@@ -1449,9 +1449,7 @@ namespace Villamos
                 else
                     return;
 
-                MyE.ExcelMegnyitás(fájlexc);
-                MyE.Munkalap_aktív("Munka1");
-                int sor = 2;
+                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexc);
 
                 List<Adat_Jármű_Takarítás_Árak> AdatokÁrak = KézTakÁr.Lista_Adatok();
                 double id = 1;
@@ -1460,58 +1458,52 @@ namespace Villamos
                 Holtart.Be();
                 List<Adat_Jármű_Takarítás_Árak> MódosítGy = new List<Adat_Jármű_Takarítás_Árak>();
                 List<Adat_Jármű_Takarítás_Árak> RögzítGy = new List<Adat_Jármű_Takarítás_Árak>();
-                while (MyE.Beolvas($"A{sor}") != "_")
+                foreach (DataRow Sor in Tábla.Rows)
                 {
-                    string ár = MyE.Beolvas($"D{sor}");
-                    if (!int.TryParse(ár, out int ára)) ára = 0;
-                    if (ára != 0)
+                    int ára = Sor["Egységár"].ToString().ToÉrt_Int();
+                    string Járműtípus = Sor["Járműtípus"].ToStrTrim();
+                    string Takarítási_fajta = Sor["Takarítási fokozat"].ToStrTrim();
+                    int napszak = Sor["Napszak"].ToStrTrim() == "Nappal" ? 1 : 2;
+                    DateTime kezdet = Sor["Kezdete"].ToStrTrim().ToÉrt_DaTeTime();
+                    DateTime vége = Sor["Vége"].ToStrTrim().ToÉrt_DaTeTime();
+
+
+                    Adat_Jármű_Takarítás_Árak Egy = (from a in AdatokÁrak
+                                                     where a.Érv_vég >= kezdet
+                                                     && a.JárműTípus == Járműtípus
+                                                     && a.Takarítási_fajta == Takarítási_fajta
+                                                     && a.Napszak == napszak
+                                                     select a).FirstOrDefault();
+                    //Megkeressük, hogy létezik-e már hasonló, ha igen akkor az érvényyeségi időt bezárjuk
+                    if (Egy != null)
                     {
-                        string Járműtípus = MyE.Beolvas($"A{sor}");
-                        string Takarítási_fajta = MyE.Beolvas($"B{sor}");
-                        int napszak = MyE.Beolvas($"C{sor}") == "Nappal" ? 1 : 2;
-                        DateTime kezdet = DateTime.TryParse(MyE.Beolvas($"E{sor}"), out kezdet) ? kezdet : new DateTime(1900, 1, 1);
-                        DateTime vége = DateTime.TryParse(MyE.Beolvas($"F{sor}"), out vége) ? vége : new DateTime(1900, 1, 1);
-
-
-                        Adat_Jármű_Takarítás_Árak Egy = (from a in AdatokÁrak
-                                                         where a.Érv_kezdet <= DateTime.Today && a.Érv_vég >= DateTime.Today
-                                                         && a.JárműTípus == Járműtípus
-                                                         && a.Takarítási_fajta == Takarítási_fajta
-                                                         && a.Napszak == napszak
-                                                         select a).FirstOrDefault();
-                        //Megkeressük, hogy létezik-e már hasonló, ha igen akkor az érvényyeségi időt bezárjuk
-                        if (Egy != null)
-                        {
-                            Adat_Jármű_Takarítás_Árak ADATM = new Adat_Jármű_Takarítás_Árak(Egy.Id,
-                                                                                            kezdet.AddDays(-1));
-                            MódosítGy.Add(ADATM);
-                        }
-
-                        // következő id meghatározása
-                        id++;
-                        //Rögzítjük az új elemet
-                        Adat_Jármű_Takarítás_Árak ADAT = new Adat_Jármű_Takarítás_Árak(id,
-                                                                                       Járműtípus,
-                                                                                       Takarítási_fajta,
-                                                                                       napszak,
-                                                                                       ára,
-                                                                                       kezdet,
-                                                                                       vége);
-                        RögzítGy.Add(ADAT);
+                        Adat_Jármű_Takarítás_Árak ADATM = new Adat_Jármű_Takarítás_Árak(Egy.Id,
+                                                                                        kezdet.AddDays(-1));
+                        MódosítGy.Add(ADATM);
                     }
-                    sor++;
+
+                    // következő id meghatározása
+                    id++;
+                    //Rögzítjük az új elemet
+                    Adat_Jármű_Takarítás_Árak ADAT = new Adat_Jármű_Takarítás_Árak(id,
+                                                                                   Járműtípus,
+                                                                                   Takarítási_fajta,
+                                                                                   napszak,
+                                                                                   ára,
+                                                                                   kezdet,
+                                                                                   vége);
+                    RögzítGy.Add(ADAT);
+
                     Holtart.Lép();
                 }
-                KézTakÁr.Módosítás_Vég(MódosítGy);
-                KézTakÁr.Rögzítés(RögzítGy);
+                if (MódosítGy.Count > 0) KézTakÁr.Módosítás_Vég(MódosítGy);
+                if (RögzítGy.Count > 0) KézTakÁr.Rögzítés(RögzítGy);
 
-
-                MyE.ExcelBezárás();
                 Ár_tábla_listázás();
                 Holtart.Ki();
-                Ár_tábla_listázás();
-                MessageBox.Show("Az Excel tábla feldolgozása megtörtént. !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 File.Delete(fájlexc);
+                MessageBox.Show("Az Excel tábla feldolgozása megtörtént. !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             }
             catch (HibásBevittAdat ex)
             {

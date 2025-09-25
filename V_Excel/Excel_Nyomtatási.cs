@@ -1,5 +1,6 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using MyExcel = Microsoft.Office.Interop.Excel;
 
@@ -568,6 +569,50 @@ namespace Villamos
                     HibaNapló.Log(ex.Message, "NyomtatásiTerület_részletes", ex.StackTrace, ex.Source, ex.HResult);
                     MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+
+        public static void Nyomtatás(string munkalap, int kezdőoldal, int példányszám)
+        {
+            try
+            {
+                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                Munkalap.PrintOutEx(kezdőoldal, misValue, példányszám, false);
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Nyomtatás(munkalap {munkalap}, kezdőoldal {kezdőoldal}, példányszám {példányszám}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
+
+        /// <summary>
+        /// Munkalapot a jelzett helyen és sornál két részre osztja
+        /// </summary>
+        /// <param name="munkalap">munkalap neve</param>
+        /// <param name="mit">Cella jelölés ahol osztani akarunk</param>
+        /// <param name="sor">a sornak a neve ahol osztani akarunk</param>
+        public static void Nyom_Oszt(string munkalap, string mit, int sor, int oldaltörés = 1)
+        {
+            try
+            {
+                xlApp.ActiveWindow.View = XlWindowView.xlPageBreakPreview;
+                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                MyExcel.Range Táblaterület = Munkalap.Range[mit];
+                Munkalap.HPageBreaks.Add(Munkalap.Cells[sor, oldaltörés]);
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Nyom_Oszt(munkalap {munkalap}, mit {mit}, sor {sor}, oldaltörés {oldaltörés}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

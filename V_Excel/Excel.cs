@@ -540,9 +540,6 @@ namespace Villamos
 
         public static void ExcelMegnyitás(string hely, bool látszik = false)
         {
-            // 1. Régi példányok bezárása (ha vannak)
-            ExcelBezárásÚJ();
-
             try
             {
                 xlApp = new MyExcel.Application();
@@ -580,7 +577,7 @@ namespace Villamos
             {
                 if (xlWorkBook != null)
                 {
-                    xlWorkBook.Close(SaveChanges: false); // Vagy true, ha menteni szeretnél
+                    xlWorkBook.Close();
                     System.Runtime.InteropServices.Marshal.ReleaseComObject(xlWorkBook);
                     xlWorkBook = null;
                 }
@@ -651,109 +648,159 @@ namespace Villamos
             }
         }
 
-        //itt tartok 
+
         public static void Képlet_másol(string munkalap, string honnan, string hova)
         {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            MyExcel.Range területhonnan = Munkalap.Range[honnan];
-            MyExcel.Range területhova = Munkalap.Range[hova];
-
-            területhonnan.Select();
-            területhonnan.Copy();
-            területhova.Select();
-            területhova.PasteSpecial(Paste: XlPasteType.xlPasteFormulas, Operation: XlPasteSpecialOperation.xlPasteSpecialOperationNone, SkipBlanks: false, Transpose: false);
+            try
+            {
+                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                MyExcel.Range területhonnan = Munkalap.Range[honnan];
+                MyExcel.Range területhova = Munkalap.Range[hova];
+                területhonnan.Copy();
+                területhova.PasteSpecial(Paste: XlPasteType.xlPasteFormulas);
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Képlet_másol(munkalap {munkalap}, honnan {honnan}, hova {hova}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
         public static string Beolvas(string honnan)
         {
             string válasz = "_";
-            MyExcel.Range Cella = Module_Excel.xlApp.Application.Range[honnan];
-
-            if (Cella.Value != null)
-                válasz = Cella.Value.ToStrTrim();
-
+            try
+            {
+                Range Cella = Module_Excel.xlApp.Application.Range[honnan];
+                if (Cella.Value != null) válasz = Cella.Value.ToStrTrim();
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Beolvas(honnan {honnan}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             return válasz;
         }
+
 
         public static void Kicsinyít(string mit)
         {
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-            Táblaterület.ShrinkToFit = true;
+            try
+            {
+                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+                Táblaterület.ShrinkToFit = true;
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Kicsinyít(mit: {mit}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
+        // JAVÍTANDÓ:       
         public static DateTime BeolvasDátum(string honnan)
         {
             DateTime válasz = new DateTime(1900, 1, 1);
-            MyExcel.Range Cella = Module_Excel.xlApp.Application.Range[honnan];
-            if (Cella.Value == null)
+            try
             {
-                válasz = new DateTime(1900, 1, 1);
+                //Eredeti
+                //MyExcel.Range Cella = Module_Excel.xlApp.Application.Range[honnan];
+                //if (Cella.Value == null)
+                //{
+                //    válasz = new DateTime(1900, 1, 1);
+                //}
+                //else if (!int.TryParse(Cella.Value.ToString(), out int result))
+                //{
+                //    válasz = Convert.ToDateTime(Cella.Value);
+                //}
+                //else
+                //{
+                //    válasz = Convert.ToDateTime(Cella.Value);
+                //}
+
+                Range cella = Module_Excel.xlWorkSheet.Range[honnan];
+                object érték = cella.Value;
+
+                if (érték == null || érték == DBNull.Value) return válasz;
+
+                if (érték is double szám) return DateTime.FromOADate(szám);
+
+                return Convert.ToDateTime(érték);
             }
-            else if (!int.TryParse(Cella.Value.ToString(), out int result))
+            catch (Exception ex)
             {
-                válasz = Convert.ToDateTime(Cella.Value);
-            }
-            else
-            {
-                válasz = Convert.ToDateTime(Cella.Value);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"BeolvasDátum(honnan: {honnan}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return válasz;
         }
 
+        // JAVÍTANDÓ:
         public static DateTime Beolvasidő(string honnan)
         {
             DateTime válasz = new DateTime(1900, 1, 1, 0, 0, 0);
-            MyExcel.Range Cella = Module_Excel.xlApp.Application.Range[honnan];
-
-            if (Cella.Value == null)
+            try
             {
-                válasz = new DateTime(1900, 1, 1, 0, 0, 0);
+                MyExcel.Range Cella = Module_Excel.xlApp.Application.Range[honnan];
+
+                if (Cella.Value == null)
+                {
+                    válasz = new DateTime(1900, 1, 1, 0, 0, 0);
+                }
+                else if (decimal.TryParse(Cella.Value.ToString(), out decimal ideig))
+                {
+                    int óra, perc, másodperc;
+                    decimal órad, percd, másodpercd;
+
+                    órad = ideig * 24;
+                    óra = ((int)órad);
+                    órad = órad - Convert.ToDecimal(óra);
+
+                    percd = órad * 60;
+                    perc = (int)percd;
+                    percd = percd - Convert.ToDecimal(perc);
+
+                    másodpercd = percd * 60;
+                    másodperc = (int)másodpercd;
+
+                    válasz = new DateTime(1900, 1, 1, óra, perc, másodperc);
+                }
+                else if (Cella.Value.ToString().Contains(":"))
+                {
+                    string[] darab = Cella.Value.ToString().Split(':');
+                    int óra = int.Parse(darab[0]);
+                    int perc = int.Parse(darab[1]);
+                    int másodperc;
+                    if (darab.Length > 2)
+                        másodperc = int.Parse(darab[2]);
+                    else
+                        másodperc = 0;
+
+                    válasz = new DateTime(1900, 1, 1, óra, perc, másodperc);
+                }
             }
-            else if (decimal.TryParse(Cella.Value.ToString(), out decimal ideig))
+            catch (Exception ex)
             {
-                int óra, perc, másodperc;
-                decimal órad, percd, másodpercd;
-
-                órad = ideig * 24;
-                óra = ((int)órad);
-                órad = órad - Convert.ToDecimal(óra);
-
-                percd = órad * 60;
-                perc = (int)percd;
-                percd = percd - Convert.ToDecimal(perc);
-
-                másodpercd = percd * 60;
-                másodperc = (int)másodpercd;
-
-                válasz = new DateTime(1900, 1, 1, óra, perc, másodperc);
-            }
-            else if (Cella.Value.ToString().Contains(":"))
-            {
-                string[] darab = Cella.Value.ToString().Split(':');
-                int óra = int.Parse(darab[0]);
-                int perc = int.Parse(darab[1]);
-                int másodperc;
-                if (darab.Length > 2)
-                    másodperc = int.Parse(darab[2]);
-                else
-                    másodperc = 0;
-
-
-                válasz = new DateTime(1900, 1, 1, óra, perc, másodperc);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Beolvasidő(honnan {honnan}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return válasz;
         }
 
-        public static void Kép_beillesztés(string munkalap, String mit, string hely)
-        {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-
-            xlWorkSheet.Shapes.AddPicture(hely, Microsoft.Office.Core.MsoTriState.msoFalse, Microsoft.Office.Core.MsoTriState.msoTrue, 50, 30, 420, 175);
-        }
 
         /// <summary>
-        /// 
+        ///  Kép_beillesztés
         /// </summary>
         /// <param name="munkalap"></param>
         /// <param name="mit"></param>
@@ -764,11 +811,21 @@ namespace Villamos
         /// <param name="Széles"></param>
         public static void Kép_beillesztés(string munkalap, String mit, string hely, int X, int Y, int Magas, int Széles)
         {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
-
-            xlWorkSheet.Shapes.AddPicture(hely, Microsoft.Office.Core.MsoTriState.msoFalse, Microsoft.Office.Core.MsoTriState.msoTrue, X, Y, Széles, Magas);
+            try
+            {
+                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
+                xlWorkSheet.Shapes.AddPicture(hely, Microsoft.Office.Core.MsoTriState.msoFalse, Microsoft.Office.Core.MsoTriState.msoTrue, X, Y, Széles, Magas);
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Kép_beillesztés(munkalap {munkalap}, mit {mit}, hely {hely}, X {X}, Y {Y}, Magas {Magas}, Széles {Széles}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
         /// <summary>
         /// 
@@ -777,11 +834,22 @@ namespace Villamos
         /// <param name="hivatkozottlap">munkalap neve amire mutat</param>
         public static void Link_beillesztés(String munkalap, string hova, string hivatkozottlap)
         {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            MyExcel.Range Táblaterület = Munkalap.Range[hova];
-            Táblaterület.Hyperlinks.Add(Anchor: Táblaterület, Address: "", SubAddress: "'" + hivatkozottlap + "'!A1", TextToDisplay: "'" + hivatkozottlap + "'");
+            try
+            {
+                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                MyExcel.Range Táblaterület = Munkalap.Range[hova];
+                Táblaterület.Hyperlinks.Add(Anchor: Táblaterület, Address: "", SubAddress: "'" + hivatkozottlap + "'!A1", TextToDisplay: "'" + hivatkozottlap + "'");
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Link_beillesztés(munkalap {munkalap}, hova {hova}, hivatkozottlap {hivatkozottlap}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
+        // JAVÍTANDÓ:
         /// <summary>
         /// 
         /// </summary>
@@ -853,111 +921,109 @@ namespace Villamos
                     datefield.EnableMultiplePageItems = true;
                 }
             }
-            //Szűrés egy napra
-            //    datefield.CurrentPage = SzűrőÉrték;
+
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, " \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
 
+        // JAVÍTANDÓ:
         public static void Kimutatás_Fő(string munkalap_adat, string balfelső, string jobbalsó, string kimutatás_Munkalap, string Kimutatás_cella, string Kimutatás_név,
             List<string> összesítNév, List<string> Összesítés_módja, List<string> sorNév, List<string> oszlopNév, List<string> SzűrőNév)
         {
-            MyExcel.Worksheet Adatok_lap = (Worksheet)xlWorkBook.Worksheets[munkalap_adat];
-            MyExcel.Worksheet Kimutatás_lap = (Worksheet)xlWorkBook.Worksheets[kimutatás_Munkalap];
-
-            MyExcel.Range AdatRange = Adatok_lap.Range[balfelső, jobbalsó];
-
-            PivotCaches pivotCaches = xlWorkBook.PivotCaches();
-            MyExcel.Range pivotData = Adatok_lap.Range[balfelső, jobbalsó];
-
-            MyExcel.PivotCache pivotCache = pivotCaches.Create(XlPivotTableSourceType.xlDatabase, pivotData);
-            MyExcel.PivotTable pivotTable = pivotCache.CreatePivotTable(Kimutatás_lap.Range[Kimutatás_cella], Kimutatás_név);
-
-            //Táblázatban megjelenő érték
-            if (összesítNév.Count > 0)
+            try
             {
-                for (int i = 0; i < összesítNév.Count; i++)
-                {
+                MyExcel.Worksheet Adatok_lap = (Worksheet)xlWorkBook.Worksheets[munkalap_adat];
+                MyExcel.Worksheet Kimutatás_lap = (Worksheet)xlWorkBook.Worksheets[kimutatás_Munkalap];
 
-                    PivotField salesField = (PivotField)pivotTable.PivotFields(összesítNév[i]);
-                    salesField.Orientation = XlPivotFieldOrientation.xlDataField;
-                    switch (Összesítés_módja[i])
+                MyExcel.Range AdatRange = Adatok_lap.Range[balfelső, jobbalsó];
+
+                PivotCaches pivotCaches = xlWorkBook.PivotCaches();
+                MyExcel.Range pivotData = Adatok_lap.Range[balfelső, jobbalsó];
+
+                MyExcel.PivotCache pivotCache = pivotCaches.Create(XlPivotTableSourceType.xlDatabase, pivotData);
+                MyExcel.PivotTable pivotTable = pivotCache.CreatePivotTable(Kimutatás_lap.Range[Kimutatás_cella], Kimutatás_név);
+
+                //Táblázatban megjelenő érték
+                if (összesítNév.Count > 0)
+                {
+                    for (int i = 0; i < összesítNév.Count; i++)
                     {
 
-                        case "xlSum":
-                            salesField.Function = XlConsolidationFunction.xlSum;
-                            salesField.Name = összesítNév[i] + " db";
-                            break;
+                        PivotField salesField = (PivotField)pivotTable.PivotFields(összesítNév[i]);
+                        salesField.Orientation = XlPivotFieldOrientation.xlDataField;
+                        switch (Összesítés_módja[i])
+                        {
 
-                        case "xlCount":
-                            salesField.Function = XlConsolidationFunction.xlCount;
-                            salesField.Name = összesítNév[i] + " Összeg";
-                            break;
+                            case "xlSum":
+                                salesField.Function = XlConsolidationFunction.xlSum;
+                                salesField.Name = összesítNév[i] + " db";
+                                break;
 
-                        default:
-                            break;
+                            case "xlCount":
+                                salesField.Function = XlConsolidationFunction.xlCount;
+                                salesField.Name = összesítNév[i] + " Összeg";
+                                break;
+
+                            default:
+                                break;
+                        }
+
+
                     }
+                }
+                //oszlopok 
+                if (oszlopNév.Count > 0)
+                {
+                    for (int i = 0; i < oszlopNév.Count; i++)
+                    {
+                        PivotField regionField = (PivotField)pivotTable.PivotFields(oszlopNév[i]);
+                        regionField.Orientation = XlPivotFieldOrientation.xlColumnField;
+                        regionField.Position = i + 1;
+                    }
+                }
 
+                //Sor adatok
+                if (sorNév.Count > 0)
+                {
+                    for (int i = 0; i < sorNév.Count; i++)
+                    {
+                        PivotField colorsRowsField = (PivotField)pivotTable.PivotFields(sorNév[i]);
+                        colorsRowsField.Orientation = XlPivotFieldOrientation.xlRowField;
+                    }
+                }
 
+                //Szűrő mezők
+                if (SzűrőNév.Count > 0)
+                {
+                    for (int i = 0; i < SzűrőNév.Count; i++)
+                    {
+                        PivotField datefield = (PivotField)pivotTable.PivotFields(SzűrőNév[i]);
+                        datefield.Orientation = XlPivotFieldOrientation.xlPageField;
+                        datefield.EnableMultiplePageItems = true;
+                    }
                 }
             }
-            //oszlopok 
-            if (oszlopNév.Count > 0)
+            catch (Exception ex)
             {
-                for (int i = 0; i < oszlopNév.Count; i++)
-                {
-                    PivotField regionField = (PivotField)pivotTable.PivotFields(oszlopNév[i]);
-                    regionField.Orientation = XlPivotFieldOrientation.xlColumnField;
-                    regionField.Position = i + 1;
-                }
-            }
-
-            //Sor adatok
-            if (sorNév.Count > 0)
-            {
-                for (int i = 0; i < sorNév.Count; i++)
-                {
-                    PivotField colorsRowsField = (PivotField)pivotTable.PivotFields(sorNév[i]);
-                    colorsRowsField.Orientation = XlPivotFieldOrientation.xlRowField;
-                }
-            }
-
-            //Szűrő mezők
-            if (SzűrőNév.Count > 0)
-            {
-                for (int i = 0; i < SzűrőNév.Count; i++)
-                {
-                    PivotField datefield = (PivotField)pivotTable.PivotFields(SzűrőNév[i]);
-                    datefield.Orientation = XlPivotFieldOrientation.xlPageField;
-                    datefield.EnableMultiplePageItems = true;
-                }
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, " \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        public static void Nyomtatás(string munkalap, int kezdőoldal, int példányszám)
-        {
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
 
-            Munkalap.PrintOutEx(kezdőoldal, misValue, példányszám, false);
-
-        }
-
-
-
-
-        /// <summary>
-        /// Munkalapot a jelzett helyen és sornál két részre osztja
-        /// </summary>
-        /// <param name="munkalap">munkalap neve</param>
-        /// <param name="mit">Cella jelölés ahol osztani akarunk</param>
-        /// <param name="sor">a sornak a neve ahol osztani akarunk</param>
-        public static void Nyom_Oszt(string munkalap, string mit, int sor, int oldaltörés = 1)
-        {
-
-            xlApp.ActiveWindow.View = XlWindowView.xlPageBreakPreview;
-            Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-            MyExcel.Range Táblaterület = Munkalap.Range[mit];
-            Munkalap.HPageBreaks.Add(Munkalap.Cells[sor, oldaltörés]);
-        }
 
 
         public static void Diagram(string munkalap, int felsőx, int felsőy, int alsóx, int alsóy, string táblafelső, string táblaalsó)
