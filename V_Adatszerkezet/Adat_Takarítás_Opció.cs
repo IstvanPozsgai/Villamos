@@ -13,16 +13,22 @@ namespace Villamos.Villamos_Adatszerkezet
 
         public Adat_Takarítás_Opció(int id, string megnevezés, string mennyisége, double ár, DateTime kezdet, DateTime vég)
         {
-            Id          = id;
+            Id = id;
             Megnevezés = megnevezés;
             Mennyisége = mennyisége;
-            Ár         = ár;
-            Kezdet     = kezdet;
-            Vég        = vég;
+            Ár = ár;
+            Kezdet = kezdet;
+            Vég = vég;
+        }
+
+        public Adat_Takarítás_Opció(int id, DateTime vég)
+        {
+            Id = id;
+            Vég = vég;
         }
     }
 
-    public class Adat_Takarítás_Telep_Opció 
+    public class Adat_Takarítás_Telep_Opció
     {
         public int Id { get; private set; }
         public DateTime Dátum { get; private set; }

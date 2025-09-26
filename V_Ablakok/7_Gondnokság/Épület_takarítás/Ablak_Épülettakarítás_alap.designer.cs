@@ -33,6 +33,7 @@ namespace Villamos
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_épülettakarítás_alap));
             this.Panel4 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
@@ -99,6 +100,7 @@ namespace Villamos
             this.Részletes_Új = new System.Windows.Forms.Button();
             this.Részletes_rögzít = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.Másol = new System.Windows.Forms.Button();
             this.Opció_Id = new System.Windows.Forms.TextBox();
             this.label26 = new System.Windows.Forms.Label();
             this.Opció_Frissít = new System.Windows.Forms.Button();
@@ -117,6 +119,8 @@ namespace Villamos
             this.Opció_Megnevezés = new System.Windows.Forms.TextBox();
             this.label21 = new System.Windows.Forms.Label();
             this.Btn_súgó = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.Lezárja = new System.Windows.Forms.Button();
             this.Panel4.SuspendLayout();
             this.LapFülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -836,6 +840,8 @@ namespace Villamos
             // tabPage4
             // 
             this.tabPage4.BackColor = System.Drawing.Color.Teal;
+            this.tabPage4.Controls.Add(this.Lezárja);
+            this.tabPage4.Controls.Add(this.Másol);
             this.tabPage4.Controls.Add(this.Opció_Id);
             this.tabPage4.Controls.Add(this.label26);
             this.tabPage4.Controls.Add(this.Opció_Frissít);
@@ -859,6 +865,19 @@ namespace Villamos
             this.tabPage4.Size = new System.Drawing.Size(1183, 532);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Opcionális";
+            // 
+            // Másol
+            // 
+            this.Másol.BackgroundImage = global::Villamos.Properties.Resources.Document_Copy_01;
+            this.Másol.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Másol.Location = new System.Drawing.Point(911, 135);
+            this.Másol.Name = "Másol";
+            this.Másol.Size = new System.Drawing.Size(45, 45);
+            this.Másol.TabIndex = 207;
+            this.toolTip1.SetToolTip(this.Másol, "A kijelölt sorokban lévő adatokat az érvényességben\r\nbeállított dátumok között lé" +
+        "trehozza új sorként\r\n0 Ft-os értékekkel.");
+            this.Másol.UseVisualStyleBackColor = true;
+            this.Másol.Click += new System.EventHandler(this.Másol_Click);
             // 
             // Opció_Id
             // 
@@ -885,6 +904,7 @@ namespace Villamos
             this.Opció_Frissít.Name = "Opció_Frissít";
             this.Opció_Frissít.Size = new System.Drawing.Size(45, 45);
             this.Opció_Frissít.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.Opció_Frissít, "Frissíti a táblázat adatait.");
             this.Opció_Frissít.UseVisualStyleBackColor = true;
             this.Opció_Frissít.Click += new System.EventHandler(this.Opció_Frissít_Click);
             // 
@@ -902,7 +922,6 @@ namespace Villamos
             this.Opció_Tábla.MaxFilterButtonImageHeight = 23;
             this.Opció_Tábla.Name = "Opció_Tábla";
             this.Opció_Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Opció_Tábla.RowHeadersVisible = false;
             this.Opció_Tábla.Size = new System.Drawing.Size(1171, 318);
             this.Opció_Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Opció_Tábla.TabIndex = 204;
@@ -916,6 +935,7 @@ namespace Villamos
             this.Opció_Új.Name = "Opció_Új";
             this.Opció_Új.Size = new System.Drawing.Size(45, 45);
             this.Opció_Új.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.Opció_Új, "Új adatnak előkészíti a beviteli mezőket.");
             this.Opció_Új.UseVisualStyleBackColor = true;
             this.Opció_Új.Click += new System.EventHandler(this.Opció_Új_Click);
             // 
@@ -928,6 +948,7 @@ namespace Villamos
             this.Opció_Excel.Name = "Opció_Excel";
             this.Opció_Excel.Size = new System.Drawing.Size(45, 45);
             this.Opció_Excel.TabIndex = 9;
+            this.toolTip1.SetToolTip(this.Opció_Excel, "Táblázat adatait Excel táblába menti.");
             this.Opció_Excel.UseVisualStyleBackColor = true;
             this.Opció_Excel.Click += new System.EventHandler(this.Opció_Excel_Click);
             // 
@@ -939,6 +960,7 @@ namespace Villamos
             this.Opció_OK.Name = "Opció_OK";
             this.Opció_OK.Size = new System.Drawing.Size(45, 45);
             this.Opció_OK.TabIndex = 6;
+            this.toolTip1.SetToolTip(this.Opció_OK, "Rögzíti/Módosítja az adatokat.");
             this.Opció_OK.UseVisualStyleBackColor = true;
             this.Opció_OK.Click += new System.EventHandler(this.Opció_OK_Click);
             // 
@@ -1038,6 +1060,18 @@ namespace Villamos
             this.Btn_súgó.TabIndex = 142;
             this.Btn_súgó.UseVisualStyleBackColor = true;
             this.Btn_súgó.Click += new System.EventHandler(this.Btn_súgó_Click);
+            // 
+            // Lezárja
+            // 
+            this.Lezárja.BackgroundImage = global::Villamos.Properties.Resources.App_network_connection_manager;
+            this.Lezárja.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Lezárja.Location = new System.Drawing.Point(962, 135);
+            this.Lezárja.Name = "Lezárja";
+            this.Lezárja.Size = new System.Drawing.Size(45, 45);
+            this.Lezárja.TabIndex = 208;
+            this.toolTip1.SetToolTip(this.Lezárja, "A kijelölt tételek befejezési dátumát csoportosan módosítja.\r\n");
+            this.Lezárja.UseVisualStyleBackColor = true;
+            this.Lezárja.Click += new System.EventHandler(this.Lezárja_Click);
             // 
             // Ablak_épülettakarítás_alap
             // 
@@ -1157,5 +1191,8 @@ namespace Villamos
         private TextBox Opció_Id;
         private Label label26;
         private Zuby.ADGV.AdvancedDataGridView Tábla1;
+        internal Button Másol;
+        private ToolTip toolTip1;
+        internal Button Lezárja;
     }
 }
