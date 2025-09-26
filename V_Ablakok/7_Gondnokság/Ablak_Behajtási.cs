@@ -1457,6 +1457,12 @@ namespace Villamos
                 if (!File.Exists(helyexcel)) throw new HibásBevittAdat("Hiányzik az kitöltendő táblázat!");
                 if (TáblaLista.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincsenek sorok a táblázatban!");
 
+                List<Adat_Behajtás_Alap> AdatokAlap = Kéz_BehajtásAlap.Lista_Adatok();
+                Adat_Behajtás_Alap AlapAdat = (from a in AdatokAlap
+                                               where a.Státus == 1
+                                               select a).FirstOrDefault() ?? throw new HibásBevittAdat("Nincs kiválasztva aktuális adatbázis!");
+                string munkalapnév = $"Engedély_{AlapAdat.Adatbázisnév}";
+
                 int j = 1;
                 // megnyitjuk az excel táblát
                 MyE.ExcelMegnyitás(helyexcel);
@@ -1539,11 +1545,11 @@ namespace Villamos
                         Adat_Behajtás_Behajtási_Napló ADATNapló = new Adat_Behajtás_Behajtási_Napló(TáblaLista.SelectedRows[i].Cells[0].Value.ToStrTrim(), 3, 0, Program.PostásNév.Trim(), DateTime.Now);
                         KézNapló.Rögzítés_Státus(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), ADATNapló);
 
-                        // ha a negyedikhez érünk akkor nyomtatunk egyet.
-                        if (j == 5)
+                        // ha a hatodikhoz érünk akkor nyomtatunk egyet.
+                        if (j == 7)
                         {
-                            MyE.Munkalap_aktív("Engedély");
-                            MyE.Nyomtatás("Engedély", 1, 1);
+                            MyE.Munkalap_aktív(munkalapnév);
+                            MyE.Nyomtatás(munkalapnév, 1, 1);
 
                             j = 1;
                             MyE.Munkalap_aktív("Adatok");
@@ -1552,8 +1558,8 @@ namespace Villamos
                 }
                 if (j != 1)
                 {
-                    MyE.Munkalap_aktív("Engedély");
-                    MyE.Nyomtatás("Engedély", 1, 1);
+                    MyE.Munkalap_aktív(munkalapnév);
+                    MyE.Nyomtatás(munkalapnév, 1, 1);
 
                     MyE.Munkalap_aktív("Adatok");
                 }
@@ -1771,6 +1777,11 @@ namespace Villamos
                 // ha nincs meg a fájl akkor kilép
                 if (!File.Exists(helyexcel)) throw new HibásBevittAdat("Hiányzik az kitöltendő táblázat!");
                 if (TáblaLista.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincsen kijelölve sor!");
+                List<Adat_Behajtás_Alap> AdatokAlap = Kéz_BehajtásAlap.Lista_Adatok();
+                Adat_Behajtás_Alap AlapAdat = (from a in AdatokAlap
+                                               where a.Státus == 1
+                                               select a).FirstOrDefault() ?? throw new HibásBevittAdat("Nincs kiválasztva aktuális adatbázis!");
+                string munkalapnév = $"Átvételi_{AlapAdat.Adatbázisnév}";
 
                 int j = 1;
 
@@ -1846,19 +1857,19 @@ namespace Villamos
                     else
                         MyE.Kiir("üzemek területére", $"i{j}");
 
-                    // ha a negyedikhez érünk akkor nyomtatunk egyet.
-                    if (j == 5)
+                    // ha a hatodikhoz érünk akkor nyomtatunk egyet.
+                    if (j == 7)
                     {
-                        MyE.Munkalap_aktív("átvételi_lap");
-                        MyE.Nyomtatás("átvételi_lap", 1, 1);
+                        MyE.Munkalap_aktív(munkalapnév);
+                        MyE.Nyomtatás(munkalapnév, 1, 1);
                         j = 1;
                         MyE.Munkalap_aktív("Adatok");
                     }
                 }
                 if (j != 1)
                 {
-                    MyE.Munkalap_aktív("átvételi_lap");
-                    MyE.Nyomtatás("átvételi_lap", 1, 1);
+                    MyE.Munkalap_aktív(munkalapnév);
+                    MyE.Nyomtatás(munkalapnév, 1, 1);
 
                     MyE.Munkalap_aktív("Adatok");
                 }
@@ -2980,7 +2991,7 @@ namespace Villamos
             TxtAdminSorszám.Text = DataAdminAlap.Rows[e.RowIndex].Cells[3].Value.ToString();
             TxtadminBetű.Text = DataAdminAlap.Rows[e.RowIndex].Cells[2].Value.ToString();
             DatadminÉrvényes.Value = DateTime.Parse(DataAdminAlap.Rows[e.RowIndex].Cells[4].Value.ToString());
-            Aktuálissor.Checked = DataAdminAlap.Rows[e.RowIndex].Cells[5].Value.ToÉrt_Int ()==1;
+            Aktuálissor.Checked = DataAdminAlap.Rows[e.RowIndex].Cells[5].Value.ToÉrt_Int() == 1;
         }
 
         private void Adminalapbeállítás()
@@ -3017,7 +3028,7 @@ namespace Villamos
                                                                  TxtadminBetű.Text.Trim(),
                                                                  Sorszám,
                                                                  DatadminÉrvényes.Value,
-                                                                 Aktuálissor.Checked ? 0 : 1,
+                                                                 Aktuálissor.Checked ? 1 : 0,
                                                                  TxtAdminkönyvtár.Text.Trim());
                 Kéz_BehajtásAlap.Módosítás(ADAT);
                 Alapadatokfeltöltése();
