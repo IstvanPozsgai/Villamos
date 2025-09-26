@@ -316,7 +316,11 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             {
 
                 // Utoljára teljesített vizsgálat sorszáma
-                tb_utolso_teljesitett.Text = $"{KézAdatok.Utolso_Km_Vizsgalat_Adatai(Ütem_pályaszám.Text).KM_Sorszám}. ({KézAdatok.Utolso_Km_Vizsgalat_Adatai(Ütem_pályaszám.Text).KM_Sorszám * 14000} Km)";
+                Adat_CAF_Adatok VizsgáltElem = KézAdatok.Utolso_Km_Vizsgalat_Adatai(Ütem_pályaszám.Text);
+                if (VizsgáltElem != null)
+                    tb_utolso_teljesitett.Text = $"{VizsgáltElem.KM_Sorszám}. {VizsgáltElem.KM_Sorszám * 14000} Km)";
+                else
+                    tb_utolso_teljesitett.Text = "Még nem történt.";
 
                 // Előző vizsgálat tervezett állása
                 tb_tervezetthez_kepest.Text = string.IsNullOrEmpty(teszt_adat.utolso_vizsgalat_valos_allasa?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_vizsgalat_valos_allasa}";
@@ -454,7 +458,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Ütem_Napkm.Text = ((int)(EgyCAF.Havikm / 30)).ToString();
                 // Kérdés: Itt ha nincs adat 0-val való osztás hibát dob. Kapjon egy saját catch-et, vagy hagyjuk, mivel papíron nem kellene olyannak lennie,
                 // hogy nincs havi km, kivéve ha törött/selejtes.
-                Ütem_KM_futhatmég.Text = ((KM_felső - (EgyCAF.KMUkm - EgyCAF.Számláló)) / ((int)(EgyCAF.Havikm / 30))).ToString();
+                if (EgyCAF.Havikm != 0)
+                    Ütem_KM_futhatmég.Text = ((KM_felső - (EgyCAF.KMUkm - EgyCAF.Számláló)) / ((int)(EgyCAF.Havikm / 30))).ToString();
+                else
+                    Ütem_KM_futhatmég.Text = "Nincs havi futás.";
             }
             catch (Exception ex)
             {
@@ -960,7 +967,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }           
+            }
         }
     }
 }
