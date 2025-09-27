@@ -48,13 +48,30 @@ namespace Villamos
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_alap_program_egyéb));
             this.Panel1 = new System.Windows.Forms.Panel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
             this.Fülek = new System.Windows.Forms.TabControl();
             this.TabPage1 = new System.Windows.Forms.TabPage();
-            this.Panel2 = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.FejlécBeolvasása = new System.Windows.Forms.Button();
+            this.Label69 = new System.Windows.Forms.Label();
+            this.SAPCsoport = new System.Windows.Forms.ComboBox();
+            this.Label68 = new System.Windows.Forms.Label();
+            this.Label67 = new System.Windows.Forms.Label();
+            this.SAPOSzlopszám = new System.Windows.Forms.TextBox();
+            this.Label60 = new System.Windows.Forms.Label();
+            this.SAPFejléc = new System.Windows.Forms.TextBox();
+            this.Változónév = new System.Windows.Forms.TextBox();
+            this.SAPRögzít = new System.Windows.Forms.Button();
+            this.SAPTöröl = new System.Windows.Forms.Button();
+            this.SAPExcel = new System.Windows.Forms.Button();
+            this.SAPFrissít = new System.Windows.Forms.Button();
+            this.SAPTábla = new System.Windows.Forms.DataGridView();
             this.TabPage2 = new System.Windows.Forms.TabPage();
             this.Osztály_Új = new System.Windows.Forms.Button();
             this.Osztályfrissít = new System.Windows.Forms.Button();
@@ -139,6 +156,8 @@ namespace Villamos
             this.Panel1.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SAPTábla)).BeginInit();
             this.TabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TáblaOsztály)).BeginInit();
             this.TabPage3.SuspendLayout();
@@ -202,25 +221,220 @@ namespace Villamos
             // 
             // TabPage1
             // 
-            this.TabPage1.Controls.Add(this.Panel2);
+            this.TabPage1.BackColor = System.Drawing.Color.SandyBrown;
+            this.TabPage1.Controls.Add(this.tableLayoutPanel4);
+            this.TabPage1.Controls.Add(this.SAPTábla);
             this.TabPage1.Location = new System.Drawing.Point(4, 29);
             this.TabPage1.Name = "TabPage1";
             this.TabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.TabPage1.Size = new System.Drawing.Size(1484, 489);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "SAP- FORTE beolvasás";
-            this.TabPage1.UseVisualStyleBackColor = true;
             // 
-            // Panel2
+            // tableLayoutPanel4
             // 
-            this.Panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.tableLayoutPanel4.ColumnCount = 6;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.Controls.Add(this.FejlécBeolvasása, 5, 4);
+            this.tableLayoutPanel4.Controls.Add(this.Label69, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.SAPCsoport, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.Label68, 0, 1);
+            this.tableLayoutPanel4.Controls.Add(this.Label67, 0, 3);
+            this.tableLayoutPanel4.Controls.Add(this.SAPOSzlopszám, 1, 1);
+            this.tableLayoutPanel4.Controls.Add(this.Label60, 0, 2);
+            this.tableLayoutPanel4.Controls.Add(this.SAPFejléc, 1, 2);
+            this.tableLayoutPanel4.Controls.Add(this.Változónév, 1, 3);
+            this.tableLayoutPanel4.Controls.Add(this.SAPRögzít, 4, 3);
+            this.tableLayoutPanel4.Controls.Add(this.SAPTöröl, 2, 4);
+            this.tableLayoutPanel4.Controls.Add(this.SAPExcel, 3, 4);
+            this.tableLayoutPanel4.Controls.Add(this.SAPFrissít, 4, 4);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(6, 6);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 5;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(823, 211);
+            this.tableLayoutPanel4.TabIndex = 113;
+            // 
+            // FejlécBeolvasása
+            // 
+            this.FejlécBeolvasása.BackColor = System.Drawing.SystemColors.Control;
+            this.FejlécBeolvasása.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.FejlécBeolvasása.Image = global::Villamos.Properties.Resources.Document_Microsoft_Excel_01;
+            this.FejlécBeolvasása.Location = new System.Drawing.Point(773, 159);
+            this.FejlécBeolvasása.Name = "FejlécBeolvasása";
+            this.FejlécBeolvasása.Size = new System.Drawing.Size(45, 45);
+            this.FejlécBeolvasása.TabIndex = 56;
+            this.toolTip1.SetToolTip(this.FejlécBeolvasása, "Excel tábla alapján beolvassa a fejlécet");
+            this.FejlécBeolvasása.UseVisualStyleBackColor = false;
+            this.FejlécBeolvasása.Click += new System.EventHandler(this.FejlécBeolvasása_Click);
+            // 
+            // Label69
+            // 
+            this.Label69.AutoSize = true;
+            this.Label69.Location = new System.Drawing.Point(3, 0);
+            this.Label69.Name = "Label69";
+            this.Label69.Size = new System.Drawing.Size(146, 20);
+            this.Label69.TabIndex = 48;
+            this.Label69.Text = "Beolvasási csoport:";
+            // 
+            // SAPCsoport
+            // 
+            this.SAPCsoport.FormattingEnabled = true;
+            this.SAPCsoport.Location = new System.Drawing.Point(155, 3);
+            this.SAPCsoport.MaxLength = 10;
+            this.SAPCsoport.Name = "SAPCsoport";
+            this.SAPCsoport.Size = new System.Drawing.Size(187, 28);
+            this.SAPCsoport.TabIndex = 0;
+            this.SAPCsoport.SelectedIndexChanged += new System.EventHandler(this.Csoport_SelectedIndexChanged);
+            // 
+            // Label68
+            // 
+            this.Label68.AutoSize = true;
+            this.Label68.Location = new System.Drawing.Point(3, 35);
+            this.Label68.Name = "Label68";
+            this.Label68.Size = new System.Drawing.Size(113, 20);
+            this.Label68.TabIndex = 53;
+            this.Label68.Text = "Oszlop száma:";
+            // 
+            // Label67
+            // 
+            this.Label67.AutoSize = true;
+            this.Label67.Location = new System.Drawing.Point(3, 105);
+            this.Label67.Name = "Label67";
+            this.Label67.Size = new System.Drawing.Size(92, 20);
+            this.Label67.TabIndex = 55;
+            this.Label67.Text = "Változónév:";
+            // 
+            // SAPOSzlopszám
+            // 
+            this.SAPOSzlopszám.Location = new System.Drawing.Point(155, 38);
+            this.SAPOSzlopszám.Name = "SAPOSzlopszám";
+            this.SAPOSzlopszám.Size = new System.Drawing.Size(187, 26);
+            this.SAPOSzlopszám.TabIndex = 1;
+            // 
+            // Label60
+            // 
+            this.Label60.AutoSize = true;
+            this.Label60.Location = new System.Drawing.Point(3, 70);
+            this.Label60.Name = "Label60";
+            this.Label60.Size = new System.Drawing.Size(118, 20);
+            this.Label60.TabIndex = 54;
+            this.Label60.Text = "Fejléc szövege:";
+            // 
+            // SAPFejléc
+            // 
+            this.SAPFejléc.Location = new System.Drawing.Point(155, 73);
+            this.SAPFejléc.MaxLength = 255;
+            this.SAPFejléc.Name = "SAPFejléc";
+            this.SAPFejléc.Size = new System.Drawing.Size(459, 26);
+            this.SAPFejléc.TabIndex = 2;
+            // 
+            // Változónév
+            // 
+            this.Változónév.Location = new System.Drawing.Point(155, 108);
+            this.Változónév.MaxLength = 50;
+            this.Változónév.Name = "Változónév";
+            this.Változónév.Size = new System.Drawing.Size(187, 26);
+            this.Változónév.TabIndex = 3;
+            // 
+            // SAPRögzít
+            // 
+            this.SAPRögzít.BackColor = System.Drawing.SystemColors.Control;
+            this.SAPRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.SAPRögzít.Image = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.SAPRögzít.Location = new System.Drawing.Point(722, 108);
+            this.SAPRögzít.Name = "SAPRögzít";
+            this.SAPRögzít.Size = new System.Drawing.Size(45, 45);
+            this.SAPRögzít.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.SAPRögzít, "Rögzíti az adatokat");
+            this.SAPRögzít.UseVisualStyleBackColor = false;
+            this.SAPRögzít.Click += new System.EventHandler(this.Rögzít_Click);
+            // 
+            // SAPTöröl
+            // 
+            this.SAPTöröl.BackColor = System.Drawing.SystemColors.Control;
+            this.SAPTöröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.SAPTöröl.Image = global::Villamos.Properties.Resources.Kuka;
+            this.SAPTöröl.Location = new System.Drawing.Point(620, 159);
+            this.SAPTöröl.Name = "SAPTöröl";
+            this.SAPTöröl.Size = new System.Drawing.Size(45, 45);
+            this.SAPTöröl.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.SAPTöröl, "Törli a megjelenített értékeket");
+            this.SAPTöröl.UseVisualStyleBackColor = false;
+            this.SAPTöröl.Click += new System.EventHandler(this.Töröl_Click);
+            // 
+            // SAPExcel
+            // 
+            this.SAPExcel.BackColor = System.Drawing.SystemColors.Control;
+            this.SAPExcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.SAPExcel.Image = global::Villamos.Properties.Resources.Excel_gyűjtő;
+            this.SAPExcel.Location = new System.Drawing.Point(671, 159);
+            this.SAPExcel.Name = "SAPExcel";
+            this.SAPExcel.Size = new System.Drawing.Size(45, 45);
+            this.SAPExcel.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.SAPExcel, "Excel kimetetet készít");
+            this.SAPExcel.UseVisualStyleBackColor = false;
+            this.SAPExcel.Click += new System.EventHandler(this.Excel_Click);
+            // 
+            // SAPFrissít
+            // 
+            this.SAPFrissít.BackColor = System.Drawing.SystemColors.Control;
+            this.SAPFrissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.SAPFrissít.Image = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.SAPFrissít.Location = new System.Drawing.Point(722, 159);
+            this.SAPFrissít.Name = "SAPFrissít";
+            this.SAPFrissít.Size = new System.Drawing.Size(45, 45);
+            this.SAPFrissít.TabIndex = 6;
+            this.toolTip1.SetToolTip(this.SAPFrissít, "Táblázar adatait frissíti");
+            this.SAPFrissít.UseVisualStyleBackColor = false;
+            this.SAPFrissít.Click += new System.EventHandler(this.Command1_Click);
+            // 
+            // SAPTábla
+            // 
+            this.SAPTábla.AllowUserToAddRows = false;
+            this.SAPTábla.AllowUserToDeleteRows = false;
+            this.SAPTábla.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.SAPTábla.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.SAPTábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Panel2.BackColor = System.Drawing.Color.SandyBrown;
-            this.Panel2.Location = new System.Drawing.Point(0, 5);
-            this.Panel2.Name = "Panel2";
-            this.Panel2.Size = new System.Drawing.Size(1478, 475);
-            this.Panel2.TabIndex = 0;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.SAPTábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.SAPTábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.SAPTábla.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.SAPTábla.EnableHeadersVisualStyles = false;
+            this.SAPTábla.Location = new System.Drawing.Point(6, 229);
+            this.SAPTábla.Name = "SAPTábla";
+            this.SAPTábla.ReadOnly = true;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.SAPTábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.SAPTábla.RowHeadersWidth = 20;
+            this.SAPTábla.Size = new System.Drawing.Size(1472, 254);
+            this.SAPTábla.TabIndex = 112;
+            this.SAPTábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SAPTábla_CellClick);
+            this.SAPTábla.SelectionChanged += new System.EventHandler(this.Tábla_SelectionChanged);
             // 
             // TabPage2
             // 
@@ -240,7 +454,7 @@ namespace Villamos
             this.TabPage2.Location = new System.Drawing.Point(4, 29);
             this.TabPage2.Name = "TabPage2";
             this.TabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage2.Size = new System.Drawing.Size(1484, 356);
+            this.TabPage2.Size = new System.Drawing.Size(1484, 489);
             this.TabPage2.TabIndex = 1;
             this.TabPage2.Text = "Osztály elemek kezelése";
             // 
@@ -362,35 +576,35 @@ namespace Villamos
             this.TáblaOsztály.AllowUserToAddRows = false;
             this.TáblaOsztály.AllowUserToDeleteRows = false;
             this.TáblaOsztály.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.TáblaOsztály.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.TáblaOsztály.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             this.TáblaOsztály.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.TáblaOsztály.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.TáblaOsztály.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.TáblaOsztály.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.TáblaOsztály.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.TáblaOsztály.EnableHeadersVisualStyles = false;
             this.TáblaOsztály.Location = new System.Drawing.Point(6, 144);
             this.TáblaOsztály.Name = "TáblaOsztály";
             this.TáblaOsztály.ReadOnly = true;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.TáblaOsztály.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.TáblaOsztály.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.TáblaOsztály.RowHeadersWidth = 20;
-            this.TáblaOsztály.Size = new System.Drawing.Size(1472, 206);
+            this.TáblaOsztály.Size = new System.Drawing.Size(1472, 339);
             this.TáblaOsztály.TabIndex = 112;
             this.TáblaOsztály.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.TáblaOsztály_CellClick);
             this.TáblaOsztály.SelectionChanged += new System.EventHandler(this.TáblaOsztály_SelectionChanged);
@@ -411,7 +625,7 @@ namespace Villamos
             this.TabPage3.Location = new System.Drawing.Point(4, 29);
             this.TabPage3.Name = "TabPage3";
             this.TabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage3.Size = new System.Drawing.Size(1484, 356);
+            this.TabPage3.Size = new System.Drawing.Size(1484, 489);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Biztonsági másolat készítés";
             // 
@@ -520,7 +734,7 @@ namespace Villamos
             this.TabPage4.Controls.Add(this.GroupBox1);
             this.TabPage4.Location = new System.Drawing.Point(4, 29);
             this.TabPage4.Name = "TabPage4";
-            this.TabPage4.Size = new System.Drawing.Size(1484, 356);
+            this.TabPage4.Size = new System.Drawing.Size(1484, 489);
             this.TabPage4.TabIndex = 3;
             this.TabPage4.Text = "Jármű Takarítás";
             // 
@@ -566,31 +780,31 @@ namespace Villamos
             this.Mátrix_tábla.AllowUserToAddRows = false;
             this.Mátrix_tábla.AllowUserToDeleteRows = false;
             this.Mátrix_tábla.AllowUserToResizeRows = false;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Mátrix_tábla.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.Mátrix_tábla.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
             this.Mátrix_tábla.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Mátrix_tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Mátrix_tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
             this.Mátrix_tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Mátrix_tábla.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.Mátrix_tábla.EnableHeadersVisualStyles = false;
             this.Mátrix_tábla.Location = new System.Drawing.Point(6, 177);
             this.Mátrix_tábla.Name = "Mátrix_tábla";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Mátrix_tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Mátrix_tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.Mátrix_tábla.RowHeadersVisible = false;
             this.Mátrix_tábla.RowHeadersWidth = 20;
             this.Mátrix_tábla.Size = new System.Drawing.Size(337, 158);
@@ -686,32 +900,32 @@ namespace Villamos
             this.Kötbér_tábla.AllowUserToAddRows = false;
             this.Kötbér_tábla.AllowUserToDeleteRows = false;
             this.Kötbér_tábla.AllowUserToResizeRows = false;
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Kötbér_tábla.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.Kötbér_tábla.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
             this.Kötbér_tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Kötbér_tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Kötbér_tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
             this.Kötbér_tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Kötbér_tábla.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.Kötbér_tábla.EnableHeadersVisualStyles = false;
             this.Kötbér_tábla.Location = new System.Drawing.Point(4, 177);
             this.Kötbér_tábla.Name = "Kötbér_tábla";
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Kötbér_tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Kötbér_tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
             this.Kötbér_tábla.RowHeadersVisible = false;
             this.Kötbér_tábla.RowHeadersWidth = 20;
             this.Kötbér_tábla.Size = new System.Drawing.Size(314, 158);
@@ -1166,18 +1380,18 @@ namespace Villamos
             this.Tak_Ár_Tábla.AllowUserToAddRows = false;
             this.Tak_Ár_Tábla.AllowUserToDeleteRows = false;
             this.Tak_Ár_Tábla.AllowUserToResizeRows = false;
-            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Tak_Ár_Tábla.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.Tak_Ár_Tábla.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle13;
             this.Tak_Ár_Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Tak_Ár_Tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Tak_Ár_Tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle14;
             this.Tak_Ár_Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tak_Ár_Tábla.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.Tak_Ár_Tábla.EnableHeadersVisualStyles = false;
@@ -1187,14 +1401,14 @@ namespace Villamos
             this.Tak_Ár_Tábla.MaxFilterButtonImageHeight = 23;
             this.Tak_Ár_Tábla.Name = "Tak_Ár_Tábla";
             this.Tak_Ár_Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Tak_Ár_Tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Tak_Ár_Tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle15;
             this.Tak_Ár_Tábla.RowHeadersWidth = 30;
             this.Tak_Ár_Tábla.Size = new System.Drawing.Size(777, 103);
             this.Tak_Ár_Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
@@ -1249,6 +1463,9 @@ namespace Villamos
             this.Panel1.PerformLayout();
             this.Fülek.ResumeLayout(false);
             this.TabPage1.ResumeLayout(false);
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SAPTábla)).EndInit();
             this.TabPage2.ResumeLayout(false);
             this.TabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TáblaOsztály)).EndInit();
@@ -1278,7 +1495,6 @@ namespace Villamos
         internal Button Button13;
         internal TabControl Fülek;
         internal TabPage TabPage1;
-        internal Panel Panel2;
         internal TabPage TabPage2;
         internal Button Osztályfrissít;
         internal Button OsztályRögzít;
@@ -1359,5 +1575,20 @@ namespace Villamos
         internal Button VégeÁrRögzítés;
         internal V_MindenEgyéb.MyProgressbar Holtart;
         internal Button Osztály_Új;
+        internal DataGridView SAPTábla;
+        private TableLayoutPanel tableLayoutPanel4;
+        internal Button FejlécBeolvasása;
+        internal Label Label69;
+        internal ComboBox SAPCsoport;
+        internal Label Label68;
+        internal Label Label67;
+        internal TextBox SAPOSzlopszám;
+        internal Label Label60;
+        internal TextBox SAPFejléc;
+        internal TextBox Változónév;
+        internal Button SAPRögzít;
+        internal Button SAPTöröl;
+        internal Button SAPExcel;
+        internal Button SAPFrissít;
     }                    
 }
