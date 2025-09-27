@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
@@ -320,23 +319,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                 else
                     return;
 
-                DateTime Eleje = DateTime.Now;
-                //Adattáblába tesszük
-                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexc);
-
-                if (!MyF.Betöltéshelyes("Nóta", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
-
                 //Készítünk egy listát az adatszerkezetnek megfelelően
-                List<Adat_Nóta_SAP> Excel_Listában = Excel_Beolvas(Tábla);
-
+                List<Adat_Nóta_SAP> Excel_Listában = SAP_Adatokbeolvasása.Nóta_beolvasó(fájlexc);
                 if (Excel_Listában != null) SAP(Excel_Listában);
 
-                DateTime Vége = DateTime.Now;
-
-                //kitöröljük a betöltött fájlt
-                File.Delete(fájlexc);
                 TáblázatÍrás();
-                MessageBox.Show($"Az adat konvertálás befejeződött!\nidő:{Vége - Eleje}", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
@@ -423,6 +410,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                 }
                 if (IDK != null && IDK.Count > 0) KézNóta.Módosítás(IDK);
                 Holtart.Ki();
+                MessageBox.Show($"Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
@@ -435,25 +423,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
             }
         }
 
-        private List<Adat_Nóta_SAP> Excel_Beolvas(DataTable EgyTábla)
-        {
-            List<Adat_Nóta_SAP> Adatok = new List<Adat_Nóta_SAP>();
-            if (EgyTábla != null)
-            {
-                for (int i = 0; i < EgyTábla.Rows.Count; i++)
-                {
-                    Adat_Nóta_SAP Adat = new Adat_Nóta_SAP(
-                                                EgyTábla.Rows[i]["Berendezés"].ToStrTrim(),
-                                                EgyTábla.Rows[i]["Rendszerstátus"].ToStrTrim(),
-                                                EgyTábla.Rows[i]["Készletsarzs"].ToStrTrim(),
-                                                EgyTábla.Rows[i]["Raktárhely"].ToStrTrim(),
-                                                EgyTábla.Rows[i]["Rendezési mező"].ToStrTrim(),
-                                                EgyTábla.Rows[i]["Anyag"].ToStrTrim());
-                    Adatok.Add(Adat);
-                }
-            }
-            return Adatok;
-        }
 
         #region Összesítés ablak
         Ablak_Nóta_Összesítés Új_Ablak_Nóta_Összesítés;
@@ -473,6 +442,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
             Új_Ablak_Nóta_Összesítés.Show();
         }
         #endregion
+
 
         #region TöbbFődarab
         private void FődarabTípusok_Feltöltése()

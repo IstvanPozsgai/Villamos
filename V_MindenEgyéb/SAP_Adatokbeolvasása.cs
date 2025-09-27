@@ -805,7 +805,7 @@ namespace Villamos.V_MindenEgyéb
                     string Cikkszám = MyF.Szöveg_Tisztítás(Sor[oszlopCikk].ToStrTrim(), 0, 20).TrimStart('0');
                     string Megnevezés = MyF.Szöveg_Tisztítás(Sor[oszlopMeg].ToStrTrim(), 0, 255);
                     string Raktár = MyF.Szöveg_Tisztítás(Sor[oszlopRaktár].ToStrTrim(), 0, 5);
-                    double Mennyi =Sor[oszlopMennyi].ToStrTrim().Replace(".", ",").ToÉrt_Double();
+                    double Mennyi = Sor[oszlopMennyi].ToStrTrim().Replace(".", ",").ToÉrt_Double();
                     double Ár = Sor[oszlopÁr].ToStrTrim().Replace(".", ",").ToÉrt_Double();
                     Ár = Math.Round(Ár, 1);
                     string Sarzs = MyF.Szöveg_Tisztítás(Sor[oszlopSarzs].ToStrTrim(), 0, 5);
@@ -818,7 +818,7 @@ namespace Villamos.V_MindenEgyéb
                                Megnevezés,
                                "",
                                Sarzs,
-                               Math.Round(Árdb,3));
+                               Math.Round(Árdb, 3));
                     AdatokGy.Add(ADAT);
 
                     //Módosítjuk a raktárkészletet
@@ -826,7 +826,7 @@ namespace Villamos.V_MindenEgyéb
                                 Cikkszám,
                                 Sarzs,
                                 Raktár,
-                                Math.Round(Mennyi,3));
+                                Math.Round(Mennyi, 3));
                     AdatokGyR.Add(ADATR);
                     sor++;
                 }
@@ -961,6 +961,69 @@ namespace Villamos.V_MindenEgyéb
                 HibaNapló.Log(ex.Message, "Km_beolvasó", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        public static List<Adat_Nóta_SAP> Nóta_beolvasó(string fájlexcel)
+        {
+            List<Adat_Nóta_SAP> Adatok = new List<Adat_Nóta_SAP>();
+            try
+            {
+                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexcel);
+                //Ellenőrzés
+                if (!MyF.Betöltéshelyes("Nóta", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
+
+                // Beolvasni kívánt oszlopok
+                Kezelő_Excel_Beolvasás KézBeolvasás = new Kezelő_Excel_Beolvasás();
+                List<Adat_Excel_Beolvasás> oszlopnév = KézBeolvasás.Lista_Adatok();
+
+                //Meghatározzuk a beolvasó tábla elnevezéseit 
+                //Oszlopnevek beállítása
+                string oszlopBerendezés = (from a in oszlopnév where a.Csoport == "Nóta" && a.Státusz == false && a.Változónév == "Berendezés" select a.Fejléc).FirstOrDefault();
+                string oszlopRendszerstátus = (from a in oszlopnév where a.Csoport == "Nóta" && a.Státusz == false && a.Változónév == "Rendszerstátus" select a.Fejléc).FirstOrDefault();
+                string oszlopKészletsarzs = (from a in oszlopnév where a.Csoport == "Nóta" && a.Státusz == false && a.Változónév == "Készletsarzs" select a.Fejléc).FirstOrDefault();
+                string oszlopRaktárhely = (from a in oszlopnév where a.Csoport == "Nóta" && a.Státusz == false && a.Változónév == "Raktárhely" select a.Fejléc).FirstOrDefault();
+                string oszlopRendezési = (from a in oszlopnév where a.Csoport == "Nóta" && a.Státusz == false && a.Változónév == "Rendezési_mező" select a.Fejléc).FirstOrDefault();
+                string oszlopAnyag = (from a in oszlopnév where a.Csoport == "Nóta" && a.Státusz == false && a.Változónév == "Anyag" select a.Fejléc).FirstOrDefault();
+
+                if (oszlopBerendezés == null ||
+                    oszlopRendszerstátus == null ||
+                    oszlopKészletsarzs == null ||
+                    oszlopRaktárhely == null ||
+                    oszlopRendezési == null ||
+                    oszlopAnyag == null) throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla! ");
+
+                foreach (DataRow Sor in Tábla.Rows)
+                {
+                    //Beolvasott értékeke
+                    string Berendezés = MyF.Szöveg_Tisztítás(Sor[oszlopBerendezés].ToStrTrim(), 0, 20);
+                    string Rendszerstátus = MyF.Szöveg_Tisztítás(Sor[oszlopRendszerstátus].ToStrTrim());
+                    string Készletsarzs = MyF.Szöveg_Tisztítás(Sor[oszlopKészletsarzs].ToStrTrim(), 0, 3);
+                    string Raktárhely = MyF.Szöveg_Tisztítás(Sor[oszlopRaktárhely].ToStrTrim(), 0, 5);
+                    string Rendezési_mező = MyF.Szöveg_Tisztítás(Sor[oszlopRendezési].ToStrTrim());
+                    string Anyag = MyF.Szöveg_Tisztítás(Sor[oszlopAnyag].ToStrTrim(), 0, 20);
+
+                    Adat_Nóta_SAP Adat = new Adat_Nóta_SAP(
+                        Berendezés,
+                        Rendszerstátus,
+                        Készletsarzs,
+                        Raktárhely,
+                        Rendezési_mező,
+                        Anyag);
+                    Adatok.Add(Adat);
+                }
+                // kitöröljük a betöltött fájlt
+                File.Delete(fájlexcel);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Km_beolvasó", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Adatok;
         }
     }
 }
