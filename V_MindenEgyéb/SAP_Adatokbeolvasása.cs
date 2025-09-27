@@ -1026,6 +1026,53 @@ namespace Villamos.V_MindenEgyéb
             return Adatok;
         }
 
+        public static List<Adat_Jármű> ÜzembeHelyezés_beolvasó(string fájlexcel)
+        {
+            List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
+            try
+            {
+                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexcel);
+                //Ellenőrzés
+                if (!MyF.Betöltéshelyes("Üzembehely", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
+
+                // Beolvasni kívánt oszlopok
+                Kezelő_Excel_Beolvasás KézBeolvasás = new Kezelő_Excel_Beolvasás();
+                List<Adat_Excel_Beolvasás> oszlopnév = KézBeolvasás.Lista_Adatok();
+
+                //Meghatározzuk a beolvasó tábla elnevezéseit 
+                //Oszlopnevek beállítása
+                string oszlopBerendezés = (from a in oszlopnév where a.Csoport == "Üzembehely" && a.Státusz == false && a.Változónév == "Berendezés" select a.Fejléc).FirstOrDefault();
+                string oszlopBeszerzésDátuma = (from a in oszlopnév where a.Csoport == "Üzembehely" && a.Státusz == false && a.Változónév == "BeszerzésDátuma" select a.Fejléc).FirstOrDefault();
+
+                if (oszlopBerendezés == null ||
+                    oszlopBeszerzésDátuma == null) throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla! ");
+
+                foreach (DataRow Sor in Tábla.Rows)
+                {
+                    //Beolvasott értékeke
+                    string Berendezés = MyF.Szöveg_Tisztítás(Sor[oszlopBerendezés].ToStrTrim(), 0, 20);
+                    DateTime BeszerzésDátuma = MyF.Szöveg_Tisztítás(Sor[oszlopBeszerzésDátuma].ToStrTrim()).ToÉrt_DaTeTime();
+
+                    Adat_Jármű Adat = new Adat_Jármű(
+                        BeszerzésDátuma,
+                        Berendezés);
+                    Adatok.Add(Adat);
+                }
+                // kitöröljük a betöltött fájlt
+                File.Delete(fájlexcel);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Km_beolvasó", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Adatok;
+        }
+
 
     }
 }

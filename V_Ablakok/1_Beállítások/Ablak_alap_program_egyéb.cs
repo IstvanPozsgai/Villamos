@@ -1922,31 +1922,6 @@ namespace Villamos
 
         #endregion
 
-        #region Csempékhez
-
-        Ablak_Beolvasás Új_Ablak_Beolvasás;
-        private void BeolvásBeállítás_Click(object sender, EventArgs e)
-        {
-            if (Új_Ablak_Beolvasás == null)
-            {
-                Új_Ablak_Beolvasás = new Ablak_Beolvasás();
-                Új_Ablak_Beolvasás.FormClosed += Új_Ablak_Beolvasás_FormClosed;
-                Új_Ablak_Beolvasás.Show();
-            }
-            else
-            {
-                Új_Ablak_Beolvasás.Activate();
-                Új_Ablak_Beolvasás.WindowState = FormWindowState.Maximized;
-            }
-
-        }
-
-        private void Új_Ablak_Beolvasás_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Új_Ablak_Beolvasás = null;
-        }
-
-        #endregion
 
         private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
         {

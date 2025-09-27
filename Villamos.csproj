@@ -1260,7 +1260,6 @@
       <DependentUpon>Ablak_üzenet.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Adatbázis\Adatbázis_Akkumulátor.cs" />
-    <Compile Include="V_Adatbázis\Adatbázis_Alap egyéb.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_CAF.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Ciklusrend.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_dolgozó.cs" />
