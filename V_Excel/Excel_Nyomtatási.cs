@@ -1,6 +1,7 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using MyExcel = Microsoft.Office.Interop.Excel;
 
@@ -606,6 +607,9 @@ namespace Villamos
                 Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
                 MyExcel.Range Táblaterület = Munkalap.Range[mit];
                 Munkalap.HPageBreaks.Add(Munkalap.Cells[sor, oldaltörés]);
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using MyExcel = Microsoft.Office.Interop.Excel;
 
@@ -29,8 +30,11 @@ namespace Villamos
                 // Beszúrunk egy sort az adott pozícióba
                 for (int i = 0; i < beszúrás; i++)
                 {
-                    MyExcel.Range row = (MyExcel.Range)Munkalap.Rows[sor];
-                    row.Insert(MyExcel.XlInsertShiftDirection.xlShiftDown);
+                    MyExcel.Range Táblaterület = (MyExcel.Range)Munkalap.Rows[sor];
+                    Táblaterület.Insert(MyExcel.XlInsertShiftDirection.xlShiftDown);
+
+                    Marshal.ReleaseComObject(Táblaterület);
+                    Táblaterület = null;
                 }
             }
             catch (Exception ex)
@@ -58,6 +62,9 @@ namespace Villamos
                     Táblaterület.RowHeight = mekkora;
                 else
                     Táblaterület.EntireRow.AutoFit();
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -86,6 +93,9 @@ namespace Villamos
                     Táblaterület.Columns.ColumnWidth = szélesség;
                 else
                     Táblaterület.Columns.EntireColumn.AutoFit();
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -108,6 +118,9 @@ namespace Villamos
             {
                 MyExcel.Range Táblaterület = xlWorkSheet.Range[oszlop];
                 Táblaterület.Delete(Microsoft.Office.Interop.Excel.XlDirection.xlToLeft);
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -130,6 +143,9 @@ namespace Villamos
                 Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
                 MyExcel.Range Táblaterület = Munkalap.Range[oszlop];
                 Táblaterület.EntireColumn.Hidden = true;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -177,8 +193,11 @@ namespace Villamos
             try
             {
                 Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-                MyExcel.Range Range = Munkalap.UsedRange;
-                maxRow = Range.Rows.Count;
+                MyExcel.Range Táblaterület = Munkalap.UsedRange;
+                maxRow = Táblaterület.Rows.Count;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -197,8 +216,11 @@ namespace Villamos
             try
             {
                 Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-                MyExcel.Range RangeX = Munkalap.UsedRange;
-                maxColumn = RangeX.Columns.Count;
+                MyExcel.Range Táblaterület = Munkalap.UsedRange;
+                maxColumn = Táblaterület.Columns.Count;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {

@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using static System.IO.File;
 using DT = System.Data;
@@ -49,42 +50,6 @@ namespace Villamos
                 StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
                 string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
                 HibaNapló.Log(ex.Message, $"ExcelLétrehozás \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-
-        /// <summary>
-        /// Bezárja az excel táblát memória ürítéssel
-        /// </summary>
-        /// <param name="obj"></param>
-        private static void ReleaseObject(object obj)
-        {
-            try
-            {   // becsukjuk az excelt.
-                if (obj != null)
-                {
-                    try
-                    {
-                        System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
-                        obj = null;
-                    }
-                    catch (Exception)
-                    {
-                        obj = null;
-                    }
-                    finally
-                    {
-                        GC.Collect();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
-                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
-                HibaNapló.Log(ex.Message, $"ReleaseObject \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -137,11 +102,30 @@ namespace Villamos
         {
             try
             {
-                xlWorkBook.Close(true, misValue, misValue);
-                xlApp.Quit();
-                ReleaseObject(xlWorkSheet);
-                ReleaseObject(xlWorkBook);
-                ReleaseObject(xlApp);
+                if (xlWorkBook != null)
+                {
+                    xlWorkBook.Close(SaveChanges: false); // vagy true, ha kell
+                    Marshal.ReleaseComObject(xlWorkBook);
+                    xlWorkBook = null;
+                }
+
+                if (xlApp != null)
+                {
+                    xlApp.Quit();
+                    Marshal.ReleaseComObject(xlApp);
+                    xlApp = null;
+                }
+
+                // Ha van munkalap referenciád, azt is szabadítsd fel
+                if (xlWorkSheet != null)
+                {
+                    Marshal.ReleaseComObject(xlWorkSheet);
+                    xlWorkSheet = null;
+                }
+
+                // Kritikus: GC hívások
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
             }
             catch (Exception ex)
             {
@@ -151,6 +135,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
 
         /// <summary>
@@ -164,6 +149,9 @@ namespace Villamos
             {
                 MyExcel.Range Cella = Module_Excel.xlApp.Application.Range[hova];
                 Cella.Value = mit;
+
+                Marshal.ReleaseComObject(Cella);
+                Cella = null;
             }
             catch (Exception ex)
             {
@@ -197,6 +185,8 @@ namespace Villamos
                         Táblaterület.HorizontalAlignment = Constants.xlCenter;
                         break;
                 }
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -230,6 +220,8 @@ namespace Villamos
                         Táblaterület.VerticalAlignment = Constants.xlCenter;
                         break;
                 }
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -249,11 +241,13 @@ namespace Villamos
         {
             try
             {
-                Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
+                MyExcel.Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
                 Range Táblaterület = Munkalap.Range[mit];
                 Táblaterület.Merge();
                 Táblaterület.HorizontalAlignment = XlHAlign.xlHAlignCenter;
                 Táblaterület.VerticalAlignment = XlVAlign.xlVAlignCenter;
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -296,6 +290,8 @@ namespace Villamos
             {
                 MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
                 Táblaterület.Interior.Color = ColorTranslator.ToOle(színe);
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -324,6 +320,9 @@ namespace Villamos
                 // ha Pattern = xlNone, de meghagyhatod biztonságból.
                 Táblaterület.Interior.TintAndShade = 0;
                 Táblaterület.Interior.PatternTintAndShade = 0;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -375,6 +374,9 @@ namespace Villamos
                 // Opcionális: eltávolítjuk a ThemeColor és TintAndShade hatásokat
                 Táblaterület.Font.ThemeColor = 0; // vagy: nincs értelme, ha Color-t használunk
                 Táblaterület.Font.TintAndShade = 0;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -398,8 +400,11 @@ namespace Villamos
                 Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
                 Module_Excel.xlWorkBook.Activate();
                 Munkalap.Activate(); // Activate() stabilabb, mint Select()
-                MyExcel.Range range = Munkalap.get_Range(mit, mit);
-                range.Select();
+                MyExcel.Range Táblaterület = Munkalap.get_Range(mit, mit);
+                Táblaterület.Select();
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -424,6 +429,9 @@ namespace Villamos
                 Worksheet Munkalap = (Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
                 MyExcel.Range Táblaterület = Munkalap.get_Range(mit, Type.Missing);
                 Táblaterület.Orientation = mennyit;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -451,6 +459,9 @@ namespace Villamos
                 Táblaterület.VerticalAlignment = MyExcel.XlVAlign.xlVAlignCenter;    // vagy -4108
                 // Sortörés BE
                 Táblaterület.WrapText = true;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -476,6 +487,9 @@ namespace Villamos
                 Táblaterület.IndentLevel = 0;
                 Táblaterület.ShrinkToFit = false;
                 Táblaterület.MergeCells = egyesített;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -500,6 +514,9 @@ namespace Villamos
                 Táblaterület.IndentLevel = 0;
                 Táblaterület.ShrinkToFit = false;
                 Táblaterület.MergeCells = true;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -625,6 +642,11 @@ namespace Villamos
                 MyExcel.Range cél = Munkalap.Range[hova];
                 cél.Value = forrás.Value;
 
+                Marshal.ReleaseComObject(forrás);
+                forrás = null;
+                Marshal.ReleaseComObject(cél);
+                cél = null;
+
                 //Kipróbálható
                 //Worksheet Munkalap = (Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
                 //MyExcel.Range forrás = Munkalap.Range[honnan];
@@ -658,6 +680,12 @@ namespace Villamos
                 MyExcel.Range területhova = Munkalap.Range[hova];
                 területhonnan.Copy();
                 területhova.PasteSpecial(Paste: XlPasteType.xlPasteFormulas);
+
+                Marshal.ReleaseComObject(területhonnan);
+                területhonnan = null;
+                Marshal.ReleaseComObject(területhova);
+                területhova = null;
+
             }
             catch (Exception ex)
             {
@@ -674,8 +702,11 @@ namespace Villamos
             string válasz = "_";
             try
             {
-                Range Cella = Module_Excel.xlApp.Application.Range[honnan];
-                if (Cella.Value != null) válasz = Cella.Value.ToStrTrim();
+                Range Táblaterület = Module_Excel.xlApp.Application.Range[honnan];
+                if (Táblaterület.Value != null) válasz = Táblaterület.Value.ToStrTrim();
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -694,6 +725,9 @@ namespace Villamos
             {
                 MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
                 Táblaterület.ShrinkToFit = true;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -816,6 +850,9 @@ namespace Villamos
                 Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
                 MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Range[mit];
                 xlWorkSheet.Shapes.AddPicture(hely, Microsoft.Office.Core.MsoTriState.msoFalse, Microsoft.Office.Core.MsoTriState.msoTrue, X, Y, Széles, Magas);
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -839,6 +876,9 @@ namespace Villamos
                 Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
                 MyExcel.Range Táblaterület = Munkalap.Range[hova];
                 Táblaterület.Hyperlinks.Add(Anchor: Táblaterület, Address: "", SubAddress: "'" + hivatkozottlap + "'!A1", TextToDisplay: "'" + hivatkozottlap + "'");
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -867,63 +907,68 @@ namespace Villamos
         public static void Kimutatás_Fő(string munkalap_adat, string balfelső, string jobbalsó, string kimutatás_Munkalap, string Kimutatás_cella, string Kimutatás_név
             , List<string> összesítNév, List<string> sorNév, List<string> oszlopNév, List<string> SzűrőNév)
         {
-
-            MyExcel.Worksheet Adatok_lap = (Worksheet)xlWorkBook.Worksheets[munkalap_adat];
-            MyExcel.Worksheet Kimutatás_lap = (Worksheet)xlWorkBook.Worksheets[kimutatás_Munkalap];
-
-            MyExcel.Range AdatRange = Adatok_lap.Range[balfelső, jobbalsó];
-
-            PivotCaches pivotCaches = xlWorkBook.PivotCaches();
-            MyExcel.Range pivotData = Adatok_lap.Range[balfelső, jobbalsó];
-
-            MyExcel.PivotCache pivotCache = pivotCaches.Create(XlPivotTableSourceType.xlDatabase, pivotData);
-            MyExcel.PivotTable pivotTable = pivotCache.CreatePivotTable(Kimutatás_lap.Range[Kimutatás_cella], Kimutatás_név);
-
-            //Táblázatban megjelenő érték
-            if (összesítNév.Count > 0)
-            {
-                for (int i = 0; i < összesítNév.Count; i++)
-                {
-
-                    PivotField salesField = (PivotField)pivotTable.PivotFields(összesítNév[i]);
-                    salesField.Orientation = XlPivotFieldOrientation.xlDataField;
-                    salesField.Function = XlConsolidationFunction.xlSum;
-                    salesField.Name = összesítNév[i] + " db";
-                }
-            }
-            //Sor adatok
-            if (sorNév.Count > 0)
-            {
-                for (int i = 0; i < sorNév.Count; i++)
-                {
-                    PivotField colorsRowsField = (PivotField)pivotTable.PivotFields(sorNév[i]);
-                    colorsRowsField.Orientation = XlPivotFieldOrientation.xlRowField;
-                }
-            }
-
-            //oszlopok 
-            if (oszlopNév.Count > 0)
-            {
-                for (int i = 0; i < oszlopNév.Count; i++)
-                {
-                    PivotField regionField = (PivotField)pivotTable.PivotFields(oszlopNév[i]);
-                    regionField.Orientation = XlPivotFieldOrientation.xlColumnField;
-                }
-            }
-
-            //Szűrő mezők
-            if (SzűrőNév.Count > 0)
-            {
-                for (int i = 0; i < SzűrőNév.Count; i++)
-                {
-                    PivotField datefield = (PivotField)pivotTable.PivotFields(SzűrőNév[i]);
-                    datefield.Orientation = XlPivotFieldOrientation.xlPageField;
-                    datefield.EnableMultiplePageItems = true;
-                }
-            }
-
             try
             {
+                MyExcel.Worksheet Adatok_lap = (Worksheet)xlWorkBook.Worksheets[munkalap_adat];
+                MyExcel.Worksheet Kimutatás_lap = (Worksheet)xlWorkBook.Worksheets[kimutatás_Munkalap];
+
+                MyExcel.Range AdatRange = Adatok_lap.Range[balfelső, jobbalsó];
+
+                PivotCaches pivotCaches = xlWorkBook.PivotCaches();
+                MyExcel.Range pivotData = Adatok_lap.Range[balfelső, jobbalsó];
+
+                MyExcel.PivotCache pivotCache = pivotCaches.Create(XlPivotTableSourceType.xlDatabase, pivotData);
+                MyExcel.PivotTable pivotTable = pivotCache.CreatePivotTable(Kimutatás_lap.Range[Kimutatás_cella], Kimutatás_név);
+
+                //Táblázatban megjelenő érték
+                if (összesítNév.Count > 0)
+                {
+                    for (int i = 0; i < összesítNév.Count; i++)
+                    {
+
+                        PivotField salesField = (PivotField)pivotTable.PivotFields(összesítNév[i]);
+                        salesField.Orientation = XlPivotFieldOrientation.xlDataField;
+                        salesField.Function = XlConsolidationFunction.xlSum;
+                        salesField.Name = összesítNév[i] + " db";
+                    }
+                }
+                //Sor adatok
+                if (sorNév.Count > 0)
+                {
+                    for (int i = 0; i < sorNév.Count; i++)
+                    {
+                        PivotField colorsRowsField = (PivotField)pivotTable.PivotFields(sorNév[i]);
+                        colorsRowsField.Orientation = XlPivotFieldOrientation.xlRowField;
+                    }
+                }
+
+                //oszlopok 
+                if (oszlopNév.Count > 0)
+                {
+                    for (int i = 0; i < oszlopNév.Count; i++)
+                    {
+                        PivotField regionField = (PivotField)pivotTable.PivotFields(oszlopNév[i]);
+                        regionField.Orientation = XlPivotFieldOrientation.xlColumnField;
+                    }
+                }
+
+                //Szűrő mezők
+                if (SzűrőNév.Count > 0)
+                {
+                    for (int i = 0; i < SzűrőNév.Count; i++)
+                    {
+                        PivotField datefield = (PivotField)pivotTable.PivotFields(SzűrőNév[i]);
+                        datefield.Orientation = XlPivotFieldOrientation.xlPageField;
+                        datefield.EnableMultiplePageItems = true;
+                    }
+                }
+
+                Marshal.ReleaseComObject(pivotData);
+                pivotData = null;
+                Marshal.ReleaseComObject(AdatRange);
+                AdatRange = null;
+
+
 
             }
             catch (Exception ex)
@@ -1013,6 +1058,11 @@ namespace Villamos
                         datefield.EnableMultiplePageItems = true;
                     }
                 }
+
+                Marshal.ReleaseComObject(AdatRange);
+                AdatRange = null;
+                Marshal.ReleaseComObject(pivotData);
+                pivotData = null;
             }
             catch (Exception ex)
             {
@@ -1022,8 +1072,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
 
 
         public static void Diagram(string munkalap, int felsőx, int felsőy, int alsóx, int alsóy, string táblafelső, string táblaalsó)
@@ -1040,6 +1088,8 @@ namespace Villamos
             cp.ChartType = MyExcel.XlChartType.xlPie;
             cp.ApplyLayout(1);
 
+            Marshal.ReleaseComObject(crange);
+            crange = null;
         }
 
         //Elkopó

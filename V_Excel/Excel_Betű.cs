@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using MyExcel = Microsoft.Office.Interop.Excel;
 
@@ -26,6 +27,9 @@ namespace Villamos
                 Táblaterület.Font.OutlineFont = false;
                 Táblaterület.Font.Shadow = false;
                 Táblaterület.Font.Underline = MyExcel.XlUnderlineStyle.xlUnderlineStyleNone;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -43,6 +47,9 @@ namespace Villamos
             {
                 MyExcel.Range Táblaterület = Module_Excel.xlApp.get_Range(mit);
                 Táblaterület.Font.Color = ColorTranslator.ToOle(színe);
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -71,6 +78,9 @@ namespace Villamos
                     : MyExcel.XlUnderlineStyle.xlUnderlineStyleNone;
                 Táblaterület.Font.Italic = dőlt;
                 Táblaterület.Font.Bold = vastag;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -100,6 +110,9 @@ namespace Villamos
 
                 if (!string.IsNullOrWhiteSpace(formátum))
                     Táblaterület.NumberFormat = formátum;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -135,6 +148,9 @@ namespace Villamos
                     karakterek.Font.Italic = dőlt;
                     karakterek.Font.Bold = vastag;
                 }
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -155,19 +171,22 @@ namespace Villamos
         {
             try
             {
-                MyExcel.Range Cellák = Module_Excel.xlApp.Application.Cells;
-                Cellák.VerticalAlignment = MyExcel.XlVAlign.xlVAlignCenter;
-                Cellák.Font.Name = név;
-                Cellák.Font.Size = méret;
-                Cellák.Font.Strikethrough = false;
-                Cellák.Font.Superscript = false;
-                Cellák.Font.Subscript = false;
-                Cellák.Font.OutlineFont = false;
-                Cellák.Font.Shadow = false;
-                Cellák.Font.Underline = Microsoft.Office.Interop.Excel.XlUnderlineStyle.xlUnderlineStyleNone;
-                Cellák.Font.ThemeColor = Microsoft.Office.Interop.Excel.XlThemeColor.xlThemeColorLight1;
-                Cellák.Font.TintAndShade = 0;
-                Cellák.Font.ThemeFont = Microsoft.Office.Interop.Excel.XlThemeFont.xlThemeFontNone;
+                MyExcel.Range Táblaterület = Module_Excel.xlApp.Application.Cells;
+                Táblaterület.VerticalAlignment = MyExcel.XlVAlign.xlVAlignCenter;
+                Táblaterület.Font.Name = név;
+                Táblaterület.Font.Size = méret;
+                Táblaterület.Font.Strikethrough = false;
+                Táblaterület.Font.Superscript = false;
+                Táblaterület.Font.Subscript = false;
+                Táblaterület.Font.OutlineFont = false;
+                Táblaterület.Font.Shadow = false;
+                Táblaterület.Font.Underline = Microsoft.Office.Interop.Excel.XlUnderlineStyle.xlUnderlineStyleNone;
+                Táblaterület.Font.ThemeColor = Microsoft.Office.Interop.Excel.XlThemeColor.xlThemeColorLight1;
+                Táblaterület.Font.TintAndShade = 0;
+                Táblaterület.Font.ThemeFont = Microsoft.Office.Interop.Excel.XlThemeFont.xlThemeFontNone;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
