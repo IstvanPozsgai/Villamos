@@ -2423,6 +2423,8 @@ namespace Villamos
                     fájlexc = OpenFileDialog1.FileName;
                 else
                     return;
+                // JAVÍTANDÓ:Előkészítve az OOP ra
+                //SAP_Adatokbeolvasása.Sérülés_beolvasó(fájlexc );
 
                 // megnyitjuk a beolvasandó táblát
                 MyE.ExcelMegnyitás(fájlexc);

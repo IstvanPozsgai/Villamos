@@ -1050,7 +1050,7 @@ namespace Villamos.V_MindenEgyéb
                 foreach (DataRow Sor in Tábla.Rows)
                 {
                     //Beolvasott értékeke
-                    string Berendezés = MyF.Szöveg_Tisztítás(Sor[oszlopBerendezés].ToStrTrim(), 0, 20);
+                    string Berendezés = MyF.Szöveg_Tisztítás(Sor[oszlopBerendezés].ToStrTrim(), 1, -1);
                     DateTime BeszerzésDátuma = MyF.Szöveg_Tisztítás(Sor[oszlopBeszerzésDátuma].ToStrTrim()).ToÉrt_DaTeTime();
 
                     Adat_Jármű Adat = new Adat_Jármű(
@@ -1073,6 +1073,77 @@ namespace Villamos.V_MindenEgyéb
             return Adatok;
         }
 
+        // JAVÍTANDÓ:a sérülés javítások anyagigényének beolvasása nem készült el, mert mókezelője nincs de beolvassa az adatokat, nincs próbálva
+        public static List<Adat_Sérülés_Anyag> Sérülés_beolvasó(string fájlexcel)
+        {
+            List<Adat_Sérülés_Anyag> Adatok = new List<Adat_Sérülés_Anyag>();
+            try
+            {
+                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexcel);
+                //Ellenőrzés
+                if (!MyF.Betöltéshelyes("SérülésAny", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
 
+                // Beolvasni kívánt oszlopok
+                Kezelő_Excel_Beolvasás KézBeolvasás = new Kezelő_Excel_Beolvasás();
+                List<Adat_Excel_Beolvasás> oszlopnév = KézBeolvasás.Lista_Adatok();
+
+                //Meghatározzuk a beolvasó tábla elnevezéseit 
+                //Oszlopnevek beállítása
+                string oszlopcikkszám = (from a in oszlopnév where a.Csoport == "SérülésAny" && a.Státusz == false && a.Változónév == "cikkszám" select a.Fejléc).FirstOrDefault();
+                string oszlopanyagnév = (from a in oszlopnév where a.Csoport == "SérülésAny" && a.Státusz == false && a.Változónév == "anyagnév" select a.Fejléc).FirstOrDefault();
+                string oszlopmennyiség = (from a in oszlopnév where a.Csoport == "SérülésAny" && a.Státusz == false && a.Változónév == "mennyiség" select a.Fejléc).FirstOrDefault();
+                string oszlopmennyiségegység = (from a in oszlopnév where a.Csoport == "SérülésAny" && a.Státusz == false && a.Változónév == "mennyiségegység" select a.Fejléc).FirstOrDefault();
+                string oszlopár = (from a in oszlopnév where a.Csoport == "SérülésAny" && a.Státusz == false && a.Változónév == "ár" select a.Fejléc).FirstOrDefault();
+                string oszlopállapot = (from a in oszlopnév where a.Csoport == "SérülésAny" && a.Státusz == false && a.Változónév == "állapot" select a.Fejléc).FirstOrDefault();
+                string oszloprendelésszám = (from a in oszlopnév where a.Csoport == "SérülésAny" && a.Státusz == false && a.Változónév == "rendelésszám" select a.Fejléc).FirstOrDefault();
+                string oszlopmozgásnem = (from a in oszlopnév where a.Csoport == "SérülésAny" && a.Státusz == false && a.Változónév == "mozgásnem" select a.Fejléc).FirstOrDefault();
+
+                if (oszlopcikkszám == null ||
+                    oszlopanyagnév == null ||
+                    oszlopmennyiség == null ||
+                    oszlopmennyiségegység == null ||
+                    oszlopár == null ||
+                    oszlopállapot == null ||
+                    oszloprendelésszám == null ||
+                    oszlopmozgásnem == null) throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla! ");
+
+                foreach (DataRow Sor in Tábla.Rows)
+                {
+                    string cikkszám = MyF.Szöveg_Tisztítás(Sor[oszlopcikkszám].ToStrTrim());
+                    string mennyiségstr = MyF.Szöveg_Tisztítás(Sor[oszlopmennyiség].ToStrTrim());
+                    double mennyiség = 0;
+                    string árstr = MyF.Szöveg_Tisztítás(Sor[oszlopár].ToStrTrim());
+                    double ár = 0;
+                    string állapot = MyF.Szöveg_Tisztítás(Sor[oszlopállapot].ToStrTrim());
+                    string mennyiségegység = MyF.Szöveg_Tisztítás(Sor[oszlopmennyiségegység].ToStrTrim());
+                    string mozgásnem = MyF.Szöveg_Tisztítás(Sor[oszlopmozgásnem].ToStrTrim());
+                    string anyagnév = MyF.Szöveg_Tisztítás(Sor[oszlopanyagnév].ToStrTrim());
+                    string rendelésstr = MyF.Szöveg_Tisztítás(Sor[oszloprendelésszám].ToStrTrim());
+                    double rendelésszám = 0;
+                    Adat_Sérülés_Anyag Adat = new Adat_Sérülés_Anyag(
+                        cikkszám,
+                        anyagnév,
+                        mennyiség,
+                        mennyiségegység,
+                        ár,
+                        állapot,
+                        rendelésszám,
+                        mozgásnem);
+                    Adatok.Add(Adat);
+                }
+                // kitöröljük a betöltött fájlt
+                File.Delete(fájlexcel);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Km_beolvasó", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Adatok;
+        }
     }
 }
