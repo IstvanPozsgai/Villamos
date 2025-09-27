@@ -203,12 +203,6 @@
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_alap_program_személy.designer.cs">
       <DependentUpon>Ablak_alap_program_személy.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\1_Beállítások\Ablak_Beolvasás.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="V_Ablakok\1_Beállítások\Ablak_Beolvasás.Designer.cs">
-      <DependentUpon>Ablak_Beolvasás.cs</DependentUpon>
-    </Compile>
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_Ciklus_Sorrend.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1405,9 +1399,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_alap_program_személy.resx">
       <DependentUpon>Ablak_alap_program_személy.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_Beolvasás.resx">
-      <DependentUpon>Ablak_Beolvasás.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_Ciklus_Sorrend.resx">
       <DependentUpon>Ablak_Ciklus_Sorrend.cs</DependentUpon>
