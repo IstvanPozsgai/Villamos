@@ -664,21 +664,26 @@ namespace Villamos
             Holtart.Ki();
         }
 
-        // JAVÍTANDÓ:
         private void Naptár_Színezése()
         {
             try
             {
-
                 Holtart.BackColor = Color.Green;
                 // ********************************************
                 // kiszinezzük a szabad és munkaszüneti napokat
                 // ********************************************
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\munkaidőnaptár.mdb";
-                if (!Exists(hely))
+
+                List<Adat_Váltós_Naptár> Adatok = KézVáltNaptár.Lista_Adatok(Dátum.Value.Year, "");
+                Adatok = (from a in Adatok
+                          where a.Dátum >= MyF.Hónap_elsőnapja(Dátum.Value) &&
+                                a.Dátum <= MyF.Hónap_utolsónapja(Dátum.Value)
+                          orderby a.Dátum ascending
+                          select a).ToList();
+
+
+                if (Adatok == null || Adatok.Count < 1)
                 {
                     // akkor a naptári jelölés
-
                     for (int i = 3; i <= hónap_hossz + 2; i++)
                     {
                         if (Tábla.Rows[0].Cells[i].Value != null)
@@ -699,15 +704,6 @@ namespace Villamos
                 else
                 {
                     // munkaügyi naptár
-                    string jelszó = "katalin";
-
-                    string szöveg = " select * from naptár ";
-                    szöveg += $" WHERE dátum>=#{MyF.Hónap_elsőnapja(Dátum.Value):M-d-yy}# ";
-                    szöveg += $" And dátum<=#{MyF.Hónap_utolsónapja(Dátum.Value):M-d-yy}# ORDER BY dátum";
-
-
-                    List<Adat_Váltós_Naptár> Adatok = KézVáltNaptár.Lista_Adatok(hely, jelszó, szöveg);
-
                     for (int i = 3; i <= hónap_hossz + 2; i++)
                     {
                         string nap = (from a in Adatok
