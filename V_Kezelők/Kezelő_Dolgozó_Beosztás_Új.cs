@@ -163,6 +163,32 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Törlés(string Telephely, DateTime Dátum, DateTime Dátumtól, DateTime Dátumig, List<string> HrAzonosítók, bool Eszterga = false)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum, Eszterga);
+                List<string> szövegGy = new List<string>();
+                foreach (string Hr_Azonosító in HrAzonosítók)
+                {
+                    string szöveg = "DELETE FROM beosztás ";
+                    szöveg += $" WHERE nap>=#{Dátumtól:M-d-yy}# ";
+                    szöveg += $" AND nap<=#{Dátumig:M-d-yy}# ";
+                    szöveg += $" AND Dolgozószám='{Hr_Azonosító}'";
+                    szövegGy.Add(szöveg);
+                }
+                MyA.ABtörlés(hely, jelszó, szövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
 
         //elkopó

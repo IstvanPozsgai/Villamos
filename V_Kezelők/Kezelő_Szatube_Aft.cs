@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-
+using MyA = Adatbázis;
 namespace Villamos.Kezelők
 {
     public class Kezelő_Szatube_Aft
@@ -60,6 +61,32 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
+        public void Módosítás(string Telephely, int Év, DateTime Dátumtól, DateTime Dátumig, List<string> Hr_Azonosítók, int Státus)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                List<string> szövegGy = new List<string>();
+                foreach (string Hr_Azonosító in Hr_Azonosítók)
+                {
+                    string szöveg = $"UPDATE {táblanév} SET státus={Státus} WHERE törzsszám='{Hr_Azonosító}' AND  kezdődátum>=#{Dátumtól:M-d-yy}#";
+                    szöveg += $" AND  kezdődátum<=#{Dátumig:M-d-yy}#";
+                    szövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, szövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
         //Elkopó
         public List<Adat_Szatube_AFT> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
@@ -101,6 +128,7 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
+
 
     }
 
