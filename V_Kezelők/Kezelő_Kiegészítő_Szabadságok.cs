@@ -53,36 +53,5 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
-
-        //Elkopó
-        public List<Adat_Kiegészítő_Szabadságok> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kiegészítő_Szabadságok> Adatok = new List<Adat_Kiegészítő_Szabadságok>();
-            Adat_Kiegészítő_Szabadságok Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kiegészítő_Szabadságok(
-                                        rekord["Sorszám"].ToÉrt_Long(),
-                                        rekord["Megnevezés"].ToStrTrim()
-                                          );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
     }
 }

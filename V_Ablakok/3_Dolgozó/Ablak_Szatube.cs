@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
 using MyA = Adatbázis;
@@ -23,11 +21,18 @@ namespace Villamos
         string hely;
         readonly string jelszó = "kertitörpe";
 
-        readonly Kezelő_Szatube_Szabadság Kéz_Szabadság = new Kezelő_Szatube_Szabadság();
         readonly Kezelő_Dolgozó_Személyes KézSzemélyes = new Kezelő_Dolgozó_Személyes();
         readonly Kezelő_Dolgozó_Alap KézDolgAlap = new Kezelő_Dolgozó_Alap();
+        readonly Kezelő_Dolgozó_Beosztás_Új KézBeosztás = new Kezelő_Dolgozó_Beosztás_Új();
+        readonly Kezelő_Szatube_Aft KézAft = new Kezelő_Szatube_Aft();
+        readonly Kezelő_Szatube_Beteg KézBeteg = new Kezelő_Szatube_Beteg();
+        readonly Kezelő_Szatube_Csúsztatás KézCsúsztatás = new Kezelő_Szatube_Csúsztatás();
+        readonly Kezelő_Szatube_Szabadság KézSzabadság = new Kezelő_Szatube_Szabadság();
+        readonly Kezelő_Szatube_Túlóra KézTúlóra = new Kezelő_Szatube_Túlóra();
+        readonly Kezelő_Kiegészítő_Szabadságok KézKiegSzab = new Kezelő_Kiegészítő_Szabadságok();
 
         List<Adat_Szatube_Szabadság> Adatok_Szabadság = new List<Adat_Szatube_Szabadság>();
+
 
         public Ablak_Szatube()
         {
@@ -41,7 +46,6 @@ namespace Villamos
         }
 
         #region  Alap
-        // JAVÍTANDÓ:
         private void Start()
         {
             try
@@ -59,14 +63,7 @@ namespace Villamos
                     GombLathatosagKezelo.Beallit(this, CmbTelephely.Text.Trim());
                 }
 
-                hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\adatok\Szatubecs";
-                if (!Exists(hely)) Directory.Exists(hely);
-
-                hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\adatok\Szatubecs\{DateTime.Now.Year}Szatubecs.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.SzaTuBe_tábla(hely);
-
                 Évek_Feltöltése();
-
                 Névfeltöltés();
                 Munkahely();
                 TabFülek.TabIndex = 0;
@@ -77,9 +74,7 @@ namespace Villamos
                 EgyéniTúlNyom.Visible = false;
                 TúlCsopNyom.Visible = false;
                 Túl_Eng_Beáll.Visible = false;
-
                 TabFülek.DrawMode = TabDrawMode.OwnerDrawFixed;
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -399,6 +394,11 @@ namespace Villamos
 
         private void CmbTelephely_SelectedIndexChanged(object sender, EventArgs e)
         {
+            TelephelyVáltás();
+        }
+
+        private void TelephelyVáltás()
+        {
             Névfeltöltés();
         }
 
@@ -660,14 +660,12 @@ namespace Villamos
             NyomtatásSzabi();
         }
 
-        // JAVÍTANDÓ:
         private void NyomtatásSzabi()
         {
             try
             {
                 string fájlexcel = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\nyomtatvány\Szabadságlap.xlsx";
-                if (!Exists(fájlexcel))
-                    throw new HibásBevittAdat("Hiányzik az kitöltendő táblázat!");
+                if (!Exists(fájlexcel)) throw new HibásBevittAdat("Hiányzik az kitöltendő táblázat!");
 
                 // 0 sorszámút ki kell jelölni.
                 for (int i = 0; i < Tábla.Rows.Count; i++)
@@ -683,23 +681,24 @@ namespace Villamos
                 DateTime IdeigDátum;
 
                 //Beolvassuk a táblázat adatait egy listába
-                string szöveg = "SELECT * FROM szabadság WHERE Szabiok LIKE '%ivétel%' AND ";
+                List<Adat_Szatube_Szabadság> Adatok = KézSzabadság.Lista_Adatok(CmbTelephely.Text.Trim(), Adat_Évek.Text.ToÉrt_Int());
+                Adatok = (from a in Adatok
+                          where a.Szabiok.ToLower().Contains("kivétel")
+                          orderby a.Kezdődátum
+                          select a).ToList();
+
                 if (!Mind.Checked)// mind
                 {
                     // Igényelt
                     if (Kért.Checked)
-                        szöveg += " státus=0";
+                        Adatok = Adatok.Where(a => a.Státus == 0).ToList();
                     // nyomtatott
                     if (Nyomtatott.Checked)
-                        szöveg += " státus=1";
+                        Adatok = Adatok.Where(a => a.Státus == 1).ToList();
                     // Rögzített
                     if (Rögzített.Checked)
-                        szöveg += " státus=2";
+                        Adatok = Adatok.Where(a => a.Státus == 2).ToList();
                 }
-                szöveg += " ORDER BY kezdődátum";
-
-                Kezelő_Szatube_Szabadság Kéz = new Kezelő_Szatube_Szabadság();
-                List<Adat_Szatube_Szabadság> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
 
                 List<double> Sorszámok = new List<double>();
                 // Beolvassuk egy listába azokat a sorszámokat amik ki vannak jelölve
@@ -829,17 +828,16 @@ namespace Villamos
                 MyE.ExcelBezárás();
 
                 // a státusokat átállítja
-                List<string> SzövegGy = new List<string>();
+                List<double> Idek = new List<double>();
                 for (int i = 0; i < SzűrtLista.Count; i++)
                 {
                     if (SzűrtLista[i] != 0)
                     {
-                        szöveg = $"Update  szabadság set státus=1 Where sorszám={SzűrtLista[i]} AND státus<>3";
-                        SzövegGy.Add(szöveg);
+                        Idek.Add(SzűrtLista[i]);
                     }
                     Holtart.Lép();
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                KézSzabadság.StátusÁllítás(CmbTelephely.Text.Trim(), Adat_Évek.Text.ToÉrt_Int(), 1, Idek);
 
                 Kért.Checked = true;
                 Szabadságkiírása(1);
@@ -958,7 +956,8 @@ namespace Villamos
 
                 string[] darabol = Dolgozónév.Text.Trim().Split('=');
 
-                SzabadságListaFeltöltés();
+
+                Adatok_Szabadság = KézSzabadság.Lista_Adatok(CmbTelephely.Text.Trim(), Adat_Évek.Text.ToÉrt_Int());
 
                 List<Adat_Szatube_Szabadság> Adatok = new List<Adat_Szatube_Szabadság>();
 
@@ -1112,14 +1111,16 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private int Kivettnapja(string törzsszám, DateTime dátum)
         {
             int válasz = 0;
-            string szöveg = $"SELECT * FROM szabadság Where törzsszám='{törzsszám.Trim()}' AND Kezdődátum<#{dátum:yyyy-MM-dd}# Order by Kezdődátum asc";
-
-            Kezelő_Szatube_Szabadság Kéz = new Kezelő_Szatube_Szabadság();
-            List<Adat_Szatube_Szabadság> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+            List<Adat_Szatube_Szabadság> Adatok = KézSzabadság.Lista_Adatok(CmbTelephely.Text.Trim(), dátum.Year);
+            Adatok = (from a in Adatok
+                      where a.Törzsszám == törzsszám.Trim() &&
+                      a.Kezdődátum < dátum
+                      orderby a.Kezdődátum
+                      select a).ToList();
 
             foreach (Adat_Szatube_Szabadság rekord in Adatok)
             {
@@ -1129,16 +1130,16 @@ namespace Villamos
             return válasz;
         }
 
-        // JAVÍTANDÓ:
         private int Összesnapja(string törzsszám)
         {
             int válasz = 0;
             try
             {
-
-                string szöveg = $"SELECT * FROM szabadság Where törzsszám='{törzsszám.Trim()}'  Order by Kezdődátum asc";
-                Kezelő_Szatube_Szabadság Kéz = new Kezelő_Szatube_Szabadság();
-                List<Adat_Szatube_Szabadság> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Szatube_Szabadság> Adatok = KézSzabadság.Lista_Adatok(CmbTelephely.Text.Trim(), Adat_Évek.Text.ToÉrt_Int());
+                Adatok = (from a in Adatok
+                          where a.Törzsszám == törzsszám.Trim()
+                          orderby a.Kezdődátum
+                          select a).ToList();
 
                 foreach (Adat_Szatube_Szabadság rekord in Adatok)
                 {
@@ -1198,7 +1199,6 @@ namespace Villamos
             Szabadságkiírása(0);
         }
 
-        // JAVÍTANDÓ:
         private void Szab_Rögzít_Click(object sender, EventArgs e)
         {
             try
@@ -1207,27 +1207,24 @@ namespace Villamos
                 if (Dolgozónév.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
                 if (!int.TryParse(Szabipótnap.Text, out int Nap)) throw new HibásBevittAdat("A szabadság napnak egész számnak kell lennie.");
 
-                SzabadságListaFeltöltés();
+                Adatok_Szabadság = KézSzabadság.Lista_Adatok(CmbTelephely.Text.Trim(), Adat_Évek.Text.ToÉrt_Int());
 
                 double id = 1;
                 if (Adatok_Szabadság.Count > 0) id = Adatok_Szabadság.Max(a => a.Sorszám) + 1;
 
                 string[] darabol = Dolgozónév.Text.Split('=');
-
-                string szöveg = "INSERT INTO szabadság ";
-                szöveg += " (Sorszám ,törzsszám, dolgozónév, kezdődátum, befejeződátum, kivettnap, Szabiok, Státus, rögzítette, rögzítésdátum )";
-                szöveg += " VALUES (";
-                szöveg += $"{id},";                         //Sorszám
-                szöveg += $"'{darabol[1].Trim()}', ";       //törzsszám
-                szöveg += $"'{darabol[0].Trim()}', ";       //dolgozónév
-                szöveg += "'1900.01.01', ";                  //kezdődátum
-                szöveg += "'1900.01.01', ";                  //befejeződátum
-                szöveg += $"{Nap}, ";                       //kivettnap
-                szöveg += $"'{Szabiok.Text.Trim()}', ";      //Szabiok
-                szöveg += "2, ";                             //Státus
-                szöveg += $"'{Program.PostásNév.Trim()}', "; //rögzítette
-                szöveg += $"'{DateTime.Now}')";  //rögzítésdátum
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                Adat_Szatube_Szabadság ADAT = new Adat_Szatube_Szabadság(
+                                    id,
+                                    darabol[1].Trim(),
+                                    darabol[0].Trim(),
+                                    new DateTime(1900, 1, 1),
+                                    new DateTime(1900, 1, 1),
+                                    Nap,
+                                    Szabiok.Text.Trim(),
+                                    2,
+                                    Program.PostásNév.Trim(),
+                                    DateTime.Now);
+                KézSzabadság.Rögzítés(CmbTelephely.Text.Trim(), Adat_Évek.Text.ToÉrt_Int(), ADAT);
                 MessageBox.Show("Az adatok rögzítésre kerültek.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Szabadságkiírása(0);
             }
@@ -1242,27 +1239,22 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
         private void Éves_Összesítő_Click(object sender, EventArgs e)
         {
             try
             {
-
                 if (Dolgozónév.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
 
                 string[] darabol = Dolgozónév.Text.Trim().Split('=');
-
-
                 string fájlexc;
                 Holtart.Be();
-
 
                 // kimeneti fájl helye és neve
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Dolgozó éves szabadság felhasználása ",
-                    FileName = "Éves_" + Dolgozónév.Text.Trim() + "-" + DateTime.Now.ToString("yyyyMMdd"),
+                    FileName = $"Éves_{Dolgozónév.Text.Trim()}-{DateTime.Now:yyyyMMdd}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1285,7 +1277,6 @@ namespace Villamos
                 MyE.Kiir("Szabadság Összesítő a " + Text.Substring(0, 4) + " évre", "b1");
                 MyE.Betű("b1");
 
-
                 MyE.Kiir("Név:", "a3");
                 MyE.Egyesít(munkalap, "b3:e3");
                 MyE.Kiir(darabol[0].Trim(), "b3");
@@ -1307,13 +1298,13 @@ namespace Villamos
                 int sor = 11;
                 int összesen = 0;
 
-                string szöveg = "SELECT * FROM szabadság ";
-                szöveg += $" WHERE Törzsszám='{darabol[1].Trim()}'  AND státus<>3 AND (szabiok Like '%pót%' OR szabiok='Alap')";
-                szöveg += " order by kezdődátum";
-
-                Kezelő_Szatube_Szabadság Kéz = new Kezelő_Szatube_Szabadság();
-                List<Adat_Szatube_Szabadság> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
+                List<Adat_Szatube_Szabadság> AdatokÖ = KézSzabadság.Lista_Adatok(CmbTelephely.Text.Trim(), Adat_Évek.Text.Trim().ToÉrt_Int());
+                List<Adat_Szatube_Szabadság> Adatok = (from a in AdatokÖ
+                                                       where a.Törzsszám == darabol[1].Trim() &&
+                                                       a.Státus != 3 &&
+                                                       (a.Szabiok.ToLower().Contains("pót") || a.Szabiok.ToLower().Contains("alap"))
+                                                       orderby a.Kezdődátum
+                                                       select a).ToList();
 
                 foreach (Adat_Szatube_Szabadság rekord in Adatok)
                 {
@@ -1349,10 +1340,12 @@ namespace Villamos
 
                 int kivett = 0;
 
-                szöveg = "SELECT * FROM szabadság ";
-                szöveg += $" WHERE Törzsszám='{darabol[1].Trim()}'  AND státus<>3 AND szabiok Like '%ivétel%'";
-                szöveg += " order by kezdődátum";
-                Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                Adatok = (from a in AdatokÖ
+                          where a.Törzsszám == darabol[1].Trim() &&
+                          a.Státus != 3 &&
+                          a.Szabiok.ToLower().Contains("kivétel")
+                          orderby a.Kezdődátum
+                          select a).ToList();
 
                 foreach (Adat_Szatube_Szabadság rekord in Adatok)
                 {
@@ -1454,19 +1447,15 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
         private void Szabadságokfeltölt()
         {
             try
             {
-                string Hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
-                string Jelszó = "Mocó";
-                string szöveg = "SELECT * FROM szabadságok WHERE NOT megnevezés like '%kivétel%' order by megnevezés asc";
                 Szabiok.Items.Clear();
                 Szabiok.BeginUpdate();
-                Kezelő_Kiegészítő_Szabadságok Kéz = new Kezelő_Kiegészítő_Szabadságok();
-                List<Adat_Kiegészítő_Szabadságok> Adatok = Kéz.Lista_Adatok(Hely, Jelszó, szöveg);
 
+                List<Adat_Kiegészítő_Szabadságok> Adatok = KézKiegSzab.Lista_Adatok(CmbTelephely.Text.Trim());
+                Adatok = Adatok.Where(a => !a.Megnevezés.ToUpper().Contains("KIVÉTEL")).ToList();
                 foreach (Adat_Kiegészítő_Szabadságok rekord in Adatok)
                     Szabiok.Items.Add(rekord.Megnevezés.Trim());
 
@@ -2605,19 +2594,22 @@ namespace Villamos
         }
         #endregion
 
+
         #region Határnapi összesítés
-        // JAVÍTANDÓ:
         private void Határnapig_Összesít_Click(object sender, EventArgs e)
         {
             try
             {
-                if (!Exists(hely)) throw new HibásBevittAdat("Ebben az évben nem lett létrehozva adatbázis.");
-
-                string szöveg = $"SELECT * FROM szabadság WHERE Státus=0 AND sorszám=0 AND Kezdődátum<=#{Határnap.Value:yyyy-MM-dd}# ORDER BY törzsszám,kezdődátum";
-
                 Holtart.Be();
-                Kezelő_Szatube_Szabadság Kéz = new Kezelő_Szatube_Szabadság();
-                List<Adat_Szatube_Szabadság> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_Szatube_Szabadság> Adatok = KézSzabadság.Lista_Adatok(CmbTelephely.Text.Trim(), Határnap.Value.Year);
+                Adatok = (from a in Adatok
+                          where a.Státus == 0 &&
+                          a.Sorszám == 0 &&
+                          a.Kezdődátum <= Határnap.Value
+                          orderby a.Törzsszám, a.Kezdődátum
+                          select a).ToList();
+                if (Adatok == null || Adatok.Count > 1) throw new HibásBevittAdat("Ebben az évben nem lett létrehozva adatbázis.");
                 Adat_Szatube_Szabadság Ideig = null;
 
                 string Első_HR = "";
@@ -2696,54 +2688,27 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
         private void Csoportosítja_Elemeket(Adat_Szatube_Szabadság rekord)
         {
-            SzabadságListaFeltöltés();
+            Adatok_Szabadság = KézSzabadság.Lista_Adatok(CmbTelephely.Text.Trim(), Adat_Évek.Text.ToÉrt_Int());
 
             double sorszám = 1;
             if (Adatok_Szabadság.Count > 0) sorszám = Adatok_Szabadság.Max(a => a.Sorszám) + 1;
 
-            string szöveg = $"UPDATE szabadság SET sorszám={sorszám} WHERE Törzsszám='{rekord.Törzsszám.Trim()}' AND Kezdődátum>=#{rekord.Kezdődátum:yyyy-MM-dd}#";
-            szöveg += $"AND  Befejeződátum<=#{rekord.Befejeződátum:yyyy-MM-dd}# AND státus<>3";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+            KézSzabadság.Módosítás(CmbTelephely.Text.Trim(), Adat_Évek.Text.ToÉrt_Int(), rekord, sorszám);
         }
-        // JAVÍTANDÓ:
+
         private bool VanKözötte(string Első_HR, DateTime ELőző_Kezdő, DateTime Aktuális)
         {
             bool válasz = false;
-            string szöveg = $"SELECT * FROM beosztás WHERE Dolgozószám='{Első_HR.Trim()}' AND nap>#{ELőző_Kezdő:yyyy-MM-dd}# AND nap<#{Aktuális:yyyy-MM-dd}#";
-            string helyb = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\Adatok\Beosztás\{ELőző_Kezdő.Year}\Ebeosztás{ELőző_Kezdő:yyyyMM}.mdb";
-            string jelszób = "kiskakas";
-
-            Kezelő_Dolgozó_Beosztás KézBeosztás = new Kezelő_Dolgozó_Beosztás();
-            Adat_Dolgozó_Beosztás Elem = KézBeosztás.Egy_Adat(helyb, jelszób, szöveg);
+            List<Adat_Dolgozó_Beosztás_Új> Adatok = KézBeosztás.Lista_Adatok(CmbTelephely.Text.Trim(), ELőző_Kezdő);
+            Adat_Dolgozó_Beosztás_Új Elem = (from a in Adatok
+                                             where a.Dolgozószám == Első_HR.Trim() &&
+                                             a.Nap > ELőző_Kezdő && a.Nap < Aktuális
+                                             select a).FirstOrDefault();
 
             if (Elem != null) válasz = true;
-
             return válasz;
-        }
-        #endregion
-
-        #region Listák
-        // JAVÍTANDÓ:
-        private void SzabadságListaFeltöltés()
-        {
-            try
-            {
-                Adatok_Szabadság.Clear();
-                string szöveg = "SELECT * FROM szabadság ";
-                Adatok_Szabadság = Kéz_Szabadság.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
         #endregion
     }

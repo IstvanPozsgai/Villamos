@@ -88,6 +88,85 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás(string Telephely, int Év, Adat_Szatube_Szabadság Adat, double sorszám)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                string szöveg = $"UPDATE {táblanév} SET sorszám={sorszám} WHERE Törzsszám='{Adat.Törzsszám.Trim()}' AND Kezdődátum>=#{Adat.Kezdődátum:yyyy-MM-dd}#";
+                szöveg += $"AND  Befejeződátum<=#{Adat.Befejeződátum:yyyy-MM-dd}# AND státus<>3";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        public void Rögzítés(string Telephely, int Év, Adat_Szatube_Szabadság Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                string szöveg = $"INSERT INTO {táblanév} ";
+                szöveg += " (Sorszám ,törzsszám, dolgozónév, kezdődátum, befejeződátum, kivettnap, Szabiok, Státus, rögzítette, rögzítésdátum )";
+                szöveg += " VALUES (";
+                szöveg += $"{Adat.Sorszám},";                   //Sorszám
+                szöveg += $"'{Adat.Törzsszám}', ";              //törzsszám
+                szöveg += $"'{Adat.Dolgozónév}', ";             //dolgozónév
+                szöveg += $"'{Adat.Kezdődátum:yyyy.MM.dd}', ";  //kezdődátum
+                szöveg += $"'{Adat.Befejeződátum:yyyy.MM.dd}', "; //befejeződátum
+                szöveg += $"{Adat.Kivettnap}, ";                       //kivettnap
+                szöveg += $"'{Adat.Szabiok}', ";      //Szabiok
+                szöveg += $"{Adat.Státus}, ";                             //Státus
+                szöveg += $"'{Adat.Rögzítette}', "; //rögzítette
+                szöveg += $"'{Adat.Rögzítésdátum}')";  //rögzítésdátum
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        public void StátusÁllítás(string Telephely, int Év, int Státus, List<double> Sorszámok)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (double Sorszám in Sorszámok)
+                {
+                    string szöveg = $"Update {táblanév} set státus={Státus} Where sorszám={Sorszám} AND státus<>3";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
         //Elkopó
         public List<Adat_Szatube_Szabadság> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
@@ -131,7 +210,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-
         public Adat_Szatube_Szabadság Egy_Adat(string hely, string jelszó, string szöveg)
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.SzaTuBe_tábla(hely);
@@ -168,6 +246,5 @@ namespace Villamos.Kezelők
             }
             return Adat;
         }
-
     }
 }
