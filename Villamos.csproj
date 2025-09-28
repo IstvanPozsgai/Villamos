@@ -853,6 +853,10 @@
     <Compile Include="V_Kezelők\Kezelő_MEO_KerékMérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oldalok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Raktár.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szatube_Aft.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szatube_Beteg.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szatube_Csúsztatás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szatube_Szabadság.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_Telep_Opció.cs" />
     <Compile Include="V_Kezelők\Kezelő_Users.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Mérés.cs" />

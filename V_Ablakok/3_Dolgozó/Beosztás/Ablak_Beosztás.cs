@@ -39,8 +39,10 @@ namespace Villamos
         readonly Kezelő_Dolgozó_Beosztás_Új KézBeo = new Kezelő_Dolgozó_Beosztás_Új();
         readonly Kezelő_Váltós_Naptár KézVáltNaptár = new Kezelő_Váltós_Naptár();
         readonly Kezelő_Kiegészítő_Munkaidő KézMunkaIdő = new Kezelő_Kiegészítő_Munkaidő();
+        readonly Kezelő_Kiegészítő_Váltóstábla KézVáltósTábla = new Kezelő_Kiegészítő_Váltóstábla();
+        readonly Kezelő_Kiegészítő_Beosztásciklus KézBeoCiklus = new Kezelő_Kiegészítő_Beosztásciklus();
 
-
+        List<Adat_Kiegészítő_Beosztáskódok> AdatokBeoKód = new List<Adat_Kiegészítő_Beosztáskódok>();
         List<Adat_Dolgozó_Alap> AdatokDolg = new List<Adat_Dolgozó_Alap>();
         #region Alap
         public Ablak_Beosztás()
@@ -182,6 +184,7 @@ namespace Villamos
             Visszacsukcsoport();
             Visszacsukjadolgozó();
 
+            AdatokBeoKód = KÉZBeoKód.Lista_Adatok(Cmbtelephely.Text.Trim());
             Nyolcórásfeltölt();
             Mindenfeltölt();
             Tizenkétórásfeltölt();
@@ -808,7 +811,6 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
         private void Váltós_BEO_Kiírás()
         {
             try
@@ -817,13 +819,7 @@ namespace Villamos
                 // kiirjuk a váltós munkarendeket
                 // ******************************
                 Holtart.BackColor = Color.Orange;
-
-                string hely = Application.StartupPath + @"\Főmérnökség\Adatok\kiegészítő2.mdb";
-                string szöveg = "SELECT * FROM váltósbeosztás order by id";
-                string jelszó = "Mocó";
-
-                Kezelő_Kiegészítő_Váltóstábla Kéz = new Kezelő_Kiegészítő_Váltóstábla();
-                List<Adat_Kiegészítő_Váltóstábla> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Váltóstábla> Adatok = KézVáltósTábla.Lista_Adatok();
 
                 foreach (Adat_Kiegészítő_Váltóstábla rekordváltó in Adatok)
                 {
@@ -845,9 +841,7 @@ namespace Villamos
                             Tábla.Rows[Tábla.RowCount - 1].Cells[1].Style.BackColor = Color.MediumSeaGreen;
                             Tábla.Rows[Tábla.RowCount - 1].Cells[2].Style.BackColor = Color.MediumSeaGreen;
 
-                            szöveg = "SELECT * FROM beosztásciklus ORDER BY ID";
-                            Kezelő_Kiegészítő_Beosztásciklus KézBeo = new Kezelő_Kiegészítő_Beosztásciklus();
-                            List<Adat_Kiegészítő_Beosztásciklus> AdatokBeo = KézBeo.Lista_Adatok(hely, jelszó, szöveg);
+                            List<Adat_Kiegészítő_Beosztásciklus> AdatokBeo = KézBeoCiklus.Lista_Adatok("beosztásciklus");
 
                             //Végig megyünk a hónapnapjain és kiírjuk a beosztáskódot
                             for (int i = 0; i < hónap_hossz; i++)
@@ -927,7 +921,7 @@ namespace Villamos
                 string szöveg = $"Select * FROM Szabadság";
 
 
-                List<Adat_Szatube_Szabadság> AdatokSzab = KézSzaTuBe.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Szatube_Szabadság> AdatokSzab = KézSzaTuBe.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
 
                 for (int i = 0; i < Tábla.Rows.Count; i++)
                 {
@@ -1356,7 +1350,6 @@ namespace Villamos
 
 
         #region Tizenkétórás
-        // JAVÍTANDÓ:
         private void Tizenkétórásfeltölt()
         {
             try
@@ -1365,12 +1358,10 @@ namespace Villamos
                 Tizenkétórás.Items.Clear();
                 Tizenkétórás.BeginUpdate();
                 Tizenkétórás.Items.Add("");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM Beosztáskódok where [munkarend]=12 order by sorszám";
-
-                Kezelő_Kiegészítő_Beosztáskódok Kéz = new Kezelő_Kiegészítő_Beosztáskódok();
-                List<Adat_Kiegészítő_Beosztáskódok> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Beosztáskódok> Adatok = (from a in AdatokBeoKód
+                                                              where a.Munkarend == 12
+                                                              orderby a.Sorszám
+                                                              select a).ToList();
 
                 foreach (Adat_Kiegészítő_Beosztáskódok rekord in Adatok)
                     Tizenkétórás.Items.Add(rekord.Beosztáskód + " = " + rekord.Munkaidőkezdet.ToString("HH:mm") + " - " + rekord.Munkaidővége.ToString("HH:mm") + " = " + rekord.Munkaidő);
@@ -1498,7 +1489,6 @@ namespace Villamos
 
 
         #region Minden
-        // JAVÍTANDÓ:
         private void Mindenfeltölt()
         {
             try
@@ -1506,12 +1496,9 @@ namespace Villamos
                 Minden.Items.Clear();
                 Minden.BeginUpdate();
                 Minden.Items.Add("");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM Beosztáskódok order by sorszám";
-
-                Kezelő_Kiegészítő_Beosztáskódok Kéz = new Kezelő_Kiegészítő_Beosztáskódok();
-                List<Adat_Kiegészítő_Beosztáskódok> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Beosztáskódok> Adatok = (from a in AdatokBeoKód
+                                                              orderby a.Sorszám
+                                                              select a).ToList();
 
                 foreach (Adat_Kiegészítő_Beosztáskódok rekord in Adatok)
                     Minden.Items.Add(rekord.Beosztáskód + " = " + rekord.Munkaidőkezdet.ToString("HH:mm") + " - " + rekord.Munkaidővége.ToString("HH:mm") + " = " + rekord.Munkaidő);
@@ -1638,7 +1625,6 @@ namespace Villamos
 
 
         #region Nyolcórás
-        // JAVÍTANDÓ:
         private void Nyolcórásfeltölt()
         {
             try
@@ -1647,12 +1633,10 @@ namespace Villamos
                 Nyolcórás.Items.Clear();
                 Nyolcórás.BeginUpdate();
                 Nyolcórás.Items.Add("");
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM Beosztáskódok where [munkarend]=8 order by sorszám";
-
-                Kezelő_Kiegészítő_Beosztáskódok Kéz = new Kezelő_Kiegészítő_Beosztáskódok();
-                List<Adat_Kiegészítő_Beosztáskódok> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Beosztáskódok> Adatok = (from a in AdatokBeoKód
+                                                              where a.Munkarend == 8
+                                                              orderby a.Sorszám
+                                                              select a).ToList();
 
                 foreach (Adat_Kiegészítő_Beosztáskódok rekord in Adatok)
                     Nyolcórás.Items.Add(rekord.Beosztáskód + " = " + rekord.Munkaidőkezdet.ToString("HH:mm") + " - " + rekord.Munkaidővége.ToString("HH:mm") + " = " + rekord.Munkaidő);
@@ -1779,7 +1763,6 @@ namespace Villamos
 
 
         #region Rögzítés
-        // JAVÍTANDÓ:
         private void Rögzítés()
         {
             try
@@ -1858,8 +1841,6 @@ namespace Villamos
 
 
         #region Kiegészítő doboz
-
-
         private void Kiegészítő_Doboz_Click(object sender, EventArgs e)
         {
             Tizenkétórás.Visible = false;
@@ -1945,7 +1926,6 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
         private void Excel_gomb_Click(object sender, EventArgs e)
         {
             try
@@ -1957,9 +1937,8 @@ namespace Villamos
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
                 {
                     InitialDirectory = "MyDocuments",
-
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Beosztás_" + Program.PostásNév.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Beosztás_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1990,17 +1969,17 @@ namespace Villamos
                 MyE.Oszlopszélesség(munkalap, "E:AP", 5);
 
                 int sor = 3;
-                MyE.Kiir("HR Azon.", "A" + sor);
-                MyE.Kiir("Név", "B" + sor);
-                MyE.Kiir("Perc", "C" + sor);
-                MyE.Kiir("Szab", "D" + sor);
+                MyE.Kiir("HR Azon.", $"A{sor}");
+                MyE.Kiir("Név", $"B{sor}");
+                MyE.Kiir("Perc", $"C{sor}");
+                MyE.Kiir("Szab", $"D{sor}");
 
                 int oszlop = 5;
 
                 for (int i = 0; i < hónap_hossz; i++)
                 {
                     DateTime adottnap = Hónap_első.AddDays(i);
-                    MyE.Kiir(Hónap_első.AddDays(i).ToString("dd"), MyE.Oszlopnév(oszlop + i) + sor);
+                    MyE.Kiir(Hónap_első.AddDays(i).ToString("dd"), MyE.Oszlopnév(oszlop + i) + sor.ToString());
                     Holtart.Lép();
                 }
                 MyE.Betű("3:4", false, false, true);
@@ -2066,7 +2045,6 @@ namespace Villamos
                 MyE.Új_munkalap(munkalap);
                 MyE.Munkalap_betű("Arial", 12);
 
-
                 sor = 1;
                 // fejlév
                 MyE.Kiir("HR azonosító", "a1");
@@ -2083,22 +2061,11 @@ namespace Villamos
                 MyE.Oszlopszélesség(munkalap, "E:E", 20);
                 MyE.Oszlopszélesség(munkalap, "F:F", 80);
 
-
-                Kezelő_Dolgozó_Beosztás_Új Kéz = new Kezelő_Dolgozó_Beosztás_Új();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Beosztás\{Dátum.Value.Year}\Ebeosztás{Dátum.Value:yyyyMM}.mdb";
-                string jelszó = "kiskakas";
-                string szöveg = $"SELECT * FROM beosztás ";
-                List<Adat_Dolgozó_Beosztás_Új> AdatokBEO = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-
-
+                List<Adat_Dolgozó_Beosztás_Új> AdatokBEO = KézBeo.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value);
                 sor = 1;
                 for (int ki = 0; ki < Dolgozónév.CheckedItems.Count; ki++)
                 {
                     string[] darabol = Dolgozónév.CheckedItems[ki].ToString().Split('=');
-
-                    szöveg = $"SELECT * FROM beosztás WHERE dolgozószám='{darabol[1].Trim()}' ";
-                    szöveg += $"AND nap>=#{MyF.Hónap_elsőnapja(Dátum.Value):MM-dd-yyyy}# AND nap<=#{MyF.Hónap_utolsónapja(Dátum.Value):MM-dd-yyyy}# ORDER BY nap";
 
                     List<Adat_Dolgozó_Beosztás_Új> Adatok = (from a in AdatokBEO
                                                              where a.Dolgozószám == darabol[1].Trim() &&
@@ -2118,56 +2085,56 @@ namespace Villamos
                             if (rekord.Túlóra != 0)
                             {
                                 sor += 1;
-                                MyE.Kiir(rekord.Dolgozószám.Trim(), "A" + sor);
-                                MyE.Kiir(Dolgozó.DolgozóNév.Trim(), "B" + sor);
-                                MyE.Kiir(rekord.Nap.ToString("yyyy.MM.dd"), "C" + sor);
-                                MyE.Kiir(rekord.Túlóra.ToString(), "D" + sor);
-                                MyE.Kiir("túlóra", "E" + sor);
+                                MyE.Kiir(rekord.Dolgozószám.Trim(), $"A{sor}");
+                                MyE.Kiir(Dolgozó.DolgozóNév.Trim(), $"B{sor}");
+                                MyE.Kiir(rekord.Nap.ToString("yyyy.MM.dd"), $"C{sor}");
+                                MyE.Kiir(rekord.Túlóra.ToString(), $"D{sor}");
+                                MyE.Kiir("túlóra", $"E{sor}");
                                 string ideig = rekord.Túlórakezd.ToString("HH:mm") + " - " + rekord.Túlóravég.ToString("HH:mm") + " - " + rekord.Túlóraok.Trim();
-                                MyE.Kiir(ideig, "F" + sor);
+                                MyE.Kiir(ideig, $"F{sor}");
                             }
 
                             if (rekord.Csúszóra != 0)
                             {
                                 sor += 1;
-                                MyE.Kiir(rekord.Dolgozószám.Trim(), "A" + sor);
-                                MyE.Kiir(Dolgozó.DolgozóNév.Trim(), "B" + sor);
-                                MyE.Kiir(rekord.Nap.ToString("yyyy.MM.dd"), "C" + sor);
-                                MyE.Kiir(rekord.Csúszóra.ToString(), "D" + sor);
-                                MyE.Kiir("Csúsztatás", "E" + sor);
-                                MyE.Kiir(rekord.Csúszok.Trim(), "F" + sor);
+                                MyE.Kiir(rekord.Dolgozószám.Trim(), $"A{sor}");
+                                MyE.Kiir(Dolgozó.DolgozóNév.Trim(), $"B{sor}");
+                                MyE.Kiir(rekord.Nap.ToString("yyyy.MM.dd"), $"C{sor}");
+                                MyE.Kiir(rekord.Csúszóra.ToString(), $"D{sor}");
+                                MyE.Kiir("Csúsztatás", $"E{sor}");
+                                MyE.Kiir(rekord.Csúszok.Trim(), $"F{sor}");
                             }
 
                             if (rekord.AFTóra != 0)
                             {
                                 sor += 1;
-                                MyE.Kiir(rekord.Dolgozószám.Trim(), "A" + sor);
-                                MyE.Kiir(Dolgozó.DolgozóNév.Trim(), "B" + sor);
-                                MyE.Kiir(rekord.Nap.ToString("yyyy.MM.dd"), "C" + sor);
-                                MyE.Kiir(rekord.AFTóra.ToString(), "D" + sor);
-                                MyE.Kiir("Átlaggal fizetett", "E" + sor);
-                                MyE.Kiir(rekord.AFTok.Trim(), "f" + sor);
+                                MyE.Kiir(rekord.Dolgozószám.Trim(), $"A{sor}");
+                                MyE.Kiir(Dolgozó.DolgozóNév.Trim(), $"B{sor}");
+                                MyE.Kiir(rekord.Nap.ToString("yyyy.MM.dd"), $"C{sor}");
+                                MyE.Kiir(rekord.AFTóra.ToString(), $"D{sor}");
+                                MyE.Kiir("Átlaggal fizetett", $"E{sor}");
+                                MyE.Kiir(rekord.AFTok.Trim(), $"F{sor}");
                             }
 
                             if (rekord.Megjegyzés.Trim() != "")
                             {
                                 sor += 1;
-                                MyE.Kiir(rekord.Dolgozószám.Trim(), "A" + sor);
-                                MyE.Kiir(Dolgozó.DolgozóNév.Trim(), "B" + sor);
-                                MyE.Kiir(rekord.Nap.ToString("yyyy.MM.dd"), "C" + sor);
-                                MyE.Kiir("-", "D" + sor);
-                                MyE.Kiir("Információ", "E" + sor);
-                                MyE.Kiir(rekord.Megjegyzés.Trim(), "f" + sor);
+                                MyE.Kiir(rekord.Dolgozószám.Trim(), $"A{sor}");
+                                MyE.Kiir(Dolgozó.DolgozóNév.Trim(), $"B{sor}");
+                                MyE.Kiir(rekord.Nap.ToString("yyyy.MM.dd"), $"C{sor}");
+                                MyE.Kiir("-", $"D{sor}");
+                                MyE.Kiir("Információ", $"E{sor}");
+                                MyE.Kiir(rekord.Megjegyzés.Trim(), $"F{sor}");
                             }
 
                             if (rekord.Szabiok.Trim() != "" && rekord.Szabiok.Trim() != "Normál kivétel")
                             {
                                 sor += 1;
-                                MyE.Kiir(rekord.Dolgozószám.Trim(), "A" + sor);
-                                MyE.Kiir(Dolgozó.DolgozóNév.Trim(), "B" + sor);
-                                MyE.Kiir(rekord.Nap.ToString("yyyy.MM.dd"), "C" + sor);
-                                MyE.Kiir(" - Szabadság - ", "E" + sor);
-                                MyE.Kiir(rekord.Szabiok.Trim(), "F" + sor);
+                                MyE.Kiir(rekord.Dolgozószám.Trim(), $"A{sor}");
+                                MyE.Kiir(Dolgozó.DolgozóNév.Trim(), $"B{sor}");
+                                MyE.Kiir(rekord.Nap.ToString("yyyy.MM.dd"), $"C{sor}");
+                                MyE.Kiir(" - Szabadság - ", $"E{sor}");
+                                MyE.Kiir(rekord.Szabiok.Trim(), $"F{sor}");
                             }
                             Holtart.Lép();
                         }
@@ -2179,7 +2146,6 @@ namespace Villamos
                             "1", "1", false, "A4", true, false);
                 MyE.Aktív_Cella(munkalap, "A1");
 
-
                 // az excel tábla bezárása
                 MyE.Munkalap_aktív("Beosztás");
                 MyE.Aktív_Cella("Beosztás", "A1");
@@ -2190,8 +2156,6 @@ namespace Villamos
                 Holtart.Ki();
                 MessageBox.Show("Az Excel táblázat elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fájlexc + ".xlsx");
-
-
             }
             catch (HibásBevittAdat ex)
             {

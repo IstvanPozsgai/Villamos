@@ -87,7 +87,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Dolgozó_Beosztás_Új Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO beosztás (Dolgozószám, Nap, Beosztáskód, Ledolgozott, " +
+                    string szöveg = $"INSERT INTO {táblanév} (Dolgozószám, Nap, Beosztáskód, Ledolgozott, " +
                                                         "Túlóra, Túlórakezd, Túlóravég, Csúszóra, " +
                                                         "CSúszórakezd, Csúszóravég, Megjegyzés, Túlóraok, " +
                                                         "Szabiok, kért, Csúszok, AFTóra, " +
@@ -149,7 +149,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum, Eszterga);
-                string szöveg = $"DELETE FROM beosztás WHERE  nap>=#{Dátumtól:yyyy-MM-dd}# AND nap<=#{Dátumig:yyyy-MM-dd}# ";
+                string szöveg = $"DELETE FROM {táblanév} WHERE  nap>=#{Dátumtól:yyyy-MM-dd}# AND nap<=#{Dátumig:yyyy-MM-dd}# ";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
