@@ -37,6 +37,8 @@ namespace Villamos
         readonly Kezelő_Szatube_Szabadság KézSzaTuBe = new Kezelő_Szatube_Szabadság();
         readonly Kezelő_Kiegészítő_Beosztáskódok KÉZBeoKód = new Kezelő_Kiegészítő_Beosztáskódok();
         readonly Kezelő_Dolgozó_Beosztás_Új KézBeo = new Kezelő_Dolgozó_Beosztás_Új();
+        readonly Kezelő_Váltós_Naptár KézVáltNaptár = new Kezelő_Váltós_Naptár();
+        readonly Kezelő_Kiegészítő_Munkaidő KézMunkaIdő = new Kezelő_Kiegészítő_Munkaidő();
 
 
         List<Adat_Dolgozó_Alap> AdatokDolg = new List<Adat_Dolgozó_Alap>();
@@ -703,8 +705,8 @@ namespace Villamos
                     szöveg += $" WHERE dátum>=#{MyF.Hónap_elsőnapja(Dátum.Value):M-d-yy}# ";
                     szöveg += $" And dátum<=#{MyF.Hónap_utolsónapja(Dátum.Value):M-d-yy}# ORDER BY dátum";
 
-                    Kezelő_Váltós_Naptár Kéz = new Kezelő_Váltós_Naptár();
-                    List<Adat_Váltós_Naptár> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+
+                    List<Adat_Váltós_Naptár> Adatok = KézVáltNaptár.Lista_Adatok(hely, jelszó, szöveg);
 
                     for (int i = 3; i <= hónap_hossz + 2; i++)
                     {
@@ -2229,7 +2231,7 @@ namespace Villamos
             Kitölti_váltósnak();
         }
 
-        // JAVÍTANDÓ:
+
         private void Kitölti_váltósnak()
         {
             try
@@ -2239,19 +2241,10 @@ namespace Villamos
 
                 Holtart.Be(Tábla.Rows.Count + 1);
 
-                string helyelv = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\munkaidőnaptár.mdb";
-                string jelszóelv = "katalin";
-                if (!Exists(helyelv)) return;
+                List<Adat_Váltós_Naptár> AdatokVált = KézVáltNaptár.Lista_Adatok(Dátum.Value.Year, "");
+                if (AdatokVált == null || AdatokVált.Count < 1) throw new HibásBevittAdat($"{Dátum.Value.Year} évben még nincs beállítva a munkaidő naptár.");
 
-                Kezelő_Váltós_Naptár KézVált = new Kezelő_Váltós_Naptár();
-                List<Adat_Váltós_Naptár> AdatokVált = new List<Adat_Váltós_Naptár>();
-
-                string helykieg = Application.StartupPath + @"\Főmérnökség\adatok\kiegészítő2.mdb";
-                string jelszókieg = "Mocó";
-                string szöveg = $"Select * FROM munkaidő";
-                Kezelő_Kiegészítő_Munkaidő KézMunkaIdő = new Kezelő_Kiegészítő_Munkaidő();
-                List<Adat_Kiegészítő_Munkaidő> AdatokMunkaIdő = KézMunkaIdő.Lista_Adatok(helykieg, jelszókieg, szöveg);
-
+                List<Adat_Kiegészítő_Munkaidő> AdatokMunkaIdő = KézMunkaIdő.Lista_Adatok();
 
                 for (int i = 0; i < Tábla.Rows.Count; i++)
                 {
@@ -2279,67 +2272,63 @@ namespace Villamos
                         if (szcsoport != null && szcsoport.Trim() != "_")
                             if (szcsoport != null && szcsoport.Trim() != "")
                             {
+
+                                if (!szcsoport.Contains("É"))
+                                    AdatokVált = KézVáltNaptár.Lista_Adatok(Dátum.Value.Year, szcsoport.Substring(szcsoport.Length - 1, 1));
+                                else
+                                    AdatokVált = KézVáltNaptár.Lista_Adatok(Dátum.Value.Year, (int.Parse(szcsoport.Substring(szcsoport.Length - 1, 1)) + 4).ToString());
+
+                                AdatokVált = (from a in AdatokVált
+                                              where a.Dátum >= MyF.Hónap_elsőnapja(Dátum.Value) &&
+                                                    a.Dátum <= MyF.Hónap_utolsónapja(Dátum.Value)
+                                              orderby a.Dátum ascending
+                                              select a).ToList();
+
+                                if (AdatokVált != null)
                                 {
-                                    if (!szcsoport.Contains("É"))
+                                    for (int j = 3; j < Tábla.Columns.Count - 2; j++)
                                     {
-                                        szöveg = $"Select * FROM naptár{szcsoport.Substring(szcsoport.Length - 1, 1)} WHERE ";
-                                        szöveg += $" dátum>=#{new DateTime(Dátum.Value.Year, Dátum.Value.Month, 1):yyyy-MM-dd}# ";
-                                        szöveg += $" AND dátum<=#{MyF.Hónap_utolsónapja(Dátum.Value):yyyy-MM-dd}# ";
-                                    }
-                                    else
-                                    {
-                                        szöveg = $"Select * FROM naptár{int.Parse(szcsoport.Substring(szcsoport.Length - 1, 1)) + 4}";
-                                        szöveg += $" dátum>=#{new DateTime(Dátum.Value.Year, Dátum.Value.Month, 1):yyyy-MM-dd}# ";
-                                        szöveg += $" AND dátum<=#{MyF.Hónap_utolsónapja(Dátum.Value):yyyy-MM-dd}# ";
-                                    }
-                                    AdatokVált = KézVált.Lista_Adatok(helyelv, jelszóelv, szöveg);
+                                        Holtart.Lép();
+                                        DateTime IdeigNap = MyF.Hónap_elsőnapja(Dátum.Value).AddDays(j - 3);
+                                        string sznap = (from a in AdatokVált
+                                                        where a.Dátum == IdeigNap
+                                                        select a.Nap).FirstOrDefault();
 
-                                    if (AdatokVált != null)
-                                    {
-                                        for (int j = 3; j < Tábla.Columns.Count - 2; j++)
+                                        BeosztáskódVálasztott = sznap;
+                                        if (sznap != null)
                                         {
-                                            Holtart.Lép();
-                                            DateTime IdeigNap = MyF.Hónap_elsőnapja(Dátum.Value).AddDays(j - 3);
-                                            string sznap = (from a in AdatokVált
-                                                            where a.Dátum == IdeigNap
-                                                            select a.Nap).FirstOrDefault();
-
-                                            BeosztáskódVálasztott = sznap;
-                                            if (sznap != null)
+                                            if (sznap != "_")
                                             {
-                                                if (sznap != "_")
+                                                // megkeressük a beosztáskódhoz tartozó adatokat
+                                                switch (sznap)
                                                 {
-                                                    // megkeressük a beosztáskódhoz tartozó adatokat
-                                                    switch (sznap)
-                                                    {
-                                                        case "E":
-                                                            {
-                                                                if (!szcsoport.Contains("É"))
-                                                                    BeosztáskódVálasztott = "7"; // ha váltós
-                                                                else
-                                                                    BeosztáskódVálasztott = "8";// ha állandó éjszakás
-                                                                break;
-                                                            }
-                                                        case "Z":
-                                                            {
-                                                                if (!szcsoport.Contains("É"))
-                                                                    BeosztáskódVálasztott = "7"; // ha váltós
-                                                                else
-                                                                    BeosztáskódVálasztott = "8";// ha állandó éjszakás
-                                                                break;
-                                                            }
-                                                        case "P":
-                                                            {
-                                                                BeosztáskódVálasztott = "";
-                                                                break;
-                                                            }
-                                                    }
-                                                    NapKiválaszt.Text = IdeigNap.ToString("yyyy.MM.dd");
-                                                    Előzőtartalom = "";
-                                                    Hrazonosító.Text = sztörzsszám;
-                                                    Ledolgozottidő.Text = Ledolgozott_idő.ToString();
-                                                    Rögzítés();
+                                                    case "E":
+                                                        {
+                                                            if (!szcsoport.Contains("É"))
+                                                                BeosztáskódVálasztott = "7"; // ha váltós
+                                                            else
+                                                                BeosztáskódVálasztott = "8";// ha állandó éjszakás
+                                                            break;
+                                                        }
+                                                    case "Z":
+                                                        {
+                                                            if (!szcsoport.Contains("É"))
+                                                                BeosztáskódVálasztott = "7"; // ha váltós
+                                                            else
+                                                                BeosztáskódVálasztott = "8";// ha állandó éjszakás
+                                                            break;
+                                                        }
+                                                    case "P":
+                                                        {
+                                                            BeosztáskódVálasztott = "";
+                                                            break;
+                                                        }
                                                 }
+                                                NapKiválaszt.Text = IdeigNap.ToString("yyyy.MM.dd");
+                                                Előzőtartalom = "";
+                                                Hrazonosító.Text = sztörzsszám;
+                                                Ledolgozottidő.Text = Ledolgozott_idő.ToString();
+                                                Rögzítés();
                                             }
                                         }
                                     }
@@ -2377,7 +2366,8 @@ namespace Villamos
             try
             {
                 // kitörli az összes dolgozó beosztását
-                if (MessageBox.Show("Biztos, hogy törli az összes havi adatot a táblázatban szereplő dolgozóknál?", "Figyelmeztetés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Cancel)
+                if (MessageBox.Show("Biztos, hogy törli az összes havi adatot a táblázatban szereplő dolgozóknál?",
+                    "Figyelmeztetés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Cancel)
                     return;
 
                 string Hr_Azonosító;
@@ -2457,28 +2447,24 @@ namespace Villamos
             Nappalos_beosztás();
         }
 
-        // JAVÍTANDÓ:
         private void Nappalos_beosztás()
         {
             try
             {
-                if (MessageBox.Show("Csak ÜRES beosztás esetén használható!\nBiztos, hogy feltölti a nappalos beosztást a táblázatban szereplő dolgozóknál? \n Minden meglévő adatot törölni fogsz vele.", "Figyelmeztetés", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.Cancel)
+                if (MessageBox.Show("Csak ÜRES beosztás esetén használható!\nBiztos, hogy feltölti a nappalos beosztást a táblázatban szereplő dolgozóknál?" +
+                    " \n Minden meglévő adatot törölni fogsz vele.", "Figyelmeztetés", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.Cancel)
                     return;
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\munkaidőnaptár.mdb";
-                if (!Exists(hely))
-                    throw new HibásBevittAdat($"{Dátum.Value.Year} évben még nincs beállítva a munkaidő naptár.");
-                string jelszó = "katalin";
                 Holtart.Be(Tábla.Rows.Count + 1);
 
                 //Betöltjük a nappalos beosztást
-                string szöveg = " select * from naptár ";
-                szöveg += $" WHERE dátum>=#{MyF.Hónap_elsőnapja(Dátum.Value):M-d-yy}# ";
-                szöveg += $" And dátum<=#{MyF.Hónap_utolsónapja(Dátum.Value):M-d-yy}# ORDER BY dátum";
-
-                Kezelő_Váltós_Naptár Kéz = new Kezelő_Váltós_Naptár();
-                List<Adat_Váltós_Naptár> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
+                List<Adat_Váltós_Naptár> Adatok = KézVáltNaptár.Lista_Adatok(Dátum.Value.Year, "");
+                if (Adatok == null || Adatok.Count < 1) throw new HibásBevittAdat($"{Dátum.Value.Year} évben még nincs beállítva a munkaidő naptár.");
+                Adatok = (from a in Adatok
+                          where a.Dátum >= MyF.Hónap_elsőnapja(Dátum.Value) &&
+                                a.Dátum <= MyF.Hónap_utolsónapja(Dátum.Value)
+                          orderby a.Dátum ascending
+                          select a).ToList();
 
                 Beosztás_Rögzítés BR = new Beosztás_Rögzítés();
                 string Hr_Azonosító;
