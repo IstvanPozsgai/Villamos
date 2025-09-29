@@ -653,7 +653,7 @@ namespace Villamos
                 // ********************************************
                 // kiszinezzük a szabad és munkaszüneti napokat
                 // ********************************************
-
+                Hónap_első = MyF.Hónap_elsőnapja(Dátum.Value);
                 List<Adat_Váltós_Naptár> Adatok = KézVáltNaptár.Lista_Adatok(Dátum.Value.Year, "");
                 Adatok = (from a in Adatok
                           where a.Dátum >= MyF.Hónap_elsőnapja(Dátum.Value) &&
