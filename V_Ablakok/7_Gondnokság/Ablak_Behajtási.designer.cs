@@ -121,6 +121,7 @@ namespace Villamos
             this.BtnEngedélySzakFrissít = new System.Windows.Forms.Button();
             this.Adminisztátor = new System.Windows.Forms.TabPage();
             this.PanelAdminAlap = new System.Windows.Forms.Panel();
+            this.Aktuálissor = new System.Windows.Forms.CheckBox();
             this.BtnAdminÚjEngedély = new System.Windows.Forms.Button();
             this.DataAdminAlap = new System.Windows.Forms.DataGridView();
             this.LblAdminAktuálisAB = new System.Windows.Forms.Label();
@@ -156,7 +157,7 @@ namespace Villamos
             this.LblTelephelyBeállítás = new System.Windows.Forms.Label();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
-            this.Aktuálissor = new System.Windows.Forms.CheckBox();
+            this.AutóLista = new System.Windows.Forms.Label();
             this.Fülek.SuspendLayout();
             this.Engedélyek.SuspendLayout();
             this.PanelEngedély.SuspendLayout();
@@ -433,6 +434,7 @@ namespace Villamos
             // Kérelem
             // 
             this.Kérelem.BackColor = System.Drawing.Color.LightSalmon;
+            this.Kérelem.Controls.Add(this.AutóLista);
             this.Kérelem.Controls.Add(this.KérelemTábla);
             this.Kérelem.Controls.Add(this.DatÉrvényes);
             this.Kérelem.Controls.Add(this.LblKérelemÉrvényességVége);
@@ -1126,6 +1128,16 @@ namespace Villamos
             this.PanelAdminAlap.Size = new System.Drawing.Size(1255, 328);
             this.PanelAdminAlap.TabIndex = 114;
             // 
+            // Aktuálissor
+            // 
+            this.Aktuálissor.AutoSize = true;
+            this.Aktuálissor.Location = new System.Drawing.Point(170, 116);
+            this.Aktuálissor.Name = "Aktuálissor";
+            this.Aktuálissor.Size = new System.Drawing.Size(84, 24);
+            this.Aktuálissor.TabIndex = 118;
+            this.Aktuálissor.Text = "Aktuális";
+            this.Aktuálissor.UseVisualStyleBackColor = true;
+            // 
             // BtnAdminÚjEngedély
             // 
             this.BtnAdminÚjEngedély.BackgroundImage = global::Villamos.Properties.Resources.New_gyűjtemény;
@@ -1481,15 +1493,14 @@ namespace Villamos
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
-            // Aktuálissor
+            // AutóLista
             // 
-            this.Aktuálissor.AutoSize = true;
-            this.Aktuálissor.Location = new System.Drawing.Point(170, 116);
-            this.Aktuálissor.Name = "Aktuálissor";
-            this.Aktuálissor.Size = new System.Drawing.Size(84, 24);
-            this.Aktuálissor.TabIndex = 118;
-            this.Aktuálissor.Text = "Aktuális";
-            this.Aktuálissor.UseVisualStyleBackColor = true;
+            this.AutóLista.AutoSize = true;
+            this.AutóLista.Location = new System.Drawing.Point(605, 180);
+            this.AutóLista.Name = "AutóLista";
+            this.AutóLista.Size = new System.Drawing.Size(138, 20);
+            this.AutóLista.TabIndex = 212;
+            this.AutóLista.Text = "Autók rendszáma:";
             // 
             // Ablak_Behajtási
             // 
@@ -1658,5 +1669,6 @@ namespace Villamos
         internal DataGridViewTextBoxColumn Column5;
         internal Button Elutasít_gomb;
         private CheckBox Aktuálissor;
+        internal Label AutóLista;
     }
 }

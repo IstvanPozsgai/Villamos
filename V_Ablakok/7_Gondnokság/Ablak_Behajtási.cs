@@ -532,6 +532,73 @@ namespace Villamos
 
         private void BtnÖsszSzabiLista_Click(object sender, EventArgs e)
         {
+            FrissítésGombEseménye();
+            AutókSzámaLekérdezés();
+            AutókRendszámaLekérdezés();
+        }
+
+        private void AutókSzámaLekérdezés()
+        {
+            try
+            {
+                List<Adat_Behajtás_Behajtási> AdatokAlapÖ = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
+                List<Adat_Behajtás_Behajtási> AdatokAlap = (from a in AdatokAlapÖ
+                                                            where a.HRazonosító == TxtkérelemHR.Text.Trim()
+                                                            select a).ToList();
+
+                if (AdatokAlap != null)
+                    TxtKérelemautó.Text = (AdatokAlap.Count + 1).ToString();
+                else
+                    TxtKérelemautó.Text = "1";
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void AutókRendszámaLekérdezés()
+        {
+            try
+            {
+                List<Adat_Behajtás_Behajtási> AdatokAlapÖ = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
+                List<Adat_Behajtás_Behajtási> AdatokAlap = (from a in AdatokAlapÖ
+                                                            where a.HRazonosító == TxtkérelemHR.Text.Trim()
+                                                            select a).ToList();
+
+                if (AdatokAlap != null)
+                {
+                    string AutókRendszáma = "";
+                    foreach (Adat_Behajtás_Behajtási Adat in AdatokAlap)
+                    {
+                        AutókRendszáma += Adat.Rendszám.Trim() + "; ";
+                    }
+                    AutóLista.Text = $"Autók rendszáma: {AutókRendszáma}";
+                }
+                else
+                {
+                    AutóLista.Text = $"Autók rendszáma:";
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void FrissítésGombEseménye()
+        {
             try
             {
                 if (TxtkérelemHR.Text.Trim() == "") throw new HibásBevittAdat("Nincs kitöltve a HR azonosító mező.");
@@ -547,16 +614,6 @@ namespace Villamos
                     Txtkérelemnév.Text = rekord.Dolgozónév.Trim();
                     CmbKérelemSzolgálati.Text = rekord.Szervezetiegység.Trim();
                 }
-
-                List<Adat_Behajtás_Behajtási> AdatokAlapÖ = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
-                List<Adat_Behajtás_Behajtási> AdatokAlap = (from a in AdatokAlapÖ
-                                                            where a.HRazonosító == TxtkérelemHR.Text.Trim()
-                                                            select a).ToList();
-
-                if (AdatokAlap != null)
-                    TxtKérelemautó.Text = (AdatokAlap.Count + 1).ToString();
-                else
-                    TxtKérelemautó.Text = "1";
             }
             catch (HibásBevittAdat ex)
             {
@@ -579,6 +636,7 @@ namespace Villamos
             TxtKérrelemPDF.Text = "";
             TxtKérelemautó.Text = "1";
             TxtKérelemMegjegyzés.Text = "";
+            AutóLista.Text = $"Autók rendszáma:";
             CmbKérelemTípus.Text = CmbKérelemTípus.Items[0].ToString();
             DatÉrvényes.Value = DatadminÉrvényes.Value;
             Kérelemalaptábla();
@@ -641,6 +699,7 @@ namespace Villamos
                                                       where a.ID == státus
                                                       select a).FirstOrDefault();
                 if (rekord2 != null) CMBkérelemStátus.Text = rekord2.Státus.Trim();
+                AutókRendszámaLekérdezés();
             }
             catch (HibásBevittAdat ex)
             {
@@ -2980,7 +3039,7 @@ namespace Villamos
             TxtAdminSorszám.Text = DataAdminAlap.Rows[e.RowIndex].Cells[3].Value.ToString();
             TxtadminBetű.Text = DataAdminAlap.Rows[e.RowIndex].Cells[2].Value.ToString();
             DatadminÉrvényes.Value = DateTime.Parse(DataAdminAlap.Rows[e.RowIndex].Cells[4].Value.ToString());
-            Aktuálissor.Checked = DataAdminAlap.Rows[e.RowIndex].Cells[5].Value.ToÉrt_Int ()==1;
+            Aktuálissor.Checked = DataAdminAlap.Rows[e.RowIndex].Cells[5].Value.ToÉrt_Int() == 1;
         }
 
         private void Adminalapbeállítás()

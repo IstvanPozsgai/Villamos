@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Behajtás_Behajtási_Napló
     {
         readonly string jelszó = "forgalmirendszám";
+        readonly string táblanév = "alapadatok";
         string hely;
 
         private void FájlBeállítás(string Könyvtár, string Fájl)
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_Behajtás_Behajtási_Napló> Lista_Adatok(string Könyvtár, string Fájl)
         {
             FájlBeállítás(Könyvtár, Fájl);
-            string szöveg = "SELECT * FROM alapadatok";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Behajtás_Behajtási_Napló> Adatok = new List<Adat_Behajtás_Behajtási_Napló>();
             Adat_Behajtás_Behajtási_Napló Adat;
 
@@ -95,8 +96,8 @@ namespace Villamos.Kezelők
             try
             {
                 List<Adat_Behajtás_Behajtási_Napló> Adatok = Lista_Adatok(Könyvtár, Fájl);
-                if (Adatok == null) return válasz;
-                válasz = Adatok.Max(a => a.ID) + 1;
+                if (Adatok != null)
+                    válasz = Adatok.Max(a => a.ID) + 1;
             }
             catch (HibásBevittAdat ex)
             {
@@ -115,7 +116,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Könyvtár, Fájl);
-                string szöveg = "INSERT INTO alapadatok ( Sorszám, Szolgálatihely, Hrazonosító, Név, Rendszám, ";
+                string szöveg = $"INSERT INTO {táblanév} ( Sorszám, Szolgálatihely, Hrazonosító, Név, Rendszám, ";
                 szöveg += "Angyalföld_engedély, Baross_engedély, Budafok_engedély, Ferencváros_engedély, Fogaskerekű_engedély, Hungária_engedély, Kelenföld_engedély, ";
                 szöveg += "Száva_engedély, Szépilona_engedély, Zugló_engedély, Státus, Dátum, PDF, oka, ";
                 szöveg += "Angyalföld_megjegyzés, Baross_megjegyzés, Budafok_megjegyzés, Ferencváros_megjegyzés, Fogaskerekű_megjegyzés, Hungária_megjegyzés, Kelenföld_megjegyzés, ";
@@ -182,7 +183,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Könyvtár, Fájl);
-                string szöveg = $"INSERT INTO alapadatok ( Sorszám, {Telephely}_engedély, {Telephely}_megjegyzés, ID, Rögzítette, rögzítésdátuma )";
+                string szöveg = $"INSERT INTO {táblanév} ( Sorszám, {Telephely}_engedély, {Telephely}_megjegyzés, ID, Rögzítette, rögzítésdátuma )";
                 szöveg += $" VALUES ( '{sorszám}', {Gondnok}, '{Megjegyzés}', {Sorszám(Könyvtár, Fájl)}, '{Program.PostásNév.Trim()}', '{DateTime.Now}') ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -202,7 +203,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Könyvtár, Fájl);
-                string szöveg = "INSERT INTO alapadatok ( Sorszám, státus, ID, Rögzítette, rögzítésdátuma )";
+                string szöveg = $"INSERT INTO {táblanév} ( Sorszám, státus, ID, Rögzítette, rögzítésdátuma )";
                 szöveg += $" VALUES ('{Adat.Sorszám}', {Adat.Státus}, {Sorszám(Könyvtár, Fájl)},'{Adat.Rögzítette}', '{Adat.Rögzítésdátuma}') ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -222,7 +223,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Könyvtár, Fájl);
-                string szöveg = $"INSERT INTO alapadatok ( Sorszám, {Szakszolg}, ID, Rögzítette, rögzítésdátuma )";
+                string szöveg = $"INSERT INTO {táblanév} ( Sorszám, {Szakszolg}, ID, Rögzítette, rögzítésdátuma )";
                 szöveg += $" VALUES ( '{sorSzám}', {SzakszolgEng}, {Sorszám(Könyvtár, Fájl)}, '{Program.PostásNév.Trim()}', '{DateTime.Now}') ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
