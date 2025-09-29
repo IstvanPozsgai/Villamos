@@ -90,7 +90,29 @@ namespace Villamos.Kezelők
             }
         }
 
-
+        public void Státus(string Telephely, int Év, List<double> Sorszámok, int státus)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (double Sorszám in Sorszámok)
+                {
+                    string szöveg = $"Update {táblanév} set státus={státus} Where sorszám={Sorszám}";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         //Elkopó
         public List<Adat_Szatube_Túlóra> Lista_Adatok(string hely, string jelszó, string szöveg)
@@ -135,7 +157,6 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
-
 
     }
 }
