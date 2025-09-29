@@ -10,7 +10,7 @@ using Villamos.Villamos_Adatszerkezet;
 
 public static partial class Függvénygyűjtemény
 {
-    readonly static Kezelő_Alap_Beolvasás KézBeolvasás = new Kezelő_Alap_Beolvasás();
+
     readonly static Kezelő_Excel_Beolvasás Kéz_Beolvasás = new Kezelő_Excel_Beolvasás();
 
     /// <summary>
@@ -65,35 +65,6 @@ public static partial class Függvénygyűjtemény
     }
 
 
-    public static bool Betöltéshelyes(string Melyik, string Fejlécsor)
-    {
-        bool válasz = false;
-        try
-        {
-            List<Adat_Alap_Beolvasás> Adatok = KézBeolvasás.Lista_Adatok();
-            Adatok = (from a in Adatok
-                      where a.Csoport == Melyik.Trim()
-                      && a.Törölt == "0"
-                      orderby a.Oszlop
-                      select a).ToList();
-
-            string szöveg = "";
-            foreach (Adat_Alap_Beolvasás rekord in Adatok)
-                szöveg += rekord.Fejléc;
-
-            if (szöveg.Trim() == Fejlécsor.Trim()) válasz = true;
-        }
-        catch (HibásBevittAdat ex)
-        {
-            MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-        catch (Exception ex)
-        {
-            HibaNapló.Log(ex.Message, "Függvénygyűjtemény - Betöltéshelyes", ex.StackTrace, ex.Source, ex.HResult);
-            MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-        return válasz;
-    }
 
 
 

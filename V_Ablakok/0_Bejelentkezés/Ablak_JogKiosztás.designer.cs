@@ -48,8 +48,10 @@ namespace Villamos
             this.Label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.CmbGombId = new System.Windows.Forms.ComboBox();
             this.CmbGombok = new System.Windows.Forms.ComboBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.CmbAblakId = new System.Windows.Forms.ComboBox();
             this.CmbAblak = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
@@ -59,14 +61,15 @@ namespace Villamos
             this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Felhasználók = new System.Windows.Forms.ComboBox();
             this.DolgozóNév = new System.Windows.Forms.Label();
-            this.CmbGombId = new System.Windows.Forms.ComboBox();
-            this.CmbAblakId = new System.Windows.Forms.ComboBox();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // ToolTip1
@@ -196,12 +199,22 @@ namespace Villamos
             // 
             this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel3.Controls.Add(this.panel4);
             this.panel3.Controls.Add(this.CmbGombId);
             this.panel3.Controls.Add(this.CmbGombok);
             this.panel3.Location = new System.Drawing.Point(303, 68);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(688, 244);
             this.panel3.TabIndex = 223;
+            // 
+            // CmbGombId
+            // 
+            this.CmbGombId.FormattingEnabled = true;
+            this.CmbGombId.Location = new System.Drawing.Point(4, 37);
+            this.CmbGombId.Name = "CmbGombId";
+            this.CmbGombId.Size = new System.Drawing.Size(121, 28);
+            this.CmbGombId.TabIndex = 229;
+            this.CmbGombId.SelectionChangeCommitted += new System.EventHandler(this.CmbGombId_SelectionChangeCommitted);
             // 
             // CmbGombok
             // 
@@ -223,6 +236,15 @@ namespace Villamos
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(294, 244);
             this.panel2.TabIndex = 223;
+            // 
+            // CmbAblakId
+            // 
+            this.CmbAblakId.FormattingEnabled = true;
+            this.CmbAblakId.Location = new System.Drawing.Point(4, 37);
+            this.CmbAblakId.Name = "CmbAblakId";
+            this.CmbAblakId.Size = new System.Drawing.Size(121, 28);
+            this.CmbAblakId.TabIndex = 103;
+            this.CmbAblakId.SelectionChangeCommitted += new System.EventHandler(this.CmbAblakId_SelectionChangeCommitted);
             // 
             // CmbAblak
             // 
@@ -321,23 +343,25 @@ namespace Villamos
             this.DolgozóNév.TabIndex = 222;
             this.DolgozóNév.Text = "<< >>";
             // 
-            // CmbGombId
+            // panel4
             // 
-            this.CmbGombId.FormattingEnabled = true;
-            this.CmbGombId.Location = new System.Drawing.Point(4, 37);
-            this.CmbGombId.Name = "CmbGombId";
-            this.CmbGombId.Size = new System.Drawing.Size(121, 28);
-            this.CmbGombId.TabIndex = 229;
-            this.CmbGombId.SelectionChangeCommitted += new System.EventHandler(this.CmbGombId_SelectionChangeCommitted);
+            this.panel4.Controls.Add(this.button1);
+            this.panel4.Location = new System.Drawing.Point(165, 118);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(447, 65);
+            this.panel4.TabIndex = 230;
             // 
-            // CmbAblakId
+            // button1
             // 
-            this.CmbAblakId.FormattingEnabled = true;
-            this.CmbAblakId.Location = new System.Drawing.Point(4, 37);
-            this.CmbAblakId.Name = "CmbAblakId";
-            this.CmbAblakId.Size = new System.Drawing.Size(121, 28);
-            this.CmbAblakId.TabIndex = 103;
-            this.CmbAblakId.SelectionChangeCommitted += new System.EventHandler(this.CmbAblakId_SelectionChangeCommitted);
+            this.button1.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button1.Location = new System.Drawing.Point(14, 17);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(45, 45);
+            this.button1.TabIndex = 226;
+            this.ToolTip1.SetToolTip(this.button1, "Jogosultságok törlése");
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Ablak_JogKiosztás
             // 
@@ -365,6 +389,7 @@ namespace Villamos
             this.panel1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
+            this.panel4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -393,5 +418,7 @@ namespace Villamos
         private Panel panel2;
         private ComboBox CmbGombId;
         private ComboBox CmbAblakId;
+        private Panel panel4;
+        internal Button button1;
     }
 }

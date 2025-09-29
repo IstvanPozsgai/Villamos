@@ -20,7 +20,6 @@ namespace Villamos
         readonly Kezelő_Jármű2 KézJármű2 = new Kezelő_Jármű2();
         readonly Kezelő_Jármű_Napló KadatNapló = new Kezelő_Jármű_Napló();
         readonly Kezelő_jármű_hiba Kéz_JHadat = new Kezelő_jármű_hiba();
-        readonly Kezelő_Alap_Beolvasás KAAdat = new Kezelő_Alap_Beolvasás();
         readonly Kezelő_kiegészítő_telephely KézTelephely = new Kezelő_kiegészítő_telephely();
         readonly Kezelő_Jármű_Állomány_Típus KézÁllomány = new Kezelő_Jármű_Állomány_Típus();
 
@@ -692,64 +691,26 @@ namespace Villamos
                 else
                     return;
 
-                // megnyitjuk a beolvasandó táblát
-                MyE.ExcelMegnyitás(fájlexc);
-
-                // ***********************************
-                // ***** Ellenőrzés       ************
-                // ***********************************
-                string kapottfejléc = "";
-                // beolvassuk a fejlécet ha eltér a megadotttól, akkor kiírja és bezárja
-                for (int i = 1; i <= 2; i++) // a max jelöli a helyes oszlopokat
-                    kapottfejléc += MyE.Beolvas(MyE.Oszlopnév(i) + "1").Trim();
-
-
-                if (!MyF.Betöltéshelyes("Üzembehely", kapottfejléc))
-                {
-                    MyE.ExcelBezárás();
-                    throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma");
-                }
-
-                // ***********************************
-                // ***** Ellenőrzés    vége **********
-                // ***********************************
-                // megnézzük, hogy hány sorból áll a tábla
-                int utolsó = MyE.Utolsósor("Sheet1");
+                List<Adat_Jármű> AdatokBe = SAP_Adatokbeolvasása.ÜzembeHelyezés_beolvasó(fájlexc);
 
                 Adatok_Állomány.Clear();
                 Adatok_Állomány = KézJármű.Lista_Adatok("Főmérnökség");
 
-                Holtart.Be(utolsó + 2);
-                // Első adattól végig pörgetjüka beolvasást
-
-
+                Holtart.Be();
 
                 List<Adat_Jármű> AdatokGy = new List<Adat_Jármű>();
-                for (int i = 2; i < utolsó; i++)
+                foreach (Adat_Jármű Adat in AdatokBe)
                 {
-                    string pályaszám = MyE.Beolvas($"a{i}").Substring(1, 4);
-                    DateTime Dátum = DateTime.Parse(MyE.Beolvas($"B{i}"));
-
                     Adat_Jármű AdatJármű = (from a in Adatok_Állomány
-                                            where a.Azonosító == pályaszám.Trim()
+                                            where a.Azonosító == Adat.Azonosító.Trim()
                                             select a).FirstOrDefault();
 
-                    if (AdatJármű != null)
-                    {
-                        Adat_Jármű ADAT = new Adat_Jármű(Dátum, pályaszám.Trim());
-
-                        AdatokGy.Add(ADAT);
-                    }
+                    if (AdatJármű != null) AdatokGy.Add(Adat);
                     Holtart.Lép();
                 }
-                KézJármű.Módosítás_ÜzemBe("Főmérnökség", AdatokGy);
-
+                if (AdatokGy.Count > 0) KézJármű.Módosítás_ÜzemBe("Főmérnökség", AdatokGy);
 
                 Holtart.Ki();
-                MyE.ExcelBezárás();
-
-                // kitöröljük a betöltött fájlt
-                File.Delete(fájlexc);
                 MessageBox.Show("Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Adatok_Állomány = KézJármű.Lista_Adatok("Főmérnökség");
             }

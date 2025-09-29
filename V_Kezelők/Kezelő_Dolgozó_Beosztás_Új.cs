@@ -87,7 +87,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Dolgozó_Beosztás_Új Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO beosztás (Dolgozószám, Nap, Beosztáskód, Ledolgozott, " +
+                    string szöveg = $"INSERT INTO {táblanév} (Dolgozószám, Nap, Beosztáskód, Ledolgozott, " +
                                                         "Túlóra, Túlórakezd, Túlóravég, Csúszóra, " +
                                                         "CSúszórakezd, Csúszóravég, Megjegyzés, Túlóraok, " +
                                                         "Szabiok, kért, Csúszok, AFTóra, " +
@@ -149,7 +149,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum, Eszterga);
-                string szöveg = $"DELETE FROM beosztás WHERE  nap>=#{Dátumtól:yyyy-MM-dd}# AND nap<=#{Dátumig:yyyy-MM-dd}# ";
+                string szöveg = $"DELETE FROM {táblanév} WHERE  nap>=#{Dátumtól:yyyy-MM-dd}# AND nap<=#{Dátumig:yyyy-MM-dd}# ";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -163,6 +163,32 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Törlés(string Telephely, DateTime Dátum, DateTime Dátumtól, DateTime Dátumig, List<string> HrAzonosítók, bool Eszterga = false)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum, Eszterga);
+                List<string> szövegGy = new List<string>();
+                foreach (string Hr_Azonosító in HrAzonosítók)
+                {
+                    string szöveg = "DELETE FROM beosztás ";
+                    szöveg += $" WHERE nap>=#{Dátumtól:M-d-yy}# ";
+                    szöveg += $" AND nap<=#{Dátumig:M-d-yy}# ";
+                    szöveg += $" AND Dolgozószám='{Hr_Azonosító}'";
+                    szövegGy.Add(szöveg);
+                }
+                MyA.ABtörlés(hely, jelszó, szövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
 
         //elkopó

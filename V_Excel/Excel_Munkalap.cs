@@ -1,6 +1,7 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using MyExcel = Microsoft.Office.Interop.Excel;
 
@@ -127,8 +128,11 @@ namespace Villamos
                 Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
                 string kezdőCella = oszloptól + sortól;
                 string utolsóCella = oszlopig + sorig;
-                MyExcel.Range myRange = Munkalap.get_Range(kezdőCella, utolsóCella);
-                object result = myRange.AutoFilter(sortól);
+                MyExcel.Range Táblaterület = Munkalap.get_Range(kezdőCella, utolsóCella);
+                object result = Táblaterület.AutoFilter(sortól);
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {

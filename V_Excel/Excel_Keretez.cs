@@ -1,6 +1,7 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using MyExcel = Microsoft.Office.Interop.Excel;
 
@@ -40,6 +41,9 @@ namespace Villamos
                     Weight: XlBorderWeight.xlMedium,
                     ColorIndex: XlColorIndex.xlColorIndexAutomatic
                 );
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -64,6 +68,9 @@ namespace Villamos
                          MyExcel.XlBorderWeight.xlMedium,
                          MyExcel.XlColorIndex.xlColorIndexAutomatic,
                          MyExcel.XlColorIndex.xlColorIndexAutomatic);
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -87,6 +94,9 @@ namespace Villamos
                 Táblaterület.BorderAround(MyExcel.XlLineStyle.xlContinuous,
                          MyExcel.XlBorderWeight.xlThin,
                          MyExcel.XlColorIndex.xlColorIndexAutomatic);
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -110,6 +120,9 @@ namespace Villamos
                 Táblaterület.Borders[XlBordersIndex.xlEdgeTop].ColorIndex = 0;
                 Táblaterület.Borders[XlBordersIndex.xlEdgeTop].TintAndShade = 0;
                 Táblaterület.Borders[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlThin;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -133,6 +146,9 @@ namespace Villamos
                 Táblaterület.Borders[XlBordersIndex.xlEdgeTop].ColorIndex = 0;
                 Táblaterület.Borders[XlBordersIndex.xlEdgeTop].TintAndShade = 0;
                 Táblaterület.Borders[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlMedium;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -153,6 +169,9 @@ namespace Villamos
                 Táblaterület.Borders[XlBordersIndex.xlEdgeTop].ColorIndex = XlColorIndex.xlColorIndexAutomatic;
                 Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].TintAndShade = 0;
                 Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlHairline;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -185,6 +204,9 @@ namespace Villamos
                 felső.ColorIndex = XlColorIndex.xlColorIndexAutomatic;
                 felső.TintAndShade = 0;
                 felső.Weight = XlBorderWeight.xlThin;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -237,6 +259,9 @@ namespace Villamos
                     felsoSzegely.TintAndShade = 0;
                     felsoSzegely.Weight = XlBorderWeight.xlThin;
                 }
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {
@@ -259,6 +284,9 @@ namespace Villamos
                 ferde.ColorIndex = XlColorIndex.xlColorIndexAutomatic;
                 ferde.TintAndShade = 0;
                 ferde.Weight = XlBorderWeight.xlThin;
+
+                Marshal.ReleaseComObject(Táblaterület);
+                Táblaterület = null;
             }
             catch (Exception ex)
             {

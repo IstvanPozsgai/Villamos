@@ -12,47 +12,16 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "váltósbeosztás";
 
         public Kezelő_Kiegészítő_Váltóstábla()
         {
             // if (!File.Exists(hely)) Adatbázis_Létrehozás   (hely.KönyvSzerk());
         }
 
-        public List<Adat_Kiegészítő_Váltóstábla> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kiegészítő_Váltóstábla> Adatok = new List<Adat_Kiegészítő_Váltóstábla>();
-            Adat_Kiegészítő_Váltóstábla Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kiegészítő_Váltóstábla(
-                                       rekord["Id"].ToÉrt_Int(),
-                                       rekord["Kezdődátum"].ToÉrt_DaTeTime(),
-                                       rekord["Ciklusnap"].ToÉrt_Int(),
-                                       rekord["Megnevezés"].ToStrTrim(),
-                                       rekord["Csoport"].ToString());
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
         public List<Adat_Kiegészítő_Váltóstábla> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM váltósbeosztás ORDER BY id";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY id";
             List<Adat_Kiegészítő_Váltóstábla> Adatok = new List<Adat_Kiegészítő_Váltóstábla>();
             Adat_Kiegészítő_Váltóstábla Adat;
 
@@ -87,7 +56,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO váltósbeosztás (kezdődátum, ciklusnap, megnevezés,  csoport) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (kezdődátum, ciklusnap, megnevezés,  csoport) VALUES (";
                 szöveg += $"'{Adat.Kezdődátum:yyyy.MM.dd}', ";
                 szöveg += $"{Adat.Ciklusnap}, ";
                 szöveg += $"'{Adat.Megnevezés}', ";
@@ -109,7 +78,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = " UPDATE  váltósbeosztás SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" kezdődátum='{Adat.Kezdődátum:yyyy.MM.dd}', ";
                 szöveg += $" ciklusnap={Adat.Ciklusnap}, ";
                 szöveg += $" megnevezés='{Adat.Megnevezés}', ";
@@ -133,7 +102,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM váltósbeosztás WHERE id={Id}";
+                string szöveg = $"DELETE FROM {táblanév} WHERE id={Id}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

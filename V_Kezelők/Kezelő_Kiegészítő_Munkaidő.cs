@@ -11,45 +11,17 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "munkaidő";
 
         public Kezelő_Kiegészítő_Munkaidő()
         {
             // if (!File.Exists(hely)) Adatbázis_Létrehozás   (hely.KönyvSzerk());
         }
 
-        public List<Adat_Kiegészítő_Munkaidő> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kiegészítő_Munkaidő> Adatok = new List<Adat_Kiegészítő_Munkaidő>();
-            Adat_Kiegészítő_Munkaidő Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kiegészítő_Munkaidő(
-                                     rekord["munkarendelnevezés"].ToStrTrim(),
-                                     rekord["munkaidő"].ToÉrt_Double()
-                                     );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
 
         public List<Adat_Kiegészítő_Munkaidő> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM munkaidő ORDER BY munkarendelnevezés";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY munkarendelnevezés";
             List<Adat_Kiegészítő_Munkaidő> Adatok = new List<Adat_Kiegészítő_Munkaidő>();
             Adat_Kiegészítő_Munkaidő Adat;
 
@@ -82,7 +54,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO munkaidő (munkaidő, munkarendelnevezés) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (munkaidő, munkarendelnevezés) VALUES (";
                 szöveg += $"{Adat.Munkaidő}, ";
                 szöveg += $"'{Adat.Munkarendelnevezés}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -102,7 +74,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = " UPDATE  munkaidő SET ";
+                string szöveg = $" UPDATE {táblanév} SET ";
                 szöveg += $" munkaidő={Adat.Munkaidő}";
                 szöveg += $" WHERE munkarendelnevezés='{Adat.Munkarendelnevezés}'";
 
@@ -123,7 +95,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM munkaidő WHERE munkarendelnevezés='{Munkarendelnevezés}'";
+                string szöveg = $"DELETE FROM {táblanév} WHERE munkarendelnevezés='{Munkarendelnevezés}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

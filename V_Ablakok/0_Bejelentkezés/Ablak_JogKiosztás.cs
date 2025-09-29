@@ -578,5 +578,30 @@ namespace Villamos
             }
             Szervezetek();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                string fájl = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Próba.xlsx";
+                Excel_Új MyE = new Excel_Új();
+                MyE.ExcelLétrehozás();
+                MyE.Munkalap_betű("Arial", 20);
+                MyE.Kiir("Ez egy próba", "A1");
+                MyE.ExcelMentés(fájl);
+                MyE.ExcelBezárás();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
     }
 }

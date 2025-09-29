@@ -17,40 +17,10 @@ namespace Villamos.Kezelők
             // if (!File.Exists(hely)) Adatbázis_Létrehozás.  (hely.KönyvSzerk());
         }
 
-        public List<Adat_Kiegészítő_Beosztásciklus> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kiegészítő_Beosztásciklus> Adatok = new List<Adat_Kiegészítő_Beosztásciklus>();
-            Adat_Kiegészítő_Beosztásciklus Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kiegészítő_Beosztásciklus(
-                                       rekord["Id"].ToÉrt_Int(),
-                                       rekord["Beosztáskód"].ToStrTrim(),
-                                       rekord["Hétnapja"].ToStrTrim(),
-                                       rekord["Beosztásszöveg"].ToStrTrim());
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
 
         public List<Adat_Kiegészítő_Beosztásciklus> Lista_Adatok(string Tábla)
         {
-            string szöveg = $"SELECT * FROM {Tábla} ORDER BY  id";
+            string szöveg = $"SELECT * FROM {Tábla} ORDER BY id";
             List<Adat_Kiegészítő_Beosztásciklus> Adatok = new List<Adat_Kiegészítő_Beosztásciklus>();
             Adat_Kiegészítő_Beosztásciklus Adat;
 

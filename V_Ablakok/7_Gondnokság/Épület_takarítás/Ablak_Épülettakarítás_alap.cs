@@ -1042,7 +1042,7 @@ namespace Villamos
             try
             {
                 AdatTábla.Columns.Clear();
-                AdatTábla.Columns.Add("Sorszám");
+                AdatTábla.Columns.Add("Sorszám", typeof(int));
                 AdatTábla.Columns.Add("Megnevezés");
                 AdatTábla.Columns.Add("Mennyisége");
                 AdatTábla.Columns.Add("Ár");
@@ -1206,6 +1206,68 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void Másol_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Opció_Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kiválasztva másolnadó sor.");
+                int ID = AdatokTakOpció.Max(a => a.Id);
+                List<Adat_Takarítás_Opció> AdatokGy = new List<Adat_Takarítás_Opció>();
+                for (int i = 0; i < Opció_Tábla.SelectedRows.Count; i++)
+                {
+                    ID++;
+                    Adat_Takarítás_Opció ADAT = new Adat_Takarítás_Opció(ID,
+                                                     Opció_Tábla.SelectedRows[i].Cells["Megnevezés"].Value.ToString(),
+                                                     Opció_Tábla.SelectedRows[i].Cells["Mennyisége"].Value.ToString(),
+                                                     0,
+                                                     Opció_Kezdet.Value,
+                                                     Opció_Vég.Value);
+                    AdatokGy.Add(ADAT);
+                }
+                if (AdatokGy.Count > 0) KézOpció.Rögzít(AdatokGy);
+                OpcióListaFeltöltés();
+                OpcióTáblaListázás();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Lezárja_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Opció_Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kiválasztva másolnadó sor.");
+
+                List<Adat_Takarítás_Opció> AdatokGy = new List<Adat_Takarítás_Opció>();
+                for (int i = 0; i < Opció_Tábla.SelectedRows.Count; i++)
+                {
+                    Adat_Takarítás_Opció ADAT = new Adat_Takarítás_Opció(
+                                                     Opció_Tábla.SelectedRows[i].Cells["Sorszám"].Value.ToÉrt_Int(),
+                                                     Opció_Vég.Value);
+                    AdatokGy.Add(ADAT);
+                }
+                if (AdatokGy.Count > 0) KézOpció.Módosít(AdatokGy);
+                OpcióListaFeltöltés();
+                OpcióTáblaListázás();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         #endregion
 
         private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
@@ -1234,5 +1296,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
     }
 }

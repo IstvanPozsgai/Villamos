@@ -203,12 +203,6 @@
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_alap_program_személy.designer.cs">
       <DependentUpon>Ablak_alap_program_személy.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\1_Beállítások\Ablak_Beolvasás.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="V_Ablakok\1_Beállítások\Ablak_Beolvasás.Designer.cs">
-      <DependentUpon>Ablak_Beolvasás.cs</DependentUpon>
-    </Compile>
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_Ciklus_Sorrend.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -355,6 +349,7 @@
     <Compile Include="V_Excel\Excel_Betű.cs" />
     <Compile Include="V_Excel\Excel_Keretez.cs" />
     <Compile Include="V_Excel\Excel_Mentés.cs" />
+    <Compile Include="V_Excel\Excel_ÚJ.cs" />
     <Compile Include="V_Kezelők\Kezelő_AnyagTörzs.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés_MindenMásol.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF_KM_Attekintes.cs" />
@@ -858,6 +853,10 @@
     <Compile Include="V_Kezelők\Kezelő_MEO_KerékMérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oldalok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Raktár.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szatube_Aft.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szatube_Beteg.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szatube_Csúsztatás.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szatube_Szabadság.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_Telep_Opció.cs" />
     <Compile Include="V_Kezelők\Kezelő_Users.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Mérés.cs" />
@@ -1265,7 +1264,6 @@
       <DependentUpon>Ablak_üzenet.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Adatbázis\Adatbázis_Akkumulátor.cs" />
-    <Compile Include="V_Adatbázis\Adatbázis_Alap egyéb.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_CAF.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Ciklusrend.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_dolgozó.cs" />
@@ -1404,9 +1402,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_alap_program_személy.resx">
       <DependentUpon>Ablak_alap_program_személy.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_Beolvasás.resx">
-      <DependentUpon>Ablak_Beolvasás.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_Ciklus_Sorrend.resx">
       <DependentUpon>Ablak_Ciklus_Sorrend.cs</DependentUpon>

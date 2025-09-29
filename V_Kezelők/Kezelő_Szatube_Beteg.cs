@@ -9,24 +9,23 @@ using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
-    public class Kezelő_Szatube_Túlóra
+    public class Kezelő_Szatube_Beteg
     {
-        string hely;
         readonly string jelszó = "kertitörpe";
-        readonly string táblanév = "Túlóra";
+        string hely;
+        readonly string táblanév = "Beteg";
 
         private void FájlBeállítás(string Telephely, int Év)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\szatubecs\{Év}szatubecs.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.SzaTuBe_tábla(hely.KönyvSzerk());
+            hely = $@"{Application.StartupPath}\{Telephely}\adatok\Szatubecs\{Év}SzaTuBeCs.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.SzaTuBe_tábla(hely);
         }
 
-        public List<Adat_Szatube_Túlóra> Lista_Adatok(string Telephely, int Év)
+        public List<Adat_Szatube_Beteg> Lista_Adatok(string Telephely, int Év)
         {
+            List<Adat_Szatube_Beteg> Adatok = new List<Adat_Szatube_Beteg>();
             FájlBeállítás(Telephely, Év);
-            string szöveg = $"SELECT * FROM {táblanév}";
-            List<Adat_Szatube_Túlóra> Adatok = new List<Adat_Szatube_Túlóra>();
-            Adat_Szatube_Túlóra Adat;
+            string szöveg = $"Select * FROM {táblanév}";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -42,7 +41,7 @@ namespace Villamos.Kezelők
                             while (rekord.Read())
                             {
 
-                                Adat = new Adat_Szatube_Túlóra(
+                                Adat_Szatube_Beteg Adat = new Adat_Szatube_Beteg(
                                           rekord["sorszám"].ToÉrt_Double(),
                                           rekord["Törzsszám"].ToStrTrim(),
                                           rekord["Dolgozónév"].ToStrTrim(),
@@ -52,10 +51,9 @@ namespace Villamos.Kezelők
                                           rekord["Szabiok"].ToStrTrim(),
                                           rekord["Státus"].ToÉrt_Int(),
                                           rekord["Rögzítette"].ToStrTrim(),
-                                          rekord["rögzítésdátum"].ToÉrt_DaTeTime(),
-                                          rekord["Kezdőidő"].ToÉrt_DaTeTime(),
-                                          rekord["Befejezőidő"].ToÉrt_DaTeTime()
+                                          rekord["rögzítésdátum"].ToÉrt_DaTeTime()
                                           );
+
                                 Adatok.Add(Adat);
                             }
                         }
@@ -88,16 +86,18 @@ namespace Villamos.Kezelők
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
         }
 
 
 
+
         //Elkopó
-        public List<Adat_Szatube_Túlóra> Lista_Adatok(string hely, string jelszó, string szöveg)
+        public List<Adat_Szatube_Beteg> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.SzaTuBe_tábla(hely);
-            List<Adat_Szatube_Túlóra> Adatok = new List<Adat_Szatube_Túlóra>();
-            Adat_Szatube_Túlóra Adat;
+            List<Adat_Szatube_Beteg> Adatok = new List<Adat_Szatube_Beteg>();
+            Adat_Szatube_Beteg Adat;
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -113,7 +113,7 @@ namespace Villamos.Kezelők
                             while (rekord.Read())
                             {
 
-                                Adat = new Adat_Szatube_Túlóra(
+                                Adat = new Adat_Szatube_Beteg(
                                           rekord["sorszám"].ToÉrt_Double(),
                                           rekord["Törzsszám"].ToStrTrim(),
                                           rekord["Dolgozónév"].ToStrTrim(),
@@ -123,10 +123,9 @@ namespace Villamos.Kezelők
                                           rekord["Szabiok"].ToStrTrim(),
                                           rekord["Státus"].ToÉrt_Int(),
                                           rekord["Rögzítette"].ToStrTrim(),
-                                          rekord["rögzítésdátum"].ToÉrt_DaTeTime(),
-                                          rekord["Kezdőidő"].ToÉrt_DaTeTime(),
-                                          rekord["Befejezőidő"].ToÉrt_DaTeTime()
+                                          rekord["rögzítésdátum"].ToÉrt_DaTeTime()
                                           );
+
                                 Adatok.Add(Adat);
                             }
                         }
@@ -135,7 +134,5 @@ namespace Villamos.Kezelők
             }
             return Adatok;
         }
-
-
     }
 }

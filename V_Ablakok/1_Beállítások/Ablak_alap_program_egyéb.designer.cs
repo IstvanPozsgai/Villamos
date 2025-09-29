@@ -57,21 +57,21 @@ namespace Villamos
             this.Label13 = new System.Windows.Forms.Label();
             this.Fülek = new System.Windows.Forms.TabControl();
             this.TabPage1 = new System.Windows.Forms.TabPage();
-            this.Panel2 = new System.Windows.Forms.Panel();
-            this.BeolvásBeállítás = new System.Windows.Forms.Button();
-            this.SAPTábla = new System.Windows.Forms.DataGridView();
-            this.SAPFrissít = new System.Windows.Forms.Button();
-            this.Label67 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.FejlécBeolvasása = new System.Windows.Forms.Button();
+            this.Label69 = new System.Windows.Forms.Label();
+            this.SAPCsoport = new System.Windows.Forms.ComboBox();
             this.Label68 = new System.Windows.Forms.Label();
-            this.SAPBeolvassuk = new System.Windows.Forms.TextBox();
+            this.Label67 = new System.Windows.Forms.Label();
+            this.SAPOSzlopszám = new System.Windows.Forms.TextBox();
             this.Label60 = new System.Windows.Forms.Label();
             this.SAPFejléc = new System.Windows.Forms.TextBox();
-            this.SAPOSzlopszám = new System.Windows.Forms.TextBox();
-            this.SAPExcel = new System.Windows.Forms.Button();
-            this.SAPCsoport = new System.Windows.Forms.ComboBox();
-            this.Label69 = new System.Windows.Forms.Label();
-            this.SAPTöröl = new System.Windows.Forms.Button();
+            this.Változónév = new System.Windows.Forms.TextBox();
             this.SAPRögzít = new System.Windows.Forms.Button();
+            this.SAPTöröl = new System.Windows.Forms.Button();
+            this.SAPExcel = new System.Windows.Forms.Button();
+            this.SAPFrissít = new System.Windows.Forms.Button();
+            this.SAPTábla = new System.Windows.Forms.DataGridView();
             this.TabPage2 = new System.Windows.Forms.TabPage();
             this.Osztály_Új = new System.Windows.Forms.Button();
             this.Osztályfrissít = new System.Windows.Forms.Button();
@@ -156,7 +156,7 @@ namespace Villamos
             this.Panel1.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
-            this.Panel2.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SAPTábla)).BeginInit();
             this.TabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TáblaOsztály)).BeginInit();
@@ -214,59 +214,189 @@ namespace Villamos
             this.Fülek.Name = "Fülek";
             this.Fülek.Padding = new System.Drawing.Point(16, 3);
             this.Fülek.SelectedIndex = 0;
-            this.Fülek.Size = new System.Drawing.Size(1492, 389);
+            this.Fülek.Size = new System.Drawing.Size(1492, 522);
             this.Fülek.TabIndex = 54;
             this.Fülek.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.Fülek_DrawItem);
             this.Fülek.SelectedIndexChanged += new System.EventHandler(this.Fülek_SelectedIndexChanged);
             // 
             // TabPage1
             // 
-            this.TabPage1.Controls.Add(this.Panel2);
+            this.TabPage1.BackColor = System.Drawing.Color.SandyBrown;
+            this.TabPage1.Controls.Add(this.tableLayoutPanel4);
+            this.TabPage1.Controls.Add(this.SAPTábla);
             this.TabPage1.Location = new System.Drawing.Point(4, 29);
             this.TabPage1.Name = "TabPage1";
             this.TabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage1.Size = new System.Drawing.Size(1484, 356);
+            this.TabPage1.Size = new System.Drawing.Size(1484, 489);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "SAP- FORTE beolvasás";
-            this.TabPage1.UseVisualStyleBackColor = true;
             // 
-            // Panel2
+            // tableLayoutPanel4
             // 
-            this.Panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Panel2.BackColor = System.Drawing.Color.SandyBrown;
-            this.Panel2.Controls.Add(this.BeolvásBeállítás);
-            this.Panel2.Controls.Add(this.SAPTábla);
-            this.Panel2.Controls.Add(this.SAPFrissít);
-            this.Panel2.Controls.Add(this.Label67);
-            this.Panel2.Controls.Add(this.Label68);
-            this.Panel2.Controls.Add(this.SAPBeolvassuk);
-            this.Panel2.Controls.Add(this.Label60);
-            this.Panel2.Controls.Add(this.SAPFejléc);
-            this.Panel2.Controls.Add(this.SAPOSzlopszám);
-            this.Panel2.Controls.Add(this.SAPExcel);
-            this.Panel2.Controls.Add(this.SAPCsoport);
-            this.Panel2.Controls.Add(this.Label69);
-            this.Panel2.Controls.Add(this.SAPTöröl);
-            this.Panel2.Controls.Add(this.SAPRögzít);
-            this.Panel2.Location = new System.Drawing.Point(0, 5);
-            this.Panel2.Name = "Panel2";
-            this.Panel2.Size = new System.Drawing.Size(1478, 342);
-            this.Panel2.TabIndex = 0;
+            this.tableLayoutPanel4.ColumnCount = 6;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.Controls.Add(this.FejlécBeolvasása, 5, 4);
+            this.tableLayoutPanel4.Controls.Add(this.Label69, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.SAPCsoport, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.Label68, 0, 1);
+            this.tableLayoutPanel4.Controls.Add(this.Label67, 0, 3);
+            this.tableLayoutPanel4.Controls.Add(this.SAPOSzlopszám, 1, 1);
+            this.tableLayoutPanel4.Controls.Add(this.Label60, 0, 2);
+            this.tableLayoutPanel4.Controls.Add(this.SAPFejléc, 1, 2);
+            this.tableLayoutPanel4.Controls.Add(this.Változónév, 1, 3);
+            this.tableLayoutPanel4.Controls.Add(this.SAPRögzít, 4, 3);
+            this.tableLayoutPanel4.Controls.Add(this.SAPTöröl, 2, 4);
+            this.tableLayoutPanel4.Controls.Add(this.SAPExcel, 3, 4);
+            this.tableLayoutPanel4.Controls.Add(this.SAPFrissít, 4, 4);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(6, 6);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 5;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(823, 211);
+            this.tableLayoutPanel4.TabIndex = 113;
             // 
-            // BeolvásBeállítás
+            // FejlécBeolvasása
             // 
-            this.BeolvásBeállítás.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.BeolvásBeállítás.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
-            this.BeolvásBeállítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BeolvásBeállítás.Location = new System.Drawing.Point(1306, 4);
-            this.BeolvásBeállítás.Name = "BeolvásBeállítás";
-            this.BeolvásBeállítás.Size = new System.Drawing.Size(159, 127);
-            this.BeolvásBeállítás.TabIndex = 112;
-            this.toolTip1.SetToolTip(this.BeolvásBeállítás, "Excel beolvasás beállítás");
-            this.BeolvásBeállítás.UseVisualStyleBackColor = false;
-            this.BeolvásBeállítás.Click += new System.EventHandler(this.BeolvásBeállítás_Click);
+            this.FejlécBeolvasása.BackColor = System.Drawing.SystemColors.Control;
+            this.FejlécBeolvasása.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.FejlécBeolvasása.Image = global::Villamos.Properties.Resources.Document_Microsoft_Excel_01;
+            this.FejlécBeolvasása.Location = new System.Drawing.Point(773, 159);
+            this.FejlécBeolvasása.Name = "FejlécBeolvasása";
+            this.FejlécBeolvasása.Size = new System.Drawing.Size(45, 45);
+            this.FejlécBeolvasása.TabIndex = 56;
+            this.toolTip1.SetToolTip(this.FejlécBeolvasása, "Excel tábla alapján beolvassa a fejlécet");
+            this.FejlécBeolvasása.UseVisualStyleBackColor = false;
+            this.FejlécBeolvasása.Click += new System.EventHandler(this.FejlécBeolvasása_Click);
+            // 
+            // Label69
+            // 
+            this.Label69.AutoSize = true;
+            this.Label69.Location = new System.Drawing.Point(3, 0);
+            this.Label69.Name = "Label69";
+            this.Label69.Size = new System.Drawing.Size(146, 20);
+            this.Label69.TabIndex = 48;
+            this.Label69.Text = "Beolvasási csoport:";
+            // 
+            // SAPCsoport
+            // 
+            this.SAPCsoport.FormattingEnabled = true;
+            this.SAPCsoport.Location = new System.Drawing.Point(155, 3);
+            this.SAPCsoport.MaxLength = 10;
+            this.SAPCsoport.Name = "SAPCsoport";
+            this.SAPCsoport.Size = new System.Drawing.Size(187, 28);
+            this.SAPCsoport.TabIndex = 0;
+            this.SAPCsoport.SelectedIndexChanged += new System.EventHandler(this.Csoport_SelectedIndexChanged);
+            // 
+            // Label68
+            // 
+            this.Label68.AutoSize = true;
+            this.Label68.Location = new System.Drawing.Point(3, 35);
+            this.Label68.Name = "Label68";
+            this.Label68.Size = new System.Drawing.Size(113, 20);
+            this.Label68.TabIndex = 53;
+            this.Label68.Text = "Oszlop száma:";
+            // 
+            // Label67
+            // 
+            this.Label67.AutoSize = true;
+            this.Label67.Location = new System.Drawing.Point(3, 105);
+            this.Label67.Name = "Label67";
+            this.Label67.Size = new System.Drawing.Size(92, 20);
+            this.Label67.TabIndex = 55;
+            this.Label67.Text = "Változónév:";
+            // 
+            // SAPOSzlopszám
+            // 
+            this.SAPOSzlopszám.Location = new System.Drawing.Point(155, 38);
+            this.SAPOSzlopszám.Name = "SAPOSzlopszám";
+            this.SAPOSzlopszám.Size = new System.Drawing.Size(187, 26);
+            this.SAPOSzlopszám.TabIndex = 1;
+            // 
+            // Label60
+            // 
+            this.Label60.AutoSize = true;
+            this.Label60.Location = new System.Drawing.Point(3, 70);
+            this.Label60.Name = "Label60";
+            this.Label60.Size = new System.Drawing.Size(118, 20);
+            this.Label60.TabIndex = 54;
+            this.Label60.Text = "Fejléc szövege:";
+            // 
+            // SAPFejléc
+            // 
+            this.SAPFejléc.Location = new System.Drawing.Point(155, 73);
+            this.SAPFejléc.MaxLength = 255;
+            this.SAPFejléc.Name = "SAPFejléc";
+            this.SAPFejléc.Size = new System.Drawing.Size(459, 26);
+            this.SAPFejléc.TabIndex = 2;
+            // 
+            // Változónév
+            // 
+            this.Változónév.Location = new System.Drawing.Point(155, 108);
+            this.Változónév.MaxLength = 50;
+            this.Változónév.Name = "Változónév";
+            this.Változónév.Size = new System.Drawing.Size(187, 26);
+            this.Változónév.TabIndex = 3;
+            // 
+            // SAPRögzít
+            // 
+            this.SAPRögzít.BackColor = System.Drawing.SystemColors.Control;
+            this.SAPRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.SAPRögzít.Image = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.SAPRögzít.Location = new System.Drawing.Point(722, 108);
+            this.SAPRögzít.Name = "SAPRögzít";
+            this.SAPRögzít.Size = new System.Drawing.Size(45, 45);
+            this.SAPRögzít.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.SAPRögzít, "Rögzíti az adatokat");
+            this.SAPRögzít.UseVisualStyleBackColor = false;
+            this.SAPRögzít.Click += new System.EventHandler(this.Rögzít_Click);
+            // 
+            // SAPTöröl
+            // 
+            this.SAPTöröl.BackColor = System.Drawing.SystemColors.Control;
+            this.SAPTöröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.SAPTöröl.Image = global::Villamos.Properties.Resources.Kuka;
+            this.SAPTöröl.Location = new System.Drawing.Point(620, 159);
+            this.SAPTöröl.Name = "SAPTöröl";
+            this.SAPTöröl.Size = new System.Drawing.Size(45, 45);
+            this.SAPTöröl.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.SAPTöröl, "Törli a megjelenített értékeket");
+            this.SAPTöröl.UseVisualStyleBackColor = false;
+            this.SAPTöröl.Click += new System.EventHandler(this.Töröl_Click);
+            // 
+            // SAPExcel
+            // 
+            this.SAPExcel.BackColor = System.Drawing.SystemColors.Control;
+            this.SAPExcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.SAPExcel.Image = global::Villamos.Properties.Resources.Excel_gyűjtő;
+            this.SAPExcel.Location = new System.Drawing.Point(671, 159);
+            this.SAPExcel.Name = "SAPExcel";
+            this.SAPExcel.Size = new System.Drawing.Size(45, 45);
+            this.SAPExcel.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.SAPExcel, "Excel kimetetet készít");
+            this.SAPExcel.UseVisualStyleBackColor = false;
+            this.SAPExcel.Click += new System.EventHandler(this.Excel_Click);
+            // 
+            // SAPFrissít
+            // 
+            this.SAPFrissít.BackColor = System.Drawing.SystemColors.Control;
+            this.SAPFrissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.SAPFrissít.Image = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.SAPFrissít.Location = new System.Drawing.Point(722, 159);
+            this.SAPFrissít.Name = "SAPFrissít";
+            this.SAPFrissít.Size = new System.Drawing.Size(45, 45);
+            this.SAPFrissít.TabIndex = 6;
+            this.toolTip1.SetToolTip(this.SAPFrissít, "Táblázar adatait frissíti");
+            this.SAPFrissít.UseVisualStyleBackColor = false;
+            this.SAPFrissít.Click += new System.EventHandler(this.Command1_Click);
             // 
             // SAPTábla
             // 
@@ -289,8 +419,9 @@ namespace Villamos
             this.SAPTábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.SAPTábla.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.SAPTábla.EnableHeadersVisualStyles = false;
-            this.SAPTábla.Location = new System.Drawing.Point(3, 137);
+            this.SAPTábla.Location = new System.Drawing.Point(6, 229);
             this.SAPTábla.Name = "SAPTábla";
+            this.SAPTábla.ReadOnly = true;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
@@ -300,130 +431,10 @@ namespace Villamos
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.SAPTábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.SAPTábla.RowHeadersWidth = 20;
-            this.SAPTábla.Size = new System.Drawing.Size(1472, 199);
-            this.SAPTábla.TabIndex = 111;
+            this.SAPTábla.Size = new System.Drawing.Size(1472, 254);
+            this.SAPTábla.TabIndex = 112;
             this.SAPTábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SAPTábla_CellClick);
             this.SAPTábla.SelectionChanged += new System.EventHandler(this.Tábla_SelectionChanged);
-            // 
-            // SAPFrissít
-            // 
-            this.SAPFrissít.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.SAPFrissít.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.SAPFrissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.SAPFrissít.Location = new System.Drawing.Point(1023, 89);
-            this.SAPFrissít.Name = "SAPFrissít";
-            this.SAPFrissít.Size = new System.Drawing.Size(45, 45);
-            this.SAPFrissít.TabIndex = 6;
-            this.toolTip1.SetToolTip(this.SAPFrissít, "Frissíti a táblázatot");
-            this.SAPFrissít.UseVisualStyleBackColor = false;
-            this.SAPFrissít.Click += new System.EventHandler(this.Command1_Click);
-            // 
-            // Label67
-            // 
-            this.Label67.AutoSize = true;
-            this.Label67.Location = new System.Drawing.Point(383, 89);
-            this.Label67.Name = "Label67";
-            this.Label67.Size = new System.Drawing.Size(94, 20);
-            this.Label67.TabIndex = 55;
-            this.Label67.Text = "Beolvassuk:";
-            // 
-            // Label68
-            // 
-            this.Label68.AutoSize = true;
-            this.Label68.Location = new System.Drawing.Point(383, 22);
-            this.Label68.Name = "Label68";
-            this.Label68.Size = new System.Drawing.Size(113, 20);
-            this.Label68.TabIndex = 53;
-            this.Label68.Text = "Oszlop száma:";
-            // 
-            // SAPBeolvassuk
-            // 
-            this.SAPBeolvassuk.Location = new System.Drawing.Point(507, 86);
-            this.SAPBeolvassuk.Name = "SAPBeolvassuk";
-            this.SAPBeolvassuk.Size = new System.Drawing.Size(187, 26);
-            this.SAPBeolvassuk.TabIndex = 3;
-            // 
-            // Label60
-            // 
-            this.Label60.AutoSize = true;
-            this.Label60.Location = new System.Drawing.Point(383, 57);
-            this.Label60.Name = "Label60";
-            this.Label60.Size = new System.Drawing.Size(118, 20);
-            this.Label60.TabIndex = 54;
-            this.Label60.Text = "Fejléc szövege:";
-            // 
-            // SAPFejléc
-            // 
-            this.SAPFejléc.Location = new System.Drawing.Point(507, 54);
-            this.SAPFejléc.MaxLength = 255;
-            this.SAPFejléc.Name = "SAPFejléc";
-            this.SAPFejléc.Size = new System.Drawing.Size(459, 26);
-            this.SAPFejléc.TabIndex = 2;
-            // 
-            // SAPOSzlopszám
-            // 
-            this.SAPOSzlopszám.Location = new System.Drawing.Point(507, 23);
-            this.SAPOSzlopszám.Name = "SAPOSzlopszám";
-            this.SAPOSzlopszám.Size = new System.Drawing.Size(187, 26);
-            this.SAPOSzlopszám.TabIndex = 1;
-            // 
-            // SAPExcel
-            // 
-            this.SAPExcel.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.SAPExcel.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
-            this.SAPExcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.SAPExcel.Location = new System.Drawing.Point(12, 86);
-            this.SAPExcel.Name = "SAPExcel";
-            this.SAPExcel.Size = new System.Drawing.Size(45, 45);
-            this.SAPExcel.TabIndex = 7;
-            this.toolTip1.SetToolTip(this.SAPExcel, "Excel táblázatot készít a táblázatból");
-            this.SAPExcel.UseVisualStyleBackColor = false;
-            this.SAPExcel.Click += new System.EventHandler(this.Excel_Click);
-            // 
-            // SAPCsoport
-            // 
-            this.SAPCsoport.FormattingEnabled = true;
-            this.SAPCsoport.Location = new System.Drawing.Point(160, 9);
-            this.SAPCsoport.MaxLength = 10;
-            this.SAPCsoport.Name = "SAPCsoport";
-            this.SAPCsoport.Size = new System.Drawing.Size(187, 28);
-            this.SAPCsoport.TabIndex = 0;
-            this.SAPCsoport.SelectedIndexChanged += new System.EventHandler(this.Csoport_SelectedIndexChanged);
-            // 
-            // Label69
-            // 
-            this.Label69.AutoSize = true;
-            this.Label69.Location = new System.Drawing.Point(8, 17);
-            this.Label69.Name = "Label69";
-            this.Label69.Size = new System.Drawing.Size(146, 20);
-            this.Label69.TabIndex = 48;
-            this.Label69.Text = "Beolvasási csoport:";
-            // 
-            // SAPTöröl
-            // 
-            this.SAPTöröl.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.SAPTöröl.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
-            this.SAPTöröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.SAPTöröl.Location = new System.Drawing.Point(972, 89);
-            this.SAPTöröl.Name = "SAPTöröl";
-            this.SAPTöröl.Size = new System.Drawing.Size(45, 45);
-            this.SAPTöröl.TabIndex = 5;
-            this.toolTip1.SetToolTip(this.SAPTöröl, "Törli az adatokat");
-            this.SAPTöröl.UseVisualStyleBackColor = false;
-            this.SAPTöröl.Click += new System.EventHandler(this.Töröl_Click);
-            // 
-            // SAPRögzít
-            // 
-            this.SAPRögzít.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.SAPRögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.SAPRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.SAPRögzít.Location = new System.Drawing.Point(1023, 10);
-            this.SAPRögzít.Name = "SAPRögzít";
-            this.SAPRögzít.Size = new System.Drawing.Size(45, 45);
-            this.SAPRögzít.TabIndex = 4;
-            this.toolTip1.SetToolTip(this.SAPRögzít, "Rögzíti/módosítja az adatokat");
-            this.SAPRögzít.UseVisualStyleBackColor = false;
-            this.SAPRögzít.Click += new System.EventHandler(this.Rögzít_Click);
             // 
             // TabPage2
             // 
@@ -443,7 +454,7 @@ namespace Villamos
             this.TabPage2.Location = new System.Drawing.Point(4, 29);
             this.TabPage2.Name = "TabPage2";
             this.TabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage2.Size = new System.Drawing.Size(1484, 356);
+            this.TabPage2.Size = new System.Drawing.Size(1484, 489);
             this.TabPage2.TabIndex = 1;
             this.TabPage2.Text = "Osztály elemek kezelése";
             // 
@@ -593,7 +604,7 @@ namespace Villamos
             dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.TáblaOsztály.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.TáblaOsztály.RowHeadersWidth = 20;
-            this.TáblaOsztály.Size = new System.Drawing.Size(1472, 206);
+            this.TáblaOsztály.Size = new System.Drawing.Size(1472, 339);
             this.TáblaOsztály.TabIndex = 112;
             this.TáblaOsztály.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.TáblaOsztály_CellClick);
             this.TáblaOsztály.SelectionChanged += new System.EventHandler(this.TáblaOsztály_SelectionChanged);
@@ -614,7 +625,7 @@ namespace Villamos
             this.TabPage3.Location = new System.Drawing.Point(4, 29);
             this.TabPage3.Name = "TabPage3";
             this.TabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage3.Size = new System.Drawing.Size(1484, 356);
+            this.TabPage3.Size = new System.Drawing.Size(1484, 489);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Biztonsági másolat készítés";
             // 
@@ -723,7 +734,7 @@ namespace Villamos
             this.TabPage4.Controls.Add(this.GroupBox1);
             this.TabPage4.Location = new System.Drawing.Point(4, 29);
             this.TabPage4.Name = "TabPage4";
-            this.TabPage4.Size = new System.Drawing.Size(1484, 356);
+            this.TabPage4.Size = new System.Drawing.Size(1484, 489);
             this.TabPage4.TabIndex = 3;
             this.TabPage4.Text = "Jármű Takarítás";
             // 
@@ -1436,7 +1447,7 @@ namespace Villamos
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Highlight;
-            this.ClientSize = new System.Drawing.Size(1499, 451);
+            this.ClientSize = new System.Drawing.Size(1499, 584);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.Fülek);
             this.Controls.Add(this.Button13);
@@ -1452,8 +1463,8 @@ namespace Villamos
             this.Panel1.PerformLayout();
             this.Fülek.ResumeLayout(false);
             this.TabPage1.ResumeLayout(false);
-            this.Panel2.ResumeLayout(false);
-            this.Panel2.PerformLayout();
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SAPTábla)).EndInit();
             this.TabPage2.ResumeLayout(false);
             this.TabPage2.PerformLayout();
@@ -1484,21 +1495,7 @@ namespace Villamos
         internal Button Button13;
         internal TabControl Fülek;
         internal TabPage TabPage1;
-        internal Panel Panel2;
         internal TabPage TabPage2;
-        internal Button SAPTöröl;
-        internal Button SAPRögzít;
-        internal Button SAPExcel;
-        internal ComboBox SAPCsoport;
-        internal Label Label69;
-        internal Label Label67;
-        internal Label Label68;
-        internal TextBox SAPBeolvassuk;
-        internal Label Label60;
-        internal TextBox SAPFejléc;
-        internal TextBox SAPOSzlopszám;
-        internal Button SAPFrissít;
-        internal DataGridView SAPTábla;
         internal Button Osztályfrissít;
         internal Button OsztályRögzít;
         internal Button OsztályExcel;
@@ -1578,6 +1575,20 @@ namespace Villamos
         internal Button VégeÁrRögzítés;
         internal V_MindenEgyéb.MyProgressbar Holtart;
         internal Button Osztály_Új;
-        internal Button BeolvásBeállítás;
+        internal DataGridView SAPTábla;
+        private TableLayoutPanel tableLayoutPanel4;
+        internal Button FejlécBeolvasása;
+        internal Label Label69;
+        internal ComboBox SAPCsoport;
+        internal Label Label68;
+        internal Label Label67;
+        internal TextBox SAPOSzlopszám;
+        internal Label Label60;
+        internal TextBox SAPFejléc;
+        internal TextBox Változónév;
+        internal Button SAPRögzít;
+        internal Button SAPTöröl;
+        internal Button SAPExcel;
+        internal Button SAPFrissít;
     }                    
 }

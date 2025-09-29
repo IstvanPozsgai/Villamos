@@ -770,18 +770,18 @@ namespace Villamos
             MyE.Sortörésseltöbbsorba_egyesített($"G{sor}:I{sor + 1}");
 
             MyE.Igazít_vízszintes($"M{sor}:O{sor + 1}", "közép");
-            MyE.Igazít_vízszintes($"G{sor}:I{sor + 1}", "közép");
-            MyE.Kiir("A kiadott munkát\n ellenőrizte:", $"m{sor}");
-            MyE.Egyesít(munkalap, $"p{sor}:r{sor}");
+            MyE.Igazít_vízszintes($"G{sor}:I{sor + 1}", "közép");       //
+            MyE.Kiir("A kiadott munkát\n ellenőrizte:", $"m{sor}");     //
+            MyE.Egyesít(munkalap, $"p{sor}:r{sor}");                    //
 
-            MyE.Betű($"a{sor}:r{sor}", 10);
-            MyE.Betű($"a{sor}:r{sor}", false, true, true);
-            MyE.Rácsoz($"A{sor}:R{sor + 1}");
+            MyE.Betű($"a{sor}:r{sor}", 10);                             //
+            MyE.Betű($"a{sor}:r{sor}", false, true, true);              //
+            MyE.Rácsoz($"A{sor}:R{sor + 1}");                           //
 
 
             sor += 1;
-            MyE.Egyesít(munkalap, $"d{sor}:f{sor}");
-            MyE.Kiir(Kiadta.Text.Trim(), $"d{sor}");
+            MyE.Egyesít(munkalap, $"d{sor}:f{sor}");                    //
+            MyE.Kiir(Kiadta.Text.Trim(), $"d{sor}");                    //
             MyE.Betű($"D{sor}", 10);
             MyE.Betű($"D{sor}", false, true, true);
             MyE.Egyesít(munkalap, $"p{sor}:r{sor}");
