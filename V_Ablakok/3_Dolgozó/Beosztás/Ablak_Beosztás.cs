@@ -1214,6 +1214,7 @@ namespace Villamos
         {
             try
             {
+                Hónap_első = MyF.Hónap_elsőnapja(Dátum.Value);
                 this.Text = $"A {Dátum.Value.Year} év {Dátum.Value.Month} havi beosztása";
 
                 if (Dolgozónév.CheckedItems.Count != 0) Táblaíró();
@@ -2363,5 +2364,7 @@ namespace Villamos
             }
         }
         #endregion
+
+
     }
 }
