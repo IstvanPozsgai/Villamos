@@ -314,6 +314,18 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
             if (teszt_adat != null)
             {
+                // Eltárolom a szükséges értékeket egy változóba a Ciklusrend adb-ből, így nem kell minden egyes művelet során adb-ből olvasni őket.
+                long nevlegesKmErtek = Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Névleges;
+                long alsoKmErtek = Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Alsóérték;
+
+                // Lekéri a Ciklusrend adatbázisból a vizsgálatok közötti megtehető km értékét.
+                tb_ciklusrend.Text = $"{nevlegesKmErtek}";
+
+                // Alább kiszámolja és visszaadja a ciklusrendben meghatározott tűréshatár értékét százalékos formában.
+                // Így nem szükséges tárolnunk a tűréshatárt, de mégis módosítható.
+                // A double castolásra szükség van, hiszen pl. 10 % alatt olyan kicsi számmal dolgozunk, amely már nem fér bele az INT típus értékkészletébe.
+                // A következő képletet használja: (Névleges - Alsóérték) / (Névleges * 100)
+                tb_tureshatar.Text = $"{(double)(nevlegesKmErtek - alsoKmErtek) / nevlegesKmErtek * 100}";
 
                 // Utoljára teljesített vizsgálat sorszáma
                 Adat_CAF_Adatok VizsgáltElem = KézAdatok.Utolso_Km_Vizsgalat_Adatai(Ütem_pályaszám.Text);
@@ -324,7 +336,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                 // Előző vizsgálat tervezett állása
                 tb_tervezetthez_kepest.Text = string.IsNullOrEmpty(teszt_adat.utolso_vizsgalat_valos_allasa?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_vizsgalat_valos_allasa}";
-                if (tb_tervezetthez_kepest.Text != "Még nem történt.") SzinezdTextBox(tb_tervezetthez_kepest, 0, -14000, true);
+                if (tb_tervezetthez_kepest.Text != "Még nem történt.") ; //SzinezdTextBox(tb_tervezetthez_kepest, 0, -14000, true);
 
                 // P0: határ -1400
                 tb_futhatmeg_p0.Text = string.IsNullOrEmpty(teszt_adat.kov_p0?.ToString()) ? "Még nem történt." : $"{teszt_adat.kov_p0}";
@@ -340,23 +352,23 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                 // Megtett P0
                 tb_megtett_p0.Text = string.IsNullOrEmpty(teszt_adat.utolso_p0_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p0_kozott}";
-                if (tb_megtett_p0.Text != "Még nem történt.") SzinezdTextBox(tb_megtett_p0, 14000, 15400);
+                if (tb_megtett_p0.Text != "Még nem történt.") SzinezdTextBox(tb_megtett_p0, teszt_adat.utolso_p0_sorszam, nevlegesKmErtek, tb_tureshatar.Text.ToÉrt_Int());
 
                 // Megtett P1
                 tb_megtett_p1.Text = string.IsNullOrEmpty(teszt_adat.utolso_p1_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p1_kozott}";
-                if (tb_megtett_p1.Text != "Még nem történt.") SzinezdTextBox(tb_megtett_p1, 70000, 77000);
+                if (tb_megtett_p1.Text != "Még nem történt.") SzinezdTextBox(tb_megtett_p1, teszt_adat.utolso_p1_sorszam, nevlegesKmErtek, tb_tureshatar.Text.ToÉrt_Int());
 
                 // P2 rendben
                 tb_rendben_p2.Text = string.IsNullOrEmpty(teszt_adat.elso_p2?.ToString()) ? "Még nem történt." : $"{teszt_adat.elso_p2}";
-                if (tb_rendben_p2.Text != "Még nem történt.") SzinezdTextBox(tb_rendben_p2, 280000, 308000);
+                if (tb_rendben_p2.Text != "Még nem történt.") ; SzinezdTextBox(tb_rendben_p2, 20, nevlegesKmErtek, tb_tureshatar.Text.ToÉrt_Int());
 
                 // P3 rendben
                 tb_rendben_p3.Text = string.IsNullOrEmpty(teszt_adat.elso_p3?.ToString()) ? "Még nem történt." : $"{teszt_adat.elso_p3}";
-                if (tb_rendben_p3.Text != "Még nem történt.") SzinezdTextBox(tb_rendben_p3, 560000, 616000);
+                if (tb_rendben_p3.Text != "Még nem történt.") ; SzinezdTextBox(tb_rendben_p3, 40, nevlegesKmErtek, tb_tureshatar.Text.ToÉrt_Int());
 
                 // P3–P2 közötti futás
                 tb_p3_p2_kozott.Text = string.IsNullOrEmpty(teszt_adat.utolso_p3_es_p2_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p3_es_p2_kozott}";
-                if (tb_p3_p2_kozott.Text != "Még nem történt.") SzinezdTextBox(tb_p3_p2_kozott, 280000, 308000);
+                if (tb_p3_p2_kozott.Text != "Még nem történt.") ; SzinezdTextBox(tb_p3_p2_kozott, 20, nevlegesKmErtek, tb_tureshatar.Text.ToÉrt_Int());
             }
             else
             {
@@ -372,45 +384,23 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
             // Ciklusrend kiírások
 
-            // Eltárolom a szükséges értékeket egy változóba a Ciklusrend adb-ből, így nem kell minden egyes művelet során adb-ből olvasni őket.
-            long nevlegesKmErtek = Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Névleges;
-            long alsoKmErtek = Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Alsóérték;
-
-            // Lekéri a Ciklusrend adatbázisból a vizsgálatok közötti megtehető km értékét.
-            tb_ciklusrend.Text = $"{nevlegesKmErtek}";
-
-            // Alább kiszámolja és visszaadja a ciklusrendben meghatározott tűréshatár értékét százalékos formában.
-            // Így nem szükséges tárolnunk a tűréshatárt, de mégis módosítható.
-            // A double castolásra szükség van, hiszen pl. 10 % alatt olyan kicsi számmal dolgozunk, amely már nem fér bele az INT típus értékkészletébe.
-            // A következő képletet használja: (Névleges - Alsóérték) / (Névleges * 100)
-            tb_tureshatar.Text = $"{(double)(nevlegesKmErtek - alsoKmErtek) / nevlegesKmErtek * 100}";
+            
 
         }
 
-        private void SzinezdTextBox(TextBox tb, int alsoHatar, int felsoHatar, bool fordított = false)
+        private void SzinezdTextBox(TextBox tb, long? vizsgalatiSorszam, long nevlegesKmErtek, int tureshatar)
         {
             if (int.TryParse(tb.Text, out int ertek))
             {
-                if (!fordított)
-                {
-                    // régi logika (megszokott helyeken minden marad)
-                    if (ertek <= alsoHatar)
-                        tb.BackColor = Color.LightGreen;
-                    else if (ertek <= felsoHatar)
-                        tb.BackColor = Color.PaleGoldenrod;
-                    else
-                        tb.BackColor = ControlPaint.Light(Color.Red);
-                }
+                long? alap = vizsgalatiSorszam * nevlegesKmErtek;
+                double? sargaHatar = alap * (1 + tureshatar / 100.0);
+
+                if (ertek <= alap)
+                    tb.BackColor = Color.LightGreen;
+                else if (ertek <= sargaHatar)
+                    tb.BackColor = Color.PaleGoldenrod;
                 else
-                {
-                    // új logika: 0-tól zöld, -1 … -13999 sárga, <= -14000 piros
-                    if (ertek >= 0)
-                        tb.BackColor = Color.LightGreen;
-                    else if (ertek > -14000)
-                        tb.BackColor = Color.PaleGoldenrod;
-                    else
-                        tb.BackColor = ControlPaint.Light(Color.Red);
-                }
+                    tb.BackColor = Color.LightCoral; // pirosabb, de nem túl sötét
 
                 tb.Text = tb.Text + " Km";
             }
@@ -419,6 +409,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 tb.BackColor = SystemColors.Window;
             }
         }
+
 
 
         void SzinezdFuthatMeg(TextBox tb, int pirosHatar)
@@ -916,7 +907,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         {
             try
             {
-                KézCafKm.Erteket_Frissit(Posta_Segéd.Azonosító);
+                KézCafKm.Tabla_Feltoltese();
+                //KézCafKm.Erteket_Frissit(Posta_Segéd.Azonosító);
                 KiirPvizsgalat();
                 MessageBox.Show("Sikeres frissítés!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

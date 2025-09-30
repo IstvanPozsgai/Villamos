@@ -62,7 +62,11 @@ namespace Villamos.Kezelők
             szöveg += "utolso_p1_kozott LONG, ";
             szöveg += "utolso_p3_es_p2_kozott LONG, ";
             szöveg += "elso_p2 LONG, ";
-            szöveg += "elso_p3 LONG);";
+            szöveg += "elso_p3 LONG,";
+            szöveg += "utolso_p0_sorszam LONG,";
+            szöveg += "utolso_p1_sorszam LONG,";
+            szöveg += "utolso_p2_sorszam LONG,";
+            szöveg += "utolso_p3_sorszam LONG);";
 
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
@@ -101,7 +105,11 @@ namespace Villamos.Kezelők
                                  rekord["utolso_p1_kozott"] != DBNull.Value ? rekord["utolso_p1_kozott"].ToÉrt_Long() : (long?)null,
                                  rekord["utolso_p3_es_p2_kozott"] != DBNull.Value ? rekord["utolso_p3_es_p2_kozott"].ToÉrt_Long() : (long?)null,
                                  rekord["elso_p2"] != DBNull.Value ? rekord["elso_p2"].ToÉrt_Long() : (long?)null,
-                                 rekord["elso_p3"] != DBNull.Value ? rekord["elso_p3"].ToÉrt_Long() : (long?)null
+                                 rekord["elso_p3"] != DBNull.Value ? rekord["elso_p3"].ToÉrt_Long() : (long?)null,
+                                 rekord["utolso_p0_sorszam"] != DBNull.Value ? rekord["utolso_p0_sorszam"].ToÉrt_Long() : (long?)null,
+                                 rekord["utolso_p1_sorszam"] != DBNull.Value ? rekord["utolso_p1_sorszam"].ToÉrt_Long() : (long?)null,
+                                 rekord["utolso_p2_sorszam"] != DBNull.Value ? rekord["utolso_p2_sorszam"].ToÉrt_Long() : (long?)null,
+                                 rekord["utolso_p3_sorszam"] != DBNull.Value ? rekord["utolso_p3_sorszam"].ToÉrt_Long() : (long?)null
                                  );
                                 Adatok.Add(Adat);
                             }
@@ -138,7 +146,7 @@ namespace Villamos.Kezelők
             {
                 if (Egy_Adat(Adat.azonosito) == null)
                 {
-                    string szöveg = $"INSERT INTO {táblanév} (azonosito, utolso_vizsgalat_valos_allasa, kov_p0, kov_p1, kov_p2, utolso_p0_kozott, utolso_p1_kozott, utolso_p3_es_p2_kozott, elso_p2, elso_p3) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (azonosito, utolso_vizsgalat_valos_allasa, kov_p0, kov_p1, kov_p2, utolso_p0_kozott, utolso_p1_kozott, utolso_p3_es_p2_kozott, elso_p2, elso_p3, utolso_p0_sorszam, utolso_p1_sorszam, utolso_p2_sorszam, utolso_p3_sorszam) VALUES (";
 
                     szöveg += $"'{Adat.azonosito}', "; // azonosító
 
@@ -175,8 +183,24 @@ namespace Villamos.Kezelők
                         : $"'{Adat.elso_p2}', "; // Első P2-es vizsgálat KM értéke
 
                     szöveg += Adat.elso_p3 == null
+                        ? "null, "
+                        : $"'{Adat.elso_p3}',"; // Első P3-as vizsgálat KM értéke
+
+                    szöveg += Adat.utolso_p0_sorszam == null
+                        ? "null, "
+                        : $"'{Adat.utolso_p0_sorszam}',"; //Utolso P0 vizsgálat KM sorszáma
+
+                    szöveg += Adat.utolso_p1_sorszam == null
+                        ? "null, "
+                        : $"'{Adat.utolso_p1_sorszam}',"; //Utolso P1 vizsgálat KM sorszáma
+
+                    szöveg += Adat.utolso_p2_sorszam == null
+                        ? "null, "
+                        : $"'{Adat.utolso_p2_sorszam}',"; //Utolso P2 vizsgálat KM sorszáma
+
+                    szöveg += Adat.utolso_p3_sorszam == null
                         ? "null)"
-                        : $"'{Adat.elso_p3}')"; // Első P3-as vizsgálat KM értéke
+                        : $"'{Adat.utolso_p3_sorszam}')"; //Utolso P3 vizsgálat KM sorszáma
 
                     MyA.ABMódosítás(hely, jelszó, szöveg); // SQL beszúrás futtatása
                 }
@@ -228,6 +252,22 @@ namespace Villamos.Kezelők
                 szoveg += Adat.utolso_p3_es_p2_kozott == null
                     ? "utolso_p3_es_p2_kozott=null "
                     : $"utolso_p3_es_p2_kozott='{Adat.utolso_p3_es_p2_kozott}' ";
+
+                szoveg += Adat.utolso_p0_sorszam == null
+                   ? "utolso_p0_sorszam=null "
+                   : $"utolso_p0_sorszam='{Adat.utolso_p0_sorszam}' ";
+
+                szoveg += Adat.utolso_p1_sorszam == null
+                   ? "utolso_p1_sorszam=null "
+                   : $"utolso_p1_sorszam='{Adat.utolso_p1_sorszam}' ";
+
+                szoveg += Adat.utolso_p2_sorszam == null
+                   ? "utolso_p2_sorszam=null "
+                   : $"utolso_p2_sorszam='{Adat.utolso_p2_sorszam}' ";
+
+                szoveg += Adat.utolso_p3_sorszam == null
+                   ? "utolso_p3_sorszam=null "
+                   : $"utolso_p3_sorszam='{Adat.utolso_p3_sorszam}' ";
 
                 szoveg += $"WHERE azonosito='{Adat.azonosito}'";
 
@@ -439,6 +479,60 @@ namespace Villamos.Kezelők
             return elsoP3?.Számláló;
         }
 
+        private int? Utolso_P0_Sorszam(string palya)
+        {
+            return osszes_adat
+                .Where(a => a.IDŐvKM == 2
+                            && a.Státus == 6
+                            && a.Azonosító == palya
+                            && a.KM_Sorszám % 5 != 0   // P0: nem osztható 5-tel
+                            && a.Megjegyzés != "Ütemezési Segéd")
+                .OrderByDescending(a => a.Dátum)
+                .Select(a => (int?)a.KM_Sorszám)
+                .FirstOrDefault();
+        }
+
+        private int? Utolso_P1_Sorszam(string palya)
+        {
+            return osszes_adat
+                .Where(a => a.IDŐvKM == 2
+                            && a.Státus == 6
+                            && a.Azonosító == palya
+                            && a.KM_Sorszám % 5 == 0
+                            && a.KM_Sorszám % 20 != 0   // P1: osztható 5-tel, de nem 20-szal
+                            && a.Megjegyzés != "Ütemezési Segéd")
+                .OrderByDescending(a => a.Dátum)
+                .Select(a => (int?)a.KM_Sorszám)
+                .FirstOrDefault();
+        }
+
+        private int? Utolso_P2_Sorszam(string palya)
+        {
+            return osszes_adat
+                .Where(a => a.IDŐvKM == 2
+                            && a.Státus == 6
+                            && a.Azonosító == palya
+                            && (a.Vizsgálat == "P2" || a.Vizsgálat == "3P2")
+                            && a.Megjegyzés != "Ütemezési Segéd")
+                .OrderByDescending(a => a.Dátum)
+                .Select(a => (int?)a.KM_Sorszám)
+                .FirstOrDefault();
+        }
+
+        private int? Utolso_P3_Sorszam(string palya)
+        {
+            return osszes_adat
+                .Where(a => a.IDŐvKM == 2
+                            && a.Státus == 6
+                            && a.Azonosító == palya
+                            && (a.Vizsgálat == "P3/2P2" || a.Vizsgálat == "2P3")
+                            && a.Megjegyzés != "Ütemezési Segéd")
+                .OrderByDescending(a => a.Dátum)
+                .Select(a => (int?)a.KM_Sorszám)
+                .FirstOrDefault();
+        }
+
+
         // JAVÍTANDÓ: A pályaszám, helyett a típust használd
         // KÉSZ
         //Amúgy miben különbözik a rövis és a hosszú CAF?
@@ -456,14 +550,14 @@ namespace Villamos.Kezelők
             for (int i = 0; i <= azonositoLista.Count()-1; i++)
             {
                 string Palyaszam = $"{azonositoLista[i]}";
-                Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(Palyaszam, Utolso_Vizsgalat_Valos_Allasa(Palyaszam), Kovetkezo_P0_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P1_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P2_Vizsgalat_KM_Erteke(Palyaszam), P0_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), P1_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), Utolso_P3_es_P2_kozotti_futas(Palyaszam), Elso_P2_rendben_van_e(Palyaszam), Elso_P3_rendben_van_e(Palyaszam));
+                Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(Palyaszam, Utolso_Vizsgalat_Valos_Allasa(Palyaszam), Kovetkezo_P0_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P1_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P2_Vizsgalat_KM_Erteke(Palyaszam), P0_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), P1_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), Utolso_P3_es_P2_kozotti_futas(Palyaszam), Elso_P2_rendben_van_e(Palyaszam), Elso_P3_rendben_van_e(Palyaszam), Utolso_P0_Sorszam(Palyaszam), Utolso_P1_Sorszam(Palyaszam), Utolso_P2_Sorszam(Palyaszam), Utolso_P3_Sorszam(Palyaszam));
                 Rögzítés_Elso(teszt);
             }
         }
 
         public void Erteket_Frissit(string palya)
         {
-            Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(palya, Utolso_Vizsgalat_Valos_Allasa(palya), Kovetkezo_P0_Vizsgalat_KM_Erteke(palya), Kovetkezo_P1_Vizsgalat_KM_Erteke(palya), Kovetkezo_P2_Vizsgalat_KM_Erteke(palya), P0_vizsgalatok_kozott_megtett_KM_Erteke(palya), P1_vizsgalatok_kozott_megtett_KM_Erteke(palya), Utolso_P3_es_P2_kozotti_futas(palya), Elso_P2_rendben_van_e(palya), Elso_P3_rendben_van_e(palya));
+            Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(palya, Utolso_Vizsgalat_Valos_Allasa(palya), Kovetkezo_P0_Vizsgalat_KM_Erteke(palya), Kovetkezo_P1_Vizsgalat_KM_Erteke(palya), Kovetkezo_P2_Vizsgalat_KM_Erteke(palya), P0_vizsgalatok_kozott_megtett_KM_Erteke(palya), P1_vizsgalatok_kozott_megtett_KM_Erteke(palya), Utolso_P3_es_P2_kozotti_futas(palya), Elso_P2_rendben_van_e(palya), Elso_P3_rendben_van_e(palya), Utolso_P0_Sorszam(palya), Utolso_P1_Sorszam(palya), Utolso_P2_Sorszam(palya), Utolso_P3_Sorszam(palya));
             Erteket_Frissit(teszt);
         }
     }
