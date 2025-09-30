@@ -2528,7 +2528,7 @@ namespace Villamos
                           a.Kezdődátum <= Határnap.Value
                           orderby a.Törzsszám, a.Kezdődátum
                           select a).ToList();
-                if (Adatok == null || Adatok.Count > 1) throw new HibásBevittAdat("Ebben az évben nem lett létrehozva adatbázis.");
+                if (Adatok == null || Adatok.Count < 1) throw new HibásBevittAdat("Ebben az évben nem lett létrehozva adatbázis.");
                 Adat_Szatube_Szabadság Ideig = null;
 
                 string Első_HR = "";
