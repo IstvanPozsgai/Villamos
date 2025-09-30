@@ -735,12 +735,13 @@ namespace Villamos
         {
             try
             {
+                Hónap_első = MyF.Hónap_elsőnapja(Dátum.Value);
                 Holtart.BackColor = Color.MediumSeaGreen;
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
                 Tábla.Refresh();
                 Tábla.Visible = false;
-
+                
                 Tábla.ColumnCount = hónap_hossz + 5;
                 Tábla.RowCount = 1;
                 // fejléc elkészítése
@@ -1215,6 +1216,7 @@ namespace Villamos
             try
             {
                 Hónap_első = MyF.Hónap_elsőnapja(Dátum.Value);
+                hónap_hossz = MyF.Hónap_hossza(Dátum.Value);
                 this.Text = $"A {Dátum.Value.Year} év {Dátum.Value.Month} havi beosztása";
 
                 if (Dolgozónév.CheckedItems.Count != 0) Táblaíró();
