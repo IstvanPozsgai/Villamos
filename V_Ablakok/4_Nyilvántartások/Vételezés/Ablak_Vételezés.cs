@@ -39,8 +39,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         public Ablak_Vételezés()
         {
             InitializeComponent();
-            Start();
+         
         }
+
+
 
         #region Alap
         private void Start()
@@ -70,7 +72,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
         private void Ablak_Vételezés_Load(object sender, EventArgs e)
         {
-
+            Start();
         }
 
         private void Ablak_Vételezés_FormClosed(object sender, FormClosedEventArgs e)
