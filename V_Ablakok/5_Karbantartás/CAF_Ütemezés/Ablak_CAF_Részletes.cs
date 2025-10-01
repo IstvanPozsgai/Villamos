@@ -330,7 +330,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 // Utoljára teljesített vizsgálat sorszáma
                 Adat_CAF_Adatok VizsgáltElem = KézAdatok.Utolso_Km_Vizsgalat_Adatai(Ütem_pályaszám.Text);
                 if (VizsgáltElem != null)
-                    tb_utolso_teljesitett.Text = $"{VizsgáltElem.KM_Sorszám}. {VizsgáltElem.KM_Sorszám * 14000} Km)";
+                    tb_utolso_teljesitett.Text = $"({VizsgáltElem.KM_Sorszám}. {VizsgáltElem.KM_Sorszám * 14000} Km)";
                 else
                     tb_utolso_teljesitett.Text = "Még nem történt.";
 
@@ -338,17 +338,25 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 tb_tervezetthez_kepest.Text = string.IsNullOrEmpty(teszt_adat.utolso_vizsgalat_valos_allasa?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_vizsgalat_valos_allasa}";
                 if (tb_tervezetthez_kepest.Text != "Még nem történt.") ; //SzinezdTextBox(tb_tervezetthez_kepest, 0, -14000, true);
 
-                // P0: határ -1400
+                // P0
                 tb_futhatmeg_p0.Text = string.IsNullOrEmpty(teszt_adat.kov_p0?.ToString()) ? "Még nem történt." : $"{teszt_adat.kov_p0}";
-                if (tb_futhatmeg_p0.Text != "Még nem történt.") SzinezdFuthatMeg(tb_futhatmeg_p0, 1400);
+                if (tb_futhatmeg_p0.Text != "Még nem történt.") SzinezdFuthatMeg(tb_futhatmeg_p0, (1 * nevlegesKmErtek)/tb_tureshatar.Text.ToÉrt_Int());
 
-                // P1: határ -7000
+                // P1
                 tb_futhatmeg_p1.Text = string.IsNullOrEmpty(teszt_adat.kov_p1?.ToString()) ? "Még nem történt." : $"{teszt_adat.kov_p1}";
-                if (tb_futhatmeg_p1.Text != "Még nem történt.") SzinezdFuthatMeg(tb_futhatmeg_p1, 7000);
+                if (tb_futhatmeg_p1.Text != "Még nem történt.") SzinezdFuthatMeg(tb_futhatmeg_p1, (5 * nevlegesKmErtek) / tb_tureshatar.Text.ToÉrt_Int());
 
-                // P2: határ -28000
+                // P2
                 tb_futhatmeg_p2.Text = string.IsNullOrEmpty(teszt_adat.kov_p2?.ToString()) ? "Még nem történt." : $"{teszt_adat.kov_p2}";
-                if (tb_futhatmeg_p2.Text != "Még nem történt.") SzinezdFuthatMeg(tb_futhatmeg_p2, 28000);
+                if (tb_futhatmeg_p2.Text != "Még nem történt.") SzinezdFuthatMeg(tb_futhatmeg_p2, (20 * nevlegesKmErtek) / tb_tureshatar.Text.ToÉrt_Int() );
+
+
+                // A SzinezdFuthatMeg a kovetkezokepp mukodik:
+                // Az 1, 5, 20 konstans a P0, P1 és P2 vizsgálatot jelölik, és ezek a mezők "visszaszamlalnak" a névértékben meghatározott Km és Vizsgalat alapján, hogy mennyit futhat meg a villamos.
+                // Pl. 14.000 a neveleges vizsgalati Km eseten a visszaszamlalas innen indul (P0: 14.000*1=14.000, P1: 14.000*5=70.000, P2: 14.000*20=280.000).
+                // A metodusnak eleg csak azt atadni, hogy miutan adjon pirosat, hiszen a visszaszamlalas miatt 0 felett mindig zold
+                // Amikor eleri az atadott Piros hatart akkor piros, egyebkent pedig sarga.
+                // Azert adom at tureshatarral, hiszen a meghatarozott tureshatart atlepve kell pirossa valtoznia.
 
                 // Megtett P0
                 tb_megtett_p0.Text = string.IsNullOrEmpty(teszt_adat.utolso_p0_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p0_kozott}";
@@ -369,6 +377,10 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 // P3–P2 közötti futás
                 tb_p3_p2_kozott.Text = string.IsNullOrEmpty(teszt_adat.utolso_p3_es_p2_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p3_es_p2_kozott}";
                 if (tb_p3_p2_kozott.Text != "Még nem történt.") ; SzinezdTextBox(tb_p3_p2_kozott, 20, nevlegesKmErtek, tb_tureshatar.Text.ToÉrt_Int());
+
+                // A SzinzedTextBox a kovetkezokepp mukodik:
+                // Megkapja az utolso elvegzett Km sorszamat a 2 azonos vizsgalat kozotti mezoknel, illetve az elso vizsgalatos mezoknel az elso vizsgalat sorszamat.
+                // Ezekbol kiszamolja a nevleges Km es tureshatar segitsegevel a szinezesi hatarokat.
             }
             else
             {
@@ -382,12 +394,13 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 tb_p3_p2_kozott.Text = "Nincs adat";
             }
 
-            // Ciklusrend kiírások
+            
 
             
 
         }
 
+        // Ez a 2 vizsgalat kozotti, illetve az elso vizsgalatok szinezeset vegzi.
         private void SzinezdTextBox(TextBox tb, long? vizsgalatiSorszam, long nevlegesKmErtek, int tureshatar)
         {
             if (int.TryParse(tb.Text, out int ertek))
@@ -400,7 +413,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 else if (ertek <= sargaHatar)
                     tb.BackColor = Color.PaleGoldenrod;
                 else
-                    tb.BackColor = Color.LightCoral; // pirosabb, de nem túl sötét
+                    tb.BackColor = Color.LightCoral;
 
                 tb.Text = tb.Text + " Km";
             }
@@ -411,8 +424,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         }
 
 
-
-        void SzinezdFuthatMeg(TextBox tb, int pirosHatar)
+        // Ez a "visszaszamlalos" mezok szinezeset vegzi.
+        void SzinezdFuthatMeg(TextBox tb, long pirosHatar)
         {
             if (int.TryParse(tb.Text, out int ertek))
             {
