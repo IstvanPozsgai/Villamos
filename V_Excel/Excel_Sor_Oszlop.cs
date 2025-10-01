@@ -58,6 +58,7 @@ namespace Villamos
             try
             {
                 MyExcel.Range Táblaterület = Module_Excel.xlApp.get_Range(mit);
+
                 if (mekkora > 0)
                     Táblaterület.RowHeight = mekkora;
                 else
@@ -93,6 +94,8 @@ namespace Villamos
                     Táblaterület.Columns.ColumnWidth = szélesség;
                 else
                     Táblaterület.Columns.EntireColumn.AutoFit();
+
+                Táblaterület.WrapText = true;
 
                 Marshal.ReleaseComObject(Táblaterület);
                 Táblaterület = null;

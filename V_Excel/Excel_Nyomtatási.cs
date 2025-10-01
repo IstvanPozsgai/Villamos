@@ -173,65 +173,59 @@ namespace Villamos
         /// <param name="LáblécMéret"></param>
         /// <param name="vízszintes"></param>
         /// <param name="függőleges"></param>
-        public static void NyomtatásiTerület_részletes(string munkalap, string terület, string sorismétlődés, string oszlopisnétlődés,
-                        string fejbal, string fejközép, string fejjobb, string lábbal, string lábközép, string lábjobb, string fénykép, double balMargó, double jobbMargó,
-                        double alsóMargó, double felsőMargó, double fejlécMéret, double LáblécMéret, bool vízszintes, bool függőleges)
+        public static void NyomtatásiTerület_részletes(string munkalap, string terület,
+                        string sorismétlődés,
+                        string lábbal, string lábközép, string lábjobb)
         {
             try
             {
+                const double MmToInch = 1.0 / 25.4;
                 Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
-                Munkalap.Select();
-
-                PageSetup Táblaterület = (MyExcel.PageSetup)Munkalap.PageSetup;
-
+                PageSetup Táblaterület = Munkalap.PageSetup;
                 Táblaterület.PrintTitleRows = sorismétlődés;
-                Táblaterület.PrintTitleColumns = oszlopisnétlődés;
-
-                Táblaterület.LeftHeaderPicture.Filename = fénykép;
-
                 Táblaterület.PrintArea = terület;
-                {
-                    Táblaterület.LeftHeader = fejbal;
-                    Táblaterület.CenterHeader = fejközép;
-                    Táblaterület.RightHeader = fejjobb;
-                    Táblaterület.LeftFooter = lábbal;
-                    Táblaterület.CenterFooter = lábközép;
-                    Táblaterület.RightFooter = lábjobb;
-                    Táblaterület.LeftMargin = xlApp.InchesToPoints(balMargó);
-                    Táblaterület.RightMargin = xlApp.InchesToPoints(jobbMargó);
-                    Táblaterület.TopMargin = xlApp.InchesToPoints(felsőMargó);
-                    Táblaterület.BottomMargin = xlApp.InchesToPoints(alsóMargó);
-                    Táblaterület.HeaderMargin = xlApp.InchesToPoints(fejlécMéret);
-                    Táblaterület.FooterMargin = xlApp.InchesToPoints(LáblécMéret);
-                    Táblaterület.PrintHeadings = false;
-                    Táblaterület.PrintGridlines = false;
-                    Táblaterület.PrintComments = MyExcel.XlPrintLocation.xlPrintNoComments;
-                    Táblaterület.CenterHorizontally = vízszintes;
-                    Táblaterület.CenterVertically = függőleges;
-                    Táblaterület.Orientation = MyExcel.XlPageOrientation.xlPortrait;
-                    Táblaterület.Draft = false;
-                    Táblaterület.PaperSize = MyExcel.XlPaperSize.xlPaperA4;
-                    Táblaterület.Order = MyExcel.XlOrder.xlDownThenOver;
-                    Táblaterület.BlackAndWhite = false;
-                    Táblaterület.Zoom = false;
-                    Táblaterület.FitToPagesWide = 1;
-                    Táblaterület.FitToPagesTall = false;
-                    Táblaterület.PrintErrors = MyExcel.XlPrintErrors.xlPrintErrorsDisplayed;
-                }
+                Táblaterület.LeftFooter = lábbal;
+                Táblaterület.CenterFooter = lábközép;
+                Táblaterület.RightFooter = lábjobb;
+                Táblaterület.LeftMargin = xlApp.InchesToPoints(6 * MmToInch); //6 mm
+                Táblaterület.RightMargin = xlApp.InchesToPoints(6 * MmToInch);
+                Táblaterület.TopMargin = xlApp.InchesToPoints(9 * MmToInch);     // ≈ 9 mm
+                Táblaterület.BottomMargin = xlApp.InchesToPoints(14 * MmToInch);      // ≈ 14 mm
+                Táblaterület.HeaderMargin = xlApp.InchesToPoints(8 * MmToInch);
+                Táblaterület.FooterMargin = xlApp.InchesToPoints(8 * MmToInch);
+                Táblaterület.PrintHeadings = false;
+                Táblaterület.PrintGridlines = false;
+                Táblaterület.PrintComments = MyExcel.XlPrintLocation.xlPrintNoComments;
+                Táblaterület.CenterHorizontally = true;
+                Táblaterület.Orientation = MyExcel.XlPageOrientation.xlPortrait;
+                Táblaterület.Draft = false;
+                Táblaterület.PaperSize = MyExcel.XlPaperSize.xlPaperA4;
+                Táblaterület.Order = MyExcel.XlOrder.xlDownThenOver;
+                Táblaterület.BlackAndWhite = false;
+                Táblaterület.Zoom = false;
+                Táblaterület.FitToPagesWide = 1;
+                Táblaterület.FitToPagesTall = false;
+                Táblaterület.PrintErrors = MyExcel.XlPrintErrors.xlPrintErrorsDisplayed;
             }
-            catch (HibásBevittAdat ex)
+            catch (System.Runtime.InteropServices.COMException comEx)
             {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Tipikus nyomtatóhiba: nincs alapértelmezett nyomtató
+                if (comEx.HResult == unchecked((int)0x800A03EC))
+                {
+                    MessageBox.Show("Alapértelmezett nyomtató be van állítva?", "Nyomtató beállítási hiba",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    HibaNapló.Log(comEx.Message, "NyomtatásiTerület_részletes", comEx.StackTrace, comEx.Source, comEx.HResult);
+                    MessageBox.Show($"{comEx.Message}\n\nA hiba naplózásra került.", "Hiba történt",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             catch (Exception ex)
             {
-                if (ex.Message.Trim() == "PageSetup osztály LeftHeader tulajdonsága nem állítható be")
-                    MessageBox.Show("Alapértelmezett nyomtató be van állítva?", "Nyomtató beállítási hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                else
-                {
-                    HibaNapló.Log(ex.Message, "NyomtatásiTerület_részletes", ex.StackTrace, ex.Source, ex.HResult);
-                    MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                HibaNapló.Log(ex.Message, "NyomtatásiTerület_részletes", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

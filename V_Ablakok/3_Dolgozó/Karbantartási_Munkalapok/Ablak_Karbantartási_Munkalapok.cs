@@ -1067,11 +1067,11 @@ namespace Villamos.Villamos_Ablakok
                 sor = MegjegyzésSorok(sor);
                 Holtart.Lép();
 
-                //Nyomtatási beállítások
-                MyE.NyomtatásiTerület_részletes(munkalap, $"A1:Q{sor}", munkafejléchelye, "", "", "", "", hatályos_str, "&P / &N oldal",
-                     Verzió, "", 0.236220472440945d, 0.236220472440945d, 0.551181102362205d, 0.354330708661417d, 0.31496062992126d, 0.31496062992126d
-                    , true, false);
-                Holtart.Lép();
+                //     Nyomtatási beállítások
+                MyE.NyomtatásiTerület_részletes(munkalap, $"A1:Q{sor}",
+                                                munkafejléchelye,
+                                                hatályos_str, "&P / &N oldal", Verzió);
+
 
                 //nyomtatás
                 if (Nyomtat_igen.Checked) MyE.Nyomtatás(munkalap, 1, 1);
@@ -1328,11 +1328,12 @@ namespace Villamos.Villamos_Ablakok
                             MyE.Kiir(ideignév.Replace("_", "\n"), "AT" + sor);
                             MyE.Sortörésseltöbbsorba("M" + sor, true);
                         }
-                        MyE.Sormagasság($"{sor}:{sor}", -1);
-                        MyE.Igazít_vízszintes("B" + sor, "bal");
+
+                        MyE.Igazít_vízszintes($"B{sor}", "bal");
                         Adat_technológia_Ciklus cikluselelje = AdatokCiklus.Where(B => B.Sorszám == a.Karb_ciklus_eleje).FirstOrDefault();
                         if (cikluselelje != null) MyE.Kiir(cikluselelje.Fokozat, $"J{sor}");
-                        MyE.Igazít_vízszintes("J" + sor, "közép");
+                        MyE.Sormagasság($"{sor}:{sor}", -1);
+                        MyE.Igazít_vízszintes($"J{sor}", "közép");
                         MyE.Rácsoz($"A{sor}:Q{sor}");
                     }
                 }

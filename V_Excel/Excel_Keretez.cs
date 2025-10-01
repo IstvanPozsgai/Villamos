@@ -14,36 +14,35 @@ namespace Villamos
         /// </summary>
         /// <param name="ws"></param>
         /// <param name="Kijelöltterület">szöveg kijelölt terület A1:V4 formában</param>
+
         public static void Rácsoz(string Kijelöltterület)
         {
+            MyExcel.Range táblaterület = null;
             try
             {
-                MyExcel.Range Táblaterület = Module_Excel.xlApp.get_Range(Kijelöltterület);
+                // Explicit munkalap használata (ajánlott, de most marad az xlApp is)
+                Worksheet ws = (MyExcel.Worksheet)Module_Excel.xlWorkBook.ActiveSheet;
+                táblaterület = ws.get_Range(Kijelöltterület);
 
-                XlBordersIndex[] szegélyek = new[]
-                {
-                    XlBordersIndex.xlEdgeLeft,
-                    XlBordersIndex.xlEdgeRight,
-                    XlBordersIndex.xlEdgeTop,
-                    XlBordersIndex.xlEdgeBottom,
-                    XlBordersIndex.xlInsideHorizontal,
-                    XlBordersIndex.xlInsideVertical
-               };
+                // Belső szegélyek: vékony
+                táblaterület.Borders[MyExcel.XlBordersIndex.xlInsideHorizontal].LineStyle = MyExcel.XlLineStyle.xlContinuous;
+                táblaterület.Borders[MyExcel.XlBordersIndex.xlInsideHorizontal].Weight = MyExcel.XlBorderWeight.xlThin;
 
-                foreach (XlBordersIndex index in szegélyek)
-                {
-                    Táblaterület.Borders[index].LineStyle = XlLineStyle.xlContinuous;
-                    Táblaterület.Borders[index].Weight = XlBorderWeight.xlThin;
-                }
+                táblaterület.Borders[MyExcel.XlBordersIndex.xlInsideVertical].LineStyle = MyExcel.XlLineStyle.xlContinuous;
+                táblaterület.Borders[MyExcel.XlBordersIndex.xlInsideVertical].Weight = MyExcel.XlBorderWeight.xlThin;
 
-                Táblaterület.BorderAround(
-                    LineStyle: XlLineStyle.xlContinuous,
-                    Weight: XlBorderWeight.xlMedium,
-                    ColorIndex: XlColorIndex.xlColorIndexAutomatic
-                );
+                // Külső szegélyek: VASTAG (közepes)
+                táblaterület.Borders[MyExcel.XlBordersIndex.xlEdgeLeft].LineStyle = MyExcel.XlLineStyle.xlContinuous;
+                táblaterület.Borders[MyExcel.XlBordersIndex.xlEdgeLeft].Weight = MyExcel.XlBorderWeight.xlMedium;
 
-                Marshal.ReleaseComObject(Táblaterület);
-                Táblaterület = null;
+                táblaterület.Borders[MyExcel.XlBordersIndex.xlEdgeRight].LineStyle = MyExcel.XlLineStyle.xlContinuous;
+                táblaterület.Borders[MyExcel.XlBordersIndex.xlEdgeRight].Weight = MyExcel.XlBorderWeight.xlMedium;
+
+                táblaterület.Borders[MyExcel.XlBordersIndex.xlEdgeTop].LineStyle = MyExcel.XlLineStyle.xlContinuous;
+                táblaterület.Borders[MyExcel.XlBordersIndex.xlEdgeTop].Weight = MyExcel.XlBorderWeight.xlMedium;
+
+                táblaterület.Borders[MyExcel.XlBordersIndex.xlEdgeBottom].LineStyle = MyExcel.XlLineStyle.xlContinuous;
+                táblaterület.Borders[MyExcel.XlBordersIndex.xlEdgeBottom].Weight = MyExcel.XlBorderWeight.xlMedium;
             }
             catch (Exception ex)
             {
@@ -52,8 +51,11 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, $"Rácsoz(Kijelöltterület: \"{Kijelöltterület}\") \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                if (táblaterület != null) Marshal.ReleaseComObject(táblaterület);
+            }
         }
-
 
         /// <summary>
         /// Vastagkeretet készít a kijelölt területre
@@ -61,16 +63,32 @@ namespace Villamos
         /// <param name="Kijelöltterület">szöveg</param>
         public static void Vastagkeret(string Kijelöltterület)
         {
+            MyExcel.Range Táblaterület = null;
             try
             {
-                MyExcel.Range Táblaterület = Module_Excel.xlApp.get_Range(Kijelöltterület);
-                Táblaterület.BorderAround(MyExcel.XlLineStyle.xlContinuous,
-                         MyExcel.XlBorderWeight.xlMedium,
-                         MyExcel.XlColorIndex.xlColorIndexAutomatic,
-                         MyExcel.XlColorIndex.xlColorIndexAutomatic);
+                Táblaterület = Module_Excel.xlApp.get_Range(Kijelöltterület);
+                //Táblaterület.BorderAround(MyExcel.XlLineStyle.xlContinuous,
+                //         MyExcel.XlBorderWeight.xlMedium,
+                //         MyExcel.XlColorIndex.xlColorIndexAutomatic,
+                //         MyExcel.XlColorIndex.xlColorIndexAutomatic);
+                // Külön-külön állítjuk be a szegélyeket
+                Borders borders = Táblaterület.Borders;
 
-                Marshal.ReleaseComObject(Táblaterület);
-                Táblaterület = null;
+                // Bal szegély
+                borders[MyExcel.XlBordersIndex.xlEdgeLeft].LineStyle = MyExcel.XlLineStyle.xlContinuous;
+                borders[MyExcel.XlBordersIndex.xlEdgeLeft].Weight = MyExcel.XlBorderWeight.xlMedium;
+
+                // Jobb szegély
+                borders[MyExcel.XlBordersIndex.xlEdgeRight].LineStyle = MyExcel.XlLineStyle.xlContinuous;
+                borders[MyExcel.XlBordersIndex.xlEdgeRight].Weight = MyExcel.XlBorderWeight.xlMedium;
+
+                // Felső szegély
+                borders[MyExcel.XlBordersIndex.xlEdgeTop].LineStyle = MyExcel.XlLineStyle.xlContinuous;
+                borders[MyExcel.XlBordersIndex.xlEdgeTop].Weight = MyExcel.XlBorderWeight.xlMedium;
+
+                // Alsó szegély ← ez a kritikus!
+                borders[MyExcel.XlBordersIndex.xlEdgeBottom].LineStyle = MyExcel.XlLineStyle.xlContinuous;
+                borders[MyExcel.XlBordersIndex.xlEdgeBottom].Weight = MyExcel.XlBorderWeight.xlMedium;
             }
             catch (Exception ex)
             {
@@ -79,8 +97,14 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, $"Vastagkeret(Kijelöltterület {Kijelöltterület}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                if (Táblaterület != null)
+                {
+                    Marshal.ReleaseComObject(Táblaterület);
+                }
+            }
         }
-
 
         /// <summary>
         /// Vékonykeretet készít a kijelölt területre
