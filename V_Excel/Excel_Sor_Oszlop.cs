@@ -95,8 +95,6 @@ namespace Villamos
                 else
                     Táblaterület.Columns.EntireColumn.AutoFit();
 
-                Táblaterület.WrapText = true;
-
                 Marshal.ReleaseComObject(Táblaterület);
                 Táblaterület = null;
             }
