@@ -9,18 +9,21 @@ namespace Villamos
 {
     public static partial class Module_Excel
     {
-        // JAVÍTANDÓ:copilot
+        const double MmToInch = 1.0 / 25.4;
 
+        // JAVÍTANDÓ:copilot
         /// <summary>
         /// Nyomtatási területet 
         /// </summary>
-        /// <param name="ws"></param>
+        /// <param name="munkalap"></param>
         /// <param name="terület"></param>
         /// <param name="sorismétlődés"> "" vagy "$1:$1"</param>
         /// /// <param name="oszlopisnétlődés">"" vagy "$A:$B"</param>
         /// <param name="álló">Álló esetén true, fekvó esetén false</param>
-        public static void NyomtatásiTerület_részletes(string munkalap, string terület, string sorismétlődés, string oszlopisnétlődés,
-                                                       bool álló, string oldalszéles = "1", string oldalmagas = "")
+        /// A
+        public static void NyomtatásiTerület_részletes(string munkalap, string terület,
+                                                       string sorismétlődés = "", string oszlopisnétlődés = "",
+                                                       bool álló = true, string oldalszéles = "1", string oldalmagas = "")
         {
             try
             {
@@ -40,12 +43,12 @@ namespace Villamos
                     Táblaterület.LeftFooter = "";
                     Táblaterület.CenterFooter = @"&P/&N";
                     Táblaterület.RightFooter = "";
-                    Táblaterület.LeftMargin = xlApp.InchesToPoints(0.590551181102362d);
-                    Táblaterület.RightMargin = xlApp.InchesToPoints(0.590551181102362d);
-                    Táblaterület.TopMargin = xlApp.InchesToPoints(0.78740157480315d);
-                    Táblaterület.BottomMargin = xlApp.InchesToPoints(0.78740157480315d);
-                    Táblaterület.HeaderMargin = xlApp.InchesToPoints(0.511811023622047d);
-                    Táblaterület.FooterMargin = xlApp.InchesToPoints(0.511811023622047d);
+                    Táblaterület.LeftMargin = xlApp.InchesToPoints(15 * MmToInch);
+                    Táblaterület.RightMargin = xlApp.InchesToPoints(15 * MmToInch);
+                    Táblaterület.TopMargin = xlApp.InchesToPoints(20 * MmToInch);
+                    Táblaterület.BottomMargin = xlApp.InchesToPoints(20 * MmToInch);
+                    Táblaterület.HeaderMargin = xlApp.InchesToPoints(13 * MmToInch);
+                    Táblaterület.FooterMargin = xlApp.InchesToPoints(13 * MmToInch);
                     Táblaterület.PrintHeadings = false;
                     Táblaterület.PrintGridlines = false;
                     Táblaterület.PrintComments = MyExcel.XlPrintLocation.xlPrintNoComments;
@@ -90,8 +93,22 @@ namespace Villamos
             }
         }
 
-        public static void NyomtatásiTerület_részletes(string munkalap, string terület, string sorismétlődés, string oszlopisnétlődés,
-            string fejbal, string fejközép, string fejjobb, string fénykép)
+        /// <summary>
+        ///         
+        /// </summary>
+        /// <param name="munkalap"></param>
+        /// <param name="terület"></param>
+        /// <param name="sorismétlődés"></param>
+        /// <param name="oszlopisnétlődés"></param>
+        /// <param name="fejbal"></param>
+        /// <param name="fejközép"></param>
+        /// <param name="fejjobb"></param>
+        /// <param name="fénykép"></param>
+        /// B
+        public static void NyomtatásiTerület_részletes(string munkalap, string terület,
+                                                       string sorismétlődés, string oszlopisnétlődés,
+                                                       string fejbal, string fejközép, string fejjobb,
+                                                       string fénykép)
         {
             try
             {
@@ -113,12 +130,12 @@ namespace Villamos
                     Táblaterület.LeftFooter = "";
                     Táblaterület.CenterFooter = @"&P/&N";
                     Táblaterület.RightFooter = "";
-                    Táblaterület.LeftMargin = xlApp.InchesToPoints(0.590551181102362d);
-                    Táblaterület.RightMargin = xlApp.InchesToPoints(0.590551181102362d);
-                    Táblaterület.TopMargin = xlApp.InchesToPoints(0.78740157480315d);
-                    Táblaterület.BottomMargin = xlApp.InchesToPoints(0.78740157480315d);
-                    Táblaterület.HeaderMargin = xlApp.InchesToPoints(0.511811023622047d);
-                    Táblaterület.FooterMargin = xlApp.InchesToPoints(0.511811023622047d);
+                    Táblaterület.LeftMargin = xlApp.InchesToPoints(15 * MmToInch);
+                    Táblaterület.RightMargin = xlApp.InchesToPoints(15 * MmToInch);
+                    Táblaterület.TopMargin = xlApp.InchesToPoints(20 * MmToInch);
+                    Táblaterület.BottomMargin = xlApp.InchesToPoints(20 * MmToInch);
+                    Táblaterület.HeaderMargin = xlApp.InchesToPoints(13 * MmToInch);
+                    Táblaterület.FooterMargin = xlApp.InchesToPoints(13 * MmToInch);
                     Táblaterület.PrintHeadings = false;
                     Táblaterület.PrintGridlines = false;
                     Táblaterület.PrintComments = MyExcel.XlPrintLocation.xlPrintNoComments;
@@ -134,10 +151,6 @@ namespace Villamos
                     Táblaterület.FitToPagesTall = false;
                     Táblaterület.PrintErrors = MyExcel.XlPrintErrors.xlPrintErrorsDisplayed;
                 }
-
-
-
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -152,34 +165,22 @@ namespace Villamos
 
 
         /// <summary>
-        /// 
+        /// Karbantartási munkalap nyomtatási terület beállítása
         /// </summary>
         /// <param name="munkalap"></param>
         /// <param name="terület"></param>
         /// <param name="sorismétlődés"></param>
-        /// <param name="oszlopisnétlődés"></param>
-        /// <param name="fejbal"></param>
-        /// <param name="fejközép"></param>
-        /// <param name="fejjobb"></param>
         /// <param name="lábbal"></param>
         /// <param name="lábközép"></param>
         /// <param name="lábjobb"></param>
-        /// <param name="fénykép"></param>
-        /// <param name="balMargó"></param>
-        /// <param name="jobbMargó"></param>
-        /// <param name="alsóMargó"></param>
-        /// <param name="felsőMargó"></param>
-        /// <param name="fejlécMéret"></param>
-        /// <param name="LáblécMéret"></param>
-        /// <param name="vízszintes"></param>
-        /// <param name="függőleges"></param>
+        /// C
         public static void NyomtatásiTerület_részletes(string munkalap, string terület,
-                        string sorismétlődés,
-                        string lábbal, string lábközép, string lábjobb)
+                                                       string sorismétlődés,
+                                                       string lábbal, string lábközép, string lábjobb)
         {
             try
             {
-                const double MmToInch = 1.0 / 25.4;
+
                 Worksheet Munkalap = (MyExcel.Worksheet)Module_Excel.xlWorkBook.Worksheets[munkalap];
                 PageSetup Táblaterület = Munkalap.PageSetup;
                 Táblaterület.PrintTitleRows = sorismétlődés;
@@ -234,21 +235,22 @@ namespace Villamos
         /// </summary>
         /// <param name="munkalap">Munkalap neve</param>
         /// <param name="terület"> "" vagy "$1:$1"</param>
-        /// <param name="balMargó">LeftMargin 0.708661417322835d formátumban</param>
-        /// <param name="jobbMargó">RightMargin 0.708661417322835d formátumban</param>
-        /// <param name="alsóMargó">BottomMargin 0.708661417322835d formátumban</param>
-        /// <param name="felsőMargó">TopMargin 0.708661417322835d formátumban</param>
-        /// <param name="fejlécMéret">HeaderMargin 0.708661417322835d formátumban</param>
-        /// <param name="LáblécMéret">FooterMargin 0.708661417322835d formátumban</param>
+        /// <param name="balMargó">LeftMargin 18 cm formátumban</param>
+        /// <param name="jobbMargó">RightMargin 18 cm formátumban</param>
+        /// <param name="alsóMargó">BottomMargin 15 cm formátumban</param>
+        /// <param name="felsőMargó">TopMargin 19 cm formátumban</param>
+        /// <param name="fejlécMéret">HeaderMargin 8 formátumban</param>
+        /// <param name="LáblécMéret">FooterMargin 8 formátumban</param>
         /// <param name="oldalszéles">"szám" vagy false</param>
         /// <param name="oldalmagas">"szám" vagy false</param>
+        /// D
         public static void NyomtatásiTerület_részletes(string munkalap, string terület,
-            double balMargó = 0.708661417322835d,
-            double jobbMargó = 0.708661417322835d,
-            double alsóMargó = 0.590551181102362d,
-            double felsőMargó = 0.748031496062992d,
-            double fejlécMéret = 0.31496062992126d,
-            double LáblécMéret = 0.31496062992126d,
+            int balMargó = 18,
+            int jobbMargó = 18,
+            int alsóMargó = 15,
+            int felsőMargó = 19,
+            int fejlécMéret = 8,
+            int LáblécMéret = 8,
             string oldalszéles = "1",
             string oldalmagas = "1")
         {
@@ -261,12 +263,12 @@ namespace Villamos
 
                 Táblaterület.PrintArea = terület;
                 {
-                    Táblaterület.LeftMargin = xlApp.InchesToPoints(balMargó);
-                    Táblaterület.RightMargin = xlApp.InchesToPoints(jobbMargó);
-                    Táblaterület.TopMargin = xlApp.InchesToPoints(felsőMargó);
-                    Táblaterület.BottomMargin = xlApp.InchesToPoints(alsóMargó);
-                    Táblaterület.HeaderMargin = xlApp.InchesToPoints(fejlécMéret);
-                    Táblaterület.FooterMargin = xlApp.InchesToPoints(LáblécMéret);
+                    Táblaterület.LeftMargin = xlApp.InchesToPoints(balMargó * MmToInch);
+                    Táblaterület.RightMargin = xlApp.InchesToPoints(jobbMargó * MmToInch);
+                    Táblaterület.TopMargin = xlApp.InchesToPoints(felsőMargó * MmToInch);
+                    Táblaterület.BottomMargin = xlApp.InchesToPoints(alsóMargó * MmToInch);
+                    Táblaterület.HeaderMargin = xlApp.InchesToPoints(fejlécMéret * MmToInch);
+                    Táblaterület.FooterMargin = xlApp.InchesToPoints(LáblécMéret * MmToInch);
                     Táblaterület.PrintHeadings = false;
                     Táblaterület.PrintGridlines = false;
                     Táblaterület.PrintComments = MyExcel.XlPrintLocation.xlPrintNoComments;
@@ -287,10 +289,6 @@ namespace Villamos
 
                     Táblaterület.PrintErrors = MyExcel.XlPrintErrors.xlPrintErrorsDisplayed;
                 }
-
-
-
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -308,9 +306,33 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <param name="munkalap"></param>
+        /// <param name="terület"></param>
+        /// <param name="sorismétlődés"></param>
+        /// <param name="oszlopisnétlődés"></param>
+        /// <param name="fejbal"></param>
+        /// <param name="fejközép"></param>
+        /// <param name="fejjobb"></param>
+        /// <param name="lábbal"></param>
+        /// <param name="lábközép"></param>
+        /// <param name="lábjobb"></param>
+        /// <param name="fénykép"></param>
+        /// <param name="balMargó"></param>
+        /// <param name="jobbMargó"></param>
+        /// <param name="alsóMargó"></param>
+        /// <param name="felsőMargó"></param>
+        /// <param name="fejlécMéret"></param>
+        /// <param name="LáblécMéret"></param>
+        /// <param name="vízszintes"></param>
+        /// <param name="függőleges"></param>
+        /// <param name="Elrendezés"></param>
+        /// E
         public static void NyomtatásiTerület_részletes(string munkalap, string terület, string sorismétlődés, string oszlopisnétlődés,
-                    string fejbal, string fejközép, string fejjobb, string lábbal, string lábközép, string lábjobb, string fénykép, double balMargó, double jobbMargó,
-                    double alsóMargó, double felsőMargó, double fejlécMéret, double LáblécMéret, bool vízszintes, bool függőleges, string Elrendezés)
+                    string fejbal, string fejközép, string fejjobb, string lábbal, string lábközép, string lábjobb, string fénykép, int balMargó, int jobbMargó,
+                    int alsóMargó, int felsőMargó, int fejlécMéret, int LáblécMéret, bool vízszintes, bool függőleges, string Elrendezés)
         {
             try
             {
@@ -332,12 +354,12 @@ namespace Villamos
                     Táblaterület.LeftFooter = lábbal;
                     Táblaterület.CenterFooter = lábközép;
                     Táblaterület.RightFooter = lábjobb;
-                    Táblaterület.LeftMargin = xlApp.InchesToPoints(balMargó);
-                    Táblaterület.RightMargin = xlApp.InchesToPoints(jobbMargó);
-                    Táblaterület.TopMargin = xlApp.InchesToPoints(felsőMargó);
-                    Táblaterület.BottomMargin = xlApp.InchesToPoints(alsóMargó);
-                    Táblaterület.HeaderMargin = xlApp.InchesToPoints(fejlécMéret);
-                    Táblaterület.FooterMargin = xlApp.InchesToPoints(LáblécMéret);
+                    Táblaterület.LeftMargin = xlApp.InchesToPoints(balMargó * MmToInch);
+                    Táblaterület.RightMargin = xlApp.InchesToPoints(jobbMargó * MmToInch);
+                    Táblaterület.TopMargin = xlApp.InchesToPoints(felsőMargó * MmToInch);
+                    Táblaterület.BottomMargin = xlApp.InchesToPoints(alsóMargó * MmToInch);
+                    Táblaterület.HeaderMargin = xlApp.InchesToPoints(fejlécMéret * MmToInch);
+                    Táblaterület.FooterMargin = xlApp.InchesToPoints(LáblécMéret * MmToInch);
                     Táblaterület.PrintHeadings = false;
                     Táblaterület.PrintGridlines = false;
                     Táblaterület.PrintComments = MyExcel.XlPrintLocation.xlPrintNoComments;
@@ -390,10 +412,11 @@ namespace Villamos
         /// <param name="papírméret ">papírméret </param>
         /// <param name="víz_közép  ">víz_közép  </param>
         /// <param name="Függ_közép ">Függ_közép </param>
+        /// F
         public static void NyomtatásiTerület_részletes(string munkalap, string terület,
-            double balMargó, double jobbMargó,
-            double alsóMargó, double felsőMargó,
-            double fejlécMéret, double LáblécMéret,
+            int balMargó, int jobbMargó,
+            int alsóMargó, int felsőMargó,
+            int fejlécMéret, int LáblécMéret,
             string oldalszéles = "1", string oldalmagas = "1",
             bool álló = true, string papírméret = "A4",
             bool víz_közép = true, bool Függ_közép = true)
@@ -407,12 +430,12 @@ namespace Villamos
 
                 Táblaterület.PrintArea = terület;
 
-                Táblaterület.LeftMargin = xlApp.InchesToPoints(balMargó);
-                Táblaterület.RightMargin = xlApp.InchesToPoints(jobbMargó);
-                Táblaterület.TopMargin = xlApp.InchesToPoints(felsőMargó);
-                Táblaterület.BottomMargin = xlApp.InchesToPoints(alsóMargó);
-                Táblaterület.HeaderMargin = xlApp.InchesToPoints(fejlécMéret);
-                Táblaterület.FooterMargin = xlApp.InchesToPoints(LáblécMéret);
+                Táblaterület.LeftMargin = xlApp.InchesToPoints(balMargó * MmToInch);
+                Táblaterület.RightMargin = xlApp.InchesToPoints(jobbMargó * MmToInch);
+                Táblaterület.TopMargin = xlApp.InchesToPoints(felsőMargó * MmToInch);
+                Táblaterület.BottomMargin = xlApp.InchesToPoints(alsóMargó * MmToInch);
+                Táblaterület.HeaderMargin = xlApp.InchesToPoints(fejlécMéret * MmToInch);
+                Táblaterület.FooterMargin = xlApp.InchesToPoints(LáblécMéret * MmToInch);
                 Táblaterület.PrintHeadings = false;
                 Táblaterület.PrintGridlines = false;
 
@@ -486,9 +509,10 @@ namespace Villamos
         /// <param name="függőleges"></param>
         /// <param name="oldalszéles"></param>
         /// <param name="oldalmagas"></param>
+        /// G
         public static void NyomtatásiTerület_részletes(string munkalap, string terület, string sorismétlődés, string oszlopisnétlődés,
-                string fejbal, string fejközép, string fejjobb, string lábbal, string lábközép, string lábjobb, string fénykép, double balMargó, double jobbMargó,
-                double alsóMargó, double felsőMargó, double fejlécMéret, double LáblécMéret, bool vízszintes, bool függőleges, string oldalszéles, string oldalmagas,
+                string fejbal, string fejközép, string fejjobb, string lábbal, string lábközép, string lábjobb, string fénykép, int balMargó, int jobbMargó,
+                int alsóMargó, int felsőMargó, int fejlécMéret, int LáblécMéret, bool vízszintes, bool függőleges, string oldalszéles, string oldalmagas,
                 bool álló = true, string papírméret = "A4")
         {
             try
@@ -511,12 +535,12 @@ namespace Villamos
                     Táblaterület.LeftFooter = lábbal;
                     Táblaterület.CenterFooter = lábközép;
                     Táblaterület.RightFooter = lábjobb;
-                    Táblaterület.LeftMargin = xlApp.InchesToPoints(balMargó);
-                    Táblaterület.RightMargin = xlApp.InchesToPoints(jobbMargó);
-                    Táblaterület.TopMargin = xlApp.InchesToPoints(felsőMargó);
-                    Táblaterület.BottomMargin = xlApp.InchesToPoints(alsóMargó);
-                    Táblaterület.HeaderMargin = xlApp.InchesToPoints(fejlécMéret);
-                    Táblaterület.FooterMargin = xlApp.InchesToPoints(LáblécMéret);
+                    Táblaterület.LeftMargin = xlApp.InchesToPoints(balMargó * MmToInch);
+                    Táblaterület.RightMargin = xlApp.InchesToPoints(jobbMargó * MmToInch);
+                    Táblaterület.TopMargin = xlApp.InchesToPoints(felsőMargó * MmToInch);
+                    Táblaterület.BottomMargin = xlApp.InchesToPoints(alsóMargó * MmToInch);
+                    Táblaterület.HeaderMargin = xlApp.InchesToPoints(fejlécMéret * MmToInch);
+                    Táblaterület.FooterMargin = xlApp.InchesToPoints(LáblécMéret * MmToInch);
                     Táblaterület.PrintHeadings = false;
                     Táblaterület.PrintGridlines = false;
                     Táblaterület.PrintComments = MyExcel.XlPrintLocation.xlPrintNoComments;
@@ -585,8 +609,6 @@ namespace Villamos
         }
 
 
-
-
         /// <summary>
         /// Munkalapot a jelzett helyen és sornál két részre osztja
         /// </summary>
@@ -613,6 +635,5 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
 }

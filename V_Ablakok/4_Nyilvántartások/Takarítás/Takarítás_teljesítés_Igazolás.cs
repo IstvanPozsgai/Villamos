@@ -601,9 +601,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                 MyE.NyomtatásiTerület_részletes(munkalap, $"A1:F{sor}", "", "",
                     $"{Telephely} Járműtakarítás", $"{Dátum.Year}.{Dátum.Month}. Hónap", "&P/&N",
                     "", "", "", "",
-                    0.393700787401575d, 0.393700787401575,
-                    0.984251968503937, 0.984251968503937,
-                    0.511811023622047d, 0.511811023622047d,
+                    10, 10,
+                    25, 25,
+                    13, 13,
                     false, false,
                     "1", "", false, "A4");
 
@@ -839,9 +839,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                 MyE.NyomtatásiTerület_részletes(munkalap, $"A1:H{sor}", "", "",
                           $"", $"", "",
                           "", "", "", "",
-                          0.393700787401575d, 0.393700787401575,
-                          0.984251968503937, 0.393700787401575,
-                          0.511811023622047d, 0.511811023622047d,
+                          10, 10,
+                          25, 10,
+                          13, 13,
                           false, false,
                           "1", "", true, "A4");
 

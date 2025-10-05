@@ -777,8 +777,8 @@ namespace Villamos
 
 
                 MyE.Oszlopszélesség(munkalap, $"A:{utolsóOszlop}");
-                MyE.NyomtatásiTerület_részletes(munkalap, "A1:" + utolsóOszlop + utolsóSor, 0.590551181102362d, 0.590551181102362d,
-                    0.78740157480315d, 0.590551181102362d, 0.511811023622047d, 0.511811023622047d, "1", "1", true, "A4", true, true);
+                MyE.NyomtatásiTerület_részletes(munkalap, "A1:" + utolsóOszlop + utolsóSor, 15, 15,
+                    20, 15, 13, 13, "1", "1", true, "A4", true, true);
 
                 // bezárjuk az Excel-t
                 MyE.Aktív_Cella(munkalap, "A1");

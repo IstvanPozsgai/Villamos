@@ -407,7 +407,7 @@ namespace Villamos
 
         //Conttoll mellett az új bejelentekezési ablakot nyitja meg
         bool CTRL_le = false;
-        private void lblVerzió_DoubleClick(object sender, EventArgs e)
+        private void LblVerzió_DoubleClick(object sender, EventArgs e)
         {
             AblakBejelentkezés_Új Újablak = new AblakBejelentkezés_Új();
             Újablak.Show();

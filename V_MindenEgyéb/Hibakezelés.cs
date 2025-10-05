@@ -41,7 +41,7 @@ namespace Villamos
 
             //Beírjuk a napi fájlba
             string szöveg = "\n=======================================================================\n";
-            szöveg += $"Idő: {DateTime.Now.ToString("yyyy.MM.dd HH.mm.ss")}\n";
+            szöveg += $"Idő: {DateTime.Now:yyyy.MM.dd HH.mm.ss}\n";
             szöveg += $"Telephely: {Program.PostásTelephely}\n";
             szöveg += $"Felhasználó: {Program.PostásNév}\n";
             szöveg += $"hibaUzenet: {hibaUzenet}\n\n";
@@ -103,16 +103,19 @@ namespace Villamos
 
         private static void Email(string hely, string hiba)
         {
-            MyO._Application _app = new MyO.Application();
-            MyO.MailItem mail = (MyO.MailItem)_app.CreateItem(MyO.OlItemType.olMailItem);
-            // címzett
-            mail.To = "pozsgaii@bkv.hu";
-            // üzenet tárgya
-            mail.Subject = $"Hibanapló {DateTime.Now:yyyyMMddHHmmss}";
-            mail.Body = hiba;
-            mail.Importance = MyO.OlImportance.olImportanceNormal;
-            if (File.Exists(hely)) mail.Attachments.Add(hely);
-            ((MyO._MailItem)mail).Send();
+            if (!hiba.Contains("0x800AC472"))
+            {
+                MyO._Application _app = new MyO.Application();
+                MyO.MailItem mail = (MyO.MailItem)_app.CreateItem(MyO.OlItemType.olMailItem);
+                // címzett
+                mail.To = "pozsgaii@bkv.hu";
+                // üzenet tárgya
+                mail.Subject = $"Hibanapló {DateTime.Now:yyyyMMddHHmmss}";
+                mail.Body = hiba;
+                mail.Importance = MyO.OlImportance.olImportanceNormal;
+                if (File.Exists(hely)) mail.Attachments.Add(hely);
+                ((MyO._MailItem)mail).Send();
+            }
         }
     }
 }

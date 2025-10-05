@@ -1539,8 +1539,8 @@ namespace Villamos
 
                 // nyomtatási beállítás
                 MyE.NyomtatásiTerület_részletes(munkalap, "A1:O60",
-                                    balMargó: 0.196850393700787d, jobbMargó: 0.196850393700787d,
-                                    alsóMargó: 0.196850393700787d, felsőMargó: 0.196850393700787d, oldalszéles: "1", oldalmagas: "");
+                                    balMargó: 5, jobbMargó: 5,
+                                    alsóMargó: 5, felsőMargó: 5, oldalszéles: "1", oldalmagas: "");
                 MyE.Nyom_Oszt(munkalap, "A40", 40, oldaltörés: 2);
 
                 MyE.Munkalap_aktív(munkalap);

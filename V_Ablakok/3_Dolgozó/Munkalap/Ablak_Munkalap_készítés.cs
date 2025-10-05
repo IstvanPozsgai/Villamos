@@ -748,8 +748,8 @@ namespace Villamos
             // **Nyomtatási beállítások                    **
             // **********************************************
 
-            MyE.NyomtatásiTerület_részletes(munkalap, $"a1:r{sor}", balMargó: 0.393700787401575d, jobbMargó: 0.393700787401575d, alsóMargó: 0.590551181102362d, felsőMargó: 0.590551181102362d,
-                fejlécMéret: 0.511811023622047d, LáblécMéret: 0.511811023622047d, oldalszéles: "1", oldalmagas: "1");
+            MyE.NyomtatásiTerület_részletes(munkalap, $"a1:r{sor}", balMargó: 10, jobbMargó: 10, alsóMargó: 15, felsőMargó: 15,
+                fejlécMéret: 13, LáblécMéret: 13, oldalszéles: "1", oldalmagas: "1");
         }
 
         private void Munkalap_Aláíró()

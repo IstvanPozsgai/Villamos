@@ -336,11 +336,11 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                 // Előző vizsgálat tervezett állása
                 tb_tervezetthez_kepest.Text = string.IsNullOrEmpty(teszt_adat.utolso_vizsgalat_valos_allasa?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_vizsgalat_valos_allasa}";
-                if (tb_tervezetthez_kepest.Text != "Még nem történt.") ; //SzinezdTextBox(tb_tervezetthez_kepest, 0, -14000, true);
+                if (tb_tervezetthez_kepest.Text != "Még nem történt.")  //SzinezdTextBox(tb_tervezetthez_kepest, 0, -14000, true);
 
-                // P0
-                tb_futhatmeg_p0.Text = string.IsNullOrEmpty(teszt_adat.kov_p0?.ToString()) ? "Még nem történt." : $"{teszt_adat.kov_p0}";
-                if (tb_futhatmeg_p0.Text != "Még nem történt.") SzinezdFuthatMeg(tb_futhatmeg_p0, (1 * nevlegesKmErtek)/tb_tureshatar.Text.ToÉrt_Int());
+                    // P0
+                    tb_futhatmeg_p0.Text = string.IsNullOrEmpty(teszt_adat.kov_p0?.ToString()) ? "Még nem történt." : $"{teszt_adat.kov_p0}";
+                if (tb_futhatmeg_p0.Text != "Még nem történt.") SzinezdFuthatMeg(tb_futhatmeg_p0, (1 * nevlegesKmErtek) / tb_tureshatar.Text.ToÉrt_Int());
 
                 // P1
                 tb_futhatmeg_p1.Text = string.IsNullOrEmpty(teszt_adat.kov_p1?.ToString()) ? "Még nem történt." : $"{teszt_adat.kov_p1}";
@@ -348,7 +348,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                 // P2
                 tb_futhatmeg_p2.Text = string.IsNullOrEmpty(teszt_adat.kov_p2?.ToString()) ? "Még nem történt." : $"{teszt_adat.kov_p2}";
-                if (tb_futhatmeg_p2.Text != "Még nem történt.") SzinezdFuthatMeg(tb_futhatmeg_p2, (20 * nevlegesKmErtek) / tb_tureshatar.Text.ToÉrt_Int() );
+                if (tb_futhatmeg_p2.Text != "Még nem történt.") SzinezdFuthatMeg(tb_futhatmeg_p2, (20 * nevlegesKmErtek) / tb_tureshatar.Text.ToÉrt_Int());
 
 
                 // A SzinezdFuthatMeg a kovetkezokepp mukodik:
@@ -368,15 +368,15 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                 // P2 rendben
                 tb_rendben_p2.Text = string.IsNullOrEmpty(teszt_adat.elso_p2?.ToString()) ? "Még nem történt." : $"{teszt_adat.elso_p2}";
-                if (tb_rendben_p2.Text != "Még nem történt.") ; SzinezdTextBox(tb_rendben_p2, 20, nevlegesKmErtek, tb_tureshatar.Text.ToÉrt_Int());
+                if (tb_rendben_p2.Text != "Még nem történt.") SzinezdTextBox(tb_rendben_p2, 20, nevlegesKmErtek, tb_tureshatar.Text.ToÉrt_Int());
 
                 // P3 rendben
                 tb_rendben_p3.Text = string.IsNullOrEmpty(teszt_adat.elso_p3?.ToString()) ? "Még nem történt." : $"{teszt_adat.elso_p3}";
-                if (tb_rendben_p3.Text != "Még nem történt.") ; SzinezdTextBox(tb_rendben_p3, 40, nevlegesKmErtek, tb_tureshatar.Text.ToÉrt_Int());
+                if (tb_rendben_p3.Text != "Még nem történt.") SzinezdTextBox(tb_rendben_p3, 40, nevlegesKmErtek, tb_tureshatar.Text.ToÉrt_Int());
 
                 // P3–P2 közötti futás
                 tb_p3_p2_kozott.Text = string.IsNullOrEmpty(teszt_adat.utolso_p3_es_p2_kozott?.ToString()) ? "Még nem történt." : $"{teszt_adat.utolso_p3_es_p2_kozott}";
-                if (tb_p3_p2_kozott.Text != "Még nem történt.") ; SzinezdTextBox(tb_p3_p2_kozott, 20, nevlegesKmErtek, tb_tureshatar.Text.ToÉrt_Int());
+                if (tb_p3_p2_kozott.Text != "Még nem történt.") SzinezdTextBox(tb_p3_p2_kozott, 20, nevlegesKmErtek, tb_tureshatar.Text.ToÉrt_Int());
 
                 // A SzinzedTextBox a kovetkezokepp mukodik:
                 // Megkapja az utolso elvegzett Km sorszamat a 2 azonos vizsgalat kozotti mezoknel, illetve az elso vizsgalatos mezoknel az elso vizsgalat sorszamat.
@@ -394,9 +394,9 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 tb_p3_p2_kozott.Text = "Nincs adat";
             }
 
-            
 
-            
+
+
 
         }
 
@@ -415,7 +415,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 else
                     tb.BackColor = Color.LightCoral;
 
-                tb.Text = tb.Text + " Km";
+                tb.Text += " Km";
             }
             else
             {
@@ -441,7 +441,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 {
                     tb.BackColor = Color.LightGreen;
                 }
-                tb.Text = tb.Text + " Km";
+                tb.Text += " Km";
             }
             else
             {
@@ -916,7 +916,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         }
         #endregion
 
-        private void btn_frissit_Click(object sender, EventArgs e)
+        private void Btn_frissit_Click(object sender, EventArgs e)
         {
             try
             {
@@ -937,7 +937,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         }
 
         //Javítás :élesítés után törlendő
-        private void btn_elso_futtatas_Click(object sender, EventArgs e)
+        private void Btn_elso_futtatas_Click(object sender, EventArgs e)
         {
             try
             {
@@ -956,7 +956,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-        private void tb_ciklusrend_modosit_Click(object sender, EventArgs e)
+        private void Tb_ciklusrend_modosit_Click(object sender, EventArgs e)
         {
             try
             {

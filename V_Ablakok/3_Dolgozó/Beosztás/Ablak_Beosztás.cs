@@ -741,7 +741,7 @@ namespace Villamos
                 Tábla.Columns.Clear();
                 Tábla.Refresh();
                 Tábla.Visible = false;
-                
+
                 Tábla.ColumnCount = hónap_hossz + 5;
                 Tábla.RowCount = 1;
                 // fejléc elkészítése
@@ -1970,7 +1970,7 @@ namespace Villamos
                 MyE.Rácsoz($"A5:{MyE.Oszlopnév(hónap_hossz + oszlop + 2)}{sor + Tábla.Rows.Count - 1}");
 
                 MyE.NyomtatásiTerület_részletes(munkalap, $"a1:{MyE.Oszlopnév(hónap_hossz + oszlop + 2)}{(sor + Tábla.Rows.Count - 1)}",
-                                                0.393700787401575d, 0.393700787401575, 0.590551181102362d, 0.590551181102362d, 0.511811023622047d, 0.511811023622047d,
+                                                10, 10, 15, 15, 13, 13,
                                                 "1", "1", false, "A4", true, false);
                 MyE.Aktív_Cella(munkalap, "A1");
 
@@ -2075,7 +2075,7 @@ namespace Villamos
                 }
                 MyE.Rácsoz($"A1:F{sor}");
                 MyE.NyomtatásiTerület_részletes(munkalap, $"a1:F{sor}",
-                            0.393700787401575d, 0.393700787401575, 0.590551181102362d, 0.590551181102362d, 0.511811023622047d, 0.511811023622047d,
+                            10, 10, 15, 15, 13, 13,
                             "1", "1", false, "A4", true, false);
                 MyE.Aktív_Cella(munkalap, "A1");
 

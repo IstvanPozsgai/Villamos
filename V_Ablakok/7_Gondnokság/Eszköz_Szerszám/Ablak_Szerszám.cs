@@ -4038,7 +4038,7 @@ namespace Villamos
                         Adat.Lábléc_Bal,
                         Adat.Lábléc_Közép,
                         Adat.Lábléc_Jobb,
-                        "", 0.708661417322835, 0.708661417322835, 0, 0.669291338582677, 0.433070866141732, 0.15748031496063, false, false, "Fekvő");
+                        "", 18, 18, 0, 17, 11, 4, false, false, "Fekvő");
 
                 if (Napló_Nyomtat.Checked == true)
                 {
@@ -4429,7 +4429,7 @@ namespace Villamos
                         Adat.Fejléc_Jobb,
                         Adat.Lábléc_Bal,
                         Adat.Lábléc_Közép,
-                        Adat.Lábléc_Jobb, "", 0.393700787401575, 0.393700787401575, 0.748031496062992, 0.748031496062992, 0.31496062992126, 0.31496062992126, true, false, "Álló");
+                        Adat.Lábléc_Jobb, "", 10, 10, 19, 19, 8, 8, true, false, "Álló");
                 }
                 if (Napló_Nyomtat.Checked)
                 {

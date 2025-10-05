@@ -507,7 +507,7 @@ namespace Villamos
                 // **********************************************
                 Holtart.Lép();
                 MyE.NyomtatásiTerület_részletes(munkalap, "a1:" + MyE.Oszlopnév(2 + mennyi * 3) + (hanyadikember + 13).ToString(),
-                    0.393700787401575d, 0.393700787401575, 0.590551181102362d, 0.590551181102362d, 0.511811023622047d, 0.511811023622047d,
+                    10, 10, 15, 15, 13, 13,
                     "1", "1", false, RdBtnA4.Checked == true ? "A4" : "A3", true, false);
 
                 // **********************************************
@@ -708,7 +708,7 @@ namespace Villamos
                 // **Nyomtatási beállítások                    **
                 // **********************************************
                 MyE.NyomtatásiTerület_részletes(munkalap, "a1:w" + sor.ToString(),
-                    0.393700787401575d, 0.393700787401575, 0.590551181102362d, 0.590551181102362d, 0.511811023622047d, 0.511811023622047d,
+                    10, 10, 15, 15, 13, 13,
                     "1", "1", false, RdBtnA4.Checked == true ? "A4" : "A3", true, false);
                 // **********************************************
                 // **Nyomtatás                                 **
@@ -1002,7 +1002,7 @@ namespace Villamos
                 // **Nyomtatási beállítások                    **
                 // **********************************************
                 MyE.NyomtatásiTerület_részletes(munkalap, "a1:w" + MyE.sor.ToString(),
-                   0.393700787401575d, 0.393700787401575, 0.590551181102362d, 0.590551181102362d, 0.511811023622047d, 0.511811023622047d,
+                   10, 10, 15, 15, 13, 13,
                    "1", "1", false, RdBtnA4.Checked == true ? "A4" : "A3", true, false);
                 // **********************************************
                 // **Nyomtatás                                 **
@@ -1198,9 +1198,9 @@ namespace Villamos
                 MyE.NyomtatásiTerület_részletes(munkalap, "a1:d" + sor.ToString(), "$1:$14", "",
                     "", "", "&P/&N",
                     "Budapest, " + Dátum.Value.ToString("yyyy.MM.dd"), "", "..........................................\nVizsgálatot végző aláírása", "",
-                    0.393700787401575d, 0.393700787401575,
-                    0.984251968503937, 0.590551181102362d,
-                    0.511811023622047d, 0.511811023622047d,
+                    10, 10,
+                    25, 15,
+                    13, 13,
                     false, false,
                     "1", "", true, RdBtnA4.Checked ? "A4" : "A3");
 
@@ -1352,9 +1352,9 @@ namespace Villamos
                 // **Nyomtatás                                 **
                 // **********************************************
                 MyE.NyomtatásiTerület_részletes(munkalap, "a1:" + MyE.Oszlopnév(2 + mennyi * 2) + (hanyadikember + 10).ToString(),
-                        0.393700787401575, 0.393700787401575,
-                        0.590551181102362, 0.590551181102362,
-                        0.511811023622047, 0.511811023622047,
+                        10, 10,
+                        15, 15,
+                        13, 13,
                         "1", "1",
                         false, RdBtnA4.Checked ? "A4" : "A3",
                         true, false);

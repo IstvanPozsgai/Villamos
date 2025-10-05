@@ -1467,7 +1467,7 @@ namespace Villamos
 
                 MyE.Oszlopszélesség("Munka1", "A:F");
                 MyE.Rácsoz("A1:F" + sor);
-                MyE.NyomtatásiTerület_részletes("Munka1", "A1:F" + sor, "", "", true);
+                MyE.NyomtatásiTerület_részletes("Munka1", $"A1:F{sor}", "", "", true);
                 MyE.ExcelMentés(fájlexc);
                 MyE.ExcelBezárás();
 

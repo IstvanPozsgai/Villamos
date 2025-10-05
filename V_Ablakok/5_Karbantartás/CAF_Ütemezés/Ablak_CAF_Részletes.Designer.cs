@@ -719,7 +719,7 @@
             this.tb_ciklusrend_modosit.TabIndex = 266;
             this.toolTip1.SetToolTip(this.tb_ciklusrend_modosit, "Rögzíti az adatokat");
             this.tb_ciklusrend_modosit.UseVisualStyleBackColor = true;
-            this.tb_ciklusrend_modosit.Click += new System.EventHandler(this.tb_ciklusrend_modosit_Click);
+            this.tb_ciklusrend_modosit.Click += new System.EventHandler(this.Tb_ciklusrend_modosit_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -811,7 +811,7 @@
             this.btn_elso_futtatas.TabIndex = 17;
             this.btn_elso_futtatas.UseVisualStyleBackColor = true;
             this.btn_elso_futtatas.Visible = false;
-            this.btn_elso_futtatas.Click += new System.EventHandler(this.btn_elso_futtatas_Click);
+            this.btn_elso_futtatas.Click += new System.EventHandler(this.Btn_elso_futtatas_Click);
             // 
             // tb_p3_p2_kozott
             // 
@@ -958,7 +958,7 @@
             this.btn_frissit.Size = new System.Drawing.Size(45, 45);
             this.btn_frissit.TabIndex = 16;
             this.btn_frissit.UseVisualStyleBackColor = true;
-            this.btn_frissit.Click += new System.EventHandler(this.btn_frissit_Click);
+            this.btn_frissit.Click += new System.EventHandler(this.Btn_frissit_Click);
             // 
             // tabControl1
             // 

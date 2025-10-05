@@ -1241,7 +1241,7 @@ namespace Villamos
                 MyE.Háttérszín("a" + sor.ToString() + ":c" + sor.ToString(), Color.Yellow);
 
                 // nyomtatási beállítások
-                MyE.NyomtatásiTerület_részletes(munkalap, "A1:C" + sor);
+                MyE.NyomtatásiTerület_részletes(munkalap, $"A1:C{sor}", "", "");
                 Holtart.Ki();
 
                 MyE.ExcelMentés(fájlexc);

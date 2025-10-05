@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Windows.Interop;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
@@ -1562,8 +1560,8 @@ namespace Villamos.Villamos_Nyomtatványok
             if (sor > újsor)
                 újsor = sor;
             MyE.NyomtatásiTerület_részletes(munkalap, "A1:" + MyE.Oszlopnév(utolsó + 14) + újsor.ToString(),
-                0.196850393700787d, 0.196850393700787d, 0.196850393700787d, 0.196850393700787d,
-                0.31496062992126d, 0.31496062992126d, "1", "1", false, "A3", true, true);
+                5, 5, 5, 5,
+                8, 8, "1", "1", false, "A3", true, true);
 
             MyE.Aktív_Cella(munkalap, "A1");
             MyE.ExcelMentés(fájlexc);
@@ -2106,7 +2104,7 @@ namespace Villamos.Villamos_Nyomtatványok
                     "&\"Arial,Normál\"&14........................................................" + '\n' + "nappalos aláírás",
                     "",
                     "&\"Arial,Normál\"&14........................................................" + '\n' + "éjszakás aláírás", "",
-                    0.708661417322835d, 0.708661417322835d, 0.984251968503937d, 0.590551181102362d, 0.31496062992126d, 0.31496062992126d, true, true, "1", "1",
+                    18, 18, 25, 15, 8, 8, true, true, "1", "1",
                     papírelrendezés != "Fekvő", papírméret);
                 MyE.Aktív_Cella(munkalap, "A1");
             }
@@ -2287,9 +2285,9 @@ namespace Villamos.Villamos_Nyomtatványok
                 if (papírméret == "--") papírméret = "A4";
 
                 MyE.NyomtatásiTerület_részletes(munkalap, "A1:" + MyE.Oszlopnév(13) + $"{sor}",
-                    0.236220472440945d, 0.236220472440945d,
-                    0.196850393700787d, 0.196850393700787d,
-                    0.31496062992126d, 0.31496062992126d, "1", "1", papírelrendez, papírméret, true, true);
+                    6, 6,
+                    5, 5,
+                    8, 8, "1", "1", papírelrendez, papírméret, true, true);
 
                 MyE.Aktív_Cella(munkalap, "A1");
                 // bezárjuk az Excel-t
@@ -2304,7 +2302,7 @@ namespace Villamos.Villamos_Nyomtatványok
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
-            {           
+            {
                 if (ex.HResult == -2146777998)
                 {
                     // Lekeri COM platformrol a hatterben futo nyitott Excel tablakat.
@@ -2337,8 +2335,8 @@ namespace Villamos.Villamos_Nyomtatványok
                                 proc.Kill();
                                 proc.WaitForExit();
                             }
-                            catch 
-                            { 
+                            catch
+                            {
                                 // Erre azert van szukseg, hogyha nem fut semmilyen EXCEL a hatterben, ne akadjon meg a program.
                                 HibaNapló.Log(ex.Message, HibaSzöveg2 + "\nHatterben levo Excel kilove!", ex.StackTrace, ex.Source, ex.HResult);
                             }
@@ -2367,7 +2365,7 @@ namespace Villamos.Villamos_Nyomtatványok
                         {
                             MessageBox.Show("A folyamat megszakítva, nem történt Excel fájl generálás.");
                         }
-                    }                   
+                    }
                 }
                 else
                 {
@@ -2381,7 +2379,7 @@ namespace Villamos.Villamos_Nyomtatványok
 
                     HibaNapló.Log(ex.Message, HibaSzöveg, ex.StackTrace, ex.Source, ex.HResult);
                     MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }                
+                }
             }
         }
 
@@ -2476,8 +2474,8 @@ namespace Villamos.Villamos_Nyomtatványok
                 MyE.Rácsoz(MyE.Oszlopnév(1 + j * 7) + "5:" + MyE.Oszlopnév(7 + j * 7) + "55");
                 MyE.Vastagkeret(MyE.Oszlopnév(1 + j * 7) + "5:" + MyE.Oszlopnév(7 + j * 7) + "5");
             }
-            MyE.NyomtatásiTerület_részletes("Munka1", "$A$1:$" + MyE.Oszlopnév(7 + (oszlopismét - 1) * 7) + "$61", 0.708661417322835d, 0.708661417322835d,
-                0.590551181102362d, 0.748031496062992d, 0.31496062992126d, 0.31496062992126d, "1", "1");
+            MyE.NyomtatásiTerület_részletes("Munka1", "$A$1:$" + MyE.Oszlopnév(7 + (oszlopismét - 1) * 7) + "$61", 18, 18,
+                15, 19, 8, 8, "1", "1");
 
 
             MyE.Kiir("©Éjszakai jegyellenőrzés", "A3");
@@ -2803,8 +2801,8 @@ namespace Villamos.Villamos_Nyomtatványok
                     papírelrendez = false;
                 if (papírméret == "--") papírméret = "A3";
 
-                MyE.NyomtatásiTerület_részletes(munkalap, "a1:ad" + $"{sor}", 0.196850393700787d, 0.196850393700787d, 0.196850393700787d, 0.196850393700787d,
-                    0.196850393700787d, 0.196850393700787d, "1", "1", papírelrendez, papírméret, true, true);
+                MyE.NyomtatásiTerület_részletes(munkalap, "a1:ad" + $"{sor}", 5, 5, 5, 5,
+                    5, 5, "1", "1", papírelrendez, papírméret, true, true);
 
                 // bezárjuk az Excel-t
                 MyE.Aktív_Cella(munkalap, "A1");
@@ -3012,8 +3010,8 @@ namespace Villamos.Villamos_Nyomtatványok
                 if (oszlopismét < 3)
                     oszlopismét = 3;
 
-                MyE.NyomtatásiTerület_részletes(rekordkieg.Trim(), "A1:" + MyE.Oszlopnév(7 + (oszlopismét - 1) * 8) + "65", 0.393700787401575d, 0.393700787401575d,
-                    0.590551181102362d, 0.748031496062992d, 0.31496062992126d, 0.31496062992126d, "1", "1", true, "A4", false, false);
+                MyE.NyomtatásiTerület_részletes(rekordkieg.Trim(), "A1:" + MyE.Oszlopnév(7 + (oszlopismét - 1) * 8) + "65", 10, 10,
+                    15, 19, 8, 8, "1", "1", true, "A4", false, false);
 
                 if (napszak == "de")
                     MyE.Kiir(rekordkieg.Trim() + "    ©J1     takarítás Nappal", "a3");
@@ -3127,8 +3125,8 @@ namespace Villamos.Villamos_Nyomtatványok
 
                 if (oszlopismét < 3)
                     oszlopismét = 3;
-                MyE.NyomtatásiTerület_részletes(munkalap, "A1:" + MyE.Oszlopnév(7 + (oszlopismét - 1) * 8) + "65", 0.393700787401575d, 0.393700787401575d,
-                                0.590551181102362d, 0.748031496062992d, 0.31496062992126d, 0.31496062992126d, "1", "1", true, "A4", false, false);
+                MyE.NyomtatásiTerület_részletes(munkalap, "A1:" + MyE.Oszlopnév(7 + (oszlopismét - 1) * 8) + "65", 10, 10,
+                                15, 19, 8, 8, "1", "1", true, "A4", false, false);
 
                 if (napszak == "de")
                     MyE.Kiir(rekordkieg.Trim() + "    ©J1     takarítás Nappal", "a3");
@@ -3371,8 +3369,8 @@ namespace Villamos.Villamos_Nyomtatványok
             // nyomtatási beállítások
             MyE.NyomtatásiTerület_részletes(munkalap, "A1:I" + vége.ToString(), "$6:$6", "", Cmbtelephely.Trim(), "©Jármű takarítás igazolólap Nappal ",
                 Dátum.ToString("yyyy.MM.dd"), "........................................\n                    BKV Zrt", "",
-                "........................................\nTakarítást végző    \n", "", 0.708661417322835d, 0.708661417322835d,
-                0.748031496062992d, 0.748031496062992d, 0.31496062992126d, 0.31496062992126d, true, false, "1", "false", true, "A4");
+                "........................................\nTakarítást végző    \n", "", 18, 18,
+                19, 19, 8, 8, true, false, "1", "false", true, "A4");
 
 
             MyE.Aktív_Cella(munkalap, "A1");
@@ -3637,8 +3635,8 @@ namespace Villamos.Villamos_Nyomtatványok
 
             if (oszlopismét < 3)
                 oszlopismét = 3;
-            MyE.NyomtatásiTerület_részletes(munkalap, "A1:" + MyE.Oszlopnév(7 + (oszlopismét - 1) * 7) + "65", 0.393700787401575d, 0.393700787401575d,
-              0.590551181102362d, 0.31496062992126d, 0.31496062992126d, 0.31496062992126d, "1", "1");
+            MyE.NyomtatásiTerület_részletes(munkalap, "A1:" + MyE.Oszlopnév(7 + (oszlopismét - 1) * 7) + "65", 10, 10,
+              15, 8, 8, 8, "1", "1");
 
             if (napszak == "de")
                 MyE.Kiir("©J1 takarítás NAPPAL", "a3");
@@ -3879,9 +3877,9 @@ namespace Villamos.Villamos_Nyomtatványok
                                              "$1:$5",
                                              "",
                                              "", "", "", "", "", "", "",
-                                             0.393700787401575d, 0.393700787401575d,
-                                             0.590551181102362d, 0.748031496062992d,
-                                             0.31496062992126d, 0.31496062992126d,
+                                             10, 10,
+                                             15, 19,
+                                             8, 8,
                                              true, false,
                                              "1", "false", true, "A4");
 

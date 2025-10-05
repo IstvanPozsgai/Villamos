@@ -1566,7 +1566,7 @@ namespace Villamos
                 }
                 // nyomtatási beállítások
                 MyE.NyomtatásiTerület_részletes(munkalap, "a1:e" + sor,
-                    balMargó: 0.393700787401575, jobbMargó: 0.393700787401575, felsőMargó: 0.393700787401575, alsóMargó: 0.393700787401575,
+                    balMargó: 10, jobbMargó: 10, felsőMargó: 10, alsóMargó: 10,
                     oldalmagas: "false");
 
                 if (Napló_Nyomtat.Checked == true)
@@ -2364,8 +2364,8 @@ namespace Villamos
 
                         // nyomtatási beállítások
                         MyE.NyomtatásiTerület_részletes(munkalap, "a1:f" + sor,
-                            0.393700787401575, 0.393700787401575,
-                            0.393700787401575, 0.393700787401575);
+                            10, 10,
+                            10, 10);
 
                         // bezárjuk az Excel-t
                         MyE.Aktív_Cella(munkalap, "A1");
@@ -3884,8 +3884,8 @@ namespace Villamos
 
                         // nyomtatási beállítások
                         MyE.NyomtatásiTerület_részletes(munkalap, "a1:e" + sor,
-                            0.393700787401575, 0.393700787401575,
-                            0.393700787401575, 0.393700787401575, oldalmagas: "false");
+                           10, 10,
+                           10, 10, oldalmagas: "false");
 
                         // bezárjuk az Excel-t
                         MyE.Aktív_Cella(munkalap, "A1");

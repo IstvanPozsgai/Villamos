@@ -97,7 +97,7 @@ namespace Villamos
             this.lblVerzió.TabIndex = 38;
             this.lblVerzió.Text = "Verzió: 20.04.19";
             this.lblVerzió.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblVerzió.DoubleClick += new System.EventHandler(this.lblVerzió_DoubleClick);
+            this.lblVerzió.DoubleClick += new System.EventHandler(this.LblVerzió_DoubleClick);
             // 
             // CmbTelephely
             // 
