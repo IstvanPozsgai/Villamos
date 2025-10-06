@@ -108,7 +108,7 @@ namespace Villamos
                 MyO._Application _app = new MyO.Application();
                 MyO.MailItem mail = (MyO.MailItem)_app.CreateItem(MyO.OlItemType.olMailItem);
                 // címzett
-                mail.To = "pozsgaii@bkv.hu";
+                mail.To = "pozsgaii@bkv.hu;papr@bkv.hu";
                 // üzenet tárgya
                 mail.Subject = $"Hibanapló {DateTime.Now:yyyyMMddHHmmss}";
                 mail.Body = hiba;
