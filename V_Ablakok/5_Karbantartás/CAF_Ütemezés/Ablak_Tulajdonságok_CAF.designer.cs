@@ -106,8 +106,9 @@ namespace Villamos
             this.Cmbtelephely.Location = new System.Drawing.Point(176, 2);
             this.Cmbtelephely.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Cmbtelephely.Name = "Cmbtelephely";
-            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 33);
             this.Cmbtelephely.TabIndex = 18;
+            this.Cmbtelephely.SelectedIndexChanged += new System.EventHandler(this.Cmbtelephely_SelectedIndexChanged);
             this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
             // 
             // Label13
@@ -115,7 +116,7 @@ namespace Villamos
             this.Label13.AutoSize = true;
             this.Label13.Location = new System.Drawing.Point(12, 5);
             this.Label13.Name = "Label13";
-            this.Label13.Size = new System.Drawing.Size(145, 20);
+            this.Label13.Size = new System.Drawing.Size(184, 25);
             this.Label13.TabIndex = 17;
             this.Label13.Text = "Telephelyi beállítás:";
             // 
@@ -365,7 +366,7 @@ namespace Villamos
             this.Elő_törölt.BackColor = System.Drawing.Color.BurlyWood;
             this.Elő_törölt.Location = new System.Drawing.Point(440, 65);
             this.Elő_törölt.Name = "Elő_törölt";
-            this.Elő_törölt.Size = new System.Drawing.Size(85, 24);
+            this.Elő_törölt.Size = new System.Drawing.Size(105, 29);
             this.Elő_törölt.TabIndex = 230;
             this.Elő_törölt.Text = "Töröltek";
             this.Elő_törölt.UseVisualStyleBackColor = false;
@@ -376,7 +377,7 @@ namespace Villamos
             this.Elő_pályaszám.FormattingEnabled = true;
             this.Elő_pályaszám.Location = new System.Drawing.Point(135, 91);
             this.Elő_pályaszám.Name = "Elő_pályaszám";
-            this.Elő_pályaszám.Size = new System.Drawing.Size(120, 25);
+            this.Elő_pályaszám.Size = new System.Drawing.Size(120, 4);
             this.Elő_pályaszám.TabIndex = 224;
             // 
             // Elő_Idő
@@ -385,7 +386,7 @@ namespace Villamos
             this.Elő_Idő.BackColor = System.Drawing.Color.BurlyWood;
             this.Elő_Idő.Location = new System.Drawing.Point(507, 92);
             this.Elő_Idő.Name = "Elő_Idő";
-            this.Elő_Idő.Size = new System.Drawing.Size(50, 24);
+            this.Elő_Idő.Size = new System.Drawing.Size(60, 29);
             this.Elő_Idő.TabIndex = 223;
             this.Elő_Idő.Text = "Idő";
             this.Elő_Idő.UseVisualStyleBackColor = false;
@@ -396,7 +397,7 @@ namespace Villamos
             this.Elő_Km.BackColor = System.Drawing.Color.BurlyWood;
             this.Elő_Km.Location = new System.Drawing.Point(563, 92);
             this.Elő_Km.Name = "Elő_Km";
-            this.Elő_Km.Size = new System.Drawing.Size(50, 24);
+            this.Elő_Km.Size = new System.Drawing.Size(63, 29);
             this.Elő_Km.TabIndex = 222;
             this.Elő_Km.Text = "Km";
             this.Elő_Km.UseVisualStyleBackColor = false;
@@ -408,7 +409,7 @@ namespace Villamos
             this.Elő_Mind.Checked = true;
             this.Elő_Mind.Location = new System.Drawing.Point(440, 92);
             this.Elő_Mind.Name = "Elő_Mind";
-            this.Elő_Mind.Size = new System.Drawing.Size(61, 24);
+            this.Elő_Mind.Size = new System.Drawing.Size(76, 29);
             this.Elő_Mind.TabIndex = 221;
             this.Elő_Mind.TabStop = true;
             this.Elő_Mind.Text = "Mind";
@@ -419,7 +420,7 @@ namespace Villamos
             this.Label21.AutoSize = true;
             this.Label21.Location = new System.Drawing.Point(135, 66);
             this.Label21.Name = "Label21";
-            this.Label21.Size = new System.Drawing.Size(89, 20);
+            this.Label21.Size = new System.Drawing.Size(114, 25);
             this.Label21.TabIndex = 219;
             this.Label21.Text = "Pályaszám:";
             // 
@@ -428,7 +429,7 @@ namespace Villamos
             this.Elő_Dátumig.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.Elő_Dátumig.Location = new System.Drawing.Point(10, 90);
             this.Elő_Dátumig.Name = "Elő_Dátumig";
-            this.Elő_Dátumig.Size = new System.Drawing.Size(119, 26);
+            this.Elő_Dátumig.Size = new System.Drawing.Size(119, 30);
             this.Elő_Dátumig.TabIndex = 217;
             // 
             // Elő_Dátumtól
@@ -436,7 +437,7 @@ namespace Villamos
             this.Elő_Dátumtól.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.Elő_Dátumtól.Location = new System.Drawing.Point(10, 60);
             this.Elő_Dátumtól.Name = "Elő_Dátumtól";
-            this.Elő_Dátumtól.Size = new System.Drawing.Size(119, 26);
+            this.Elő_Dátumtól.Size = new System.Drawing.Size(119, 30);
             this.Elő_Dátumtól.TabIndex = 216;
             // 
             // Tábla_elő
@@ -459,6 +460,7 @@ namespace Villamos
             this.Tábla_elő.Name = "Tábla_elő";
             this.Tábla_elő.ReadOnly = true;
             this.Tábla_elő.RowHeadersVisible = false;
+            this.Tábla_elő.RowHeadersWidth = 51;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Tábla_elő.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.Tábla_elő.Size = new System.Drawing.Size(1250, 200);
@@ -484,7 +486,7 @@ namespace Villamos
             // 
             // Ablak_Tulajdonságok_CAF
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.BurlyWood;
             this.ClientSize = new System.Drawing.Size(1268, 333);

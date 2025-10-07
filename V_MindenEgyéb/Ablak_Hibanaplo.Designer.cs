@@ -89,6 +89,7 @@
             this.cmb_valaszthato_evek.Name = "cmb_valaszthato_evek";
             this.cmb_valaszthato_evek.Size = new System.Drawing.Size(138, 24);
             this.cmb_valaszthato_evek.TabIndex = 4;
+            this.cmb_valaszthato_evek.SelectionChangeCommitted += new System.EventHandler(this.cmb_valaszthato_evek_SelectionChangeCommitted);
             // 
             // btn_frissit
             // 

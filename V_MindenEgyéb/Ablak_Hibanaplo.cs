@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
@@ -20,6 +21,7 @@ namespace Villamos.V_MindenEgyéb
         public Ablak_Hibanaplo()
         {
             InitializeComponent();
+            cmb_valaszthato_evek.Items.AddRange(KorabbiEvek());
             Start();
         }
 
@@ -62,7 +64,7 @@ namespace Villamos.V_MindenEgyéb
         private void ABFeltöltése()
         {
             // A CSV ANSI kódolásban van, a 1250-es ANSI kódolás tartalmaz ékezeteket.
-            string[] betoltott_log = File.ReadAllLines($@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba2025.csv", Encoding.GetEncoding(1250));
+            string[] betoltott_log = File.ReadAllLines($@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba{DateTime.Now.Year}.csv", Encoding.GetEncoding(1250));
 
             AdatTábla.Clear();
             foreach (string sor in betoltott_log.Skip(1))
@@ -93,10 +95,40 @@ namespace Villamos.V_MindenEgyéb
             Hibanaplo_Tablazat.Columns["Egyéb"].Width = 40;
         }
 
+        static string[] KorabbiEvek()
+        {
+            string path = $@"{Application.StartupPath}\Főmérnökség\adatok\Hibanapló";
+            List<string> result = new List<string>();
+
+            Regex regex = new Regex(@"^\d{4}$");
+
+            foreach (string dir in Directory.GetDirectories(path))
+            {
+                string folderName = Path.GetFileName(dir);
+                if (regex.IsMatch(folderName))
+                {
+                    result.Add(folderName);
+                }
+            }
+
+            return result.ToArray();
+        }
+
         private void btn_frissit_Click(object sender, EventArgs e)
         {            
             Start();
         }
 
+        private void cmb_valaszthato_evek_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (cmb_valaszthato_evek.SelectedItem.ToÉrt_Int() == DateTime.Now.Year)
+            {
+                string[] betoltott_log = File.ReadAllLines($@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba{DateTime.Now.Year}.csv", Encoding.GetEncoding(1250));
+            }
+            else 
+            {
+                string[] betoltott_log = File.ReadAllLines($@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{cmb_valaszthato_evek.SelectedItem.ToÉrt_Int()}\hiba{cmb_valaszthato_evek.SelectedItem.ToÉrt_Int()}.csv", Encoding.GetEncoding(1250));
+            }
+        }
     }
 }
