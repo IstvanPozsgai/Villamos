@@ -20,7 +20,7 @@ namespace Villamos.V_MindenEgyéb
         public Ablak_Hibanaplo()
         {
             InitializeComponent();
-            Start();               
+            Start();
         }
 
         private void Ablak_Hibanaplo_Load(object sender, EventArgs e)
@@ -92,5 +92,11 @@ namespace Villamos.V_MindenEgyéb
             Hibanaplo_Tablazat.Columns["Névtér"].Width = 70;
             Hibanaplo_Tablazat.Columns["Egyéb"].Width = 40;
         }
+
+        private void btn_frissit_Click(object sender, EventArgs e)
+        {            
+            Start();
+        }
+
     }
 }
