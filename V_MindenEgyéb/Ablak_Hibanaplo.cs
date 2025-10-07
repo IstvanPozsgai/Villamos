@@ -58,6 +58,7 @@ namespace Villamos.V_MindenEgyéb
             // Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum
             AdatTábla.Columns.Clear();
             AdatTábla.Columns.Add("Dátum");
+            AdatTábla.Columns.Add("Idő");
             AdatTábla.Columns.Add("Telephely");
             AdatTábla.Columns.Add("Felhasználó");
             AdatTábla.Columns.Add("Hiba üzenet");
@@ -76,7 +77,8 @@ namespace Villamos.V_MindenEgyéb
             {
                 // Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum
                 DataRow Soradat = AdatTábla.NewRow();
-                Soradat["Dátum"] = sor.Split(';')[0];
+                Soradat["Dátum"] = sor.Split(';')[0].Split(' ')[0];
+                Soradat["Idő"] = sor.Split(';')[0].Split(' ')[1];
                 Soradat["Telephely"] = sor.Split(';')[1];
                 Soradat["Felhasználó"] = sor.Split(';')[2];
                 Soradat["Hiba üzenet"] = sor.Split(';')[3];
@@ -90,7 +92,8 @@ namespace Villamos.V_MindenEgyéb
 
         private void OszlopSzélesség()
         {
-            Hibanaplo_Tablazat.Columns["Dátum"].Width = 150;
+            Hibanaplo_Tablazat.Columns["Dátum"].Width = 70;
+            Hibanaplo_Tablazat.Columns["Idő"].Width = 50;
             Hibanaplo_Tablazat.Columns["Telephely"].Width = 90;
             Hibanaplo_Tablazat.Columns["Felhasználó"].Width = 70;
             Hibanaplo_Tablazat.Columns["Hiba üzenet"].Width = 450;
