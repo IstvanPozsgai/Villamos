@@ -6,7 +6,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
@@ -21,8 +20,7 @@ namespace Villamos.V_MindenEgyéb
         public Ablak_Hibanaplo()
         {
             InitializeComponent();
-            cmb_valaszthato_evek.Items.AddRange(KorabbiEvek());
-            Start();
+            Start();               
         }
 
         private void Ablak_Hibanaplo_Load(object sender, EventArgs e)
@@ -33,20 +31,14 @@ namespace Villamos.V_MindenEgyéb
         private void Start()
         {
             Fejlec();
-
-            int ev = cmb_valaszthato_evek.SelectedItem != null
-                     ? cmb_valaszthato_evek.SelectedItem.ToÉrt_Int()
-                     : DateTime.Now.Year;
-
-            Tablalista_kiírás(ev);
+            Tablalista_kiírás();
         }
 
-        private void Tablalista_kiírás(int kiirasEv)
+        private void Tablalista_kiírás()
         {
-            ABFeltöltése(evesLogFajltBetolt(kiirasEv));
+            ABFeltöltése();
             Hibanaplo_Tablazat.CleanFilterAndSort();
             Hibanaplo_Tablazat.DataSource = AdatTábla;
-            Hibanaplo_Tablazat.Sort(Hibanaplo_Tablazat.Columns["Dátum"], ListSortDirection.Descending);
             OszlopSzélesség();
             Hibanaplo_Tablazat.Refresh();
             Hibanaplo_Tablazat.Visible = true;
@@ -58,7 +50,6 @@ namespace Villamos.V_MindenEgyéb
             // Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum
             AdatTábla.Columns.Clear();
             AdatTábla.Columns.Add("Dátum");
-            AdatTábla.Columns.Add("Idő");
             AdatTábla.Columns.Add("Telephely");
             AdatTábla.Columns.Add("Felhasználó");
             AdatTábla.Columns.Add("Hiba üzenet");
@@ -68,17 +59,17 @@ namespace Villamos.V_MindenEgyéb
             AdatTábla.Columns.Add("Egyéb");
         }
 
-        private void ABFeltöltése(string[] betoltott_log)
+        private void ABFeltöltése()
         {
-            // A CSV ANSI kódolásban van, a 1250-es ANSI kódolás tartalmaz ékezeteket.            
+            // A CSV ANSI kódolásban van, a 1250-es ANSI kódolás tartalmaz ékezeteket.
+            string[] betoltott_log = File.ReadAllLines($@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba2025.csv", Encoding.GetEncoding(1250));
 
             AdatTábla.Clear();
             foreach (string sor in betoltott_log.Skip(1))
             {
                 // Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum
                 DataRow Soradat = AdatTábla.NewRow();
-                Soradat["Dátum"] = sor.Split(';')[0].Split(' ')[0];
-                Soradat["Idő"] = sor.Split(';')[0].Split(' ')[1];
+                Soradat["Dátum"] = sor.Split(';')[0];
                 Soradat["Telephely"] = sor.Split(';')[1];
                 Soradat["Felhasználó"] = sor.Split(';')[2];
                 Soradat["Hiba üzenet"] = sor.Split(';')[3];
@@ -92,8 +83,7 @@ namespace Villamos.V_MindenEgyéb
 
         private void OszlopSzélesség()
         {
-            Hibanaplo_Tablazat.Columns["Dátum"].Width = 70;
-            Hibanaplo_Tablazat.Columns["Idő"].Width = 50;
+            Hibanaplo_Tablazat.Columns["Dátum"].Width = 150;
             Hibanaplo_Tablazat.Columns["Telephely"].Width = 90;
             Hibanaplo_Tablazat.Columns["Felhasználó"].Width = 70;
             Hibanaplo_Tablazat.Columns["Hiba üzenet"].Width = 450;
@@ -102,50 +92,5 @@ namespace Villamos.V_MindenEgyéb
             Hibanaplo_Tablazat.Columns["Névtér"].Width = 70;
             Hibanaplo_Tablazat.Columns["Egyéb"].Width = 40;
         }
-
-        static string[] KorabbiEvek()
-        {
-            string path = $@"{Application.StartupPath}\Főmérnökség\adatok\Hibanapló";
-            List<string> result = new List<string>();
-
-            Regex regex = new Regex(@"^\d{4}$");
-
-            foreach (string dir in Directory.GetDirectories(path))
-            {
-                string folderName = Path.GetFileName(dir);
-                if (regex.IsMatch(folderName))
-                {
-                    result.Add(folderName);
-                }
-            }
-            return result.ToArray();
-        }
-
-        private string[] evesLogFajltBetolt(int ev)
-        {
-            string fajlUtvonal;
-
-            if (ev == DateTime.Now.Year)
-            {
-                fajlUtvonal = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba{ev}.csv";
-            }
-            else
-            {
-                fajlUtvonal = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{ev}\hiba{ev}.csv";
-            }
-
-            return File.ReadAllLines(fajlUtvonal, Encoding.GetEncoding(1250));
-        }
-
-        private void btn_frissit_Click(object sender, EventArgs e)
-        {
-            Start();
-        }
-
-        private void cmb_valaszthato_evek_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            Start(); 
-        }
-
     }
 }
