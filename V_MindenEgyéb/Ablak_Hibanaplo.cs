@@ -12,12 +12,12 @@ using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.V_MindenEgyéb
 {
-    public partial class Hibanapló : Form
+    public partial class Ablak_Hibanaplo : Form
     {
 
         readonly DataTable AdatTábla = new DataTable();
         
-        public Hibanapló()
+        public Ablak_Hibanaplo()
         {
             InitializeComponent();
             Start();               
