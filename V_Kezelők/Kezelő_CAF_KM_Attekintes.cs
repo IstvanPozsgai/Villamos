@@ -250,20 +250,20 @@ namespace Villamos.Kezelők
                     : $"utolso_p1_kozott='{Adat.utolso_p1_kozott}', ";
 
                 szoveg += Adat.utolso_p3_es_p2_kozott == null
-                    ? "utolso_p3_es_p2_kozott=null "
-                    : $"utolso_p3_es_p2_kozott='{Adat.utolso_p3_es_p2_kozott}' ";
+                    ? "utolso_p3_es_p2_kozott=null, "
+                    : $"utolso_p3_es_p2_kozott='{Adat.utolso_p3_es_p2_kozott}', ";
 
                 szoveg += Adat.utolso_p0_sorszam == null
-                   ? "utolso_p0_sorszam=null "
-                   : $"utolso_p0_sorszam='{Adat.utolso_p0_sorszam}' ";
+                   ? "utolso_p0_sorszam=null, "
+                   : $"utolso_p0_sorszam='{Adat.utolso_p0_sorszam}', ";
 
                 szoveg += Adat.utolso_p1_sorszam == null
-                   ? "utolso_p1_sorszam=null "
-                   : $"utolso_p1_sorszam='{Adat.utolso_p1_sorszam}' ";
+                   ? "utolso_p1_sorszam=null, "
+                   : $"utolso_p1_sorszam='{Adat.utolso_p1_sorszam}', ";
 
                 szoveg += Adat.utolso_p2_sorszam == null
-                   ? "utolso_p2_sorszam=null "
-                   : $"utolso_p2_sorszam='{Adat.utolso_p2_sorszam}' ";
+                   ? "utolso_p2_sorszam=null, "
+                   : $"utolso_p2_sorszam='{Adat.utolso_p2_sorszam}', ";
 
                 szoveg += Adat.utolso_p3_sorszam == null
                    ? "utolso_p3_sorszam=null "
