@@ -273,7 +273,6 @@ namespace Villamos
             // 
             // HibanaploMenu
             // 
-            this.HibanaploMenu.Enabled = false;
             this.HibanaploMenu.Name = "HibanaploMenu";
             this.HibanaploMenu.Size = new System.Drawing.Size(338, 26);
             this.HibanaploMenu.Text = "Hibanapló";

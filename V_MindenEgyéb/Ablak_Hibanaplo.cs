@@ -20,8 +20,7 @@ namespace Villamos.V_MindenEgyéb
         public Ablak_Hibanaplo()
         {
             InitializeComponent();
-            Start();
-            // var teszt = ReadFileLines($@"{Application.StartupPath}\Főmérnökség\adatok\Hibanapló\hiba2025.csv");                
+            Start();               
         }
 
         private void Ablak_Hibanaplo_Load(object sender, EventArgs e)
@@ -32,11 +31,11 @@ namespace Villamos.V_MindenEgyéb
         private void Start()
         {
             Fejlec();
+            Tablalista_kiírás();
         }
 
         private void Tablalista_kiírás()
         {
-            Listazas();
             ABFeltöltése();
             Hibanaplo_Tablazat.CleanFilterAndSort();
             Hibanaplo_Tablazat.DataSource = AdatTábla;
@@ -60,18 +59,13 @@ namespace Villamos.V_MindenEgyéb
             AdatTábla.Columns.Add("Egyéb");
         }
 
-        private void Listazas()
-        {
-
-        }
-
         private void ABFeltöltése()
         {
             // A CSV ANSI kódolásban van, a 1250-es ANSI kódolás tartalmaz ékezeteket.
             string[] betoltott_log = File.ReadAllLines($@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba2025.csv", Encoding.GetEncoding(1250));
 
             AdatTábla.Clear();
-            foreach (string sor in betoltott_log)
+            foreach (string sor in betoltott_log.Skip(1))
             {
                 // Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum
                 DataRow Soradat = AdatTábla.NewRow();
@@ -89,8 +83,14 @@ namespace Villamos.V_MindenEgyéb
 
         private void OszlopSzélesség()
         {
-
+            Hibanaplo_Tablazat.Columns["Dátum"].Width = 150;
+            Hibanaplo_Tablazat.Columns["Telephely"].Width = 90;
+            Hibanaplo_Tablazat.Columns["Felhasználó"].Width = 70;
+            Hibanaplo_Tablazat.Columns["Hiba üzenet"].Width = 450;
+            Hibanaplo_Tablazat.Columns["Hiba osztály"].Width = 300;
+            Hibanaplo_Tablazat.Columns["Hiba metódus"].Width = 300;
+            Hibanaplo_Tablazat.Columns["Névtér"].Width = 70;
+            Hibanaplo_Tablazat.Columns["Egyéb"].Width = 40;
         }
-
     }
 }
