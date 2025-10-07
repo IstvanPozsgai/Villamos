@@ -46,6 +46,7 @@ namespace Villamos.V_MindenEgyéb
             ABFeltöltése(evesLogFajltBetolt(kiirasEv));
             Hibanaplo_Tablazat.CleanFilterAndSort();
             Hibanaplo_Tablazat.DataSource = AdatTábla;
+            Hibanaplo_Tablazat.Sort(Hibanaplo_Tablazat.Columns["Dátum"], ListSortDirection.Descending);
             OszlopSzélesség();
             Hibanaplo_Tablazat.Refresh();
             Hibanaplo_Tablazat.Visible = true;
@@ -117,16 +118,6 @@ namespace Villamos.V_MindenEgyéb
             return result.ToArray();
         }
 
-        private void btn_frissit_Click(object sender, EventArgs e)
-        {
-            Start();
-        }
-
-        private void cmb_valaszthato_evek_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            Start(); 
-        }
-
         private string[] evesLogFajltBetolt(int ev)
         {
             string fajlUtvonal;
@@ -141,6 +132,16 @@ namespace Villamos.V_MindenEgyéb
             }
 
             return File.ReadAllLines(fajlUtvonal, Encoding.GetEncoding(1250));
+        }
+
+        private void btn_frissit_Click(object sender, EventArgs e)
+        {
+            Start();
+        }
+
+        private void cmb_valaszthato_evek_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            Start(); 
         }
 
     }
