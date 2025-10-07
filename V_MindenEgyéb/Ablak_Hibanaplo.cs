@@ -50,7 +50,7 @@ namespace Villamos.V_MindenEgyéb
         {
             // Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum
             AdatTábla.Columns.Clear();
-            AdatTábla.Columns.Add("Dátum", typeof(DateTime));
+            AdatTábla.Columns.Add("Dátum");
             AdatTábla.Columns.Add("Telephely");
             AdatTábla.Columns.Add("Felhasználó");
             AdatTábla.Columns.Add("Hiba üzenet");
@@ -70,22 +70,21 @@ namespace Villamos.V_MindenEgyéb
             // A CSV ANSI kódolásban van, a 1250-es ANSI kódolás tartalmaz ékezeteket.
             string[] betoltott_log = File.ReadAllLines($@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba2025.csv", Encoding.GetEncoding(1250));
 
-            //AdatTábla.Clear();
-            //foreach (Adat_CAF_Adatok villamos in CafAdatok)
-            //{
-            //    DataRow Soradat = AdatTábla.NewRow();
-            //    Soradat["ID"] = villamos.Id;
-            //    Soradat["Pályaszám"] = villamos.Azonosító;
-            //    Soradat["Vizsgálat"] = villamos.Vizsgálat;
-            //    Soradat["Dátum"] = villamos.Dátum.ToString("yyyy.MM.dd");
-            //    Soradat["Számláló állás"] = villamos.Számláló;
-            //    Soradat["Telephely"] = villamos.Telephely;
-
-            //    AdatTábla.Rows.Add(Soradat);
-            //}
-
             AdatTábla.Clear();
-
+            foreach (string sor in betoltott_log)
+            {
+                // Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum
+                DataRow Soradat = AdatTábla.NewRow();
+                Soradat["Dátum"] = sor.Split(';')[0];
+                Soradat["Telephely"] = sor.Split(';')[1];
+                Soradat["Felhasználó"] = sor.Split(';')[2];
+                Soradat["Hiba üzenet"] = sor.Split(';')[3];
+                Soradat["Hiba osztály"] = sor.Split(';')[4];
+                Soradat["Hiba metódus"] = sor.Split(';')[5];
+                Soradat["Névtér"] = sor.Split(';')[6];
+                Soradat["Egyéb"] = sor.Split(';')[7];
+                AdatTábla.Rows.Add(Soradat);
+            }                      
         }
 
         private void OszlopSzélesség()
