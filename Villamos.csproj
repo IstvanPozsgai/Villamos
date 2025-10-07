@@ -1791,6 +1791,9 @@
     <EmbeddedResource Include="V_Ablakok\2_Információ\Ablak_Utasítás_Generálás.resx">
       <DependentUpon>Ablak_Utasítás_Generálás.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="V_MindenEgyéb\Ablak_Hibanaplo.resx">
+      <DependentUpon>Ablak_Hibanaplo.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
