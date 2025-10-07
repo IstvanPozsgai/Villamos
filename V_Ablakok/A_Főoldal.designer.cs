@@ -42,6 +42,7 @@ namespace Villamos
             this.ablakokBeállításaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gombokBeállításaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SzoftverkulcsKészítésMenü = new System.Windows.Forms.ToolStripMenuItem();
+            this.HibanaploMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator37 = new System.Windows.Forms.ToolStripSeparator();
             this.felhasználókLétrehozásaTörléseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jogosultságKiosztásToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -192,7 +193,6 @@ namespace Villamos
             this.Képkeret = new System.Windows.Forms.PictureBox();
             this.Képkeret1 = new System.Windows.Forms.PictureBox();
             this.Panels1 = new System.Windows.Forms.Label();
-            this.HibanaploMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.Menü.SuspendLayout();
             this.Alsó.SuspendLayout();
             this.Rejtett.SuspendLayout();
@@ -270,6 +270,14 @@ namespace Villamos
             this.SzoftverkulcsKészítésMenü.Size = new System.Drawing.Size(338, 26);
             this.SzoftverkulcsKészítésMenü.Text = "Szoftverkulcs készítés";
             this.SzoftverkulcsKészítésMenü.Click += new System.EventHandler(this.SzoftverkulcsKészítésMenü_Click);
+            // 
+            // HibanaploMenu
+            // 
+            this.HibanaploMenu.Enabled = false;
+            this.HibanaploMenu.Name = "HibanaploMenu";
+            this.HibanaploMenu.Size = new System.Drawing.Size(338, 26);
+            this.HibanaploMenu.Text = "Hibanapló";
+            this.HibanaploMenu.Click += new System.EventHandler(this.HibanaploMenu_Click);
             // 
             // toolStripSeparator37
             // 
@@ -1499,13 +1507,6 @@ namespace Villamos
             this.Panels1.Text = "Név";
             this.Panels1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.Panels1.DoubleClick += new System.EventHandler(this.Panels1_DoubleClick);
-            // 
-            // HibanaploMenu
-            // 
-            this.HibanaploMenu.Name = "HibanaploMenu";
-            this.HibanaploMenu.Size = new System.Drawing.Size(338, 26);
-            this.HibanaploMenu.Text = "Hibanapló";
-            this.HibanaploMenu.Click += new System.EventHandler(this.HibanaploMenu_Click);
             // 
             // A_Főoldal
             // 
