@@ -33,12 +33,17 @@ namespace Villamos.V_MindenEgyéb
         private void Start()
         {
             Fejlec();
-            Tablalista_kiírás();
+
+            int ev = cmb_valaszthato_evek.SelectedItem != null
+                     ? cmb_valaszthato_evek.SelectedItem.ToÉrt_Int()
+                     : DateTime.Now.Year;
+
+            Tablalista_kiírás(ev);
         }
 
-        private void Tablalista_kiírás()
+        private void Tablalista_kiírás(int kiirasEv)
         {
-            ABFeltöltése();
+            ABFeltöltése(evesLogFajltBetolt(kiirasEv));
             Hibanaplo_Tablazat.CleanFilterAndSort();
             Hibanaplo_Tablazat.DataSource = AdatTábla;
             OszlopSzélesség();
@@ -61,10 +66,9 @@ namespace Villamos.V_MindenEgyéb
             AdatTábla.Columns.Add("Egyéb");
         }
 
-        private void ABFeltöltése()
+        private void ABFeltöltése(string[] betoltott_log)
         {
-            // A CSV ANSI kódolásban van, a 1250-es ANSI kódolás tartalmaz ékezeteket.
-            string[] betoltott_log = File.ReadAllLines($@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba{DateTime.Now.Year}.csv", Encoding.GetEncoding(1250));
+            // A CSV ANSI kódolásban van, a 1250-es ANSI kódolás tartalmaz ékezeteket.            
 
             AdatTábla.Clear();
             foreach (string sor in betoltott_log.Skip(1))
@@ -110,25 +114,34 @@ namespace Villamos.V_MindenEgyéb
                     result.Add(folderName);
                 }
             }
-
             return result.ToArray();
         }
 
         private void btn_frissit_Click(object sender, EventArgs e)
-        {            
+        {
             Start();
         }
 
         private void cmb_valaszthato_evek_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cmb_valaszthato_evek.SelectedItem.ToÉrt_Int() == DateTime.Now.Year)
-            {
-                string[] betoltott_log = File.ReadAllLines($@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba{DateTime.Now.Year}.csv", Encoding.GetEncoding(1250));
-            }
-            else 
-            {
-                string[] betoltott_log = File.ReadAllLines($@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{cmb_valaszthato_evek.SelectedItem.ToÉrt_Int()}\hiba{cmb_valaszthato_evek.SelectedItem.ToÉrt_Int()}.csv", Encoding.GetEncoding(1250));
-            }
+            Start(); 
         }
+
+        private string[] evesLogFajltBetolt(int ev)
+        {
+            string fajlUtvonal;
+
+            if (ev == DateTime.Now.Year)
+            {
+                fajlUtvonal = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba{ev}.csv";
+            }
+            else
+            {
+                fajlUtvonal = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{ev}\hiba{ev}.csv";
+            }
+
+            return File.ReadAllLines(fajlUtvonal, Encoding.GetEncoding(1250));
+        }
+
     }
 }

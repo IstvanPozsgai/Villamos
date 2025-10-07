@@ -100,6 +100,7 @@
             this.btn_frissit.Size = new System.Drawing.Size(50, 50);
             this.btn_frissit.TabIndex = 3;
             this.btn_frissit.UseVisualStyleBackColor = true;
+            this.btn_frissit.Click += new System.EventHandler(this.btn_frissit_Click);
             // 
             // Ablak_Hibanaplo
             // 
