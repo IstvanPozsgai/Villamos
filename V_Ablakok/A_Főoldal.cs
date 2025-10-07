@@ -2751,12 +2751,12 @@ namespace Villamos
             }
         }
 
-        Ablak_Hibanaplo Új_Ablak_Hibanaplo;
+        Hibanapló Új_Ablak_Hibanaplo;
         private void HibanaploMenu_Click(object sender, EventArgs e)
         {
             if (Új_Ablak_Hibanaplo == null)
             {
-                Új_Ablak_Hibanaplo = new Ablak_Hibanaplo();
+                Új_Ablak_Hibanaplo = new Hibanapló();
                 Új_Ablak_Hibanaplo.FormClosed += Ablak_Hibanaplo_FormClosed;
                 Új_Ablak_Hibanaplo.Show();
             }

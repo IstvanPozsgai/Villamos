@@ -1,6 +1,6 @@
 ﻿namespace Villamos.V_MindenEgyéb
 {
-    partial class Ablak_Hibanaplo
+    partial class Hibanapló
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Hibanaplo));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Hibanapló));
             this.Hibanaplo_Tablazat = new Zuby.ADGV.AdvancedDataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.Hibanaplo_Tablazat)).BeginInit();
             this.SuspendLayout();
@@ -53,14 +53,14 @@
             this.Hibanaplo_Tablazat.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Hibanaplo_Tablazat.TabIndex = 0;
             // 
-            // Ablak_Hibanaplo
+            // Hibanapló
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.Hibanaplo_Tablazat);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Ablak_Hibanaplo";
+            this.Name = "Hibanapló";
             this.Text = "Ablak_Hibanaplo";
             this.Load += new System.EventHandler(this.Ablak_Hibanaplo_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Hibanaplo_Tablazat)).EndInit();
