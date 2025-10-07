@@ -1345,6 +1345,12 @@
     <Compile Include="V_Kezelők\Kezelő_Üzenet_Olvas.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF_Szinezés.cs" />
     <Compile Include="V_MindenEgyéb\AblakokGombok.cs" />
+    <Compile Include="V_MindenEgyéb\Ablak_Hibanaplo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_MindenEgyéb\Ablak_Hibanaplo.Designer.cs">
+      <DependentUpon>Ablak_Hibanaplo.cs</DependentUpon>
+    </Compile>
     <Compile Include="V_MindenEgyéb\AccessDatabaseHelper.cs" />
     <Compile Include="V_MindenEgyéb\Enumok.cs" />
     <Compile Include="V_MindenEgyéb\Excel_Kezelés.cs" />
