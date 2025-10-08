@@ -20,12 +20,7 @@ namespace Villamos
 
         public Ablak_Hibanaplo()
         {
-            InitializeComponent();
-
-            int ev = DateTime.Now.Year;
-            cmb_korabbi_evek.Items.AddRange(new object[] { ev, ev - 1 });
-            cmb_korabbi_evek.SelectedItem = ev;
-
+            InitializeComponent();            
             Start();
         }
 
@@ -69,14 +64,20 @@ namespace Villamos
 
         private void ABFeltöltése()
         {
-            int valasztottEv = (int)cmb_korabbi_evek.SelectedItem;
-
-            // Az evesLogFajltBetolt metódus használata
-            string[] betoltott_log = evesLogFajltBetolt(valasztottEv);
-
             AdatTábla.Clear();
 
-            foreach (string sor in betoltott_log.Skip(1))
+            int ideiEv = DateTime.Now.Year;
+            int tavalyiEv = ideiEv - 1;
+            // Az evesLogFajltBetolt metódus használata
+            var osszesSor = new List<string>();
+
+            if (FileLetezik(ideiEv))
+                osszesSor.AddRange(evesLogFajltBetolt(ideiEv).Skip(1)); 
+
+            if (FileLetezik(tavalyiEv))
+                osszesSor.AddRange(evesLogFajltBetolt(tavalyiEv).Skip(1)); 
+
+            foreach (string sor in osszesSor)
             {
                 // Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum
                 DataRow Soradat = AdatTábla.NewRow();
@@ -123,9 +124,15 @@ namespace Villamos
             return File.ReadAllLines(fajlUtvonal, Encoding.GetEncoding(1250));
         }
 
-        private void cmb_korabbi_evek_SelectionChangeCommitted(object sender, EventArgs e)
+        private bool FileLetezik(int ev)
         {
-            Tablalista_kiírás();
+            string fajlUtvonal;
+            if (ev == DateTime.Now.Year)
+                fajlUtvonal = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba{ev}.csv";
+            else
+                fajlUtvonal = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{ev}\hiba{ev}.csv";
+
+            return File.Exists(fajlUtvonal);
         }
 
     }
