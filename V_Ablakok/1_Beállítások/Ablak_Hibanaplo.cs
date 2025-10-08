@@ -68,14 +68,38 @@ namespace Villamos
 
             int ideiEv = DateTime.Now.Year;
             int tavalyiEv = ideiEv - 1;
-            // Az evesLogFajltBetolt metódus használata
-            var osszesSor = new List<string>();
+
+            List<string> osszesSor = new List<string>();
 
             if (FileLetezik(ideiEv))
-                osszesSor.AddRange(evesLogFajltBetolt(ideiEv).Skip(1)); 
+            {
+                osszesSor.AddRange(evesLogFajltBetolt(ideiEv).Skip(1));
+            }
+            else
+            {
+                MessageBox.Show(
+                    $"A {ideiEv}. évi hibanapló fájl nem található.\n\n" +
+                    $@"Elvárt hely: {Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba{ideiEv}.csv",
+                    "Hiányzó fájl",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+            }
 
             if (FileLetezik(tavalyiEv))
-                osszesSor.AddRange(evesLogFajltBetolt(tavalyiEv).Skip(1)); 
+            {
+                osszesSor.AddRange(evesLogFajltBetolt(tavalyiEv).Skip(1));
+            }
+            else
+            {
+                MessageBox.Show(
+                    $"A {tavalyiEv}. évi hibanapló fájl nem található.\n\n" +
+                    $@"Elvárt hely: {Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{tavalyiEv}\hiba{tavalyiEv}.csv",
+                    "Hiányzó fájl",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+            }
 
             foreach (string sor in osszesSor)
             {
