@@ -150,6 +150,9 @@ namespace Villamos
             this.Label12 = new System.Windows.Forms.Label();
             this.Label5 = new System.Windows.Forms.Label();
             this.Tak_Ár_Tábla = new Zuby.ADGV.AdvancedDataGridView();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.email_tabla = new Zuby.ADGV.AdvancedDataGridView();
             this.Button13 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
@@ -171,6 +174,9 @@ namespace Villamos
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tak_Ár_Tábla)).BeginInit();
+            this.tabPage5.SuspendLayout();
+            this.tableLayoutPanel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.email_tabla)).BeginInit();
             this.SuspendLayout();
             // 
             // Panel1
@@ -188,7 +194,7 @@ namespace Villamos
             this.Cmbtelephely.FormattingEnabled = true;
             this.Cmbtelephely.Location = new System.Drawing.Point(175, 2);
             this.Cmbtelephely.Name = "Cmbtelephely";
-            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 33);
             this.Cmbtelephely.TabIndex = 18;
             this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
             // 
@@ -197,7 +203,7 @@ namespace Villamos
             this.Label13.AutoSize = true;
             this.Label13.Location = new System.Drawing.Point(3, 4);
             this.Label13.Name = "Label13";
-            this.Label13.Size = new System.Drawing.Size(145, 20);
+            this.Label13.Size = new System.Drawing.Size(184, 25);
             this.Label13.TabIndex = 17;
             this.Label13.Text = "Telephelyi beállítás:";
             // 
@@ -210,6 +216,7 @@ namespace Villamos
             this.Fülek.Controls.Add(this.TabPage2);
             this.Fülek.Controls.Add(this.TabPage3);
             this.Fülek.Controls.Add(this.TabPage4);
+            this.Fülek.Controls.Add(this.tabPage5);
             this.Fülek.Location = new System.Drawing.Point(2, 60);
             this.Fülek.Name = "Fülek";
             this.Fülek.Padding = new System.Drawing.Point(16, 3);
@@ -224,10 +231,10 @@ namespace Villamos
             this.TabPage1.BackColor = System.Drawing.Color.SandyBrown;
             this.TabPage1.Controls.Add(this.tableLayoutPanel4);
             this.TabPage1.Controls.Add(this.SAPTábla);
-            this.TabPage1.Location = new System.Drawing.Point(4, 29);
+            this.TabPage1.Location = new System.Drawing.Point(4, 34);
             this.TabPage1.Name = "TabPage1";
             this.TabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage1.Size = new System.Drawing.Size(1484, 489);
+            this.TabPage1.Size = new System.Drawing.Size(1484, 484);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "SAP- FORTE beolvasás";
             // 
@@ -269,7 +276,7 @@ namespace Villamos
             this.FejlécBeolvasása.BackColor = System.Drawing.SystemColors.Control;
             this.FejlécBeolvasása.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.FejlécBeolvasása.Image = global::Villamos.Properties.Resources.Document_Microsoft_Excel_01;
-            this.FejlécBeolvasása.Location = new System.Drawing.Point(773, 159);
+            this.FejlécBeolvasása.Location = new System.Drawing.Point(809, 159);
             this.FejlécBeolvasása.Name = "FejlécBeolvasása";
             this.FejlécBeolvasása.Size = new System.Drawing.Size(45, 45);
             this.FejlécBeolvasása.TabIndex = 56;
@@ -282,17 +289,17 @@ namespace Villamos
             this.Label69.AutoSize = true;
             this.Label69.Location = new System.Drawing.Point(3, 0);
             this.Label69.Name = "Label69";
-            this.Label69.Size = new System.Drawing.Size(146, 20);
+            this.Label69.Size = new System.Drawing.Size(182, 25);
             this.Label69.TabIndex = 48;
             this.Label69.Text = "Beolvasási csoport:";
             // 
             // SAPCsoport
             // 
             this.SAPCsoport.FormattingEnabled = true;
-            this.SAPCsoport.Location = new System.Drawing.Point(155, 3);
+            this.SAPCsoport.Location = new System.Drawing.Point(191, 3);
             this.SAPCsoport.MaxLength = 10;
             this.SAPCsoport.Name = "SAPCsoport";
-            this.SAPCsoport.Size = new System.Drawing.Size(187, 28);
+            this.SAPCsoport.Size = new System.Drawing.Size(187, 33);
             this.SAPCsoport.TabIndex = 0;
             this.SAPCsoport.SelectedIndexChanged += new System.EventHandler(this.Csoport_SelectedIndexChanged);
             // 
@@ -301,7 +308,7 @@ namespace Villamos
             this.Label68.AutoSize = true;
             this.Label68.Location = new System.Drawing.Point(3, 35);
             this.Label68.Name = "Label68";
-            this.Label68.Size = new System.Drawing.Size(113, 20);
+            this.Label68.Size = new System.Drawing.Size(143, 25);
             this.Label68.TabIndex = 53;
             this.Label68.Text = "Oszlop száma:";
             // 
@@ -310,15 +317,15 @@ namespace Villamos
             this.Label67.AutoSize = true;
             this.Label67.Location = new System.Drawing.Point(3, 105);
             this.Label67.Name = "Label67";
-            this.Label67.Size = new System.Drawing.Size(92, 20);
+            this.Label67.Size = new System.Drawing.Size(116, 25);
             this.Label67.TabIndex = 55;
             this.Label67.Text = "Változónév:";
             // 
             // SAPOSzlopszám
             // 
-            this.SAPOSzlopszám.Location = new System.Drawing.Point(155, 38);
+            this.SAPOSzlopszám.Location = new System.Drawing.Point(191, 38);
             this.SAPOSzlopszám.Name = "SAPOSzlopszám";
-            this.SAPOSzlopszám.Size = new System.Drawing.Size(187, 26);
+            this.SAPOSzlopszám.Size = new System.Drawing.Size(187, 30);
             this.SAPOSzlopszám.TabIndex = 1;
             // 
             // Label60
@@ -326,24 +333,24 @@ namespace Villamos
             this.Label60.AutoSize = true;
             this.Label60.Location = new System.Drawing.Point(3, 70);
             this.Label60.Name = "Label60";
-            this.Label60.Size = new System.Drawing.Size(118, 20);
+            this.Label60.Size = new System.Drawing.Size(149, 25);
             this.Label60.TabIndex = 54;
             this.Label60.Text = "Fejléc szövege:";
             // 
             // SAPFejléc
             // 
-            this.SAPFejléc.Location = new System.Drawing.Point(155, 73);
+            this.SAPFejléc.Location = new System.Drawing.Point(191, 73);
             this.SAPFejléc.MaxLength = 255;
             this.SAPFejléc.Name = "SAPFejléc";
-            this.SAPFejléc.Size = new System.Drawing.Size(459, 26);
+            this.SAPFejléc.Size = new System.Drawing.Size(459, 30);
             this.SAPFejléc.TabIndex = 2;
             // 
             // Változónév
             // 
-            this.Változónév.Location = new System.Drawing.Point(155, 108);
+            this.Változónév.Location = new System.Drawing.Point(191, 108);
             this.Változónév.MaxLength = 50;
             this.Változónév.Name = "Változónév";
-            this.Változónév.Size = new System.Drawing.Size(187, 26);
+            this.Változónév.Size = new System.Drawing.Size(187, 30);
             this.Változónév.TabIndex = 3;
             // 
             // SAPRögzít
@@ -351,7 +358,7 @@ namespace Villamos
             this.SAPRögzít.BackColor = System.Drawing.SystemColors.Control;
             this.SAPRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.SAPRögzít.Image = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.SAPRögzít.Location = new System.Drawing.Point(722, 108);
+            this.SAPRögzít.Location = new System.Drawing.Point(758, 108);
             this.SAPRögzít.Name = "SAPRögzít";
             this.SAPRögzít.Size = new System.Drawing.Size(45, 45);
             this.SAPRögzít.TabIndex = 4;
@@ -364,7 +371,7 @@ namespace Villamos
             this.SAPTöröl.BackColor = System.Drawing.SystemColors.Control;
             this.SAPTöröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.SAPTöröl.Image = global::Villamos.Properties.Resources.Kuka;
-            this.SAPTöröl.Location = new System.Drawing.Point(620, 159);
+            this.SAPTöröl.Location = new System.Drawing.Point(656, 159);
             this.SAPTöröl.Name = "SAPTöröl";
             this.SAPTöröl.Size = new System.Drawing.Size(45, 45);
             this.SAPTöröl.TabIndex = 5;
@@ -377,7 +384,7 @@ namespace Villamos
             this.SAPExcel.BackColor = System.Drawing.SystemColors.Control;
             this.SAPExcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.SAPExcel.Image = global::Villamos.Properties.Resources.Excel_gyűjtő;
-            this.SAPExcel.Location = new System.Drawing.Point(671, 159);
+            this.SAPExcel.Location = new System.Drawing.Point(707, 159);
             this.SAPExcel.Name = "SAPExcel";
             this.SAPExcel.Size = new System.Drawing.Size(45, 45);
             this.SAPExcel.TabIndex = 7;
@@ -390,7 +397,7 @@ namespace Villamos
             this.SAPFrissít.BackColor = System.Drawing.SystemColors.Control;
             this.SAPFrissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.SAPFrissít.Image = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.SAPFrissít.Location = new System.Drawing.Point(722, 159);
+            this.SAPFrissít.Location = new System.Drawing.Point(758, 159);
             this.SAPFrissít.Name = "SAPFrissít";
             this.SAPFrissít.Size = new System.Drawing.Size(45, 45);
             this.SAPFrissít.TabIndex = 6;
@@ -451,10 +458,10 @@ namespace Villamos
             this.TabPage2.Controls.Add(this.Osztálynév);
             this.TabPage2.Controls.Add(this.ID);
             this.TabPage2.Controls.Add(this.TáblaOsztály);
-            this.TabPage2.Location = new System.Drawing.Point(4, 29);
+            this.TabPage2.Location = new System.Drawing.Point(4, 34);
             this.TabPage2.Name = "TabPage2";
             this.TabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage2.Size = new System.Drawing.Size(1484, 489);
+            this.TabPage2.Size = new System.Drawing.Size(1484, 484);
             this.TabPage2.TabIndex = 1;
             this.TabPage2.Text = "Osztály elemek kezelése";
             // 
@@ -514,7 +521,7 @@ namespace Villamos
             this.Használatban.AutoSize = true;
             this.Használatban.Location = new System.Drawing.Point(152, 107);
             this.Használatban.Name = "Használatban";
-            this.Használatban.Size = new System.Drawing.Size(127, 24);
+            this.Használatban.Size = new System.Drawing.Size(154, 29);
             this.Használatban.TabIndex = 119;
             this.Használatban.Text = "Használatban";
             this.Használatban.UseVisualStyleBackColor = true;
@@ -524,7 +531,7 @@ namespace Villamos
             this.Label1.AutoSize = true;
             this.Label1.Location = new System.Drawing.Point(8, 79);
             this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(100, 20);
+            this.Label1.Size = new System.Drawing.Size(126, 25);
             this.Label1.TabIndex = 118;
             this.Label1.Text = "Osztálymező";
             // 
@@ -533,7 +540,7 @@ namespace Villamos
             this.Label2.AutoSize = true;
             this.Label2.Location = new System.Drawing.Point(8, 12);
             this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(138, 20);
+            this.Label2.Size = new System.Drawing.Size(174, 25);
             this.Label2.TabIndex = 116;
             this.Label2.Text = "Osztály sorszáma:";
             // 
@@ -543,7 +550,7 @@ namespace Villamos
             this.Osztálymező.Location = new System.Drawing.Point(152, 75);
             this.Osztálymező.MaxLength = 50;
             this.Osztálymező.Name = "Osztálymező";
-            this.Osztálymező.Size = new System.Drawing.Size(187, 26);
+            this.Osztálymező.Size = new System.Drawing.Size(187, 30);
             this.Osztálymező.TabIndex = 115;
             // 
             // Label3
@@ -551,7 +558,7 @@ namespace Villamos
             this.Label3.AutoSize = true;
             this.Label3.Location = new System.Drawing.Point(8, 47);
             this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(86, 20);
+            this.Label3.Size = new System.Drawing.Size(110, 25);
             this.Label3.TabIndex = 117;
             this.Label3.Text = "Osztálynév";
             // 
@@ -560,7 +567,7 @@ namespace Villamos
             this.Osztálynév.Location = new System.Drawing.Point(152, 43);
             this.Osztálynév.MaxLength = 50;
             this.Osztálynév.Name = "Osztálynév";
-            this.Osztálynév.Size = new System.Drawing.Size(459, 26);
+            this.Osztálynév.Size = new System.Drawing.Size(459, 30);
             this.Osztálynév.TabIndex = 114;
             // 
             // ID
@@ -568,7 +575,7 @@ namespace Villamos
             this.ID.Enabled = false;
             this.ID.Location = new System.Drawing.Point(152, 12);
             this.ID.Name = "ID";
-            this.ID.Size = new System.Drawing.Size(187, 26);
+            this.ID.Size = new System.Drawing.Size(187, 30);
             this.ID.TabIndex = 113;
             // 
             // TáblaOsztály
@@ -622,10 +629,10 @@ namespace Villamos
             this.TabPage3.Controls.Add(this.Dátumig);
             this.TabPage3.Controls.Add(this.Label8);
             this.TabPage3.Controls.Add(this.Label7);
-            this.TabPage3.Location = new System.Drawing.Point(4, 29);
+            this.TabPage3.Location = new System.Drawing.Point(4, 34);
             this.TabPage3.Name = "TabPage3";
             this.TabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage3.Size = new System.Drawing.Size(1484, 489);
+            this.TabPage3.Size = new System.Drawing.Size(1484, 484);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Biztonsági másolat készítés";
             // 
@@ -648,7 +655,7 @@ namespace Villamos
             this.Label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.Label4.Location = new System.Drawing.Point(8, 82);
             this.Label4.Name = "Label4";
-            this.Label4.Size = new System.Drawing.Size(66, 20);
+            this.Label4.Size = new System.Drawing.Size(81, 25);
             this.Label4.TabIndex = 93;
             this.Label4.Text = "Honnan";
             // 
@@ -656,14 +663,14 @@ namespace Villamos
             // 
             this.Hova.Location = new System.Drawing.Point(137, 125);
             this.Hova.Name = "Hova";
-            this.Hova.Size = new System.Drawing.Size(819, 26);
+            this.Hova.Size = new System.Drawing.Size(819, 30);
             this.Hova.TabIndex = 83;
             // 
             // Honnan
             // 
             this.Honnan.Location = new System.Drawing.Point(137, 79);
             this.Honnan.Name = "Honnan";
-            this.Honnan.Size = new System.Drawing.Size(819, 26);
+            this.Honnan.Size = new System.Drawing.Size(819, 30);
             this.Honnan.TabIndex = 82;
             // 
             // Honnan_rögzít
@@ -695,7 +702,7 @@ namespace Villamos
             this.Dátumtól.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.Dátumtól.Location = new System.Drawing.Point(137, 31);
             this.Dátumtól.Name = "Dátumtól";
-            this.Dátumtól.Size = new System.Drawing.Size(114, 26);
+            this.Dátumtól.Size = new System.Drawing.Size(114, 30);
             this.Dátumtól.TabIndex = 78;
             // 
             // Dátumig
@@ -703,7 +710,7 @@ namespace Villamos
             this.Dátumig.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.Dátumig.Location = new System.Drawing.Point(257, 31);
             this.Dátumig.Name = "Dátumig";
-            this.Dátumig.Size = new System.Drawing.Size(114, 26);
+            this.Dátumig.Size = new System.Drawing.Size(114, 30);
             this.Dátumig.TabIndex = 77;
             // 
             // Label8
@@ -712,7 +719,7 @@ namespace Villamos
             this.Label8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.Label8.Location = new System.Drawing.Point(8, 131);
             this.Label8.Name = "Label8";
-            this.Label8.Size = new System.Drawing.Size(50, 20);
+            this.Label8.Size = new System.Drawing.Size(64, 25);
             this.Label8.TabIndex = 4;
             this.Label8.Text = "Hova:";
             // 
@@ -722,7 +729,7 @@ namespace Villamos
             this.Label7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.Label7.Location = new System.Drawing.Point(8, 37);
             this.Label7.Name = "Label7";
-            this.Label7.Size = new System.Drawing.Size(114, 20);
+            this.Label7.Size = new System.Drawing.Size(142, 25);
             this.Label7.TabIndex = 3;
             this.Label7.Text = "Mettől-meddig:";
             // 
@@ -732,9 +739,9 @@ namespace Villamos
             this.TabPage4.Controls.Add(this.GroupBox3);
             this.TabPage4.Controls.Add(this.GroupBox2);
             this.TabPage4.Controls.Add(this.GroupBox1);
-            this.TabPage4.Location = new System.Drawing.Point(4, 29);
+            this.TabPage4.Location = new System.Drawing.Point(4, 34);
             this.TabPage4.Name = "TabPage4";
-            this.TabPage4.Size = new System.Drawing.Size(1484, 489);
+            this.TabPage4.Size = new System.Drawing.Size(1484, 484);
             this.TabPage4.TabIndex = 3;
             this.TabPage4.Text = "Jármű Takarítás";
             // 
@@ -764,7 +771,7 @@ namespace Villamos
             this.Mátrix_igazság.FormattingEnabled = true;
             this.Mátrix_igazság.Location = new System.Drawing.Point(169, 88);
             this.Mátrix_igazság.Name = "Mátrix_igazság";
-            this.Mátrix_igazság.Size = new System.Drawing.Size(174, 28);
+            this.Mátrix_igazság.Size = new System.Drawing.Size(174, 33);
             this.Mátrix_igazság.TabIndex = 116;
             // 
             // Mátrix_fajtamásik
@@ -772,7 +779,7 @@ namespace Villamos
             this.Mátrix_fajtamásik.FormattingEnabled = true;
             this.Mátrix_fajtamásik.Location = new System.Drawing.Point(169, 56);
             this.Mátrix_fajtamásik.Name = "Mátrix_fajtamásik";
-            this.Mátrix_fajtamásik.Size = new System.Drawing.Size(174, 28);
+            this.Mátrix_fajtamásik.Size = new System.Drawing.Size(174, 33);
             this.Mátrix_fajtamásik.TabIndex = 115;
             // 
             // Mátrix_tábla
@@ -844,7 +851,7 @@ namespace Villamos
             this.Label17.AutoSize = true;
             this.Label17.Location = new System.Drawing.Point(6, 61);
             this.Label17.Name = "Label17";
-            this.Label17.Size = new System.Drawing.Size(161, 20);
+            this.Label17.Size = new System.Drawing.Size(200, 25);
             this.Label17.TabIndex = 14;
             this.Label17.Text = "Takarítási fajta másik:";
             // 
@@ -853,7 +860,7 @@ namespace Villamos
             this.Label18.AutoSize = true;
             this.Label18.Location = new System.Drawing.Point(6, 32);
             this.Label18.Name = "Label18";
-            this.Label18.Size = new System.Drawing.Size(116, 20);
+            this.Label18.Size = new System.Drawing.Size(144, 25);
             this.Label18.TabIndex = 12;
             this.Label18.Text = "Takarítási fajta:";
             // 
@@ -862,7 +869,7 @@ namespace Villamos
             this.Label19.AutoSize = true;
             this.Label19.Location = new System.Drawing.Point(6, 93);
             this.Label19.Name = "Label19";
-            this.Label19.Size = new System.Drawing.Size(70, 20);
+            this.Label19.Size = new System.Drawing.Size(87, 25);
             this.Label19.TabIndex = 11;
             this.Label19.Text = "Igazság:";
             // 
@@ -871,7 +878,7 @@ namespace Villamos
             this.Mátrix_fajta.FormattingEnabled = true;
             this.Mátrix_fajta.Location = new System.Drawing.Point(169, 25);
             this.Mátrix_fajta.Name = "Mátrix_fajta";
-            this.Mátrix_fajta.Size = new System.Drawing.Size(174, 28);
+            this.Mátrix_fajta.Size = new System.Drawing.Size(174, 33);
             this.Mátrix_fajta.TabIndex = 10;
             // 
             // GroupBox2
@@ -949,7 +956,7 @@ namespace Villamos
             // 
             this.Kötbér_Nem.Location = new System.Drawing.Point(167, 58);
             this.Kötbér_Nem.Name = "Kötbér_Nem";
-            this.Kötbér_Nem.Size = new System.Drawing.Size(151, 26);
+            this.Kötbér_Nem.Size = new System.Drawing.Size(151, 30);
             this.Kötbér_Nem.TabIndex = 15;
             // 
             // Button4
@@ -970,7 +977,7 @@ namespace Villamos
             this.Label16.AutoSize = true;
             this.Label16.Location = new System.Drawing.Point(4, 61);
             this.Label16.Name = "Label16";
-            this.Label16.Size = new System.Drawing.Size(166, 20);
+            this.Label16.Size = new System.Drawing.Size(205, 25);
             this.Label16.TabIndex = 14;
             this.Label16.Text = "Nem megfelelő szorzó";
             // 
@@ -978,7 +985,7 @@ namespace Villamos
             // 
             this.Kötbér_pót.Location = new System.Drawing.Point(167, 90);
             this.Kötbér_pót.Name = "Kötbér_pót";
-            this.Kötbér_pót.Size = new System.Drawing.Size(151, 26);
+            this.Kötbér_pót.Size = new System.Drawing.Size(151, 30);
             this.Kötbér_pót.TabIndex = 13;
             // 
             // Label14
@@ -986,7 +993,7 @@ namespace Villamos
             this.Label14.AutoSize = true;
             this.Label14.Location = new System.Drawing.Point(4, 32);
             this.Label14.Name = "Label14";
-            this.Label14.Size = new System.Drawing.Size(116, 20);
+            this.Label14.Size = new System.Drawing.Size(144, 25);
             this.Label14.TabIndex = 12;
             this.Label14.Text = "Takarítási fajta:";
             // 
@@ -995,7 +1002,7 @@ namespace Villamos
             this.LLabel1.AutoSize = true;
             this.LLabel1.Location = new System.Drawing.Point(4, 95);
             this.LLabel1.Name = "LLabel1";
-            this.LLabel1.Size = new System.Drawing.Size(146, 20);
+            this.LLabel1.Size = new System.Drawing.Size(179, 25);
             this.LLabel1.TabIndex = 11;
             this.LLabel1.Text = "Pót határidő szorzó";
             // 
@@ -1004,7 +1011,7 @@ namespace Villamos
             this.Kötbér_takarítási_fajta.FormattingEnabled = true;
             this.Kötbér_takarítási_fajta.Location = new System.Drawing.Point(167, 24);
             this.Kötbér_takarítási_fajta.Name = "Kötbér_takarítási_fajta";
-            this.Kötbér_takarítási_fajta.Size = new System.Drawing.Size(151, 28);
+            this.Kötbér_takarítási_fajta.Size = new System.Drawing.Size(151, 33);
             this.Kötbér_takarítási_fajta.TabIndex = 10;
             // 
             // GroupBox1
@@ -1063,33 +1070,33 @@ namespace Villamos
             // Szűr_Fajta
             // 
             this.Szűr_Fajta.FormattingEnabled = true;
-            this.Szűr_Fajta.Location = new System.Drawing.Point(3, 23);
+            this.Szűr_Fajta.Location = new System.Drawing.Point(3, 28);
             this.Szűr_Fajta.Name = "Szűr_Fajta";
-            this.Szűr_Fajta.Size = new System.Drawing.Size(121, 28);
+            this.Szűr_Fajta.Size = new System.Drawing.Size(121, 33);
             this.Szűr_Fajta.TabIndex = 14;
             // 
             // Szűr_Típus
             // 
             this.Szűr_Típus.FormattingEnabled = true;
-            this.Szűr_Típus.Location = new System.Drawing.Point(130, 23);
+            this.Szűr_Típus.Location = new System.Drawing.Point(153, 28);
             this.Szűr_Típus.Name = "Szűr_Típus";
-            this.Szűr_Típus.Size = new System.Drawing.Size(121, 28);
+            this.Szűr_Típus.Size = new System.Drawing.Size(121, 33);
             this.Szűr_Típus.TabIndex = 13;
             // 
             // Szűr_Napszak
             // 
             this.Szűr_Napszak.FormattingEnabled = true;
-            this.Szűr_Napszak.Location = new System.Drawing.Point(257, 23);
+            this.Szűr_Napszak.Location = new System.Drawing.Point(280, 28);
             this.Szűr_Napszak.Name = "Szűr_Napszak";
-            this.Szűr_Napszak.Size = new System.Drawing.Size(121, 28);
+            this.Szűr_Napszak.Size = new System.Drawing.Size(121, 33);
             this.Szűr_Napszak.TabIndex = 12;
             // 
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(257, 0);
+            this.label22.Location = new System.Drawing.Point(280, 0);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(75, 20);
+            this.label22.Size = new System.Drawing.Size(95, 25);
             this.label22.TabIndex = 7;
             this.label22.Text = "Napszak:";
             // 
@@ -1098,16 +1105,16 @@ namespace Villamos
             this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(3, 0);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(116, 20);
+            this.label21.Size = new System.Drawing.Size(144, 25);
             this.label21.TabIndex = 6;
             this.label21.Text = "Takarítási fajta:";
             // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(130, 0);
+            this.label20.Location = new System.Drawing.Point(153, 0);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(95, 20);
+            this.label20.Size = new System.Drawing.Size(119, 25);
             this.label20.TabIndex = 2;
             this.label20.Text = "Jármű típus:";
             // 
@@ -1116,9 +1123,9 @@ namespace Villamos
             this.Szűr_Érvényes.AutoSize = true;
             this.Szűr_Érvényes.Checked = true;
             this.Szűr_Érvényes.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.Szűr_Érvényes.Location = new System.Drawing.Point(384, 23);
+            this.Szűr_Érvényes.Location = new System.Drawing.Point(407, 28);
             this.Szűr_Érvényes.Name = "Szűr_Érvényes";
-            this.Szűr_Érvényes.Size = new System.Drawing.Size(128, 24);
+            this.Szűr_Érvényes.Size = new System.Drawing.Size(159, 29);
             this.Szűr_Érvényes.TabIndex = 15;
             this.Szűr_Érvényes.Text = "Érvényes árak";
             this.Szűr_Érvényes.UseVisualStyleBackColor = true;
@@ -1262,107 +1269,107 @@ namespace Villamos
             this.Label15.AutoSize = true;
             this.Label15.Location = new System.Drawing.Point(3, 0);
             this.Label15.Name = "Label15";
-            this.Label15.Size = new System.Drawing.Size(76, 20);
+            this.Label15.Size = new System.Drawing.Size(96, 25);
             this.Label15.TabIndex = 114;
             this.Label15.Text = "Sorszám:";
             // 
             // Tak_id
             // 
             this.Tak_id.Enabled = false;
-            this.Tak_id.Location = new System.Drawing.Point(3, 37);
+            this.Tak_id.Location = new System.Drawing.Point(3, 42);
             this.Tak_id.Name = "Tak_id";
-            this.Tak_id.Size = new System.Drawing.Size(121, 26);
+            this.Tak_id.Size = new System.Drawing.Size(121, 30);
             this.Tak_id.TabIndex = 113;
             // 
             // Label10
             // 
             this.Label10.AutoSize = true;
-            this.Label10.Location = new System.Drawing.Point(130, 34);
+            this.Label10.Location = new System.Drawing.Point(130, 39);
             this.Label10.Name = "Label10";
-            this.Label10.Size = new System.Drawing.Size(75, 20);
+            this.Label10.Size = new System.Drawing.Size(95, 25);
             this.Label10.TabIndex = 4;
             this.Label10.Text = "Napszak:";
             // 
             // Label6
             // 
             this.Label6.AutoSize = true;
-            this.Label6.Location = new System.Drawing.Point(130, 68);
+            this.Label6.Location = new System.Drawing.Point(130, 78);
             this.Label6.Name = "Label6";
-            this.Label6.Size = new System.Drawing.Size(139, 20);
+            this.Label6.Size = new System.Drawing.Size(174, 25);
             this.Label6.TabIndex = 2;
             this.Label6.Text = "Érvényes kezdete:";
             // 
             // Tak_J_típus
             // 
             this.Tak_J_típus.FormattingEnabled = true;
-            this.Tak_J_típus.Location = new System.Drawing.Point(275, 3);
+            this.Tak_J_típus.Location = new System.Drawing.Point(310, 3);
             this.Tak_J_típus.Name = "Tak_J_típus";
-            this.Tak_J_típus.Size = new System.Drawing.Size(121, 28);
+            this.Tak_J_típus.Size = new System.Drawing.Size(121, 33);
             this.Tak_J_típus.TabIndex = 11;
             // 
             // Tak_Napszak
             // 
             this.Tak_Napszak.FormattingEnabled = true;
-            this.Tak_Napszak.Location = new System.Drawing.Point(275, 37);
+            this.Tak_Napszak.Location = new System.Drawing.Point(310, 42);
             this.Tak_Napszak.Name = "Tak_Napszak";
-            this.Tak_Napszak.Size = new System.Drawing.Size(121, 28);
+            this.Tak_Napszak.Size = new System.Drawing.Size(121, 33);
             this.Tak_Napszak.TabIndex = 10;
             // 
             // Tak_Érv_k
             // 
             this.Tak_Érv_k.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Tak_Érv_k.Location = new System.Drawing.Point(275, 71);
+            this.Tak_Érv_k.Location = new System.Drawing.Point(310, 81);
             this.Tak_Érv_k.Name = "Tak_Érv_k";
-            this.Tak_Érv_k.Size = new System.Drawing.Size(121, 26);
+            this.Tak_Érv_k.Size = new System.Drawing.Size(121, 30);
             this.Tak_Érv_k.TabIndex = 7;
             // 
             // Tak_érv_V
             // 
             this.Tak_érv_V.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Tak_érv_V.Location = new System.Drawing.Point(524, 71);
+            this.Tak_érv_V.Location = new System.Drawing.Point(591, 81);
             this.Tak_érv_V.Name = "Tak_érv_V";
-            this.Tak_érv_V.Size = new System.Drawing.Size(121, 26);
+            this.Tak_érv_V.Size = new System.Drawing.Size(121, 30);
             this.Tak_érv_V.TabIndex = 8;
             // 
             // Tak_Ár
             // 
-            this.Tak_Ár.Location = new System.Drawing.Point(524, 37);
+            this.Tak_Ár.Location = new System.Drawing.Point(591, 42);
             this.Tak_Ár.Name = "Tak_Ár";
-            this.Tak_Ár.Size = new System.Drawing.Size(121, 26);
+            this.Tak_Ár.Size = new System.Drawing.Size(121, 30);
             this.Tak_Ár.TabIndex = 9;
             // 
             // Label11
             // 
             this.Label11.AutoSize = true;
-            this.Label11.Location = new System.Drawing.Point(402, 0);
+            this.Label11.Location = new System.Drawing.Point(437, 0);
             this.Label11.Name = "Label11";
-            this.Label11.Size = new System.Drawing.Size(116, 20);
+            this.Label11.Size = new System.Drawing.Size(144, 25);
             this.Label11.TabIndex = 5;
             this.Label11.Text = "Takarítási fajta:";
             // 
             // Label9
             // 
             this.Label9.AutoSize = true;
-            this.Label9.Location = new System.Drawing.Point(402, 34);
+            this.Label9.Location = new System.Drawing.Point(437, 39);
             this.Label9.Name = "Label9";
-            this.Label9.Size = new System.Drawing.Size(29, 20);
+            this.Label9.Size = new System.Drawing.Size(38, 25);
             this.Label9.TabIndex = 3;
             this.Label9.Text = "Ár:";
             // 
             // Tak_J_takarítási_fajta
             // 
             this.Tak_J_takarítási_fajta.FormattingEnabled = true;
-            this.Tak_J_takarítási_fajta.Location = new System.Drawing.Point(524, 3);
+            this.Tak_J_takarítási_fajta.Location = new System.Drawing.Point(591, 3);
             this.Tak_J_takarítási_fajta.Name = "Tak_J_takarítási_fajta";
-            this.Tak_J_takarítási_fajta.Size = new System.Drawing.Size(121, 28);
+            this.Tak_J_takarítási_fajta.Size = new System.Drawing.Size(121, 33);
             this.Tak_J_takarítási_fajta.TabIndex = 0;
             // 
             // Label12
             // 
             this.Label12.AutoSize = true;
-            this.Label12.Location = new System.Drawing.Point(402, 68);
+            this.Label12.Location = new System.Drawing.Point(437, 78);
             this.Label12.Name = "Label12";
-            this.Label12.Size = new System.Drawing.Size(116, 20);
+            this.Label12.Size = new System.Drawing.Size(148, 25);
             this.Label12.TabIndex = 6;
             this.Label12.Text = "Érvényes vége:";
             // 
@@ -1371,7 +1378,7 @@ namespace Villamos
             this.Label5.AutoSize = true;
             this.Label5.Location = new System.Drawing.Point(130, 0);
             this.Label5.Name = "Label5";
-            this.Label5.Size = new System.Drawing.Size(95, 20);
+            this.Label5.Size = new System.Drawing.Size(119, 25);
             this.Label5.TabIndex = 1;
             this.Label5.Text = "Jármű típus:";
             // 
@@ -1415,6 +1422,47 @@ namespace Villamos
             this.Tak_Ár_Tábla.TabIndex = 112;
             this.Tak_Ár_Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tak_Ár_Tábla_CellClick);
             // 
+            // tabPage5
+            // 
+            this.tabPage5.BackColor = System.Drawing.Color.SeaShell;
+            this.tabPage5.Controls.Add(this.tableLayoutPanel5);
+            this.tabPage5.Location = new System.Drawing.Point(4, 34);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(1484, 484);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "E-mail címek";
+            // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.ColumnCount = 1;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel5.Controls.Add(this.email_tabla, 0, 0);
+            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 1;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(1478, 478);
+            this.tableLayoutPanel5.TabIndex = 1;
+            // 
+            // email_tabla
+            // 
+            this.email_tabla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.email_tabla.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.email_tabla.FilterAndSortEnabled = true;
+            this.email_tabla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.email_tabla.Location = new System.Drawing.Point(3, 3);
+            this.email_tabla.MaxFilterButtonImageHeight = 23;
+            this.email_tabla.Name = "email_tabla";
+            this.email_tabla.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.email_tabla.RowHeadersWidth = 51;
+            this.email_tabla.RowTemplate.Height = 24;
+            this.email_tabla.Size = new System.Drawing.Size(1472, 472);
+            this.email_tabla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.email_tabla.TabIndex = 0;
+            // 
             // Button13
             // 
             this.Button13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -1444,7 +1492,7 @@ namespace Villamos
             // 
             // Ablak_alap_program_egyéb
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Highlight;
             this.ClientSize = new System.Drawing.Size(1499, 584);
@@ -1485,6 +1533,9 @@ namespace Villamos
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tak_Ár_Tábla)).EndInit();
+            this.tabPage5.ResumeLayout(false);
+            this.tableLayoutPanel5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.email_tabla)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1590,5 +1641,8 @@ namespace Villamos
         internal Button SAPTöröl;
         internal Button SAPExcel;
         internal Button SAPFrissít;
+        internal TabPage tabPage5;
+        private TableLayoutPanel tableLayoutPanel5;
+        private Zuby.ADGV.AdvancedDataGridView email_tabla;
     }                    
 }

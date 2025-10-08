@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
@@ -29,14 +31,16 @@ namespace Villamos
 
 
         private string directoryTargetLocation; // Selected file path
-        private string Destinydirectory; // Selected dest directory path
+        private string Destinydirectory; // Selected dest directory path        
 
         readonly DataTable AdatÁRTábla = new DataTable();
+        readonly DataTable EmailAdatTábla = new DataTable();
 
         public Ablak_alap_program_egyéb()
         {
             InitializeComponent();
             Start();
+            Start_Email();
         }
 
         private void AblakProgramegyéb_Load(object sender, EventArgs e)
@@ -1922,7 +1926,47 @@ namespace Villamos
 
         #endregion
 
+        #region E-mail cím lapfül
+        private void Start_Email()
+        {
+            Fejlec();
+            Tablalista_kiírás();
+        }
+        private void Tablalista_kiírás()
+        {
+            ABFeltöltése();
+            email_tabla.CleanFilterAndSort();
+            email_tabla.DataSource = EmailAdatTábla;
+            OszlopSzélesség();
+            email_tabla.Refresh();
+            email_tabla.Visible = true;
+            email_tabla.ClearSelection();
+        }
+        private void Fejlec()
+        {
+            EmailAdatTábla.Columns.Clear();
+            EmailAdatTábla.Columns.Add("E-mail cím");            
+        }
 
+        private void ABFeltöltése()
+        {
+            EmailAdatTábla.Clear();            
+
+            foreach (string cim in Kezelő_Kiegészítő_Email.ÖsszesEmailCím.Split(';'))
+            {
+                DataRow Soradat = EmailAdatTábla.NewRow();
+
+                Soradat["E-mail cím"] = cim;          
+                EmailAdatTábla.Rows.Add(Soradat);
+            }
+        }
+
+        private void OszlopSzélesség()
+        {
+            email_tabla.Columns["E-mail cím"].Width = 200;
+        }
+
+        #endregion
         private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
