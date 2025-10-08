@@ -78,6 +78,7 @@
             this.cmb_korabbi_evek.Name = "cmb_korabbi_evek";
             this.cmb_korabbi_evek.Size = new System.Drawing.Size(140, 24);
             this.cmb_korabbi_evek.TabIndex = 1;
+            this.cmb_korabbi_evek.SelectionChangeCommitted += new System.EventHandler(this.cmb_korabbi_evek_SelectionChangeCommitted);
             // 
             // Ablak_Hibanaplo
             // 

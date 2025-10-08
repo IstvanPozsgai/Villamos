@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
@@ -16,11 +17,16 @@ namespace Villamos
     {
 
         readonly DataTable AdatTábla = new DataTable();
-        
+
         public Ablak_Hibanaplo()
         {
             InitializeComponent();
-            Start();               
+
+            int ev = DateTime.Now.Year;
+            cmb_korabbi_evek.Items.AddRange(new object[] { ev, ev - 1 });
+            cmb_korabbi_evek.SelectedItem = ev;
+
+            Start();
         }
 
         private void Ablak_Hibanaplo_Load(object sender, EventArgs e)
@@ -63,26 +69,32 @@ namespace Villamos
 
         private void ABFeltöltése()
         {
-            // A CSV ANSI kódolásban van, a 1250-es ANSI kódolás tartalmaz ékezeteket.
-            string[] betoltott_log = File.ReadAllLines($@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba2025.csv", Encoding.GetEncoding(1250));
+            int valasztottEv = (int)cmb_korabbi_evek.SelectedItem;
+
+            // Az evesLogFajltBetolt metódus használata
+            string[] betoltott_log = evesLogFajltBetolt(valasztottEv);
 
             AdatTábla.Clear();
+
             foreach (string sor in betoltott_log.Skip(1))
             {
                 // Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum
                 DataRow Soradat = AdatTábla.NewRow();
-                Soradat["Dátum"] = sor.Split(';')[0].Split(' ')[0];
-                Soradat["Idő"] = sor.Split(';')[0].Split(' ')[1];
-                Soradat["Telephely"] = sor.Split(';')[1];
-                Soradat["Felhasználó"] = sor.Split(';')[2];
-                Soradat["Hiba üzenet"] = sor.Split(';')[3];
-                Soradat["Hiba osztály"] = sor.Split(';')[4];
-                Soradat["Hiba metódus"] = sor.Split(';')[5];
-                Soradat["Névtér"] = sor.Split(';')[6];
-                Soradat["Egyéb"] = sor.Split(';')[7];
+                string[] mezok = sor.Split(';');
+
+                Soradat["Dátum"] = mezok[0].Split(' ')[0];
+                Soradat["Idő"] = mezok[0].Split(' ')[1];
+                Soradat["Telephely"] = mezok[1];
+                Soradat["Felhasználó"] = mezok[2];
+                Soradat["Hiba üzenet"] = mezok[3];
+                Soradat["Hiba osztály"] = mezok[4];
+                Soradat["Hiba metódus"] = mezok[5];
+                Soradat["Névtér"] = mezok[6];
+                Soradat["Egyéb"] = mezok[7];
                 AdatTábla.Rows.Add(Soradat);
-            }                      
+            }
         }
+
 
         private void OszlopSzélesség()
         {
@@ -96,5 +108,25 @@ namespace Villamos
             Hibanaplo_Tablazat.Columns["Névtér"].Width = 70;
             Hibanaplo_Tablazat.Columns["Egyéb"].Width = 40;
         }
+
+        private string[] evesLogFajltBetolt(int ev)
+        {
+            string fajlUtvonal;
+            if (ev == DateTime.Now.Year)
+            {
+                fajlUtvonal = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba{ev}.csv";
+            }
+            else
+            {
+                fajlUtvonal = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{ev}\hiba{ev}.csv";
+            }
+            return File.ReadAllLines(fajlUtvonal, Encoding.GetEncoding(1250));
+        }
+
+        private void cmb_korabbi_evek_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            Tablalista_kiírás();
+        }
+
     }
 }
