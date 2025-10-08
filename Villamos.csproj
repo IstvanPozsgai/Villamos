@@ -849,6 +849,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Tengely.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Terjesztés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Tevékenység.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Email.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szabadságok.cs" />
     <Compile Include="V_Kezelők\Kezelő_MEO_KerékMérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oldalok.cs" />

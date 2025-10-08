@@ -10,6 +10,7 @@ using Villamos.Ablakok;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Ablakok._0_Bejelentkezés;
+using Villamos.V_Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP;
@@ -42,7 +43,7 @@ namespace Villamos
         readonly Kezelő_Jármű_Napló KézNapló = new Kezelő_Jármű_Napló();
         readonly Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();
         readonly Kezelő_Belépés_Jogosultságtábla Kéz_Jogosultság = new Kezelő_Belépés_Jogosultságtábla();
-
+        readonly Kezelő_Kiegészítő_Email KézEmail = new Kezelő_Kiegészítő_Email();
 
         List<Adat_Belépés_Verzió> AdatokVerzó = new List<Adat_Belépés_Verzió>();
         List<Adat_Kiegészítő_Könyvtár> AdatokKönyvtár = new List<Adat_Kiegészítő_Könyvtár>();
@@ -53,6 +54,8 @@ namespace Villamos
         {
             InitializeComponent();
             Start();
+            // E-mail címek beolvasása hibakezeléshez.
+            KézEmail.Email_Cimek();
         }
 
         [DllImport("user32")]

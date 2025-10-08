@@ -4,6 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using Villamos.V_Kezelők;
 using MyF = Függvénygyűjtemény;
 using MyO = Microsoft.Office.Interop.Outlook;
 
@@ -108,7 +109,7 @@ namespace Villamos
                 MyO._Application _app = new MyO.Application();
                 MyO.MailItem mail = (MyO.MailItem)_app.CreateItem(MyO.OlItemType.olMailItem);
                 // címzett
-                mail.To = "pozsgaii@bkv.hu;papr@bkv.hu";
+                mail.To = $"{Kezelő_Kiegészítő_Email.ÖsszesEmailCím}";
                 // üzenet tárgya
                 mail.Subject = $"Hibanapló {DateTime.Now:yyyyMMddHHmmss}";
                 mail.Body = hiba;
