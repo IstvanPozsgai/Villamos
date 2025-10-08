@@ -1933,6 +1933,7 @@ namespace Villamos
             Fejlec();
             Tablalista_kiírás();
         }
+
         private void Tablalista_kiírás()
         {
             ABFeltöltése();
@@ -1943,21 +1944,26 @@ namespace Villamos
             email_tabla.Visible = true;
             email_tabla.ClearSelection();
         }
+
         private void Fejlec()
         {
             EmailAdatTábla.Columns.Clear();
-            EmailAdatTábla.Columns.Add("E-mail cím");            
+            EmailAdatTábla.Columns.Add("E-mail cím");
         }
+
         private void ABFeltöltése()
         {
             EmailAdatTábla.Clear();
 
-            // Force reload az adatbázisból, hogy ne a statikus címeket töltse be.
+            // Force reload az adatbázisból a statikus tér miatt.
             foreach (string cim in KézEmail.Email_Cimek(true).Split(';'))
             {
-                DataRow Soradat = EmailAdatTábla.NewRow();
-                Soradat["E-mail cím"] = cim;
-                EmailAdatTábla.Rows.Add(Soradat);
+                if (!string.IsNullOrWhiteSpace(cim))
+                {
+                    DataRow Soradat = EmailAdatTábla.NewRow();
+                    Soradat["E-mail cím"] = cim.Trim();
+                    EmailAdatTábla.Rows.Add(Soradat);
+                }
             }
         }
 
@@ -1966,6 +1972,7 @@ namespace Villamos
             email_tabla.Columns["E-mail cím"].Width = 200;
         }
 
+        // Új cím vagy módosítás kezelése
         private void email_tabla_RowValidated(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -1974,17 +1981,51 @@ namespace Villamos
             string ujCim = sor.Cells["E-mail cím"].Value?.ToString()?.Trim();
             if (string.IsNullOrEmpty(ujCim)) return;
 
-            var lista = KézEmail.Email_Cimek(true).Split(';');
-            if (!lista.Contains(ujCim))
-            {
-                var kezelo = new Kezelő_Kiegészítő_Email();
-                kezelo.Rögzítés(ujCim);
+            string eredetiCim = sor.Tag as string;
 
-                // grid frissítése
-                ABFeltöltése();
-                email_tabla.DataSource = EmailAdatTábla;
-                email_tabla.Refresh();
+            // Force reload és lista előkészítése
+            List<string> lista = KézEmail.Email_Cimek(true)
+                .Split(';')
+                .Select(a => a.Trim())
+                .Where(a => a != eredetiCim) // saját sor értékét kihagyjuk
+                .ToList();
+
+            if (string.IsNullOrEmpty(eredetiCim))
+            {
+                // Új cím hozzáadása
+                if (!lista.Contains(ujCim))
+                {
+                    KézEmail.Rögzítés(ujCim);
+                }
+                else
+                {
+                    sor.Cells["E-mail cím"].Value = null;
+                }
             }
+            else
+            {
+                // Módosítás
+                if (eredetiCim != ujCim)
+                {
+                    if (!lista.Contains(ujCim))
+                    {
+                        KézEmail.Módosít(eredetiCim, ujCim);
+                    }
+                    else
+                    {
+                        sor.Cells["E-mail cím"].Value = eredetiCim;
+                    }
+                }
+            }
+
+            // Force reload a statikus listára
+            Kezelő_Kiegészítő_Email.ÖsszesEmailCím = string.Empty;
+            KézEmail.Email_Cimek(true);
+
+            // Grid frissítése
+            ABFeltöltése();
+            email_tabla.DataSource = EmailAdatTábla;
+            email_tabla.Refresh();
         }
 
         private void email_tabla_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
@@ -1996,6 +2037,11 @@ namespace Villamos
             try
             {
                 KézEmail.Törlés(cim);
+
+                // Force reload statikus listára
+                Kezelő_Kiegészítő_Email.ÖsszesEmailCím = string.Empty;
+                KézEmail.Email_Cimek(true);
+
             }
             catch (Exception ex)
             {
@@ -2003,6 +2049,14 @@ namespace Villamos
                 e.Cancel = true; // ha hiba van, nem törli a sor a gridből
             }
         }
+
+        // Eredeti érték mentése szerkesztés előtt
+        private void email_tabla_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            var sor = email_tabla.Rows[e.RowIndex];
+            sor.Tag = sor.Cells["E-mail cím"].Value?.ToString();
+        }
+
         #endregion
         private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
         {

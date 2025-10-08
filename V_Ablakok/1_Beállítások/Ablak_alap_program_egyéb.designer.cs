@@ -1462,6 +1462,7 @@ namespace Villamos
             this.email_tabla.Size = new System.Drawing.Size(1472, 472);
             this.email_tabla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.email_tabla.TabIndex = 0;
+            this.email_tabla.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.email_tabla_CellBeginEdit);
             this.email_tabla.RowValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.email_tabla_RowValidated);
             this.email_tabla.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.email_tabla_UserDeletingRow);
             // 

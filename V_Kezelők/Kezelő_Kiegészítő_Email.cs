@@ -15,7 +15,7 @@ namespace Villamos.V_Kezelők
         string táblanév = "hibanaplo_email";
         
         // Statikusan tárolom, hogy csak egyszer kelljen betölteni a címeket.
-        public static string ÖsszesEmailCím { get; private set; } = string.Empty;
+        public static string ÖsszesEmailCím { get; set; } = string.Empty;
 
         public string Email_Cimek(bool forceReload = false)
         {
@@ -74,6 +74,24 @@ namespace Villamos.V_Kezelők
             {
                 string szöveg = $"DELETE FROM {táblanév} WHERE cim='{cim}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosít(string régiCim, string újCim)
+        {
+            try
+            {
+                string szöveg = $"UPDATE {táblanév} SET cim='{újCim}' WHERE cim='{régiCim}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
