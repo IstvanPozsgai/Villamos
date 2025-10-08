@@ -1,4 +1,4 @@
-﻿namespace Villamos.V_MindenEgyéb
+﻿namespace Villamos
 {
     partial class Ablak_Hibanaplo
     {

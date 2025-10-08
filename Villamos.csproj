@@ -1345,10 +1345,10 @@
     <Compile Include="V_Kezelők\Kezelő_Üzenet_Olvas.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF_Szinezés.cs" />
     <Compile Include="V_MindenEgyéb\AblakokGombok.cs" />
-    <Compile Include="V_MindenEgyéb\Ablak_Hibanaplo.cs">
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_Hibanaplo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_MindenEgyéb\Ablak_Hibanaplo.Designer.cs">
+    <Compile Include="V_Ablakok\1_Beállítások\Ablak_Hibanaplo.Designer.cs">
       <DependentUpon>Ablak_Hibanaplo.cs</DependentUpon>
     </Compile>
     <Compile Include="V_MindenEgyéb\AccessDatabaseHelper.cs" />
@@ -1791,7 +1791,7 @@
     <EmbeddedResource Include="V_Ablakok\2_Információ\Ablak_Utasítás_Generálás.resx">
       <DependentUpon>Ablak_Utasítás_Generálás.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_MindenEgyéb\Ablak_Hibanaplo.resx">
+    <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_Hibanaplo.resx">
       <DependentUpon>Ablak_Hibanaplo.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />

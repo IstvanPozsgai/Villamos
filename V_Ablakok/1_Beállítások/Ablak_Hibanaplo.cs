@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
 
-namespace Villamos.V_MindenEgyéb
+namespace Villamos
 {
     public partial class Ablak_Hibanaplo : Form
     {
