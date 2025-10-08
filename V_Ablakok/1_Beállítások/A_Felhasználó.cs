@@ -613,7 +613,8 @@ namespace Villamos
                 menünév[16] = "Technológiai adatok";
                 menüleírás[16] = " 1- Adatok szerkesztésén rögzítési gombok, 2- Beállítási lapon rögzítési gombok, 3-Jármű altípusok beállítása";
                 //17
-                // 18
+                menünév[18] = "Hibanapló";
+                menüleírás[18] = " 1- Hibanapló megtekintése, 2- , 3- ";
                 // 19
                 menünév[20] = "Menetkimaradás kezelés";
                 menüleírás[20] = " 1- SAP Adatok feltöltése, 2- Adatok kézi módosítása, 3-Főmérnökségi megjelenítés";
