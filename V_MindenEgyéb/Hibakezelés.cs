@@ -54,7 +54,7 @@ namespace Villamos
             szöveg += " -----------------------------------------------------------------------\n";
 
             // E-mail küldés
-            Email(Képernyőfájl, szöveg);
+            Email(Képernyőfájl, szöveg, HibaKód);
 
             string hely = $@"{Application.StartupPath}\főmérnökség\adatok\hibanapló\hiba{DateTime.Today:yyyyMMdd}.log";
             File.AppendAllText(hely, szöveg);
@@ -102,9 +102,9 @@ namespace Villamos
             return Válasz;
         }
 
-        private static void Email(string hely, string hiba)
+        private static void Email(string hely, string hiba, int hibakod)
         {
-            if (!hiba.Contains("0x800AC472"))
+            if (hibakod!=-2146777998)
             {
                 MyO._Application _app = new MyO.Application();
                 MyO.MailItem mail = (MyO.MailItem)_app.CreateItem(MyO.OlItemType.olMailItem);
