@@ -100,7 +100,7 @@ namespace Villamos
                 if (panels2.Text.Substring(17, 1) == "0")
                     HibanaploMenu.Enabled = false;
                 else
-                    járműTechnológiákToolStripMenuItem.Enabled = true;
+                    HibanaploMenu.Enabled = true;
                 if (panels2.Text.Substring(19, 1) == "0")
                     MenetkimaradásMenü.Enabled = false;
                 else

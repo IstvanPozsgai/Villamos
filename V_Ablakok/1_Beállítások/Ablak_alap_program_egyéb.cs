@@ -27,6 +27,7 @@ namespace Villamos
         readonly Kezelő_Jármű_Állomány_Típus KézÁllományTípus = new Kezelő_Jármű_Állomány_Típus();
         readonly Kezelő_Jármű_Takarítás_Mátrix KétJárműtakMátr = new Kezelő_Jármű_Takarítás_Mátrix();
         readonly Kezelő_Kiegészítő_Sérülés KézSérülés = new Kezelő_Kiegészítő_Sérülés();
+        readonly Kezelő_Kiegészítő_Email KézEmail = new Kezelő_Kiegészítő_Email();
         #endregion
 
 
@@ -1947,16 +1948,15 @@ namespace Villamos
             EmailAdatTábla.Columns.Clear();
             EmailAdatTábla.Columns.Add("E-mail cím");            
         }
-
         private void ABFeltöltése()
         {
-            EmailAdatTábla.Clear();            
+            EmailAdatTábla.Clear();
 
-            foreach (string cim in Kezelő_Kiegészítő_Email.ÖsszesEmailCím.Split(';'))
+            // Force reload az adatbázisból, hogy ne a statikus címeket töltse be.
+            foreach (string cim in KézEmail.Email_Cimek(true).Split(';'))
             {
                 DataRow Soradat = EmailAdatTábla.NewRow();
-
-                Soradat["E-mail cím"] = cim;          
+                Soradat["E-mail cím"] = cim;
                 EmailAdatTábla.Rows.Add(Soradat);
             }
         }
@@ -1966,6 +1966,43 @@ namespace Villamos
             email_tabla.Columns["E-mail cím"].Width = 200;
         }
 
+        private void email_tabla_RowValidated(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            DataGridViewRow sor = email_tabla.Rows[e.RowIndex];
+            string ujCim = sor.Cells["E-mail cím"].Value?.ToString()?.Trim();
+            if (string.IsNullOrEmpty(ujCim)) return;
+
+            var lista = KézEmail.Email_Cimek(true).Split(';');
+            if (!lista.Contains(ujCim))
+            {
+                var kezelo = new Kezelő_Kiegészítő_Email();
+                kezelo.Rögzítés(ujCim);
+
+                // grid frissítése
+                ABFeltöltése();
+                email_tabla.DataSource = EmailAdatTábla;
+                email_tabla.Refresh();
+            }
+        }
+
+        private void email_tabla_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            var row = e.Row;
+            string cim = row.Cells["E-mail cím"].Value?.ToString();
+            if (string.IsNullOrEmpty(cim)) return;
+
+            try
+            {
+                KézEmail.Törlés(cim);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hiba az e-mail törlésekor: {ex.Message}", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                e.Cancel = true; // ha hiba van, nem törli a sor a gridből
+            }
+        }
         #endregion
         private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
         {

@@ -17,10 +17,9 @@ namespace Villamos.V_Kezelők
         // Statikusan tárolom, hogy csak egyszer kelljen betölteni a címeket.
         public static string ÖsszesEmailCím { get; private set; } = string.Empty;
 
-        public string Email_Cimek()
+        public string Email_Cimek(bool forceReload = false)
         {
-            // Ha már betöltésre került legalább egyszer, nem olvassa be újra.
-            if (!string.IsNullOrEmpty(ÖsszesEmailCím))
+            if (!string.IsNullOrEmpty(ÖsszesEmailCím) && !forceReload)
                 return ÖsszesEmailCím;
 
             List<string> adatok = new List<string>();
@@ -55,8 +54,7 @@ namespace Villamos.V_Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO {táblanév} (cim) VALUES (";
-                szöveg += $"{cim}) ";
+                string szöveg = $"INSERT INTO {táblanév} (cim) VALUES ('{cim}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
