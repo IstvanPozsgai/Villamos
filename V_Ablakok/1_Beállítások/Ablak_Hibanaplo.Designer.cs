@@ -33,6 +33,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Hibanaplo));
             this.Hibanaplo_Tablazat = new Zuby.ADGV.AdvancedDataGridView();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.btn_rejtett_joghoz = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Hibanaplo_Tablazat)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -78,14 +79,23 @@
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.Hibanaplo_Tablazat, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.btn_rejtett_joghoz, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 0F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 450);
             this.tableLayoutPanel1.TabIndex = 1;
+            // 
+            // btn_rejtett_joghoz
+            // 
+            this.btn_rejtett_joghoz.Location = new System.Drawing.Point(3, 3);
+            this.btn_rejtett_joghoz.Name = "btn_rejtett_joghoz";
+            this.btn_rejtett_joghoz.Size = new System.Drawing.Size(75, 1);
+            this.btn_rejtett_joghoz.TabIndex = 1;
+            this.btn_rejtett_joghoz.UseVisualStyleBackColor = true;
             // 
             // Ablak_Hibanaplo
             // 
@@ -107,5 +117,6 @@
 
         private Zuby.ADGV.AdvancedDataGridView Hibanaplo_Tablazat;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Button btn_rejtett_joghoz;
     }
 }
