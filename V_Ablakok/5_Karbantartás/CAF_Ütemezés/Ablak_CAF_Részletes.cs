@@ -233,10 +233,13 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                 Ütem_Köv_Számláló.ReadOnly = Ütem_Köv_Státus.SelectedItem.ToString() != "6- Elvégzett";
 
-                if ((int.Parse(Ütem_számláló.Text) > int.Parse(Ütem_Köv_Számláló.Text) || int.Parse(Ütem_számláló.Text) == 0) && Ütem_státus.SelectedItem.ToString() == "6- Elvégzett")
+                if (Adat != null)
                 {
-                    Ütem_Köv_Számláló.BackColor = Color.LightPink;
-                }
+                    if ((int.Parse(Ütem_számláló.Text) > int.Parse(Ütem_Köv_Számláló.Text) || int.Parse(Ütem_számláló.Text) == 0) && Ütem_státus.SelectedItem.ToString() == "6- Elvégzett")
+                    {
+                        Ütem_Köv_Számláló.BackColor = Color.LightPink;
+                    }
+                }                
                 KiirPvizsgalat();
             }
             catch (HibásBevittAdat ex)
