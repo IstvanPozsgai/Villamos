@@ -40,7 +40,7 @@ namespace Villamos
             ABFeltöltése();
             Hibanaplo_Tablazat.CleanFilterAndSort();
             Hibanaplo_Tablazat.DataSource = AdatTábla;
-            Hibanaplo_Tablazat.Sort(Hibanaplo_Tablazat.Columns["Dátum"], ListSortDirection.Descending);
+            Hibanaplo_Tablazat.Sort(Hibanaplo_Tablazat.Columns["TeljesIdő"], ListSortDirection.Descending);
             OszlopSzélesség();
             Hibanaplo_Tablazat.Refresh();
             Hibanaplo_Tablazat.Visible = true;
@@ -60,6 +60,7 @@ namespace Villamos
             AdatTábla.Columns.Add("Hiba metódus");
             AdatTábla.Columns.Add("Névtér");
             AdatTábla.Columns.Add("Egyéb");
+            AdatTábla.Columns.Add("TeljesIdő");
         }
 
         private void ABFeltöltése()
@@ -106,7 +107,7 @@ namespace Villamos
                 // Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum
                 DataRow Soradat = AdatTábla.NewRow();
                 string[] mezok = sor.Split(';');
-
+                
                 Soradat["Dátum"] = mezok[0].Split(' ')[0];
                 Soradat["Idő"] = mezok[0].Split(' ')[1];
                 Soradat["Telephely"] = mezok[1];
@@ -116,6 +117,7 @@ namespace Villamos
                 Soradat["Hiba metódus"] = mezok[5];
                 Soradat["Névtér"] = mezok[6];
                 Soradat["Egyéb"] = mezok[7];
+                Soradat["TeljesIdő"] = mezok[0];
                 AdatTábla.Rows.Add(Soradat);
             }
         }
@@ -124,14 +126,16 @@ namespace Villamos
         private void OszlopSzélesség()
         {
             Hibanaplo_Tablazat.Columns["Dátum"].Width = 100;
-            Hibanaplo_Tablazat.Columns["Idő"].Width = 50;
-            Hibanaplo_Tablazat.Columns["Telephely"].Width = 90;
-            Hibanaplo_Tablazat.Columns["Felhasználó"].Width = 70;
+            Hibanaplo_Tablazat.Columns["Idő"].Width = 85;
+            Hibanaplo_Tablazat.Columns["Telephely"].Width = 130;
+            Hibanaplo_Tablazat.Columns["Felhasználó"].Width = 115;
             Hibanaplo_Tablazat.Columns["Hiba üzenet"].Width = 450;
             Hibanaplo_Tablazat.Columns["Hiba osztály"].Width = 300;
             Hibanaplo_Tablazat.Columns["Hiba metódus"].Width = 300;
             Hibanaplo_Tablazat.Columns["Névtér"].Width = 70;
             Hibanaplo_Tablazat.Columns["Egyéb"].Width = 40;
+
+            Hibanaplo_Tablazat.Columns["TeljesIdő"].Visible = false;
         }
 
         private string[] evesLogFajltBetolt(int ev)
