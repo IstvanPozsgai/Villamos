@@ -1475,7 +1475,7 @@ namespace Villamos
                       MyF.Szöveg_Tisztítás(Kiazonosító.Text.Trim(), 0, 18),
                       KiHonnanRaktár.Text.Trim(),
                       KiHovaRaktár.Text.Trim(),
-                      készletki,
+                      mennyiségki,
                       KiFelhasználás.Text.Trim(),
                       Program.PostásNév.Trim(),
                       DateTime.Now,
