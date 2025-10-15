@@ -288,13 +288,13 @@ namespace Villamos
                         Kiír_Futásadatok();
                         break;
                     }
-                case 4:
+                case 3:
                     {
 
                         Kiirjaatörténelmet();
                         break;
                     }
-                case 5:
+                case 4:
                     {
 
                         Kiirjaatörténelmet();
@@ -326,17 +326,12 @@ namespace Villamos
                         Combofeltöltés();
                         break;
                     }
-
                 case 3:
-                    {
-                        break;
-                    }
-                case 4:
                     {
                         Kiirjaatörténelmet();
                         break;
                     }
-                case 5:
+                case 4:
                     {
 
                         Pszlista();
