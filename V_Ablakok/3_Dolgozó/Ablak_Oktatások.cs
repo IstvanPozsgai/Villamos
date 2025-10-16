@@ -27,7 +27,6 @@ namespace Villamos
         readonly Kezelő_OktatásiSegéd KézSegéd = new Kezelő_OktatásiSegéd();
         readonly Kezelő_Kiegészítő_Jelenlétiív KézJelenléti = new Kezelő_Kiegészítő_Jelenlétiív();
 
-        List<Adat_Oktatás_Napló> Adatok_Okt_Nap = new List<Adat_Oktatás_Napló>();
         List<Adat_Oktatásrajelöltek> Adatok_OktJelölt = new List<Adat_Oktatásrajelöltek>();
 
         #endregion
@@ -194,7 +193,7 @@ namespace Villamos
             TörölKötelezés.Enabled = false;
             BtnJelenléti.Enabled = false;
             BtnAdminMentés.Enabled = false;
-            BtnEmailKüldés.Enabled = false;
+         
             BtnPDFsave.Enabled = false;
             BtnNaplózásEredményTöröl.Enabled = false;
 
@@ -213,7 +212,7 @@ namespace Villamos
             {
                 BtnJelenléti.Enabled = true;
                 BtnAdminMentés.Enabled = true;
-                BtnEmailKüldés.Enabled = true;
+
             }
 
             melyikelem = 65;
@@ -409,8 +408,8 @@ namespace Villamos
             Fülek.Top = TáblaOktatás.Height + TáblaOktatás.Top + 10;
             Fülek.Height = 220;
             BtnPdfNyit.Visible = true;
-            Button10.Visible = true;
-            Button9.Visible = false;
+            AdminFel.Visible = true;
+            AdminLe.Visible = false;
         }
 
         private void Tárgyfeltöltés()
@@ -1088,15 +1087,15 @@ namespace Villamos
         private void Button10_Click(object sender, EventArgs e)
         {
             Lecsukja();
-            Button10.Visible = true;
-            Button9.Visible = false;
+            AdminFel.Visible = true;
+            AdminLe.Visible = false;
         }
 
         private void BtnLapFül_Click(object sender, EventArgs e)
         {
             Felcsukja();
-            Button9.Visible = true;
-            Button10.Visible = false;
+            AdminLe.Visible = true;
+            AdminFel.Visible = false;
         }
 
         private void ADMINürítés()
@@ -1153,11 +1152,6 @@ namespace Villamos
             }
         }
 
-        private void BtnEmailKüldés_Click(object sender, EventArgs e)
-        {
-            EmailKüldés();
-        }
-
         private void JelenlétiÍVKészítés()
         {
             try
@@ -1167,7 +1161,7 @@ namespace Villamos
                 // E-mail küldés előkészítése
                 TextBox1.Text = "";
                 TextBox2.Text = "";
-                BtnEmailKüldés.Visible = false;
+        
                 // ha nincs kijelölve senki akkor kilép
                 if (TáblaOktatás.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem.");
 
@@ -1369,12 +1363,6 @@ namespace Villamos
                 MyE.ExcelBezárás();
                 MyE.Megnyitás(fájlexc + ".xlsx");
 
-                if (TextBox1.Text?.Trim() != "")
-                    BtnEmailKüldés.Visible = true;
-                if (Txtemail.Text.Trim() != "_")
-                    BtnEmailKüldés.Enabled = true;
-                else
-                    BtnEmailKüldés.Enabled = false;
                 Holtart.Ki();
                 MessageBox.Show("A nyomtatvány elkészült. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1453,39 +1441,6 @@ namespace Villamos
         private void BtnJelenléti_Click(object sender, EventArgs e)
         {
             JelenlétiÍVKészítés();
-        }
-
-        private void EmailKüldés()
-        {
-            // e-mail küldés
-            try
-            {
-                if (Txtemail.Text.Trim() == "_" || Txtemail.Text.Trim() == "")
-                    return;
-                Microsoft.Office.Interop.Outlook.Application _app = new Microsoft.Office.Interop.Outlook.Application();
-                Microsoft.Office.Interop.Outlook.MailItem mail = (Microsoft.Office.Interop.Outlook.MailItem)_app.CreateItem(Microsoft.Office.Interop.Outlook.OlItemType.olMailItem);
-                // címzett
-                mail.To = Txtemail.Text.Trim();
-                // mail.To = "pozsgaii@bkv.hu"
-                // üzent szövege
-                TextBox1.Text += $"\n\r\n\r Ezt az e-mailt a Villamos program generálta.";
-                mail.Body = TextBox1.Text;
-                // üzenet tárgya
-                mail.Subject = $"FAR rendszerbe adatszolgáltatás {Cmbtelephely.Text} - {DateTime.Now.AddDays(-1):yyyyMMdd}";
-                mail.Importance = Microsoft.Office.Interop.Outlook.OlImportance.olImportanceNormal;
-                mail.Attachments.Add(TextBox2.Text);
-                mail.Send();
-                MessageBox.Show("Üzenet el lett küldve", "Üzenet küldés sikeres", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show("Nem lett elküldve az e-mail!", "Üzenet küldési hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private void TáblaOktatás_CellClick(object sender, DataGridViewCellEventArgs e)

@@ -52,8 +52,8 @@ namespace Villamos
             this.BtnOktatásFrissít = new System.Windows.Forms.Button();
             this.BtnAdminMentés = new System.Windows.Forms.Button();
             this.BtnJelenléti = new System.Windows.Forms.Button();
-            this.Button10 = new System.Windows.Forms.Button();
-            this.Button9 = new System.Windows.Forms.Button();
+            this.AdminFel = new System.Windows.Forms.Button();
+            this.AdminLe = new System.Windows.Forms.Button();
             this.BtnOktatásEredményTöröl = new System.Windows.Forms.Button();
             this.BtnPdfÚjHasznál = new System.Windows.Forms.Button();
             this.BtnPDFsave = new System.Windows.Forms.Button();
@@ -61,12 +61,11 @@ namespace Villamos
             this.BtnNaplózásEredményTöröl = new System.Windows.Forms.Button();
             this.BtnRögzítFrissít = new System.Windows.Forms.Button();
             this.BtnPdfNyit = new System.Windows.Forms.Button();
-            this.Button3 = new System.Windows.Forms.Button();
+            this.PdfLe = new System.Windows.Forms.Button();
             this.BtnKijelölésátjelöl = new System.Windows.Forms.Button();
             this.Btnkilelöltörlés = new System.Windows.Forms.Button();
             this.Btnkijelöléstöröl = new System.Windows.Forms.Button();
             this.BtnSúgó = new System.Windows.Forms.Button();
-            this.BtnEmailKüldés = new System.Windows.Forms.Button();
             this.Txtemail = new System.Windows.Forms.TextBox();
             this.Btnmindkijelöl = new System.Windows.Forms.Button();
             this.BtnKijelölcsop = new System.Windows.Forms.Button();
@@ -320,31 +319,31 @@ namespace Villamos
             this.BtnJelenléti.UseVisualStyleBackColor = true;
             this.BtnJelenléti.Click += new System.EventHandler(this.BtnJelenléti_Click);
             // 
-            // Button10
+            // AdminFel
             // 
-            this.Button10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button10.BackgroundImage = global::Villamos.Properties.Resources.fel;
-            this.Button10.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Button10.Location = new System.Drawing.Point(875, 0);
-            this.Button10.Name = "Button10";
-            this.Button10.Size = new System.Drawing.Size(45, 45);
-            this.Button10.TabIndex = 67;
-            this.ToolTip1.SetToolTip(this.Button10, "Frissíti a névsort");
-            this.Button10.UseVisualStyleBackColor = true;
-            this.Button10.Click += new System.EventHandler(this.BtnLapFül_Click);
+            this.AdminFel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.AdminFel.BackgroundImage = global::Villamos.Properties.Resources.fel;
+            this.AdminFel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.AdminFel.Location = new System.Drawing.Point(875, 0);
+            this.AdminFel.Name = "AdminFel";
+            this.AdminFel.Size = new System.Drawing.Size(45, 45);
+            this.AdminFel.TabIndex = 67;
+            this.ToolTip1.SetToolTip(this.AdminFel, "Frissíti a névsort");
+            this.AdminFel.UseVisualStyleBackColor = true;
+            this.AdminFel.Click += new System.EventHandler(this.BtnLapFül_Click);
             // 
-            // Button9
+            // AdminLe
             // 
-            this.Button9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button9.BackgroundImage = global::Villamos.Properties.Resources.le;
-            this.Button9.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Button9.Location = new System.Drawing.Point(875, 0);
-            this.Button9.Name = "Button9";
-            this.Button9.Size = new System.Drawing.Size(45, 45);
-            this.Button9.TabIndex = 68;
-            this.ToolTip1.SetToolTip(this.Button9, "Frissíti a névsort");
-            this.Button9.UseVisualStyleBackColor = true;
-            this.Button9.Click += new System.EventHandler(this.Button10_Click);
+            this.AdminLe.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.AdminLe.BackgroundImage = global::Villamos.Properties.Resources.le;
+            this.AdminLe.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.AdminLe.Location = new System.Drawing.Point(875, 0);
+            this.AdminLe.Name = "AdminLe";
+            this.AdminLe.Size = new System.Drawing.Size(45, 45);
+            this.AdminLe.TabIndex = 68;
+            this.ToolTip1.SetToolTip(this.AdminLe, "Frissíti a névsort");
+            this.AdminLe.UseVisualStyleBackColor = true;
+            this.AdminLe.Click += new System.EventHandler(this.Button10_Click);
             // 
             // BtnOktatásEredményTöröl
             // 
@@ -430,17 +429,17 @@ namespace Villamos
             this.BtnPdfNyit.UseVisualStyleBackColor = true;
             this.BtnPdfNyit.Click += new System.EventHandler(this.BtnPdfNyit_Click);
             // 
-            // Button3
+            // PdfLe
             // 
-            this.Button3.BackgroundImage = global::Villamos.Properties.Resources.le;
-            this.Button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Button3.Location = new System.Drawing.Point(3, 3);
-            this.Button3.Name = "Button3";
-            this.Button3.Size = new System.Drawing.Size(45, 45);
-            this.Button3.TabIndex = 66;
-            this.ToolTip1.SetToolTip(this.Button3, "Frissíti a névsort");
-            this.Button3.UseVisualStyleBackColor = true;
-            this.Button3.Click += new System.EventHandler(this.BtnPdfCsuk_Click);
+            this.PdfLe.BackgroundImage = global::Villamos.Properties.Resources.le;
+            this.PdfLe.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.PdfLe.Location = new System.Drawing.Point(3, 3);
+            this.PdfLe.Name = "PdfLe";
+            this.PdfLe.Size = new System.Drawing.Size(45, 45);
+            this.PdfLe.TabIndex = 66;
+            this.ToolTip1.SetToolTip(this.PdfLe, "Frissíti a névsort");
+            this.PdfLe.UseVisualStyleBackColor = true;
+            this.PdfLe.Click += new System.EventHandler(this.BtnPdfCsuk_Click);
             // 
             // BtnKijelölésátjelöl
             // 
@@ -489,20 +488,6 @@ namespace Villamos
             this.ToolTip1.SetToolTip(this.BtnSúgó, "Súgó");
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
-            // 
-            // BtnEmailKüldés
-            // 
-            this.BtnEmailKüldés.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnEmailKüldés.BackgroundImage = global::Villamos.Properties.Resources.email;
-            this.BtnEmailKüldés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnEmailKüldés.Location = new System.Drawing.Point(875, 160);
-            this.BtnEmailKüldés.Name = "BtnEmailKüldés";
-            this.BtnEmailKüldés.Size = new System.Drawing.Size(45, 45);
-            this.BtnEmailKüldés.TabIndex = 103;
-            this.ToolTip1.SetToolTip(this.BtnEmailKüldés, "Elküldi e-mailben FAR-hoz az adatokat.");
-            this.BtnEmailKüldés.UseVisualStyleBackColor = true;
-            this.BtnEmailKüldés.Visible = false;
-            this.BtnEmailKüldés.Click += new System.EventHandler(this.BtnEmailKüldés_Click);
             // 
             // Txtemail
             // 
@@ -751,7 +736,6 @@ namespace Villamos
             this.TPAdmin.Controls.Add(this.Txtemail);
             this.TPAdmin.Controls.Add(this.TextBox2);
             this.TPAdmin.Controls.Add(this.TextBox1);
-            this.TPAdmin.Controls.Add(this.BtnEmailKüldés);
             this.TPAdmin.Controls.Add(this.Egyébszöveg);
             this.TPAdmin.Controls.Add(this.Label21);
             this.TPAdmin.Controls.Add(this.Adminhelyszín);
@@ -772,8 +756,8 @@ namespace Villamos
             this.TPAdmin.Controls.Add(this.AdminOktató);
             this.TPAdmin.Controls.Add(this.Adminoktatásdátuma);
             this.TPAdmin.Controls.Add(this.Label14);
-            this.TPAdmin.Controls.Add(this.Button10);
-            this.TPAdmin.Controls.Add(this.Button9);
+            this.TPAdmin.Controls.Add(this.AdminFel);
+            this.TPAdmin.Controls.Add(this.AdminLe);
             this.TPAdmin.Location = new System.Drawing.Point(4, 29);
             this.TPAdmin.Name = "TPAdmin";
             this.TPAdmin.Padding = new System.Windows.Forms.Padding(3);
@@ -1174,7 +1158,7 @@ namespace Villamos
             this.TabPage6.BackColor = System.Drawing.Color.LightGreen;
             this.TabPage6.Controls.Add(this.PDF_néző);
             this.TabPage6.Controls.Add(this.BtnPdfNyit);
-            this.TabPage6.Controls.Add(this.Button3);
+            this.TabPage6.Controls.Add(this.PdfLe);
             this.TabPage6.Location = new System.Drawing.Point(4, 29);
             this.TabPage6.Name = "TabPage6";
             this.TabPage6.Size = new System.Drawing.Size(926, 182);
@@ -1308,7 +1292,7 @@ namespace Villamos
         internal TabPage TabPage6;
 
         internal Button BtnPdfNyit;
-        internal Button Button3;
+        internal Button PdfLe;
         internal Label Label7;
         internal DateTimePicker Átütemezés;
         internal Button TörölKötelezés;
@@ -1317,8 +1301,8 @@ namespace Villamos
         internal Button BtnOktatásEredményTöröl;
         internal Label Label11;
         internal TextBox Megjegyzés;
-        internal Button Button10;
-        internal Button Button9;
+        internal Button AdminFel;
+        internal Button AdminLe;
         internal TextBox Admintartam;
         internal ComboBox Adminoktatástárgya;
         internal Label Label18;
@@ -1339,7 +1323,6 @@ namespace Villamos
         internal Label Label20;
         internal RichTextBox Egyébszöveg;
         internal Label Label21;
-        internal Button BtnEmailKüldés;
         internal TextBox Txtemail;
         internal Label Label22;
         internal TextBox TextBox2;

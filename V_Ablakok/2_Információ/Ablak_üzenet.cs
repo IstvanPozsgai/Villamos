@@ -22,8 +22,6 @@ namespace Villamos
         List<Adat_Üzenet> Adatok_Üzenet = new List<Adat_Üzenet>();
         List<Adat_Üzenet_Olvasás> Adatok_Olvas = new List<Adat_Üzenet_Olvasás>();
 
-        bool CTRL_le = false;
-
         #region Alap
         public Ablak_üzenet()
         {
@@ -823,11 +821,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void Ablak_üzenet_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control) CTRL_le = true;
         }
 
         private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)

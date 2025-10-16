@@ -566,7 +566,6 @@ namespace Villamos
             this.Text = "Üzenetek írása, olvasása";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Ablak_üzenet_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Ablak_üzenet_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
