@@ -58,12 +58,16 @@
             this.Tak_1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.Panel2 = new System.Windows.Forms.Panel();
+            this.Cmbtelephely = new System.Windows.Forms.ComboBox();
+            this.Label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Segéd_tábla)).BeginInit();
+            this.Panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // Ütem_szerelvény_text2
             // 
-            this.Ütem_szerelvény_text2.Location = new System.Drawing.Point(12, 40);
+            this.Ütem_szerelvény_text2.Location = new System.Drawing.Point(12, 89);
             this.Ütem_szerelvény_text2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_szerelvény_text2.Name = "Ütem_szerelvény_text2";
             this.Ütem_szerelvény_text2.Size = new System.Drawing.Size(322, 26);
@@ -72,7 +76,7 @@
             // Ütem_Rögzít2
             // 
             this.Ütem_Rögzít2.Image = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Ütem_Rögzít2.Location = new System.Drawing.Point(504, 309);
+            this.Ütem_Rögzít2.Location = new System.Drawing.Point(504, 358);
             this.Ütem_Rögzít2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_Rögzít2.Name = "Ütem_Rögzít2";
             this.Ütem_Rögzít2.Size = new System.Drawing.Size(45, 45);
@@ -83,7 +87,7 @@
             // Ütem_Töröl2
             // 
             this.Ütem_Töröl2.Image = global::Villamos.Properties.Resources.Kuka;
-            this.Ütem_Töröl2.Location = new System.Drawing.Point(10, 309);
+            this.Ütem_Töröl2.Location = new System.Drawing.Point(10, 358);
             this.Ütem_Töröl2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_Töröl2.Name = "Ütem_Töröl2";
             this.Ütem_Töröl2.Size = new System.Drawing.Size(45, 45);
@@ -95,7 +99,7 @@
             // 
             this.Ütem_szerelvény2.AutoSize = true;
             this.Ütem_szerelvény2.BackColor = System.Drawing.Color.YellowGreen;
-            this.Ütem_szerelvény2.Location = new System.Drawing.Point(157, 6);
+            this.Ütem_szerelvény2.Location = new System.Drawing.Point(157, 55);
             this.Ütem_szerelvény2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_szerelvény2.Name = "Ütem_szerelvény2";
             this.Ütem_szerelvény2.Size = new System.Drawing.Size(189, 24);
@@ -107,7 +111,7 @@
             // 
             this.Kocsi_PSZ_2.AutoSize = true;
             this.Kocsi_PSZ_2.BackColor = System.Drawing.Color.YellowGreen;
-            this.Kocsi_PSZ_2.Location = new System.Drawing.Point(12, 10);
+            this.Kocsi_PSZ_2.Location = new System.Drawing.Point(12, 59);
             this.Kocsi_PSZ_2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Kocsi_PSZ_2.Name = "Kocsi_PSZ_2";
             this.Kocsi_PSZ_2.Size = new System.Drawing.Size(105, 20);
@@ -128,7 +132,7 @@
             this.Column5,
             this.Column6,
             this.Column7});
-            this.Segéd_tábla.Location = new System.Drawing.Point(10, 127);
+            this.Segéd_tábla.Location = new System.Drawing.Point(10, 176);
             this.Segéd_tábla.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Segéd_tábla.MultiSelect = false;
             this.Segéd_tábla.Name = "Segéd_tábla";
@@ -206,7 +210,7 @@
             this.Kedvenc_2.AutoSize = true;
             this.Kedvenc_2.Checked = true;
             this.Kedvenc_2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.Kedvenc_2.Location = new System.Drawing.Point(91, 330);
+            this.Kedvenc_2.Location = new System.Drawing.Point(91, 379);
             this.Kedvenc_2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Kedvenc_2.Name = "Kedvenc_2";
             this.Kedvenc_2.Size = new System.Drawing.Size(89, 24);
@@ -218,7 +222,7 @@
             // T5C5_1
             // 
             this.T5C5_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.T5C5_1.Location = new System.Drawing.Point(157, 72);
+            this.T5C5_1.Location = new System.Drawing.Point(157, 121);
             this.T5C5_1.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.T5C5_1.Name = "T5C5_1";
             this.T5C5_1.Size = new System.Drawing.Size(58, 22);
@@ -228,7 +232,7 @@
             // T5C5_2
             // 
             this.T5C5_2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.T5C5_2.Location = new System.Drawing.Point(222, 72);
+            this.T5C5_2.Location = new System.Drawing.Point(222, 121);
             this.T5C5_2.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.T5C5_2.Name = "T5C5_2";
             this.T5C5_2.Size = new System.Drawing.Size(58, 22);
@@ -238,7 +242,7 @@
             // T5C5_3
             // 
             this.T5C5_3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.T5C5_3.Location = new System.Drawing.Point(287, 72);
+            this.T5C5_3.Location = new System.Drawing.Point(287, 121);
             this.T5C5_3.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.T5C5_3.Name = "T5C5_3";
             this.T5C5_3.Size = new System.Drawing.Size(58, 22);
@@ -248,7 +252,7 @@
             // T5C5_4
             // 
             this.T5C5_4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.T5C5_4.Location = new System.Drawing.Point(352, 72);
+            this.T5C5_4.Location = new System.Drawing.Point(352, 121);
             this.T5C5_4.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.T5C5_4.Name = "T5C5_4";
             this.T5C5_4.Size = new System.Drawing.Size(58, 22);
@@ -258,7 +262,7 @@
             // T5C5_5
             // 
             this.T5C5_5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.T5C5_5.Location = new System.Drawing.Point(417, 72);
+            this.T5C5_5.Location = new System.Drawing.Point(417, 121);
             this.T5C5_5.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.T5C5_5.Name = "T5C5_5";
             this.T5C5_5.Size = new System.Drawing.Size(58, 22);
@@ -268,7 +272,7 @@
             // T5C5_6
             // 
             this.T5C5_6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.T5C5_6.Location = new System.Drawing.Point(482, 72);
+            this.T5C5_6.Location = new System.Drawing.Point(482, 121);
             this.T5C5_6.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.T5C5_6.Name = "T5C5_6";
             this.T5C5_6.Size = new System.Drawing.Size(58, 22);
@@ -278,7 +282,7 @@
             // Tak_6
             // 
             this.Tak_6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Tak_6.Location = new System.Drawing.Point(482, 100);
+            this.Tak_6.Location = new System.Drawing.Point(482, 149);
             this.Tak_6.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.Tak_6.Name = "Tak_6";
             this.Tak_6.Size = new System.Drawing.Size(58, 22);
@@ -288,7 +292,7 @@
             // Tak_5
             // 
             this.Tak_5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Tak_5.Location = new System.Drawing.Point(417, 100);
+            this.Tak_5.Location = new System.Drawing.Point(417, 149);
             this.Tak_5.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.Tak_5.Name = "Tak_5";
             this.Tak_5.Size = new System.Drawing.Size(58, 22);
@@ -298,7 +302,7 @@
             // Tak_4
             // 
             this.Tak_4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Tak_4.Location = new System.Drawing.Point(352, 100);
+            this.Tak_4.Location = new System.Drawing.Point(352, 149);
             this.Tak_4.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.Tak_4.Name = "Tak_4";
             this.Tak_4.Size = new System.Drawing.Size(58, 22);
@@ -308,7 +312,7 @@
             // Tak_3
             // 
             this.Tak_3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Tak_3.Location = new System.Drawing.Point(287, 100);
+            this.Tak_3.Location = new System.Drawing.Point(287, 149);
             this.Tak_3.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.Tak_3.Name = "Tak_3";
             this.Tak_3.Size = new System.Drawing.Size(58, 22);
@@ -318,7 +322,7 @@
             // Tak_2
             // 
             this.Tak_2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Tak_2.Location = new System.Drawing.Point(222, 100);
+            this.Tak_2.Location = new System.Drawing.Point(222, 149);
             this.Tak_2.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.Tak_2.Name = "Tak_2";
             this.Tak_2.Size = new System.Drawing.Size(58, 22);
@@ -328,7 +332,7 @@
             // Tak_1
             // 
             this.Tak_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Tak_1.Location = new System.Drawing.Point(157, 100);
+            this.Tak_1.Location = new System.Drawing.Point(157, 149);
             this.Tak_1.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.Tak_1.Name = "Tak_1";
             this.Tak_1.Size = new System.Drawing.Size(58, 22);
@@ -338,7 +342,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 74);
+            this.label1.Location = new System.Drawing.Point(12, 123);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(91, 20);
             this.label1.TabIndex = 109;
@@ -347,18 +351,45 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 100);
+            this.label2.Location = new System.Drawing.Point(12, 149);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(91, 20);
             this.label2.TabIndex = 110;
             this.label2.Text = "Takarítások";
+            // 
+            // Panel2
+            // 
+            this.Panel2.Controls.Add(this.Cmbtelephely);
+            this.Panel2.Controls.Add(this.Label13);
+            this.Panel2.Location = new System.Drawing.Point(10, 7);
+            this.Panel2.Name = "Panel2";
+            this.Panel2.Size = new System.Drawing.Size(335, 40);
+            this.Panel2.TabIndex = 176;
+            // 
+            // Cmbtelephely
+            // 
+            this.Cmbtelephely.FormattingEnabled = true;
+            this.Cmbtelephely.Location = new System.Drawing.Point(145, 5);
+            this.Cmbtelephely.Name = "Cmbtelephely";
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
+            this.Cmbtelephely.TabIndex = 0;
+            // 
+            // Label13
+            // 
+            this.Label13.AutoSize = true;
+            this.Label13.Location = new System.Drawing.Point(5, 10);
+            this.Label13.Name = "Label13";
+            this.Label13.Size = new System.Drawing.Size(145, 20);
+            this.Label13.TabIndex = 17;
+            this.Label13.Text = "Telephelyi beállítás:";
             // 
             // Jármű_Takarítás_Ütemezés_Segéd2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Olive;
-            this.ClientSize = new System.Drawing.Size(560, 359);
+            this.ClientSize = new System.Drawing.Size(560, 409);
+            this.Controls.Add(this.Panel2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Tak_6);
@@ -388,6 +419,8 @@
             this.Text = "Jármű Takarítás Ütemezés Segéd2";
             this.Load += new System.EventHandler(this.Jármű_Takarítás_Ütemezés_Segéd2_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Segéd_tábla)).EndInit();
+            this.Panel2.ResumeLayout(false);
+            this.Panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -424,5 +457,8 @@
         internal System.Windows.Forms.TextBox Tak_1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        internal System.Windows.Forms.Panel Panel2;
+        internal System.Windows.Forms.ComboBox Cmbtelephely;
+        internal System.Windows.Forms.Label Label13;
     }
 }

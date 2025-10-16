@@ -1864,8 +1864,7 @@ namespace Villamos
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_Jármű_takarítás_új_FormClosed);
             this.Load += new System.EventHandler(this.Ablak_Jármű_takarítás_új_Load);
-            this.Shown += new System.EventHandler(this.Ablak_Jármű_takarítás_új_Shown);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ESC_KeyDown);
+                      this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ESC_KeyDown);
             this.Panel2.ResumeLayout(false);
             this.Panel2.PerformLayout();
             this.Lapfülek.ResumeLayout(false);

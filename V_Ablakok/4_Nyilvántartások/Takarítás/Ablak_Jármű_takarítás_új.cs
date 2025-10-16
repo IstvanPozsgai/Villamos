@@ -126,14 +126,8 @@ namespace Villamos
         }
 
         private void Ablak_Jármű_takarítás_új_Load(object sender, EventArgs e)
-        {
+        { }
 
-        }
-
-        private void Ablak_Jármű_takarítás_új_Shown(object sender, EventArgs e)
-        {
-
-        }
 
         public void Background_Process()
         {

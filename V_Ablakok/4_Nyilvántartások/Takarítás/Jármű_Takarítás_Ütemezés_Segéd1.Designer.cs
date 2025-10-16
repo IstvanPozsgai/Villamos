@@ -46,12 +46,16 @@
             this.Ütem_szerelvény_text = new System.Windows.Forms.TextBox();
             this.Ütem_J2_nap = new System.Windows.Forms.TextBox();
             this.Label8 = new System.Windows.Forms.Label();
+            this.Panel2 = new System.Windows.Forms.Panel();
+            this.Cmbtelephely = new System.Windows.Forms.ComboBox();
+            this.Label13 = new System.Windows.Forms.Label();
+            this.Panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // Kedvenc_1
             // 
             this.Kedvenc_1.AutoSize = true;
-            this.Kedvenc_1.Location = new System.Drawing.Point(66, 275);
+            this.Kedvenc_1.Location = new System.Drawing.Point(66, 322);
             this.Kedvenc_1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Kedvenc_1.Name = "Kedvenc_1";
             this.Kedvenc_1.Size = new System.Drawing.Size(89, 24);
@@ -62,7 +66,7 @@
             // 
             // Ütem_J6_nap
             // 
-            this.Ütem_J6_nap.Location = new System.Drawing.Point(163, 234);
+            this.Ütem_J6_nap.Location = new System.Drawing.Point(163, 281);
             this.Ütem_J6_nap.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_J6_nap.Name = "Ütem_J6_nap";
             this.Ütem_J6_nap.Size = new System.Drawing.Size(90, 26);
@@ -70,7 +74,7 @@
             // 
             // Ütem_J5_nap
             // 
-            this.Ütem_J5_nap.Location = new System.Drawing.Point(163, 198);
+            this.Ütem_J5_nap.Location = new System.Drawing.Point(163, 245);
             this.Ütem_J5_nap.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_J5_nap.Name = "Ütem_J5_nap";
             this.Ütem_J5_nap.Size = new System.Drawing.Size(90, 26);
@@ -78,7 +82,7 @@
             // 
             // Ütem_J4_nap
             // 
-            this.Ütem_J4_nap.Location = new System.Drawing.Point(163, 162);
+            this.Ütem_J4_nap.Location = new System.Drawing.Point(163, 209);
             this.Ütem_J4_nap.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_J4_nap.Name = "Ütem_J4_nap";
             this.Ütem_J4_nap.Size = new System.Drawing.Size(90, 26);
@@ -88,7 +92,7 @@
             // 
             this.Ütem_J6_kell.AutoSize = true;
             this.Ütem_J6_kell.BackColor = System.Drawing.Color.YellowGreen;
-            this.Ütem_J6_kell.Location = new System.Drawing.Point(110, 236);
+            this.Ütem_J6_kell.Location = new System.Drawing.Point(110, 283);
             this.Ütem_J6_kell.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_J6_kell.Name = "Ütem_J6_kell";
             this.Ütem_J6_kell.Size = new System.Drawing.Size(45, 24);
@@ -100,7 +104,7 @@
             // 
             this.Ütem_J5_kell.AutoSize = true;
             this.Ütem_J5_kell.BackColor = System.Drawing.Color.YellowGreen;
-            this.Ütem_J5_kell.Location = new System.Drawing.Point(110, 200);
+            this.Ütem_J5_kell.Location = new System.Drawing.Point(110, 247);
             this.Ütem_J5_kell.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_J5_kell.Name = "Ütem_J5_kell";
             this.Ütem_J5_kell.Size = new System.Drawing.Size(45, 24);
@@ -112,7 +116,7 @@
             // 
             this.Ütem_J4_kell.AutoSize = true;
             this.Ütem_J4_kell.BackColor = System.Drawing.Color.YellowGreen;
-            this.Ütem_J4_kell.Location = new System.Drawing.Point(110, 164);
+            this.Ütem_J4_kell.Location = new System.Drawing.Point(110, 211);
             this.Ütem_J4_kell.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_J4_kell.Name = "Ütem_J4_kell";
             this.Ütem_J4_kell.Size = new System.Drawing.Size(45, 24);
@@ -124,7 +128,7 @@
             // 
             this.Kocsi_PSZ_1.AutoSize = true;
             this.Kocsi_PSZ_1.BackColor = System.Drawing.Color.YellowGreen;
-            this.Kocsi_PSZ_1.Location = new System.Drawing.Point(13, 9);
+            this.Kocsi_PSZ_1.Location = new System.Drawing.Point(13, 56);
             this.Kocsi_PSZ_1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Kocsi_PSZ_1.Name = "Kocsi_PSZ_1";
             this.Kocsi_PSZ_1.Size = new System.Drawing.Size(105, 20);
@@ -135,7 +139,7 @@
             // 
             this.Ütem_szerelvény.AutoSize = true;
             this.Ütem_szerelvény.BackColor = System.Drawing.Color.YellowGreen;
-            this.Ütem_szerelvény.Location = new System.Drawing.Point(146, 5);
+            this.Ütem_szerelvény.Location = new System.Drawing.Point(146, 52);
             this.Ütem_szerelvény.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_szerelvény.Name = "Ütem_szerelvény";
             this.Ütem_szerelvény.Size = new System.Drawing.Size(189, 24);
@@ -147,7 +151,7 @@
             // 
             this.Ütem_J3_kell.AutoSize = true;
             this.Ütem_J3_kell.BackColor = System.Drawing.Color.YellowGreen;
-            this.Ütem_J3_kell.Location = new System.Drawing.Point(110, 126);
+            this.Ütem_J3_kell.Location = new System.Drawing.Point(110, 173);
             this.Ütem_J3_kell.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_J3_kell.Name = "Ütem_J3_kell";
             this.Ütem_J3_kell.Size = new System.Drawing.Size(45, 24);
@@ -159,7 +163,7 @@
             // 
             this.Ütem_J2_kell.AutoSize = true;
             this.Ütem_J2_kell.BackColor = System.Drawing.Color.YellowGreen;
-            this.Ütem_J2_kell.Location = new System.Drawing.Point(110, 92);
+            this.Ütem_J2_kell.Location = new System.Drawing.Point(110, 139);
             this.Ütem_J2_kell.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_J2_kell.Name = "Ütem_J2_kell";
             this.Ütem_J2_kell.Size = new System.Drawing.Size(45, 24);
@@ -169,7 +173,7 @@
             // 
             // Ütem_J3_nap
             // 
-            this.Ütem_J3_nap.Location = new System.Drawing.Point(163, 126);
+            this.Ütem_J3_nap.Location = new System.Drawing.Point(163, 173);
             this.Ütem_J3_nap.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_J3_nap.Name = "Ütem_J3_nap";
             this.Ütem_J3_nap.Size = new System.Drawing.Size(90, 26);
@@ -178,7 +182,7 @@
             // Ütem_Töröl
             // 
             this.Ütem_Töröl.Image = global::Villamos.Properties.Resources.Kuka;
-            this.Ütem_Töröl.Location = new System.Drawing.Point(13, 254);
+            this.Ütem_Töröl.Location = new System.Drawing.Point(13, 301);
             this.Ütem_Töröl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_Töröl.Name = "Ütem_Töröl";
             this.Ütem_Töröl.Size = new System.Drawing.Size(45, 45);
@@ -189,7 +193,7 @@
             // Ütem_Rögzít
             // 
             this.Ütem_Rögzít.Image = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Ütem_Rögzít.Location = new System.Drawing.Point(285, 254);
+            this.Ütem_Rögzít.Location = new System.Drawing.Point(285, 301);
             this.Ütem_Rögzít.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_Rögzít.Name = "Ütem_Rögzít";
             this.Ütem_Rögzít.Size = new System.Drawing.Size(45, 45);
@@ -199,7 +203,7 @@
             // 
             // Ütem_szerelvény_text
             // 
-            this.Ütem_szerelvény_text.Location = new System.Drawing.Point(13, 36);
+            this.Ütem_szerelvény_text.Location = new System.Drawing.Point(13, 83);
             this.Ütem_szerelvény_text.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_szerelvény_text.Name = "Ütem_szerelvény_text";
             this.Ütem_szerelvény_text.Size = new System.Drawing.Size(322, 26);
@@ -207,7 +211,7 @@
             // 
             // Ütem_J2_nap
             // 
-            this.Ütem_J2_nap.Location = new System.Drawing.Point(163, 90);
+            this.Ütem_J2_nap.Location = new System.Drawing.Point(163, 137);
             this.Ütem_J2_nap.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Ütem_J2_nap.Name = "Ütem_J2_nap";
             this.Ütem_J2_nap.Size = new System.Drawing.Size(90, 26);
@@ -216,19 +220,46 @@
             // Label8
             // 
             this.Label8.AutoSize = true;
-            this.Label8.Location = new System.Drawing.Point(13, 67);
+            this.Label8.Location = new System.Drawing.Point(13, 114);
             this.Label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Label8.Name = "Label8";
             this.Label8.Size = new System.Drawing.Size(95, 20);
             this.Label8.TabIndex = 7;
             this.Label8.Text = "Takarítások:";
             // 
+            // Panel2
+            // 
+            this.Panel2.Controls.Add(this.Cmbtelephely);
+            this.Panel2.Controls.Add(this.Label13);
+            this.Panel2.Location = new System.Drawing.Point(0, 4);
+            this.Panel2.Name = "Panel2";
+            this.Panel2.Size = new System.Drawing.Size(335, 40);
+            this.Panel2.TabIndex = 177;
+            // 
+            // Cmbtelephely
+            // 
+            this.Cmbtelephely.FormattingEnabled = true;
+            this.Cmbtelephely.Location = new System.Drawing.Point(145, 5);
+            this.Cmbtelephely.Name = "Cmbtelephely";
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
+            this.Cmbtelephely.TabIndex = 0;
+            // 
+            // Label13
+            // 
+            this.Label13.AutoSize = true;
+            this.Label13.Location = new System.Drawing.Point(5, 10);
+            this.Label13.Name = "Label13";
+            this.Label13.Size = new System.Drawing.Size(145, 20);
+            this.Label13.TabIndex = 17;
+            this.Label13.Text = "Telephelyi beállítás:";
+            // 
             // Jármű_Takarítás_Ütemezés_Segéd1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Olive;
-            this.ClientSize = new System.Drawing.Size(343, 313);
+            this.ClientSize = new System.Drawing.Size(343, 365);
+            this.Controls.Add(this.Panel2);
             this.Controls.Add(this.Label8);
             this.Controls.Add(this.Kedvenc_1);
             this.Controls.Add(this.Kocsi_PSZ_1);
@@ -253,6 +284,8 @@
             this.Name = "Jármű_Takarítás_Ütemezés_Segéd1";
             this.Text = "Jármű Takarítás Ütemezés Segéd1";
             this.Load += new System.EventHandler(this.Jármű_Takarítás_Ütemezés_Segéd1_Load);
+            this.Panel2.ResumeLayout(false);
+            this.Panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -276,5 +309,8 @@
         internal System.Windows.Forms.TextBox Ütem_szerelvény_text;
         internal System.Windows.Forms.TextBox Ütem_J2_nap;
         internal System.Windows.Forms.Label Label8;
+        internal System.Windows.Forms.Panel Panel2;
+        internal System.Windows.Forms.ComboBox Cmbtelephely;
+        internal System.Windows.Forms.Label Label13;
     }
 }
