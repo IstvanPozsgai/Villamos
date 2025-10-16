@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -118,7 +117,10 @@ namespace Villamos
                 foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
                     Cmbtelephely.Items.Add(Adat.Trim());
                 //Alapkönyvtárat beállítjuk 
-                Cmbtelephely.Text = Program.PostásTelephely;
+                if (Cmbtelephely.Items.Cast<string>().Contains(Program.PostásTelephely))
+                    Cmbtelephely.Text = Program.PostásTelephely;
+                else
+                    Cmbtelephely.Text = Cmbtelephely.Items[0].ToStrTrim();
             }
             catch (HibásBevittAdat ex)
             {

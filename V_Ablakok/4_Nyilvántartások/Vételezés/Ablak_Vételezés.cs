@@ -39,7 +39,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         public Ablak_Vételezés()
         {
             InitializeComponent();
-         
+
         }
 
 
@@ -133,7 +133,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
                     CmbTelephely.Items.Add(Adat.Trim());
                 //Alapkönyvtárat beállítjuk 
-                CmbTelephely.Text = Program.PostásTelephely;
+                if (CmbTelephely.Items.Cast<string>().Contains(Program.PostásTelephely))
+                    CmbTelephely.Text = Program.PostásTelephely;
+                else
+                    CmbTelephely.Text = CmbTelephely.Items[0].ToStrTrim();
             }
             catch (HibásBevittAdat ex)
             {
@@ -145,6 +148,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void Jogosultságkiosztás()
         {

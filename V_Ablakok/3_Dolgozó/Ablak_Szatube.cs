@@ -119,7 +119,10 @@ namespace Villamos
                 foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
                     CmbTelephely.Items.Add(Adat.Trim());
                 //Alapkönyvtárat beállítjuk 
-                CmbTelephely.Text = Program.PostásTelephely;
+                if (CmbTelephely.Items.Cast<string>().Contains(Program.PostásTelephely))
+                    CmbTelephely.Text = Program.PostásTelephely;
+                else
+                    CmbTelephely.Text = CmbTelephely.Items[0].ToStrTrim();
             }
             catch (HibásBevittAdat ex)
             {
@@ -131,6 +134,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void Névfeltöltés()
         {
@@ -2597,10 +2601,10 @@ namespace Villamos
                 Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
-            { 
+            {
                 Holtart.Ki();
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-               
+
             }
             catch (Exception ex)
             {

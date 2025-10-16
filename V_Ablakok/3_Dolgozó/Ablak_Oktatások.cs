@@ -169,7 +169,10 @@ namespace Villamos
                 foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
                     Cmbtelephely.Items.Add(Adat.Trim());
                 //Alapkönyvtárat beállítjuk 
-                Cmbtelephely.Text = Program.PostásTelephely;
+                if (Cmbtelephely.Items.Cast<string>().Contains(Program.PostásTelephely))
+                    Cmbtelephely.Text = Program.PostásTelephely;
+                else
+                    Cmbtelephely.Text = Cmbtelephely.Items[0].ToStrTrim();
             }
             catch (HibásBevittAdat ex)
             {
@@ -183,6 +186,7 @@ namespace Villamos
         }
 
 
+
         private void Jogosultságkiosztás()
         {
             int melyikelem;
@@ -193,7 +197,7 @@ namespace Villamos
             TörölKötelezés.Enabled = false;
             BtnJelenléti.Enabled = false;
             BtnAdminMentés.Enabled = false;
-         
+
             BtnPDFsave.Enabled = false;
             BtnNaplózásEredményTöröl.Enabled = false;
 
@@ -1161,7 +1165,7 @@ namespace Villamos
                 // E-mail küldés előkészítése
                 TextBox1.Text = "";
                 TextBox2.Text = "";
-        
+
                 // ha nincs kijelölve senki akkor kilép
                 if (TáblaOktatás.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem.");
 
