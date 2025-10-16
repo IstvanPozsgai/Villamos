@@ -99,6 +99,7 @@ namespace Villamos
         {
             if (CmbAblak.Text.Trim() == "") return;
             CmbGombok.Items.Clear();
+            CmbGombId.Items.Clear();
             Adat_Oldalak oldal = (from a in AdatokOldal
                                   where a.Törölt == false
                                   && a.MenuFelirat == CmbAblak.Text.Trim()

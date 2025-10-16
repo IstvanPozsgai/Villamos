@@ -67,11 +67,11 @@ namespace Villamos
                 TabFülek.TabIndex = 0;
 
                 // Gombok nem láthatóak mert mindent listáz
-                SzabLeadás.Visible = false;
-                SzabNyomtatás.Visible = false;
-                EgyéniTúlNyom.Visible = false;
-                TúlCsopNyom.Visible = false;
-                Túl_Eng_Beáll.Visible = false;
+                SzabLeadás.Enabled = false;
+                SzabNyomtatás.Enabled = false;
+                EgyéniTúlNyom.Enabled = false;
+                TúlCsopNyom.Enabled = false;
+                Túl_Eng_Beáll.Enabled = false;
                 TabFülek.DrawMode = TabDrawMode.OwnerDrawFixed;
             }
             catch (HibásBevittAdat ex)
@@ -160,36 +160,36 @@ namespace Villamos
             int melyikelem;
             // ide kell az összes gombot tenni amit szabályozni akarunk
             // Szabi gombok
-            SzabNyilat.Enabled = false;
-            SzabNyomtatás.Enabled = false;
-            SzabLeadás.Enabled = false;
-            Éves_Összesítő.Enabled = false;
-            Szab_Rögzít.Enabled = false;
+            SzabNyilat.Visible = false;
+            SzabNyomtatás.Visible = false;
+            SzabLeadás.Visible = false;
+            Éves_Összesítő.Visible = false;
+            Szab_Rögzít.Visible = false;
             // túlóra gombok
-            Túl_Eng_Beáll.Enabled = false;
-            EgyéniTúlNyom.Enabled = false;
-            TúlCsopNyom.Enabled = false;
+            Túl_Eng_Beáll.Visible = false;
+            EgyéniTúlNyom.Visible = false;
+            TúlCsopNyom.Visible = false;
             // telephely szabadválasztás
-            CmbTelephely.Enabled = false;
+            CmbTelephely.Visible = false;
 
             // Szabadság
             melyikelem = 61;
             // módosítás 1
             if (MyF.Vanjoga(melyikelem, 1))
             {
-                SzabNyomtatás.Enabled = true;
-                SzabLeadás.Enabled = true;
+                SzabNyomtatás.Visible = true;
+                SzabLeadás.Visible = true;
             }
             // módosítás 2
             if (MyF.Vanjoga(melyikelem, 2))
             {
-                Éves_Összesítő.Enabled = true;
-                Szab_Rögzít.Enabled = true;
+                Éves_Összesítő.Visible = true;
+                Szab_Rögzít.Visible = true;
             }
             // módosítás 3
             if (MyF.Vanjoga(melyikelem, 3))
             {
-                SzabNyilat.Enabled = true;
+                SzabNyilat.Visible = true;
             }
 
             // túlóra
@@ -197,13 +197,13 @@ namespace Villamos
             // módosítás 1
             if (MyF.Vanjoga(melyikelem, 1))
             {
-                Túl_Eng_Beáll.Enabled = true;
+                Túl_Eng_Beáll.Visible = true;
             }
             // módosítás 2
             if (MyF.Vanjoga(melyikelem, 2))
             {
-                EgyéniTúlNyom.Enabled = true;
-                TúlCsopNyom.Enabled = true;
+                EgyéniTúlNyom.Visible = true;
+                TúlCsopNyom.Visible = true;
             }
             // módosítás 3
             if (MyF.Vanjoga(melyikelem, 3))
@@ -214,7 +214,7 @@ namespace Villamos
             // módosítás 1
             if (MyF.Vanjoga(melyikelem, 1))
             {
-                CmbTelephely.Enabled = true;
+                CmbTelephely.Visible = true;
             }
             // módosítás 2
             if (MyF.Vanjoga(melyikelem, 2))
@@ -1141,29 +1141,29 @@ namespace Villamos
 
         private void Mind_Click(object sender, EventArgs e)
         {
-            SzabLeadás.Visible = false;
-            SzabNyomtatás.Visible = false;
+            SzabLeadás.Enabled = false;
+            SzabNyomtatás.Enabled = false;
             Szabadságkiírása(1);
         }
 
         private void Kért_Click(object sender, EventArgs e)
         {
-            SzabNyomtatás.Visible = true;
-            SzabLeadás.Visible = false;
+            SzabNyomtatás.Enabled = true;
+            SzabLeadás.Enabled = false;
             Szabadságkiírása(1);
         }
 
         private void Nyomtatott_Click(object sender, EventArgs e)
         {
-            SzabNyomtatás.Visible = true;
-            SzabLeadás.Visible = true;
+            SzabNyomtatás.Enabled = true;
+            SzabLeadás.Enabled = true;
             Szabadságkiírása(1);
         }
 
         private void Rögzített_Click(object sender, EventArgs e)
         {
-            SzabNyomtatás.Visible = true;
-            SzabLeadás.Visible = false;
+            SzabNyomtatás.Enabled = true;
+            SzabLeadás.Enabled = false;
             Szabadságkiírása(1);
         }
         #endregion
@@ -1454,33 +1454,33 @@ namespace Villamos
         private void Túlóramind_Click(object sender, EventArgs e)
         {
             Túlórakiírás(1);
-            EgyéniTúlNyom.Visible = false;
-            TúlCsopNyom.Visible = false;
-            Túl_Eng_Beáll.Visible = false;
+            EgyéniTúlNyom.Enabled = false;
+            TúlCsopNyom.Enabled = false;
+            Túl_Eng_Beáll.Enabled = false;
         }
 
         private void Túlóraigényelt_Click(object sender, EventArgs e)
         {
             Túlórakiírás(1);
-            Túl_Eng_Beáll.Visible = false;
-            EgyéniTúlNyom.Visible = true;
-            TúlCsopNyom.Visible = true;
+            Túl_Eng_Beáll.Enabled = false;
+            EgyéniTúlNyom.Enabled = true;
+            TúlCsopNyom.Enabled = true;
         }
 
         private void Túlóranyomtatott_Click(object sender, EventArgs e)
         {
             Túlórakiírás(1);
-            EgyéniTúlNyom.Visible = true;
-            TúlCsopNyom.Visible = true;
-            Túl_Eng_Beáll.Visible = true;
+            EgyéniTúlNyom.Enabled = true;
+            TúlCsopNyom.Enabled = true;
+            Túl_Eng_Beáll.Enabled = true;
         }
 
         private void Túlórarögzített_Click(object sender, EventArgs e)
         {
             Túlórakiírás(1);
-            Túl_Eng_Beáll.Visible = false;
-            EgyéniTúlNyom.Visible = true;
-            TúlCsopNyom.Visible = true;
+            Túl_Eng_Beáll.Enabled = false;
+            EgyéniTúlNyom.Enabled = true;
+            TúlCsopNyom.Enabled = true;
         }
 
         private void BtnTúlóraÖsszlekérd_Click(object sender, EventArgs e)
@@ -2528,7 +2528,7 @@ namespace Villamos
                           a.Kezdődátum <= Határnap.Value
                           orderby a.Törzsszám, a.Kezdődátum
                           select a).ToList();
-                if (Adatok == null || Adatok.Count < 1) throw new HibásBevittAdat("Ebben az évben nem lett létrehozva adatbázis.");
+                if (Adatok == null || Adatok.Count < 1) throw new HibásBevittAdat("A kijelölt adatokat nem kell összevonni.");
                 Adat_Szatube_Szabadság Ideig = null;
 
                 string Első_HR = "";
@@ -2597,8 +2597,10 @@ namespace Villamos
                 Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
-            {
+            { 
+                Holtart.Ki();
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+               
             }
             catch (Exception ex)
             {
