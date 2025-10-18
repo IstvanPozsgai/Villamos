@@ -47,14 +47,17 @@ namespace Villamos
                 {
                     Telephelyekfeltöltése();
                     Jogosultságkiosztás();
+                    Rögzítésvezérlő.Visible = true;
                 }
                 else
                 {
                     TelephelyekFeltöltéseÚj();
                     GombLathatosagKezelo.Beallit(this, CmbTelephely.Text.Trim());
+
                 }
                 Fülekkitöltése();
                 Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -70,6 +73,8 @@ namespace Villamos
 
         private void AblakAkkumulátor_Load(object sender, EventArgs e)
         {
+
+
         }
 
         private void Jogosultságkiosztás()
@@ -242,6 +247,7 @@ namespace Villamos
                 case 2:
                     {
                         //Beépítés átépítés
+                        GombokTábla.Visible = Rögzítésvezérlő.Visible;
                         Beép_Státus_Feltöltés();
                         Beép_Pályaszám_fetöltés();
                         StátusVálasztás();

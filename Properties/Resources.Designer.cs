@@ -153,6 +153,16 @@ namespace Villamos.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Action_view_multicolumn {
+            get {
+                object obj = ResourceManager.GetObject("Action-view-multicolumn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Aha_Soft_Large_Seo_SEO {
             get {
                 object obj = ResourceManager.GetObject("Aha-Soft-Large-Seo-SEO", resourceCulture);

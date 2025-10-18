@@ -72,11 +72,7 @@ namespace Villamos
             this.Label18 = new System.Windows.Forms.Label();
             this.Label11 = new System.Windows.Forms.Label();
             this.TextMegjegyzés = new System.Windows.Forms.TextBox();
-            this.btnAkufriss = new System.Windows.Forms.Button();
-            this.Btnakurögzít = new System.Windows.Forms.Button();
-            this.Btnakuúj = new System.Windows.Forms.Button();
             this.TabPage3 = new System.Windows.Forms.TabPage();
-            this.Résztörlés = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.Label22 = new System.Windows.Forms.Label();
             this.Textmérkapacitás = new System.Windows.Forms.TextBox();
@@ -95,38 +91,24 @@ namespace Villamos
             this.Label1 = new System.Windows.Forms.Label();
             this.Label7 = new System.Windows.Forms.Label();
             this.TextMérmegjegyzés = new System.Windows.Forms.TextBox();
-            this.btnrögzítés = new System.Windows.Forms.Button();
-            this.btnmérúj = new System.Windows.Forms.Button();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.label26 = new System.Windows.Forms.Label();
             this.Beép_Gyári = new System.Windows.Forms.TextBox();
-            this.Használt = new System.Windows.Forms.Button();
-            this.Törölt = new System.Windows.Forms.Button();
-            this.Kiépít = new System.Windows.Forms.Button();
-            this.Leselejtezett = new System.Windows.Forms.Button();
             this.KIBE_Panel = new System.Windows.Forms.Panel();
             this.label29 = new System.Windows.Forms.Label();
             this.BePSz = new System.Windows.Forms.TextBox();
-            this.Beépít = new System.Windows.Forms.Button();
             this.Pályaszám_Szűrő = new System.Windows.Forms.Panel();
             this.label28 = new System.Windows.Forms.Label();
             this.Beép_Psz = new System.Windows.Forms.ComboBox();
             this.label27 = new System.Windows.Forms.Label();
-            this.Beép_Frissít = new System.Windows.Forms.Button();
             this.Tábla_Beép = new System.Windows.Forms.DataGridView();
-            this.SelejtElő = new System.Windows.Forms.Button();
             this.Beép_Státus = new System.Windows.Forms.ComboBox();
             this.TabPage2 = new System.Windows.Forms.TabPage();
-            this.TelephelyEllenőr = new System.Windows.Forms.Button();
-            this.Mérés = new System.Windows.Forms.Button();
-            this.Teljesség = new System.Windows.Forms.Button();
             this.Telephely_Szűrő = new System.Windows.Forms.ComboBox();
             this.label24 = new System.Windows.Forms.Label();
-            this.ExcelAlapLista = new System.Windows.Forms.Button();
             this.Label21 = new System.Windows.Forms.Label();
             this.txtgyáriszám = new System.Windows.Forms.TextBox();
             this.Tábla2 = new System.Windows.Forms.DataGridView();
-            this.Akku_Tábla_Listázás = new System.Windows.Forms.Button();
             this.Label9 = new System.Windows.Forms.Label();
             this.ComboStátuslek = new System.Windows.Forms.ComboBox();
             this.TextPszlek = new System.Windows.Forms.TextBox();
@@ -137,15 +119,35 @@ namespace Villamos
             this.Dátumig = new System.Windows.Forms.DateTimePicker();
             this.Dátumtól = new System.Windows.Forms.DateTimePicker();
             this.Tábla4 = new System.Windows.Forms.DataGridView();
-            this.R_törlés = new System.Windows.Forms.Button();
-            this.Button2 = new System.Windows.Forms.Button();
-            this.BtnMéréslista = new System.Windows.Forms.Button();
             this.Panel1 = new System.Windows.Forms.Panel();
             this.CmbTelephely = new System.Windows.Forms.ComboBox();
             this.label23 = new System.Windows.Forms.Label();
-            this.Súgó = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Súgó = new System.Windows.Forms.Button();
+            this.btnAkufriss = new System.Windows.Forms.Button();
+            this.Btnakurögzít = new System.Windows.Forms.Button();
+            this.Btnakuúj = new System.Windows.Forms.Button();
+            this.Résztörlés = new System.Windows.Forms.Button();
+            this.btnrögzítés = new System.Windows.Forms.Button();
+            this.btnmérúj = new System.Windows.Forms.Button();
+            this.Rögzítésvezérlő = new System.Windows.Forms.Button();
+            this.Használt = new System.Windows.Forms.Button();
+            this.Törölt = new System.Windows.Forms.Button();
+            this.Kiépít = new System.Windows.Forms.Button();
+            this.Leselejtezett = new System.Windows.Forms.Button();
+            this.Beépít = new System.Windows.Forms.Button();
+            this.Beép_Frissít = new System.Windows.Forms.Button();
+            this.SelejtElő = new System.Windows.Forms.Button();
+            this.TelephelyEllenőr = new System.Windows.Forms.Button();
+            this.Mérés = new System.Windows.Forms.Button();
+            this.Teljesség = new System.Windows.Forms.Button();
+            this.ExcelAlapLista = new System.Windows.Forms.Button();
+            this.Akku_Tábla_Listázás = new System.Windows.Forms.Button();
+            this.R_törlés = new System.Windows.Forms.Button();
+            this.Button2 = new System.Windows.Forms.Button();
+            this.BtnMéréslista = new System.Windows.Forms.Button();
+            this.GombokTábla = new System.Windows.Forms.TableLayoutPanel();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -160,6 +162,7 @@ namespace Villamos
             this.TabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla4)).BeginInit();
             this.Panel1.SuspendLayout();
+            this.GombokTábla.SuspendLayout();
             this.SuspendLayout();
             // 
             // Fülek
@@ -453,45 +456,6 @@ namespace Villamos
             this.TextMegjegyzés.Size = new System.Drawing.Size(754, 65);
             this.TextMegjegyzés.TabIndex = 67;
             // 
-            // btnAkufriss
-            // 
-            this.btnAkufriss.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.btnAkufriss.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnAkufriss.Location = new System.Drawing.Point(466, 146);
-            this.btnAkufriss.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnAkufriss.Name = "btnAkufriss";
-            this.btnAkufriss.Size = new System.Drawing.Size(48, 48);
-            this.btnAkufriss.TabIndex = 66;
-            this.toolTip1.SetToolTip(this.btnAkufriss, "Frissíti az adatokat");
-            this.btnAkufriss.UseVisualStyleBackColor = true;
-            this.btnAkufriss.Click += new System.EventHandler(this.BtnAkufriss_Click);
-            // 
-            // Btnakurögzít
-            // 
-            this.Btnakurögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Btnakurögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btnakurögzít.Location = new System.Drawing.Point(466, 5);
-            this.Btnakurögzít.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Btnakurögzít.Name = "Btnakurögzít";
-            this.Btnakurögzít.Size = new System.Drawing.Size(48, 48);
-            this.Btnakurögzít.TabIndex = 65;
-            this.toolTip1.SetToolTip(this.Btnakurögzít, "Rögzíti/módosítja az adatokat");
-            this.Btnakurögzít.UseVisualStyleBackColor = true;
-            this.Btnakurögzít.Click += new System.EventHandler(this.Btnakurögzít_Click);
-            // 
-            // Btnakuúj
-            // 
-            this.Btnakuúj.BackgroundImage = global::Villamos.Properties.Resources.New_gyűjtemény;
-            this.Btnakuúj.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btnakuúj.Location = new System.Drawing.Point(466, 76);
-            this.Btnakuúj.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Btnakuúj.Name = "Btnakuúj";
-            this.Btnakuúj.Size = new System.Drawing.Size(48, 48);
-            this.Btnakuúj.TabIndex = 64;
-            this.toolTip1.SetToolTip(this.Btnakuúj, "Új adatnak előkészíti a beviteli mezőt");
-            this.Btnakuúj.UseVisualStyleBackColor = true;
-            this.Btnakuúj.Click += new System.EventHandler(this.Btnakuúj_Click);
-            // 
             // TabPage3
             // 
             this.TabPage3.BackColor = System.Drawing.Color.Turquoise;
@@ -506,19 +470,6 @@ namespace Villamos
             this.TabPage3.Size = new System.Drawing.Size(1416, 488);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Akkumulátor mérés rögzítésre";
-            // 
-            // Résztörlés
-            // 
-            this.Résztörlés.BackgroundImage = global::Villamos.Properties.Resources.részjelöl;
-            this.Résztörlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Résztörlés.Location = new System.Drawing.Point(459, 101);
-            this.Résztörlés.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Résztörlés.Name = "Résztörlés";
-            this.Résztörlés.Size = new System.Drawing.Size(48, 48);
-            this.Résztörlés.TabIndex = 57;
-            this.toolTip1.SetToolTip(this.Résztörlés, "Új adatnak előkészíti a beviteli mezőt Nem minden");
-            this.Résztörlés.UseVisualStyleBackColor = true;
-            this.Résztörlés.Click += new System.EventHandler(this.Résztörlés_Click);
             // 
             // tableLayoutPanel2
             // 
@@ -697,47 +648,16 @@ namespace Villamos
             this.TextMérmegjegyzés.Size = new System.Drawing.Size(754, 65);
             this.TextMérmegjegyzés.TabIndex = 8;
             // 
-            // btnrögzítés
-            // 
-            this.btnrögzítés.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.btnrögzítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnrögzítés.Location = new System.Drawing.Point(403, 15);
-            this.btnrögzítés.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnrögzítés.Name = "btnrögzítés";
-            this.btnrögzítés.Size = new System.Drawing.Size(48, 48);
-            this.btnrögzítés.TabIndex = 9;
-            this.toolTip1.SetToolTip(this.btnrögzítés, "Rögzíti/módosítja az adatokat");
-            this.btnrögzítés.UseVisualStyleBackColor = true;
-            this.btnrögzítés.Click += new System.EventHandler(this.Btnrögzítés_Click);
-            // 
-            // btnmérúj
-            // 
-            this.btnmérúj.BackgroundImage = global::Villamos.Properties.Resources.üres_lista;
-            this.btnmérúj.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnmérúj.Location = new System.Drawing.Point(403, 99);
-            this.btnmérúj.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnmérúj.Name = "btnmérúj";
-            this.btnmérúj.Size = new System.Drawing.Size(48, 48);
-            this.btnmérúj.TabIndex = 10;
-            this.toolTip1.SetToolTip(this.btnmérúj, "Új adatnak előkészíti a beviteli mezőt Mindent ");
-            this.btnmérúj.UseVisualStyleBackColor = true;
-            this.btnmérúj.Click += new System.EventHandler(this.Btnmérúj_Click);
-            // 
             // tabPage5
             // 
             this.tabPage5.BackColor = System.Drawing.Color.LimeGreen;
+            this.tabPage5.Controls.Add(this.GombokTábla);
             this.tabPage5.Controls.Add(this.label26);
             this.tabPage5.Controls.Add(this.Beép_Gyári);
-            this.tabPage5.Controls.Add(this.Használt);
-            this.tabPage5.Controls.Add(this.Törölt);
-            this.tabPage5.Controls.Add(this.Kiépít);
-            this.tabPage5.Controls.Add(this.Leselejtezett);
-            this.tabPage5.Controls.Add(this.KIBE_Panel);
             this.tabPage5.Controls.Add(this.Pályaszám_Szűrő);
             this.tabPage5.Controls.Add(this.label27);
             this.tabPage5.Controls.Add(this.Beép_Frissít);
             this.tabPage5.Controls.Add(this.Tábla_Beép);
-            this.tabPage5.Controls.Add(this.SelejtElő);
             this.tabPage5.Controls.Add(this.Beép_Státus);
             this.tabPage5.Location = new System.Drawing.Point(4, 29);
             this.tabPage5.Name = "tabPage5";
@@ -761,66 +681,14 @@ namespace Villamos
             this.Beép_Gyári.Size = new System.Drawing.Size(181, 26);
             this.Beép_Gyári.TabIndex = 85;
             // 
-            // Használt
-            // 
-            this.Használt.BackgroundImage = global::Villamos.Properties.Resources.App_ark;
-            this.Használt.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Használt.Location = new System.Drawing.Point(1185, 8);
-            this.Használt.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Használt.Name = "Használt";
-            this.Használt.Size = new System.Drawing.Size(48, 48);
-            this.Használt.TabIndex = 84;
-            this.toolTip1.SetToolTip(this.Használt, "Kijelölt elemek Használttá tétele");
-            this.Használt.UseVisualStyleBackColor = true;
-            this.Használt.Click += new System.EventHandler(this.Használt_Click);
-            // 
-            // Törölt
-            // 
-            this.Törölt.BackgroundImage = global::Villamos.Properties.Resources.bezár;
-            this.Törölt.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Törölt.Location = new System.Drawing.Point(1353, 8);
-            this.Törölt.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Törölt.Name = "Törölt";
-            this.Törölt.Size = new System.Drawing.Size(48, 48);
-            this.Törölt.TabIndex = 83;
-            this.toolTip1.SetToolTip(this.Törölt, "Kijelölt elemeket Töröltre állítja.");
-            this.Törölt.UseVisualStyleBackColor = true;
-            this.Törölt.Click += new System.EventHandler(this.Törölt_Click);
-            // 
-            // Kiépít
-            // 
-            this.Kiépít.BackgroundImage = global::Villamos.Properties.Resources.Fatcow_Farm_Fresh_Table_row_delete_32;
-            this.Kiépít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Kiépít.Location = new System.Drawing.Point(1129, 8);
-            this.Kiépít.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Kiépít.Name = "Kiépít";
-            this.Kiépít.Size = new System.Drawing.Size(48, 48);
-            this.Kiépít.TabIndex = 78;
-            this.toolTip1.SetToolTip(this.Kiépít, "Kiépíti a kijelölt akkumulátorokat");
-            this.Kiépít.UseVisualStyleBackColor = true;
-            this.Kiépít.Click += new System.EventHandler(this.Kiépít_Click);
-            // 
-            // Leselejtezett
-            // 
-            this.Leselejtezett.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
-            this.Leselejtezett.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Leselejtezett.Location = new System.Drawing.Point(1297, 8);
-            this.Leselejtezett.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Leselejtezett.Name = "Leselejtezett";
-            this.Leselejtezett.Size = new System.Drawing.Size(48, 48);
-            this.Leselejtezett.TabIndex = 82;
-            this.toolTip1.SetToolTip(this.Leselejtezett, "Kijelölt elemek Selejtezése");
-            this.Leselejtezett.UseVisualStyleBackColor = true;
-            this.Leselejtezett.Click += new System.EventHandler(this.Leselejtezett_Click);
-            // 
             // KIBE_Panel
             // 
             this.KIBE_Panel.Controls.Add(this.label29);
             this.KIBE_Panel.Controls.Add(this.BePSz);
             this.KIBE_Panel.Controls.Add(this.Beépít);
-            this.KIBE_Panel.Location = new System.Drawing.Point(847, 3);
+            this.KIBE_Panel.Location = new System.Drawing.Point(3, 3);
             this.KIBE_Panel.Name = "KIBE_Panel";
-            this.KIBE_Panel.Size = new System.Drawing.Size(271, 59);
+            this.KIBE_Panel.Size = new System.Drawing.Size(271, 53);
             this.KIBE_Panel.TabIndex = 81;
             // 
             // label29
@@ -839,19 +707,6 @@ namespace Villamos
             this.BePSz.Name = "BePSz";
             this.BePSz.Size = new System.Drawing.Size(110, 26);
             this.BePSz.TabIndex = 63;
-            // 
-            // Beépít
-            // 
-            this.Beépít.BackgroundImage = global::Villamos.Properties.Resources.Fatcow_Farm_Fresh_Table_row_insert;
-            this.Beépít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Beépít.Location = new System.Drawing.Point(215, 5);
-            this.Beépít.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Beépít.Name = "Beépít";
-            this.Beépít.Size = new System.Drawing.Size(48, 48);
-            this.Beépít.TabIndex = 67;
-            this.toolTip1.SetToolTip(this.Beépít, "Beépíti a kijelölt akkumulátorokat");
-            this.Beépít.UseVisualStyleBackColor = true;
-            this.Beépít.Click += new System.EventHandler(this.Beépít_Click);
             // 
             // Pályaszám_Szűrő
             // 
@@ -887,19 +742,6 @@ namespace Villamos
             this.label27.Size = new System.Drawing.Size(60, 20);
             this.label27.TabIndex = 69;
             this.label27.Text = "Státus:";
-            // 
-            // Beép_Frissít
-            // 
-            this.Beép_Frissít.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.Beép_Frissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Beép_Frissít.Location = new System.Drawing.Point(790, 7);
-            this.Beép_Frissít.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Beép_Frissít.Name = "Beép_Frissít";
-            this.Beép_Frissít.Size = new System.Drawing.Size(48, 48);
-            this.Beép_Frissít.TabIndex = 68;
-            this.toolTip1.SetToolTip(this.Beép_Frissít, "Frissíti az adatokat");
-            this.Beép_Frissít.UseVisualStyleBackColor = true;
-            this.Beép_Frissít.Click += new System.EventHandler(this.Beép_Frissít_Click);
             // 
             // Tábla_Beép
             // 
@@ -938,19 +780,6 @@ namespace Villamos
             this.Tábla_Beép.Size = new System.Drawing.Size(1408, 418);
             this.Tábla_Beép.TabIndex = 75;
             // 
-            // SelejtElő
-            // 
-            this.SelejtElő.BackgroundImage = global::Villamos.Properties.Resources.App_spreadsheet;
-            this.SelejtElő.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.SelejtElő.Location = new System.Drawing.Point(1241, 8);
-            this.SelejtElő.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.SelejtElő.Name = "SelejtElő";
-            this.SelejtElő.Size = new System.Drawing.Size(48, 48);
-            this.SelejtElő.TabIndex = 71;
-            this.toolTip1.SetToolTip(this.SelejtElő, "Kijelölt elemek Selejtelőkészítése");
-            this.SelejtElő.UseVisualStyleBackColor = true;
-            this.SelejtElő.Click += new System.EventHandler(this.SelejtElő_Click);
-            // 
             // Beép_Státus
             // 
             this.Beép_Státus.FormattingEnabled = true;
@@ -968,60 +797,21 @@ namespace Villamos
             this.TabPage2.Controls.Add(this.Teljesség);
             this.TabPage2.Controls.Add(this.Telephely_Szűrő);
             this.TabPage2.Controls.Add(this.label24);
-            this.TabPage2.Controls.Add(this.ExcelAlapLista);
             this.TabPage2.Controls.Add(this.Label21);
             this.TabPage2.Controls.Add(this.txtgyáriszám);
             this.TabPage2.Controls.Add(this.Tábla2);
-            this.TabPage2.Controls.Add(this.Akku_Tábla_Listázás);
             this.TabPage2.Controls.Add(this.Label9);
             this.TabPage2.Controls.Add(this.ComboStátuslek);
             this.TabPage2.Controls.Add(this.TextPszlek);
             this.TabPage2.Controls.Add(this.Label8);
+            this.TabPage2.Controls.Add(this.ExcelAlapLista);
+            this.TabPage2.Controls.Add(this.Akku_Tábla_Listázás);
             this.TabPage2.Location = new System.Drawing.Point(4, 29);
             this.TabPage2.Name = "TabPage2";
             this.TabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.TabPage2.Size = new System.Drawing.Size(1416, 488);
             this.TabPage2.TabIndex = 1;
             this.TabPage2.Text = "Akkumulátorok listázása";
-            // 
-            // TelephelyEllenőr
-            // 
-            this.TelephelyEllenőr.BackgroundImage = global::Villamos.Properties.Resources.process_accept;
-            this.TelephelyEllenőr.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.TelephelyEllenőr.Location = new System.Drawing.Point(1312, 10);
-            this.TelephelyEllenőr.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.TelephelyEllenőr.Name = "TelephelyEllenőr";
-            this.TelephelyEllenőr.Size = new System.Drawing.Size(45, 45);
-            this.TelephelyEllenőr.TabIndex = 74;
-            this.toolTip1.SetToolTip(this.TelephelyEllenőr, "Telephely ellenőrzés.\r\nA kocsi telephelyét átveszi az akkumulátor alapadata.\r\n");
-            this.TelephelyEllenőr.UseVisualStyleBackColor = true;
-            this.TelephelyEllenőr.Click += new System.EventHandler(this.TelephelyEllenőr_Click);
-            // 
-            // Mérés
-            // 
-            this.Mérés.BackgroundImage = global::Villamos.Properties.Resources.Aha_Soft_Large_Seo_SEO;
-            this.Mérés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Mérés.Location = new System.Drawing.Point(1261, 10);
-            this.Mérés.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Mérés.Name = "Mérés";
-            this.Mérés.Size = new System.Drawing.Size(45, 45);
-            this.Mérés.TabIndex = 73;
-            this.toolTip1.SetToolTip(this.Mérés, "Utolsó mérési adatok");
-            this.Mérés.UseVisualStyleBackColor = true;
-            this.Mérés.Click += new System.EventHandler(this.Mérés_Click);
-            // 
-            // Teljesség
-            // 
-            this.Teljesség.BackgroundImage = global::Villamos.Properties.Resources.CARDFIL3;
-            this.Teljesség.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Teljesség.Location = new System.Drawing.Point(1208, 10);
-            this.Teljesség.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Teljesség.Name = "Teljesség";
-            this.Teljesség.Size = new System.Drawing.Size(45, 45);
-            this.Teljesség.TabIndex = 72;
-            this.toolTip1.SetToolTip(this.Teljesség, "Teljesség vizsgálat");
-            this.Teljesség.UseVisualStyleBackColor = true;
-            this.Teljesség.Click += new System.EventHandler(this.Teljesség_Click);
             // 
             // Telephely_Szűrő
             // 
@@ -1039,18 +829,6 @@ namespace Villamos
             this.label24.Size = new System.Drawing.Size(80, 20);
             this.label24.TabIndex = 70;
             this.label24.Text = "Telephely:";
-            // 
-            // ExcelAlapLista
-            // 
-            this.ExcelAlapLista.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
-            this.ExcelAlapLista.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ExcelAlapLista.Location = new System.Drawing.Point(1364, 10);
-            this.ExcelAlapLista.Name = "ExcelAlapLista";
-            this.ExcelAlapLista.Size = new System.Drawing.Size(45, 45);
-            this.ExcelAlapLista.TabIndex = 69;
-            this.toolTip1.SetToolTip(this.ExcelAlapLista, "Excel táblázatot készít a táblázat adataiból");
-            this.ExcelAlapLista.UseVisualStyleBackColor = true;
-            this.ExcelAlapLista.Click += new System.EventHandler(this.ExcelAlapLista_Click);
             // 
             // Label21
             // 
@@ -1106,19 +884,6 @@ namespace Villamos
             this.Tábla2.Size = new System.Drawing.Size(1402, 414);
             this.Tábla2.TabIndex = 64;
             this.Tábla2.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla2_CellDoubleClick);
-            // 
-            // Akku_Tábla_Listázás
-            // 
-            this.Akku_Tábla_Listázás.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.Akku_Tábla_Listázás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Akku_Tábla_Listázás.Location = new System.Drawing.Point(1114, 10);
-            this.Akku_Tábla_Listázás.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Akku_Tábla_Listázás.Name = "Akku_Tábla_Listázás";
-            this.Akku_Tábla_Listázás.Size = new System.Drawing.Size(45, 45);
-            this.Akku_Tábla_Listázás.TabIndex = 63;
-            this.toolTip1.SetToolTip(this.Akku_Tábla_Listázás, "Frissíti a táblázatot");
-            this.Akku_Tábla_Listázás.UseVisualStyleBackColor = true;
-            this.Akku_Tábla_Listázás.Click += new System.EventHandler(this.Akku_Tábla_Listázás_Click);
             // 
             // Label9
             // 
@@ -1239,6 +1004,309 @@ namespace Villamos
             this.Tábla4.Size = new System.Drawing.Size(1404, 417);
             this.Tábla4.TabIndex = 36;
             // 
+            // Panel1
+            // 
+            this.Panel1.Controls.Add(this.CmbTelephely);
+            this.Panel1.Controls.Add(this.label23);
+            this.Panel1.Location = new System.Drawing.Point(12, 4);
+            this.Panel1.Name = "Panel1";
+            this.Panel1.Size = new System.Drawing.Size(373, 45);
+            this.Panel1.TabIndex = 54;
+            // 
+            // CmbTelephely
+            // 
+            this.CmbTelephely.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CmbTelephely.FormattingEnabled = true;
+            this.CmbTelephely.Location = new System.Drawing.Point(184, 9);
+            this.CmbTelephely.Name = "CmbTelephely";
+            this.CmbTelephely.Size = new System.Drawing.Size(186, 28);
+            this.CmbTelephely.TabIndex = 18;
+            this.CmbTelephely.SelectedIndexChanged += new System.EventHandler(this.CmbTelephely_SelectedIndexChanged);
+            this.CmbTelephely.SelectionChangeCommitted += new System.EventHandler(this.CmbTelephely_SelectionChangeCommitted);
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(12, 11);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(145, 20);
+            this.label23.TabIndex = 17;
+            this.label23.Text = "Telephelyi beállítás:";
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.IsBalloon = true;
+            // 
+            // Holtart
+            // 
+            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Holtart.Location = new System.Drawing.Point(543, 15);
+            this.Holtart.Name = "Holtart";
+            this.Holtart.Size = new System.Drawing.Size(842, 30);
+            this.Holtart.TabIndex = 56;
+            this.Holtart.Visible = false;
+            // 
+            // Súgó
+            // 
+            this.Súgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Súgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
+            this.Súgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Súgó.Location = new System.Drawing.Point(1390, 5);
+            this.Súgó.Name = "Súgó";
+            this.Súgó.Size = new System.Drawing.Size(45, 45);
+            this.Súgó.TabIndex = 55;
+            this.toolTip1.SetToolTip(this.Súgó, "Súgó");
+            this.Súgó.UseVisualStyleBackColor = true;
+            this.Súgó.Click += new System.EventHandler(this.Súgó_Click);
+            // 
+            // btnAkufriss
+            // 
+            this.btnAkufriss.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.btnAkufriss.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnAkufriss.Location = new System.Drawing.Point(466, 146);
+            this.btnAkufriss.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnAkufriss.Name = "btnAkufriss";
+            this.btnAkufriss.Size = new System.Drawing.Size(48, 48);
+            this.btnAkufriss.TabIndex = 66;
+            this.toolTip1.SetToolTip(this.btnAkufriss, "Frissíti az adatokat");
+            this.btnAkufriss.UseVisualStyleBackColor = true;
+            this.btnAkufriss.Click += new System.EventHandler(this.BtnAkufriss_Click);
+            // 
+            // Btnakurögzít
+            // 
+            this.Btnakurögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.Btnakurögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btnakurögzít.Location = new System.Drawing.Point(466, 5);
+            this.Btnakurögzít.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Btnakurögzít.Name = "Btnakurögzít";
+            this.Btnakurögzít.Size = new System.Drawing.Size(48, 48);
+            this.Btnakurögzít.TabIndex = 65;
+            this.toolTip1.SetToolTip(this.Btnakurögzít, "Rögzíti/módosítja az adatokat");
+            this.Btnakurögzít.UseVisualStyleBackColor = true;
+            this.Btnakurögzít.Click += new System.EventHandler(this.Btnakurögzít_Click);
+            // 
+            // Btnakuúj
+            // 
+            this.Btnakuúj.BackgroundImage = global::Villamos.Properties.Resources.New_gyűjtemény;
+            this.Btnakuúj.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btnakuúj.Location = new System.Drawing.Point(466, 76);
+            this.Btnakuúj.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Btnakuúj.Name = "Btnakuúj";
+            this.Btnakuúj.Size = new System.Drawing.Size(48, 48);
+            this.Btnakuúj.TabIndex = 64;
+            this.toolTip1.SetToolTip(this.Btnakuúj, "Új adatnak előkészíti a beviteli mezőt");
+            this.Btnakuúj.UseVisualStyleBackColor = true;
+            this.Btnakuúj.Click += new System.EventHandler(this.Btnakuúj_Click);
+            // 
+            // Résztörlés
+            // 
+            this.Résztörlés.BackgroundImage = global::Villamos.Properties.Resources.részjelöl;
+            this.Résztörlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Résztörlés.Location = new System.Drawing.Point(459, 101);
+            this.Résztörlés.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Résztörlés.Name = "Résztörlés";
+            this.Résztörlés.Size = new System.Drawing.Size(48, 48);
+            this.Résztörlés.TabIndex = 57;
+            this.toolTip1.SetToolTip(this.Résztörlés, "Új adatnak előkészíti a beviteli mezőt Nem minden");
+            this.Résztörlés.UseVisualStyleBackColor = true;
+            this.Résztörlés.Click += new System.EventHandler(this.Résztörlés_Click);
+            // 
+            // btnrögzítés
+            // 
+            this.btnrögzítés.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.btnrögzítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnrögzítés.Location = new System.Drawing.Point(403, 15);
+            this.btnrögzítés.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnrögzítés.Name = "btnrögzítés";
+            this.btnrögzítés.Size = new System.Drawing.Size(48, 48);
+            this.btnrögzítés.TabIndex = 9;
+            this.toolTip1.SetToolTip(this.btnrögzítés, "Rögzíti/módosítja az adatokat");
+            this.btnrögzítés.UseVisualStyleBackColor = true;
+            this.btnrögzítés.Click += new System.EventHandler(this.Btnrögzítés_Click);
+            // 
+            // btnmérúj
+            // 
+            this.btnmérúj.BackgroundImage = global::Villamos.Properties.Resources.üres_lista;
+            this.btnmérúj.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnmérúj.Location = new System.Drawing.Point(403, 99);
+            this.btnmérúj.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnmérúj.Name = "btnmérúj";
+            this.btnmérúj.Size = new System.Drawing.Size(48, 48);
+            this.btnmérúj.TabIndex = 10;
+            this.toolTip1.SetToolTip(this.btnmérúj, "Új adatnak előkészíti a beviteli mezőt Mindent ");
+            this.btnmérúj.UseVisualStyleBackColor = true;
+            this.btnmérúj.Click += new System.EventHandler(this.Btnmérúj_Click);
+            // 
+            // Rögzítésvezérlő
+            // 
+            this.Rögzítésvezérlő.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Rögzítésvezérlő.BackgroundImage = global::Villamos.Properties.Resources.Action_view_multicolumn;
+            this.Rögzítésvezérlő.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Rögzítésvezérlő.Location = new System.Drawing.Point(1390, 5);
+            this.Rögzítésvezérlő.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Rögzítésvezérlő.Name = "Rögzítésvezérlő";
+            this.Rögzítésvezérlő.Size = new System.Drawing.Size(40, 40);
+            this.Rögzítésvezérlő.TabIndex = 87;
+            this.toolTip1.SetToolTip(this.Rögzítésvezérlő, "Rögzítésvezérlő");
+            this.Rögzítésvezérlő.UseVisualStyleBackColor = true;
+            this.Rögzítésvezérlő.Visible = false;
+            // 
+            // Használt
+            // 
+            this.Használt.BackgroundImage = global::Villamos.Properties.Resources.App_ark;
+            this.Használt.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Használt.Location = new System.Drawing.Point(341, 5);
+            this.Használt.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Használt.Name = "Használt";
+            this.Használt.Size = new System.Drawing.Size(48, 48);
+            this.Használt.TabIndex = 84;
+            this.toolTip1.SetToolTip(this.Használt, "Kijelölt elemek Használttá tétele");
+            this.Használt.UseVisualStyleBackColor = true;
+            this.Használt.Click += new System.EventHandler(this.Használt_Click);
+            // 
+            // Törölt
+            // 
+            this.Törölt.BackgroundImage = global::Villamos.Properties.Resources.bezár;
+            this.Törölt.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Törölt.Location = new System.Drawing.Point(521, 5);
+            this.Törölt.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Törölt.Name = "Törölt";
+            this.Törölt.Size = new System.Drawing.Size(48, 48);
+            this.Törölt.TabIndex = 83;
+            this.toolTip1.SetToolTip(this.Törölt, "Kijelölt elemeket Töröltre állítja.");
+            this.Törölt.UseVisualStyleBackColor = true;
+            this.Törölt.Click += new System.EventHandler(this.Törölt_Click);
+            // 
+            // Kiépít
+            // 
+            this.Kiépít.BackgroundImage = global::Villamos.Properties.Resources.Fatcow_Farm_Fresh_Table_row_delete_32;
+            this.Kiépít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Kiépít.Location = new System.Drawing.Point(281, 5);
+            this.Kiépít.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Kiépít.Name = "Kiépít";
+            this.Kiépít.Size = new System.Drawing.Size(48, 48);
+            this.Kiépít.TabIndex = 78;
+            this.toolTip1.SetToolTip(this.Kiépít, "Kiépíti a kijelölt akkumulátorokat");
+            this.Kiépít.UseVisualStyleBackColor = true;
+            this.Kiépít.Click += new System.EventHandler(this.Kiépít_Click);
+            // 
+            // Leselejtezett
+            // 
+            this.Leselejtezett.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
+            this.Leselejtezett.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Leselejtezett.Location = new System.Drawing.Point(461, 5);
+            this.Leselejtezett.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Leselejtezett.Name = "Leselejtezett";
+            this.Leselejtezett.Size = new System.Drawing.Size(48, 48);
+            this.Leselejtezett.TabIndex = 82;
+            this.toolTip1.SetToolTip(this.Leselejtezett, "Kijelölt elemek Selejtezése");
+            this.Leselejtezett.UseVisualStyleBackColor = true;
+            this.Leselejtezett.Click += new System.EventHandler(this.Leselejtezett_Click);
+            // 
+            // Beépít
+            // 
+            this.Beépít.BackgroundImage = global::Villamos.Properties.Resources.Fatcow_Farm_Fresh_Table_row_insert;
+            this.Beépít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Beépít.Location = new System.Drawing.Point(215, 5);
+            this.Beépít.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Beépít.Name = "Beépít";
+            this.Beépít.Size = new System.Drawing.Size(48, 48);
+            this.Beépít.TabIndex = 67;
+            this.toolTip1.SetToolTip(this.Beépít, "Beépíti a kijelölt akkumulátorokat");
+            this.Beépít.UseVisualStyleBackColor = true;
+            this.Beépít.Click += new System.EventHandler(this.Beépít_Click);
+            // 
+            // Beép_Frissít
+            // 
+            this.Beép_Frissít.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.Beép_Frissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Beép_Frissít.Location = new System.Drawing.Point(786, 7);
+            this.Beép_Frissít.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Beép_Frissít.Name = "Beép_Frissít";
+            this.Beép_Frissít.Size = new System.Drawing.Size(48, 48);
+            this.Beép_Frissít.TabIndex = 68;
+            this.toolTip1.SetToolTip(this.Beép_Frissít, "Frissíti az adatokat");
+            this.Beép_Frissít.UseVisualStyleBackColor = true;
+            this.Beép_Frissít.Click += new System.EventHandler(this.Beép_Frissít_Click);
+            // 
+            // SelejtElő
+            // 
+            this.SelejtElő.BackgroundImage = global::Villamos.Properties.Resources.App_spreadsheet;
+            this.SelejtElő.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.SelejtElő.Location = new System.Drawing.Point(401, 5);
+            this.SelejtElő.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.SelejtElő.Name = "SelejtElő";
+            this.SelejtElő.Size = new System.Drawing.Size(48, 48);
+            this.SelejtElő.TabIndex = 71;
+            this.toolTip1.SetToolTip(this.SelejtElő, "Kijelölt elemek Selejtelőkészítése");
+            this.SelejtElő.UseVisualStyleBackColor = true;
+            this.SelejtElő.Click += new System.EventHandler(this.SelejtElő_Click);
+            // 
+            // TelephelyEllenőr
+            // 
+            this.TelephelyEllenőr.BackgroundImage = global::Villamos.Properties.Resources.process_accept;
+            this.TelephelyEllenőr.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.TelephelyEllenőr.Location = new System.Drawing.Point(1312, 10);
+            this.TelephelyEllenőr.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.TelephelyEllenőr.Name = "TelephelyEllenőr";
+            this.TelephelyEllenőr.Size = new System.Drawing.Size(45, 45);
+            this.TelephelyEllenőr.TabIndex = 74;
+            this.toolTip1.SetToolTip(this.TelephelyEllenőr, "Telephely ellenőrzés.\r\nA kocsi telephelyét átveszi az akkumulátor alapadata.\r\n");
+            this.TelephelyEllenőr.UseVisualStyleBackColor = true;
+            this.TelephelyEllenőr.Click += new System.EventHandler(this.TelephelyEllenőr_Click);
+            // 
+            // Mérés
+            // 
+            this.Mérés.BackgroundImage = global::Villamos.Properties.Resources.Aha_Soft_Large_Seo_SEO;
+            this.Mérés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Mérés.Location = new System.Drawing.Point(1261, 10);
+            this.Mérés.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Mérés.Name = "Mérés";
+            this.Mérés.Size = new System.Drawing.Size(45, 45);
+            this.Mérés.TabIndex = 73;
+            this.toolTip1.SetToolTip(this.Mérés, "Utolsó mérési adatok");
+            this.Mérés.UseVisualStyleBackColor = true;
+            this.Mérés.Click += new System.EventHandler(this.Mérés_Click);
+            // 
+            // Teljesség
+            // 
+            this.Teljesség.BackgroundImage = global::Villamos.Properties.Resources.CARDFIL3;
+            this.Teljesség.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Teljesség.Location = new System.Drawing.Point(1208, 10);
+            this.Teljesség.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Teljesség.Name = "Teljesség";
+            this.Teljesség.Size = new System.Drawing.Size(45, 45);
+            this.Teljesség.TabIndex = 72;
+            this.toolTip1.SetToolTip(this.Teljesség, "Teljesség vizsgálat");
+            this.Teljesség.UseVisualStyleBackColor = true;
+            this.Teljesség.Click += new System.EventHandler(this.Teljesség_Click);
+            // 
+            // ExcelAlapLista
+            // 
+            this.ExcelAlapLista.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
+            this.ExcelAlapLista.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ExcelAlapLista.Location = new System.Drawing.Point(1364, 10);
+            this.ExcelAlapLista.Name = "ExcelAlapLista";
+            this.ExcelAlapLista.Size = new System.Drawing.Size(45, 45);
+            this.ExcelAlapLista.TabIndex = 69;
+            this.toolTip1.SetToolTip(this.ExcelAlapLista, "Excel táblázatot készít a táblázat adataiból");
+            this.ExcelAlapLista.UseVisualStyleBackColor = true;
+            this.ExcelAlapLista.Click += new System.EventHandler(this.ExcelAlapLista_Click);
+            // 
+            // Akku_Tábla_Listázás
+            // 
+            this.Akku_Tábla_Listázás.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.Akku_Tábla_Listázás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Akku_Tábla_Listázás.Location = new System.Drawing.Point(1114, 10);
+            this.Akku_Tábla_Listázás.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Akku_Tábla_Listázás.Name = "Akku_Tábla_Listázás";
+            this.Akku_Tábla_Listázás.Size = new System.Drawing.Size(45, 45);
+            this.Akku_Tábla_Listázás.TabIndex = 63;
+            this.toolTip1.SetToolTip(this.Akku_Tábla_Listázás, "Frissíti a táblázatot");
+            this.Akku_Tábla_Listázás.UseVisualStyleBackColor = true;
+            this.Akku_Tábla_Listázás.Click += new System.EventHandler(this.Akku_Tábla_Listázás_Click);
+            // 
             // R_törlés
             // 
             this.R_törlés.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
@@ -1276,61 +1344,28 @@ namespace Villamos
             this.BtnMéréslista.UseVisualStyleBackColor = true;
             this.BtnMéréslista.Click += new System.EventHandler(this.BtnMéréslista_Click);
             // 
-            // Panel1
+            // GombokTábla
             // 
-            this.Panel1.Controls.Add(this.CmbTelephely);
-            this.Panel1.Controls.Add(this.label23);
-            this.Panel1.Location = new System.Drawing.Point(12, 4);
-            this.Panel1.Name = "Panel1";
-            this.Panel1.Size = new System.Drawing.Size(373, 45);
-            this.Panel1.TabIndex = 54;
-            // 
-            // CmbTelephely
-            // 
-            this.CmbTelephely.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.CmbTelephely.FormattingEnabled = true;
-            this.CmbTelephely.Location = new System.Drawing.Point(184, 9);
-            this.CmbTelephely.Name = "CmbTelephely";
-            this.CmbTelephely.Size = new System.Drawing.Size(186, 28);
-            this.CmbTelephely.TabIndex = 18;
-            this.CmbTelephely.SelectedIndexChanged += new System.EventHandler(this.CmbTelephely_SelectedIndexChanged);
-            this.CmbTelephely.SelectionChangeCommitted += new System.EventHandler(this.CmbTelephely_SelectionChangeCommitted);
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(12, 11);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(145, 20);
-            this.label23.TabIndex = 17;
-            this.label23.Text = "Telephelyi beállítás:";
-            // 
-            // Súgó
-            // 
-            this.Súgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Súgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
-            this.Súgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Súgó.Location = new System.Drawing.Point(1391, 4);
-            this.Súgó.Name = "Súgó";
-            this.Súgó.Size = new System.Drawing.Size(45, 45);
-            this.Súgó.TabIndex = 55;
-            this.toolTip1.SetToolTip(this.Súgó, "Súgó");
-            this.Súgó.UseVisualStyleBackColor = true;
-            this.Súgó.Click += new System.EventHandler(this.Súgó_Click);
-            // 
-            // toolTip1
-            // 
-            this.toolTip1.IsBalloon = true;
-            // 
-            // Holtart
-            // 
-            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(410, 15);
-            this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(975, 30);
-            this.Holtart.TabIndex = 56;
-            this.Holtart.Visible = false;
+            this.GombokTábla.BackColor = System.Drawing.Color.LimeGreen;
+            this.GombokTábla.ColumnCount = 6;
+            this.GombokTábla.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 277F));
+            this.GombokTábla.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.GombokTábla.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.GombokTábla.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.GombokTábla.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.GombokTábla.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.GombokTábla.Controls.Add(this.Törölt, 5, 0);
+            this.GombokTábla.Controls.Add(this.Kiépít, 1, 0);
+            this.GombokTábla.Controls.Add(this.Leselejtezett, 4, 0);
+            this.GombokTábla.Controls.Add(this.Használt, 2, 0);
+            this.GombokTábla.Controls.Add(this.SelejtElő, 3, 0);
+            this.GombokTábla.Controls.Add(this.KIBE_Panel, 0, 0);
+            this.GombokTábla.Location = new System.Drawing.Point(836, 3);
+            this.GombokTábla.Name = "GombokTábla";
+            this.GombokTábla.RowCount = 1;
+            this.GombokTábla.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.GombokTábla.Size = new System.Drawing.Size(580, 59);
+            this.GombokTábla.TabIndex = 88;
             // 
             // Ablak_Akkumulátor
             // 
@@ -1342,6 +1377,7 @@ namespace Villamos
             this.Controls.Add(this.Súgó);
             this.Controls.Add(this.Panel1);
             this.Controls.Add(this.Fülek);
+            this.Controls.Add(this.Rögzítésvezérlő);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -1373,6 +1409,7 @@ namespace Villamos
             ((System.ComponentModel.ISupportInitialize)(this.Tábla4)).EndInit();
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
+            this.GombokTábla.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1477,5 +1514,7 @@ namespace Villamos
         internal TextBox MérésLekGyári;
         internal Button TelephelyEllenőr;
         internal V_MindenEgyéb.MyProgressbar Holtart;
+        internal Button Rögzítésvezérlő;
+        private TableLayoutPanel GombokTábla;
     }
 }
