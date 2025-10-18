@@ -50,14 +50,18 @@
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.Sorszám = new System.Windows.Forms.TextBox();
             this.CHKÉrvényes = new System.Windows.Forms.CheckBox();
+            this.Panel1 = new System.Windows.Forms.Panel();
+            this.Cmbtelephely = new System.Windows.Forms.ComboBox();
+            this.Label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Csoport_tábla)).BeginInit();
+            this.Panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Csoport_Töröl
             // 
             this.Csoport_Töröl.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
             this.Csoport_Töröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Csoport_Töröl.Location = new System.Drawing.Point(1143, 58);
+            this.Csoport_Töröl.Location = new System.Drawing.Point(1146, 103);
             this.Csoport_Töröl.Name = "Csoport_Töröl";
             this.Csoport_Töröl.Size = new System.Drawing.Size(45, 45);
             this.Csoport_Töröl.TabIndex = 252;
@@ -69,7 +73,7 @@
             // 
             this.Csoport_frissít.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Csoport_frissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Csoport_frissít.Location = new System.Drawing.Point(1092, 58);
+            this.Csoport_frissít.Location = new System.Drawing.Point(1095, 103);
             this.Csoport_frissít.Name = "Csoport_frissít";
             this.Csoport_frissít.Size = new System.Drawing.Size(45, 45);
             this.Csoport_frissít.TabIndex = 245;
@@ -81,7 +85,7 @@
             // 
             this.Csoport_rögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.Csoport_rögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Csoport_rögzít.Location = new System.Drawing.Point(1009, 58);
+            this.Csoport_rögzít.Location = new System.Drawing.Point(1012, 103);
             this.Csoport_rögzít.Name = "Csoport_rögzít";
             this.Csoport_rögzít.Size = new System.Drawing.Size(45, 45);
             this.Csoport_rögzít.TabIndex = 240;
@@ -93,7 +97,7 @@
             // 
             this.BtnÜres.BackgroundImage = global::Villamos.Properties.Resources.üres_lista;
             this.BtnÜres.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnÜres.Location = new System.Drawing.Point(1143, 7);
+            this.BtnÜres.Location = new System.Drawing.Point(1146, 52);
             this.BtnÜres.Name = "BtnÜres";
             this.BtnÜres.Size = new System.Drawing.Size(45, 45);
             this.BtnÜres.TabIndex = 257;
@@ -105,7 +109,7 @@
             // 
             this.Label111.AutoSize = true;
             this.Label111.BackColor = System.Drawing.Color.Transparent;
-            this.Label111.Location = new System.Drawing.Point(8, 53);
+            this.Label111.Location = new System.Drawing.Point(11, 98);
             this.Label111.Name = "Label111";
             this.Label111.Size = new System.Drawing.Size(76, 20);
             this.Label111.TabIndex = 251;
@@ -115,7 +119,7 @@
             // 
             this.Csoport_típus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Csoport_típus.FormattingEnabled = true;
-            this.Csoport_típus.Location = new System.Drawing.Point(121, 12);
+            this.Csoport_típus.Location = new System.Drawing.Point(124, 57);
             this.Csoport_típus.Name = "Csoport_típus";
             this.Csoport_típus.Size = new System.Drawing.Size(239, 28);
             this.Csoport_típus.TabIndex = 247;
@@ -125,7 +129,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.BackColor = System.Drawing.Color.Transparent;
-            this.label8.Location = new System.Drawing.Point(7, 20);
+            this.label8.Location = new System.Drawing.Point(10, 65);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(95, 20);
             this.label8.TabIndex = 248;
@@ -135,7 +139,7 @@
             // 
             this.Csoport_Ciklus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Csoport_Ciklus.FormattingEnabled = true;
-            this.Csoport_Ciklus.Location = new System.Drawing.Point(638, 12);
+            this.Csoport_Ciklus.Location = new System.Drawing.Point(641, 57);
             this.Csoport_Ciklus.Name = "Csoport_Ciklus";
             this.Csoport_Ciklus.Size = new System.Drawing.Size(121, 28);
             this.Csoport_Ciklus.TabIndex = 249;
@@ -145,7 +149,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.BackColor = System.Drawing.Color.Transparent;
-            this.label9.Location = new System.Drawing.Point(445, 20);
+            this.label9.Location = new System.Drawing.Point(448, 65);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(147, 20);
             this.label9.TabIndex = 250;
@@ -163,11 +167,11 @@
             this.Csoport_tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Csoport_tábla.FilterAndSortEnabled = true;
             this.Csoport_tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.Csoport_tábla.Location = new System.Drawing.Point(11, 114);
+            this.Csoport_tábla.Location = new System.Drawing.Point(11, 157);
             this.Csoport_tábla.MaxFilterButtonImageHeight = 23;
             this.Csoport_tábla.Name = "Csoport_tábla";
             this.Csoport_tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Csoport_tábla.Size = new System.Drawing.Size(1177, 320);
+            this.Csoport_tábla.Size = new System.Drawing.Size(1177, 361);
             this.Csoport_tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Csoport_tábla.TabIndex = 246;
             this.Csoport_tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Csoport_tábla_CellClick);
@@ -175,7 +179,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(445, 86);
+            this.label7.Location = new System.Drawing.Point(448, 131);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(185, 20);
             this.label7.TabIndex = 244;
@@ -184,7 +188,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(7, 86);
+            this.label6.Location = new System.Drawing.Point(10, 131);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(97, 20);
             this.label6.TabIndex = 243;
@@ -193,7 +197,7 @@
             // Csoport_változat
             // 
             this.Csoport_változat.FormattingEnabled = true;
-            this.Csoport_változat.Location = new System.Drawing.Point(121, 78);
+            this.Csoport_változat.Location = new System.Drawing.Point(124, 123);
             this.Csoport_változat.Name = "Csoport_változat";
             this.Csoport_változat.Size = new System.Drawing.Size(302, 28);
             this.Csoport_változat.TabIndex = 242;
@@ -202,7 +206,7 @@
             // Csoport_Végző
             // 
             this.Csoport_Végző.FormattingEnabled = true;
-            this.Csoport_Végző.Location = new System.Drawing.Point(638, 78);
+            this.Csoport_Végző.Location = new System.Drawing.Point(641, 123);
             this.Csoport_Végző.Name = "Csoport_Végző";
             this.Csoport_Végző.Size = new System.Drawing.Size(302, 28);
             this.Csoport_Végző.TabIndex = 241;
@@ -211,7 +215,7 @@
             // 
             this.Excel.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
             this.Excel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Excel.Location = new System.Drawing.Point(1092, 7);
+            this.Excel.Location = new System.Drawing.Point(1095, 52);
             this.Excel.Name = "Excel";
             this.Excel.Size = new System.Drawing.Size(45, 45);
             this.Excel.TabIndex = 253;
@@ -222,7 +226,7 @@
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(29, 173);
+            this.Holtart.Location = new System.Drawing.Point(27, 199);
             this.Holtart.Name = "Holtart";
             this.Holtart.Size = new System.Drawing.Size(1140, 28);
             this.Holtart.TabIndex = 255;
@@ -230,7 +234,7 @@
             // 
             // Sorszám
             // 
-            this.Sorszám.Location = new System.Drawing.Point(121, 47);
+            this.Sorszám.Location = new System.Drawing.Point(124, 92);
             this.Sorszám.Name = "Sorszám";
             this.Sorszám.Size = new System.Drawing.Size(100, 26);
             this.Sorszám.TabIndex = 256;
@@ -240,18 +244,46 @@
             this.CHKÉrvényes.AutoSize = true;
             this.CHKÉrvényes.Checked = true;
             this.CHKÉrvényes.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CHKÉrvényes.Location = new System.Drawing.Point(786, 14);
+            this.CHKÉrvényes.Location = new System.Drawing.Point(789, 59);
             this.CHKÉrvényes.Name = "CHKÉrvényes";
             this.CHKÉrvényes.Size = new System.Drawing.Size(186, 24);
             this.CHKÉrvényes.TabIndex = 258;
             this.CHKÉrvényes.Text = "Csak érvényes elemek";
             this.CHKÉrvényes.UseVisualStyleBackColor = true;
             // 
+            // Panel1
+            // 
+            this.Panel1.Controls.Add(this.Cmbtelephely);
+            this.Panel1.Controls.Add(this.Label13);
+            this.Panel1.Location = new System.Drawing.Point(15, 13);
+            this.Panel1.Name = "Panel1";
+            this.Panel1.Size = new System.Drawing.Size(373, 38);
+            this.Panel1.TabIndex = 259;
+            // 
+            // Cmbtelephely
+            // 
+            this.Cmbtelephely.FormattingEnabled = true;
+            this.Cmbtelephely.Location = new System.Drawing.Point(173, 7);
+            this.Cmbtelephely.Name = "Cmbtelephely";
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
+            this.Cmbtelephely.TabIndex = 18;
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
+            // 
+            // Label13
+            // 
+            this.Label13.AutoSize = true;
+            this.Label13.Location = new System.Drawing.Point(9, 10);
+            this.Label13.Name = "Label13";
+            this.Label13.Size = new System.Drawing.Size(145, 20);
+            this.Label13.TabIndex = 17;
+            this.Label13.Text = "Telephelyi beállítás:";
+            // 
             // Ablak_Karbantartás_Csoport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 443);
+            this.ClientSize = new System.Drawing.Size(1200, 527);
+            this.Controls.Add(this.Panel1);
             this.Controls.Add(this.CHKÉrvényes);
             this.Controls.Add(this.BtnÜres);
             this.Controls.Add(this.Sorszám);
@@ -278,6 +310,8 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Ablak_Karbantartás_Csoport_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Csoport_tábla)).EndInit();
+            this.Panel1.ResumeLayout(false);
+            this.Panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -304,5 +338,8 @@
         private System.Windows.Forms.TextBox Sorszám;
         internal System.Windows.Forms.Button BtnÜres;
         private System.Windows.Forms.CheckBox CHKÉrvényes;
+        internal System.Windows.Forms.Panel Panel1;
+        internal System.Windows.Forms.ComboBox Cmbtelephely;
+        internal System.Windows.Forms.Label Label13;
     }
 }

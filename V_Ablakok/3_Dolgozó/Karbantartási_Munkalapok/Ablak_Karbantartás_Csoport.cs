@@ -13,7 +13,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
 {
     public partial class Ablak_Karbantartás_Csoport : Form
     {
-        public string Cmbtelephely { get; private set; }
+        public string CMBtelephely { get; private set; }
 
         readonly Kezelő_Technológia_Változat KézVáltozat = new Kezelő_Technológia_Változat();
 
@@ -26,7 +26,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
         public Ablak_Karbantartás_Csoport(string cmbTelephely)
         {
             InitializeComponent();
-            Cmbtelephely = cmbTelephely;
+            CMBtelephely = cmbTelephely;
         }
 
         public Ablak_Karbantartás_Csoport()
@@ -36,10 +36,50 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
 
         private void Ablak_Karbantartás_Csoport_Load(object sender, EventArgs e)
         {
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
+            if (Program.PostásJogkör.Any(c => c != '0'))
+            {
+                Jogosultságkiosztás();
+            }
+            else
+            {
+                TelephelyekFeltöltéseÚj();
+                GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+            }
+
+
             Csoport_Típus_feltöltés();
         }
+
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                if (Cmbtelephely.Items.Cast<string>().Contains(Program.PostásTelephely))
+                {
+                    Cmbtelephely.Text = Program.PostásTelephely;
+                    CMBtelephely = Program.PostásTelephely;
+                }
+                else
+                {
+                    Cmbtelephely.Text = Cmbtelephely.Items[0].ToStrTrim();
+                    CMBtelephely = Cmbtelephely.Items[0].ToStrTrim();
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         private void Jogosultságkiosztás()
         {
@@ -138,7 +178,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             {
                 if (Csoport_típus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva járműtípus.");
                 if (Csoport_Ciklus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva karbantartási ciklus.");
-                List<Adat_Technológia_Változat> Adatok = KézVáltozat.Lista_Adatok(Csoport_típus.Text.Trim(), Cmbtelephely.Trim());
+                List<Adat_Technológia_Változat> Adatok = KézVáltozat.Lista_Adatok(Csoport_típus.Text.Trim(), CMBtelephely.Trim());
                 List<string> Változatok = Adatok.Where(a => a.Karbantartási_fokozat == Csoport_Ciklus.Text.Trim()).Select(a => a.Változatnév).Distinct().ToList();
 
                 Csoport_változat.Text = "";
@@ -174,7 +214,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 if (Csoport_Ciklus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva karbantartási ciklus.");
                 if (Csoport_változat.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva csoport változatnév.");
 
-                List<Adat_Technológia_Változat> Adatok = KézVáltozat.Lista_Adatok(Csoport_típus.Text.Trim(), Cmbtelephely.Trim());
+                List<Adat_Technológia_Változat> Adatok = KézVáltozat.Lista_Adatok(Csoport_típus.Text.Trim(), CMBtelephely.Trim());
                 List<string> Végzők = (from a in Adatok
                                        where a.Változatnév == Csoport_változat.Text.Trim()
                                        orderby a.Végzi
@@ -235,8 +275,8 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                     else
                         AdatokRögz.Add(ADAT);
                 }
-                if (AdatokMód.Count > 0) KézVáltozat.Módosítás(Csoport_típus.Text.Trim(), Cmbtelephely.Trim(), AdatokMód);
-                if (AdatokRögz.Count > 0) KézVáltozat.Rögzítés(Csoport_típus.Text.Trim(), Cmbtelephely.Trim(), AdatokRögz);
+                if (AdatokMód.Count > 0) KézVáltozat.Módosítás(Csoport_típus.Text.Trim(), CMBtelephely.Trim(), AdatokMód);
+                if (AdatokRögz.Count > 0) KézVáltozat.Rögzítés(Csoport_típus.Text.Trim(), CMBtelephely.Trim(), AdatokRögz);
 
                 MessageBox.Show("Adatok rögzítése megtörtént", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Label111.Text = "Sorszám:";
@@ -335,7 +375,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
         {
             try
             {
-                AdatokVáltozat = MyLista.VáltozatLista(Csoport_típus.Text.Trim(), Cmbtelephely.Trim());
+                AdatokVáltozat = MyLista.VáltozatLista(Csoport_típus.Text.Trim(), CMBtelephely.Trim());
                 AdatokCiklus = MyLista.KarbCiklusLista(Csoport_típus.Text.Trim());
                 AdatokTechnológia = MyLista.TechnológiaLista(Csoport_típus.Text.Trim());
                 if (CHKÉrvényes.Checked)
@@ -454,7 +494,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                                 Csoport_Végző.Text.Trim(),
                                 Csoport_Ciklus.Text.Trim());
                 if (Elem != null)
-                    KézVáltozat.Törlés(Csoport_típus.Text.Trim(), Cmbtelephely.Trim(), ADAT);
+                    KézVáltozat.Törlés(Csoport_típus.Text.Trim(), CMBtelephely.Trim(), ADAT);
                 Csoport_tábla_író();
             }
             catch (HibásBevittAdat ex)
@@ -511,6 +551,12 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
         {
             Csoport_változat.Text = "";
             Csoport_Végző.Text = "";
+        }
+
+        private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
+            CMBtelephely = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
         }
     }
 }

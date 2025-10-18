@@ -45,9 +45,11 @@ namespace Villamos
             this.BtnSugó = new System.Windows.Forms.Button();
             this.Btn_MindenMasol = new System.Windows.Forms.Button();
             this.JogTörlés = new System.Windows.Forms.Button();
+            this.MindenGomb = new System.Windows.Forms.Button();
             this.Label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.panel4 = new System.Windows.Forms.Panel();
             this.CmbGombId = new System.Windows.Forms.ComboBox();
             this.CmbGombok = new System.Windows.Forms.ComboBox();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -61,15 +63,13 @@ namespace Villamos
             this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Felhasználók = new System.Windows.Forms.ComboBox();
             this.DolgozóNév = new System.Windows.Forms.Label();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
-            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // ToolTip1
@@ -157,9 +157,21 @@ namespace Villamos
             this.JogTörlés.Name = "JogTörlés";
             this.JogTörlés.Size = new System.Drawing.Size(45, 45);
             this.JogTörlés.TabIndex = 225;
-            this.ToolTip1.SetToolTip(this.JogTörlés, "Jogosultságok törlése");
+            this.ToolTip1.SetToolTip(this.JogTörlés, "A felhasználó összs jogosultságának törlése");
             this.JogTörlés.UseVisualStyleBackColor = true;
             this.JogTörlés.Click += new System.EventHandler(this.JogTörlés_Click);
+            // 
+            // MindenGomb
+            // 
+            this.MindenGomb.BackgroundImage = global::Villamos.Properties.Resources.Action_view_bottom;
+            this.MindenGomb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.MindenGomb.Location = new System.Drawing.Point(3, 3);
+            this.MindenGomb.Name = "MindenGomb";
+            this.MindenGomb.Size = new System.Drawing.Size(45, 45);
+            this.MindenGomb.TabIndex = 226;
+            this.ToolTip1.SetToolTip(this.MindenGomb, "Az ablakhoz tartozó összes gomb jogosultság beállítása");
+            this.MindenGomb.UseVisualStyleBackColor = true;
+            this.MindenGomb.Click += new System.EventHandler(this.MindenGomb_Click);
             // 
             // Label1
             // 
@@ -206,6 +218,14 @@ namespace Villamos
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(688, 244);
             this.panel3.TabIndex = 223;
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.MindenGomb);
+            this.panel4.Location = new System.Drawing.Point(237, 170);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(447, 65);
+            this.panel4.TabIndex = 230;
             // 
             // CmbGombId
             // 
@@ -343,26 +363,6 @@ namespace Villamos
             this.DolgozóNév.TabIndex = 222;
             this.DolgozóNév.Text = "<< >>";
             // 
-            // panel4
-            // 
-            this.panel4.Controls.Add(this.button1);
-            this.panel4.Location = new System.Drawing.Point(165, 118);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(447, 65);
-            this.panel4.TabIndex = 230;
-            // 
-            // button1
-            // 
-            this.button1.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button1.Location = new System.Drawing.Point(14, 17);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(45, 45);
-            this.button1.TabIndex = 226;
-            this.ToolTip1.SetToolTip(this.button1, "Jogosultságok törlése");
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // Ablak_JogKiosztás
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -385,11 +385,11 @@ namespace Villamos
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.panel3.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
-            this.panel4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -419,6 +419,6 @@ namespace Villamos
         private ComboBox CmbGombId;
         private ComboBox CmbAblakId;
         private Panel panel4;
-        internal Button button1;
+        internal Button MindenGomb;
     }
 }

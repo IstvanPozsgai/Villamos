@@ -16,7 +16,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
         readonly Kezelő_Technológia_Rendelés KézRendelés = new Kezelő_Technológia_Rendelés();
         #endregion
 
-        public string CmbTelephely { get; private set; }
+        public string CMBTelephely { get; private set; }
 
         List<Adat_Technológia_Rendelés> AdatokRendelés = new List<Adat_Technológia_Rendelés>();
         List<Adat_technológia_Ciklus> AdatokCiklus = new List<Adat_technológia_Ciklus>();
@@ -25,7 +25,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
         public Ablak_Karbantartási_Rendelés(string cmbTelephely)
         {
             InitializeComponent();
-            CmbTelephely = cmbTelephely;
+            CMBTelephely = cmbTelephely;
         }
 
         public Ablak_Karbantartási_Rendelés()
@@ -36,10 +36,58 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
         private void Ablak_Karbantartási_Rendelés_Load(object sender, EventArgs e)
         {
             Rendelés_Dátum.Value = DateTime.Today;
-            Jogosultságkiosztás();
+            //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+            //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+            if (Program.PostásJogkör.Any(c => c != '0'))
+            {
+                Jogosultságkiosztás();
+            }
+            else
+            {
+                TelephelyekFeltöltéseÚj();
+                GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+            }
             Rendelés_Típus_feltöltés();
             Rendelés_tábla_frissít();
         }
+
+        private void TelephelyekFeltöltéseÚj()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                    Cmbtelephely.Items.Add(Adat.Trim());
+                //Alapkönyvtárat beállítjuk 
+                if (Cmbtelephely.Items.Count < 1)
+                {
+                    Cmbtelephely.Text = Program.PostásTelephely;
+                    CMBTelephely = Program.PostásTelephely;
+                }
+                else
+                if (Cmbtelephely.Items.Cast<string>().Contains(Program.PostásTelephely))
+                {
+                    Cmbtelephely.Text = Program.PostásTelephely;
+                    CMBTelephely = Program.PostásTelephely;
+                }
+                else
+                {
+                    Cmbtelephely.Text = Cmbtelephely.Items[0].ToStrTrim();
+                    CMBTelephely = Cmbtelephely.Items[0].ToStrTrim();
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
 
         private void Jogosultságkiosztás()
         {
@@ -132,9 +180,9 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                                            Rendelés_Rendelés.Text.Trim());
 
                 if (Elem != null)
-                    KézRendelés.Módosítás(CmbTelephely, ADAT);
+                    KézRendelés.Módosítás(CMBTelephely, ADAT);
                 else
-                    KézRendelés.Rögzítés(CmbTelephely, ADAT);
+                    KézRendelés.Rögzítés(CMBTelephely, ADAT);
 
                 Rendelés_tábla_frissít();
             }
@@ -170,7 +218,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
 
                 if (Elem != null)
                 {
-                    KézRendelés.Törlés(CmbTelephely, ADAT);
+                    KézRendelés.Törlés(CMBTelephely, ADAT);
                     Rendelés_tábla_frissít();
                 }
                 else
@@ -197,7 +245,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
         {
             try
             {
-                AdatokRendelés = MyLista.RendelésLista(CmbTelephely, Rendelés_Dátum.Value);
+                AdatokRendelés = MyLista.RendelésLista(CMBTelephely, Rendelés_Dátum.Value);
                 List<Adat_Technológia_Rendelés> AdatokSzűrt = (from a in AdatokRendelés
                                                                where a.Év == Rendelés_Dátum.Value.Year
                                                                orderby a.Technológia_típus, a.Karbantartási_fokozat
@@ -262,6 +310,12 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
+            CMBTelephely = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
         }
     }
 }

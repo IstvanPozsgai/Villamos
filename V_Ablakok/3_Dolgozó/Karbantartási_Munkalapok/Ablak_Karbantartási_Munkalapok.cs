@@ -71,7 +71,7 @@ namespace Villamos.Villamos_Ablakok
         public Ablak_Karbantartási_Munkalapok()
         {
             InitializeComponent();
-            Start();
+
         }
 
         private void Start()
@@ -114,7 +114,7 @@ namespace Villamos.Villamos_Ablakok
 
         private void Ablak_Karbantartási_Munkalapok_Load(object sender, EventArgs e)
         {
-
+            Start();
         }
 
 

@@ -72,7 +72,7 @@ namespace Villamos
         public Ablak_Karbantartási_adatok()
         {
             InitializeComponent();
-            Start();
+
         }
 
         private void Start()
@@ -126,7 +126,7 @@ namespace Villamos
 
         private void Ablak_Jármű_állapotok_Load(object sender, EventArgs e)
         {
-
+            Start();
         }
 
         private void Telephelyekfeltöltése()

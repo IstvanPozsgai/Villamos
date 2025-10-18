@@ -44,14 +44,18 @@
             this.Rendelés_Ciklus = new System.Windows.Forms.ComboBox();
             this.label15 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.Panel1 = new System.Windows.Forms.Panel();
+            this.Cmbtelephely = new System.Windows.Forms.ComboBox();
+            this.Label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Rendelés_Tábla)).BeginInit();
+            this.Panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Rendelés_Töröl
             // 
             this.Rendelés_Töröl.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
             this.Rendelés_Töröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Rendelés_Töröl.Location = new System.Drawing.Point(421, 93);
+            this.Rendelés_Töröl.Location = new System.Drawing.Point(421, 150);
             this.Rendelés_Töröl.Name = "Rendelés_Töröl";
             this.Rendelés_Töröl.Size = new System.Drawing.Size(45, 45);
             this.Rendelés_Töröl.TabIndex = 248;
@@ -61,7 +65,7 @@
             // 
             // Rendelés_Rendelés
             // 
-            this.Rendelés_Rendelés.Location = new System.Drawing.Point(167, 112);
+            this.Rendelés_Rendelés.Location = new System.Drawing.Point(167, 169);
             this.Rendelés_Rendelés.Name = "Rendelés_Rendelés";
             this.Rendelés_Rendelés.Size = new System.Drawing.Size(239, 26);
             this.Rendelés_Rendelés.TabIndex = 247;
@@ -70,7 +74,7 @@
             // 
             this.label17.AutoSize = true;
             this.label17.BackColor = System.Drawing.Color.Silver;
-            this.label17.Location = new System.Drawing.Point(12, 112);
+            this.label17.Location = new System.Drawing.Point(12, 169);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(126, 20);
             this.label17.TabIndex = 246;
@@ -80,7 +84,7 @@
             // 
             this.Rendelés_Frissít.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Rendelés_Frissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Rendelés_Frissít.Location = new System.Drawing.Point(472, 93);
+            this.Rendelés_Frissít.Location = new System.Drawing.Point(472, 150);
             this.Rendelés_Frissít.Name = "Rendelés_Frissít";
             this.Rendelés_Frissít.Size = new System.Drawing.Size(45, 45);
             this.Rendelés_Frissít.TabIndex = 245;
@@ -105,11 +109,11 @@
             this.Rendelés_Tábla.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.Rendelés_Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Rendelés_Tábla.EnableHeadersVisualStyles = false;
-            this.Rendelés_Tábla.Location = new System.Drawing.Point(7, 144);
+            this.Rendelés_Tábla.Location = new System.Drawing.Point(7, 206);
             this.Rendelés_Tábla.Name = "Rendelés_Tábla";
             this.Rendelés_Tábla.RowHeadersVisible = false;
             this.Rendelés_Tábla.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.Rendelés_Tábla.Size = new System.Drawing.Size(619, 332);
+            this.Rendelés_Tábla.Size = new System.Drawing.Size(619, 270);
             this.Rendelés_Tábla.TabIndex = 244;
             this.Rendelés_Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Rendelés_Tábla_CellClick);
             // 
@@ -117,7 +121,7 @@
             // 
             this.Rendelés_Ok.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.Rendelés_Ok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Rendelés_Ok.Location = new System.Drawing.Point(421, 9);
+            this.Rendelés_Ok.Location = new System.Drawing.Point(421, 66);
             this.Rendelés_Ok.Name = "Rendelés_Ok";
             this.Rendelés_Ok.Size = new System.Drawing.Size(45, 45);
             this.Rendelés_Ok.TabIndex = 243;
@@ -129,7 +133,7 @@
             // 
             this.label16.AutoSize = true;
             this.label16.BackColor = System.Drawing.Color.Silver;
-            this.label16.Location = new System.Drawing.Point(12, 14);
+            this.label16.Location = new System.Drawing.Point(12, 71);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(61, 20);
             this.label16.TabIndex = 242;
@@ -138,7 +142,7 @@
             // Rendelés_Dátum
             // 
             this.Rendelés_Dátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Rendelés_Dátum.Location = new System.Drawing.Point(167, 9);
+            this.Rendelés_Dátum.Location = new System.Drawing.Point(167, 66);
             this.Rendelés_Dátum.Name = "Rendelés_Dátum";
             this.Rendelés_Dátum.Size = new System.Drawing.Size(105, 26);
             this.Rendelés_Dátum.TabIndex = 241;
@@ -147,7 +151,7 @@
             // 
             this.Rendelés_Típus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Rendelés_Típus.FormattingEnabled = true;
-            this.Rendelés_Típus.Location = new System.Drawing.Point(167, 42);
+            this.Rendelés_Típus.Location = new System.Drawing.Point(167, 99);
             this.Rendelés_Típus.Name = "Rendelés_Típus";
             this.Rendelés_Típus.Size = new System.Drawing.Size(239, 28);
             this.Rendelés_Típus.TabIndex = 237;
@@ -157,7 +161,7 @@
             // 
             this.label14.AutoSize = true;
             this.label14.BackColor = System.Drawing.Color.Silver;
-            this.label14.Location = new System.Drawing.Point(12, 45);
+            this.label14.Location = new System.Drawing.Point(12, 102);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(95, 20);
             this.label14.TabIndex = 238;
@@ -167,7 +171,7 @@
             // 
             this.Rendelés_Ciklus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Rendelés_Ciklus.FormattingEnabled = true;
-            this.Rendelés_Ciklus.Location = new System.Drawing.Point(167, 76);
+            this.Rendelés_Ciklus.Location = new System.Drawing.Point(167, 133);
             this.Rendelés_Ciklus.Name = "Rendelés_Ciklus";
             this.Rendelés_Ciklus.Size = new System.Drawing.Size(121, 28);
             this.Rendelés_Ciklus.TabIndex = 239;
@@ -176,7 +180,7 @@
             // 
             this.label15.AutoSize = true;
             this.label15.BackColor = System.Drawing.Color.Silver;
-            this.label15.Location = new System.Drawing.Point(12, 82);
+            this.label15.Location = new System.Drawing.Point(12, 139);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(147, 20);
             this.label15.TabIndex = 240;
@@ -186,11 +190,39 @@
             // 
             this.toolTip1.IsBalloon = true;
             // 
+            // Panel1
+            // 
+            this.Panel1.Controls.Add(this.Cmbtelephely);
+            this.Panel1.Controls.Add(this.Label13);
+            this.Panel1.Location = new System.Drawing.Point(12, 12);
+            this.Panel1.Name = "Panel1";
+            this.Panel1.Size = new System.Drawing.Size(373, 38);
+            this.Panel1.TabIndex = 260;
+            // 
+            // Cmbtelephely
+            // 
+            this.Cmbtelephely.FormattingEnabled = true;
+            this.Cmbtelephely.Location = new System.Drawing.Point(173, 7);
+            this.Cmbtelephely.Name = "Cmbtelephely";
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
+            this.Cmbtelephely.TabIndex = 18;
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
+            // 
+            // Label13
+            // 
+            this.Label13.AutoSize = true;
+            this.Label13.Location = new System.Drawing.Point(9, 10);
+            this.Label13.Name = "Label13";
+            this.Label13.Size = new System.Drawing.Size(145, 20);
+            this.Label13.TabIndex = 17;
+            this.Label13.Text = "Telephelyi beállítás:";
+            // 
             // Ablak_Karbantartási_Rendelés
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(638, 488);
+            this.Controls.Add(this.Panel1);
             this.Controls.Add(this.Rendelés_Töröl);
             this.Controls.Add(this.Rendelés_Rendelés);
             this.Controls.Add(this.label17);
@@ -214,6 +246,8 @@
             this.Text = "Karbantartási Rendelés számok";
             this.Load += new System.EventHandler(this.Ablak_Karbantartási_Rendelés_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Rendelés_Tábla)).EndInit();
+            this.Panel1.ResumeLayout(false);
+            this.Panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -234,5 +268,8 @@
         private System.Windows.Forms.ComboBox Rendelés_Ciklus;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.ToolTip toolTip1;
+        internal System.Windows.Forms.Panel Panel1;
+        internal System.Windows.Forms.ComboBox Cmbtelephely;
+        internal System.Windows.Forms.Label Label13;
     }
 }

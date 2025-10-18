@@ -285,6 +285,45 @@ namespace Villamos
             }
         }
 
+        private void MindenGomb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem adja meg a Felhasználót!");
+                if (CmbAblak.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon egy Ablakot!");
+
+                List<Adat_Jogosultságok> Adatok = new List<Adat_Jogosultságok>();
+                for (int j = 0; j < CmbGombId.Items.Count; j++)
+                {
+                    for (int i = 0; i < LstChkSzervezet.Items.Count; i++)
+                    {
+                        int SzervezetId = AdatokSzervezet.FirstOrDefault(a => a.Név == LstChkSzervezet.Items[i].ToString())?.ID ?? -1;
+                        Adat_Jogosultságok adat = new Adat_Jogosultságok
+                        (
+                            FelhasználóFőId,
+                            AblakFőID,
+                            CmbGombId.Items[j].ToÉrt_Int(),
+                            SzervezetId,
+                            !LstChkSzervezet.GetItemChecked(i)
+                        );
+                        Adatok.Add(adat);
+                    }
+                }
+                if (Adatok.Count > 0) KézJogosultságok.Rögzítés(Adatok);
+                TáblázatListázás();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
 
         private void Btn_MindenMasol_Click(object sender, EventArgs e)
         {
@@ -580,29 +619,6 @@ namespace Villamos
             Szervezetek();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
 
-            try
-            {
-                string fájl = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Próba.xlsx";
-                Excel_Új MyE = new Excel_Új();
-                MyE.ExcelLétrehozás();
-                MyE.Munkalap_betű("Arial", 20);
-                MyE.Kiir("Ez egy próba", "A1");
-                MyE.ExcelMentés(fájl);
-                MyE.ExcelBezárás();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
     }
 }
