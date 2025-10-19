@@ -75,8 +75,6 @@ namespace Villamos
                 Eszterga.Value = DateTime.Today;
                 Dátumtól.Value = new DateTime(DateTime.Today.Year, 1, 1);
 
-                GombLathatosagKezelo.Beallit(this);
-
                 Irányítófeltöltés();
                 Jegyzettömb.Visible = false;
                 Tábla1.Visible = true;
@@ -103,9 +101,6 @@ namespace Villamos
             Új_Ablak_Kerék_gyűjtő?.Close();
         }
 
-        private void Ablak_keréknyilvántartás_Shown(object sender, EventArgs e)
-        {
-        }
 
         private void Telephelyekfeltöltése()
         {
