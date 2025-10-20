@@ -540,13 +540,14 @@ namespace Villamos
                 {
                     RendelkezésText.BackColor = Color.Green;
                     FelhasználtText.BackColor = Color.Green;
-
                     Rögzítés.Enabled = true;
+                    Rögítéstakaró.Visible = false;
                 }
                 else
                 {
                     RendelkezésText.BackColor = Color.Red;
                     FelhasználtText.BackColor = Color.Red;
+                    Rögítéstakaró.Visible = true;
                     Rögzítés.Enabled = false;
                 }
             }
@@ -681,8 +682,6 @@ namespace Villamos
         {
             try
             {
-                Rögzítés.Enabled = false;
-
                 List<Adat_Munka_Adatok> Adatok = new List<Adat_Munka_Adatok>();
                 for (int i = 0; i < Tábla1.ColumnCount; i++)
                 {
@@ -701,7 +700,8 @@ namespace Villamos
                     }
                 }
                 KézMunkaAdatok.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value.Year, Adatok);
-                Rögzítés.Enabled = false;
+
+                Rögítéstakaró.Visible = true;
                 MessageBox.Show("Az adatrögzítése megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)

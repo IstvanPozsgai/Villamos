@@ -102,6 +102,7 @@ namespace Villamos
             this.SaveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
+            this.Rögítéstakaró = new System.Windows.Forms.Panel();
             this.Panel1.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -162,6 +163,7 @@ namespace Villamos
             // TabPage1
             // 
             this.TabPage1.BackColor = System.Drawing.Color.Thistle;
+            this.TabPage1.Controls.Add(this.Rögítéstakaró);
             this.TabPage1.Controls.Add(this.FelhasználtText);
             this.TabPage1.Controls.Add(this.RendelkezésText);
             this.TabPage1.Controls.Add(this.Benn_Lévő);
@@ -815,6 +817,14 @@ namespace Villamos
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
+            // Rögítéstakaró
+            // 
+            this.Rögítéstakaró.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Rögítéstakaró.Location = new System.Drawing.Point(1115, 468);
+            this.Rögítéstakaró.Name = "Rögítéstakaró";
+            this.Rögítéstakaró.Size = new System.Drawing.Size(64, 61);
+            this.Rögítéstakaró.TabIndex = 102;
+            // 
             // Ablak_munkalap_dekádoló
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -908,5 +918,6 @@ namespace Villamos
         internal Button Button2;
         internal ToolTip ToolTip1;
         internal TextBox Napi_id;
+        private Panel Rögítéstakaró;
     }
 }
