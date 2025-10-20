@@ -104,8 +104,6 @@ namespace Villamos
 
         private static void Email(string hely, string hiba, int hibakod)
         {
-            if (hibakod != -2146777998)
-            {
                 MyO._Application _app = new MyO.Application();
                 MyO.MailItem mail = (MyO.MailItem)_app.CreateItem(MyO.OlItemType.olMailItem);
                 // címzett
@@ -115,8 +113,7 @@ namespace Villamos
                 mail.Body = hiba;
                 mail.Importance = MyO.OlImportance.olImportanceNormal;
                 if (File.Exists(hely)) mail.Attachments.Add(hely);
-                if (mail.To != null) ((MyO._MailItem)mail).Send();
-            }
+                ((MyO._MailItem)mail).Send();
         }
     }
 }
