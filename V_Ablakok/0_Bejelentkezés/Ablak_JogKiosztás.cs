@@ -498,17 +498,13 @@ namespace Villamos
                 GombFőID = Gomb?.GombokId ?? -1;
                 CmbGombId.Text = GombFőID.ToString();
                 if (Gomb == null) return;
-                string[] Gomb_Szervezetek_darabolva = Gomb.Szervezet.Split(';');
-                string[] Felhasználó_Szervezetek_darabolva = Program.Postás_Felhasználó.Szervezetek.Split(';');
+                string[] Gomb_Szervezetek_darabolva = Gomb.Szervezet.Split(';');//A gombhoz tartozó szervezetek tömbben
+                string[] Jogadó_Szervezetek_darabolva = Program.Postás_Felhasználó.Szervezetek.Split(';');//Jogosultságot adó jogosultsága
                 //A teljes lista csorbítása a beállító jogosultságaival
                 foreach (string szervezet in Gomb_Szervezetek_darabolva)
                 {
-                    // A listában szereplő szervezetet megnézzük a felhasználónál is és ha egyezés van akkor kiírjuk
-                    int i = 0;
-                    while (i < Felhasználó_Szervezetek_darabolva.Length && Felhasználó_Szervezetek_darabolva[i] != szervezet)
-                        i++;
-
-                    if (i < Felhasználó_Szervezetek_darabolva.Length && Felhasználó_Szervezetek_darabolva[i] == szervezet)
+                    // A jogosztó adhat jogot
+                    if (Jogadó_Szervezetek_darabolva.Contains(szervezet))
                     {
                         //Csak azokat a szervezeteket írjuk ki amelyek a beállító jogosultságai között is szerepelnek
                         LstChkSzervezet.Items.Add(szervezet.Trim());
