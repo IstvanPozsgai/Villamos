@@ -43,7 +43,7 @@ public static partial class Függvénygyűjtemény
     /// <param name="kezdő">Kezdő pozíció</param>
     /// <param name="hossz">Szöveg hossza, ha -1 akkor nem veszi figyelembe</param>
     /// <returns></returns>
-    public static string Szöveg_Tisztítás(string szöveg, int kezdő, int hossz)
+    public static string Szöveg_Tisztítás(string szöveg, int kezdő, int hossz=-1)
     {
         string válasz = szöveg.Trim() == "" ? "_" : szöveg.Trim();
         if (hossz != -1)

@@ -224,7 +224,7 @@ namespace Villamos.V_MindenEgyéb
                 List<Adat_Menetkimaradás_Főmérnökség> AdatokFőGy = new List<Adat_Menetkimaradás_Főmérnökség>();
                 foreach (DataRow Sor in Tábla.Rows)
                 {
-                    string azonosító = MyF.Szöveg_Tisztítás(Sor[oszlopAzon].ToStrTrim(), 1, 4);
+                    string azonosító = MyF.Szöveg_Tisztítás(Sor[oszlopAzon].ToStrTrim(), 1);
                     string viszonylat = MyF.Szöveg_Tisztítás(Sor[oszlopVisz].ToStrTrim(), 0, 6);
                     string Típus = Milyen_típus(AdatokJármű, azonosító);
                     string Eseményjele = MyF.Szöveg_Tisztítás(Sor[oszlopJel].ToStrTrim(), 0, 1);
