@@ -1428,7 +1428,6 @@ namespace Villamos.Villamos_Ablakok
             this.PDF_néző.Location = new System.Drawing.Point(307, 88);
             this.PDF_néző.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.PDF_néző.Name = "PDF_néző";
-            this.PDF_néző.ShowToolbar = false;
             this.PDF_néző.Size = new System.Drawing.Size(825, 353);
             this.PDF_néző.TabIndex = 240;
             this.PDF_néző.ZoomMode = PdfiumViewer.PdfViewerZoomMode.FitWidth;

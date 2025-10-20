@@ -874,7 +874,6 @@ namespace Villamos
             this.PDF_néző.Location = new System.Drawing.Point(6, 8);
             this.PDF_néző.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.PDF_néző.Name = "PDF_néző";
-            this.PDF_néző.ShowToolbar = false;
             this.PDF_néző.Size = new System.Drawing.Size(1251, 541);
             this.PDF_néző.TabIndex = 68;
             this.PDF_néző.ZoomMode = PdfiumViewer.PdfViewerZoomMode.FitWidth;

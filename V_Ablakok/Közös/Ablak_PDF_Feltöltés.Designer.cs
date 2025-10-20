@@ -60,7 +60,6 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés
             this.Pdftöltő.Location = new System.Drawing.Point(306, 10);
             this.Pdftöltő.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.Pdftöltő.Name = "Pdftöltő";
-            this.Pdftöltő.ShowToolbar = false;
             this.Pdftöltő.Size = new System.Drawing.Size(473, 542);
             this.Pdftöltő.TabIndex = 253;
             this.Pdftöltő.ZoomMode = PdfiumViewer.PdfViewerZoomMode.FitBest;
