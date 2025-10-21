@@ -638,8 +638,8 @@ namespace Villamos
                         Holtart.Be(10);
                         MyE.ExcelLétrehozás();
                         MyE.Munkalap_betű("arial", 12);
-                        MyE.Oszlopszélesség(munkalap, "a:b", 7);
-                        MyE.Oszlopszélesség(munkalap, "c:r", 6);
+                        MyE.Oszlopszélesség(munkalap, "a:a", 18);
+                        MyE.Oszlopszélesség(munkalap, "b:r", 6);
 
                         Munkalap_Fejléc(szöveg1);
                         Dolgozó_Fejléc();
@@ -703,10 +703,10 @@ namespace Villamos
                 blokkeleje = 5;
 
                 Holtart.Be(10);
-                MyE.ExcelLétrehozás();
+                MyE.ExcelLétrehozás( );
                 MyE.Munkalap_betű("arial", 12);
-                MyE.Oszlopszélesség(munkalap, "a:b", 7);
-                MyE.Oszlopszélesség(munkalap, "c:r", 6);
+                MyE.Oszlopszélesség(munkalap, "a:a", 18);
+                MyE.Oszlopszélesség(munkalap, "b:r", 6);
 
                 Munkalap_Fejléc(szöveg1);
                 Dolgozó_Fejléc();
@@ -765,9 +765,9 @@ namespace Villamos
             // **********************************************
             sor += 1;
             MyE.Sormagasság($"{sor}:{sor}", 35);
-            MyE.Egyesít(munkalap, $"a{sor}:c{sor + 1}");
+            MyE.Egyesít(munkalap, $"a{sor}:b{sor + 1}");
             MyE.Kiir("A munkát kiadta:", $"a{sor}");
-            MyE.Egyesít(munkalap, $"d{sor}:f{sor}");
+            MyE.Egyesít(munkalap, $"c{sor}:f{sor}");
             MyE.Egyesít(munkalap, $"g{sor}:i{sor + 1}");
             MyE.Kiir("A kiadott munkát\nelvégezte:", $"g{sor}");
             MyE.Egyesít(munkalap, $"j{sor}:l{sor + 1}");
@@ -786,10 +786,10 @@ namespace Villamos
 
 
             sor += 1;
-            MyE.Egyesít(munkalap, $"d{sor}:f{sor}");                    //
-            MyE.Kiir(Kiadta.Text.Trim(), $"d{sor}");                    //
-            MyE.Betű($"D{sor}", 10);
-            MyE.Betű($"D{sor}", false, true, true);
+            MyE.Egyesít(munkalap, $"c{sor}:f{sor}");                    //
+            MyE.Kiir(Kiadta.Text.Trim(), $"c{sor}");                    //
+            MyE.Betű($"c{sor}", 10);
+            MyE.Betű($"c{sor}", false, true, true);
             MyE.Egyesít(munkalap, $"p{sor}:r{sor}");
             MyE.Kiir(Ellenőrizte.Text.Trim(), $"p{sor}");
             MyE.Betű($"P{sor}", 10);
@@ -867,13 +867,13 @@ namespace Villamos
                         {
                             sor += 1;
                             blokkeleje = sor;
-                            oszlop = 2;
+                            oszlop =1;
                             foreach (string PályaszámLista in AdatokRész)
                             {
                                 if (AdatokÖssz.Contains(PályaszámLista.Trim()))
                                     if (oszlop == 18)
                                     {
-                                        oszlop = 2;
+                                        oszlop = 1;
                                         sor += 1;
                                     }
                                 oszlop += 1;
@@ -881,14 +881,14 @@ namespace Villamos
                             }
                         }
 
-                        MyE.Egyesít(munkalap, $"a{blokkeleje}:b{sor}");
+                        MyE.Egyesít(munkalap, $"a{blokkeleje}:a{sor}");
                         if (Típusoklistája.Items[i].ToStrTrim() != "Üres")
                         {
                             MyE.Kiir("E2-" + Típusoklistája.Items[i].ToStrTrim(), $"A{blokkeleje}");
                         }
 
-                        MyE.Rácsoz($"c{blokkeleje}:r{sor}");
-                        MyE.Vastagkeret($"c{blokkeleje}:r{sor}");
+                        MyE.Rácsoz($"b{blokkeleje}:r{sor}");
+                        MyE.Vastagkeret($"b{blokkeleje}:r{sor}");
                         MyE.Vastagkeret($"a{blokkeleje}:r{sor}");
                         MyE.Sormagasság($"{blokkeleje}:{sor}", 25);
                         MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
@@ -965,14 +965,14 @@ namespace Villamos
                         {
                             sor += 1;
                             blokkeleje = sor;
-                            oszlop = 2;
+                            oszlop = 1;
                             foreach (string PályaszámLista in AdatokRész)
                             {
                                 if (AdatokÖssz.Contains(PályaszámLista.Trim()))
                                 {
                                     if (oszlop == 18)
                                     {
-                                        oszlop = 2;
+                                        oszlop = 1;
                                         sor += 1;
                                     }
                                     oszlop += 1;
@@ -980,15 +980,15 @@ namespace Villamos
                                 }
                             }
 
-                            MyE.Egyesít(munkalap, $"a{blokkeleje}:b{sor}");
+                            MyE.Egyesít(munkalap, $"a{blokkeleje}:a{sor}");
 
                             if (Típusoklistája.Items[i].ToStrTrim() != "Üres")
                             {
                                 MyE.Kiir("E3-  " + Típusoklistája.Items[i].ToString(), $"A{blokkeleje}");
                             }
 
-                            MyE.Rácsoz($"c{blokkeleje}:r{sor}");
-                            MyE.Vastagkeret($"c{blokkeleje}:r{sor}");
+                            MyE.Rácsoz($"b{blokkeleje}:r{sor}");
+                            MyE.Vastagkeret($"b{blokkeleje}:r{sor}");
                             MyE.Vastagkeret($"a{blokkeleje}:r{sor}");
                             MyE.Sormagasság($"{blokkeleje}:{sor}", 25);
                             MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
@@ -1029,27 +1029,27 @@ namespace Villamos
                         {
                             sor += 1;
                             blokkeleje = sor;
-                            oszlop = 2;
+                            oszlop = 1;
                             foreach (Adat_Vezénylés PályaszámLista in AdatokVezénylés)
                             {
                                 if (AdatokÖssz.Contains(PályaszámLista.Azonosító.Trim()))
                                 {
                                     if (oszlop == 18)
                                     {
-                                        oszlop = 2;
+                                        oszlop = 1;
                                         sor += 1;
                                     }
                                     oszlop += 1;
                                     MyE.Kiir(PályaszámLista.Azonosító.Trim(), MyE.Oszlopnév(oszlop) + sor.ToString());
                                 }
                             }
-                            MyE.Egyesít(munkalap, $"a{blokkeleje}:b{sor}");
+                            MyE.Egyesít(munkalap, $"a{blokkeleje}:a{sor}");
                             if (Típusoklistája.Items[i].ToStrTrim() != "Üres")
                             {
                                 MyE.Kiir("E3-" + Típusoklistája.Items[i].ToString(), $"A{blokkeleje}");
                             }
-                            MyE.Rácsoz($"c{blokkeleje}:r{sor}");
-                            MyE.Vastagkeret($"c{blokkeleje}:r{sor}");
+                            MyE.Rácsoz($"b{blokkeleje}:r{sor}");
+                            MyE.Vastagkeret($"b{blokkeleje}:r{sor}");
                             MyE.Vastagkeret($"a{blokkeleje}:r{sor}");
                             MyE.Sormagasság($"{blokkeleje}:{sor}", 25);
                             MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
@@ -1126,14 +1126,14 @@ namespace Villamos
                         {
                             sor += 1;
                             blokkeleje = sor;
-                            oszlop = 2;
+                            oszlop = 1;
                             foreach (string PályaszámLista in AdatokRész)
                             {
                                 if (AdatokÖssz.Contains(PályaszámLista))
                                 {
                                     if (oszlop == 18)
                                     {
-                                        oszlop = 2;
+                                        oszlop = 1;
                                         sor += 1;
                                     }
                                     oszlop += 1;
@@ -1141,14 +1141,14 @@ namespace Villamos
                                 }
                             }
 
-                            MyE.Egyesít(munkalap, $"a{blokkeleje}:b{sor}");
+                            MyE.Egyesít(munkalap, $"a{blokkeleje}:a{sor}");
                             if (Típusoklistája.Items[i].ToStrTrim() != "Üres")
                             {
                                 MyE.Kiir("E2- \n" + Típusoklistája.Items[i].ToString(), $"A{blokkeleje}");
                             }
 
-                            MyE.Rácsoz($"c{blokkeleje}:r{sor}");
-                            MyE.Vastagkeret($"c{blokkeleje}:r{sor}");
+                            MyE.Rácsoz($"b{blokkeleje}:r{sor}");
+                            MyE.Vastagkeret($"b{blokkeleje}:r{sor}");
                             MyE.Vastagkeret($"a{blokkeleje}:r{sor}");
                             MyE.Sormagasság($"{blokkeleje}:{sor}", 25);
                             MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
@@ -1184,25 +1184,25 @@ namespace Villamos
                         {
                             sor += 1;
                             blokkeleje = sor;
-                            oszlop = 2;
+                            oszlop = 1;
                             foreach (string PályaszámLista in Adatok)
                             {
                                 if (oszlop == 18)
                                 {
-                                    oszlop = 2;
+                                    oszlop = 1;
                                     sor += 1;
                                 }
                                 oszlop += 1;
                                 MyE.Kiir(PályaszámLista, MyE.Oszlopnév(oszlop) + sor.ToString());
                             }
 
-                            MyE.Egyesít(munkalap, $"a{blokkeleje}" + $":b{sor}");
+                            MyE.Egyesít(munkalap, $"a{blokkeleje}" + $":a{sor}");
                             if (Típusoklistája.Items[i].ToStrTrim() != "Üres")
                             {
                                 MyE.Kiir("E1- \n" + Típusoklistája.Items[i].ToStrTrim(), $"a{blokkeleje}");
                             }
-                            MyE.Rácsoz($"c{blokkeleje}:r{sor}");
-                            MyE.Vastagkeret($"c{blokkeleje}:r{sor}");
+                            MyE.Rácsoz($"b{blokkeleje}:r{sor}");
+                            MyE.Vastagkeret($"b{blokkeleje}:r{sor}");
                             MyE.Vastagkeret($"a{blokkeleje}:r{sor}");
                             MyE.Sormagasság($"{blokkeleje}:{sor}", 25);
                             MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
@@ -1234,12 +1234,12 @@ namespace Villamos
                         {
                             sor += 1;
                             blokkeleje = sor;
-                            oszlop = 2;
+                            oszlop = 1;
                             foreach (string PályaszámLista in Adatok)
                             {
                                 if (oszlop == 18)
                                 {
-                                    oszlop = 2;
+                                    oszlop = 1;
                                     sor += 1;
                                 }
                                 oszlop += 1;
@@ -1247,13 +1247,13 @@ namespace Villamos
 
                             }
 
-                            MyE.Egyesít(munkalap, $"a{blokkeleje}:b{sor}");
+                            MyE.Egyesít(munkalap, $"a{blokkeleje}:a{sor}");
                             if (Típusoklistája.Items[i].ToStrTrim() != "Üres")
                             {
                                 MyE.Kiir(Típusoklistája.Items[i].ToStrTrim(), $"a{blokkeleje}");
                             }
-                            MyE.Rácsoz($"c{blokkeleje}:r{sor}");
-                            MyE.Vastagkeret($"c{blokkeleje}:r{sor}");
+                            MyE.Rácsoz($"b{blokkeleje}:r{sor}");
+                            MyE.Vastagkeret($"b{blokkeleje}:r{sor}");
                             MyE.Vastagkeret($"a{blokkeleje}:r{sor}");
                             MyE.Sormagasság($"{blokkeleje}:{sor}", 25);
                             MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
@@ -1269,10 +1269,10 @@ namespace Villamos
             // **Pályaszám típus sor                      ***
             // **********************************************
             sor += 1;
-            MyE.Egyesít(munkalap, $"a{sor}:b{sor}");
+            MyE.Egyesít(munkalap, $"a{sor}:a{sor}");
             MyE.Kiir("Típus:", $"a{sor}");
-            MyE.Egyesít(munkalap, $"c{sor}:r{sor}");
-            MyE.Kiir("Pályaszámok:", $"c{sor}");
+            MyE.Egyesít(munkalap, $"b{sor}:r{sor}");
+            MyE.Kiir("Pályaszámok:", $"b{sor}");
             MyE.Betű($"a{sor}:r{sor}", 10);
             MyE.Betű($"a{sor}:r{sor}", false, true, true);
             MyE.Rácsoz($"a{sor}:r{sor}");
@@ -1314,14 +1314,14 @@ namespace Villamos
                     for (int i = 1; i <= üressor; i++)
                     {
                         sor += 1;
-                        MyE.Egyesít(munkalap, $"a{sor}:c{sor}");
+                        MyE.Egyesít(munkalap, $"a{sor}:a{sor}");
+                        MyE.Egyesít(munkalap, $"b{sor}:c{sor}");
                         MyE.Egyesít(munkalap, $"d{sor}:e{sor}");
-                        MyE.Egyesít(munkalap, $"f{sor}:g{sor}");
-                        MyE.Egyesít(munkalap, $"h{sor}:p{sor}");
+                        MyE.Egyesít(munkalap, $"f{sor}:p{sor}");
                         MyE.Egyesít(munkalap, $"q{sor}:r{sor}");
                     }
                     MyE.Betű($"a{blokkeleje}:r{sor}", 16);
-                    MyE.Betű($"h{blokkeleje}:p{sor}", 11);
+                    MyE.Betű($"f{blokkeleje}:p{sor}", 11);
                     MyE.Sormagasság($"a{blokkeleje}:r{sor}", 24);
                     MyE.Rácsoz($"a{blokkeleje}:r{sor}");
                     MyE.Vastagkeret($"a{blokkeleje}:r{sor}");
@@ -1349,14 +1349,14 @@ namespace Villamos
                             {
                                 sor += 1;
                                 MyE.Sormagasság($"a{sor}:r{sor}", 24);
-                                MyE.Egyesít(munkalap, $"a{sor}:c{sor}");
+                                MyE.Egyesít(munkalap, $"a{sor}:a{sor}");
+                                MyE.Egyesít(munkalap, $"b{sor}:c{sor}");
                                 MyE.Egyesít(munkalap, $"d{sor}:e{sor}");
-                                MyE.Egyesít(munkalap, $"f{sor}:g{sor}");
-                                MyE.Egyesít(munkalap, $"h{sor}:p{sor}");
+                                MyE.Egyesít(munkalap, $"f{sor}:p{sor}");
                                 MyE.Egyesít(munkalap, $"q{sor}:r{sor}");
                                 MyE.Kiir(V1Tábla.Rows[k].Cells[0].Value.ToString(), $"a{sor}");
-                                MyE.Kiir(V1Tábla.Rows[k].Cells[1].Value.ToString(), $"d{sor}");
-                                MyE.Kiir(MunkafolyamatTábla.Rows[i].Cells[0].Value.ToString(), $"h{sor}");
+                                MyE.Kiir(V1Tábla.Rows[k].Cells[1].Value.ToString(), $"b{sor}");
+                                MyE.Kiir(MunkafolyamatTábla.Rows[i].Cells[0].Value.ToString(), $"f{sor}");
                                 if (MunkafolyamatTábla.Rows[i].Cells[0].Value.ToString().Length > 55)
                                 {
                                     // ha hosszabb a szöveg 55-nél akkor több sorba írja
@@ -1376,14 +1376,14 @@ namespace Villamos
                         {
                             sor += 1;
                             MyE.Sormagasság($"a{sor}:r{sor}", 24);
-                            MyE.Egyesít(munkalap, $"a{sor}:c{sor}");
+                            MyE.Egyesít(munkalap, $"a{sor}:a{sor}");
+                            MyE.Egyesít(munkalap, $"b{sor}:c{sor}");
                             MyE.Egyesít(munkalap, $"d{sor}:e{sor}");
-                            MyE.Egyesít(munkalap, $"f{sor}:g{sor}");
-                            MyE.Egyesít(munkalap, $"h{sor}:p{sor}");
+                            MyE.Egyesít(munkalap, $"f{sor}:p{sor}");
                             MyE.Egyesít(munkalap, $"q{sor}:r{sor}");
                             MyE.Kiir(MunkafolyamatTábla.Rows[i].Cells[3].Value.ToString(), $"a{sor}");
-                            MyE.Kiir(MunkafolyamatTábla.Rows[i].Cells[1].Value.ToString(), $"d{sor}");
-                            MyE.Kiir(MunkafolyamatTábla.Rows[i].Cells[0].Value.ToString(), $"h{sor}");
+                            MyE.Kiir(MunkafolyamatTábla.Rows[i].Cells[1].Value.ToString(), $"b{sor}");
+                            MyE.Kiir(MunkafolyamatTábla.Rows[i].Cells[0].Value.ToString(), $"f{sor}");
                             if (MunkafolyamatTábla.Rows[i].Cells[0].Value.ToString().Length > 55)
                             {
                                 // ha hosszabb a szöveg 55-nél akkor több sorba írja
@@ -1401,9 +1401,9 @@ namespace Villamos
                 MyE.Betű($"a{blokkeleje}:r{sor}", 16);
                 MyE.Betű($"A{blokkeleje}:R{sor}", false, false, true);
                 MyE.Igazít_függőleges($"A{blokkeleje}:R{sor}", "alsó");
-                MyE.Betű($"h{blokkeleje}:p{sor}", 11);
-                MyE.Betű($"H{blokkeleje}:P{sor}", false, false, true);
-                MyE.Igazít_függőleges($"H{blokkeleje}:P{sor}", "alsó");
+                MyE.Betű($"f{blokkeleje}:p{sor}", 11);
+                MyE.Betű($"f{blokkeleje}:P{sor}", false, false, true);
+                MyE.Igazít_függőleges($"f{blokkeleje}:P{sor}", "alsó");
                 MyE.Rácsoz($"a{blokkeleje}:r{sor}");
                 MyE.Vastagkeret($"a{blokkeleje}:r{sor}");
                 Holtart.Lép();
@@ -1415,14 +1415,14 @@ namespace Villamos
             // **********************************************
             // ** munkafejléc                              **
             // **********************************************
-            MyE.Egyesít(munkalap, $"a{sor}:c{sor}");
+            MyE.Egyesít(munkalap, $"a{sor}:a{sor}");
             MyE.Kiir("Rendelési szám:", $"a{sor}");
+            MyE.Egyesít(munkalap, $"b{sor}:c{sor}");
+            MyE.Kiir("Pályaszám:", $"b{sor}");
             MyE.Egyesít(munkalap, $"d{sor}:e{sor}");
-            MyE.Kiir("Pályaszám:", $"d{sor}");
-            MyE.Egyesít(munkalap, $"f{sor}:g{sor}");
-            MyE.Kiir("Darab:", $"f{sor}");
-            MyE.Egyesít(munkalap, $"h{sor}:p{sor}");
-            MyE.Kiir("Munkafolyamat megnevezése:", $"h{sor}");
+            MyE.Kiir("Darab:", $"d{sor}");
+            MyE.Egyesít(munkalap, $"f{sor}:p{sor}");
+            MyE.Kiir("Munkafolyamat megnevezése:", $"f{sor}");
             MyE.Egyesít(munkalap, $"q{sor}:r{sor}");
             MyE.Kiir("Időráfordítás [perc]:", $"q{sor}");
             MyE.Betű($"a{sor}:r{sor}", 10);
@@ -1453,10 +1453,10 @@ namespace Villamos
                     Dolgozónév.Rows[m].Selected = false;
                     string dolgozószám = Dolgozónév.Rows[m].Cells[0].Value.ToStrTrim();
                     string dolgozóneve = Dolgozónév.Rows[m].Cells[1].Value.ToStrTrim();
-                    MyE.Egyesít(munkalap, $"a{sor}:e{sor}");
+                    MyE.Egyesít(munkalap, $"a{sor}:c{sor}");
                     MyE.Kiir(dolgozószám, $"a{sor}");
-                    MyE.Egyesít(munkalap, $"f{sor}:n{sor}");
-                    MyE.Kiir(dolgozóneve, $"f{sor}");
+                    MyE.Egyesít(munkalap, $"d{sor}:n{sor}");
+                    MyE.Kiir(dolgozóneve, $"d{sor}");
                     MyE.Egyesít(munkalap, $"o{sor}:r{sor}");
                     sor += 1;
                 }
@@ -1475,10 +1475,10 @@ namespace Villamos
             // ** dolgozók neve                          ****
             // **********************************************
 
-            MyE.Egyesít(munkalap, $"a{sor}:e{sor}");
+            MyE.Egyesít(munkalap, $"a{sor}:c{sor}");
             MyE.Kiir(HR, $"a{sor}");
-            MyE.Egyesít(munkalap, $"f{sor}:n{sor}");
-            MyE.Kiir(Dolgozó, $"f{sor}");
+            MyE.Egyesít(munkalap, $"d{sor}:n{sor}");
+            MyE.Kiir(Dolgozó, $"d{sor}");
             MyE.Egyesít(munkalap, $"o{sor}:r{sor}");
             sor += 1;
 
@@ -1496,10 +1496,10 @@ namespace Villamos
             // **********************************************
             // ** dolgozó fejléc                          ***
             // **********************************************
-            MyE.Egyesít(munkalap, "a4:e4");
+            MyE.Egyesít(munkalap, "a4:c4");
             MyE.Kiir("Dolgozószám:", "a4");
-            MyE.Egyesít(munkalap, "f4:n4");
-            MyE.Kiir("Dolgozó neve:", "f4");
+            MyE.Egyesít(munkalap, "d4:n4");
+            MyE.Kiir("Dolgozó neve:", "d4");
             MyE.Egyesít(munkalap, "o4:r4");
             MyE.Kiir("Dolgozó aláírása:", "o4");
             MyE.Rácsoz("a4:r4");
@@ -1522,20 +1522,20 @@ namespace Villamos
             MyE.Betű("a1:r1", 22);
             MyE.Betű("a1:r1", false, false, true);
             MyE.Igazít_vízszintes("a1:r1", "bal");
-            MyE.Egyesít(munkalap, "a2:d2");
+            MyE.Egyesít(munkalap, "a2:c2");
             MyE.Kiir("Munkautasítás száma:", "a2");
-            MyE.Egyesít(munkalap, "a3:d3");
+            MyE.Egyesít(munkalap, "a3:c3");
 
-            MyE.Egyesít(munkalap, "e2:h2");
-            MyE.Kiir("Munkarend:", "e2");
-            MyE.Betű("e2:h2", 10);
-            MyE.Betű("e2:h2", false, true, true);
+            MyE.Egyesít(munkalap, "d2:h2");
+            MyE.Kiir("Munkarend:", "d2");
+            MyE.Betű("d2:h2", 10);
+            MyE.Betű("d2:h2", false, true, true);
 
-            MyE.Egyesít(munkalap, "e3:h3");
+            MyE.Egyesít(munkalap, "d3:h3");
             if (Munkarendlist.SelectedItems.Count != 0)
             {
-                MyE.Kiir(Munkarendlist.SelectedItems[0].ToString(), "e3");
-                MyE.Betű("e3", false, false, true);
+                MyE.Kiir(Munkarendlist.SelectedItems[0].ToString(), "d3");
+                MyE.Betű("d3", false, false, true);
             }
 
             MyE.Egyesít(munkalap, "i2:k2");
@@ -1572,8 +1572,8 @@ namespace Villamos
             MyE.Betű("a3:r3", false, false, true);
 
             MyE.Rácsoz("a2:r3");
-            MyE.Vastagkeret("a2:d3");
-            MyE.Vastagkeret("e2:h3");
+            MyE.Vastagkeret("a2:b3");
+            MyE.Vastagkeret("c2:h3");
             MyE.Vastagkeret("i2:k3");
             MyE.Vastagkeret("l2:n3");
             MyE.Vastagkeret("o2:r3");
