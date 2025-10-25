@@ -33,6 +33,7 @@ namespace Villamos
         readonly List<Adat_Jármű_hiba> AdatokHIBA = new List<Adat_Jármű_hiba>();
         #endregion
 
+
         Adat_Jármű AdatJármű;
         Adat_MEO_Naptábla AdatNaptábla;
 
@@ -48,7 +49,7 @@ namespace Villamos
             Dátum.Value = DateTime.Today;
             Dátumig.Value = DateTime.Today;
             Dátumtól.Value = new DateTime(DateTime.Today.Year, 1, 1);
-            GombLathatosagKezelo.Beallit(this);
+            GombLathatosagKezelo.Beallit(this, "Főmérnökség");
             Jogosultságkiosztás();
             AdatokKerékMérés_Feltöltés();
             Fülekkitöltése();
