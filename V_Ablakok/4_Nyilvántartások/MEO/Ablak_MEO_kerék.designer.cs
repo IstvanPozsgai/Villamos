@@ -301,7 +301,7 @@ namespace Villamos
             this.Tábla.Name = "Tábla";
             this.Tábla.RowHeadersVisible = false;
             this.Tábla.RowHeadersWidth = 51;
-            this.Tábla.Size = new System.Drawing.Size(1005, 279);
+            this.Tábla.Size = new System.Drawing.Size(1005, 272);
             this.Tábla.TabIndex = 83;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
@@ -748,7 +748,7 @@ namespace Villamos
             this.FelhasználóTábla.Name = "FelhasználóTábla";
             this.FelhasználóTábla.RowHeadersVisible = false;
             this.FelhasználóTábla.RowHeadersWidth = 51;
-            this.FelhasználóTábla.Size = new System.Drawing.Size(994, 282);
+            this.FelhasználóTábla.Size = new System.Drawing.Size(994, 275);
             this.FelhasználóTábla.TabIndex = 82;
             this.FelhasználóTábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.FelhasználóTábla_CellClick);
             // 

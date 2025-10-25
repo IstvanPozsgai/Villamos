@@ -49,8 +49,18 @@ namespace Villamos
             Dátum.Value = DateTime.Today;
             Dátumig.Value = DateTime.Today;
             Dátumtól.Value = new DateTime(DateTime.Today.Year, 1, 1);
-            GombLathatosagKezelo.Beallit(this, "Főmérnökség");
-            Jogosultságkiosztás();
+
+            //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+            //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+            if (Program.PostásJogkör.Any(c => c != '0'))
+            {
+
+                Jogosultságkiosztás();
+            }
+            else
+            {
+                GombLathatosagKezelo.Beallit(this, "Főmérnökség");
+            }
             AdatokKerékMérés_Feltöltés();
             Fülekkitöltése();
             Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;

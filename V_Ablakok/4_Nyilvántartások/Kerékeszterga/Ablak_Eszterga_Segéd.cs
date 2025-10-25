@@ -72,7 +72,14 @@ namespace Villamos.Villamos_Ablakok
             }
 
             IgénylistaFeltötlés();
-            Jogosultságkiosztás();
+            if (Program.PostásJogkör.Any(c => c != '0'))
+            {
+                Jogosultságkiosztás();
+            }
+            else
+            {
+                GombLathatosagKezelo.Beallit(this, "Baross");
+            }
             Text_Dátum.Text = DátumésIdő.ToString("yyyy.MM.dd");
             Text_Idő.Text = DátumésIdő.ToString("HH:mm");
             Kiírás();
