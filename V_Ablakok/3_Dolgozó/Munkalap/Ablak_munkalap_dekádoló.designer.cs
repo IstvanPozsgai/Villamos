@@ -50,6 +50,7 @@ namespace Villamos
             this.Label13 = new System.Windows.Forms.Label();
             this.Fülek = new System.Windows.Forms.TabControl();
             this.TabPage1 = new System.Windows.Forms.TabPage();
+            this.Rögítéstakaró = new System.Windows.Forms.Panel();
             this.FelhasználtText = new System.Windows.Forms.Label();
             this.RendelkezésText = new System.Windows.Forms.Label();
             this.Benn_Lévő = new System.Windows.Forms.Button();
@@ -102,7 +103,6 @@ namespace Villamos
             this.SaveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
-            this.Rögítéstakaró = new System.Windows.Forms.Panel();
             this.Panel1.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -184,6 +184,14 @@ namespace Villamos
             this.TabPage1.Size = new System.Drawing.Size(1182, 532);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Napi Összesítés";
+            // 
+            // Rögítéstakaró
+            // 
+            this.Rögítéstakaró.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Rögítéstakaró.Location = new System.Drawing.Point(1115, 468);
+            this.Rögítéstakaró.Name = "Rögítéstakaró";
+            this.Rögítéstakaró.Size = new System.Drawing.Size(64, 61);
+            this.Rögítéstakaró.TabIndex = 102;
             // 
             // FelhasználtText
             // 
@@ -340,7 +348,6 @@ namespace Villamos
             this.Rögzítés.TabIndex = 84;
             this.ToolTip1.SetToolTip(this.Rögzítés, "Rögzíti az adatokat.");
             this.Rögzítés.UseVisualStyleBackColor = true;
-            this.Rögzítés.Visible = false;
             this.Rögzítés.Click += new System.EventHandler(this.Rögzítés_Click);
             // 
             // Tábla1
@@ -816,14 +823,6 @@ namespace Villamos
             this.ToolTip1.SetToolTip(this.BtnSúgó, "Súgó");
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
-            // 
-            // Rögítéstakaró
-            // 
-            this.Rögítéstakaró.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Rögítéstakaró.Location = new System.Drawing.Point(1115, 468);
-            this.Rögítéstakaró.Name = "Rögítéstakaró";
-            this.Rögítéstakaró.Size = new System.Drawing.Size(64, 61);
-            this.Rögítéstakaró.TabIndex = 102;
             // 
             // Ablak_munkalap_dekádoló
             // 

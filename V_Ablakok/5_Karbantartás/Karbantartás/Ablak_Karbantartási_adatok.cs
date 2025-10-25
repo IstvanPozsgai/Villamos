@@ -331,9 +331,6 @@ namespace Villamos
         #region Lista lap
         private void Frissíti_táblalistát_Click(object sender, EventArgs e)
         {
-            szűrő = "";
-            sorba = "";
-
             if (szűrő != "" || sorba != "")
                 Táblalista.LoadFilterAndSort(szűrő, sorba);
 
