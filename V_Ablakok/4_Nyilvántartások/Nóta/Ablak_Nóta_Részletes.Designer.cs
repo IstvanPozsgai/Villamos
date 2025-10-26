@@ -65,9 +65,13 @@
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.Rögzít = new System.Windows.Forms.Button();
+            this.Panel1 = new System.Windows.Forms.Panel();
+            this.Cmbtelephely = new System.Windows.Forms.ComboBox();
+            this.label17 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
+            this.Panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -325,7 +329,7 @@
             this.tableLayoutPanel1.Controls.Add(this.Cikkszám, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.label16, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.Beépíthető, 3, 6);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 54);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 9;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -337,7 +341,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(829, 310);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(875, 310);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // label10
@@ -410,7 +414,7 @@
             this.tableLayoutPanel2.Controls.Add(this.Műszaki, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.label12, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.Osztási, 1, 1);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 325);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 367);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -429,7 +433,7 @@
             this.tableLayoutPanel3.Controls.Add(this.Dátum, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.label14, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this.Státus, 3, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(12, 545);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(12, 587);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -440,19 +444,46 @@
             // 
             this.Rögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.Rögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Rögzít.Location = new System.Drawing.Point(847, 15);
+            this.Rögzít.Location = new System.Drawing.Point(847, 0);
             this.Rögzít.Name = "Rögzít";
             this.Rögzít.Size = new System.Drawing.Size(45, 45);
             this.Rögzít.TabIndex = 120;
             this.Rögzít.UseVisualStyleBackColor = true;
             this.Rögzít.Click += new System.EventHandler(this.Rögzít_Click);
             // 
+            // Panel1
+            // 
+            this.Panel1.Controls.Add(this.Cmbtelephely);
+            this.Panel1.Controls.Add(this.label17);
+            this.Panel1.Location = new System.Drawing.Point(12, 12);
+            this.Panel1.Name = "Panel1";
+            this.Panel1.Size = new System.Drawing.Size(373, 33);
+            this.Panel1.TabIndex = 197;
+            // 
+            // Cmbtelephely
+            // 
+            this.Cmbtelephely.FormattingEnabled = true;
+            this.Cmbtelephely.Location = new System.Drawing.Point(175, 2);
+            this.Cmbtelephely.Name = "Cmbtelephely";
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
+            this.Cmbtelephely.TabIndex = 18;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(12, 5);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(145, 20);
+            this.label17.TabIndex = 17;
+            this.label17.Text = "Telephelyi beállítás:";
+            // 
             // Ablak_Nóta_Részletes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tan;
-            this.ClientSize = new System.Drawing.Size(899, 602);
+            this.ClientSize = new System.Drawing.Size(899, 636);
+            this.Controls.Add(this.Panel1);
             this.Controls.Add(this.Rögzít);
             this.Controls.Add(this.tableLayoutPanel3);
             this.Controls.Add(this.tableLayoutPanel2);
@@ -469,6 +500,8 @@
             this.tableLayoutPanel2.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
+            this.Panel1.ResumeLayout(false);
+            this.Panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -512,5 +545,8 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox Cikkszám;
         private System.Windows.Forms.Label label16;
+        internal System.Windows.Forms.Panel Panel1;
+        internal System.Windows.Forms.ComboBox Cmbtelephely;
+        internal System.Windows.Forms.Label label17;
     }
 }

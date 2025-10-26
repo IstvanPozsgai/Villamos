@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.Táblalista = new Zuby.ADGV.AdvancedDataGridView();
             this.Frissíti_táblalistát = new System.Windows.Forms.Button();
@@ -45,9 +45,13 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.FődarabTípusok = new System.Windows.Forms.ComboBox();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Panel1 = new System.Windows.Forms.Panel();
+            this.Cmbtelephely = new System.Windows.Forms.ComboBox();
+            this.Label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Táblalista)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.KötésiOsztály)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.Panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // BtnSúgó
@@ -55,7 +59,7 @@
             this.BtnSúgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnSúgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
             this.BtnSúgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSúgó.Location = new System.Drawing.Point(856, 3);
+            this.BtnSúgó.Location = new System.Drawing.Point(783, 6);
             this.BtnSúgó.Name = "BtnSúgó";
             this.BtnSúgó.Size = new System.Drawing.Size(45, 45);
             this.BtnSúgó.TabIndex = 171;
@@ -66,19 +70,19 @@
             // 
             this.Táblalista.AllowUserToAddRows = false;
             this.Táblalista.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.Táblalista.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.Táblalista.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.Táblalista.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Táblalista.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Táblalista.FilterAndSortEnabled = true;
             this.Táblalista.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.Táblalista.Location = new System.Drawing.Point(12, 102);
+            this.Táblalista.Location = new System.Drawing.Point(12, 146);
             this.Táblalista.MaxFilterButtonImageHeight = 23;
             this.Táblalista.Name = "Táblalista";
             this.Táblalista.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Táblalista.Size = new System.Drawing.Size(886, 140);
+            this.Táblalista.Size = new System.Drawing.Size(816, 96);
             this.Táblalista.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Táblalista.TabIndex = 185;
             this.Táblalista.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Táblalista_CellClick);
@@ -87,7 +91,7 @@
             // 
             this.Frissíti_táblalistát.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Frissíti_táblalistát.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Frissíti_táblalistát.Location = new System.Drawing.Point(475, 50);
+            this.Frissíti_táblalistát.Location = new System.Drawing.Point(475, 95);
             this.Frissíti_táblalistát.Name = "Frissíti_táblalistát";
             this.Frissíti_táblalistát.Size = new System.Drawing.Size(47, 45);
             this.Frissíti_táblalistát.TabIndex = 184;
@@ -99,7 +103,7 @@
             // 
             this.Excel_gomb.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
             this.Excel_gomb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Excel_gomb.Location = new System.Drawing.Point(526, 50);
+            this.Excel_gomb.Location = new System.Drawing.Point(526, 95);
             this.Excel_gomb.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Excel_gomb.Name = "Excel_gomb";
             this.Excel_gomb.Size = new System.Drawing.Size(47, 45);
@@ -112,7 +116,7 @@
             // 
             this.BtnSAP.BackgroundImage = global::Villamos.Properties.Resources.SAP;
             this.BtnSAP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSAP.Location = new System.Drawing.Point(736, 50);
+            this.BtnSAP.Location = new System.Drawing.Point(736, 95);
             this.BtnSAP.Name = "BtnSAP";
             this.BtnSAP.Size = new System.Drawing.Size(45, 45);
             this.BtnSAP.TabIndex = 186;
@@ -124,7 +128,7 @@
             // 
             this.Módosítás.BackgroundImage = global::Villamos.Properties.Resources.Action_configure;
             this.Módosítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Módosítás.Location = new System.Drawing.Point(787, 50);
+            this.Módosítás.Location = new System.Drawing.Point(787, 95);
             this.Módosítás.Name = "Módosítás";
             this.Módosítás.Size = new System.Drawing.Size(45, 45);
             this.Módosítás.TabIndex = 187;
@@ -135,7 +139,7 @@
             // Aktív
             // 
             this.Aktív.AutoSize = true;
-            this.Aktív.Location = new System.Drawing.Point(12, 3);
+            this.Aktív.Location = new System.Drawing.Point(12, 48);
             this.Aktív.Name = "Aktív";
             this.Aktív.Size = new System.Drawing.Size(146, 24);
             this.Aktív.TabIndex = 188;
@@ -146,7 +150,7 @@
             // 
             this.Összesítés.BackgroundImage = global::Villamos.Properties.Resources.justice_297629_1280;
             this.Összesítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Összesítés.Location = new System.Drawing.Point(685, 50);
+            this.Összesítés.Location = new System.Drawing.Point(685, 95);
             this.Összesítés.Name = "Összesítés";
             this.Összesítés.Size = new System.Drawing.Size(45, 45);
             this.Összesítés.TabIndex = 189;
@@ -179,7 +183,7 @@
             this.groupBox1.BackColor = System.Drawing.Color.BurlyWood;
             this.groupBox1.Controls.Add(this.ChkSzűrés);
             this.groupBox1.Controls.Add(this.ChkRendezés);
-            this.groupBox1.Location = new System.Drawing.Point(12, 30);
+            this.groupBox1.Location = new System.Drawing.Point(12, 75);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(156, 65);
             this.groupBox1.TabIndex = 193;
@@ -188,7 +192,7 @@
             // FődarabTípusok
             // 
             this.FődarabTípusok.FormattingEnabled = true;
-            this.FődarabTípusok.Location = new System.Drawing.Point(174, 67);
+            this.FődarabTípusok.Location = new System.Drawing.Point(174, 112);
             this.FődarabTípusok.Name = "FődarabTípusok";
             this.FődarabTípusok.Size = new System.Drawing.Size(300, 28);
             this.FődarabTípusok.TabIndex = 194;
@@ -197,18 +201,45 @@
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(174, 16);
+            this.Holtart.Location = new System.Drawing.Point(174, 49);
             this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(658, 28);
+            this.Holtart.Size = new System.Drawing.Size(654, 28);
             this.Holtart.TabIndex = 195;
             this.Holtart.Visible = false;
+            // 
+            // Panel1
+            // 
+            this.Panel1.Controls.Add(this.Cmbtelephely);
+            this.Panel1.Controls.Add(this.Label13);
+            this.Panel1.Location = new System.Drawing.Point(6, 6);
+            this.Panel1.Name = "Panel1";
+            this.Panel1.Size = new System.Drawing.Size(373, 33);
+            this.Panel1.TabIndex = 196;
+            // 
+            // Cmbtelephely
+            // 
+            this.Cmbtelephely.FormattingEnabled = true;
+            this.Cmbtelephely.Location = new System.Drawing.Point(175, 2);
+            this.Cmbtelephely.Name = "Cmbtelephely";
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
+            this.Cmbtelephely.TabIndex = 18;
+            // 
+            // Label13
+            // 
+            this.Label13.AutoSize = true;
+            this.Label13.Location = new System.Drawing.Point(12, 5);
+            this.Label13.Name = "Label13";
+            this.Label13.Size = new System.Drawing.Size(145, 20);
+            this.Label13.TabIndex = 17;
+            this.Label13.Text = "Telephelyi beállítás:";
             // 
             // Ablak_Fődarab
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tan;
-            this.ClientSize = new System.Drawing.Size(906, 252);
+            this.ClientSize = new System.Drawing.Size(836, 252);
+            this.Controls.Add(this.Panel1);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.FődarabTípusok);
             this.Controls.Add(this.groupBox1);
@@ -231,6 +262,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.KötésiOsztály)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.Panel1.ResumeLayout(false);
+            this.Panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -252,5 +285,8 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ComboBox FődarabTípusok;
         internal V_MindenEgyéb.MyProgressbar Holtart;
+        internal System.Windows.Forms.Panel Panel1;
+        internal System.Windows.Forms.ComboBox Cmbtelephely;
+        internal System.Windows.Forms.Label Label13;
     }
 }
