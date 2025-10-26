@@ -297,7 +297,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 if (DátumÜtem == new DateTime(1900, 1, 1)) throw new HibásBevittAdat("Nincs beütemezve a kocsi, így ez a funkció nem működik");
 
                 Új_Ablak_TTP_Történet?.Close();
-                Új_Ablak_TTP_Történet = new Ablak_TTP_Történet(Azonosító, AdatokJármű, AdatokTábla, "KészJó", DátumÜtem);
+                Új_Ablak_TTP_Történet = new Ablak_TTP_Történet(Azonosító, AdatokJármű, AdatokTábla, "KészJó", DátumÜtem, "Főmérnökség");
                 Új_Ablak_TTP_Történet.FormClosed += Új_Ablak_TTP_Történet_Closed;
                 Új_Ablak_TTP_Történet.Változás += Táblalistázás;
                 Új_Ablak_TTP_Történet.Show();
@@ -322,7 +322,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 if (Tábla.SelectedRows.Count > 0) DátumÜtem = Tábla.Rows[Tábla.SelectedRows[0].Index].Cells[2].Value.ToÉrt_DaTeTime();
                 if (DátumÜtem == new DateTime(1900, 1, 1)) throw new HibásBevittAdat("Nincs beütemezve a kocsi, így ez a funkció nem működik");
                 Új_Ablak_TTP_Történet?.Close();
-                Új_Ablak_TTP_Történet = new Ablak_TTP_Történet(Azonosító, AdatokJármű, AdatokTábla, "KészJav", DátumÜtem);
+                Új_Ablak_TTP_Történet = new Ablak_TTP_Történet(Azonosító, AdatokJármű, AdatokTábla, "KészJav", DátumÜtem, "Főmérnökség");
                 Új_Ablak_TTP_Történet.FormClosed += Új_Ablak_TTP_Történet_Closed;
                 Új_Ablak_TTP_Történet.Változás += Táblalistázás;
                 Új_Ablak_TTP_Történet.Show();
@@ -347,7 +347,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 if (Tábla.SelectedRows.Count > 0) DátumÜtem = Tábla.Rows[Tábla.SelectedRows[0].Index].Cells[2].Value.ToÉrt_DaTeTime();
                 if (DátumÜtem == new DateTime(1900, 1, 1)) throw new HibásBevittAdat("Nincs beütemezve a kocsi, így ez a funkció nem működik");
                 Új_Ablak_TTP_Történet?.Close();
-                Új_Ablak_TTP_Történet = new Ablak_TTP_Történet(Azonosító, AdatokJármű, AdatokTábla, "JavKész", DátumÜtem);
+                Új_Ablak_TTP_Történet = new Ablak_TTP_Történet(Azonosító, AdatokJármű, AdatokTábla, "JavKész", DátumÜtem, Cmbtelephely.Text.Trim());
                 Új_Ablak_TTP_Történet.FormClosed += Új_Ablak_TTP_Történet_Closed;
                 Új_Ablak_TTP_Történet.Változás += Táblalistázás;
                 Új_Ablak_TTP_Történet.Show();
@@ -775,7 +775,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             if (Tábla.SelectedRows.Count > 0) DátumÜtem = Tábla.Rows[Tábla.SelectedRows[0].Index].Cells[2].Value.ToÉrt_DaTeTime();
 
             Új_Ablak_TTP_Történet?.Close();
-            Új_Ablak_TTP_Történet = new Ablak_TTP_Történet(Azonosító, AdatokJármű, AdatokTábla, "Összes", DátumÜtem);
+            Új_Ablak_TTP_Történet = new Ablak_TTP_Történet(Azonosító, AdatokJármű, AdatokTábla, "Összes", DátumÜtem, "");
             Új_Ablak_TTP_Történet.FormClosed += Új_Ablak_TTP_Történet_Closed;
             Új_Ablak_TTP_Történet.Változás += Táblalistázás;
             Új_Ablak_TTP_Történet.Show();

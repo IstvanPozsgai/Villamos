@@ -43,9 +43,15 @@ namespace Villamos
             AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség").Where(a => a.Törölt == false).ToList();
             AdatokOsztály = KézOsztály.Lista_Adat();
             AdatokNév = KézNév.Lista_Adat();
+            if (Program.PostásJogkör.Any(c => c != '0'))
+            {
+                Jogosultságkiosztás();
+            }
+            else
+            {
+                GombLathatosagKezelo.Beallit(this, "Főmérnökség");
+            }
 
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
             Fülekkitöltése();
             Pályaszámfeltöltés();
 

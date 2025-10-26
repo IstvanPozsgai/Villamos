@@ -23,10 +23,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
         public List<Adat_Jármű> AdatokJármű { get; set; }
         public string Művelet { get; set; }
         public DateTime ÜtemezésDátum { get; set; }
+        public string Telephely { get; set; }
 
         readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
 
-        public Ablak_TTP_Történet(string azonosító, List<Adat_Jármű> adatokJármű, List<Adat_TTP_Tábla> adatokTeljes, string művelet, DateTime ütemezésDátum)
+        public Ablak_TTP_Történet(string azonosító, List<Adat_Jármű> adatokJármű, List<Adat_TTP_Tábla> adatokTeljes, string művelet, DateTime ütemezésDátum, string telephely)
         {
             InitializeComponent();
             Azonosító = azonosító;
@@ -34,6 +35,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             AdatokTeljes = adatokTeljes;
             Művelet = művelet;
             ÜtemezésDátum = ütemezésDátum;
+            Telephely = telephely;
         }
 
         private void Ablak_TTP_Történet_Load(object sender, EventArgs e)
@@ -42,8 +44,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             Pályaszámok_feltöltése();
             StátusokFeltöltése();
 
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
+            if (Program.PostásJogkör.Any(c => c != '0'))
+            {
+                Jogosultságkiosztás();
+            }
+            else
+            {
+                GombLathatosagKezelo.Beallit(this);
+            }
             AdatokTeljes = KézTábla.Lista_Adatok();
             CmbAzonosító.Text = Azonosító;
             TáblaListázás();
@@ -212,7 +220,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                     CmbStátus.Text = Enum.GetName(typeof(MyEn.TTP_Státus), 8);
                     return;
                 case "Összes":
-                    if (Program.PostásTelephely.Trim() == "Főmérnökség") MindenAktív();
+                    if (Telephely.Trim() == "Főmérnökség") MindenAktív();
                     return;
             }
         }
