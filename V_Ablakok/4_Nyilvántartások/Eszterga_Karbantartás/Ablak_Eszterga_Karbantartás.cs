@@ -100,8 +100,17 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultsagkiosztas();
+
+            //Ez szabályozza, hogy melyikbe lépünk be
+            if (Program.PostásJogkör.Any(c => c != '0'))
+            {
+                Jogosultsagkiosztas();
+            }
+            else
+            {
+                GombLathatosagKezelo.Beallit(this, "Baross");
+            }
+
             TablaListazas();
             AtlagUzemoraFrissites(Alap_Napi_Atlag);
             Tabla.DataBindingComplete += (s, ev) => SorSzinezes();
@@ -1179,7 +1188,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                         { "Egység", 35f },
                         { "Nap", 22f },
                         { "Óra", 27f },
-                        { "Státusz", 33f },     
+                        { "Státusz", 33f },
                         { "Utolsó dátum", 43f },
                         { "Utolsó üzemóra", 40f },
                         { "Esedékesség dátuma", 53f },
@@ -1370,7 +1379,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         {
             try
             {
-                if(DtmPckrEloTerv.Value.Date == DateTime.Today)
+                if (DtmPckrEloTerv.Value.Date == DateTime.Today)
                     TablaListazas();
                 else
                     EloreTervezesListazasa();
