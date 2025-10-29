@@ -1716,7 +1716,7 @@ namespace Villamos
 
         private void Ablak_T5C5_Felmentés_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Új_Ablak_T5C5_Vonalak = null;
+            Új_Ablak_T5C5_Felmentés = null;
         }
 
         private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)

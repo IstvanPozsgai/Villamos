@@ -36,8 +36,6 @@
             this.Vizs_tábla = new System.Windows.Forms.DataGridView();
             this.Kért_vizsgálat = new System.Windows.Forms.TextBox();
             this.Label39 = new System.Windows.Forms.Label();
-            this.Következő_vizsgálat = new System.Windows.Forms.TextBox();
-            this.Label38 = new System.Windows.Forms.Label();
             this.Ciklus_Mentés = new System.Windows.Forms.Button();
             this.J_tőlFutott = new System.Windows.Forms.TextBox();
             this.Label37 = new System.Windows.Forms.Label();
@@ -113,7 +111,7 @@
             // 
             // Kért_vizsgálat
             // 
-            this.Kért_vizsgálat.Location = new System.Drawing.Point(427, 214);
+            this.Kért_vizsgálat.Location = new System.Drawing.Point(146, 214);
             this.Kért_vizsgálat.Name = "Kért_vizsgálat";
             this.Kért_vizsgálat.Size = new System.Drawing.Size(122, 26);
             this.Kért_vizsgálat.TabIndex = 116;
@@ -121,27 +119,11 @@
             // Label39
             // 
             this.Label39.AutoSize = true;
-            this.Label39.Location = new System.Drawing.Point(274, 220);
+            this.Label39.Location = new System.Drawing.Point(10, 220);
             this.Label39.Name = "Label39";
             this.Label39.Size = new System.Drawing.Size(125, 20);
             this.Label39.TabIndex = 115;
             this.Label39.Text = "Kért vizsgálat:(łł)";
-            // 
-            // Következő_vizsgálat
-            // 
-            this.Következő_vizsgálat.Location = new System.Drawing.Point(146, 214);
-            this.Következő_vizsgálat.Name = "Következő_vizsgálat";
-            this.Következő_vizsgálat.Size = new System.Drawing.Size(122, 26);
-            this.Következő_vizsgálat.TabIndex = 114;
-            // 
-            // Label38
-            // 
-            this.Label38.AutoSize = true;
-            this.Label38.Location = new System.Drawing.Point(10, 214);
-            this.Label38.Name = "Label38";
-            this.Label38.Size = new System.Drawing.Size(118, 20);
-            this.Label38.TabIndex = 113;
-            this.Label38.Text = "Köv. vizsg.: (ŁŁ)";
             // 
             // Ciklus_Mentés
             // 
@@ -350,8 +332,6 @@
             this.Controls.Add(this.Vizs_tábla);
             this.Controls.Add(this.Kért_vizsgálat);
             this.Controls.Add(this.Label39);
-            this.Controls.Add(this.Következő_vizsgálat);
-            this.Controls.Add(this.Label38);
             this.Controls.Add(this.Ciklus_Mentés);
             this.Controls.Add(this.J_tőlFutott);
             this.Controls.Add(this.Label37);
@@ -392,8 +372,6 @@
         internal System.Windows.Forms.DataGridView Vizs_tábla;
         internal System.Windows.Forms.TextBox Kért_vizsgálat;
         internal System.Windows.Forms.Label Label39;
-        internal System.Windows.Forms.TextBox Következő_vizsgálat;
-        internal System.Windows.Forms.Label Label38;
         internal System.Windows.Forms.Button Ciklus_Mentés;
         internal System.Windows.Forms.TextBox J_tőlFutott;
         internal System.Windows.Forms.Label Label37;

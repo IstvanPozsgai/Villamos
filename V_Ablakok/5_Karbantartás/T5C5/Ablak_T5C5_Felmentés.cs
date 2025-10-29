@@ -69,14 +69,14 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
                 mail.CC = Másolat.Text.Trim(); // másolatot kap
 
                 string szöveg = Tárgy.Text.Trim();
-                szöveg = szöveg.Replace("$$", Ciklus_Pályaszám.Text.Trim()).Replace("ßß", J_tőlFutott.Text).Replace("ŁŁ", Következő_vizsgálat.Text).Replace("łł", Kért_vizsgálat.Text).Replace("\r\n", "<br>");
+                szöveg = szöveg.Replace("$$", Ciklus_Pályaszám.Text.Trim()).Replace("ßß", J_tőlFutott.Text).Replace("łł", Kért_vizsgálat.Text).Replace("\r\n", "<br>");
                 mail.Subject = szöveg.Trim(); // üzenet tárgya
 
                 // üzent szövege
                 mail.HTMLBody = "<html><body> <p> ";
                 // üzent szövege
                 szöveg = Bevezetés.Text.Trim() + "<br>";
-                szöveg = szöveg.Replace("$$", Ciklus_Pályaszám.Text.Trim()).Replace("ßß", J_tőlFutott.Text).Replace("ŁŁ", Következő_vizsgálat.Text).Replace("łł", Kért_vizsgálat.Text).Replace("\r\n", "<br>");
+                szöveg = szöveg.Replace("$$", Ciklus_Pályaszám.Text.Trim()).Replace("ßß", J_tőlFutott.Text).Replace("łł", Kért_vizsgálat.Text).Replace("\r\n", "<br>");
                 mail.HTMLBody += szöveg + "</p>";
 
                 // Table start.
@@ -100,7 +100,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
                 mail.HTMLBody += Tábla_html;
 
                 szöveg = "<p>" + Tárgyalás.Text.Trim() + "<br>";
-                szöveg = szöveg.Replace("$$", Ciklus_Pályaszám.Text.Trim()).Replace("ßß", J_tőlFutott.Text).Replace("ŁŁ", Következő_vizsgálat.Text).Replace("łł", Kért_vizsgálat.Text).Replace("\r\n", "<br>");
+                szöveg = szöveg.Replace("$$", Ciklus_Pályaszám.Text.Trim()).Replace("ßß", J_tőlFutott.Text).Replace("łł", Kért_vizsgálat.Text).Replace("\r\n", "<br>");
                 mail.HTMLBody += szöveg + "</p>";
 
 
@@ -124,7 +124,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
                 // Table end.
                 mail.HTMLBody += Tábla_html;
                 szöveg = "<p>" + Befejezés.Text.Trim() + "<br>";
-                szöveg = szöveg.Replace("$$", Ciklus_Pályaszám.Text.Trim()).Replace("ßß", J_tőlFutott.Text).Replace("ŁŁ", Következő_vizsgálat.Text).Replace("łł", Kért_vizsgálat.Text).Replace("\r\n", "<br>");
+                szöveg = szöveg.Replace("$$", Ciklus_Pályaszám.Text.Trim()).Replace("ßß", J_tőlFutott.Text).Replace("łł", Kért_vizsgálat.Text).Replace("\r\n", "<br>");
                 mail.HTMLBody += szöveg;
 
                 mail.HTMLBody += "</p></body></html>  ";

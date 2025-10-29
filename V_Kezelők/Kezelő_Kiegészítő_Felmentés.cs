@@ -77,7 +77,7 @@ namespace Villamos.Kezelők
                     szöveg += $"Kértvizsgálat='{Adat.Kértvizsgálat}', ";
                     szöveg += $"Bevezetés='{Adat.Bevezetés}', ";
                     szöveg += $"Tárgyalás='{Adat.Tárgyalás}', ";
-                    szöveg += $"Befejezés='{Adat.Befejezés}' ";
+                    szöveg += $"Befejezés='{Adat.Befejezés}', ";
                     szöveg += $"CiklusTípus='{Adat.CiklusTípus}' ";
                     szöveg += $" WHERE Id={Adat.Id}";
                     MyA.ABMódosítás(hely, jelszó, szöveg);
