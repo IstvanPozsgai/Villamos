@@ -1803,6 +1803,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Aha-Soft-Standard-Transport-Tram.ico" />
+    <Content Include="Főmérnökség\Adatok\Nosztalgia\Kép\5901_1.jpg" />
     <None Include="Resources\Action-view-multicolumn.ico" />
     <None Include="Resources\Action-view-bottom.ico" />
     <None Include="Resources\App-photo.ico" />
