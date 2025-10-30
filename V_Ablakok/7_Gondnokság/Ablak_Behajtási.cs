@@ -1528,7 +1528,7 @@ namespace Villamos
 
                 int j = 1;
                 // megnyitjuk az excel táblát
-                MyE.ExcelMegnyitás(helyexcel);
+                MyE.ExcelMegnyitás(helyexcel );
 
                 int k = 0;
                 int l = 0;
