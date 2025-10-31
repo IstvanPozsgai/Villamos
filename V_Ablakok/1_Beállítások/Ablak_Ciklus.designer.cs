@@ -234,7 +234,7 @@ namespace Villamos
             // 
             this.Töröl.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
             this.Töröl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Töröl.Location = new System.Drawing.Point(312, 256);
+            this.Töröl.Location = new System.Drawing.Point(261, 256);
             this.Töröl.Name = "Töröl";
             this.Töröl.Size = new System.Drawing.Size(45, 45);
             this.Töröl.TabIndex = 173;
