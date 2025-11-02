@@ -15,6 +15,8 @@ namespace Villamos.Villamos_Ablakok.Beosztás
     {
         #region Kezelők,Listák
 
+        readonly Kezelő_Dolgozó_Beosztás_Új KézBEO = new Kezelő_Dolgozó_Beosztás_Új();
+
         readonly Kezelő_Dolgozó_Beosztás_Napló KézNapló = new Kezelő_Dolgozó_Beosztás_Napló();
         List<Adat_Dolgozó_Beosztás_Napló> AdatokNapló = new List<Adat_Dolgozó_Beosztás_Napló>();
 
@@ -185,8 +187,8 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
 
-                Kezelő_Dolgozó_Beosztás_Új Kéz = new Kezelő_Dolgozó_Beosztás_Új();
-                Adat_Dolgozó_Beosztás_Új Rekord_Old = Kéz.Egy_Adat(hely, jelszó, szöveg);
+
+                Adat_Dolgozó_Beosztás_Új Rekord_Old = KézBEO.Egy_Adat(hely, jelszó, szöveg);
 
                 string szabiok = Beosztáskód.ToUpper().Contains("SZ") ? "Normál kivétel" : "";
 
@@ -259,7 +261,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
 
 
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
-                Adat_Dolgozó_Beosztás_Új Rekord_Új = Kéz.Egy_Adat(hely, jelszó, szöveg);
+                Adat_Dolgozó_Beosztás_Új Rekord_Új = KézBEO.Egy_Adat(hely, jelszó, szöveg);
 
                 if (Beosztáskód.Length > 0 && Beosztáskód.Substring(0, 1) == "A")
                     AFT_Átírás(Cmbtelephely, Dátum, Rekord_Új, Dolgozónév);
@@ -273,7 +275,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 if (Beosztáskód.Length > 0 && Beosztáskód.Substring(0, 1) == "B")
                     Beteg_Átírás(Cmbtelephely, Dátum, Rekord_Új, Dolgozónév);
 
-                Rekord_Új = Kéz.Egy_Adat(hely, jelszó, szöveg);
+                Rekord_Új = KézBEO.Egy_Adat(hely, jelszó, szöveg);
                 Naplózás(Cmbtelephely, Rekord_Új, Dolgozónév);
 
                 Ellenőrzés_Csúsztatás(Cmbtelephely, Dátum, HR_Azonosító);
@@ -458,8 +460,8 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
 
-                Kezelő_Dolgozó_Beosztás_Új Kéz = new Kezelő_Dolgozó_Beosztás_Új();
-                Adat_Dolgozó_Beosztás_Új Rekord = Kéz.Egy_Adat(hely, jelszó, szöveg);
+
+                Adat_Dolgozó_Beosztás_Új Rekord = KézBEO.Egy_Adat(hely, jelszó, szöveg);
 
                 string Beosztáskód = "";
                 string AFTok = "";
@@ -502,7 +504,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
-                Rekord = Kéz.Egy_Adat(hely, jelszó, szöveg);
+                Rekord = KézBEO.Egy_Adat(hely, jelszó, szöveg);
                 Naplózás(Cmbtelephely, Rekord, Dolgozónév);
 
             }
@@ -528,8 +530,8 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
 
-                Kezelő_Dolgozó_Beosztás_Új Kéz = new Kezelő_Dolgozó_Beosztás_Új();
-                Adat_Dolgozó_Beosztás_Új Rekord = Kéz.Egy_Adat(hely, jelszó, szöveg);
+
+                Adat_Dolgozó_Beosztás_Új Rekord = KézBEO.Egy_Adat(hely, jelszó, szöveg);
 
 
                 if (Rekord == null)
@@ -565,7 +567,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
 
                 //újra beolvassuk a módosítás/létrehozás utáni állapotot
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
-                Rekord = Kéz.Egy_Adat(hely, jelszó, szöveg);
+                Rekord = KézBEO.Egy_Adat(hely, jelszó, szöveg);
 
                 Szabadság_Átírás(Cmbtelephely, Dátum, Rekord, Dolgozónév);
                 Naplózás(Cmbtelephely, Rekord, Dolgozónév);
@@ -691,12 +693,9 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 Kezelő_Szatube_Beteg Kéz_SZA = new Kezelő_Szatube_Beteg();
                 List<Adat_Szatube_Beteg> Adatok_SZA = Kéz_SZA.Lista_Adatok(hely, jelszó, szöveg);
 
-                string helybeo = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
-                string jelszóbeo = "kiskakas";
-                szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}'";
+                List<Adat_Dolgozó_Beosztás_Új> Adatok_Beo = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Adatok_Beo = Adatok_Beo.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim()).ToList();
 
-                Kezelő_Dolgozó_Beosztás_Új Kéz = new Kezelő_Dolgozó_Beosztás_Új();
-                List<Adat_Dolgozó_Beosztás_Új> Adatok_Beo = Kéz.Lista_Adatok(helybeo, jelszóbeo, szöveg);
 
                 string BeoKód;
                 //Megkeressük a beosztás táblában a SZATUBE-ben tároltat, ha nem létezik akkor töröltre állítjuk
@@ -856,12 +855,8 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 Kezelő_Szatube_Szabadság Kéz_SZA = new Kezelő_Szatube_Szabadság();
                 List<Adat_Szatube_Szabadság> Adatok_SZA = Kéz_SZA.Lista_Adatok(hely, jelszó, szöveg);
 
-                string helybeo = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
-                string jelszóbeo = "kiskakas";
-                szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}'";
-
-                Kezelő_Dolgozó_Beosztás_Új Kéz = new Kezelő_Dolgozó_Beosztás_Új();
-                List<Adat_Dolgozó_Beosztás_Új> Adatok_Beo = Kéz.Lista_Adatok(helybeo, jelszóbeo, szöveg);
+                List<Adat_Dolgozó_Beosztás_Új> Adatok_Beo = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Adatok_Beo = Adatok_Beo.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim()).ToList();
 
                 string BeoKód;
                 //Megkeressük a beosztás táblában a SZATUBE-ben tároltat, ha nem létezik akkor töröltre állítjuk
@@ -943,8 +938,8 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
 
-                Kezelő_Dolgozó_Beosztás_Új Kéz = new Kezelő_Dolgozó_Beosztás_Új();
-                Adat_Dolgozó_Beosztás_Új Rekord_Old = Kéz.Egy_Adat(hely, jelszó, szöveg);
+
+                Adat_Dolgozó_Beosztás_Új Rekord_Old = KézBEO.Egy_Adat(hely, jelszó, szöveg);
 
 
                 if (Rekord_Old == null)
@@ -982,7 +977,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
-                Adat_Dolgozó_Beosztás_Új Rekord_Új = Kéz.Egy_Adat(hely, jelszó, szöveg);
+                Adat_Dolgozó_Beosztás_Új Rekord_Új = KézBEO.Egy_Adat(hely, jelszó, szöveg);
                 Naplózás(Cmbtelephely, Rekord_Új, Dolgozónév);
 
                 if (Rekord_Új.Túlóra != 0)
@@ -1135,12 +1130,8 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 Kezelő_Szatube_Túlóra Kézcsúsz = new Kezelő_Szatube_Túlóra();
                 List<Adat_Szatube_Túlóra> Adatok_Aft = Kézcsúsz.Lista_Adatok(hely, jelszó, szöveg);
 
-                string helybeo = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
-                string jelszóbeo = "kiskakas";
-                szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND Túlóra<>0";
-
-                Kezelő_Dolgozó_Beosztás_Új Kéz = new Kezelő_Dolgozó_Beosztás_Új();
-                List<Adat_Dolgozó_Beosztás_Új> Adatok_Beo = Kéz.Lista_Adatok(helybeo, jelszóbeo, szöveg);
+                List<Adat_Dolgozó_Beosztás_Új> Adatok_Beo = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Adatok_Beo = Adatok_Beo.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Túlóra != 0).ToList();
 
                 int óra;
                 //Megkeressük a beosztás táblában a SZATUBE-ben tároltat, ha nem létezik akkor töröltre állítjuk
@@ -1278,8 +1269,8 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
 
-                Kezelő_Dolgozó_Beosztás_Új Kéz = new Kezelő_Dolgozó_Beosztás_Új();
-                Adat_Dolgozó_Beosztás_Új Rekord_Old = Kéz.Egy_Adat(hely, jelszó, szöveg);
+
+                Adat_Dolgozó_Beosztás_Új Rekord_Old = KézBEO.Egy_Adat(hely, jelszó, szöveg);
 
 
                 if (Rekord_Old == null)
@@ -1315,7 +1306,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
-                Adat_Dolgozó_Beosztás_Új Rekord_Új = Kéz.Egy_Adat(hely, jelszó, szöveg);
+                Adat_Dolgozó_Beosztás_Új Rekord_Új = KézBEO.Egy_Adat(hely, jelszó, szöveg);
                 Naplózás(Cmbtelephely, Rekord_Új, Dolgozónév);
 
                 if (Rekord_Új.AFTóra != 0)
@@ -1464,12 +1455,8 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 Kezelő_Szatube_Aft Kézcsúsz = new Kezelő_Szatube_Aft();
                 List<Adat_Szatube_AFT> Adatok_Aft = Kézcsúsz.Lista_Adatok(hely, jelszó, szöveg);
 
-                string helybeo = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
-                string jelszóbeo = "kiskakas";
-                szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND AFTóra<>0";
-
-                Kezelő_Dolgozó_Beosztás_Új Kéz = new Kezelő_Dolgozó_Beosztás_Új();
-                List<Adat_Dolgozó_Beosztás_Új> Adatok_Beo = Kéz.Lista_Adatok(helybeo, jelszóbeo, szöveg);
+                List<Adat_Dolgozó_Beosztás_Új> Adatok_Beo = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Adatok_Beo = Adatok_Beo.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.AFTóra != 0).ToList();
 
                 int óra;
                 //Megkeressük a beosztás táblában a SZATUBE-ben tároltat, ha nem létezik akkor töröltre állítjuk
@@ -1533,8 +1520,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
 
-                Kezelő_Dolgozó_Beosztás_Új Kéz = new Kezelő_Dolgozó_Beosztás_Új();
-                Adat_Dolgozó_Beosztás_Új Rekord_Old = Kéz.Egy_Adat(hely, jelszó, szöveg);
+                Adat_Dolgozó_Beosztás_Új Rekord_Old = KézBEO.Egy_Adat(hely, jelszó, szöveg);
 
 
                 if (Rekord_Old == null)
@@ -1572,7 +1558,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
-                Adat_Dolgozó_Beosztás_Új Rekord_Új = Kéz.Egy_Adat(hely, jelszó, szöveg);
+                Adat_Dolgozó_Beosztás_Új Rekord_Új = KézBEO.Egy_Adat(hely, jelszó, szöveg);
 
                 Naplózás(Cmbtelephely, Rekord_Új, Dolgozónév);
                 if (Rekord_Új.Csúszóra != 0)
@@ -1608,12 +1594,8 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 Kezelő_Szatube_Csúsztatás Kézcsúsz = new Kezelő_Szatube_Csúsztatás();
                 List<Adat_Szatube_Csúsztatás> AdatokCsúszik = Kézcsúsz.Lista_Adatok(hely, jelszó, szöveg);
 
-                string helybeo = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
-                string jelszóbeo = "kiskakas";
-                szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND Csúszóra<>0";
-
-                Kezelő_Dolgozó_Beosztás_Új Kéz = new Kezelő_Dolgozó_Beosztás_Új();
-                List<Adat_Dolgozó_Beosztás_Új> Adatok_Beo = Kéz.Lista_Adatok(helybeo, jelszóbeo, szöveg);
+                List<Adat_Dolgozó_Beosztás_Új> Adatok_Beo = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Adatok_Beo = Adatok_Beo.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Csúszóra != 0).ToList();
 
                 int óra;
                 //Megkeressük a beosztás táblában a SZATUBE-ben tároltat, ha nem létezik akkor töröltre állítjuk

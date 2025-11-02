@@ -192,57 +192,6 @@ namespace Villamos.Kezelők
 
 
         //elkopó
-        public List<Adat_Dolgozó_Beosztás_Új> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Dolgozó_Beosztás_Új> Adatok = new List<Adat_Dolgozó_Beosztás_Új>();
-            Adat_Dolgozó_Beosztás_Új Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-
-                                Adat = new Adat_Dolgozó_Beosztás_Új(
-                                          rekord["dolgozószám"].ToStrTrim(),
-                                          rekord["Nap"].ToÉrt_DaTeTime(),
-                                          rekord["Beosztáskód"].ToStrTrim(),
-                                          rekord["Ledolgozott"].ToÉrt_Int(),
-
-                                          rekord["Túlóra"].ToÉrt_Int(),
-                                          rekord["Túlórakezd"].ToÉrt_DaTeTime(),
-                                          rekord["Túlóravég"].ToÉrt_DaTeTime(),
-
-                                          rekord["Csúszóra"].ToÉrt_Int(),
-                                          rekord["CSúszórakezd"].ToÉrt_DaTeTime(),
-                                          rekord["Csúszóravég"].ToÉrt_DaTeTime(),
-
-                                          rekord["Megjegyzés"].ToStrTrim(),
-                                          rekord["Túlóraok"].ToStrTrim(),
-                                          rekord["Szabiok"].ToStrTrim(),
-
-                                          rekord["kért"].ToÉrt_Bool(),
-                                          rekord["Csúszok"].ToStrTrim(),
-                                          rekord["AFTóra"].ToÉrt_Int(),
-                                          rekord["AFTok"].ToStrTrim()
-                                          );
-
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
 
         public Adat_Dolgozó_Beosztás_Új Egy_Adat(string hely, string jelszó, string szöveg)
         {
