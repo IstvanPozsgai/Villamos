@@ -150,29 +150,6 @@ namespace Villamos.Villamos_Ablakok.Beosztás
 
         }
 
-        private void ListaCsúsztatás(string Cmbtelephely, DateTime Dátum)
-        {
-            try
-            {
-                AdatokCsúsztatás.Clear();
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
-                string jelszó = "kertitörpe";
-                string szöveg = $"SELECT * FROM csúsztatás";
-
-                AdatokCsúsztatás = KézCsúsztatás.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
         #endregion
 
         #region Rögzítések
@@ -1608,8 +1585,8 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 string szöveg = $"SELECT * FROM csúsztatás WHERE törzsszám='{HR_Azonosító.Trim()}' AND ";
                 szöveg += $"[kezdődátum]>=#{hónapelső:M-d-yy}# AND [befejeződátum]<=#{hónaputolsó:M-d-yy}# AND [státus]<>3";
 
-                Kezelő_Szatube_Csúsztatás Kézcsúsz = new Kezelő_Szatube_Csúsztatás();
-                List<Adat_Szatube_Csúsztatás> AdatokCsúszik = Kézcsúsz.Lista_Adatok(hely, jelszó, szöveg);
+
+                List<Adat_Szatube_Csúsztatás> AdatokCsúszik = KézCsúsztatás.Lista_Adatok(Cmbtelephely.Trim(), Dátum.Year);
 
                 List<Adat_Dolgozó_Beosztás_Új> Adatok_Beo = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
                 Adatok_Beo = Adatok_Beo.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Csúszóra != 0).ToList();
@@ -1654,7 +1631,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 string jelszó = "kertitörpe";
                 string szöveg;
 
-                ListaCsúsztatás(Cmbtelephely, Dátum);
+                AdatokCsúsztatás = KézCsúsztatás.Lista_Adatok(Cmbtelephely.Trim(), Dátum.Year);
                 Adat_Szatube_Csúsztatás AdatCsúsztatás = (from a in AdatokCsúsztatás
                                                           where a.Törzsszám == Rekord_Új.Dolgozószám.Trim()
                                                           && a.Kezdődátum.ToShortDateString() == Rekord_Új.Nap.ToShortDateString()
@@ -1727,7 +1704,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 string jelszó = "kertitörpe";
                 string szöveg;
 
-                ListaCsúsztatás(Cmbtelephely, Dátum);
+                AdatokCsúsztatás = KézCsúsztatás.Lista_Adatok(Cmbtelephely.Trim(), Dátum.Year);
                 Adat_Szatube_Csúsztatás AdatCsúsztatás = (from a in AdatokCsúsztatás
                                                           where a.Törzsszám == Rekord_Új.Dolgozószám.Trim()
                                                           && a.Kezdődátum.ToShortDateString() == Rekord_Új.Nap.ToShortDateString()
