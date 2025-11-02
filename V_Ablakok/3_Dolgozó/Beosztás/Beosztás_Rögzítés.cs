@@ -181,14 +181,13 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             string szöveg = "Nincs hiba";
             try
             {
-
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
-
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
 
-
-                Adat_Dolgozó_Beosztás_Új Rekord_Old = KézBEO.Egy_Adat(hely, jelszó, szöveg);
+                List<Adat_Dolgozó_Beosztás_Új> Rekordok = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Rekordok = Rekordok.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
+                Adat_Dolgozó_Beosztás_Új Rekord_Old = Rekordok.FirstOrDefault();
 
                 string szabiok = Beosztáskód.ToUpper().Contains("SZ") ? "Normál kivétel" : "";
 
@@ -259,9 +258,9 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 }
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
-
-                szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
-                Adat_Dolgozó_Beosztás_Új Rekord_Új = KézBEO.Egy_Adat(hely, jelszó, szöveg);
+                Rekordok = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Rekordok = Rekordok.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
+                Adat_Dolgozó_Beosztás_Új Rekord_Új = Rekordok.FirstOrDefault();
 
                 if (Beosztáskód.Length > 0 && Beosztáskód.Substring(0, 1) == "A")
                     AFT_Átírás(Cmbtelephely, Dátum, Rekord_Új, Dolgozónév);
@@ -275,7 +274,10 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 if (Beosztáskód.Length > 0 && Beosztáskód.Substring(0, 1) == "B")
                     Beteg_Átírás(Cmbtelephely, Dátum, Rekord_Új, Dolgozónév);
 
-                Rekord_Új = KézBEO.Egy_Adat(hely, jelszó, szöveg);
+                List<Adat_Dolgozó_Beosztás_Új> RekordOk = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                RekordOk = RekordOk.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
+                Rekord_Új = RekordOk.FirstOrDefault();
+
                 Naplózás(Cmbtelephely, Rekord_Új, Dolgozónév);
 
                 Ellenőrzés_Csúsztatás(Cmbtelephely, Dátum, HR_Azonosító);
@@ -460,8 +462,9 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
 
-
-                Adat_Dolgozó_Beosztás_Új Rekord = KézBEO.Egy_Adat(hely, jelszó, szöveg);
+                List<Adat_Dolgozó_Beosztás_Új> Rekordok = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Rekordok = Rekordok.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
+                Adat_Dolgozó_Beosztás_Új Rekord = Rekordok.FirstOrDefault();
 
                 string Beosztáskód = "";
                 string AFTok = "";
@@ -503,8 +506,11 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 }
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
-                szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
-                Rekord = KézBEO.Egy_Adat(hely, jelszó, szöveg);
+
+                List<Adat_Dolgozó_Beosztás_Új> Rekord_Old = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Rekord_Old = Rekord_Old.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
+                Rekord = Rekord_Old.FirstOrDefault();
+
                 Naplózás(Cmbtelephely, Rekord, Dolgozónév);
 
             }
@@ -530,11 +536,10 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
 
+                List<Adat_Dolgozó_Beosztás_Új> Rekord_Old = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Rekord_Old = Rekord_Old.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
 
-                Adat_Dolgozó_Beosztás_Új Rekord = KézBEO.Egy_Adat(hely, jelszó, szöveg);
-
-
-                if (Rekord == null)
+                if (Rekord_Old == null)
                 {
                     szöveg = "INSERT INTO beosztás (Dolgozószám, Nap, Beosztáskód, Ledolgozott, Túlóra, Túlórakezd, Túlóravég, Csúszóra, CSúszórakezd, Csúszóravég, Megjegyzés, Túlóraok, Szabiok, Kért, Csúszok, AFTóra, AFTok)";
                     szöveg += " VALUES (";
@@ -566,8 +571,10 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
                 //újra beolvassuk a módosítás/létrehozás utáni állapotot
-                szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
-                Rekord = KézBEO.Egy_Adat(hely, jelszó, szöveg);
+                Rekord_Old = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Rekord_Old = Rekord_Old.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
+
+                Adat_Dolgozó_Beosztás_Új Rekord = Rekord_Old.FirstOrDefault();
 
                 Szabadság_Átírás(Cmbtelephely, Dátum, Rekord, Dolgozónév);
                 Naplózás(Cmbtelephely, Rekord, Dolgozónév);
@@ -932,15 +939,12 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             string szöveg = "Nincs hiba";
             try
             {
-
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
-
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
 
-
-                Adat_Dolgozó_Beosztás_Új Rekord_Old = KézBEO.Egy_Adat(hely, jelszó, szöveg);
-
+                List<Adat_Dolgozó_Beosztás_Új> Rekord_Old = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Rekord_Old = Rekord_Old.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
 
                 if (Rekord_Old == null)
                 {
@@ -977,7 +981,11 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
-                Adat_Dolgozó_Beosztás_Új Rekord_Új = KézBEO.Egy_Adat(hely, jelszó, szöveg);
+                List<Adat_Dolgozó_Beosztás_Új> Rekordok = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Rekordok = Rekordok.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
+                Adat_Dolgozó_Beosztás_Új Rekord_Új = Rekordok.FirstOrDefault();
+
+
                 Naplózás(Cmbtelephely, Rekord_Új, Dolgozónév);
 
                 if (Rekord_Új.Túlóra != 0)
@@ -1269,8 +1277,10 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
 
+                List<Adat_Dolgozó_Beosztás_Új> Rekordok = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Rekordok = Rekordok.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
+                Adat_Dolgozó_Beosztás_Új Rekord_Old = Rekordok.FirstOrDefault();
 
-                Adat_Dolgozó_Beosztás_Új Rekord_Old = KézBEO.Egy_Adat(hely, jelszó, szöveg);
 
 
                 if (Rekord_Old == null)
@@ -1306,7 +1316,10 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
-                Adat_Dolgozó_Beosztás_Új Rekord_Új = KézBEO.Egy_Adat(hely, jelszó, szöveg);
+                Rekordok = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Rekordok = Rekordok.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
+                Adat_Dolgozó_Beosztás_Új Rekord_Új = Rekordok.FirstOrDefault();
+
                 Naplózás(Cmbtelephely, Rekord_Új, Dolgozónév);
 
                 if (Rekord_Új.AFTóra != 0)
@@ -1520,7 +1533,9 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 string jelszó = "kiskakas";
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
 
-                Adat_Dolgozó_Beosztás_Új Rekord_Old = KézBEO.Egy_Adat(hely, jelszó, szöveg);
+                List<Adat_Dolgozó_Beosztás_Új> Rekordok = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Rekordok = Rekordok.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
+                Adat_Dolgozó_Beosztás_Új Rekord_Old = Rekordok.FirstOrDefault();
 
 
                 if (Rekord_Old == null)
@@ -1558,7 +1573,9 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
                 szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
-                Adat_Dolgozó_Beosztás_Új Rekord_Új = KézBEO.Egy_Adat(hely, jelszó, szöveg);
+                Rekordok = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                Rekordok = Rekordok.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
+                Adat_Dolgozó_Beosztás_Új Rekord_Új = Rekordok.FirstOrDefault();
 
                 Naplózás(Cmbtelephely, Rekord_Új, Dolgozónév);
                 if (Rekord_Új.Csúszóra != 0)
