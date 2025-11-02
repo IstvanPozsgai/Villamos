@@ -81,7 +81,6 @@ namespace Villamos
             }
         }
 
-
         private void Ablak_Túlóra_Figyelés_Load(object sender, EventArgs e)
         {
 
@@ -172,8 +171,6 @@ namespace Villamos
             }
         }
 
-
-
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             try
@@ -220,6 +217,33 @@ namespace Villamos
 
             }
         }
+
+        private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            try
+            {
+                Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
+                if (Cmbtelephely.Text.Trim() == "") return;
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+
+                }
+                else
+                {
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         #endregion
 
 
@@ -247,7 +271,7 @@ namespace Villamos
 
                 MyE.DataGridViewToExcel(fájlexc, Tábla2);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -337,7 +361,6 @@ namespace Villamos
 
         private void Tábla2_másik()
         {
-
             try
             {
                 List<Adat_Szatube_Túlóra> Adatok = KézTúlóra.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year).Where(a => a.Státus != 3).ToList();
@@ -366,7 +389,6 @@ namespace Villamos
                 }
                 Tábla2.Visible = true;
                 Tábla2.Refresh();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -384,7 +406,6 @@ namespace Villamos
         #region Munkaidő keret
         private void Kötelezőidők()
         {
-
             List<Adat_Kiegészítő_Munkaidő> AdatokMunka = KézMunka.Lista_Adatok();
             Adat_Kiegészítő_Munkaidő Elem = (from a in AdatokMunka
                                              where a.Munkarendelnevezés == "8"
@@ -1013,7 +1034,7 @@ namespace Villamos
 
                 Module_Excel.DataGridViewToExcel(fájlexc, Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                Module_Excel.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1068,7 +1089,6 @@ namespace Villamos
                 Csoport.Items.Add(Elem.Csoport);
         }
 
-        // aaa  Ezt még egyesíteni kell a rögzítés során
         private void Rögzítés_Click(object sender, EventArgs e)
         {
             try
@@ -1089,9 +1109,6 @@ namespace Villamos
                 for (int j = 0; j < Tábla.Rows.Count; j++)
                 {
                     vdátum = DateTime.Parse(Tábla.Rows[j].Cells[3].Value.ToString());
-                    string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Beosztás\{vdátum.Year}\Ebeosztás{vdátum:yyyyMM}.mdb";
-
-
                     string dolgozónév = Tábla.Rows[j].Cells[0].Value.ToString().Trim();
                     string dolgozószám = Tábla.Rows[j].Cells[1].Value.ToString().Trim();
                     string Beosztáskód = Tábla.Rows[j].Cells[4].Value.ToString().Trim();
@@ -1275,45 +1292,12 @@ namespace Villamos
             Visszacsukjadolgozó();
         }
 
-        private void CsoportFrissít_Click_1(object sender, EventArgs e)
-        {
-            Cursor = Cursors.WaitCursor; // homok óra kezdete
-            Visszacsukcsoport();
-            Csoport_listáz();
-            Cursor = Cursors.Default; // homokóra vége
-        }
-
         private void Kilépettjel_CheckedChanged(object sender, EventArgs e)
         {
             Névfeltöltés();
         }
         #endregion
 
-        private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            try
-            {
-                Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
-                if (Cmbtelephely.Text.Trim() == "") return;
-                if (Program.PostásJogkör.Any(c => c != '0'))
-                {
 
-                }
-                else
-                {
-                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
-                }
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
     }
 }

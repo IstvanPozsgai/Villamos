@@ -302,7 +302,7 @@ namespace Villamos
             this.CsoportFrissít.Size = new System.Drawing.Size(40, 40);
             this.CsoportFrissít.TabIndex = 141;
             this.CsoportFrissít.UseVisualStyleBackColor = true;
-            this.CsoportFrissít.Click += new System.EventHandler(this.CsoportFrissít_Click_1);
+            this.CsoportFrissít.Click += new System.EventHandler(this.CsoportFrissít_Click);
             // 
             // Tábla3
             // 
