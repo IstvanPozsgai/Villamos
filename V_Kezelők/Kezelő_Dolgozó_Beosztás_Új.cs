@@ -124,13 +124,18 @@ namespace Villamos.Kezelők
             }
         }
 
-
-        public void Módosítás(string Telephely, DateTime Dátum, Adat_Dolgozó_Beosztás_Új Adat, bool Eszterga = false)
+        public void MódosításCsúsz(string Telephely, DateTime Dátum, Adat_Dolgozó_Beosztás_Új Adat, bool Eszterga = false)
         {
             try
             {
                 FájlBeállítás(Telephely, Dátum, Eszterga);
-
+                string szöveg = "UPDATE beosztás SET ";
+                szöveg += $"Csúszóra={Adat.Csúszóra}, ";// Csúszóra
+                szöveg += $"CSúszórakezd='{Adat.CSúszórakezd}', ";// CSúszórakezd
+                szöveg += $"Csúszóravég='{Adat.Csúszóravég}', ";// Csúszóravég
+                szöveg += $"Csúszok='{Adat.Csúszok}' ";// Csúszok
+                szöveg += $" WHERE Dolgozószám='{Adat.Dolgozószám}' AND nap=#{Adat.Nap:MM-dd-yyyy}#";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -142,7 +147,6 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         public void Törlés(string Telephely, DateTime Dátum, DateTime Dátumtól, DateTime Dátumig, bool Eszterga = false)
         {

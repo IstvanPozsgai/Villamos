@@ -285,47 +285,7 @@ namespace Villamos.Villamos_Adatszerkezet
     }
 
 
-    public class Adat_Dolgozó_Beosztás_Új
-    {
-        public string Dolgozószám { get; private set; }
-        public DateTime Nap { get; private set; }
-        public string Beosztáskód { get; private set; }
-        public int Ledolgozott { get; private set; }
-        public int Túlóra { get; private set; }
-        public DateTime Túlórakezd { get; private set; }
-        public DateTime Túlóravég { get; private set; }
-        public int Csúszóra { get; private set; }
-        public DateTime CSúszórakezd { get; private set; }
-        public DateTime Csúszóravég { get; private set; }
-        public string Megjegyzés { get; private set; }
-        public string Túlóraok { get; private set; }
-        public string Szabiok { get; private set; }
-        public bool Kért { get; private set; }
-        public string Csúszok { get; private set; }
-        public int AFTóra { get; private set; }
-        public string AFTok { get; private set; }
 
-        public Adat_Dolgozó_Beosztás_Új(string dolgozószám, DateTime nap, string beosztáskód, int ledolgozott, int túlóra, DateTime túlórakezd, DateTime túlóravég, int csúszóra, DateTime cSúszórakezd, DateTime csúszóravég, string megjegyzés, string túlóraok, string szabiok, bool kért, string csúszok, int aFTóra, string aFTok)
-        {
-            Dolgozószám = dolgozószám;
-            Nap = nap;
-            Beosztáskód = beosztáskód;
-            Ledolgozott = ledolgozott;
-            Túlóra = túlóra;
-            Túlórakezd = túlórakezd;
-            Túlóravég = túlóravég;
-            Csúszóra = csúszóra;
-            CSúszórakezd = cSúszórakezd;
-            Csúszóravég = csúszóravég;
-            Megjegyzés = megjegyzés;
-            Túlóraok = túlóraok;
-            Szabiok = szabiok;
-            Kért = kért;
-            Csúszok = csúszok;
-            AFTóra = aFTóra;
-            AFTok = aFTok;
-        }
-    }
 
     public class Adat_Dolgozó_Személyes
     {
@@ -442,37 +402,7 @@ namespace Villamos.Villamos_Adatszerkezet
     }
 
 
-    public class Adat_Szatube_Csúsztatás
-    {
-        public double Sorszám { get; private set; }
-        public string Törzsszám { get; private set; }
-        public string Dolgozónév { get; private set; }
-        public DateTime Kezdődátum { get; private set; }
-        public DateTime Befejeződátum { get; private set; }
-        public int Kivettnap { get; private set; }
-        public string Szabiok { get; private set; }
-        public int Státus { get; private set; }
-        public string Rögzítette { get; private set; }
-        public DateTime Rögzítésdátum { get; private set; }
-        public DateTime Kezdőidő { get; private set; }
-        public DateTime Befejezőidő { get; private set; }
 
-        public Adat_Szatube_Csúsztatás(double sorszám, string törzsszám, string dolgozónév, DateTime kezdődátum, DateTime befejeződátum, int kivettnap, string szabiok, int státus, string rögzítette, DateTime rögzítésdátum, DateTime kezdőidő, DateTime befejezőidő)
-        {
-            Sorszám = sorszám;
-            Törzsszám = törzsszám;
-            Dolgozónév = dolgozónév;
-            Kezdődátum = kezdődátum;
-            Befejeződátum = befejeződátum;
-            Kivettnap = kivettnap;
-            Szabiok = szabiok;
-            Státus = státus;
-            Rögzítette = rögzítette;
-            Rögzítésdátum = rögzítésdátum;
-            Kezdőidő = kezdőidő;
-            Befejezőidő = befejezőidő;
-        }
-    }
 
 
     public class Adat_Szatube_Túlóra
