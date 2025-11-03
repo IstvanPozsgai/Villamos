@@ -1307,17 +1307,17 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                     double sorszám = 1;
                     if (Elem != null) sorszám = Elem.Sorszám + 1;
 
-                    szöveg = "INSERT INTO aft ";
-                    szöveg += "(Sorszám, törzsszám, dolgozónév, dátum, AFTóra, AFTok, Státus, rögzítette, rögzítésdátum) VALUES (";
-                    szöveg += $"{sorszám}, ";   //Sorszám
-                    szöveg += $"'{Rekord_Új.Dolgozószám.Trim()}', "; //törzsszám
-                    szöveg += $"'{Dolgozónév.Trim()}', "; //dolgozónév
-                    szöveg += $"'{Rekord_Új.Nap:yyyy.MM.dd}', "; //dátum
-                    szöveg += $"{Rekord_Új.AFTóra}, ";   //AFTóra
-                    szöveg += $"'{Rekord_Új.AFTok.Trim()}', "; //AFTok
-                    szöveg += $"0, ";   //Státus
-                    szöveg += $"'{Program.PostásNév.Trim()}', "; //rögzítette
-                    szöveg += $"'{DateTime.Now}' ) "; //rögzítésdátum
+                    Adat_Szatube_AFT ADAT = new Adat_Szatube_AFT(
+                        sorszám,
+                        Rekord_Új.Dolgozószám.Trim(),
+                        Dolgozónév.Trim(),
+                        Rekord_Új.Nap,
+                        Rekord_Új.AFTóra,
+                        Rekord_Új.AFTok.Trim(),
+                        0,
+                        Program.PostásNév.Trim(),
+                        DateTime.Now);
+                    KézAft.Rögzítés(Cmbtelephely, Dátum.Year, ADAT);
                 }
                 else
                 {

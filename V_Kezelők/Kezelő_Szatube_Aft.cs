@@ -86,7 +86,35 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Rögzítés(string Telephely, int Év, Adat_Szatube_AFT Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                string szöveg = "INSERT INTO aft ";
+                szöveg += "(Sorszám, törzsszám, dolgozónév, dátum, AFTóra, AFTok, Státus, rögzítette, rögzítésdátum) VALUES (";
+                szöveg += $"{Adat.Sorszám}, ";   //Sorszám
+                szöveg += $"'{Adat.Törzsszám}', "; //törzsszám
+                szöveg += $"'{Adat.Dolgozónév}', "; //dolgozónév
+                szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', "; //dátum
+                szöveg += $"{Adat.AFTóra}, ";   //AFTóra
+                szöveg += $"'{Adat.AFTok.Trim()}', "; //AFTok
+                szöveg += $"0, ";   //Státus
+                szöveg += $"'{Adat.Rögzítette}', "; //rögzítette
+                szöveg += $"'{Adat.Rögzítésdátum}' ) "; //rögzítésdátum
 
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
     }
 
