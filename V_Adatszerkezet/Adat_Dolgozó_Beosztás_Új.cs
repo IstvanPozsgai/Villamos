@@ -22,7 +22,10 @@ namespace Villamos.Villamos_Adatszerkezet
         public int AFTóra { get; private set; }
         public string AFTok { get; private set; }
 
-        public Adat_Dolgozó_Beosztás_Új(string dolgozószám, DateTime nap, string beosztáskód, int ledolgozott, int túlóra, DateTime túlórakezd, DateTime túlóravég, int csúszóra, DateTime cSúszórakezd, DateTime csúszóravég, string megjegyzés, string túlóraok, string szabiok, bool kért, string csúszok, int aFTóra, string aFTok)
+        public Adat_Dolgozó_Beosztás_Új(string dolgozószám, DateTime nap, string beosztáskód, int ledolgozott,
+            int túlóra, DateTime túlórakezd, DateTime túlóravég,
+            int csúszóra, DateTime cSúszórakezd, DateTime csúszóravég,
+            string megjegyzés, string túlóraok, string szabiok, bool kért, string csúszok, int aFTóra, string aFTok)
         {
             Dolgozószám = dolgozószám;
             Nap = nap;
@@ -55,6 +58,17 @@ namespace Villamos.Villamos_Adatszerkezet
             CSúszórakezd = cSúszórakezd;
             Csúszóravég = csúszóravég;
             Csúszok = csúszok;
+        }
+
+        public Adat_Dolgozó_Beosztás_Új(string dolgozószám, DateTime nap, string beosztáskód, int ledolgozott,
+                                        int aFTóra, string aFTok)
+        {
+            Dolgozószám = dolgozószám;
+            Nap = nap;
+            Beosztáskód = beosztáskód;
+            Ledolgozott = ledolgozott;
+            AFTóra = aFTóra;
+            AFTok = aFTok;
         }
 
 

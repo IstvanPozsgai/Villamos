@@ -129,12 +129,35 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum, Eszterga);
-                string szöveg = "UPDATE beosztás SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"Csúszóra={Adat.Csúszóra}, ";// Csúszóra
                 szöveg += $"CSúszórakezd='{Adat.CSúszórakezd}', ";// CSúszórakezd
                 szöveg += $"Csúszóravég='{Adat.Csúszóravég}', ";// Csúszóravég
                 szöveg += $"Csúszok='{Adat.Csúszok}' ";// Csúszok
                 szöveg += $" WHERE Dolgozószám='{Adat.Dolgozószám}' AND nap=#{Adat.Nap:MM-dd-yyyy}#";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void MódosításAft(string Telephely, DateTime Dátum, Adat_Dolgozó_Beosztás_Új Adat, bool Eszterga = false)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum, Eszterga);
+                string szöveg = $"UPDATE {táblanév} SET ";
+                szöveg += $"AFTóra={Adat.AFTóra}, ";// AFTóra
+                szöveg += $"AFTok='{Adat.AFTok}' ";// AFTok
+                szöveg += $" WHERE Dolgozószám='{Adat.Dolgozószám}' AND nap=#{Adat.Nap:MM-dd-yyyy}#";
+
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -175,7 +198,7 @@ namespace Villamos.Kezelők
                 List<string> szövegGy = new List<string>();
                 foreach (string Hr_Azonosító in HrAzonosítók)
                 {
-                    string szöveg = "DELETE FROM beosztás ";
+                    string szöveg = $"DELETE FROM {táblanév} ";
                     szöveg += $" WHERE nap>=#{Dátumtól:M-d-yy}# ";
                     szöveg += $" AND nap<=#{Dátumig:M-d-yy}# ";
                     szöveg += $" AND Dolgozószám='{Hr_Azonosító}'";
