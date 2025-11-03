@@ -2287,7 +2287,7 @@ namespace Villamos
                                    Hr_Azonosítók,
                                    false);
 
-                    KézAft.Módosítás(Cmbtelephely.Text.Trim(), Dátum.Value.Year, MyF.Hónap_elsőnapja(Dátum.Value),
+                    KézAft.StátusÁllítás(Cmbtelephely.Text.Trim(), Dátum.Value.Year, MyF.Hónap_elsőnapja(Dátum.Value),
                                    MyF.Hónap_utolsónapja(Dátum.Value), Hr_Azonosítók, 3);
                     KézBeteg.Módosítás(Cmbtelephely.Text.Trim(), Dátum.Value.Year, MyF.Hónap_elsőnapja(Dátum.Value),
                                    MyF.Hónap_utolsónapja(Dátum.Value), Hr_Azonosítók, 3);

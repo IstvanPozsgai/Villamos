@@ -61,7 +61,7 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Módosítás(string Telephely, int Év, DateTime Dátumtól, DateTime Dátumig, List<string> Hr_Azonosítók, int Státus)
+        public void StátusÁllítás(string Telephely, int Év, DateTime Dátumtól, DateTime Dátumig, List<string> Hr_Azonosítók, int Státus)
         {
             try
             {
@@ -69,11 +69,30 @@ namespace Villamos.Kezelők
                 List<string> szövegGy = new List<string>();
                 foreach (string Hr_Azonosító in Hr_Azonosítók)
                 {
-                    string szöveg = $"UPDATE {táblanév} SET státus={Státus} WHERE törzsszám='{Hr_Azonosító}' AND  kezdődátum>=#{Dátumtól:M-d-yy}#";
-                    szöveg += $" AND  kezdődátum<=#{Dátumig:M-d-yy}#";
+                    string szöveg = $"UPDATE {táblanév} SET státus={Státus} WHERE törzsszám='{Hr_Azonosító}' AND  dátum>=#{Dátumtól:M-d-yy}#";
+                    szöveg += $" AND  dátum<=#{Dátumig:M-d-yy}#";
                     szövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, szövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void StátusÁllítás(string Telephely, int Év, DateTime Dátum, string Hr_Azonosító, int Státus)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                string szöveg = $"UPDATE {táblanév} SET státus={Státus} WHERE törzsszám='{Hr_Azonosító}' AND  dátum=#{Dátum:M-d-yy}# AND [státus]<>3";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -91,7 +110,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = "INSERT INTO aft ";
+                string szöveg = $"INSERT INTO {táblanév} ";
                 szöveg += "(Sorszám, törzsszám, dolgozónév, dátum, AFTóra, AFTok, Státus, rögzítette, rögzítésdátum) VALUES (";
                 szöveg += $"{Adat.Sorszám}, ";   //Sorszám
                 szöveg += $"'{Adat.Törzsszám}', "; //törzsszám
@@ -116,6 +135,28 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás(string Telephely, int Év, Adat_Szatube_AFT Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                string szöveg = $"UPDATE {táblanév} SET ";
+                szöveg += $"dolgozónév='{Adat.Dolgozónév}', "; //dolgozónév
+                szöveg += $"AFTóra={Adat.AFTóra}, ";   //AFTóra
+                szöveg += $"AFTok='{Adat.AFTok.Trim()}', "; //AFTok
+                szöveg += $"rögzítette='{Adat.Rögzítette}', "; //rögzítette
+                szöveg += $"rögzítésdátum='{Adat.Rögzítésdátum}'  "; //rögzítésdátum
+                szöveg += $" WHERE törzsszám='{Adat.Törzsszám}' AND [dátum]=#{Adat.Dátum:M-d-yy}# AND [státus]<>3";
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
-
 }
