@@ -133,7 +133,7 @@ namespace Villamos.Kezelők
                 {
                     string szöveg = $"UPDATE  összesítő{Tábla} SET ";
                     szöveg += $" perc={Adat.Perc} ";
-                    szöveg += $" WHERE dátum='{Adat.Dátum:M-d-yy}'";
+                    szöveg += $" WHERE dátum=#{Adat.Dátum:M-d-yy}#";
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }

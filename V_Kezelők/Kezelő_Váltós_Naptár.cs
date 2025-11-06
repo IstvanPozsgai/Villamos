@@ -24,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Váltós_Naptár> Lista_Adatok(int Év, string Tábla)
         {
             FájlBeállítás(Év);
-            string szöveg = $"SELECT * FROM {táblanév}{Tábla}";
+            string szöveg = $"SELECT * FROM {táblanév}{Tábla} ORDER BY Dátum ";
             List<Adat_Váltós_Naptár> Adatok = new List<Adat_Váltós_Naptár>();
             Adat_Váltós_Naptár Adat;
 
@@ -81,7 +81,7 @@ namespace Villamos.Kezelők
                 FájlBeállítás(Év);
                 string szöveg = $"UPDATE  {táblanév}{Tábla} SET ";
                 szöveg += $" nap='{Adat.Nap}'";
-                szöveg += $" WHERE dátum='{Adat.Dátum:M-d-yy}'";
+                szöveg += $" WHERE dátum='#{Adat.Dátum:M-d-yy}#'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -129,9 +129,9 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Váltós_Naptár Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE  {táblanév}{Tábla} SET ";
+                    string szöveg = $"UPDATE {táblanév}{Tábla} SET ";
                     szöveg += $" nap='{Adat.Nap}'";
-                    szöveg += $" WHERE dátum= {Adat.Dátum:M-d-yy}'";
+                    szöveg += $" WHERE dátum= #{Adat.Dátum:yyyy-MM-dd}#";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);

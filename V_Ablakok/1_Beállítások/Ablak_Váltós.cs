@@ -89,6 +89,8 @@ namespace Villamos
                 GombLathatosagKezelo.Beallit(this, "Főmérnökség");
             }
             Fülek.SelectedIndex = 0;
+            VáltósNaptár.Value = DateTime.Today;
+            Dátumnappal.Value = DateTime.Today;
             Fülekkitöltése();
             Munkarend8és12kiirás();
             Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
@@ -371,14 +373,14 @@ namespace Villamos
                 case 4:
                     {
                         // munkaidő naptár
-                        Dátumnappal.Value = DateTime.Today;
+
                         Nappaloslenyílófeltöltés();
                         break;
                     }
                 case 5:
                     {
                         // váltós keret
-                        VáltósNaptár.Value = DateTime.Today;
+
                         Váltóslenyílófeltöltés();
                         VváltósCsoportfeltöltés();
                         break;
@@ -1563,9 +1565,6 @@ namespace Villamos
         {
             try
             {
-                DateTime hónaputolsónapja;
-                DateTime próbanap;
-
                 Tábla_Nappalos.Rows.Clear();
                 Tábla_Nappalos.Columns.Clear();
                 Tábla_Nappalos.Refresh();
@@ -1614,7 +1613,7 @@ namespace Villamos
                     Tábla_Nappalos.Rows[j - 1].Cells[0].Value = j;
 
                     DateTime képzettDátum = new DateTime(Dátumnappal.Value.Year, j, 1);
-                    hónaputolsónapja = MyF.Hónap_utolsónapja(képzettDátum);
+                    DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(képzettDátum);
 
 
                     for (int i = 1; i <= 31; i++)
@@ -1626,7 +1625,7 @@ namespace Villamos
                         }
                         else
                         {
-                            próbanap = new DateTime(Dátumnappal.Value.Year, j, i);
+                            DateTime próbanap = new DateTime(Dátumnappal.Value.Year, j, i);
                             switch (próbanap.DayOfWeek)
                             {
                                 case DayOfWeek.Saturday:
@@ -1778,75 +1777,75 @@ namespace Villamos
 
                 int napokszáma;
                 int pihenőnapokszáma;
+
+                Tábla_Nappalos.Visible = false;
+                for (int j = 1; j <= 12; j++)
                 {
-                    Tábla_Nappalos.Visible = false;
-                    for (int j = 1; j <= 12; j++)
-                    {
-                        napokszáma = 0;
-                        pihenőnapokszáma = 0;
-
-                        for (int i = 1; i <= 31; i++)
-                        {
-
-                            if (Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value != null && Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value.ToString() == "1")
-                                napokszáma += 1;
-                            if (Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value.ToString() == "Ü" ||
-                                Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value.ToString() == "P" ||
-                                Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value.ToString() == "V")
-                                pihenőnapokszáma += 1;
-
-                        }
-                        Tábla_Nappalos.Rows[j - 1].Cells[1].Value = napokszáma;
-                        Tábla_Nappalos.Rows[j - 1].Cells[2].Value = napokszáma * Munkarend8;
-                        Tábla_Nappalos.Rows[j - 1].Cells[3].Value = napokszáma * Munkarend8 / 60;
-                        Tábla_Nappalos.Columns[3].DefaultCellStyle.Format = "0.00";
-                        Tábla_Nappalos.Rows[j - 1].Cells[4].Value = pihenőnapokszáma;
-                    }
-
-                    // Összesít félévre
                     napokszáma = 0;
                     pihenőnapokszáma = 0;
-                    for (int j = 1; j <= 6; j++)
-                    {
-                        napokszáma += Tábla_Nappalos.Rows[j - 1].Cells[1].Value.ToÉrt_Int();
-                        pihenőnapokszáma += Tábla_Nappalos.Rows[j - 1].Cells[4].Value.ToÉrt_Int();
-                    }
-                    Tábla_Nappalos.Rows[12].Cells[0].Value = "1 félév";
-                    Tábla_Nappalos.Rows[12].Cells[1].Value = napokszáma;
-                    Tábla_Nappalos.Rows[12].Cells[2].Value = napokszáma * Munkarend8;
-                    Tábla_Nappalos.Rows[12].Cells[3].Value = napokszáma * Munkarend8 / 60;
-                    Tábla_Nappalos.Rows[12].Cells[4].Value = pihenőnapokszáma;
 
-                    napokszáma = 0;
-                    pihenőnapokszáma = 0;
-                    for (int j = 7; j <= 12; j++)
+                    for (int i = 1; i <= 31; i++)
                     {
-                        napokszáma += Tábla_Nappalos.Rows[j - 1].Cells[1].Value.ToÉrt_Int();
-                        pihenőnapokszáma += Tábla_Nappalos.Rows[j - 1].Cells[4].Value.ToÉrt_Int();
-                    }
 
-                    Tábla_Nappalos.Rows[13].Cells[0].Value = "2 félév";
-                    Tábla_Nappalos.Rows[13].Cells[1].Value = napokszáma;
-                    Tábla_Nappalos.Rows[13].Cells[2].Value = napokszáma * Munkarend8;
-                    Tábla_Nappalos.Rows[13].Cells[3].Value = napokszáma * Munkarend8 / 60;
-                    Tábla_Nappalos.Rows[13].Cells[4].Value = pihenőnapokszáma;
-                    // összesít évre
-                    napokszáma = 0;
-                    pihenőnapokszáma = 0;
-                    for (int j = 1; j <= 12; j++)
-                    {
-                        napokszáma += Tábla_Nappalos.Rows[j - 1].Cells[1].Value.ToÉrt_Int();
-                        pihenőnapokszáma += Tábla_Nappalos.Rows[j - 1].Cells[4].Value.ToÉrt_Int();
-                    }
-                    Tábla_Nappalos.Rows[14].Cells[0].Value = "Év";
-                    Tábla_Nappalos.Rows[14].Cells[1].Value = napokszáma;
-                    Tábla_Nappalos.Rows[14].Cells[2].Value = napokszáma * Munkarend8;
-                    Tábla_Nappalos.Rows[14].Cells[3].Value = napokszáma * Munkarend8 / 60;
-                    Tábla_Nappalos.Rows[14].Cells[4].Value = pihenőnapokszáma;
+                        if (Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value != null && Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value.ToString() == "1")
+                            napokszáma += 1;
+                        if (Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value.ToString() == "Ü" ||
+                            Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value.ToString() == "P" ||
+                            Tábla_Nappalos.Rows[j - 1].Cells[4 + i].Value.ToString() == "V")
+                            pihenőnapokszáma += 1;
 
-                    Tábla_Nappalos.Refresh();
-                    Tábla_Nappalos.Visible = true;
+                    }
+                    Tábla_Nappalos.Rows[j - 1].Cells[1].Value = napokszáma;
+                    Tábla_Nappalos.Rows[j - 1].Cells[2].Value = napokszáma * Munkarend8;
+                    Tábla_Nappalos.Rows[j - 1].Cells[3].Value = napokszáma * Munkarend8 / 60;
+                    Tábla_Nappalos.Columns[3].DefaultCellStyle.Format = "0.00";
+                    Tábla_Nappalos.Rows[j - 1].Cells[4].Value = pihenőnapokszáma;
                 }
+
+                // Összesít félévre
+                napokszáma = 0;
+                pihenőnapokszáma = 0;
+                for (int j = 1; j <= 6; j++)
+                {
+                    napokszáma += Tábla_Nappalos.Rows[j - 1].Cells[1].Value.ToÉrt_Int();
+                    pihenőnapokszáma += Tábla_Nappalos.Rows[j - 1].Cells[4].Value.ToÉrt_Int();
+                }
+                Tábla_Nappalos.Rows[12].Cells[0].Value = "1 félév";
+                Tábla_Nappalos.Rows[12].Cells[1].Value = napokszáma;
+                Tábla_Nappalos.Rows[12].Cells[2].Value = napokszáma * Munkarend8;
+                Tábla_Nappalos.Rows[12].Cells[3].Value = napokszáma * Munkarend8 / 60;
+                Tábla_Nappalos.Rows[12].Cells[4].Value = pihenőnapokszáma;
+
+                napokszáma = 0;
+                pihenőnapokszáma = 0;
+                for (int j = 7; j <= 12; j++)
+                {
+                    napokszáma += Tábla_Nappalos.Rows[j - 1].Cells[1].Value.ToÉrt_Int();
+                    pihenőnapokszáma += Tábla_Nappalos.Rows[j - 1].Cells[4].Value.ToÉrt_Int();
+                }
+
+                Tábla_Nappalos.Rows[13].Cells[0].Value = "2 félév";
+                Tábla_Nappalos.Rows[13].Cells[1].Value = napokszáma;
+                Tábla_Nappalos.Rows[13].Cells[2].Value = napokszáma * Munkarend8;
+                Tábla_Nappalos.Rows[13].Cells[3].Value = napokszáma * Munkarend8 / 60;
+                Tábla_Nappalos.Rows[13].Cells[4].Value = pihenőnapokszáma;
+                // összesít évre
+                napokszáma = 0;
+                pihenőnapokszáma = 0;
+                for (int j = 1; j <= 12; j++)
+                {
+                    napokszáma += Tábla_Nappalos.Rows[j - 1].Cells[1].Value.ToÉrt_Int();
+                    pihenőnapokszáma += Tábla_Nappalos.Rows[j - 1].Cells[4].Value.ToÉrt_Int();
+                }
+                Tábla_Nappalos.Rows[14].Cells[0].Value = "Év";
+                Tábla_Nappalos.Rows[14].Cells[1].Value = napokszáma;
+                Tábla_Nappalos.Rows[14].Cells[2].Value = napokszáma * Munkarend8;
+                Tábla_Nappalos.Rows[14].Cells[3].Value = napokszáma * Munkarend8 / 60;
+                Tábla_Nappalos.Rows[14].Cells[4].Value = pihenőnapokszáma;
+
+                Tábla_Nappalos.Refresh();
+                Tábla_Nappalos.Visible = true;
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -2058,17 +2057,13 @@ namespace Villamos
                                                     select a).FirstOrDefault();
                     Adat_Váltós_Összesítő ADAT = new Adat_Váltós_Összesítő(Tábla_Nappalos.Rows[i - 1].Cells[2].Value.ToÉrt_Int(),
                                                                             próbanap);
-
-
                     if (Összes != null)
                         AdatokMódosításÖ.Add(ADAT);
                     else
                         AdatokRögzítésÖ.Add(ADAT);
-
-                    if (AdatokMódosításÖ.Count > 0) KézVáltÖsszesítő.Módosítás(Dátumnappal.Value.Year, "", AdatokMódosításÖ);
-                    if (AdatokRögzítésÖ.Count > 0) KézVáltÖsszesítő.Rögzítés(Dátumnappal.Value.Year, "", AdatokRögzítésÖ);
                 }
-
+                if (AdatokMódosításÖ.Count > 0) KézVáltÖsszesítő.Módosítás(Dátumnappal.Value.Year, "", AdatokMódosításÖ);
+                if (AdatokRögzítésÖ.Count > 0) KézVáltÖsszesítő.Rögzítés(Dátumnappal.Value.Year, "", AdatokRögzítésÖ);
                 Holtart.Ki();
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
@@ -2177,8 +2172,6 @@ namespace Villamos
                 DateTime vkezdődátum = Elem.Kezdődátum;
                 int ciklushossz = Elem.Ciklusnap;
 
-                DateTime hónaputolsónapja;
-                DateTime próbanap;
                 int napokszáma;
                 int vciklusnap;
                 string jel;
@@ -2231,7 +2224,7 @@ namespace Villamos
                 {
                     Tábla9.Rows[j - 1].Cells[0].Value = j;
                     DateTime idiegdátum = new DateTime(Dátumnappal.Value.Year, j, 1);
-                    hónaputolsónapja = MyF.Hónap_utolsónapja(idiegdátum);
+                    DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(idiegdátum);
 
                     for (int i = 1; i <= 31; i++)
                     {
@@ -2244,7 +2237,7 @@ namespace Villamos
                         else
                         {
                             // váltós beosztás szerinti értéket beírja
-                            próbanap = new DateTime(VáltósNaptár.Value.Year, j, i);
+                            DateTime próbanap = new DateTime(VáltósNaptár.Value.Year, j, i);
                             TimeSpan Különbözet = próbanap - vkezdődátum;
 
                             napokszáma = Különbözet.Days;
@@ -2300,24 +2293,16 @@ namespace Villamos
                 Évpihenő = 0;
 
                 List<Adat_Váltós_Összesítő> Adatok = KézVáltÖsszesítő.Lista_Adatok(Dátumnappal.Value.Year, "");
+                DateTime FélévVége = MyF.Félév_utolsónapja(Dátumnappal.Value.Year);
 
-                int i = 1;
-
-                foreach (Adat_Váltós_Összesítő rekord in Adatok)
-                {
-                    if (i <= 6)
-                    {
-                        EfélévNappal += rekord.Perc;
-                    }
-                    else
-                    {
-                        MfélévNappal += rekord.Perc;
-                    }
-
-                    i += 1;
-                }
-
+                EfélévNappal = (from a in Adatok
+                                where a.Dátum <= FélévVége
+                                select a.Perc).ToList().Sum();
+                MfélévNappal = (from a in Adatok
+                                where a.Dátum > FélévVége
+                                select a.Perc).ToList().Sum();
                 Egészév = EfélévNappal + MfélévNappal;
+
                 DateTime ideignap = new DateTime(Dátumnappal.Value.Year, 7, 1);
 
                 List<Adat_Váltós_Naptár> AdatokNaptár = KézVNaptár.Lista_Adatok(Dátumnappal.Value.Year, "");
@@ -2423,8 +2408,7 @@ namespace Villamos
                 Nappalosszumma();
                 int napokszáma;
                 int pihenőnapokszáma;
-                if (Tábla9.Rows.Count < 1)
-                    return;
+                if (Tábla9.Rows.Count < 1) return;
 
                 Tábla9.Visible = false;
                 for (int j = 1; j <= 12; j++)
@@ -2572,8 +2556,7 @@ namespace Villamos
         {
             try
             {
-                DateTime hónaputolsónapja;
-                if ((VváltósCsoport.Text) == "") return;
+                if (VváltósCsoport.Text.Trim() == "") return;
                 Dátumnappal.Value = VáltósNaptár.Value;
                 Tábla9.Rows.Clear();
                 Tábla9.Columns.Clear();
@@ -2624,8 +2607,8 @@ namespace Villamos
                         Tábla9.Rows[j - 1].Cells[i].Style.BackColor = Color.SandyBrown;
                 }
 
-                DateTime eleje = new DateTime(Dátumnappal.Value.Year, 1, 1);
-                DateTime vége = new DateTime(Dátumnappal.Value.Year, 12, 31);
+                DateTime eleje = new DateTime(VáltósNaptár.Value.Year, 1, 1);
+                DateTime vége = new DateTime(VáltósNaptár.Value.Year, 12, 31);
                 DateTime mikor = eleje;
                 int sor;
                 int oszlop;
@@ -2650,7 +2633,7 @@ namespace Villamos
                 for (int j = 1; j <= 12; j++)
                 {
                     DateTime idiegdátum = new DateTime(VáltósNaptár.Value.Year, j, 1);
-                    hónaputolsónapja = MyF.Hónap_utolsónapja(idiegdátum);
+                    DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(idiegdátum);
 
                     for (int i = 1; i <= 31; i++)
                     {
@@ -2680,8 +2663,6 @@ namespace Villamos
                                         break;
                                     }
                             }
-
-
                         }
                     }
                 }
@@ -2817,6 +2798,7 @@ namespace Villamos
 
         private void VáltósNaptár_ValueChanged(object sender, EventArgs e)
         {
+            Dátumnappal.Value = VáltósNaptár.Value;
             Tábla9.Rows.Clear();
             Tábla9.Columns.Clear();
             Tábla9.Refresh();
