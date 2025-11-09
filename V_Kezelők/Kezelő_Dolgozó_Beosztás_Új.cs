@@ -171,6 +171,30 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void MódosításTúl(string Telephely, DateTime Dátum, Adat_Dolgozó_Beosztás_Új Adat, bool Eszterga = false)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum, Eszterga);
+                string szöveg = $"UPDATE {táblanév} SET ";
+                szöveg += $"Túlóra={Adat.Túlóra}, ";// Túlóra
+                szöveg += $"Túlórakezd='{Adat.Túlórakezd}', ";// Túlórakezd
+                szöveg += $"Túlóravég='{Adat.Túlóravég}', ";// Túlóravég
+                szöveg += $"Túlóraok='{Adat.Túlóraok.Trim()}' ";// Túlóraok
+                szöveg += $" WHERE Dolgozószám='{Adat.Dolgozószám}' AND nap=#{Adat.Nap:MM-dd-yyyy}#";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Törlés(string Telephely, DateTime Dátum, DateTime Dátumtól, DateTime Dátumig, bool Eszterga = false)
         {
             try

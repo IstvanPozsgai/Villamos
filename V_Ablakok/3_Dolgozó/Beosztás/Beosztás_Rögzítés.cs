@@ -23,6 +23,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         readonly Kezelő_Szatube_Aft KézAft = new Kezelő_Szatube_Aft();
         readonly Kezelő_Szatube_Csúsztatás KézCsúsztatás = new Kezelő_Szatube_Csúsztatás();
         readonly Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
+        readonly Kezelő_Kiegészítő_Túlórakeret KézTúlkeret = new Kezelő_Kiegészítő_Túlórakeret();
 
         List<Adat_Dolgozó_Beosztás_Napló> AdatokNapló = new List<Adat_Dolgozó_Beosztás_Napló>();
         List<Adat_Szatube_Beteg> AdatokBeteg = new List<Adat_Szatube_Beteg>();
@@ -848,7 +849,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         }
         #endregion
 
-
+        //Kész Hátulról kezdve
         #region Túlóra
         /// <summary>
         /// 
@@ -868,48 +869,41 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             string szöveg = "Nincs hiba";
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
-                string jelszó = "kiskakas";
-                szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
-
                 List<Adat_Dolgozó_Beosztás_Új> Rekord_Old = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
                 Rekord_Old = Rekord_Old.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
 
                 if (Rekord_Old.Count < 1)
                 {
-                    szöveg = "INSERT INTO beosztás (Dolgozószám, Nap, Beosztáskód, Ledolgozott, Túlóra, Túlórakezd, Túlóravég, Csúszóra, CSúszórakezd, Csúszóravég, Megjegyzés, Túlóraok, Szabiok, Kért, Csúszok, AFTóra, AFTok)";
-                    szöveg += " VALUES (";
-                    szöveg += $"'{HR_Azonosító.Trim()}',";// Dolgozószám
-                    szöveg += $"'{Dátum:yyyy.MM.dd}', ";// Nap
-                    szöveg += $"'{Beosztáskód.Trim()}', ";// Beosztáskód
-                    szöveg += $"{Ledolgozott}, ";// Ledolgozott
-                    szöveg += $"{túlóra}, ";// Túlóra
-                    szöveg += $"'{Túlórakezd}', ";// Túlórakezd
-                    szöveg += $"'{Túlóravég}', ";// Túlóravég
-                    szöveg += $"0, ";// Csúszóra
-                    szöveg += $"'1900.01.01. 00:00:00', ";// CSúszórakezd
-                    szöveg += $"'1900.01.01. 00:00:00', ";// Csúszóravég
-                    szöveg += $"'', ";// Megjegyzés
-                    szöveg += $"'{TúlóraOk.Trim()}', ";// Túlóraok
-                    szöveg += $"'', ";// Szabiok
-                    szöveg += $"false, ";// Kért
-                    szöveg += $"'_', ";// Csúszok
-                    szöveg += $"0, ";// AFTóra
-                    szöveg += $"'' ";// AFTok
-                    szöveg += ")";
+                    Adat_Dolgozó_Beosztás_Új ADAT = new Adat_Dolgozó_Beosztás_Új(
+                       HR_Azonosító.Trim(),
+                       Dátum,
+                       Beosztáskód.Trim(),
+                       Ledolgozott,
+                       túlóra, Túlórakezd, Túlóravég,
+                       0, new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(1900, 1, 1, 0, 0, 0),
+                       "",
+                       TúlóraOk.Trim(),
+                       "",
+                       false,
+                       "",
+                       0, "");
+                    List<Adat_Dolgozó_Beosztás_Új> ADATOK = new List<Adat_Dolgozó_Beosztás_Új>
+                    {
+                        ADAT
+                    };
+                    KézBEO.Rögzítés(Cmbtelephely, Dátum, ADATOK);
                 }
                 else
                 {
-                    szöveg = "UPDATE beosztás SET ";
-                    szöveg += $"Túlóra={túlóra}, ";// Túlóra
-                    szöveg += $"Túlórakezd='{Túlórakezd}', ";// Túlórakezd
-                    szöveg += $"Túlóravég='{Túlóravég}', ";// Túlóravég
-                    szöveg += $"Túlóraok='{TúlóraOk.Trim()}' ";// Túlóraok
-                    szöveg += $" WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
+                    Adat_Dolgozó_Beosztás_Új ADAT = new Adat_Dolgozó_Beosztás_Új(
+                        HR_Azonosító.Trim(),
+                        Dátum,
+                        túlóra,
+                        Túlórakezd,
+                        Túlóravég,
+                        TúlóraOk.Trim());
+                    KézBEO.MódosításTúl(Cmbtelephely, Dátum, ADAT);
                 }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
-                szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
                 List<Adat_Dolgozó_Beosztás_Új> Rekordok = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
                 Rekordok = Rekordok.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
                 Adat_Dolgozó_Beosztás_Új Rekord_Új = Rekordok.FirstOrDefault();
@@ -939,9 +933,6 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
-                string jelszó = "kertitörpe";
-                string szöveg;
                 AdatokTúlóra = KézTúlóra.Lista_Adatok(Cmbtelephely, Dátum.Year);
                 Adat_Szatube_Túlóra AdatTúlóra = (from a in AdatokTúlóra
                                                   where a.Törzsszám == Rekord_Új.Dolgozószám.Trim()
@@ -957,48 +948,48 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                     double sorszám = 1;
                     if (Elem != null) sorszám = Elem.Sorszám + 1;
 
-                    szöveg = "INSERT INTO Túlóra ";
-                    szöveg += "(Sorszám, Törzsszám, Dolgozónév, Kezdődátum, Befejeződátum, Kivettnap, Szabiok, Státus, Rögzítette, Rögzítésdátum, Kezdőidő, Befejezőidő) VALUES (";
-                    szöveg += $"{sorszám}, ";   //Sorszám
-                    szöveg += $"'{Rekord_Új.Dolgozószám.Trim()}', "; //törzsszám
-                    szöveg += $"'{Dolgozónév.Trim()}', "; //dolgozónév
-                    szöveg += $"'{Rekord_Új.Nap:yyyy.MM.dd}', "; //Kezdődátum
-                    szöveg += $"'{Rekord_Új.Nap:yyyy.MM.dd}', "; //Befejeződátum
-                    szöveg += $"{Rekord_Új.Túlóra}, ";   //Kivettnap
-                    szöveg += $"'{Rekord_Új.Túlóraok.Trim()}', "; //Szabiok
-                    szöveg += $"0, ";   //Státus
-                    szöveg += $"'{Program.PostásNév.Trim()}', "; //rögzítette
-                    szöveg += $"'{DateTime.Now}', "; //rögzítésdátum
-                    szöveg += $"'{Rekord_Új.Túlórakezd:HH:mm:ss}', "; //Kezdőidő
-                    szöveg += $"'{Rekord_Új.Túlóravég:HH:mm:ss}') "; //Befejezőidő
+                    Adat_Szatube_Túlóra ADAT = new Adat_Szatube_Túlóra(
+                          sorszám,
+                          Rekord_Új.Dolgozószám.Trim(),
+                          Dolgozónév.Trim(),
+                          Rekord_Új.Nap,
+                          Rekord_Új.Nap,
+                          Rekord_Új.Túlóra,
+                          Rekord_Új.Túlóraok.Trim(),
+                          0,
+                          Program.PostásNév.Trim(),
+                          DateTime.Now,
+                          Rekord_Új.Túlórakezd,
+                          Rekord_Új.Túlóravég);
+                    KézTúlóra.Rögzítés(Cmbtelephely, Dátum.Year, ADAT);
                 }
                 else
                 {
                     if (Rekord_Új.Túlóra == 0)
                     {
                         // ha lenullázzuk akkor a státust állítjuk
-                        szöveg = "UPDATE Túlóra SET ";
-                        szöveg += $"Státus=3, ";   //Státus
-                        szöveg += $" WHERE törzsszám='{Rekord_Új.Dolgozószám.Trim()}' AND [Kezdődátum]=#{Rekord_Új.Nap:M-d-yy}# AND [státus]<>3";
+                        Adat_Szatube_Túlóra ADAT = new Adat_Szatube_Túlóra(Rekord_Új.Dolgozószám.Trim(), Rekord_Új.Nap, 3);
+                        List<Adat_Szatube_Túlóra> Adatok = new List<Adat_Szatube_Túlóra> { ADAT };
+                        KézTúlóra.Törlés(Cmbtelephely, Dátum.Year, Adatok);
                     }
                     else
                     {
                         // Módosítjuk 
-                        szöveg = "UPDATE Túlóra SET ";
-                        szöveg += $"törzsszám='{Rekord_Új.Dolgozószám.Trim()}', "; //törzsszám
-                        szöveg += $"dolgozónév='{Dolgozónév.Trim()}', "; //dolgozónév
-                        szöveg += $"Kezdődátum='{Rekord_Új.Nap:yyyy.MM.dd}', "; //Kezdődátum
-                        szöveg += $"Befejeződátum='{Rekord_Új.Nap:yyyy.MM.dd}', "; //Befejeződátum
-                        szöveg += $"Kivettnap={Rekord_Új.Túlóra}, ";   //Kivettnap
-                        szöveg += $"Szabiok='{Rekord_Új.Túlóraok.Trim()}', "; //Szabiok
-                        szöveg += $"rögzítette='{Program.PostásNév.Trim()}', "; //rögzítette
-                        szöveg += $"rögzítésdátum='{DateTime.Now}',  "; //rögzítésdátum
-                        szöveg += $"Kezdőidő='{Rekord_Új.Túlórakezd:HH:mm:ss}',  "; //Kezdőidő
-                        szöveg += $"Befejezőidő='{Rekord_Új.Túlóravég:HH:mm:ss}'  "; //Befejezőidő
-                        szöveg += $" WHERE törzsszám='{Rekord_Új.Dolgozószám.Trim()}' AND [Kezdődátum]=#{Rekord_Új.Nap:M-d-yy}# AND [státus]<>3";
+                        Adat_Szatube_Túlóra ADAT = new Adat_Szatube_Túlóra(
+                            0,
+                            Rekord_Új.Dolgozószám.Trim(),
+                            Dolgozónév.Trim(),
+                            Rekord_Új.Nap,
+                            Rekord_Új.Nap,
+                            Rekord_Új.Túlóra,
+                            Rekord_Új.Túlóraok.Trim(),
+                            Program.PostásNév.Trim(),
+                            DateTime.Now,
+                            Rekord_Új.Túlórakezd,
+                            Rekord_Új.Túlóravég);
+                        KézTúlóra.Módosítás(Cmbtelephely, Dátum.Year, ADAT);
                     }
                 }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1015,10 +1006,6 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
-                string jelszó = "kertitörpe";
-                string szöveg;
-
                 AdatokTúlóra = KézTúlóra.Lista_Adatok(Cmbtelephely, Dátum.Year);
                 Adat_Szatube_Túlóra AdatTúlóra = (from a in AdatokTúlóra
                                                   where a.Törzsszám == Rekord_Új.Dolgozószám.Trim()
@@ -1028,10 +1015,9 @@ namespace Villamos.Villamos_Ablakok.Beosztás
 
                 if (AdatTúlóra != null)
                 {
-                    szöveg = "UPDATE Túlóra SET ";
-                    szöveg += $"Státus=3 ";   //Státus
-                    szöveg += $" WHERE törzsszám='{Rekord_Új.Dolgozószám.Trim()}' AND [Kezdődátum]=#{Rekord_Új.Nap:M-d-yy}# AND [státus]<>3";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    Adat_Szatube_Túlóra ADAT = new Adat_Szatube_Túlóra(Rekord_Új.Dolgozószám.Trim(), Rekord_Új.Nap, 3);
+                    List<Adat_Szatube_Túlóra> Adatok = new List<Adat_Szatube_Túlóra> { ADAT };
+                    KézTúlóra.Törlés(Cmbtelephely, Dátum.Year, Adatok);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1049,22 +1035,16 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         {
             try
             {
-                string helydolg = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Dolgozók.mdb";
-                string jelszódolg = "forgalmiutasítás";
-
-                Adat_Dolgozó_Alap Adat_Dolg;
-
-
                 DateTime hónapelső = MyF.Hónap_elsőnapja(Dátum);
                 DateTime hónaputolsó = MyF.Hónap_utolsónapja(Dátum);
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
-                string jelszó = "kertitörpe";
-                string szöveg = $"SELECT * FROM Túlóra WHERE törzsszám='{HR_Azonosító.Trim()}' AND ";
-                szöveg += $"[Kezdődátum]>=#{hónapelső:MM-dd-yyyy} # AND [Kezdődátum]<=# {hónaputolsó:MM-dd-yyyy}# AND [státus]<>3";
-
-                Kezelő_Szatube_Túlóra Kézcsúsz = new Kezelő_Szatube_Túlóra();
-                List<Adat_Szatube_Túlóra> Adatok_Aft = Kézcsúsz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Szatube_Túlóra> Adatok_Aft = KézTúlóra.Lista_Adatok(Cmbtelephely.Trim(), Dátum.Year);
+                Adatok_Aft = (from a in Adatok_Aft
+                              where a.Törzsszám == HR_Azonosító.Trim()
+                              && a.Kezdődátum >= hónapelső
+                              && a.Kezdődátum <= hónaputolsó
+                              && a.Státus != 3
+                              select a).ToList();
 
                 List<Adat_Dolgozó_Beosztás_Új> Adatok_Beo = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
                 Adatok_Beo = Adatok_Beo.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Túlóra != 0).ToList();
@@ -1072,7 +1052,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 int óra;
                 //Megkeressük a beosztás táblában a SZATUBE-ben tároltat, ha nem létezik akkor töröltre állítjuk
 
-                List<string> SzövegGy = new List<string>();
+                List<Adat_Szatube_Túlóra> AdatokGY = new List<Adat_Szatube_Túlóra>();
                 foreach (Adat_Szatube_Túlóra rekord in Adatok_Aft)
                 {
                     óra = (from a in Adatok_Beo
@@ -1081,18 +1061,20 @@ namespace Villamos.Villamos_Ablakok.Beosztás
 
                     if (rekord.Kivettnap != óra)
                     {
-
-                        szöveg = "UPDATE Túlóra SET ";
-                        szöveg += $" Státus=3 ";   //Státus
-                        szöveg += $" WHERE törzsszám='{HR_Azonosító.Trim()}' AND [Kezdődátum]=#{rekord.Kezdődátum:M-d-yy}# AND [státus]<>3";
-                        SzövegGy.Add(szöveg);
+                        Adat_Szatube_Túlóra ADAT = new Adat_Szatube_Túlóra(HR_Azonosító.Trim(), rekord.Kezdődátum, 3);
+                        AdatokGY.Add(ADAT);
                     }
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                KézTúlóra.Törlés(Cmbtelephely.Trim(), Dátum.Year, AdatokGY);
                 // leellenőrizzük, hogy a beosztás táblában létezik és ha SZATUBE nem létezik akkor rögzítjük.
-                szöveg = $"SELECT * FROM Túlóra WHERE törzsszám='{HR_Azonosító.Trim()}' AND ";
-                szöveg += $"[Kezdődátum]>=#{hónapelső:MM-dd-yyyy} # AND [Kezdődátum]<=# {hónaputolsó:MM-dd-yyyy}# AND [státus]<>3";
-                Adatok_Aft = Kézcsúsz.Lista_Adatok(hely, jelszó, szöveg);
+                Adatok_Aft = KézTúlóra.Lista_Adatok(Cmbtelephely.Trim(), Dátum.Year);
+                Adatok_Aft = (from a in Adatok_Aft
+                              where a.Törzsszám == HR_Azonosító.Trim()
+                              && a.Kezdődátum >= hónapelső
+                              && a.Kezdődátum <= hónaputolsó
+                              && a.Státus != 3
+                              select a).ToList();
+
                 foreach (Adat_Dolgozó_Beosztás_Új rekord in Adatok_Beo)
                 {
                     óra = (from a in Adatok_Aft
@@ -1100,8 +1082,8 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                            select a.Kivettnap).FirstOrDefault();
                     if (rekord.Túlóra != óra)
                     {
-                        szöveg = $"SELECT * FROM Dolgozóadatok WHERE Dolgozószám='{HR_Azonosító}'";
-                        Adat_Dolg = KézDolg.Egy_Adat(helydolg, jelszódolg, szöveg);
+                        List<Adat_Dolgozó_Alap> Adatok_Dolg = KézDolg.Lista_Adatok(Cmbtelephely.Trim());
+                        Adat_Dolgozó_Alap Adat_Dolg = Adatok_Dolg.Where(y => y.Dolgozószám == HR_Azonosító).FirstOrDefault();
                         Túlóra_Átírás(Cmbtelephely, Dátum, rekord, Adat_Dolg.DolgozóNév.Trim());
                     }
                 }
@@ -1119,7 +1101,6 @@ namespace Villamos.Villamos_Ablakok.Beosztás
 
         public int Túlóra_Keret_Ellenőrzés(string Cmbtelephely, DateTime Dátum, string HR_Azonosító)
         {
-
             int válasz = 0;
             try
             {
@@ -1128,26 +1109,25 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 // *****************************************
                 double Eddigi_TúlÓra = Évestúlóra_Keret_Figyelés(Cmbtelephely, Dátum, HR_Azonosító);
 
-
-                string hely = Application.StartupPath + @"\Főmérnökség\adatok\Kiegészítő1.mdb";
-                string jelszó = "Mocó";
-                string szöveg = $"SELECT * FROM túlórakeret  order by határ";
-
-                Kezelő_Kiegészítő_Túlórakeret Kéz = new Kezelő_Kiegészítő_Túlórakeret();
-                List<Adat_Kiegészítő_Túlórakeret> Elemek = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Túlórakeret> Elemek = KézTúlkeret.Lista_Adatok();
 
                 string telephely = (from a in Elemek
                                     where a.Telephely.Trim() == Cmbtelephely.Trim()
                                     select a.Telephely).FirstOrDefault();
 
-                //ha nincs ilyen telephely
-                if (telephely == null)
-                    szöveg = $"SELECT * FROM túlórakeret WHERE Telephely='_'";
+                //ha van a telephelynek külön megkötése ellenben az általánost használja
+                if (Elemek.Any(y => y.Telephely.Trim() == Cmbtelephely.Trim()))
+                {
+                    Elemek = (from a in Elemek
+                              where a.Telephely.Trim() == Cmbtelephely.Trim()
+                              select a).ToList();
+                }
                 else
-                    szöveg = $"SELECT * FROM túlórakeret WHERE Telephely='{Cmbtelephely.Trim()}'";
-
-                Elemek = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
+                {
+                    Elemek = (from a in Elemek
+                              where a.Telephely.Trim() == "_"
+                              select a).ToList();
+                }
 
                 foreach (Adat_Kiegészítő_Túlórakeret elem in Elemek)
                 {
@@ -1192,7 +1172,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         }
         #endregion
 
-        //Kész Hátulról kezdve
+
         #region AFT
         public void Rögzít_AFT(string Cmbtelephely, DateTime Dátum, string Beosztáskód, string HR_Azonosító, int Ledolgozott, string AFTok, int AFTóra, string Dolgozónév)
         {
@@ -1217,10 +1197,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                          false,
                          "",
                          AFTóra, AFTok);
-                    List<Adat_Dolgozó_Beosztás_Új> ADATOK = new List<Adat_Dolgozó_Beosztás_Új>
-                    {
-                        ADAT
-                    };
+                    List<Adat_Dolgozó_Beosztás_Új> ADATOK = new List<Adat_Dolgozó_Beosztás_Új> { ADAT };
                     KézBEO.Rögzítés(Cmbtelephely, Dátum, ADATOK);
                 }
                 else

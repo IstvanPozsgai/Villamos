@@ -351,6 +351,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Raktár.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_AFT.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Csúsztatás.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Szatube_Túlóra.cs" />
     <Compile Include="V_Excel\Excel_Betű.cs" />
     <Compile Include="V_Excel\Excel_Keretez.cs" />
     <Compile Include="V_Excel\Excel_Mentés.cs" />

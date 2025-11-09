@@ -22,6 +22,26 @@ namespace Villamos.Villamos_Adatszerkezet
         public int AFTóra { get; private set; }
         public string AFTok { get; private set; }
 
+        /// <summary>
+        /// Teljes
+        /// </summary>
+        /// <param name="dolgozószám"></param>
+        /// <param name="nap"></param>
+        /// <param name="beosztáskód"></param>
+        /// <param name="ledolgozott"></param>
+        /// <param name="túlóra"></param>
+        /// <param name="túlórakezd"></param>
+        /// <param name="túlóravég"></param>
+        /// <param name="csúszóra"></param>
+        /// <param name="cSúszórakezd"></param>
+        /// <param name="csúszóravég"></param>
+        /// <param name="megjegyzés"></param>
+        /// <param name="túlóraok"></param>
+        /// <param name="szabiok"></param>
+        /// <param name="kért"></param>
+        /// <param name="csúszok"></param>
+        /// <param name="aFTóra"></param>
+        /// <param name="aFTok"></param>
         public Adat_Dolgozó_Beosztás_Új(string dolgozószám, DateTime nap, string beosztáskód, int ledolgozott,
             int túlóra, DateTime túlórakezd, DateTime túlóravég,
             int csúszóra, DateTime cSúszórakezd, DateTime csúszóravég,
@@ -46,7 +66,17 @@ namespace Villamos.Villamos_Adatszerkezet
             AFTok = aFTok;
         }
 
-
+        /// <summary>
+        /// Csúsztatás
+        /// </summary>
+        /// <param name="dolgozószám"></param>
+        /// <param name="nap"></param>
+        /// <param name="beosztáskód"></param>
+        /// <param name="ledolgozott"></param>
+        /// <param name="csúszóra"></param>
+        /// <param name="cSúszórakezd"></param>
+        /// <param name="csúszóravég"></param>
+        /// <param name="csúszok"></param>
         public Adat_Dolgozó_Beosztás_Új(string dolgozószám, DateTime nap, string beosztáskód, int ledolgozott,
                                         int csúszóra, DateTime cSúszórakezd, DateTime csúszóravég, string csúszok)
         {
@@ -60,6 +90,15 @@ namespace Villamos.Villamos_Adatszerkezet
             Csúszok = csúszok;
         }
 
+        /// <summary>
+        /// AFT
+        /// </summary>
+        /// <param name="dolgozószám"></param>
+        /// <param name="nap"></param>
+        /// <param name="beosztáskód"></param>
+        /// <param name="ledolgozott"></param>
+        /// <param name="aFTóra"></param>
+        /// <param name="aFTok"></param>
         public Adat_Dolgozó_Beosztás_Új(string dolgozószám, DateTime nap, string beosztáskód, int ledolgozott,
                                         int aFTóra, string aFTok)
         {
@@ -71,6 +110,23 @@ namespace Villamos.Villamos_Adatszerkezet
             AFTok = aFTok;
         }
 
-
+        /// <summary>
+        /// Túlóra
+        /// </summary>
+        /// <param name="dolgozószám"></param>
+        /// <param name="nap"></param>
+        /// <param name="túlóra"></param>
+        /// <param name="túlórakezd"></param>
+        /// <param name="túlóravég"></param>
+        /// <param name="túlóraok"></param>
+        public Adat_Dolgozó_Beosztás_Új(string dolgozószám, DateTime nap, int túlóra, DateTime túlórakezd, DateTime túlóravég, string túlóraok)
+        {
+            Dolgozószám = dolgozószám;
+            Nap = nap;
+            Túlóra = túlóra;
+            Túlórakezd = túlórakezd;
+            Túlóravég = túlóravég;
+            Túlóraok = túlóraok;
+        }
     }
 }
