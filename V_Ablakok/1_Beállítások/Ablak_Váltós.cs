@@ -2616,7 +2616,7 @@ namespace Villamos
                 if (!VváltósCsoport.Text.Contains("É"))
                     Tábla = VváltósCsoport.Text.Substring(VváltósCsoport.Text.Length - 1, 1).ToString();
                 else
-                    Tábla = VváltósCsoport.Text.Substring(VváltósCsoport.Text.Length - 1, 1).ToString();   // ha éjszakás
+                    Tábla = (VváltósCsoport.Text.Substring(VváltósCsoport.Text.Length - 1, 1).ToÉrt_Int() + 4).ToString();   // ha éjszakás
 
                 List<Adat_Váltós_Naptár> Adatok = KézVNaptár.Lista_Adatok(VáltósNaptár.Value.Year, Tábla);
 
