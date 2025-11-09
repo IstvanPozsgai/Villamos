@@ -98,30 +98,6 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             }
 
         }
-
-        private void ListaTúlóra(string Cmbtelephely, DateTime Dátum)
-        {
-            try
-            {
-                AdatokTúlóra.Clear();
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
-                string jelszó = "kertitörpe";
-                string szöveg = $"SELECT * FROM Túlóra ";
-
-                AdatokTúlóra = KézTúlóra.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
         #endregion
 
 
@@ -966,7 +942,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\Szatubecs\{Dátum.Year}Szatubecs.mdb";
                 string jelszó = "kertitörpe";
                 string szöveg;
-                ListaTúlóra(Cmbtelephely, Dátum);
+                AdatokTúlóra = KézTúlóra.Lista_Adatok(Cmbtelephely, Dátum.Year);
                 Adat_Szatube_Túlóra AdatTúlóra = (from a in AdatokTúlóra
                                                   where a.Törzsszám == Rekord_Új.Dolgozószám.Trim()
                                                         && a.Kezdődátum.ToShortDateString() == Rekord_Új.Nap.ToShortDateString()
@@ -1043,7 +1019,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 string jelszó = "kertitörpe";
                 string szöveg;
 
-                ListaTúlóra(Cmbtelephely, Dátum);
+                AdatokTúlóra = KézTúlóra.Lista_Adatok(Cmbtelephely, Dátum.Year);
                 Adat_Szatube_Túlóra AdatTúlóra = (from a in AdatokTúlóra
                                                   where a.Törzsszám == Rekord_Új.Dolgozószám.Trim()
                                                         && a.Kezdődátum.ToShortDateString() == Rekord_Új.Nap.ToShortDateString()
@@ -1196,8 +1172,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             double válasz = 0;
             try
             {
-                ListaTúlóra(Cmbtelephely, Dátum);
-
+                AdatokTúlóra = KézTúlóra.Lista_Adatok(Cmbtelephely, Dátum.Year);
                 List<Adat_Szatube_Túlóra> Adatok = (from a in AdatokTúlóra
                                                     where a.Törzsszám == Hrazonosító.Trim()
                                                     && a.Státus != 3
@@ -1242,8 +1217,10 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                          false,
                          "",
                          AFTóra, AFTok);
-                    List<Adat_Dolgozó_Beosztás_Új> ADATOK = new List<Adat_Dolgozó_Beosztás_Új>();
-                    ADATOK.Add(ADAT);
+                    List<Adat_Dolgozó_Beosztás_Új> ADATOK = new List<Adat_Dolgozó_Beosztás_Új>
+                    {
+                        ADAT
+                    };
                     KézBEO.Rögzítés(Cmbtelephely, Dátum, ADATOK);
                 }
                 else
@@ -1438,6 +1415,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         }
         #endregion
 
+
         #region Csúsztatás
         public void Rögzít_Csúsztatás(string Cmbtelephely, DateTime Dátum, string Beosztáskód, string HR_Azonosító, int Ledolgozott, DateTime CSúszórakezd, DateTime Csúszóravég, int Csúszóra, string Csúszok, string Dolgozónév)
         {
@@ -1462,8 +1440,10 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                                 false,
                                 Csúszok,
                                 0, "");
-                    List<Adat_Dolgozó_Beosztás_Új> ADATOK = new List<Adat_Dolgozó_Beosztás_Új>();
-                    ADATOK.Add(ADAT);
+                    List<Adat_Dolgozó_Beosztás_Új> ADATOK = new List<Adat_Dolgozó_Beosztás_Új>
+                    {
+                        ADAT
+                    };
                     KézBEO.Rögzítés(Cmbtelephely, Dátum, ADATOK);
                 }
                 else
@@ -1589,8 +1569,10 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                             Rekord_Új.Dolgozószám.Trim(),
                             Rekord_Új.Nap,
                             3);
-                        List<Adat_Szatube_Csúsztatás> Adatok = new List<Adat_Szatube_Csúsztatás>();
-                        Adatok.Add(ADAT);
+                        List<Adat_Szatube_Csúsztatás> Adatok = new List<Adat_Szatube_Csúsztatás>
+                        {
+                            ADAT
+                        };
                         KézCsúsztatás.Módosítás(Cmbtelephely, Dátum.Year, Adatok);
                     }
                     else
