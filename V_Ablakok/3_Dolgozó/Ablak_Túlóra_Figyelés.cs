@@ -869,7 +869,7 @@ namespace Villamos
                                   select a).ToList();
                 else
                     AdatokVált = (from a in AdatokVált
-                                  where a.Dátum >= MyF.Félév_elsőnapja(ÉV)
+                                  where a.Dátum > MyF.Félév_utolsónapja(ÉV)
                                   && a.Dátum <= MyF.Év_utolsónapja(ÉV)
                                   select a).ToList();
 
@@ -899,11 +899,8 @@ namespace Villamos
                 }
                 List<Adat_Váltós_Naptár> AdatokNaptár = KézVáltósNaptár.Lista_Adatok(ÉV, szövegelv);
 
-                List<Adat_Dolgozó_Alap> AdatokDolg = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim()).Where(a => a.Kilépésiidő == MyF.ElsőNap()).ToList();
-                if (Csoport.Text.Trim() == "Összes")
-                    AdatokDolg = AdatokDolg.Where(a => a.Csoport != "").ToList();
-                else
-                    AdatokDolg = AdatokDolg.Where(a => a.Csoport == Csoport.Text.Trim()).ToList();
+                List<Adat_Dolgozó_Alap> AdatokDolg = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim(), true).ToList();
+                AdatokDolg = AdatokDolg.Where(a => a.Csoportkód.Trim() == Csoport.Text.Trim()).ToList();
                 if (AdatokDolg.Count == 0) throw new HibásBevittAdat("Nincs a feltételeknek megfelelő dolgozók listája.");
 
                 List<Adat_Kiegészítő_Beosztásciklus> AdatokVáltCiklus = KÉZBEO.Lista_Adatok("beosztásciklus");
