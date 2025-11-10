@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Váltós_Váltóstábla
     {
         readonly string jelszó = "katalin";
+        readonly string táblanév = "Váltóstábla";
         string hely;
 
         private void FájlBeállítás(int Év)
@@ -25,7 +26,7 @@ namespace Villamos.Kezelők
         {
             FájlBeállítás(Év);
 
-            string szöveg = "SELECT * FROM Váltóstábla  ORDER BY telephely, év, félév, csoport";
+            string szöveg = $"SELECT * FROM {táblanév}  ORDER BY telephely, év, félév, csoport";
             List<Adat_Váltós_Váltóstábla> Adatok = new List<Adat_Váltós_Váltóstábla>();
             Adat_Váltós_Váltóstábla Adat;
 
@@ -66,8 +67,8 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Év);
 
-                string szöveg = "INSERT INTO váltóstábla (év, félév, csoport, ZKnap, EPnap, Tperc, telephely ) VALUES (";
-                szöveg += $" VALUES ({Adat.Év},";
+                string szöveg = $"INSERT INTO {táblanév} (év, félév, csoport, ZKnap, EPnap, Tperc, telephely ) VALUES (";
+                szöveg += $"{Adat.Év},";
                 szöveg += $"{Adat.Félév}, ";
                 szöveg += $"'{Adat.Csoport}', ";
                 szöveg += $"{Adat.Zknap}, ";
@@ -94,7 +95,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Év);
 
-                string szöveg = " UPDATE  váltóstábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" ZKnap={Adat.Zknap}, ";
                 szöveg += $" EPnap={Adat.Epnap}, ";
                 szöveg += $" Tperc={Adat.Tperc} ";
@@ -121,7 +122,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = $"DELETE FROM váltóstábla where év={Adat.Év}";
+                string szöveg = $"DELETE FROM {táblanév} where év={Adat.Év}";
                 szöveg += $" and félév={Adat.Félév}";
                 szöveg += $" and csoport='{Adat.Csoport}'";
                 szöveg += $" and telephely='{Adat.Telephely}'";

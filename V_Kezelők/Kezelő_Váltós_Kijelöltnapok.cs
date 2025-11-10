@@ -87,6 +87,7 @@ namespace Villamos.Kezelők
                     szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', ";
                     szöveg += $"'{Adat.Csoport}', ";
                     szöveg += $"'{Adat.Telephely}') ";
+                    SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }

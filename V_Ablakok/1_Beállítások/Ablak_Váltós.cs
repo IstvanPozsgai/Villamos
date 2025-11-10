@@ -1083,7 +1083,25 @@ namespace Villamos
             try
             {
                 if (!int.TryParse(ÉvesÉv.Text, out int Év)) throw new HibásBevittAdat("Az Évnek egész számnak kell lennie.");
+                ÉvesÖsszesítőGenerálás(Év);
+                Éves_Tábla_kiirás();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
+        private void ÉvesÖsszesítőGenerálás(int Év)
+        {
+
+            try
+            {
                 if (ÉvesTelephely.Text.Trim() == "") ÉvesTelephely.Text = "_";
 
                 for (int l = 1; l <= ÉvesCsoport.Items.Count; l++)
@@ -1141,8 +1159,6 @@ namespace Villamos
                                                             Tperc);
                     Rögzít_VáltósTábla(FélÉvAdat);
                 }
-
-                Éves_Tábla_kiirás();
             }
             catch (HibásBevittAdat ex)
             {
@@ -1153,6 +1169,8 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+
         }
 
         private void Rögzít_VáltósTábla(Adat_Váltós_Váltóstábla Adat)
@@ -2778,6 +2796,8 @@ namespace Villamos
 
                 Holtart.Ki();
                 Ált_Elvont_Generált("_");
+                ÉvesÖsszesítőGenerálás(VáltósNaptár.Value.Year);
+
                 MessageBox.Show("Az adatok rögzítése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 if (VáltósNaptár.Value.Year == DateTime.Today.Year)
                 {
@@ -3531,16 +3551,16 @@ namespace Villamos
 
                     foreach (Adat_Váltós_Naptár rekord in Adatok)
                     {
-                        string ideig = (from a in AdatokKij
-                                        where a.Telephely == TelepElvont && a.Dátum == rekord.Dátum && a.Csoport == Elem.Csoport
-                                        select a.Csoport).FirstOrDefault();
+                        Adat_Váltós_Kijelöltnapok ideig = (from a in AdatokKij
+                                                           where a.Telephely == TelepElvont && a.Dátum == rekord.Dátum && a.Csoport == Elem.Csoport
+                                                           select a).FirstOrDefault();
 
                         if (ideig == null)
                         {
                             Adat_Váltós_Kijelöltnapok ADAT = new Adat_Váltós_Kijelöltnapok(
-                                                                ElvontTelephely.Text.Trim(),
-                                                                ElvontCsoport.Text.Trim(),
-                                                                ElvontDátum.Value);
+                                                                TelepElvont,
+                                                                Elem.Csoport,
+                                                                rekord.Dátum);
                             AdatokGy.Add(ADAT);
                         }
                     }
