@@ -89,50 +89,60 @@ namespace Villamos.Kezelők
 
         }
 
-
-
-
-        //Elkopó
-        public List<Adat_Szatube_Beteg> Lista_Adatok(string hely, string jelszó, string szöveg)
+        public void Módosítás(string Telephely, int Év, List<Adat_Szatube_Beteg> Adatok)
         {
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.SzaTuBe_tábla(hely);
-            List<Adat_Szatube_Beteg> Adatok = new List<Adat_Szatube_Beteg>();
-            Adat_Szatube_Beteg Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                FájlBeállítás(Telephely, Év);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Szatube_Beteg Adat in Adatok)
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-
-                                Adat = new Adat_Szatube_Beteg(
-                                          rekord["sorszám"].ToÉrt_Double(),
-                                          rekord["Törzsszám"].ToStrTrim(),
-                                          rekord["Dolgozónév"].ToStrTrim(),
-                                          rekord["Kezdődátum"].ToÉrt_DaTeTime(),
-                                          rekord["Befejeződátum"].ToÉrt_DaTeTime(),
-                                          rekord["Kivettnap"].ToÉrt_Int(),
-                                          rekord["Szabiok"].ToStrTrim(),
-                                          rekord["Státus"].ToÉrt_Int(),
-                                          rekord["Rögzítette"].ToStrTrim(),
-                                          rekord["rögzítésdátum"].ToÉrt_DaTeTime()
-                                          );
-
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
+                    string szöveg = $"UPDATE {táblanév} SET ";
+                    szöveg += $" Státus=3 ";   //Státus
+                    szöveg += $" WHERE törzsszám='{Adat.Törzsszám}' AND [Kezdődátum]=#{Adat.Kezdődátum:M-d-yy}# AND [státus]<>3";
+                    SzövegGy.Add(szöveg);
                 }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
-            return Adatok;
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Rögzítés(string Telephely, int Év, Adat_Szatube_Beteg Adat)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                string szöveg = $"INSERT INTO {táblanév} ";
+                szöveg += "(Sorszám, Törzsszám, Dolgozónév, Kezdődátum, Befejeződátum, Kivettnap, Szabiok, Státus, Rögzítette, Rögzítésdátum) VALUES (";
+                szöveg += $"{Adat.Sorszám}, ";   //Sorszám
+                szöveg += $"'{Adat.Törzsszám}', "; //törzsszám
+                szöveg += $"'{Adat.Dolgozónév}', "; //dolgozónév
+                szöveg += $"'{Adat.Kezdődátum:yyyy.MM.dd}', "; //Kezdődátum
+                szöveg += $"'{Adat.Befejeződátum:yyyy.MM.dd}', "; //Befejeződátum
+                szöveg += $"{Adat.Kivettnap}, ";   //Kivettnap
+                szöveg += $"'{Adat.Szabiok}', "; //Szabiok
+                szöveg += $"{Adat.Státus}, ";   //Státus
+                szöveg += $"'{Adat.Rögzítette}', "; //rögzítette
+                szöveg += $"'{Adat.Rögzítésdátum}') "; //rögzítésdátum
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

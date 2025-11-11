@@ -350,6 +350,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Nosztalgia_Állomány.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Raktár.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_AFT.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Szatube_Beteg.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Csúsztatás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Szabadság.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Túlóra.cs" />
