@@ -904,6 +904,7 @@ namespace Villamos
         {
             try
             {
+                Adatok_Állomány = KézJármű.Lista_Adatok("Főmérnökség");
                 List<Adat_Jármű> Elemek = (from a in Adatok_Állomány
                                            where a.Üzem.Trim() == "Közös" && !a.Törölt
                                            orderby a.Azonosító
@@ -996,6 +997,7 @@ namespace Villamos
                 if (Közös_járművek.SelectedItem == null || Közös_járművek.SelectedItem.ToString().Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva jármű.");
 
                 bool volt = false;
+                Adatok_Állomány = KézJármű.Lista_Adatok("Főmérnökség");
                 Adat_Jármű Elem = (from a in Adatok_Állomány
                                    where a.Azonosító == Közös_járművek.SelectedItem.ToStrTrim() && !a.Törölt
                                    orderby a.Azonosító
