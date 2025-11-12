@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
@@ -12,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "kerekeskút";
         string hely;
+        string táblanév = "adatok";
 
         private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
@@ -22,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Dolgozó_Beosztás_Napló> Lista_Adatok(string Telephely, DateTime Dátum)
         {
             FájlBeállítás(Telephely, Dátum);
-            string szöveg = $"SELECT * FROM adatok ";
+            string szöveg = $"SELECT * FROM {táblanév} ";
             List<Adat_Dolgozó_Beosztás_Napló> Adatok = new List<Adat_Dolgozó_Beosztás_Napló>();
             Adat_Dolgozó_Beosztás_Napló Adat;
 
@@ -68,6 +70,54 @@ namespace Villamos.Kezelők
                 }
             }
             return Adatok;
+        }
+
+
+        public void Rögzítés(string Telephely, DateTime Dátum, List<Adat_Dolgozó_Beosztás_Napló> Adatok)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum);
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Dolgozó_Beosztás_Napló Adat in Adatok)
+                {
+                    string szöveg = $"INSERT INTO {táblanév} (Sorszám, Dátum, Beosztáskód, Túlóra, Túlórakezd, Túlóravég, Csúszóra, CSúszórakezd, Csúszóravég, Megjegyzés,";
+                    szöveg += " Túlóraok, Szabiok, Kért, Csúszok, Rögzítette, rögzítésdátum, dolgozónév, Törzsszám,AFTóra, AFTok )";
+                    szöveg += " VALUES (";
+                    szöveg += $"'{Adat.Sorszám}', ";// Sorszám
+                    szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', ";// Dátum
+                    szöveg += $"'{Adat.Beosztáskód}', ";// Beosztáskód
+                    szöveg += $"{Adat.Túlóra}, ";// Túlóra
+                    szöveg += $"'{Adat.Túlórakezd}', ";// Túlórakezd
+                    szöveg += $"'{Adat.Túlóravég}', ";// Túlóravég
+                    szöveg += $"{Adat.Csúszóra}, ";// Csúszóra
+                    szöveg += $"'{Adat.CSúszórakezd}', ";// CSúszórakezd
+                    szöveg += $"'{Adat.Csúszóravég}', ";// Csúszóravég
+                    szöveg += $"'{Adat.Megjegyzés}', ";// Megjegyzés
+                    szöveg += $"'{Adat.Túlóraok}', ";// Túlóraok
+                    szöveg += $"'{Adat.Szabiok}', ";// Szabiok
+                    szöveg += $"{Adat.Kért}, ";// Kért
+                    szöveg += $"'{Adat.Csúszok}', ";// Csúszok
+                    szöveg += $"'{Adat.Rögzítette}', ";// Rögzítette
+                    szöveg += $"'{Adat.Rögzítésdátum}', ";// rögzítésdátum
+                    szöveg += $"'{Adat.Dolgozónév}',";// dolgozónév
+                    szöveg += $"'{Adat.Törzsszám}',";// Törzsszám
+                    szöveg += $"{Adat.AFTóra}, ";// AFTóra
+                    szöveg += $"'{Adat.AFTok}' ";// AFTok
+                    szöveg += ")";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
     }

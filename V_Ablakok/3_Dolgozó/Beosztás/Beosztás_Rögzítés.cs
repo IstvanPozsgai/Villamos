@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
 using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
 
@@ -24,6 +22,7 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         readonly Kezelő_Szatube_Csúsztatás KézCsúsztatás = new Kezelő_Szatube_Csúsztatás();
         readonly Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
         readonly Kezelő_Kiegészítő_Túlórakeret KézTúlkeret = new Kezelő_Kiegészítő_Túlórakeret();
+        readonly Kezelő_Kiegészítő_Beosztáskódok KézBEOKód = new Kezelő_Kiegészítő_Beosztáskódok();
 
         List<Adat_Dolgozó_Beosztás_Napló> AdatokNapló = new List<Adat_Dolgozó_Beosztás_Napló>();
         List<Adat_Szatube_Beteg> AdatokBeteg = new List<Adat_Szatube_Beteg>();
@@ -32,25 +31,6 @@ namespace Villamos.Villamos_Ablakok.Beosztás
         List<Adat_Szatube_AFT> AdatokAft = new List<Adat_Szatube_AFT>();
         List<Adat_Szatube_Csúsztatás> AdatokCsúsztatás = new List<Adat_Szatube_Csúsztatás>();
 
-
-        private void ListaNapló(string Cmbtelephely)
-        {
-            try
-            {
-                AdatokNapló.Clear();
-                AdatokNapló = KézNapló.Lista_Adatok(Cmbtelephely.Trim(), DateTime.Now);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
         #endregion
 
 
@@ -60,10 +40,6 @@ namespace Villamos.Villamos_Ablakok.Beosztás
             string szöveg = "Nincs hiba";
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Beosztás\{Dátum.Year}\Ebeosztás{Dátum:yyyyMM}.mdb";
-                string jelszó = "kiskakas";
-                szöveg = $"SELECT * FROM Beosztás WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
-
                 List<Adat_Dolgozó_Beosztás_Új> Rekordok = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
                 Rekordok = Rekordok.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
                 Adat_Dolgozó_Beosztás_Új Rekord_Old = Rekordok.FirstOrDefault();
@@ -92,50 +68,26 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                     }
                 }
 
+                Adat_Dolgozó_Beosztás_Új ADAT = new Adat_Dolgozó_Beosztás_Új(
+                    HR_Azonosító.Trim(),
+                    Dátum,
+                    Beosztáskód.Trim(),
+                    Ledolgozott,
+                    Túlóra, Túlórakezd, Túlóravég,
+                    0, new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(1900, 1, 1, 0, 0, 0),
+                    "", "_", szabiok,
+                    false, "_",
+                    AFTóra, AFTok);
+                List<Adat_Dolgozó_Beosztás_Új> ADATok = new List<Adat_Dolgozó_Beosztás_Új> { ADAT };
                 if (Rekordok.Count < 1)
                 {
-                    szöveg = "INSERT INTO beosztás (Dolgozószám, Nap, Beosztáskód, Ledolgozott, Túlóra, Túlórakezd, Túlóravég, Csúszóra, CSúszórakezd, Csúszóravég, Megjegyzés, Túlóraok, Szabiok, Kért, Csúszok, AFTóra, AFTok)";
-                    szöveg += " VALUES (";
-                    szöveg += $"'{HR_Azonosító.Trim()}',";// Dolgozószám
-                    szöveg += $"'{Dátum:yyyy.MM.dd}', ";// Nap
-                    szöveg += $"'{Beosztáskód.Trim()}', ";// Beosztáskód
-                    szöveg += $"{Ledolgozott}, ";// Ledolgozott
-                    szöveg += $"{Túlóra}, ";// Túlóra
-                    szöveg += $"'{Túlórakezd}', ";// Túlórakezd
-                    szöveg += $"'{Túlóravég}', ";// Túlóravég
-                    szöveg += $"0, ";// Csúszóra
-                    szöveg += $"'1900.01.01. 00:00:00', ";// CSúszórakezd
-                    szöveg += $"'1900.01.01. 00:00:00', ";// Csúszóravég
-                    szöveg += $"'', ";// Megjegyzés
-                    szöveg += $"'_', ";// Túlóraok
-                    szöveg += $"'{szabiok}', ";// Szabiok
-                    szöveg += $"false, ";// Kért
-                    szöveg += $"'_', ";// Csúszok
-                    szöveg += $"{AFTóra}, ";// AFTóra
-                    szöveg += $"'{AFTok}' ";// AFTok
-                    szöveg += ")";
+                    KézBEO.Rögzítés(Cmbtelephely.Trim(), Dátum, ADATok);
                 }
                 else
                 {
-                    szöveg = "UPDATE beosztás SET ";
-                    szöveg += $"Beosztáskód='{Beosztáskód.Trim()}', ";// Beosztáskód
-                    szöveg += $" Ledolgozott={Ledolgozott}, ";// Ledolgozott
-                    szöveg += $"Túlóra={Túlóra}, ";// Túlóra
-                    szöveg += $"Túlórakezd='{Túlórakezd}', ";// Túlórakezd
-                    szöveg += $"Túlóravég='{Túlóravég}', ";// Túlóravég
-                    szöveg += $"Csúszóra=0, ";// Csúszóra
-                    szöveg += $"CSúszórakezd='1900.01.01. 00:00:00', ";// CSúszórakezd
-                    szöveg += $"Csúszóravég='1900.01.01. 00:00:00', ";// Csúszóravég
-                    szöveg += $"Megjegyzés='', ";// Megjegyzés
-                    szöveg += $"Túlóraok='_', ";// Túlóraok
-                    szöveg += $"Szabiok='{szabiok}', ";// Szabiok
-                    szöveg += $"Kért=false, ";// Kért
-                    szöveg += $"Csúszok='_', ";// Csúszok
-                    szöveg += $"AFTóra={AFTóra}, ";// AFTóra
-                    szöveg += $"AFTok='{AFTok}' ";// AFTok
-                    szöveg += $" WHERE Dolgozószám='{HR_Azonosító.Trim()}' AND nap=#{Dátum:MM-dd-yyyy}#";
+                    KézBEO.Módosítás(Cmbtelephely.Trim(), Dátum, ADATok);
                 }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+
 
                 Rekordok = KézBEO.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
                 Rekordok = Rekordok.Where(x => x.Dolgozószám.Trim() == HR_Azonosító.Trim() && x.Nap.ToShortDateString() == Dátum.ToShortDateString()).ToList();
@@ -203,14 +155,8 @@ namespace Villamos.Villamos_Ablakok.Beosztás
 
             try
             {
-                string hely = $@"{Application.StartupPath}\{cmbtelephely.Trim()}\Adatok\Segéd\kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = $"SELECT * FROM Beosztáskódok WHERE beosztáskód='{beosztáskód}'";
-
-
-                Kezelő_Kiegészítő_Beosztáskódok Kéz = new Kezelő_Kiegészítő_Beosztáskódok();
-                válasz = Kéz.Egy_Adat(hely, jelszó, szöveg);
-
+                List<Adat_Kiegészítő_Beosztáskódok> Adatok = KézBEOKód.Lista_Adatok(cmbtelephely.Trim());
+                válasz = Adatok.Where(y => y.Beosztáskód.Trim() == beosztáskód.Trim()).FirstOrDefault();
             }
             catch (HibásBevittAdat ex)
             {
@@ -226,44 +172,27 @@ namespace Villamos.Villamos_Ablakok.Beosztás
 
         private void Naplózás(string Cmbtelephely, Adat_Dolgozó_Beosztás_Új Rekord, string dolgozónév)
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\naplózás\{DateTime.Now:yyyyMM}napló.mdb";
-            string jelszó = "kerekeskút";
-            string szöveg;
-            if (!Exists(hely)) Adatbázis_Létrehozás.Beosztás_Naplózása(hely);
             try
             {
-                ListaNapló(Cmbtelephely);
+                AdatokNapló = KézNapló.Lista_Adatok(Cmbtelephely.Trim(), DateTime.Now);
                 Adat_Dolgozó_Beosztás_Napló AdatNapló = (from a in AdatokNapló
                                                          orderby a.Sorszám descending
                                                          select a).FirstOrDefault();
                 double sorszám = 1;
                 if (AdatNapló != null) sorszám = AdatNapló.Sorszám + 1;
 
-                szöveg = "INSERT INTO adatok (Sorszám, Dátum, Beosztáskód, Túlóra, Túlórakezd, Túlóravég, Csúszóra, CSúszórakezd, Csúszóravég, Megjegyzés,";
-                szöveg += " Túlóraok, Szabiok, Kért, Csúszok, Rögzítette, rögzítésdátum, dolgozónév, Törzsszám,AFTóra, AFTok )";
-                szöveg += " VALUES (";
-                szöveg += $"'{sorszám}', ";// Sorszám
-                szöveg += $"'{Rekord.Nap}', ";// Dátum
-                szöveg += $"'{Rekord.Beosztáskód.Trim()}', ";// Beosztáskód
-                szöveg += $"{Rekord.Túlóra}, ";// Túlóra
-                szöveg += $"'{Rekord.Túlórakezd}', ";// Túlórakezd
-                szöveg += $"'{Rekord.Túlóravég}', ";// Túlóravég
-                szöveg += $"{Rekord.Csúszóra}, ";// Csúszóra
-                szöveg += $"'{Rekord.CSúszórakezd}', ";// CSúszórakezd
-                szöveg += $"'{Rekord.Csúszóravég}', ";// Csúszóravég
-                szöveg += $"'{Rekord.Megjegyzés.Trim()}', ";// Megjegyzés
-                szöveg += $"'{Rekord.Túlóraok.Trim()}', ";// Túlóraok
-                szöveg += $"'{Rekord.Szabiok.Trim()}', ";// Szabiok
-                szöveg += $"{Rekord.Kért}, ";// Kért
-                szöveg += $"'{Rekord.Csúszok.Trim()}', ";// Csúszok
-                szöveg += $"'{Program.PostásNév.Trim()}', ";// Rögzítette
-                szöveg += $"'{DateTime.Now}', ";// rögzítésdátum
-                szöveg += $"'{dolgozónév.Trim()}',";// dolgozónév
-                szöveg += $"'{Rekord.Dolgozószám.Trim()}',";// Törzsszám
-                szöveg += $"{Rekord.AFTóra}, ";// AFTóra
-                szöveg += $"'{Rekord.AFTok.Trim()}' ";// AFTok
-                szöveg += ")";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                Adat_Dolgozó_Beosztás_Napló ADAT = new Adat_Dolgozó_Beosztás_Napló(
+                      sorszám,
+                      Rekord.Nap, Rekord.Beosztáskód.Trim(),
+                      Rekord.Túlóra, Rekord.Túlórakezd, Rekord.Túlóravég,
+                      Rekord.Csúszóra, Rekord.CSúszórakezd, Rekord.Csúszóravég,
+                      Rekord.Megjegyzés.Trim(), Rekord.Túlóraok.Trim(), Rekord.Szabiok.Trim(),
+                      Rekord.Kért, Rekord.Csúszok.Trim(),
+                      Program.PostásNév.Trim(), DateTime.Now,
+                      dolgozónév.Trim(), Rekord.Dolgozószám.Trim(),
+                      Rekord.AFTóra, Rekord.AFTok.Trim());
+                List<Adat_Dolgozó_Beosztás_Napló> ADATOK = new List<Adat_Dolgozó_Beosztás_Napló> { ADAT };
+                KézNapló.Rögzítés(Cmbtelephely.Trim(), DateTime.Now, ADATOK);
             }
             catch (HibásBevittAdat ex)
             {
@@ -278,14 +207,9 @@ namespace Villamos.Villamos_Ablakok.Beosztás
 
         public void Naplózás(string Cmbtelephely, string Művelet)
         {
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\naplózás\{DateTime.Now:yyyyMM}napló.mdb";
-            string jelszó = "kerekeskút";
-            string szöveg;
-            if (!Exists(hely)) Adatbázis_Létrehozás.Beosztás_Naplózása(hely);
-
             try
             {
-                ListaNapló(Cmbtelephely);
+                AdatokNapló = KézNapló.Lista_Adatok(Cmbtelephely.Trim(), DateTime.Now);
 
                 Adat_Dolgozó_Beosztás_Napló AdatNapló = (from a in AdatokNapló
                                                          orderby a.Sorszám descending
@@ -293,31 +217,20 @@ namespace Villamos.Villamos_Ablakok.Beosztás
                 double sorszám = 1;
                 if (AdatNapló != null) sorszám = AdatNapló.Sorszám + 1;
 
-                szöveg = "INSERT INTO adatok (Sorszám, Dátum, Beosztáskód, Túlóra, Túlórakezd, Túlóravég, Csúszóra, CSúszórakezd, Csúszóravég, Megjegyzés,";
-                szöveg += " Túlóraok, Szabiok, Kért, Csúszok, Rögzítette, rögzítésdátum, dolgozónév, Törzsszám,AFTóra, AFTok )";
-                szöveg += " VALUES (";
-                szöveg += $"'{sorszám}', ";// Sorszám
-                szöveg += $"'{DateTime.Today:yyyy.MM.dd}', ";// Dátum
-                szöveg += $"'{000}', ";// Beosztáskód
-                szöveg += $"{0}, ";// Túlóra
-                szöveg += $"'{new DateTime(1900, 1, 1, 0, 0, 0)}', ";// Túlórakezd
-                szöveg += $"'{new DateTime(1900, 1, 1, 0, 0, 0)}', ";// Túlóravég
-                szöveg += $"{0}, ";// Csúszóra
-                szöveg += $"'{new DateTime(1900, 1, 1, 0, 0, 0)}', ";// CSúszórakezd
-                szöveg += $"'{new DateTime(1900, 1, 1, 0, 0, 0)}', ";// Csúszóravég
-                szöveg += $"'{Művelet}', ";// Megjegyzés
-                szöveg += $"'{0}', ";// Túlóraok
-                szöveg += $"'{0000}', ";// Szabiok
-                szöveg += $"{false}, ";// Kért
-                szöveg += $"'{0000}', ";// Csúszok
-                szöveg += $"'{Program.PostásNév.Trim()}', ";// Rögzítette
-                szöveg += $"'{DateTime.Now}', ";// rögzítésdátum
-                szöveg += $"'{Művelet}',";// dolgozónév
-                szöveg += $"'{000000}',";// Törzsszám
-                szöveg += $"{0}, ";// AFTóra
-                szöveg += $"'{0000}' ";// AFTok
-                szöveg += ")";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+                Adat_Dolgozó_Beosztás_Napló ADAT = new Adat_Dolgozó_Beosztás_Napló(
+                    sorszám,
+                    DateTime.Today,
+                    "000",
+                    0, new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(1900, 1, 1, 0, 0, 0),
+                    0, new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(1900, 1, 1, 0, 0, 0),
+                    Művelet,
+                    "0", "0000", false,
+                    "0000",
+                    Program.PostásNév.Trim(), DateTime.Now,
+                    Művelet, "000000",
+                    0, "0000");
+                List<Adat_Dolgozó_Beosztás_Napló> ADATOK = new List<Adat_Dolgozó_Beosztás_Napló> { ADAT };
+                KézNapló.Rögzítés(Cmbtelephely.Trim(), DateTime.Now, ADATOK);
             }
             catch (HibásBevittAdat ex)
             {
