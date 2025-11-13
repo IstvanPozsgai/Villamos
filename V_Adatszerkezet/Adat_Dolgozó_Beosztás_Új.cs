@@ -128,5 +128,27 @@ namespace Villamos.Villamos_Adatszerkezet
             Túlóravég = túlóravég;
             Túlóraok = túlóraok;
         }
+
+        /// <summary>
+        /// Megjegyzés
+        /// </summary>
+        /// <param name="dolgozószám"></param>
+        /// <param name="nap"></param>
+        /// <param name="megjegyzés"></param>
+        /// <param name="kért"></param>
+        public Adat_Dolgozó_Beosztás_Új(string dolgozószám, DateTime nap, string megjegyzés, bool kért)
+        {
+            Dolgozószám = dolgozószám;
+            Nap = nap;
+            Megjegyzés = megjegyzés;
+            Kért = kért;
+        }
+
+        public Adat_Dolgozó_Beosztás_Új(string dolgozószám, DateTime nap, string szabiok)
+        {
+            Dolgozószám = dolgozószám;
+            Nap = nap;
+            Szabiok = szabiok;
+        }
     }
 }
