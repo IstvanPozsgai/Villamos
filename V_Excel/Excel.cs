@@ -25,7 +25,7 @@ namespace Villamos
         public static MyExcel._Workbook _xlWorkBook;
         public static MyExcel._Worksheet _xlWorkSheet;
 
-        readonly static string ExcelUzenet = "Egy Office frissítés miatt keletkező hiba miatt a háttérben megnyílt egy Excel ablak.\nA billentyűzet ALT+TAB gombok megnyomásával " +
+        readonly static string ExcelUzenet = "Egy Office frissítés miatt keletkező hiba miatt a háttérben megnyílt egy Excel ablak.\nA billentyűzet ALT+TAB gombjainak megnyomásával " +
             "válassza ki az Excel ablakot, majd kattintson a bezárás gombra és indítsa újra a folyamatot!";
 
 
