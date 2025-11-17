@@ -1,4 +1,5 @@
 ﻿using ArrayToExcel;
+using ClosedXML.Excel;
 using System;
 using System.Data;
 using System.Drawing;
@@ -45,7 +46,7 @@ namespace Villamos
                 Rácsoz(munkalapnév, $"A1:{Module_Excel.Oszlopnév(oszlop)}{sor + 1}"); // rácsozás
                 Oszlopszélesség(munkalapnév, $"A:{Module_Excel.Oszlopnév(oszlop)}");     //Automata Oszlop szélesség beállítás
 
-                //     if (TáblaGrid != null) Színezés(TáblaGrid);
+                if (TáblaGrid != null) Színezés(TáblaGrid);
 
                 Tábla_Rögzítés(munkalapnév, 1);  //Rögzítjük a fejlécet
                 Szűrés(munkalapnév, "A", Module_Excel.Oszlopnév(oszlop), sor + 1);    //szűrést felteszük
@@ -121,5 +122,47 @@ namespace Villamos
             }
         }
 
+        // JAVÍTANDÓ:
+        private static void Színezés(DataGridView táblaDat)
+        {
+            try
+            {
+                int sor = 2;
+                int oszlop = 1;
+                for (int i = 0; i < táblaDat.Rows.Count; i++)
+                {
+                    for (int j = 0; j < táblaDat.Columns.Count; j++)
+                    {
+                        var cella = táblaDat.Rows[i].Cells[j];
+                        Color háttér = cella.Style.BackColor;
+
+                        // Ha a háttérszín nem definiált (pl. "0" névvel), akkor fehérnek vesszük
+                        if (háttér.Name == "0" || háttér.IsEmpty)
+                            háttér = Color.White;
+
+                        // Csak akkor alkalmazzuk a színt, ha nem fehér
+                        if (háttér != Color.White)
+                        {
+                            // ClosedXML: RGB szín beállítása (ARGB -> RGB figyelem!)
+                            var rgb = XLColor.FromArgb(
+                                háttér.R,
+                                háttér.G,
+                                háttér.B);
+
+                            //     munkalap.Cell(sor + i, oszlop + j).Style.Fill.BackgroundColor = rgb;
+                        }
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Színezés", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\nA hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
