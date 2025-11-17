@@ -354,6 +354,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Csúsztatás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Szabadság.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Túlóra.cs" />
+    <Compile Include="V_Adatszerkezet\NyomtatásiBeállítás.cs" />
     <Compile Include="V_Excel\Excel_Betű.cs" />
     <Compile Include="V_Excel\Excel_Keretez.cs" />
     <Compile Include="V_Excel\Excel_Mentés.cs" />
@@ -1388,6 +1389,13 @@
     <Compile Include="V_MindenEgyéb\Vezénylés.cs" />
     <Compile Include="V_MindenEgyéb\Váltós_Számítások.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_nyomtatványok.cs" />
+    <Compile Include="V_XML\MyClosedXML_Betű.cs" />
+    <Compile Include="V_XML\MyClosedXML_Excel.cs" />
+    <Compile Include="V_XML\MyClosedXML_Keret.cs" />
+    <Compile Include="V_XML\MyClosedXML_Munkalap.cs" />
+    <Compile Include="V_XML\MyClosedXML_Nyomtatás.cs" />
+    <Compile Include="V_XML\MyClosedXML_Sor_Oszlop.cs" />
+    <Compile Include="V_XML\MyClosedXML_Tábla.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -2089,6 +2097,7 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
