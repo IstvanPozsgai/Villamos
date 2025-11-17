@@ -24,7 +24,6 @@ namespace Villamos
             }
         }
 
-
         private static void AlkalmazNyomtatásiBeállításokat(string fájlnév, Dictionary<string, NyomtatásiBeállítás> beállítások)
         {
             using (SpreadsheetDocument doc = SpreadsheetDocument.Open(fájlnév, true))
@@ -118,142 +117,224 @@ namespace Villamos
 
         private static void Papírkitöltés(this Worksheet worksheet, NyomtatásiBeállítás beállítás)
         {
-            if (worksheet == null) throw new ArgumentNullException(nameof(worksheet));
-
-            // 1. PageSetup beállítása (ez a nyomtatási méretezés részletei)
-            var pageSetup = worksheet.GetFirstChild<PageSetup>();
-            if (pageSetup == null)
+            try
             {
-                pageSetup = new PageSetup();
-                worksheet.Append(pageSetup);
-            }
-            pageSetup.FitToWidth = (UInt32Value)(uint)beállítás.LapSzéles;
-            pageSetup.FitToHeight = (UInt32Value)(uint)beállítás.LapMagas;
+                if (worksheet == null) throw new ArgumentNullException(nameof(worksheet));
 
-            // 2. SheetProperties (<sheetPr>) lekérése – ha nem létezik, létrehozzuk
-            var sheetPr = worksheet.GetFirstChild<SheetProperties>();
-            if (sheetPr == null)
+                // 1. PageSetup beállítása (ez a nyomtatási méretezés részletei)
+                var pageSetup = worksheet.GetFirstChild<PageSetup>();
+                if (pageSetup == null)
+                {
+                    pageSetup = new PageSetup();
+                    worksheet.Append(pageSetup);
+                }
+                pageSetup.FitToWidth = (UInt32Value)(uint)beállítás.LapSzéles;
+                pageSetup.FitToHeight = (UInt32Value)(uint)beállítás.LapMagas;
+
+                // 2. SheetProperties (<sheetPr>) lekérése – ha nem létezik, létrehozzuk
+                var sheetPr = worksheet.GetFirstChild<SheetProperties>();
+                if (sheetPr == null)
+                {
+                    sheetPr = new SheetProperties();
+                    // A sheetPr MINDIG legyen az első gyermek elem
+                    worksheet.InsertAt(sheetPr, 0);
+                }
+
+                // 3. PageSetupProperties (<pageSetUpPr>) lekérése vagy létrehozása a sheetPr-ben
+                var pageSetupPr = sheetPr.GetFirstChild<PageSetupProperties>();
+                if (pageSetupPr == null)
+                {
+                    pageSetupPr = new PageSetupProperties();
+                    sheetPr.Append(pageSetupPr);
+                }
+
+                // 4. FitToPage bekapcsolása
+                pageSetupPr.FitToPage = true;
+            }
+            catch (HibásBevittAdat ex)
             {
-                sheetPr = new SheetProperties();
-                // A sheetPr MINDIG legyen az első gyermek elem
-                worksheet.InsertAt(sheetPr, 0);
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
-            // 3. PageSetupProperties (<pageSetUpPr>) lekérése vagy létrehozása a sheetPr-ben
-            var pageSetupPr = sheetPr.GetFirstChild<PageSetupProperties>();
-            if (pageSetupPr == null)
+            catch (Exception ex)
             {
-                pageSetupPr = new PageSetupProperties();
-                sheetPr.Append(pageSetupPr);
+                HibaNapló.Log(ex.Message, "Papírkitöltés", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            // 4. FitToPage bekapcsolása
-            pageSetupPr.FitToPage = true;
         }
 
         private static void Papírméret(this PageSetup pageSetup, NyomtatásiBeállítás beállítás)
         {
-            // Papírméret: A4 = 9
-            if (beállítás.Papírméret.Trim() == "A3")
-                pageSetup.PaperSize = 8;
-            else
-                pageSetup.PaperSize = 9;
+            try
+            {   // Papírméret: A4 = 9
+                if (beállítás.Papírméret.Trim() == "A3")
+                    pageSetup.PaperSize = 8;
+                else
+                    pageSetup.PaperSize = 9;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Papírméret", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private static void PapírTájolás(this PageSetup pageSetup, NyomtatásiBeállítás beállítás)
         {
-            pageSetup.Orientation = beállítás.Álló ? OrientationValues.Portrait : OrientationValues.Landscape;
+            try
+            {
+                pageSetup.Orientation = beállítás.Álló ? OrientationValues.Portrait : OrientationValues.Landscape;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "PapírTájolás", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private static void MargóBeállítás(this PageMargins pageMargins, NyomtatásiBeállítás beállítás)
         {
-            pageMargins.Left = beállítás.BalMargó * MmToInch;
-            pageMargins.Right = beállítás.JobbMargó * MmToInch;
-            pageMargins.Top = beállítás.FelsőMargó * MmToInch;
-            pageMargins.Bottom = beállítás.AlsóMargó * MmToInch;
-            pageMargins.Header = beállítás.FejlécMéret * MmToInch;
-            pageMargins.Footer = beállítás.LáblécMéret * MmToInch;
+            try
+            {
+                pageMargins.Left = beállítás.BalMargó * MmToInch;
+                pageMargins.Right = beállítás.JobbMargó * MmToInch;
+                pageMargins.Top = beállítás.FelsőMargó * MmToInch;
+                pageMargins.Bottom = beállítás.AlsóMargó * MmToInch;
+                pageMargins.Header = beállítás.FejlécMéret * MmToInch;
+                pageMargins.Footer = beállítás.LáblécMéret * MmToInch;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "MargóBeállítás", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private static void LáblécBeállítás(this HeaderFooter headerFooter, NyomtatásiBeállítás beállítás)
         {
-            headerFooter.AlignWithMargins = true;
-            headerFooter.DifferentFirst = false;
-            headerFooter.DifferentOddEven = false;
-
-            headerFooter.OddHeader = new OddHeader
+            try
             {
-                Text = $"&L{beállítás.FejlécBal}&C{beállítás.FejlécKözép}&R{beállítás.FejlécJobb}"
-            };
+                headerFooter.AlignWithMargins = true;
+                headerFooter.DifferentFirst = false;
+                headerFooter.DifferentOddEven = false;
 
-            headerFooter.OddFooter = new OddFooter
+                headerFooter.OddHeader = new OddHeader
+                {
+                    Text = $"&L{beállítás.FejlécBal}&C{beállítás.FejlécKözép}&R{beállítás.FejlécJobb}"
+                };
+
+                headerFooter.OddFooter = new OddFooter
+                {
+                    Text = $"&L{beállítás.LáblécBal}&C{beállítás.LáblécKözép}&R{beállítás.LáblécJobb}"
+                };
+            }
+            catch (HibásBevittAdat ex)
             {
-                Text = $"&L{beállítás.LáblécBal}&C{beállítás.LáblécKözép}&R{beállítás.LáblécJobb}"
-            };
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "LáblécBeállítás", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private static void SorOszlopIsmétlődés(this WorkbookPart workbookPart, NyomtatásiBeállítás beállítás, string lapNév, int i)
         {
-            if (!string.IsNullOrEmpty(beállítás.IsmétlődőSorok) || !string.IsNullOrEmpty(beállítás.IsmétlődőOszlopok))
+            try
             {
-                Workbook workbook = workbookPart.Workbook;
-                DefinedNames definedNames = workbook.DefinedNames;
-                if (definedNames == null)
+                if (!string.IsNullOrEmpty(beállítás.IsmétlődőSorok) || !string.IsNullOrEmpty(beállítás.IsmétlődőOszlopok))
                 {
-                    definedNames = new DefinedNames();
-                    workbook.Append(definedNames);
+                    Workbook workbook = workbookPart.Workbook;
+                    DefinedNames definedNames = workbook.DefinedNames;
+                    if (definedNames == null)
+                    {
+                        definedNames = new DefinedNames();
+                        workbook.Append(definedNames);
+                    }
+
+                    // Eltávolítjuk a meglévő Print_Titles-t erre a munkalapra (index alapján)
+                    DefinedName existingPrintTitle = definedNames.OfType<DefinedName>()
+                        .FirstOrDefault(dn => dn.Name == "_xlnm.Print_Titles" && dn.LocalSheetId?.Value == (uint)i);
+                    existingPrintTitle?.Remove();
+
+                    // Referencia összeállítása
+                    string escapedName = NévEllenőr(lapNév);
+                    string reference = "";
+
+                    if (!string.IsNullOrEmpty(beállítás.IsmétlődőSorok) && !string.IsNullOrEmpty(beállítás.IsmétlődőOszlopok))
+                        reference = $"{escapedName}!{beállítás.IsmétlődőSorok},{escapedName}!{beállítás.IsmétlődőOszlopok}";
+                    else if (!string.IsNullOrEmpty(beállítás.IsmétlődőSorok))
+                        reference = $"{escapedName}!{beállítás.IsmétlődőSorok}";
+                    else if (!string.IsNullOrEmpty(beállítás.IsmétlődőOszlopok))
+                        reference = $"{escapedName}!{beállítás.IsmétlődőOszlopok}";
+
+                    definedNames.Append(new DefinedName
+                    {
+                        Name = "_xlnm.Print_Titles",
+                        LocalSheetId = (uint)i,
+                        Text = reference
+                    });
                 }
-
-                // Eltávolítjuk a meglévő Print_Titles-t erre a munkalapra (index alapján)
-                DefinedName existingPrintTitle = definedNames.OfType<DefinedName>()
-                    .FirstOrDefault(dn => dn.Name == "_xlnm.Print_Titles" && dn.LocalSheetId?.Value == (uint)i);
-                existingPrintTitle?.Remove();
-
-                // Referencia összeállítása
-                string escapedName = NévEllenőr(lapNév);
-                string reference = "";
-
-                if (!string.IsNullOrEmpty(beállítás.IsmétlődőSorok) && !string.IsNullOrEmpty(beállítás.IsmétlődőOszlopok))
-                    reference = $"{escapedName}!{beállítás.IsmétlődőSorok},{escapedName}!{beállítás.IsmétlődőOszlopok}";
-                else if (!string.IsNullOrEmpty(beállítás.IsmétlődőSorok))
-                    reference = $"{escapedName}!{beállítás.IsmétlődőSorok}";
-                else if (!string.IsNullOrEmpty(beállítás.IsmétlődőOszlopok))
-                    reference = $"{escapedName}!{beállítás.IsmétlődőOszlopok}";
-
-                definedNames.Append(new DefinedName
-                {
-                    Name = "_xlnm.Print_Titles",
-                    LocalSheetId = (uint)i,
-                    Text = reference
-                });
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "SorOszlopIsmétlődés", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private static void NyomtatásiTerület(this WorkbookPart workbookPart, NyomtatásiBeállítás beállítás, string lapNév, int i)
         {
-            if (!string.IsNullOrEmpty(beállítás.NyomtatásiTerület))
+            try
             {
-                DefinedNames definedNames = workbookPart.Workbook.GetFirstChild<DefinedNames>();
-                if (definedNames == null)
+                if (!string.IsNullOrEmpty(beállítás.NyomtatásiTerület))
                 {
-                    definedNames = new DefinedNames();
-                    workbookPart.Workbook.InsertAfter(definedNames, workbookPart.Workbook.GetFirstChild<Sheets>());
+                    DefinedNames definedNames = workbookPart.Workbook.GetFirstChild<DefinedNames>();
+                    if (definedNames == null)
+                    {
+                        definedNames = new DefinedNames();
+                        workbookPart.Workbook.InsertAfter(definedNames, workbookPart.Workbook.GetFirstChild<Sheets>());
+                    }
+
+                    DefinedName printArea = definedNames.Elements<DefinedName>()
+                        .FirstOrDefault(dn => dn.Name?.Value == "_xlnm.Print_Area" && dn.LocalSheetId?.Value == (uint)i);
+
+                    printArea?.Remove();
+
+                    definedNames.Append(new DefinedName
+                    {
+                        Name = "_xlnm.Print_Area",
+                        LocalSheetId = (uint)i,
+                        Text = $"{NévEllenőr(lapNév)}!{beállítás.NyomtatásiTerület}",
+                        Hidden = true
+                    });
                 }
-
-                DefinedName printArea = definedNames.Elements<DefinedName>()
-                    .FirstOrDefault(dn => dn.Name?.Value == "_xlnm.Print_Area" && dn.LocalSheetId?.Value == (uint)i);
-
-                printArea?.Remove();
-
-                definedNames.Append(new DefinedName
-                {
-                    Name = "_xlnm.Print_Area",
-                    LocalSheetId = (uint)i,
-                    Text = $"{NévEllenőr(lapNév)}!{beállítás.NyomtatásiTerület}",
-                    Hidden = true
-                });
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "NyomtatásiTerület", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
 }
