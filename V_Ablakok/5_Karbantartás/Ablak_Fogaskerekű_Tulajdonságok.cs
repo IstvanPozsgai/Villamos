@@ -13,6 +13,7 @@ using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos
 {
@@ -332,8 +333,8 @@ namespace Villamos
             try
             {
                 List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
-                List<string> Elemek = new List<string> { "Azonosító", "Típus" };
                 if (Adatok.Count <= 0) return;
+
                 string fájlexc;
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
                 {
@@ -348,14 +349,22 @@ namespace Villamos
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
-                DataTable TáblaAdat = MyF.ToDataTable(Adatok);
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.EXCELtábla(TáblaAdat, fájlexc, Elemek);
-                Tábla_lekérdezés.Rows.Clear();
-                Tábla_lekérdezés.Columns.Clear();
+
+                var Elemek = Adatok
+                      .OrderBy(j => j.Valóstípus)        // Elsődleges rendezés: Valóstípus szerint
+                      .ThenBy(j => j.Azonosító)          // Másodlagos rendezés: Azonosító szerint
+                      .Select(j => new
+                      {
+                          j.Azonosító,
+                          j.Valóstípus
+                      })
+                      .ToList();
+                DataTable TáblaAdat = MyF.ToDataTable(Elemek);
+
+                MyX.DataTableToXML(fájlexc, TáblaAdat);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
