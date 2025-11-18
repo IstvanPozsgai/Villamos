@@ -354,11 +354,13 @@
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Csúsztatás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Szabadság.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Túlóra.cs" />
-    <Compile Include="V_Adatszerkezet\NyomtatásiBeállítás.cs" />
+    <Compile Include="V_Adatszerkezet\Beállítás_Betű.cs" />
+    <Compile Include="V_Adatszerkezet\Beállítás_Nyomtatás.cs" />
     <Compile Include="V_Excel\Excel_Betű.cs" />
     <Compile Include="V_Excel\Excel_Keretez.cs" />
     <Compile Include="V_Excel\Excel_Mentés.cs" />
     <Compile Include="V_Excel\Excel_ÚJ.cs" />
+    <Compile Include="V_Függvények\Oszlopneve.cs" />
     <Compile Include="V_Kezelők\Kezelő_AnyagTörzs.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés_MindenMásol.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF_KM_Attekintes.cs" />

@@ -586,7 +586,7 @@ namespace Villamos
             this.V1Tábla.AllowUserToAddRows = false;
             this.V1Tábla.AllowUserToDeleteRows = false;
             this.V1Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.V1Tábla.Location = new System.Drawing.Point(381, 586);
+            this.V1Tábla.Location = new System.Drawing.Point(382, 581);
             this.V1Tábla.Name = "V1Tábla";
             this.V1Tábla.RowHeadersWidth = 51;
             this.V1Tábla.Size = new System.Drawing.Size(39, 25);
@@ -608,10 +608,10 @@ namespace Villamos
             // 
             this.ListFájl.FormattingEnabled = true;
             this.ListFájl.ItemHeight = 20;
-            this.ListFájl.Location = new System.Drawing.Point(502, 587);
+            this.ListFájl.Location = new System.Drawing.Point(473, 581);
             this.ListFájl.Name = "ListFájl";
             this.ListFájl.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.ListFájl.Size = new System.Drawing.Size(38, 4);
+            this.ListFájl.Size = new System.Drawing.Size(69, 24);
             this.ListFájl.TabIndex = 104;
             this.ListFájl.Visible = false;
             // 

@@ -17,7 +17,7 @@ namespace Villamos
         private static XLWorkbook xlWorkBook;
         private static IXLWorksheet xlWorkSheet;
         private static readonly Dictionary<string, int> FagyasztandóSorok = new Dictionary<string, int>();
-        private static readonly Dictionary<string, NyomtatásiBeállítás> NyomtatásiBeállítások = new Dictionary<string, NyomtatásiBeállítás>();
+        private static readonly Dictionary<string, Beállítás_Nyomtatás> NyomtatásiBeállítások = new Dictionary<string, Beállítás_Nyomtatás>();
 
         public static int sor;
         public static int oszlop;

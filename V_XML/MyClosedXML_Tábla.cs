@@ -5,7 +5,9 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
+using Villamos.V_Adatszerkezet;
 using DataTable = System.Data.DataTable;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos
 {
@@ -38,22 +40,26 @@ namespace Villamos
                 oszlop = Tábla.Columns.Count;
                 sor = Tábla.Rows.Count;
 
-                Háttérszín(munkalapnév, $"A1:{Module_Excel.Oszlopnév(oszlop)}1", Color.Yellow); //Sárga háttér
-                Betű(munkalapnév, $"A1:{Module_Excel.Oszlopnév(oszlop)}1", Color.Black);  //Fekete betű
-                Betű(munkalapnév, $"A1:{Module_Excel.Oszlopnév(oszlop)}1", false, false, true); //vastag betű
+                Háttérszín(munkalapnév, $"A1:{MyF.Oszlopnév(oszlop)}1", Color.Yellow); //Sárga háttér
+                Beállítás_Betű BeBetű = new Beállítás_Betű
+                {
+                    Vastag = true
+                };
+                Betű(munkalapnév, $"A1:{MyF.Oszlopnév(oszlop)}1", BeBetű);
 
-                Rácsoz(munkalapnév, $"A1:{Module_Excel.Oszlopnév(oszlop)}{sor + 1}"); // rácsozás
-                Oszlopszélesség(munkalapnév, $"A:{Module_Excel.Oszlopnév(oszlop)}");     //Automata Oszlop szélesség beállítás
+
+                Rácsoz(munkalapnév, $"A1:{MyF.Oszlopnév(oszlop)}{sor + 1}"); // rácsozás
+                Oszlopszélesség(munkalapnév, $"A:{MyF.Oszlopnév(oszlop)}");     //Automata Oszlop szélesség beállítás
 
                 if (TáblaGrid != null) Színezés(munkalapnév, TáblaGrid);
 
                 Tábla_Rögzítés(munkalapnév, 1);  //Rögzítjük a fejlécet
-                Szűrés(munkalapnév, "A", Module_Excel.Oszlopnév(oszlop), sor + 1);    //szűrést felteszük
+                Szűrés(munkalapnév, "A", MyF.Oszlopnév(oszlop), sor + 1);    //szűrést felteszük
 
                 //Nyomtatási terület kijelülése
-                NyomtatásiBeállítás NyBeállítás = new NyomtatásiBeállítás
+                Beállítás_Nyomtatás NyBeállítás = new Beállítás_Nyomtatás
                 {
-                    NyomtatásiTerület = $"A1:{Module_Excel.Oszlopnév(oszlop)}{sor + 1}",
+                    NyomtatásiTerület = $"A1:{MyF.Oszlopnév(oszlop)}{sor + 1}",
                     Munkalap = munkalapnév,
                     IsmétlődőSorok = "$1:$1",
                     Álló = false,

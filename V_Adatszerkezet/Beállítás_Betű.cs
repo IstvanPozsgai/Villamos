@@ -1,0 +1,13 @@
+﻿using System.Drawing;
+
+namespace Villamos.V_Adatszerkezet
+{
+    public class Beállítás_Betű
+    {
+        public Color Szín { get; set; } = Color.Black;
+        public int Méret { get; set; } = 12;
+        public bool Aláhúzott { get; set; } = false;
+        public bool Dőlt { get; set; } = false;
+        public bool Vastag { get; set; } = false;
+    }
+}

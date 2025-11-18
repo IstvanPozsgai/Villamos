@@ -536,8 +536,7 @@ namespace Villamos
         {
             try
             {
-                if (Tábla_lekérdezés.Rows.Count <= 0)
-                    return;
+                if (Tábla_lekérdezés.Rows.Count <= 0) return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -555,7 +554,7 @@ namespace Villamos
                 else
                     return;
 
-                MyE.DataGridViewToExcel(fájlexc, Tábla_lekérdezés);
+                MyX.DataGridViewToXML(fájlexc, Tábla_lekérdezés);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc);

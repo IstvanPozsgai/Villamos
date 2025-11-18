@@ -11,7 +11,7 @@ namespace Villamos
 {
     public static partial class MyClosedXML_Excel
     {
-        public static void NyomtatásiTerület_részletes(string munkalap, NyomtatásiBeállítás beállítás)
+        public static void NyomtatásiTerület_részletes(string munkalap, Beállítás_Nyomtatás beállítás)
         {
             try
             {
@@ -24,7 +24,7 @@ namespace Villamos
             }
         }
 
-        private static void AlkalmazNyomtatásiBeállításokat(string fájlnév, Dictionary<string, NyomtatásiBeállítás> beállítások)
+        private static void AlkalmazNyomtatásiBeállításokat(string fájlnév, Dictionary<string, Beállítás_Nyomtatás> beállítások)
         {
             using (SpreadsheetDocument doc = SpreadsheetDocument.Open(fájlnév, true))
             {
@@ -115,7 +115,7 @@ namespace Villamos
             return name;
         }
 
-        private static void Papírkitöltés(this Worksheet worksheet, NyomtatásiBeállítás beállítás)
+        private static void Papírkitöltés(this Worksheet worksheet, Beállítás_Nyomtatás beállítás)
         {
             try
             {
@@ -162,7 +162,7 @@ namespace Villamos
             }
         }
 
-        private static void Papírméret(this PageSetup pageSetup, NyomtatásiBeállítás beállítás)
+        private static void Papírméret(this PageSetup pageSetup, Beállítás_Nyomtatás beállítás)
         {
             try
             {   // Papírméret: A4 = 9
@@ -182,7 +182,7 @@ namespace Villamos
             }
         }
 
-        private static void PapírTájolás(this PageSetup pageSetup, NyomtatásiBeállítás beállítás)
+        private static void PapírTájolás(this PageSetup pageSetup, Beállítás_Nyomtatás beállítás)
         {
             try
             {
@@ -199,7 +199,7 @@ namespace Villamos
             }
         }
 
-        private static void MargóBeállítás(this PageMargins pageMargins, NyomtatásiBeállítás beállítás)
+        private static void MargóBeállítás(this PageMargins pageMargins, Beállítás_Nyomtatás beállítás)
         {
             try
             {
@@ -221,7 +221,7 @@ namespace Villamos
             }
         }
 
-        private static void LáblécBeállítás(this HeaderFooter headerFooter, NyomtatásiBeállítás beállítás)
+        private static void LáblécBeállítás(this HeaderFooter headerFooter, Beállítás_Nyomtatás beállítás)
         {
             try
             {
@@ -250,7 +250,7 @@ namespace Villamos
             }
         }
 
-        private static void SorOszlopIsmétlődés(this WorkbookPart workbookPart, NyomtatásiBeállítás beállítás, string lapNév, int i)
+        private static void SorOszlopIsmétlődés(this WorkbookPart workbookPart, Beállítás_Nyomtatás beállítás, string lapNév, int i)
         {
             try
             {
@@ -299,7 +299,7 @@ namespace Villamos
             }
         }
 
-        private static void NyomtatásiTerület(this WorkbookPart workbookPart, NyomtatásiBeállítás beállítás, string lapNév, int i)
+        private static void NyomtatásiTerület(this WorkbookPart workbookPart, Beállítás_Nyomtatás beállítás, string lapNév, int i)
         {
             try
             {
