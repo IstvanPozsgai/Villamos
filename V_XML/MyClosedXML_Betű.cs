@@ -20,6 +20,7 @@ namespace Villamos
                 tartomány.Style.Font.FontColor = XLColor.FromColor(beállítás.Szín);
                 tartomány.Style.Font.Italic = beállítás.Dőlt;
                 tartomány.Style.Font.Bold = beállítás.Vastag;
+                if (beállítás.Aláhúzott) tartomány.Style.Font.Underline = XLFontUnderlineValues.Single;                   //nincs próbálva
             }
             catch (Exception ex)
             {
