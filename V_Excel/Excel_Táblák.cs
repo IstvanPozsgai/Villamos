@@ -75,7 +75,7 @@ namespace Villamos
         {
             try
             {
-                int sor = 2;
+                int sor = 2;   // 1 sor a fejléc ami sárga
                 int oszlop = 1;
                 Color Háttér;
                 for (int i = 0; i < TáblaDat.Rows.Count; i++)

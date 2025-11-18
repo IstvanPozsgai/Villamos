@@ -1,5 +1,4 @@
 ﻿using ArrayToExcel;
-using ClosedXML.Excel;
 using System;
 using System.Data;
 using System.Drawing;
@@ -46,7 +45,7 @@ namespace Villamos
                 Rácsoz(munkalapnév, $"A1:{Module_Excel.Oszlopnév(oszlop)}{sor + 1}"); // rácsozás
                 Oszlopszélesség(munkalapnév, $"A:{Module_Excel.Oszlopnév(oszlop)}");     //Automata Oszlop szélesség beállítás
 
-                if (TáblaGrid != null) Színezés(TáblaGrid);
+                if (TáblaGrid != null) Színezés(munkalapnév, TáblaGrid);
 
                 Tábla_Rögzítés(munkalapnév, 1);  //Rögzítjük a fejlécet
                 Szűrés(munkalapnév, "A", Module_Excel.Oszlopnév(oszlop), sor + 1);    //szűrést felteszük
@@ -122,18 +121,17 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:
-        private static void Színezés(DataGridView táblaDat)
+        private static void Színezés(string munkalapnév, DataGridView táblaDat)
         {
             try
             {
-                int sor = 2;
+                int sor = 2;        //Első sor sárga 
                 int oszlop = 1;
                 for (int i = 0; i < táblaDat.Rows.Count; i++)
                 {
                     for (int j = 0; j < táblaDat.Columns.Count; j++)
                     {
-                        var cella = táblaDat.Rows[i].Cells[j];
+                        DataGridViewCell cella = táblaDat.Rows[i].Cells[j];
                         Color háttér = cella.Style.BackColor;
 
                         // Ha a háttérszín nem definiált (pl. "0" névvel), akkor fehérnek vesszük
@@ -143,13 +141,8 @@ namespace Villamos
                         // Csak akkor alkalmazzuk a színt, ha nem fehér
                         if (háttér != Color.White)
                         {
-                            // ClosedXML: RGB szín beállítása (ARGB -> RGB figyelem!)
-                            var rgb = XLColor.FromArgb(
-                                háttér.R,
-                                háttér.G,
-                                háttér.B);
-
-                            //     munkalap.Cell(sor + i, oszlop + j).Style.Fill.BackgroundColor = rgb;
+                            string mit = $"{Module_Excel.Oszlopnév(oszlop + j)}{sor + i}";
+                            Háttérszín(munkalapnév, mit, háttér);
                         }
                     }
                 }

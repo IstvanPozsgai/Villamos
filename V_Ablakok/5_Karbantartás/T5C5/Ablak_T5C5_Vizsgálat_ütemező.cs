@@ -10,6 +10,7 @@ using Villamos.V_Ablakok.Közös;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos
 {
@@ -1450,7 +1451,7 @@ namespace Villamos
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
-                Module_Excel.DataGridViewToExcel(fájlexc, Tábla, true);
+                MyX.DataGridViewToXML(fájlexc, Tábla, true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Module_Excel.Megnyitás(fájlexc);
             }
