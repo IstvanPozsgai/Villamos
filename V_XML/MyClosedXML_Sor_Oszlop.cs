@@ -89,54 +89,32 @@ namespace Villamos
             }
         }
 
-
-
-
-        // JAVÍTANDÓ:
-
-        /// <summary>
-        /// Sormagasságot lehet beállítani
-        /// </summary>
-        /// <param name="mit">szöveg</param>
-        /// <param name="mekkora">egész, ha -1 akkor automatikus sormagasságot akarunk beállítani</param>
-        /// 
-        public static void Sormagasság(string mit, int mekkora)
+        public static void Sortörésseltöbbsorba(string munkalapnév, string mit)
         {
             try
             {
-                var tartomány = xlWorkSheet.Range(mit);
-
-                if (mekkora > 0)
-                {
-                    // Fix sor magasság beállítása (Excel egységekben)
-                    foreach (var sor in tartomány.Rows())
-                    {
-                        // IXLRangeRow-nak nincs Height property-je, de van WorksheetRow() metódusa,
-                        // ami IXLRow-t ad vissza, azon már van Height property.
-                        sor.WorksheetRow().Height = mekkora;
-                    }
-                }
-                else
-                {
-                    // AutoFit NEM támogatott ClosedXML-ben.
-                    // Alternatíva: alapértelmezett magasság (pl. 15), vagy semmi.
-                    // Itt választhatod, hogy mit szeretnél:
-                    //
-                    // Opció 1: alapértelmezett magasság
-                    // foreach (var sor in tartomány.Rows()) { sor.WorksheetRow().Height = 15; }
-                    //
-                    // Opció 2: nem csinálunk semmit (marad az alapértelmezett)
-                    // (ez a legbiztonságosabb, mert az Excel alapértelmezetten jól méretez)
-                }
+                IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
+                IXLRange range = munkalap.Range(mit);
+                range.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.General;
+                range.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                range.Style.Alignment.WrapText = true;
             }
             catch (Exception ex)
             {
                 StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
                 string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
-                HibaNapló.Log(ex.Message, $"Sormagasság(mit: {mit}, mekkora: {mekkora}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                HibaNapló.Log(ex.Message, $"Sortörésseltöbbsorba(mit {mit}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                if (ex.HResult == -2146777998)
+                {
+                    MessageBox.Show(ex.Message, "A program figyelmet igényel", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else
+                {
+                    MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
+
 
     }
 }

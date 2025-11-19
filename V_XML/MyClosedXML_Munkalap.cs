@@ -102,6 +102,22 @@ namespace Villamos
             }
         }
 
-
+        public static void Munkalap_átnevezés(string régi, string új)
+        {
+            try
+            {
+                //  munkalap lekérése  név alapján)
+                IXLWorksheet worksheet = xlWorkBook.Worksheet(régi);
+                // Átnevezés
+                worksheet.Name = új;
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Munkalap_átnevezés(régi {régi}, új {új}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

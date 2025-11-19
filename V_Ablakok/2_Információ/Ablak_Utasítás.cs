@@ -5,8 +5,8 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Ablakok.Közös;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos
 {
@@ -586,7 +586,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Utasítás_" + Program.PostásNév.Trim() + "_" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Utasítás_{Program.PostásNév.Trim()}_{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -595,43 +595,47 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.ExcelLétrehozás();
+                MyX.ExcelLétrehozás();
 
                 string munkalap = "Utasítás";
-                MyE.Munkalap_átnevezés("Munka1", "Utasítás");
+                MyX.Munkalap_átnevezés("Munka1", "Utasítás");
                 Holtart.Be(tábla.Rows.Count + 2);
 
-                MyE.Kiir("Sorszám", "a1");
-                MyE.Kiir("Írta", "b1");
-                MyE.Kiir("Mikor", "c1");
-                MyE.Kiir("Üzenet", "d1");
+                MyX.Kiir("Sorszám", "a1");
+                MyX.Kiir("Írta", "b1");
+                MyX.Kiir("Mikor", "c1");
+                MyX.Kiir("Üzenet", "d1");
 
-                MyE.Oszlopszélesség(munkalap, "A:A", 8);
-                MyE.Oszlopszélesség(munkalap, "B:B", 15);
-                MyE.Oszlopszélesség(munkalap, "C:C", 18);
-                MyE.Oszlopszélesség(munkalap, "D:D", 100);
+                MyX.Oszlopszélesség(munkalap, "A:A", 8);
+                MyX.Oszlopszélesség(munkalap, "B:B", 15);
+                MyX.Oszlopszélesség(munkalap, "C:C", 18);
+                MyX.Oszlopszélesség(munkalap, "D:D", 100);
 
                 for (int i = 0; i < tábla.Rows.Count; i++)
                 {
-                    MyE.Kiir(tábla.Rows[i].Cells[0].Value.ToString(), "a" + (i + 2).ToString());
-                    MyE.Kiir(tábla.Rows[i].Cells[1].Value.ToString(), "b" + (i + 2).ToString());
-                    MyE.Kiir(tábla.Rows[i].Cells[2].Value.ToString(), "c" + (i + 2).ToString());
-                    MyE.Kiir(tábla.Rows[i].Cells[3].Value.ToString(), "d" + (i + 2).ToString());
-                    MyE.Sortörésseltöbbsorba("d" + (i + 2).ToString());
+                    MyX.Kiir(tábla.Rows[i].Cells[0].Value.ToString(), $"a{i + 2}");
+                    MyX.Kiir(tábla.Rows[i].Cells[1].Value.ToString(), $"b{i + 2}");
+                    MyX.Kiir(tábla.Rows[i].Cells[2].Value.ToString(), $"c{i + 2}");
+                    MyX.Kiir(tábla.Rows[i].Cells[3].Value.ToString(), $"d{i + 2}");
+                    MyX.Sortörésseltöbbsorba(munkalap, $"d{i + 2}");
                     Holtart.Lép();
                 }
-                MyE.Rácsoz("A1:D" + (tábla.Rows.Count + 1).ToString());
-                MyE.NyomtatásiTerület_részletes(munkalap, "A1:D" + (tábla.Rows.Count + 1).ToString(), "1:1", "", false);
-                MyE.Szűrés(munkalap, "A", "D", tábla.Rows.Count + 1);
-                MyE.Aktív_Cella(munkalap, "A1");
-
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
+                MyX.Rácsoz($"A1:D{tábla.Rows.Count + 1}");
+                Beállítás_Nyomtatás beállítás = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:D{tábla.Rows.Count + 1}",
+                    Álló = false,
+                    IsmétlődőSorok = "$1:$1"
+                };
+                MyX.Szűrés(munkalap, "A", "D", tábla.Rows.Count + 1);
+                MyX.NyomtatásiTerület_részletes(munkalap, beállítás);
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
                 Holtart.Ki();
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                Module_Excel.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
