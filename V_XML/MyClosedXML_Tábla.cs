@@ -25,11 +25,10 @@ namespace Villamos
         /// <param name="Elemek"></param>
         /// 
 
-        public static void DataTableToXML(string fájl, DataTable Tábla, DataGridView TáblaGrid = null)
+        public static void DataTableToXML(string fájl, DataTable Tábla, string munkalapnév = "Munka1", DataGridView TáblaGrid = null)
         {
             try
             {
-                string munkalapnév = "Munka1";
                 byte[] excel = Tábla.ToExcel(a => a.SheetName(munkalapnév));
                 File.WriteAllBytes(fájl, excel);
 
@@ -87,7 +86,7 @@ namespace Villamos
         /// <param name="fájl">Mentési név</param>
         /// <param name="Tábla">DataGridView tábla</param>
         /// <param name="színes">DataGridView tábla színezését át akarjuk vinni az Excel táblába</param>
-        public static void DataGridViewToXML(string fájl, DataGridView Tábla, bool színes = false)
+        public static void DataGridViewToXML(string fájl, DataGridView Tábla, string munkalapnév = "Munka1", bool színes = false)
         {
             try
             {
@@ -112,9 +111,9 @@ namespace Villamos
                     ÚjTábla.Rows.Add(ÚjSor);
                 }
                 if (színes)
-                    DataTableToXML(fájl, ÚjTábla, Tábla);
+                    DataTableToXML(fájl, ÚjTábla, munkalapnév, Tábla);
                 else
-                    DataTableToXML(fájl, ÚjTábla);
+                    DataTableToXML(fájl, ÚjTábla, munkalapnév);
             }
             catch (HibásBevittAdat ex)
             {

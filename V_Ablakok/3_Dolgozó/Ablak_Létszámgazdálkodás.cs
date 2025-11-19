@@ -10,6 +10,7 @@ using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos
 {
@@ -353,9 +354,9 @@ namespace Villamos
                 Tábla.Columns[0].Width = 40;
                 Tábla.Columns[1].HeaderText = "Kilépő Név";
                 Tábla.Columns[1].Width = 190;
-                Tábla.Columns[2].HeaderText = "Hr azonosító";
+                Tábla.Columns[2].HeaderText = "Hr azonosító ki";
                 Tábla.Columns[2].Width = 90;
-                Tábla.Columns[3].HeaderText = "Bér";
+                Tábla.Columns[3].HeaderText = "Bér ki";
                 Tábla.Columns[3].Width = 75;
                 Tábla.Columns[4].HeaderText = "Telephelyről";
                 Tábla.Columns[4].Width = 120;
@@ -365,9 +366,9 @@ namespace Villamos
                 Tábla.Columns[6].Width = 100;
                 Tábla.Columns[7].HeaderText = "Belépő Név";
                 Tábla.Columns[7].Width = 190;
-                Tábla.Columns[8].HeaderText = "Hr azonosító";
+                Tábla.Columns[8].HeaderText = "Hr azonosító be";
                 Tábla.Columns[8].Width = 90;
-                Tábla.Columns[9].HeaderText = "Bér";
+                Tábla.Columns[9].HeaderText = "Bér be";
                 Tábla.Columns[9].Width = 75;
                 Tábla.Columns[10].HeaderText = "Régi munkahelye";
                 Tábla.Columns[10].Width = 120;
@@ -1062,13 +1063,14 @@ namespace Villamos
                 fájlexc = MyF.Szöveg_Tisztítás(fájlexc, 0, -1);
 
                 // létrehozzuk az excel táblát
-                MyE.ExcelLétrehozás();
-                MyE.Munkalap_betű("arial", 12);
+                MyX.DataGridViewToXML(fájlexc, Tábla, "Státus", true);
+                MyE.ExcelMegnyitás(fájlexc);
+                StátusMunkaLap();
 
                 // ****************************************************
                 // elkészítjük a lapokat
                 // ****************************************************
-                MyE.Munkalap_átnevezés("Munka1", "Státus");
+
 
                 for (int i = 0; i < Cmbtelephely.Items.Count; i++)
                     MyE.Új_munkalap(Cmbtelephely.Items[i].ToString());
@@ -1193,7 +1195,7 @@ namespace Villamos
                 // ***************************
                 // Státus tábla
                 // ***************************
-                StátusMunkaLap();
+
 
                 Holtart.Ki();
                 MyE.Aktív_Cella(munkalap, "A1");
@@ -1280,7 +1282,6 @@ namespace Villamos
             {
                 string munkalap = "Státus";
                 MyE.Munkalap_aktív(munkalap);
-                MyE.EXCELtábla(munkalap, "", Tábla, true);
 
                 // oszlopszélességek
                 MyE.Oszlopszélesség(munkalap, "a:a", 5);

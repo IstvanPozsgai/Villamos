@@ -1451,7 +1451,7 @@ namespace Villamos
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
-                MyX.DataGridViewToXML(fájlexc, Tábla, true);
+                MyX.DataGridViewToXML(fájlexc, Tábla, "Munka1", true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Module_Excel.Megnyitás(fájlexc);
             }

@@ -451,7 +451,7 @@ namespace Villamos
                 else
                     return;
                 this.Cursor = Cursors.WaitCursor;
-                MyX.DataGridViewToXML(fájlexc, Tábla3, true);
+                MyX.DataGridViewToXML(fájlexc, Tábla3, "Munka1", true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fájlexc);
             }
