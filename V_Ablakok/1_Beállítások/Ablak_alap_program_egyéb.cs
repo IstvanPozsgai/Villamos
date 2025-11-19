@@ -1420,6 +1420,7 @@ namespace Villamos
             }
         }
 
+
         private void Beviteli_táblakészítés_Click(object sender, EventArgs e)
         {
             try
@@ -1440,15 +1441,14 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.ExcelLétrehozás();
+                MyX.ExcelLétrehozás();
 
-                MyE.Kiir("Járműtípus", "A1");
-                MyE.Kiir("Takarítási fokozat", "B1");
-                MyE.Kiir("Napszak", "C1");
-                MyE.Kiir("Egységár", "D1");
-                MyE.Kiir("Kezdete", "E1");
-                MyE.Kiir("Vége", "F1");
+                MyX.Kiir("Járműtípus", "A1");
+                MyX.Kiir("Takarítási fokozat", "B1");
+                MyX.Kiir("Napszak", "C1");
+                MyX.Kiir("Egységár", "D1");
+                MyX.Kiir("Kezdete", "E1");
+                MyX.Kiir("Vége", "F1");
                 string[] Tak_fajta = { "J1", "J2", "J3", "J4", "J5", "J6", "Graffiti", "Eseti", "Fertőtlenítés" };
                 string[] Napszak = { "Nappal", "Éjszaka" };
 
@@ -1462,25 +1462,29 @@ namespace Villamos
                         foreach (string nap in Napszak)
                         {
                             sor++;
-                            MyE.Kiir(rekord.Típus.ToString().Trim(), "A" + sor);
-                            MyE.Kiir(fajta.Trim(), "B" + sor);
-                            MyE.Kiir(nap.ToString().Trim(), "C" + sor);
-
-                            MyE.Kiir(Tak_Érv_k.Value.ToString("yyyy.MM.dd"), "E" + sor);
-                            MyE.Kiir(Tak_érv_V.Value.ToString("yyyy.MM.dd"), "F" + sor);
+                            MyX.Kiir(rekord.Típus.ToString().Trim(), $"A{sor}");
+                            MyX.Kiir(fajta.Trim(), $"B{sor}");
+                            MyX.Kiir(nap.ToString().Trim(), $"C{sor}");
+                            MyX.Kiir(Tak_Érv_k.Value.ToString("yyyy.MM.dd"), $"E{sor}");
+                            MyX.Kiir(Tak_érv_V.Value.ToString("yyyy.MM.dd"), $"F{sor}");
                         }
                     }
                 }
 
-
-                MyE.Oszlopszélesség("Munka1", "A:F");
-                MyE.Rácsoz("A1:F" + sor);
-                MyE.NyomtatásiTerület_részletes("Munka1", $"A1:F{sor}", "", "", true);
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
+                string munkalap = "Munka1";
+                MyX.Oszlopszélesség(munkalap, "A:F");
+                MyX.Rácsoz($"A1:F{sor}");
+                Beállítás_Nyomtatás beállítás = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:F{sor}",
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, beállítás);
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

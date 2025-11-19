@@ -744,31 +744,36 @@ namespace Villamos.Villamos_Ablakok
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.ExcelLétrehozás();
+                MyX.ExcelLétrehozás();
 
-                MyE.Kiir("Id", "A1");
-                MyE.Kiir("Részegység", "B1");
-                MyE.Kiir("Munka_utasítás_szám", "C1");
-                MyE.Kiir("Utasítás_Cím", "D1");
-                MyE.Kiir("Utasítás_leírás", "E1");
-                MyE.Kiir("Paraméter", "F1");
-                MyE.Kiir("Karb_ciklus_eleje", "G1");
-                MyE.Kiir("Karb_ciklus_vége", "H1");
-                MyE.Kiir("Érv_kezdete", "I1");
-                MyE.Kiir("Érv_vége", "J1");
-                MyE.Kiir("Szakmai_bontás", "K1");
-                MyE.Kiir("Munkaterületi_bontás", "L1");
-                MyE.Kiir("Altípus", "M1");
-                MyE.Kiir("Kenés", "N1");
-                MyE.Oszlopszélesség("Munka1", "A:N");
-                MyE.Rácsoz("a1:n5");
-                MyE.NyomtatásiTerület_részletes("Munka1", "A1:N5", "", "", true);
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
+                MyX.Kiir("Id", "A1");
+                MyX.Kiir("Részegység", "B1");
+                MyX.Kiir("Munka_utasítás_szám", "C1");
+                MyX.Kiir("Utasítás_Cím", "D1");
+                MyX.Kiir("Utasítás_leírás", "E1");
+                MyX.Kiir("Paraméter", "F1");
+                MyX.Kiir("Karb_ciklus_eleje", "G1");
+                MyX.Kiir("Karb_ciklus_vége", "H1");
+                MyX.Kiir("Érv_kezdete", "I1");
+                MyX.Kiir("Érv_vége", "J1");
+                MyX.Kiir("Szakmai_bontás", "K1");
+                MyX.Kiir("Munkaterületi_bontás", "L1");
+                MyX.Kiir("Altípus", "M1");
+                MyX.Kiir("Kenés", "N1");
+                string munkalap = "Munka1";
+                MyX.Oszlopszélesség(munkalap, "A:N");
+                MyX.Rácsoz("a1:n5");
+                Beállítás_Nyomtatás beállítás = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = "A1:N5"
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, beállítás);
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

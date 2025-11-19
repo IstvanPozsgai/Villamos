@@ -1,5 +1,12 @@
 ﻿namespace Villamos.Adatszerkezet
 {
+    /// <summary>
+    /// Represents the print settings for a worksheet, including page layout, margins, headers, and footers.
+    /// </summary>
+    /// <remarks>This class provides properties to configure various aspects of printing, such as the paper size, 
+    /// orientation, margins, and repeating rows or columns. It also allows customization of headers and  footers for the
+    /// printed output.</remarks>
+    ///  <param name="Munkalap"></param>
     public class Beállítás_Nyomtatás
     {
         public string Munkalap { get; set; } = "";
