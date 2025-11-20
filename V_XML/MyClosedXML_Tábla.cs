@@ -126,6 +126,7 @@ namespace Villamos
             }
         }
 
+
         private static void Színezés(string munkalapnév, DataGridView táblaDat)
         {
             try
