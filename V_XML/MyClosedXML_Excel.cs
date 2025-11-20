@@ -98,29 +98,13 @@ namespace Villamos
             }
         }
 
-
-
-
-        // JAVÍTANDÓ:
-
-        /// <summary>
-        /// Elindítjuk az Excel készítést egy üres munkafüzettel
-        /// </summary>
-        public static void ExcelLétrehozás(string munkalap = "Munka1", bool teszt = false)
+        public static void ExcelLétrehozás(string munkalap = "Munka1")
         {
             try
             {
                 // Üres munkafüzet létrehozása memóriában
                 xlWorkBook = new XLWorkbook();
                 xlWorkSheet = xlWorkBook.Worksheets.Add(munkalap); // Alapértelmezett lapnév
-
-                // Ha teszt módban vagyunk, elmentjük ideiglenes fájlba és megnyitjuk
-                if (teszt)
-                {
-                    string tempFile = System.IO.Path.GetTempFileName().Replace(".tmp", ".xlsx");
-                    xlWorkBook.SaveAs(tempFile);
-                    Process.Start(new ProcessStartInfo(tempFile) { UseShellExecute = true });
-                }
             }
             catch (Exception ex)
             {
@@ -131,7 +115,6 @@ namespace Villamos
 
             }
         }
-
 
         /// <summary>
         /// Kiírja a szöveget a megfelelő cellába
@@ -153,7 +136,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         /// <summary>
         /// Egyesíti a kiválasztott területet
@@ -181,7 +163,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, $"Egyesít(munkalap {munkalap}, mit {mit}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
     }
 }

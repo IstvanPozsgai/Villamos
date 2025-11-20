@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 using Villamos;
 
@@ -27,5 +28,26 @@ public static partial class Függvénygyűjtemény
             MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         return oszlopNev;
+    }
+
+    public static Color Színnév(int szín)
+    {
+        Color Válasz;
+        if (szín < 0 || szín > 16777215)
+        {
+            // Ha érvénytelen, akkor fehér színnel hívjuk meg a másikat
+            Válasz = Color.White;
+        }
+        else
+        {
+            // Konvertáljuk az int-et Color-á, majd hívjuk a másik túlterhelést
+            Color color = Color.FromArgb(
+                (szín >> 16) & 0xFF, // R
+                (szín >> 8) & 0xFF,  // G
+                szín & 0xFF          // B
+            );
+            Válasz = color;
+        }
+        return Válasz;
     }
 }

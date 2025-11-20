@@ -10,6 +10,7 @@ using Villamos.Villamos_Adatszerkezet;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos
 {
@@ -282,58 +283,63 @@ namespace Villamos
                     return;
 
                 // megnyitjuk az excelt
-                MyE.ExcelLétrehozás();
+                string munkalap = "Táblázatos";
+                MyX.ExcelLétrehozás(munkalap);
 
                 int sor = 1;
                 Holtart.Be(AdatokJármű.Count + 1);
 
-                MyE.Munkalap_betű("Arial", 12);
+                MyX.Munkalap_betű(munkalap, "Arial", 12);
                 // fejléc kiírása
-                MyE.Kiir("Pályaszám", "A1");
-                MyE.Kiir("Típus", "B1");
-                MyE.Kiir("Kiadó telephely", "C1");
+                MyX.Kiir("Pályaszám", "A1");
+                MyX.Kiir("Típus", "B1");
+                MyX.Kiir("Kiadó telephely", "C1");
 
                 // tartalom kiírása
                 foreach (Adat_Jármű A in AdatokJármű)
                 {
                     sor++;
-                    MyE.Kiir(A.Azonosító.Trim(), $"A{sor}");
-                    MyE.Kiir(A.Típus.Trim(), $"B{sor}");
+                    MyX.Kiir(A.Azonosító.Trim(), $"A{sor}");
+                    MyX.Kiir(A.Típus.Trim(), $"B{sor}");
                     Adat_Jármű_Vendég AdatTelep = AdatokTelep.FirstOrDefault(a => a.Azonosító == A.Azonosító);
-                    if (AdatTelep != null) MyE.Kiir(AdatTelep.KiadóTelephely.Trim(), $"C{sor}");
+                    if (AdatTelep != null) MyX.Kiir(AdatTelep.KiadóTelephely.Trim(), $"C{sor}");
                     Holtart.Lép();
                 }
                 // megformázzuk
-                MyE.Rácsoz($"A1:C{sor}");
-                MyE.Vastagkeret("A1:C1");
-                MyE.Vastagkeret($"A1:C{sor}");
+                MyX.Rácsoz($"A1:C{sor}");
+                MyX.Vastagkeret("A1:C1");
+                MyX.Vastagkeret($"A1:C{sor}");
 
                 //Első sor sárga
-                MyE.Háttérszín("A1:C1", Color.Yellow);
+                MyX.Háttérszín(munkalap, "A1:C1", Color.Yellow);
 
-                MyE.Szűrés("Munka1", "A", "C", sor);
+                MyX.Szűrés(munkalap, "A", "C", sor);
 
                 // Oszlopok beállítása
-                MyE.Oszlopszélesség("Munka1", "A:C");
+                MyX.Oszlopszélesség(munkalap, "A:C");
 
                 //Nyomtatási terület
-                MyE.NyomtatásiTerület_részletes("Munka1", $"A1:C{sor}", "1:1", "", true);
+                Beállítás_Nyomtatás beállítás = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:C{sor}",
+                    IsmétlődőSorok = "$1:$1"
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, beállítás);
 
-                MyE.Aktív_Cella("Munka1", "A1");
-
-                MyE.Új_munkalap("Színes");
-                MyE.Munkalap_átnevezés("Munka1", "Táblázatos");
+                munkalap = "Színes";
+                MyX.Új_munkalap(munkalap);
 
                 //***************************************************************************************
-                MyE.Munkalap_aktív("Színes");
-                MyE.Munkalap_betű("Arial", 12);
+                MyX.Munkalap_betű(munkalap, "Arial", 12);
 
                 // fejlécet kéazítünk
-                string munkalap = "Színes";
-                MyE.Kiir("Típus", "A1");
-                MyE.Egyesít(munkalap, "B1:U1");
-                MyE.Kiir("Pályaszámok", "B1");
-                MyE.Kiir("Darab", "V1");
+                munkalap = "Színes";
+                MyX.Munkalap_aktív(munkalap);
+                MyX.Kiir("Típus", "A1");
+                MyX.Egyesít(munkalap, "B1:U1");
+                MyX.Kiir("Pályaszámok", "B1");
+                MyX.Kiir("Darab", "V1");
 
                 int j = 2;
                 int k = 2;
@@ -352,16 +358,16 @@ namespace Villamos
                     {
                         if (elsősor != j)
                         {
-                            MyE.Egyesít(munkalap, $"a{elsősor}:a{j}");
-                            MyE.Egyesít(munkalap, $"v{elsősor}:v{j}");
-                            MyE.Kiir(előzőtípus, $"a{elsősor}");
-                            MyE.Kiir(darab.ToString(), $"v{elsősor}");
+                            MyX.Egyesít(munkalap, $"a{elsősor}:a{j}");
+                            MyX.Egyesít(munkalap, $"v{elsősor}:v{j}");
+                            MyX.Kiir(előzőtípus, $"a{elsősor}");
+                            MyX.Kiir(darab.ToString(), $"v{elsősor}");
                             darab = 0;
                         }
                         else
                         {
-                            MyE.Kiir(előzőtípus, $"a{elsősor}");
-                            MyE.Kiir(darab.ToString(), $"v{elsősor}");
+                            MyX.Kiir(előzőtípus, $"a{elsősor}");
+                            MyX.Kiir(darab.ToString(), $"v{elsősor}");
                             darab = 0;
                         }
                         k = 2;
@@ -370,12 +376,12 @@ namespace Villamos
                         előzőtípus = A.Típus.Trim();
                     }
 
-                    MyE.Kiir(A.Azonosító.Trim(), MyE.Oszlopnév(k) + $"{j}");
+                    MyX.Kiir(A.Azonosító.Trim(), MyF.Oszlopnév(k) + $"{j}");
                     Adat_Kiegészítő_Típuszínektábla AdatSzín = AdatokSzín.FirstOrDefault(a => a.Típus == A.Típus);
                     if (AdatSzín != null)
                     {
-                        int szine = (int)AdatSzín.Színszám;
-                        MyE.Háttérszín(MyE.Oszlopnév(k) + $"{j}", szine);
+                        Color szine = MyF.Színnév((int)AdatSzín.Színszám);
+                        MyX.Háttérszín(munkalap, MyF.Oszlopnév(k) + $"{j}", szine);
                     }
                     Adat_Jármű_Vendég AdatTelep = AdatokTelep.FirstOrDefault(a => a.Azonosító == A.Azonosító);
                     if (AdatTelep != null)
@@ -383,8 +389,8 @@ namespace Villamos
                         AdatSzín = AdatokSzín.FirstOrDefault(a => a.Típus == AdatTelep.KiadóTelephely);
                         if (AdatSzín != null)
                         {
-                            int szine = (int)AdatSzín.Színszám;
-                            MyE.Háttérszín(MyE.Oszlopnév(k) + $"{j}", szine);
+                            Color szine = MyF.Színnév((int)AdatSzín.Színszám);
+                            MyX.Háttérszín(munkalap, MyF.Oszlopnév(k) + $"{j}", szine);
                         }
                     }
 
@@ -401,32 +407,33 @@ namespace Villamos
                 // az utolsó típus adatai
                 if (elsősor != j - 1)
                 {
-                    MyE.Egyesít(munkalap, $"a{elsősor}:a{j}");
-                    MyE.Egyesít(munkalap, $"v{elsősor}:v{j}");
-                    MyE.Kiir(utolsótípus, $"a{elsősor}");
-                    MyE.Kiir(darab.ToString(), $"v{elsősor}");
+                    MyX.Egyesít(munkalap, $"a{elsősor}:a{j}");
+                    MyX.Egyesít(munkalap, $"v{elsősor}:v{j}");
+                    MyX.Kiir(utolsótípus, $"a{elsősor}");
+                    MyX.Kiir(darab.ToString(), $"v{elsősor}");
                     darab = 0;
                 }
                 else
                 {
-                    MyE.Kiir(utolsótípus, $"a{elsősor}");
-                    MyE.Kiir(darab.ToString(), $"v{elsősor}");
+                    MyX.Kiir(utolsótípus, $"a{elsősor}");
+                    MyX.Kiir(darab.ToString(), $"v{elsősor}");
                     darab = 0;
                 }
 
                 // formázás
-                MyE.Oszlopszélesség(munkalap, "A:V");
+                MyX.Oszlopszélesség(munkalap, "A:V");
 
-                MyE.Rácsoz($"A1:V{j}");
-                MyE.NyomtatásiTerület_részletes(munkalap, $"A1:V{j}", "", "", true);
+                MyX.Rácsoz($"A1:V{j}");
+                beállítás = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:V{j}",
+                    IsmétlődőSorok = "$1:$1"
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, beállítás);
 
-                MyE.Aktív_Cella(munkalap, "A1");
-
-                MyE.Munkalap_aktív("Táblázatos");
-
-
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
 
                 MyE.Megnyitás(fájlexc);
                 Holtart.Ki();
