@@ -106,13 +106,13 @@ namespace Villamos
         /// <summary>
         /// Elindítjuk az Excel készítést egy üres munkafüzettel
         /// </summary>
-        public static void ExcelLétrehozás(bool teszt = false)
+        public static void ExcelLétrehozás(string munkalap = "Munka1", bool teszt = false)
         {
             try
             {
                 // Üres munkafüzet létrehozása memóriában
                 xlWorkBook = new XLWorkbook();
-                xlWorkSheet = xlWorkBook.Worksheets.Add("Munka1"); // Alapértelmezett lapnév
+                xlWorkSheet = xlWorkBook.Worksheets.Add(munkalap); // Alapértelmezett lapnév
 
                 // Ha teszt módban vagyunk, elmentjük ideiglenes fájlba és megnyitjuk
                 if (teszt)
