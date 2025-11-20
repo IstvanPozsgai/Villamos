@@ -327,6 +327,7 @@ namespace Villamos.Villamos_Ablakok.MEO
                     sor++;
                     Holtart.Lép();
                 }
+                MyE.ExcelMentés(fájlexc);
                 MyE.ExcelBezárás();
                 MyE.Megnyitás(fájlexc);
             }
@@ -361,7 +362,7 @@ namespace Villamos.Villamos_Ablakok.MEO
                     return;
 
                 MyE.ExcelLétrehozás();
-                MyE.ExcelMentés(fájlexc);
+
 
                 int sor = 1;
                 int i = 1;
@@ -545,7 +546,7 @@ namespace Villamos.Villamos_Ablakok.MEO
                     sor++;
                     Holtart.Lép();
                 }
-
+                MyE.ExcelMentés(fájlexc);
                 MyE.ExcelBezárás();
                 MyE.Megnyitás(fájlexc);
             }
