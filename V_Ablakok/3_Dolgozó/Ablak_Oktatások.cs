@@ -864,7 +864,7 @@ namespace Villamos
         {
             try
             {
-                if (CMBoktatástárgya.Text.Trim() == "") return;
+            
 
                 // ha nincs kijelölve egy dolgozó sem akkor kilép
                 if (ChkDolgozónév.CheckedItems.Count < 1) throw new HibásBevittAdat("Nincs kijelölve dolgozó!");
@@ -902,7 +902,8 @@ namespace Villamos
                 TáblaOktatás.Columns[7].Width = 100;
 
                 List<Adat_Oktatásrajelöltek> Adatok;
-                long oktatásid = CMBoktatástárgya.Text.Substring(0, CMBoktatástárgya.Text.IndexOf("-")).ToÉrt_Long();
+                long oktatásid = 0;
+                if(CMBoktatástárgya.Text.Trim ()!="") oktatásid = CMBoktatástárgya.Text.Substring(0, CMBoktatástárgya.Text.IndexOf("-")).ToÉrt_Long();
                 switch (Melyik)
                 {
                     case 1:
