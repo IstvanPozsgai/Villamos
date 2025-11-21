@@ -52,6 +52,7 @@ namespace Villamos
                     }
                     pageSetup.PapírTájolás(beállítás);
                     pageSetup.Papírméret(beállítás);
+                    pageSetup.OldaltörésBeállítása(beállítás);
 
                     worksheet.Papírkitöltés(beállítás);
 
@@ -187,6 +188,24 @@ namespace Villamos
             try
             {
                 pageSetup.Orientation = beállítás.Álló ? OrientationValues.Portrait : OrientationValues.Landscape;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "PapírTájolás", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        // JAVÍTANDÓ:
+        private static void OldaltörésBeállítása(this PageSetup pageSetup, Beállítás_Nyomtatás beállítás)
+        {
+            try
+            {
+                //pageSetup.AddHorizontalPageBreak(sor);
+                //pageSetup.SheetView.View = XLSheetViewValues.PageBreakPreview;
             }
             catch (HibásBevittAdat ex)
             {

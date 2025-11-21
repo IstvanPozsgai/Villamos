@@ -90,5 +90,10 @@
         /// 
         /// </summary>
         public string LáblécBal { get; set; } = "";
+        /// <summary>
+        /// a sorszám után lévő részen megtöri az oldalt,
+        /// 0 érték az alapértelmezett, ekkor az oldaltörés nem szabályozott    
+        /// </summary>
+        public int Oldaltörés { get; set; } = 0;
     }
 }
