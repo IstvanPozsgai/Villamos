@@ -7,6 +7,7 @@ using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 using MyLista = Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok.Karbantartási_ListaFeltöltés;
 
 namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
@@ -531,7 +532,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 else
                     return;
 
-                MyE.DataGridViewToExcel(fájlexc, Csoport_tábla);
+                MyX.DataGridViewToXML(fájlexc, Csoport_tábla);
                 MessageBox.Show("Elkészült az Excel tábla: \n" + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc);
