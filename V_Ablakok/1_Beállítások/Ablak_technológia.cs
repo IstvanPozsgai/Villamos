@@ -762,7 +762,7 @@ namespace Villamos.Villamos_Ablakok
                 MyX.Kiir("Kenés", "N1");
                 string munkalap = "Munka1";
                 MyX.Oszlopszélesség(munkalap, "A:N");
-                MyX.Rácsoz("a1:n5");
+                MyX.Rácsoz(munkalap, "a1:n5");
                 Beállítás_Nyomtatás beállítás = new Beállítás_Nyomtatás
                 {
                     Munkalap = munkalap,

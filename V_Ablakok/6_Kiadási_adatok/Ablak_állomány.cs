@@ -306,9 +306,9 @@ namespace Villamos
                     Holtart.Lép();
                 }
                 // megformázzuk
-                MyX.Rácsoz($"A1:C{sor}");
-                MyX.Vastagkeret("A1:C1");
-                MyX.Vastagkeret($"A1:C{sor}");
+                MyX.Rácsoz(munkalap, $"A1:C{sor}");
+                MyX.Vastagkeret(munkalap, "A1:C1");
+                MyX.Vastagkeret(munkalap, $"A1:C{sor}");
 
                 //Első sor sárga
                 MyX.Háttérszín(munkalap, "A1:C1", Color.Yellow);
@@ -423,7 +423,7 @@ namespace Villamos
                 // formázás
                 MyX.Oszlopszélesség(munkalap, "A:V");
 
-                MyX.Rácsoz($"A1:V{j}");
+                MyX.Rácsoz(munkalap, $"A1:V{j}");
                 beállítás = new Beállítás_Nyomtatás
                 {
                     Munkalap = munkalap,

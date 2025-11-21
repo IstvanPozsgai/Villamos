@@ -620,7 +620,7 @@ namespace Villamos
                     MyX.Sortörésseltöbbsorba(munkalap, $"d{i + 2}");
                     Holtart.Lép();
                 }
-                MyX.Rácsoz($"A1:D{tábla.Rows.Count + 1}");
+                MyX.Rácsoz(munkalap, $"A1:D{tábla.Rows.Count + 1}");
                 Beállítás_Nyomtatás beállítás = new Beállítás_Nyomtatás
                 {
                     Munkalap = munkalap,

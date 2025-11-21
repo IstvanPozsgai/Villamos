@@ -1,8 +1,6 @@
 ﻿using ClosedXML.Excel;
-using Microsoft.Office.Interop.Excel;
 using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Villamos
@@ -15,16 +13,16 @@ namespace Villamos
             {
                 // Tartomány lekérése az aktuális (aktív) munkalapon
                 IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
-                IXLRange tartomany = munkalap.Range(Kijelöltterület);
+                IXLRange tartomány = xlWorkSheet.Range(Kijelöltterület);
 
                 // === Külső szegélyek: MEDIUM ===
-                tartomany.Style.Border.LeftBorder = XLBorderStyleValues.Medium;
-                tartomany.Style.Border.RightBorder = XLBorderStyleValues.Medium;
-                tartomany.Style.Border.TopBorder = XLBorderStyleValues.Medium;
-                tartomany.Style.Border.BottomBorder = XLBorderStyleValues.Medium;
+                tartomány.Style.Border.LeftBorder = XLBorderStyleValues.Medium;
+                tartomány.Style.Border.RightBorder = XLBorderStyleValues.Medium;
+                tartomány.Style.Border.TopBorder = XLBorderStyleValues.Medium;
+                tartomány.Style.Border.BottomBorder = XLBorderStyleValues.Medium;
 
                 // Belső rács: vékony (mind vízszintes, mind függőleges)
-                tartomany.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                tartomány.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
             }
             catch (Exception ex)
             {
@@ -35,42 +33,19 @@ namespace Villamos
             }
         }
 
-        public static void Rácsoz(string Kijelöltterület)
-        {
-            try
-            {
-                // Tartomány lekérése az aktuális (aktív) munkalapon
 
-                var tartomany = xlWorkSheet.Range(Kijelöltterület);
-
-                // === Külső szegélyek: MEDIUM ===
-                tartomany.Style.Border.LeftBorder = XLBorderStyleValues.Medium;
-                tartomany.Style.Border.RightBorder = XLBorderStyleValues.Medium;
-                tartomany.Style.Border.TopBorder = XLBorderStyleValues.Medium;
-                tartomany.Style.Border.BottomBorder = XLBorderStyleValues.Medium;
-
-                // Belső rács: vékony (mind vízszintes, mind függőleges)
-                tartomany.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-            }
-            catch (Exception ex)
-            {
-                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
-                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
-                HibaNapló.Log(ex.Message, $"Rácsoz(Kijelöltterület: \"{Kijelöltterület}\") \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         /// <summary>
         /// Vastagkeretet készít a kijelölt területre
         /// </summary>
         /// <param name="Kijelöltterület">szöveg</param>
-        public static void Vastagkeret(string Kijelöltterület)
+        public static void Vastagkeret(string munkalapnév,string Kijelöltterület)
         {
 
             try
             {
-                var tartomány = xlWorkSheet.Range(Kijelöltterület);
+                IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
+                IXLRange tartomány = xlWorkSheet.Range(Kijelöltterület);
 
                 // Bal szegély
                 tartomány.Style.Border.LeftBorder = XLBorderStyleValues.Medium;
@@ -83,6 +58,8 @@ namespace Villamos
 
                 // Alsó szegély ← ez a kritikus!
                 tartomány.Style.Border.BottomBorder = XLBorderStyleValues.Medium;
+
+                tartomány.Style.Border.InsideBorder = XLBorderStyleValues.None;
             }
             catch (Exception ex)
             {
@@ -97,7 +74,7 @@ namespace Villamos
         {
             try
             {
-            IXLRange     tartomány = xlWorkSheet.Range(Kijelöltterület);
+                IXLRange tartomány = xlWorkSheet.Range(Kijelöltterület);
 
                 // Bal szegély
                 tartomány.Style.Border.LeftBorder = XLBorderStyleValues.None;

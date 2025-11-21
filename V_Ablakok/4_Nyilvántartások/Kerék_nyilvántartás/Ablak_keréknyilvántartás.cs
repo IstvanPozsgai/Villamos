@@ -630,6 +630,7 @@ namespace Villamos
                 string munkalap = "Munka1";
                 MyX.ExcelLétrehozás(munkalap);
 
+
                 Holtart.Be(3);
 
                 int újlap = 0;
@@ -654,13 +655,15 @@ namespace Villamos
 
                     sor += 2;
                     MyX.Egyesít(munkalap, $"a{sor}:H{sor}");
-                    MyX.Kiir("Munkafelvételilap kerék esztergáláshoz", $"a{sor}");
-
                     Beállítás_Betű BeállításBetű = new Beállítás_Betű
                     {
                         Méret = 14
                     };
-                    MyX.Betű(munkalap, $"a{sor}:H{sor}", BeállításBetű);
+                    MyX.Betű(munkalap, $"a{sor}", BeállításBetű);
+                    MyX.Kiir("Munkafelvételilap kerék esztergáláshoz", $"a{sor}");
+
+
+
 
                     sor += 2;
                     MyX.Egyesít(munkalap, $"A{sor}:B{sor}");
@@ -702,13 +705,15 @@ namespace Villamos
                     MyX.Kiir("Állapot", $"f{sor}");
                     MyX.Kiir("Méret", $"g{sor}");
                     MyX.Kiir("Méret", $"h{sor}");
-                    MyX.Rácsoz($"a{eleje}:g{sor}");
-                    MyX.Vastagkeret($"a{eleje}:h{sor}");
+                    MyX.Rácsoz(munkalap, $"a{eleje}:g{sor}");
+                    MyX.Vastagkeret(munkalap, $"h{eleje}:h{sor}");
 
                     // Átmásoljuk a táblázatos értékeket
                     for (int j = 0; j <= Tábla.Rows.Count - 1; j++)
                     {
                         sor += 1;
+                        BeállításBetű = new Beállítás_Betű();
+
                         MyX.Sormagasság(munkalap, $"{sor}:{sor}", 40);
                         MyX.Kiir(Tábla.Rows[j].Cells[3].Value.ToStrTrim(), $"a{sor}"); // pozíció
                         MyX.Kiir(Tábla.Rows[j].Cells[2].Value.ToStrTrim(), $"b{sor}"); // kerékgyártásiszám
@@ -716,17 +721,18 @@ namespace Villamos
                         if (Tábla.Rows[j].Cells[4].Value.ToStrTrim() != "")
                             MyX.Kiir(Tábla.Rows[j].Cells[4].Value.ToÉrt_DaTeTime().ToString("yyyy.MM.dd"), $"e{sor}"); // mikor
                         MyX.Kiir(Tábla.Rows[j].Cells[5].Value.ToStrTrim(), $"f{sor}"); // állapot
-                        MyX.Sortörésseltöbbsorba(munkalap,$"f{sor}",true );
+                        MyX.Sortörésseltöbbsorba(munkalap, $"f{sor}", true);
                         BeállításBetű = new Beállítás_Betű
                         {
                             Méret = 10
                         };
                         MyX.Betű(munkalap, $"f{sor}", BeállításBetű);
                         MyX.Kiir(Tábla.Rows[j].Cells[6].Value.ToStrTrim(), $"g{sor}"); // méret
+                        BeállításBetű = new Beállítás_Betű();
                     }
 
-                    MyX.Rácsoz($"a{eleje + 2}:h{sor}");
-                    MyX.Vastagkeret($"a{eleje + 2}:h{sor}");
+                    MyX.Rácsoz(munkalap, $"a{eleje + 2}:h{sor}");
+                    //MyX.Vastagkeret(munkalap, $"G{sor}:h{sor}");
                     sor += 2;
                     MyX.Kiir("Kelt, Budapest " + DateTime.Today.ToString("yyyy.MM.dd"), $"a{sor}");
                     MyX.Kiir("Elkészült:", $"f{sor}");
@@ -740,25 +746,26 @@ namespace Villamos
                     MyX.Aláírásvonal($"b{sor}:c{sor}");
                     MyX.Aláírásvonal($"g{sor}:h{sor}");
                     sor += 1;
-                    MyX.Egyesít(munkalap, $"b{sor}:c{sor}" );
+                    MyX.Egyesít(munkalap, $"b{sor}:c{sor}");
                     MyX.Kiir(Kiadta.Text.Trim(), $"b{sor}");
                     if (i == 1)
                     {
                         sor += 4;
                         újlap = sor;
-                        
+
                     }
 
                 }
                 Holtart.Lép();
-                Beállítás_Nyomtatás beállításnyomtatás = new Beállítás_Nyomtatás { 
-                    Munkalap=munkalap ,
-                    NyomtatásiTerület=$"a1:h{sor}",
-                    Oldaltörés =30
+                Beállítás_Nyomtatás beállításnyomtatás = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"a1:h{sor}",
+                    Oldaltörés = 30
                 };
                 MyX.NyomtatásiTerület_részletes(munkalap, beállításnyomtatás);
                 // bezárjuk az Excel-t
-            
+
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
                 MyE.Megnyitás(fájlexc);

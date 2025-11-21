@@ -744,7 +744,7 @@ namespace Villamos
                     MyX.Sortörésseltöbbsorba(munkalap, $"d{i + 2}");
                     Holtart.Lép();
                 }
-                MyX.Rácsoz("A1:D" + (Tábla.Rows.Count + 2).ToString());
+                MyX.Rácsoz(munkalap, "A1:D" + (Tábla.Rows.Count + 2).ToString());
                 Beállítás_Nyomtatás beállítás = new Beállítás_Nyomtatás
                 {
                     Munkalap = munkalap,

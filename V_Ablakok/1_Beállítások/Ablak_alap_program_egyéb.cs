@@ -1473,7 +1473,7 @@ namespace Villamos
 
                 string munkalap = "Munka1";
                 MyX.Oszlopszélesség(munkalap, "A:F");
-                MyX.Rácsoz($"A1:F{sor}");
+                MyX.Rácsoz(munkalap, $"A1:F{sor}");
                 Beállítás_Nyomtatás beállítás = new Beállítás_Nyomtatás
                 {
                     Munkalap = munkalap,
