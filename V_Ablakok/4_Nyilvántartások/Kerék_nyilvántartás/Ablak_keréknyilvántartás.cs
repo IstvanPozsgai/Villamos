@@ -16,6 +16,7 @@ using static System.IO.File;
 using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos
 {
@@ -1604,7 +1605,7 @@ namespace Villamos
                     return;
                 }
 
-                MyE.DataGridViewToExcel(fájlexc, Tábla2);
+                MyX.DataGridViewToXML(fájlexc, Tábla2);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc);
@@ -1780,7 +1781,7 @@ namespace Villamos
                     return;
                 }
 
-                MyE.DataGridViewToExcel(fájlexc, Tábla1);
+                MyX.DataGridViewToXML(fájlexc, Tábla1);
                 MessageBox.Show("Elkészült az Excel tábla: \n" + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc);

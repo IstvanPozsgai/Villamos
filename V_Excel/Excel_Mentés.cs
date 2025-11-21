@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos
 {
@@ -34,7 +35,7 @@ namespace Villamos
                 else
                     return;
 
-                DataGridViewToExcel(fájlexc, Tábla);
+                MyX.DataGridViewToXML(fájlexc, Tábla);
                 MessageBox.Show($"Elkészült az Excel tábla:\n{fájlexc}", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Megnyitás(fájlexc);
             }

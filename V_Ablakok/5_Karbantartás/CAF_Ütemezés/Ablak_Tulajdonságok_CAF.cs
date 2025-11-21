@@ -11,6 +11,7 @@ using Villamos.Villamos_Adatszerkezet;
 using MyCaf = Villamos.Villamos_Ablakok.CAF_Ütemezés.CAF_Közös_Eljárások;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos
 {
@@ -746,10 +747,10 @@ namespace Villamos
             else
                 return;
 
-            MyE.DataGridViewToExcel(fájlexc, Tábla_elő);
+            MyX.DataGridViewToXML(fájlexc, Tábla_elő);
             MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            Module_Excel.Megnyitás(fájlexc + ".xlsx");
+            MyE.Megnyitás(fájlexc);
         }
         #endregion
 

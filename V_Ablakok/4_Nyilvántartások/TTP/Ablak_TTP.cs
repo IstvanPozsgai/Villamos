@@ -12,6 +12,7 @@ using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
 {
@@ -271,7 +272,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 else
                     return;
 
-                MyE.DataGridViewToExcel(fájlexc, Tábla);
+                MyX.DataGridViewToXML(fájlexc, Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc);

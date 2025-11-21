@@ -11,6 +11,7 @@ using Villamos.Villamos_Adatszerkezet;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 using MyO = Microsoft.Office.Interop.Outlook;
 
 
@@ -1592,7 +1593,7 @@ namespace Villamos.Villamos_Ablakok
                 else
                     return;
 
-                MyE.DataGridViewToExcel(fájlexc, Tábla);
+                MyX.DataGridViewToXML(fájlexc, Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fájlexc);
             }

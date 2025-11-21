@@ -12,6 +12,7 @@ using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 {
@@ -786,7 +787,9 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 else
                     return;
 
-                MyE.DataGridViewToExcel(fájlexc, TablaMuvelet, true);
+                string munkalap = "Munka1";
+                MyX.DataGridViewToXML(fájlexc, TablaMuvelet, munkalap, true);
+
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc);

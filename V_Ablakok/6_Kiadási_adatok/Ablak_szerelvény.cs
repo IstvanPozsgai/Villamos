@@ -10,6 +10,7 @@ using Villamos.V_Ablakok.Közös;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.Ablakok
 {
@@ -998,7 +999,8 @@ namespace Villamos.Ablakok
                 else
                     return;
                 this.Cursor = Cursors.WaitCursor; // homok óra kezdete
-                MyE.DataGridViewToExcel(fájlexc, Szerelvénylista, true);
+                string munkalap = "Munka1";
+                MyX.DataGridViewToXML(fájlexc, Szerelvénylista, munkalap, true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc);
@@ -1699,7 +1701,8 @@ namespace Villamos.Ablakok
                 else
                     return;
                 this.Cursor = Cursors.WaitCursor; // homokóra kezdete
-                MyE.DataGridViewToExcel(fájlexc, Előírt_Szerelvénylista, true);
+                string munkalap = "Munka1";
+                MyX.DataGridViewToXML(fájlexc, Előírt_Szerelvénylista, munkalap, true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fájlexc);
             }
@@ -2238,7 +2241,7 @@ namespace Villamos.Ablakok
                 else
                     return;
 
-                MyE.DataGridViewToExcel(fájlexc, Tábla_napló);
+                MyX.DataGridViewToXML(fájlexc, Tábla_napló);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc);

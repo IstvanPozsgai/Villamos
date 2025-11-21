@@ -14,6 +14,7 @@ using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos
 {
@@ -1329,7 +1330,7 @@ namespace Villamos
                 else
                     return;
 
-                MyE.DataGridViewToExcel(fájlexc, Tábla);
+                MyX.DataGridViewToXML(fájlexc, Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fájlexc);
             }
@@ -2637,7 +2638,7 @@ namespace Villamos
                 return;
             }
 
-            MyE.DataGridViewToExcel(fájlexc, Tábla_utolsó);
+            MyX.DataGridViewToXML(fájlexc, Tábla_utolsó);
             MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             MyE.Megnyitás(fájlexc);
@@ -2975,7 +2976,7 @@ namespace Villamos
                     return;
                 }
 
-                MyE.DataGridViewToExcel(fájlexc, Ütem_Tábla);
+                MyX.DataGridViewToXML(fájlexc, Ütem_Tábla);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -4810,7 +4811,7 @@ namespace Villamos
                     return;
                 }
 
-                MyE.DataGridViewToExcel(fájlexc, ListaTábla);
+                MyX.DataGridViewToXML(fájlexc, ListaTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc);
@@ -5479,7 +5480,7 @@ namespace Villamos
                 else
                     return;
 
-                MyE.DataGridViewToExcel(fájlexc, Gépi_Tábla);
+                MyX.DataGridViewToXML(fájlexc, Gépi_Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc);

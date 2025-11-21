@@ -11,6 +11,7 @@ using Villamos.Villamos_Adatszerkezet;
 using static Villamos.V_MindenEgyéb.Enumok;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
 {
@@ -316,7 +317,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
                 else
                     return;
 
-                MyE.DataGridViewToExcel(fájlexc, Táblalista);
+                MyX.DataGridViewToXML(fájlexc, Táblalista);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fájlexc);
             }

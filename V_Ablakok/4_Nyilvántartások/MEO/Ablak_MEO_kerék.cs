@@ -9,6 +9,8 @@ using Villamos.Villamos_Ablakok.MEO;
 using Villamos.Villamos_Adatszerkezet;
 using static System.Windows.Forms.CheckedListBox;
 using MyF = Függvénygyűjtemény;
+using MyE = Villamos.Module_Excel;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos
 {
@@ -882,9 +884,9 @@ namespace Villamos
                 else
                     return;
 
-                Module_Excel.DataGridViewToExcel(fájlexc, ListaTábla);
+                MyX.DataGridViewToXML(fájlexc, ListaTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás(fájlexc);
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1019,10 +1021,10 @@ namespace Villamos
                 else
                     return;
 
-                Module_Excel.DataGridViewToExcel(fájlexc, LekérdTábla);
+                MyX.DataGridViewToXML(fájlexc, LekérdTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                Module_Excel.Megnyitás(fájlexc);
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

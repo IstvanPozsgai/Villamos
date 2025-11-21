@@ -11,6 +11,7 @@ using static System.IO.File;
 using MyA = Adatbázis;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.Villamos_Ablakok.Kerékeszterga
 {
@@ -645,11 +646,11 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 else
                     return;
 
-                Module_Excel.DataGridViewToExcel(fájlexc, Tábla);
+                MyX.DataGridViewToXML(fájlexc, Tábla);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                Module_Excel.Megnyitás(fájlexc + ".xlsx");
+                Module_Excel.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

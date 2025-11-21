@@ -867,7 +867,7 @@ namespace Villamos
                 else
                     return;
                 DateTime Kezdet = DateTime.Now;
-                MyE.DataGridViewToExcel(fájlexc, Tábla_lekérdezés);
+                MyX.DataGridViewToXML(fájlexc, Tábla_lekérdezés);
                 MessageBox.Show($"Elkészült az Excel tábla: {fájlexc}\n idő alatt:{DateTime.Now - Kezdet}", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fájlexc);
             }
@@ -2335,7 +2335,7 @@ namespace Villamos
                 else
                     return;
 
-                MyE.DataGridViewToExcel(fájlexc, Tábla1);
+                MyX.DataGridViewToXML(fájlexc, Tábla1);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MyE.Megnyitás(fájlexc);

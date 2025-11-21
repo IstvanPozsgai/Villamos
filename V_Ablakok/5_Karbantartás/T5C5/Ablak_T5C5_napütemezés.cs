@@ -12,6 +12,7 @@ using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos
 {
@@ -1073,7 +1074,7 @@ namespace Villamos
 
                 Holtart.Be();
                 timer1.Enabled = true;
-                await Task.Run(() => MyE.DataGridViewToExcel(FájlExcel_, Tábla));
+                await Task.Run(() => MyX.DataGridViewToXML(FájlExcel_, Tábla));
                 timer1.Enabled = false;
                 Holtart.Ki();
 

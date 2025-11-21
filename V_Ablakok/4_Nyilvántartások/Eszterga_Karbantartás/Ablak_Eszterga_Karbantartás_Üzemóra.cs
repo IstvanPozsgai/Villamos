@@ -14,6 +14,7 @@ using Villamos.Villamos_Kezelők;
 using Application = System.Windows.Forms.Application;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
 {
@@ -302,7 +303,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
                 else
                     return;
 
-                MyE.DataGridViewToExcel(fájlexc, Tabla, true);
+                string munkalap = "Munka1";
+                MyX.DataGridViewToXML(fájlexc, Tabla, munkalap, true);
+
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyE.Megnyitás(fájlexc);

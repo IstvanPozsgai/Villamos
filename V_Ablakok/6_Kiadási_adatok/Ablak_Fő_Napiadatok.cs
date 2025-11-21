@@ -7,6 +7,7 @@ using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos
 {
@@ -876,12 +877,12 @@ namespace Villamos
                     return;
 
 
-                if (Tábla.Visible) MyE.DataGridViewToExcel(fájlexc, Tábla);
-                if (Tábla1.Visible) MyE.DataGridViewToExcel(fájlexc, Tábla1);
-                if (Tábla2.Visible) MyE.DataGridViewToExcel(fájlexc, Tábla2);
+                if (Tábla.Visible) MyX.DataGridViewToXML(fájlexc, Tábla);
+                if (Tábla1.Visible) MyX.DataGridViewToXML(fájlexc, Tábla1);
+                if (Tábla2.Visible) MyX.DataGridViewToXML(fájlexc, Tábla2);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
