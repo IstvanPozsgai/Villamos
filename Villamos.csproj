@@ -2066,10 +2066,10 @@
       <Version>1.2.30115.18</Version>
     </PackageReference>
     <PackageReference Include="DocumentFormat.OpenXml">
-      <Version>3.3.0</Version>
+      <Version>3.2.0</Version>
     </PackageReference>
     <PackageReference Include="DocumentFormat.OpenXml.Framework">
-      <Version>3.3.0</Version>
+      <Version>3.2.0</Version>
     </PackageReference>
     <PackageReference Include="ExcelDataReader">
       <Version>3.8.0-develop00488</Version>
