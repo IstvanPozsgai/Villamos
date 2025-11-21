@@ -1,6 +1,8 @@
 ﻿using ClosedXML.Excel;
+using Microsoft.Office.Interop.Excel;
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Villamos
@@ -33,10 +35,6 @@ namespace Villamos
             }
         }
 
-
-
-
-        // JAVÍTANDÓ:
         public static void Rácsoz(string Kijelöltterület)
         {
             try
@@ -95,6 +93,33 @@ namespace Villamos
             }
         }
 
+        public static void Aláírásvonal(string Kijelöltterület)
+        {
+            try
+            {
+            IXLRange     tartomány = xlWorkSheet.Range(Kijelöltterület);
+
+                // Bal szegély
+                tartomány.Style.Border.LeftBorder = XLBorderStyleValues.None;
+
+                // Jobb szegély
+                tartomány.Style.Border.RightBorder = XLBorderStyleValues.None;
+
+                // Felső szegély
+                tartomány.Style.Border.TopBorder = XLBorderStyleValues.Dashed;
+
+                // Alsó szegély ← ez a kritikus!
+                tartomány.Style.Border.BottomBorder = XLBorderStyleValues.None;
+
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Aláírásvonal(Kijelöltterület: {Kijelöltterület}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
     }
 }
