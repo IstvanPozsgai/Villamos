@@ -14,7 +14,6 @@ using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Ablakok.Kerék_nyilvántartás;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
-using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -159,7 +158,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\berendezés_kerék.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {

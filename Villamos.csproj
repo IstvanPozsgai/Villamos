@@ -1371,6 +1371,7 @@
     <Compile Include="V_Függvények\Fv_Dátum.cs" />
     <Compile Include="V_Függvények\Függvénygyűjtemény.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Funkciók.cs" />
+    <Compile Include="V_MindenEgyéb\Fájl.cs" />
     <Compile Include="V_MindenEgyéb\GombLathatosagKezelo.cs" />
     <Compile Include="V_MindenEgyéb\Hely_Ellenőr.cs" />
     <Compile Include="V_MindenEgyéb\Hibakezelés.cs" />
