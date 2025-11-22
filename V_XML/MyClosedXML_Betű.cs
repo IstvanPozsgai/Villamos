@@ -16,7 +16,7 @@ namespace Villamos
             try
             {
                 IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
-                IXLCell cella = munkalap.Cell(mit);
+                IXLRange cella = munkalap.Range (mit);
                 cella.Style.Font.FontColor = XLColor.FromColor(beállítás.Szín);
                 cella.Style.Font.Italic = beállítás.Dőlt;
                 cella.Style.Font.Bold = beállítás.Vastag;
@@ -33,7 +33,7 @@ namespace Villamos
             }
         }
 
-        public static void Munkalap_betű(string munkalapnév, string név, int méret)
+        public static void Munkalap_betű(string munkalapnév, Beállítás_Betű beállítás)
         {
             try
             {
@@ -41,8 +41,8 @@ namespace Villamos
                 IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
                 // Stílus beállítása a munkalap alapértelmezett stílusára (ez éri el a teljes munkalapot)
                 munkalap.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                munkalap.Style.Font.SetFontName(név);
-                munkalap.Style.Font.FontSize = méret;
+                munkalap.Style.Font.SetFontName(beállítás.Név);
+                munkalap.Style.Font.FontSize = beállítás.Méret;
                 munkalap.Style.Font.Strikethrough = false;
                 munkalap.Style.Font.VerticalAlignment = XLFontVerticalTextAlignmentValues.Baseline;
                 munkalap.Style.Font.Underline = XLFontUnderlineValues.None;
@@ -54,7 +54,7 @@ namespace Villamos
             {
                 var hívó = new System.Diagnostics.StackTrace().GetFrame(1);
                 string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
-                HibaNapló.Log(ex.Message, $"Munkalap_betű(név: {név}, méret: {méret}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, $"Munkalap_betű(név: {beállítás.Név}, méret: {beállítás.Méret}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\nA hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

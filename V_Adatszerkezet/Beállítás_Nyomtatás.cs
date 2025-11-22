@@ -10,7 +10,7 @@
         /// </summary>
         public string Munkalap { get; set; } = "";
         /// <summary>
-        /// 
+        ///  Nyomtatási terület beállítása pl. $"a1:i{sor}"
         /// </summary>
         public string NyomtatásiTerület { get; set; } = "";
         /// <summary>
@@ -22,40 +22,40 @@
         /// </summary>
         public string IsmétlődőOszlopok { get; set; } = "";
         /// <summary>
-        /// 
+        ///  Nyomtatási beállítás Álló elhelyezkedés ha true
         /// </summary>
         public bool Álló { get; set; } = true;
         /// <summary>
-        /// 
+        /// Automatikus 0, ... lap széles
         /// </summary>
         public int LapSzéles { get; set; } = 0;// Automatikus érték
         /// <summary>
-        /// 
+        /// Automatikus 0, ... lap magas
         /// </summary>
-        public int LapMagas { get; set; } = 0;// Automatikus érték
-                                              //     /// <summary>
-        /// 
+        public int LapMagas { get; set; } = 0;
+        /// <summary>
+        /// Bal margó beállítása alap 15 mm
         /// </summary>
         public int? BalMargó { get; set; } = 15;
         /// <summary>
-        /// 
+        /// Jobb margó beállítása alap 15 mm
         /// </summary>
         public int? JobbMargó { get; set; } = 15;
         /// <summary>
-        /// 
+        /// Alsó margó beállítása alap 20 mm
         /// </summary>
         public int? AlsóMargó { get; set; } = 20;
         /// <summary>
-        /// 
+        /// Felső margó beállítása alap 20 mm 
         /// </summary>
         public int? FelsőMargó { get; set; } = 20;
         /// <summary>
-        /// 
+        /// Fejléc mérete lap 13 mm
         /// </summary>
         /// 
         public int? FejlécMéret { get; set; } = 13;
         /// <summary>
-        /// 
+        /// Lábléc mérete lap 13 mm
         /// </summary>
         public int? LáblécMéret { get; set; } = 13;
         /// <summary>

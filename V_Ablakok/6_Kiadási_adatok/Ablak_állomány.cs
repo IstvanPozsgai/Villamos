@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
@@ -289,7 +290,8 @@ namespace Villamos
                 int sor = 1;
                 Holtart.Be(AdatokJármű.Count + 1);
 
-                MyX.Munkalap_betű(munkalap, "Arial", 12);
+                Beállítás_Betű beállBetű = new Beállítás_Betű();
+                MyX.Munkalap_betű(munkalap, beállBetű);
                 // fejléc kiírása
                 MyX.Kiir("Pályaszám", "A1");
                 MyX.Kiir("Típus", "B1");
@@ -331,7 +333,8 @@ namespace Villamos
                 MyX.Új_munkalap(munkalap);
 
                 //***************************************************************************************
-                MyX.Munkalap_betű(munkalap, "Arial", 12);
+                beállBetű = new Beállítás_Betű();
+                MyX.Munkalap_betű(munkalap, beállBetű);
 
                 // fejlécet kéazítünk
                 munkalap = "Színes";
