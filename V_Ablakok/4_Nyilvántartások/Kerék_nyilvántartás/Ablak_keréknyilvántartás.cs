@@ -878,20 +878,20 @@ namespace Villamos
                 {
                     Holtart.Lép();
                     // Lap felsőrész
-                    MyE.Egyesít("Munka1", "a" + sor.ToString() + ":i" + sor.ToString());
+                    MyE.Egyesít("Munka1", "a" + sor.ToString() + $":i{sor}");
 
                     if (AdatKiegJelenlét != null) MyE.Kiir(AdatKiegJelenlét.Szervezet, "a" + sor.ToString());
 
                     sor += 2;
-                    MyE.Egyesít("Munka1", "a" + sor.ToString() + ":i" + sor.ToString());
+                    MyE.Egyesít("Munka1", "a" + sor.ToString() + $":i{sor}");
                     MyE.Kiir("Kerék mérés", "A" + sor.ToString());
-                    MyE.Egyesít("Munka1", "A" + sor.ToString() + ":b" + sor.ToString());
-                    MyE.Betű("A" + sor.ToString() + ":b" + sor.ToString(), 14);
+                    MyE.Egyesít("Munka1", "A" + sor.ToString() + $":b{sor}");
+                    MyE.Betű("A" + sor.ToString() + $":b{sor}", 14);
                     sor += 2;
                     MyE.Kiir("Jármű pályaszáma:", "a" + sor.ToString());
                     MyE.Kiir(SAPPályaszám.Text.Trim(), "C" + sor.ToString());
-                    MyE.Egyesít("Munka1", "e" + sor.ToString() + ":f" + sor.ToString());
-                    MyE.Kiir("Jármű típusa:", "e" + sor.ToString());
+                    MyE.Egyesít("Munka1", $"e{sor}" + $":f{sor}");
+                    MyE.Kiir("Jármű típusa:", $"e{sor}");
 
                     if (AdatJármű != null) MyE.Kiir(AdatJármű.Típus, "g" + sor.ToString());
 
@@ -904,54 +904,54 @@ namespace Villamos
                     MyE.Kiir("Gyári szám", "b" + sor.ToString());
                     MyE.Egyesít("Munka1", "c" + sor.ToString() + ":" + "d" + (sor + 1).ToString());
                     MyE.Kiir("SAP megnevezés", "c" + sor.ToString());
-                    MyE.Egyesít("Munka1", "e" + sor.ToString() + ":" + "g" + sor.ToString());
-                    MyE.Kiir("Előző mérési eredmények", "e" + sor.ToString());
+                    MyE.Egyesít("Munka1", $"e{sor}" + ":" + "g" + sor.ToString());
+                    MyE.Kiir("Előző mérési eredmények", $"e{sor}");
                     MyE.Egyesít("Munka1", "h" + sor.ToString() + ":" + "i" + sor.ToString());
                     MyE.Kiir("Mért eredmények", "h" + sor.ToString());
                     sor += 1;
-                    MyE.Kiir("Dátum", "e" + sor.ToString());
+                    MyE.Kiir("Dátum", $"e{sor}");
                     MyE.Kiir("Állapot", "f" + sor.ToString());
                     MyE.Kiir("Méret", "g" + sor.ToString());
                     MyE.Kiir("Állapot", "h" + sor.ToString());
                     MyE.Kiir("Méret", "i" + sor.ToString());
-                    MyE.Rácsoz("a" + eleje.ToString() + ":i" + sor.ToString());
-                    MyE.Vastagkeret("a" + eleje.ToString() + ":i" + sor.ToString());
+                    MyE.Rácsoz("a" + eleje.ToString() + $":i{sor}");
+                    MyE.Vastagkeret("a" + eleje.ToString() + $":i{sor}");
 
                     // Átmásoljuk a táblázatos értékeket
 
                     for (int j = 0; j < Tábla.Rows.Count; j++)
                     {
                         sor += 1;
-                        MyE.Sormagasság(sor.ToString() + ":" + sor.ToString(), 40);
+                        MyE.Sormagasság($"{sor}:{sor}", 40);
                         MyE.Kiir(Tábla.Rows[j].Cells[3].Value.ToStrTrim(), "a" + sor.ToString()); // pozíció
                         MyE.Kiir(Tábla.Rows[j].Cells[2].Value.ToStrTrim(), "b" + sor.ToString()); // kerékgyártásiszám
                         MyE.Kiir(Tábla.Rows[j].Cells[7].Value.ToStrTrim(), "c" + sor.ToString()); // kerékmegnevezés
                         if (Tábla.Rows[j].Cells[4].Value.ToStrTrim() != "")
                         {
-                            MyE.Kiir(Tábla.Rows[j].Cells[4].Value.ToÉrt_DaTeTime().ToString("yyyy.MM.dd"), "e" + sor.ToString()); // mikor
+                            MyE.Kiir(Tábla.Rows[j].Cells[4].Value.ToÉrt_DaTeTime().ToString("yyyy.MM.dd"), $"e{sor}"); // mikor
                         }
                         MyE.Kiir(Tábla.Rows[j].Cells[5].Value.ToStrTrim(), "f" + sor.ToString()); // állapot
                         MyE.Kiir(Tábla.Rows[j].Cells[6].Value.ToStrTrim(), "g" + sor.ToString()); // méret
                     }
-                    MyE.Rácsoz("a" + (eleje + 2).ToString() + ":i" + sor.ToString());
-                    MyE.Vastagkeret("a" + (eleje + 2).ToString() + ":i" + sor.ToString());
+                    MyE.Rácsoz("a" + (eleje + 2).ToString() + $":i{sor}");
+                    MyE.Vastagkeret("a" + (eleje + 2).ToString() + $":i{sor}");
                     sor += 2;
                     MyE.Kiir("Erőtám:     van   /   nincs", "a" + sor.ToString());
                     sor += 2;
                     MyE.Kiir("Kelt, Budapest " + DateTime.Today.ToString("yyyy.MM.dd").ToString(), "a" + sor.ToString());
                     sor += 2;
                     MyE.Egyesít("Munka1", "b" + sor.ToString() + ":c" + sor.ToString());
-                    MyE.Egyesít("Munka1", "h" + sor.ToString() + ":i" + sor.ToString());
+                    MyE.Egyesít("Munka1", "h" + sor.ToString() + $":i{sor}");
                     sor += 1;
                     MyE.Aláírásvonal("b" + sor.ToString() + ":c" + sor.ToString());
                     MyE.Egyesít("Munka1", "b" + sor.ToString() + ":c" + sor.ToString());
                     MyE.Kiir("Mérést végezte", "b" + sor.ToString());
-                    MyE.Egyesít("Munka1", "h" + sor.ToString() + ":i" + sor.ToString());
+                    MyE.Egyesít("Munka1", "h" + sor.ToString() + $":i{sor}");
                     MyE.Kiir("Ellenőrizte", "H" + sor.ToString());
                     MyE.Aláírásvonal("b" + sor.ToString() + ":c" + sor.ToString());
-                    MyE.Aláírásvonal("h" + sor.ToString() + ":i" + sor.ToString());
+                    MyE.Aláírásvonal("h" + sor.ToString() + $":i{sor}");
                     sor += 1;
-                    MyE.Egyesít("Munka1", "h" + sor.ToString() + ":i" + sor.ToString());
+                    MyE.Egyesít("Munka1", "h" + sor.ToString() + $":i{sor}");
                     MyE.Kiir(Kiadta.Text.Trim(), "H" + sor.ToString());
                     if (i == 1)
                         sor += 4;
@@ -1042,21 +1042,21 @@ namespace Villamos
 
 
                 // megnyitjuk az excelt
-                MyE.ExcelLétrehozás();
+                string munkalap = "Munka1";
+                MyX.ExcelLétrehozás(munkalap);
 
                 Holtart.Be(10);
 
-                MyE.Oszlopszélesség("Munka1", "b:i", 12);
-                MyE.Oszlopszélesség("Munka1", "h:i", 16);
+                MyX.Oszlopszélesség(munkalap, "b:i", 12);
+                MyX.Oszlopszélesség(munkalap, "h:i", 16);
 
                 // betűméret
-                MyE.Munkalap_betű("Arial", 12);
+                MyX.Munkalap_betű(munkalap, "Arial", 12);
 
                 int sor = 1;
                 int eleje;
 
                 //Új
-
                 AdatokKiegJelenlét = KézKiegJelenlét.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Kiegészítő_Jelenlétiív AdatKiegJelenlét = (from a in AdatokKiegJelenlét
@@ -1070,74 +1070,83 @@ namespace Villamos
 
                 Holtart.Lép();
                 // Lap felsőrész
-                MyE.Egyesít("Munka1", $"a{sor}" + ":i" + sor.ToString());
+                MyX.Egyesít(munkalap, $"a{sor}:i{sor}");
 
-                if (AdatKiegJelenlét != null) MyE.Kiir(AdatKiegJelenlét.Szervezet, $"a{sor}");
+                if (AdatKiegJelenlét != null) MyX.Kiir(AdatKiegJelenlét.Szervezet, $"a{sor}");
 
                 sor += 2;
-                MyE.Egyesít("Munka1", $"a{sor}" + ":i" + sor.ToString());
-                MyE.Kiir("Forgalombiztonsági kiemelt szerkezeti elemek azonosítószám ellenőrző lapja", $"a{sor}");
-                MyE.Betű($"a{sor}", 14);
+                MyX.Egyesít(munkalap, $"a{sor}:i{sor}");
+                MyX.Kiir("Forgalombiztonsági kiemelt szerkezeti elemek azonosítószám ellenőrző lapja", $"a{sor}");
+                Beállítás_Betű beállításbetű = new Beállítás_Betű
+                {
+                    Méret = 14
+                };
+                MyX.Betű(munkalap, $"a{sor}", beállításbetű);
                 sor += 2;
-                MyE.Egyesít("Munka1", $"a{sor}" + ":b" + sor.ToString());
+                MyX.Egyesít(munkalap, $"a{sor}:b{sor}");
 
-                MyE.Kiir("Jármű pályaszáma:", $"a{sor}");
-                MyE.Kiir(SAPPályaszám.Text.Trim(), $"c{sor}");
-                MyE.Egyesít("Munka1", "e" + sor.ToString() + ":f" + sor.ToString());
-                MyE.Kiir("Jármű típusa:", "e" + sor.ToString());
+                MyX.Kiir("Jármű pályaszáma:", $"a{sor}");
+                MyX.Kiir(SAPPályaszám.Text.Trim(), $"c{sor}");
+                MyX.Egyesít(munkalap, $"e{sor}:f{sor}");
+                MyX.Kiir("Jármű típusa:", $"e{sor}");
 
-                if (AdatJármű != null) MyE.Kiir(AdatJármű.Típus, $"g{sor}");
+                if (AdatJármű != null) MyX.Kiir(AdatJármű.Típus, $"g{sor}");
 
                 sor += 2;
                 eleje = sor;
                 // Fejléc táblázat
-                MyE.Egyesít("Munka1", $"a{sor}" + ":" + $"a{sor}");
-                MyE.Kiir("Pozíció", $"a{sor}");
-                MyE.Egyesít("Munka1", $"b{sor}" + ":" + $"c{sor}");
-                MyE.Kiir("Gyári szám", $"b{sor}");
-                MyE.Egyesít("Munka1", $"d{sor}" + ":" + $"g{sor}");
-                MyE.Kiir("SAP megnevezés", $"d{sor}");
-                MyE.Egyesít("Munka1", $"h{sor}" + ":" + $"h{sor}");
-                MyE.Kiir("Megfelelő", $"h{sor}");
-                MyE.Egyesít("Munka1", $"i{sor}" + ":" + $"i{sor}");
-                MyE.Kiir("Nem megfelelő", $"i{sor}");
+                MyX.Egyesít(munkalap, $"a{sor}:a{sor}");
+                MyX.Kiir("Pozíció", $"a{sor}");
+                MyX.Egyesít(munkalap, $"b{sor}:c{sor}");
+                MyX.Kiir("Gyári szám", $"b{sor}");
+                MyX.Egyesít(munkalap, $"d{sor}:g{sor}");
+                MyX.Kiir("SAP megnevezés", $"d{sor}");
+                MyX.Egyesít(munkalap, $"h{sor}:h{sor}");
+                MyX.Kiir("Megfelelő", $"h{sor}");
+                MyX.Egyesít(munkalap, $"i{sor}:i{sor}");
+                MyX.Kiir("Nem megfelelő", $"i{sor}");
 
-                MyE.Rácsoz($"a{sor}" + ":i" + sor.ToString());
-                MyE.Vastagkeret($"a{sor}" + ":i" + sor.ToString());
+                MyX.Rácsoz(munkalap, $"a{sor}" + $":i{sor}");
 
                 // Átmásoljuk a táblázatos értékeket
 
                 for (int j = 0; j < Tábla.Rows.Count; j++)
                 {
                     sor += 1;
-                    MyE.Sormagasság(sor.ToString() + ":" + sor.ToString(), 40);
-                    MyE.Kiir(Tábla.Rows[j].Cells[3].Value.ToStrTrim(), $"a{sor}"); // pozíció
-                    MyE.Egyesít("Munka1", $"b{sor}" + ":" + $"c{sor}");
-                    MyE.Kiir(Tábla.Rows[j].Cells[2].Value.ToStrTrim(), $"b{sor}"); // kerékgyártásiszám
-                    MyE.Egyesít("Munka1", $"d{sor}" + ":" + $"g{sor}");
-                    MyE.Kiir(Tábla.Rows[j].Cells[7].Value.ToStrTrim(), $"d{sor}"); // kerékmegnevezés
+                    MyX.Sormagasság(munkalap, $"{sor}:{sor}", 40);
+                    MyX.Kiir(Tábla.Rows[j].Cells[3].Value.ToStrTrim(), $"a{sor}"); // pozíció
+                    MyX.Egyesít(munkalap, $"b{sor}:c{sor}");
+                    MyX.Kiir(Tábla.Rows[j].Cells[2].Value.ToStrTrim(), $"b{sor}"); // kerékgyártásiszám
+                    MyX.Egyesít(munkalap, $"d{sor}:g{sor}");
+                    MyX.Kiir(Tábla.Rows[j].Cells[7].Value.ToStrTrim(), $"d{sor}"); // kerékmegnevezés
 
                 }
-                MyE.Rácsoz("a" + (eleje + 1).ToString() + ":i" + sor.ToString());
-                MyE.Vastagkeret("a" + (eleje + 1).ToString() + ":i" + sor.ToString());
+                MyX.Rácsoz(munkalap, $"a{eleje + 1}:i{sor}");
+
                 sor += 2;
-                MyE.Kiir("Kelt, Budapest " + DateTime.Today.ToString("yyyy.MM.dd"), $"a{sor}");
+                MyX.Kiir($"Kelt, Budapest {DateTime.Today:yyyy.MM.dd}", $"a{sor}");
                 sor += 2;
-                MyE.Egyesít("Munka1", $"h{sor}" + ":i" + sor.ToString());
-                MyE.Kiir("Ellenőrizte", $"h{sor}");
-                MyE.Aláírásvonal($"h{sor}" + ":i" + sor.ToString());
+                MyX.Egyesít(munkalap, $"h{sor}:i{sor}");
+                MyX.Kiir("Ellenőrizte", $"h{sor}");
+                MyX.Aláírásvonal($"h{sor}:i{sor}");
                 sor += 1;
-                MyE.Egyesít("Munka1", $"h{sor}" + ":i" + sor.ToString());
-                MyE.Kiir(Kiadta.Text.Trim(), $"h{sor}");
+                MyX.Egyesít(munkalap, $"h{sor}:i{sor}");
+                MyX.Kiir(Kiadta.Text.Trim(), $"h{sor}");
 
                 Holtart.Lép();
-                MyE.NyomtatásiTerület_részletes("Munka1", "a1:i" + sor.ToString(), "", "", true);
+                Beállítás_Nyomtatás beállításNy = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"a1:i{sor}",
+                    LapSzéles = 1
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, beállításNy);
 
 
                 // bezárjuk az Excel-t
-                MyE.Aktív_Cella("Munka1", "A1");
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
+
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
                 MyE.Megnyitás(fájlexc);
                 Holtart.Ki();
             }
