@@ -41,7 +41,6 @@ namespace Villamos
         /// <param name="Kijelöltterület">szöveg</param>
         public static void Vastagkeret(string munkalapnév,string Kijelöltterület)
         {
-
             try
             {
                 IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);

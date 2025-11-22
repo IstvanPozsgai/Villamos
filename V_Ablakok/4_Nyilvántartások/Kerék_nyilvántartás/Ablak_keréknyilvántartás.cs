@@ -761,7 +761,8 @@ namespace Villamos
                 {
                     Munkalap = munkalap,
                     NyomtatásiTerület = $"a1:h{sor}",
-                    Oldaltörés = 30
+                    Oldaltörés = 30,
+                    LapSzéles = 1
                 };
                 MyX.NyomtatásiTerület_részletes(munkalap, beállításnyomtatás);
                 // bezárjuk az Excel-t
