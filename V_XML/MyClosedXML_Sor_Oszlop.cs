@@ -2,7 +2,6 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Villamos
@@ -127,8 +126,8 @@ namespace Villamos
                 IXLRange tartomány = munkalap.Range(mit);
 
                 // Az érintett sorok számai
-             var érintettSorok = Enumerable.Range(tartomány.FirstRow().RowNumber(),
-                                                    tartomány.RowCount()).ToList();
+                var érintettSorok = Enumerable.Range(tartomány.FirstRow().RowNumber(),
+                                                       tartomány.RowCount()).ToList();
                 if (mekkora > 0)
                 {
                     // Fix sor magasság beállítása (pontban – Excel-ben 1 egység = 1 pont)
@@ -163,5 +162,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
     }
 }

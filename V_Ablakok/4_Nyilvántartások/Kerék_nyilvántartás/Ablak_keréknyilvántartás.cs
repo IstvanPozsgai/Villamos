@@ -849,7 +849,7 @@ namespace Villamos
 
                 // megnyitjuk az excelt
                 string munkalap = "Munka1";
-                MyX.ExcelLétrehozás();
+                MyX.ExcelLétrehozás(munkalap);
 
                 Holtart.Be(10);
 

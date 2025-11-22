@@ -116,53 +116,6 @@ namespace Villamos
             }
         }
 
-        /// <summary>
-        /// Kiírja a szöveget a megfelelő cellába
-        /// </summary>
-        /// <param name="mit">szöveg</param>
-        /// <param name="hova">szöveg</param>
-        public static void Kiir(string mit, string hova)
-        {
-            try
-            {
-                // Érték beírása a megadott cellába vagy tartományba
-                xlWorkSheet.Range(hova).Value = mit;
-            }
-            catch (Exception ex)
-            {
-                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
-                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
-                HibaNapló.Log(ex.Message, $"Kiir(mit {mit}, hova {hova})\n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
-        /// <summary>
-        /// Egyesíti a kiválasztott területet
-        /// </summary>
-        /// <param name="mit">szöveg</param>
-        public static void Egyesít(string munkalap, string mit)
-        {
-            try
-            {
-                // Munkalap lekérése név alapján
-                IXLWorksheet munkalapObj = xlWorkBook.Worksheet(munkalap);
-
-                // Tartomány egyesítése
-                IXLRange tartomany = munkalapObj.Range(mit);
-                tartomany.Merge();
-
-                // Igazítás beállítása: vízszintesen és függőlegesen középre
-                tartomany.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                tartomany.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-            }
-            catch (Exception ex)
-            {
-                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
-                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
-                HibaNapló.Log(ex.Message, $"Egyesít(munkalap {munkalap}, mit {mit}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
     }
 }

@@ -1393,6 +1393,7 @@
     <Compile Include="V_MindenEgyéb\Váltós_Számítások.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_nyomtatványok.cs" />
     <Compile Include="V_XML\MyClosedXML_Betű.cs" />
+    <Compile Include="V_XML\MyClosedXML_Cella.cs" />
     <Compile Include="V_XML\MyClosedXML_Excel.cs" />
     <Compile Include="V_XML\MyClosedXML_Keret.cs" />
     <Compile Include="V_XML\MyClosedXML_Munkalap.cs" />
