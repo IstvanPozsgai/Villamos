@@ -52,7 +52,7 @@ namespace Villamos
                     }
                     pageSetup.PapírTájolás(beállítás);
                     pageSetup.Papírméret(beállítás);
-                    pageSetup.OldaltörésBeállítása(beállítás);
+                    worksheet.OldaltörésBeállítása(beállítás);
 
                     worksheet.Papírkitöltés(beállítás);
 
@@ -199,13 +199,24 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
-        private static void OldaltörésBeállítása(this PageSetup pageSetup, Beállítás_Nyomtatás beállítás)
+
+        private static void OldaltörésBeállítása(this Worksheet worksheet, Beállítás_Nyomtatás beállítás)
         {
             try
             {
-                //pageSetup.AddHorizontalPageBreak(sor);
-                //pageSetup.SheetView.View = XLSheetViewValues.PageBreakPreview;
+                //// Meglévő RowBreaks keresése
+                //RowBreaks rowBreaks = worksheet.Descendants<RowBreaks>().FirstOrDefault();
+
+                //if (rowBreaks == null)
+                //{
+                //    rowBreaks = new RowBreaks();
+                //    SheetData sheetData = worksheet.GetFirstChild<SheetData>();
+                //    worksheet.InsertAfter(rowBreaks, sheetData);
+                //}
+                //rowBreaks.Append(new Break { Id = (uint)beállítás.Oldaltörés });
+                //rowBreaks.Count = (uint)rowBreaks.ChildElements.Count;
+                //rowBreaks.ManualBreakCount = (uint)rowBreaks.ChildElements.Count;
+
             }
             catch (HibásBevittAdat ex)
             {

@@ -752,7 +752,6 @@ namespace Villamos
                     {
                         sor += 4;
                         újlap = sor;
-
                     }
 
                 }
