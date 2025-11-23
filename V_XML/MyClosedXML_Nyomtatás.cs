@@ -52,9 +52,11 @@ namespace Villamos
                     }
                     pageSetup.PapírTájolás(beállítás);
                     pageSetup.Papírméret(beállítás);
-                    worksheet.OldaltörésBeállítása(beállítás);
 
+                    worksheet.OldaltörésBeállítása(beállítás);
                     worksheet.Papírkitöltés(beállítás);
+
+
 
                     // 2.
                     // Létező PageMargins eltávolítása, ha van
@@ -86,7 +88,8 @@ namespace Villamos
                     }
                     printOptions.Headings = false;
                     printOptions.GridLines = false;
-
+                    printOptions.VerticalCentered = beállítás.FüggKözép;
+                    printOptions.HorizontalCentered = beállítás.VízKözép;
 
 
                     workbookPart.SorOszlopIsmétlődés(beállítás, lapNév, i);
@@ -239,6 +242,7 @@ namespace Villamos
                 pageMargins.Bottom = beállítás.AlsóMargó * MmToInch;
                 pageMargins.Header = beállítás.FejlécMéret * MmToInch;
                 pageMargins.Footer = beállítás.LáblécMéret * MmToInch;
+
             }
             catch (HibásBevittAdat ex)
             {

@@ -581,7 +581,6 @@ namespace Villamos
                 MyX.ExcelLétrehozás(munkalap);
 
                 // minden cella betűméret
-                Beállítás_Betű beállBetű = new Beállítás_Betű { Méret = 11, Név = "calibri" };
                 MyX.Munkalap_betű(munkalap, beállBetű);
 
                 MyX.Kiir("1. oldal", "a6");
@@ -658,11 +657,18 @@ namespace Villamos
                 // formázunk
                 // fejléc rácsozás
                 MyX.Rácsoz(munkalap, "a7:W8");
-                //     MyX.Vastagkeret(munkalap, "a7:b8");
+                MyX.Rácsoz(munkalap, "c7:e8");
+                MyX.Rácsoz(munkalap, "f7:h8");
+                MyX.Rácsoz(munkalap, "i7:k8");
+                MyX.Rácsoz(munkalap, "l7:n8");
+                MyX.Rácsoz(munkalap, "o7:q8");
+                MyX.Rácsoz(munkalap, "r7:t8");
+                MyX.Rácsoz(munkalap, "u7:w8");
+
                 MyX.Rácsoz(munkalap, "a9:" + MyF.Oszlopnév(2 + 7 * 3) + (hanyadikember + 7).ToString());
-                //      MyX.Vastagkeret(munkalap, "a7:b" + (hanyadikember + 7).ToString());
-                MyX.Egyesít(munkalap, "a" + (hanyadikember + 8).ToString() + ":b" + (hanyadikember + 8).ToString());
-                //   MyX.Vastagkeret(munkalap, "a" + (hanyadikember + 8).ToString() + ":b" + (hanyadikember + 8).ToString());
+
+                MyX.Egyesít(munkalap, $"a{hanyadikember + 8}:b{hanyadikember + 8}");
+
 
                 oszlop = 3;
                 string csekkoló;
@@ -697,14 +703,11 @@ namespace Villamos
 
                 for (int i = 0; i < 7; i++)
                 {
-                    //      MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + "7:" + MyF.Oszlopnév(oszlop + 2) + "8");
-                    //      MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + "9:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 7).ToString());
                     MyX.Egyesít(munkalap, MyF.Oszlopnév(oszlop) + (hanyadikember + 8).ToString() + ":" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 8).ToString());
-                    //       MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + (hanyadikember + 8).ToString() + ":" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 8).ToString());
                     if (MyF.Szöveg_Tisztítás(csekkoló, i, 1) == "0")
                     {
                         MyX.Rácsoz(munkalap, MyF.Oszlopnév(oszlop) + "9:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 7).ToString());
-                        //      MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + "9:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 7).ToString());
+                        MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + $"{hanyadikember + 8}:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 8).ToString());
                     }
                     else
                     {
@@ -717,11 +720,11 @@ namespace Villamos
                             Jobb = true
                         };
                         MyX.FerdeVonal(beállFerde);
-                        //      MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + "9:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 7).ToString());
+                        MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + $"{hanyadikember + 8}:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 8).ToString());
                     }
-
                     oszlop += 3;
                 }
+                MyX.Vastagkeret(munkalap, $"A{hanyadikember + 8}:B{(hanyadikember + 8)}");
                 MyX.Sormagasság(munkalap, "9:" + (hanyadikember + 8).ToString(), 20);
                 int sor = hanyadikember + 10;
                 // kiirjuk a személyeket az ellenőrző személyeket
@@ -749,10 +752,23 @@ namespace Villamos
                 // **********************************************
                 // **Nyomtatási beállítások                    **
                 // **********************************************
-                //MyX.NyomtatásiTerület_részletes(munkalap, $"a1:w{sor}",
-                //    10, 10, 15, 15, 13, 13,
-                //    "1", "1", false, RdBtnA4.Checked == true ? "A4" : "A3", true, false);
-
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"a1:w{sor}",
+                    LapMagas = 1,
+                    LapSzéles = 1,
+                    Álló = false,
+                    Papírméret = RdBtnA4.Checked ? "A4" : "A3",
+                    BalMargó = 10,
+                    JobbMargó = 10,
+                    FelsőMargó = 15,
+                    AlsóMargó = 15,
+                    FejlécMéret = 13,
+                    LáblécMéret = 13,
+                    VízKözép = true
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
                 Holtart.Ki();
 

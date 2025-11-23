@@ -95,5 +95,13 @@
         /// 0 érték az alapértelmezett, ekkor az oldaltörés nem szabályozott    
         /// </summary>
         public int Oldaltörés { get; set; } = 0;
+        /// <summary>
+        /// Papríron elhelyezkedés alapérték false
+        /// </summary>
+        public bool VízKözép { get; set; } = false;
+        /// <summary>
+        /// Papríron elhelyezkedés alapérték false 
+        /// </summary>
+        public bool FüggKözép { get; set; } = false;
     }
 }
