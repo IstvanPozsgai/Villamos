@@ -354,6 +354,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Csúsztatás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Szabadság.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Túlóra.cs" />
+    <Compile Include="V_Adatszerkezet\Beállítás_Ferde.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Betű.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Nyomtatás.cs" />
     <Compile Include="V_Excel\Excel_Betű.cs" />
@@ -1395,6 +1396,7 @@
     <Compile Include="V_XML\MyClosedXML_Betű.cs" />
     <Compile Include="V_XML\MyClosedXML_Cella.cs" />
     <Compile Include="V_XML\MyClosedXML_Excel.cs" />
+    <Compile Include="V_XML\MyClosedXML_Ferde.cs" />
     <Compile Include="V_XML\MyClosedXML_Keret.cs" />
     <Compile Include="V_XML\MyClosedXML_Munkalap.cs" />
     <Compile Include="V_XML\MyClosedXML_Nyomtatás.cs" />

@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 
 namespace Villamos
 {
@@ -32,8 +33,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
 
         /// <summary>
         /// Vastagkeretet készít a kijelölt területre
@@ -98,25 +97,21 @@ namespace Villamos
         }
 
         /// <summary>
-        /// 
+        /// Nem kezeli a teljes oszlop (A:A) vagy teljes sor (1:1) jelöléseket – csak cellatartományokat (A1:B2 típusúakat).
         /// </summary>
         /// <param name="Kijelöltterület"></param>
         /// <param name="jobb">jobb felső</param>
-        public static void FerdeVonal(string Kijelöltterület, bool jobb = true)
+        public static void FerdeVonal(Beállítás_Ferde beáll)
         {
             try
             {
-                IXLRange tartomány = xlWorkSheet.Range(Kijelöltterület);
-                if (jobb)
-                    tartomány.Style.Border.DiagonalDown = true;
-                else
-                    tartomány.Style.Border.DiagonalUp = true;
+                FerdeVonalak.Add(beáll);
             }
             catch (Exception ex)
             {
                 StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
                 string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
-                HibaNapló.Log(ex.Message, $"FerdeVonal(Kijelöltterület: {Kijelöltterület}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, $"FerdeVonal(Kijelöltterület: {beáll.Terület}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

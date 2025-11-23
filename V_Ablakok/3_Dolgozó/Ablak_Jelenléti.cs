@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Adatszerkezet;
@@ -657,11 +658,11 @@ namespace Villamos
                 // formázunk
                 // fejléc rácsozás
                 MyX.Rácsoz(munkalap, "a7:W8");
-                MyX.Vastagkeret(munkalap, "a7:b8");
+                //     MyX.Vastagkeret(munkalap, "a7:b8");
                 MyX.Rácsoz(munkalap, "a9:" + MyF.Oszlopnév(2 + 7 * 3) + (hanyadikember + 7).ToString());
-                MyX.Vastagkeret(munkalap, "a7:b" + (hanyadikember + 7).ToString());
+                //      MyX.Vastagkeret(munkalap, "a7:b" + (hanyadikember + 7).ToString());
                 MyX.Egyesít(munkalap, "a" + (hanyadikember + 8).ToString() + ":b" + (hanyadikember + 8).ToString());
-                MyX.Vastagkeret(munkalap, "a" + (hanyadikember + 8).ToString() + ":b" + (hanyadikember + 8).ToString());
+                //   MyX.Vastagkeret(munkalap, "a" + (hanyadikember + 8).ToString() + ":b" + (hanyadikember + 8).ToString());
 
                 oszlop = 3;
                 string csekkoló;
@@ -696,21 +697,27 @@ namespace Villamos
 
                 for (int i = 0; i < 7; i++)
                 {
-                    MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + "7:" + MyF.Oszlopnév(oszlop + 2) + "8");
-                    MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + "9:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 7).ToString());
+                    //      MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + "7:" + MyF.Oszlopnév(oszlop + 2) + "8");
+                    //      MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + "9:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 7).ToString());
                     MyX.Egyesít(munkalap, MyF.Oszlopnév(oszlop) + (hanyadikember + 8).ToString() + ":" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 8).ToString());
-                    MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + (hanyadikember + 8).ToString() + ":" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 8).ToString());
+                    //       MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + (hanyadikember + 8).ToString() + ":" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 8).ToString());
                     if (MyF.Szöveg_Tisztítás(csekkoló, i, 1) == "0")
                     {
                         MyX.Rácsoz(munkalap, MyF.Oszlopnév(oszlop) + "9:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 7).ToString());
-                        MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + "9:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 7).ToString());
+                        //      MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + "9:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 7).ToString());
                     }
                     else
                     {
                         MyX.Egyesít(munkalap, MyF.Oszlopnév(oszlop) + "9:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 7).ToString());
                         MyX.Kiir("Pihenőnap", MyF.Oszlopnév(oszlop) + "9:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 7).ToString());
-                        MyX.FerdeVonal(MyF.Oszlopnév(oszlop) + "9:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 7).ToString());
-                        MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + "9:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 7).ToString());
+                        Beállítás_Ferde beállFerde = new Beállítás_Ferde
+                        {
+                            Munkalap = munkalap,
+                            Terület = MyF.Oszlopnév(oszlop) + "9:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 7).ToString(),
+                            Jobb = true
+                        };
+                        MyX.FerdeVonal(beállFerde);
+                        //      MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + "9:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 7).ToString());
                     }
 
                     oszlop += 3;

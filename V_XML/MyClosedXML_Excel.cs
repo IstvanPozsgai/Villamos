@@ -14,6 +14,7 @@ namespace Villamos
         private static IXLWorksheet xlWorkSheet;
         private static readonly Dictionary<string, int> FagyasztandóSorok = new Dictionary<string, int>();
         private static readonly Dictionary<string, Beállítás_Nyomtatás> NyomtatásiBeállítások = new Dictionary<string, Beállítás_Nyomtatás>();
+        private static readonly List<Beállítás_Ferde> FerdeVonalak = new List<Beállítás_Ferde>();
 
         public static int sor;
         public static int oszlop;
@@ -60,6 +61,12 @@ namespace Villamos
                     FagyasztandóSorok.Clear(); // nem kötelező, de tiszta állapot
                 }
 
+                // Utólaf OpenXml segítségével behúzzuk a ferde vonalat.
+                if (FerdeVonalak.Count > 0)
+                {
+                    FerdeVonalAlkalmaz(fájlnév, FerdeVonalak);
+                    FerdeVonalak.Clear();
+                }
 
                 // Ha van nyomtatási beállítás, alkalmazzuk OpenXml-mel
                 if (NyomtatásiBeállítások.Count > 0)
