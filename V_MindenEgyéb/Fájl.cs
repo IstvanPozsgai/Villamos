@@ -34,8 +34,6 @@ public static partial class Függvénygyűjtemény
         }
     }
 
-
-
     public static void ExcelNyomtatás(List<string> excelFiles, bool törlés = false)
     {
         MyE.Application excelApp = null;
