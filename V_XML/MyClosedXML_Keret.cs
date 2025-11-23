@@ -39,7 +39,7 @@ namespace Villamos
         /// Vastagkeretet készít a kijelölt területre
         /// </summary>
         /// <param name="Kijelöltterület">szöveg</param>
-        public static void Vastagkeret(string munkalapnév,string Kijelöltterület)
+        public static void Vastagkeret(string munkalapnév, string Kijelöltterület)
         {
             try
             {
@@ -97,5 +97,28 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Kijelöltterület"></param>
+        /// <param name="jobb">jobb felső</param>
+        public static void FerdeVonal(string Kijelöltterület, bool jobb = true)
+        {
+            try
+            {
+                IXLRange tartomány = xlWorkSheet.Range(Kijelöltterület);
+                if (jobb)
+                    tartomány.Style.Border.DiagonalDown = true;
+                else
+                    tartomány.Style.Border.DiagonalUp = true;
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"FerdeVonal(Kijelöltterület: {Kijelöltterület}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
