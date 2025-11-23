@@ -45,7 +45,7 @@ public static partial class Függvénygyűjtemény
         {
             if (!File.Exists(filePath))
             {
-                Console.WriteLine($"Fájl nem található: {filePath}");
+                MessageBox.Show($"Fájl nem található: {filePath}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 continue;
             }
 
@@ -71,8 +71,9 @@ public static partial class Függvénygyűjtemény
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Hiba a(z) {filePath} fájl nyomtatása közben: {ex.Message}");
+                MessageBox.Show($"Hiba a(z) {filePath} fájl nyomtatása közben: {ex.Message}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+
             finally
             {
                 // Excel alkalmazás bezárása
@@ -89,12 +90,12 @@ public static partial class Függvénygyűjtemény
                     if (törlés)
                     {
                         File.Delete(filePath);
-                        Console.WriteLine($"Törölve: {filePath}");
+                        // MessageBox.Show($"Törölve: {filePath}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 catch (Exception delEx)
                 {
-                    Console.WriteLine($"Nem sikerült törölni: {filePath} – {delEx.Message}");
+                    // MessageBox.Show($"Nem sikerült törölni: {filePath} – {delEx.Message}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
