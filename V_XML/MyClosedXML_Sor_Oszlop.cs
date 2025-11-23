@@ -163,6 +163,32 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// A cellába beírt szöveg olvasási irányát lehet beállítani
+        /// A ClosedXML csak 0 - 180-at kezel értelmesen
+        /// </summary>
+        /// <param name="munkalap">munkalap neve</param>
+        /// <param name="mit">cella helyzete</param>
+        /// <param name="mennyit">-90 bal- 0 vízszintes- 90 jobb</param>
+        public static void SzövegIrány(string munkalapNév, string mit, int fok)
+        {
+            try
+            {
+                IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapNév);
 
+                IXLRange range = munkalap.Range(mit); // pl. "A1" vagy "A1:B5"
+
+                // Beállítás közvetlenül számként
+                range.Style.Alignment.TextRotation = (ushort)fok;
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"SzövegIrány(munkalap {munkalapNév}, mit: {mit}, fok: {fok}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+        }
     }
 }
