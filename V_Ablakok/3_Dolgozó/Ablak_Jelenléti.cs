@@ -390,10 +390,6 @@ namespace Villamos
                 DateTime utolsónap = MyF.Hét_Utolsónapja(Dátum.Value);
                 MyX.Kiir("A munkavállaló neve", "b5");
 
-                MyX.Betű(munkalap, "b:b", beállB14);
-                MyX.Betű(munkalap, "a:a", beállB14);
-                MyX.Betű(munkalap, "a5", beállB12);
-                MyX.Betű(munkalap, "4:4", beállB12);
                 if (RdBtn5Napos.Checked)
                     mennyi = 5;
                 if (RdBtn6Napos.Checked)
@@ -454,43 +450,18 @@ namespace Villamos
                 MyX.Egyesít(munkalap, "a" + (hanyadikember + 6).ToString() + ":b" + (hanyadikember + 6).ToString());
                 MyX.Kiir(" Az igazoló aláírása:\n" + LstKiadta.Text.Trim(), "a" + (hanyadikember + 6).ToString());
                 oszlop = 3;
-                for (int ii = 0; ii < mennyi; ii++)
-                {
-                    MyX.Egyesít(munkalap, MyF.Oszlopnév(oszlop) + (hanyadikember + 6).ToString() + ":" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 6).ToString());
-                    oszlop += 3;
-                }
                 // formázunk
-                // fejléc rácsozás
-                Holtart.Lép();
                 MyX.Vastagkeret(munkalap, "a4:a5");
                 MyX.Vastagkeret(munkalap, "b4:b5");
-                oszlop = 3;
-                MyX.Rácsoz(munkalap, MyF.Oszlopnév(oszlop) + "4:" + MyF.Oszlopnév((oszlop + 3 * mennyi) - 1) + "5");
+                MyX.Rácsoz(munkalap, $"A6:A{hanyadikember + 5}");
+                MyX.Rácsoz(munkalap, $"B6:B{hanyadikember + 5}");
 
                 for (int i = 0; i < mennyi; i++)
                 {
-                    MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + "4:" + MyF.Oszlopnév(oszlop + 2) + "5");
-                    oszlop += 3;
-                }
-
-                // középsőrész
-                Holtart.Lép();
-                MyX.Rácsoz(munkalap, "a6:" + MyF.Oszlopnév(2 + mennyi * 3) + (hanyadikember + 5).ToString());
-                MyX.Vastagkeret(munkalap, "A6:A" + (hanyadikember + 5).ToString());
-                MyX.Vastagkeret(munkalap, "B6:B" + (hanyadikember + 5).ToString());
-                for (int i = 0; i < mennyi; i++)
-                {
-                    MyX.Vastagkeret(munkalap, "A6:A" + (hanyadikember + 5).ToString());
-                    MyX.Vastagkeret(munkalap, "B6:B" + (hanyadikember + 5).ToString());
-                    oszlop += 3;
-                }
-
-                // napok rácsozása
-                Holtart.Lép();
-                oszlop = 3;
-                for (int i = 0; i < mennyi; i++)
-                {
-                    MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + "6:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 5).ToString());
+                    MyX.Rácsoz(munkalap, MyF.Oszlopnév(oszlop) + "4:" + MyF.Oszlopnév(oszlop + 2) + "5");
+                    MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}6:{MyF.Oszlopnév(oszlop + 2)}{hanyadikember + 5}");
+                    MyX.Egyesít(munkalap, $"{MyF.Oszlopnév(oszlop)}{hanyadikember + 6}:{MyF.Oszlopnév(oszlop + 2)}{hanyadikember + 6}");
+                    MyX.Vastagkeret(munkalap, $"{MyF.Oszlopnév(oszlop)}{hanyadikember + 6}:{MyF.Oszlopnév(oszlop + 2)}{hanyadikember + 6}");
                     oszlop += 3;
                 }
 
@@ -498,12 +469,8 @@ namespace Villamos
                 Holtart.Lép();
                 MyX.Sormagasság(munkalap, (hanyadikember + 6).ToString() + ":" + (hanyadikember + 6).ToString(), 36);
                 int vege = 2 + mennyi * 3;
-                MyX.Vastagkeret(munkalap, MyF.Oszlopnév(1) + (hanyadikember + 6).ToString() + ":" + MyF.Oszlopnév(2).ToString() + (hanyadikember + 6).ToString());
-                for (int i = 3; i < vege; i += 3)
-                {
-                    MyX.Vastagkeret(munkalap, MyF.Oszlopnév(i) + (hanyadikember + 6).ToString() + ":" + MyF.Oszlopnév(i + 2).ToString() + (hanyadikember + 6).ToString());
-                    oszlop += 3;
-                }
+                MyX.Vastagkeret(munkalap, $"A{hanyadikember + 6}:B{hanyadikember + 6}");
+
                 sor = 9 + hanyadikember;
                 MyX.Kiir(" Az igazoló aláírása:", $"a{sor}");
 
@@ -531,29 +498,34 @@ namespace Villamos
                     MyX.Kiir(Elem.Beosztás, $"e{sor}");
                 }
                 MyX.Oszlopszélesség(munkalap, "B:B");
-                // **********************************************
-                // **Nyomtatási beállítások                    **
-                // **********************************************
+
                 Holtart.Lép();
-                //MyX.NyomtatásiTerület_részletes(munkalap, "a1:" + MyF.Oszlopnév(2 + mennyi * 3) + (hanyadikember + 13).ToString(),
-                //    10, 10, 15, 15, 13, 13,
-                //    "1", "1", false, RdBtnA4.Checked == true ? "A4" : "A3", true, false);
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"a1:w{sor}",
+                    LapMagas = 1,
+                    LapSzéles = 1,
+                    Álló = false,
+                    Papírméret = RdBtnA4.Checked ? "A4" : "A3",
+                    BalMargó = 10,
+                    JobbMargó = 10,
+                    FelsőMargó = 15,
+                    AlsóMargó = 15,
+                    FejlécMéret = 13,
+                    LáblécMéret = 13,
+                    VízKözép = true
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
                 MyX.ExcelMentés(fájlexc);
-                // **********************************************
-                // **Nyomtatás                                 **
-                // **********************************************
+
                 List<string> Fájlok = new List<string> { fájlexc };
                 if (RdBtnNyomtat.Checked) MyF.ExcelNyomtatás(Fájlok);
 
-                Holtart.Ki();
-
-
                 MyX.ExcelBezárás();
-
-                if (RdBtnFájlTöröl.Checked)
-                    File.Delete(fájlexc);
-
+                if (RdBtnFájlTöröl.Checked) File.Delete(fájlexc);
+                Holtart.Ki();
                 MessageBox.Show("A nyomtatvány elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -807,35 +779,30 @@ namespace Villamos
                 string fájlexc = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Jelenléti_Váltó_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}.xlsx";
 
                 MyX.ExcelLétrehozás(munkalap);
-
-
                 MyX.Munkalap_betű(munkalap, beállBetű);
                 MyX.Kiir("1. oldal", "a1");
                 MyX.Oszlopszélesség(munkalap, "a:a", 13);
                 MyX.Oszlopszélesség(munkalap, "b:b", 25);
-                MyX.Betű(munkalap, "k1", beállB16V);
 
+                MyX.Betű(munkalap, "k1", beállB16V);
                 MyX.Kiir("JELENLÉTI ÍV", "k1");
-                MyX.Betű(munkalap, "2:2", beállB12);
 
                 Adat_Kiegészítő_Jelenlétiív Eleme = (from a in AdatokJelenléti
                                                      where a.Id == 1
                                                      select a).FirstOrDefault();
                 if (Eleme != null) MyX.Kiir(Eleme.Szervezet, "a2");
 
+
+                // napok fejlécet létrehozzuk
                 DateTime elsőnap = MyF.Hét_elsőnapja(Dátum.Value.ToString("yyyy.MM.dd").ToÉrt_DaTeTime());
                 DateTime utolsónap = MyF.Hét_Utolsónapja(Dátum.Value.ToString("yyyy.MM.dd").ToÉrt_DaTeTime());
+                string szöveg = $"{elsőnap:yyyy. év MMMM dd}.-tól - ";
+                szöveg += $"{utolsónap:yyyy. év MMMM dd}.-ig ";
+                MyX.Kiir(szöveg, "L2");
+
 
                 MyX.Kiir("Hr azonosító", "a5");
                 MyX.Kiir("A munkavállaló neve", "b5");
-                MyX.Betű(munkalap, "b:b", beállB14);
-                MyX.Betű(munkalap, "a:a", beállB12);
-                MyX.Betű(munkalap, "4:4", beállB12);
-
-                // napok fejlécet létrehozzuk
-                string szöveg = $"{elsőnap:yyyy. év MMMM dd}.-tól - ";
-                szöveg += $"{utolsónap:yyyy. év MMMM dd}.-ig ";
-                MyX.Kiir(szöveg, "l2");
 
                 // sormagasság
                 MyX.Sormagasság(munkalap, "5:5", 120);
@@ -875,7 +842,6 @@ namespace Villamos
                 do
                 {
                     MyX.Kiir($"{elsőnap.AddDays(i):dddd}", $"{MyF.Oszlopnév(oszlop)}4");
-
                     MyX.Egyesít(munkalap, MyF.Oszlopnév(oszlop) + "4:" + MyF.Oszlopnév(oszlop + 1) + "4");
 
                     if (volt == 1)
@@ -909,7 +875,6 @@ namespace Villamos
                             MyX.Kiir("Érkezés ideje", MyF.Oszlopnév(oszlop) + "5");
                             MyX.Kiir("Távozás ideje", MyF.Oszlopnév(oszlop + 1) + "5");
                             MyX.Kiir("A dolgozó aláírása", MyF.Oszlopnév(oszlop + 2) + "5");
-                            MyX.Háttérszín(munkalap, MyF.Oszlopnév(oszlop) + "4:" + MyF.Oszlopnév(oszlop + 2) + "5", Color.Cyan);
                             Napszíne += "1";
                         }
                         if (beosztáskód == "7")
@@ -978,9 +943,11 @@ namespace Villamos
                 // sormagasság
                 MyX.Sormagasság(munkalap, "6:" + (hanyadikember + 6).ToString(), 24);
                 MyX.Egyesít(munkalap, "a" + (hanyadikember + 6).ToString() + ":b" + (hanyadikember + 6).ToString());
+                MyX.Vastagkeret(munkalap, "a" + (hanyadikember + 6).ToString() + ":b" + (hanyadikember + 6).ToString());
                 MyX.Kiir(" Az igazoló aláírása:\n" + LstKiadta.Text.Trim(), "a" + (hanyadikember + 6).ToString());
                 i = 0;
                 oszlop = 3;
+
                 do
                 {
                     MyX.Egyesít(munkalap, MyF.Oszlopnév(oszlop) + (hanyadikember + 6).ToString() + ":" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 6).ToString());
@@ -993,37 +960,20 @@ namespace Villamos
                 // fejléc rácsozás
                 MyX.Vastagkeret(munkalap, "a4:a5");
                 MyX.Vastagkeret(munkalap, "b4:b5");
+                MyX.Rácsoz(munkalap, $"A6:A{hanyadikember + 5}");
+                MyX.Rácsoz(munkalap, $"B6:B{hanyadikember + 5}");
                 oszlop = 3;
-                MyX.Rácsoz(munkalap, MyF.Oszlopnév(oszlop) + "5:" + MyF.Oszlopnév(oszlop + 2) + "5");
                 for (int j = 0; j < 7; j++)
                 {
-                    MyX.Rácsoz(munkalap, MyF.Oszlopnév(oszlop) + "5:" + MyF.Oszlopnév(oszlop + 2) + "5");
-
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(oszlop) + "4:" + MyF.Oszlopnév(oszlop + 2) + "5");
-                    oszlop += 3;
-                }
-                // középsőrész
-                MyX.Rácsoz(munkalap, "a6:" + MyF.Oszlopnév(2 + 7 * 3) + (hanyadikember + 5).ToString());
-                MyX.Vastagkeret(munkalap, "a6:" + MyF.Oszlopnév(2 + 7 * 3) + (hanyadikember + 5).ToString());
-                MyX.Vastagkeret(munkalap, "A6:A" + (hanyadikember + 5).ToString());
-                MyX.Rácsoz(munkalap, "A6:A" + (hanyadikember + 5).ToString());
-                MyX.Vastagkeret(munkalap, "B6:B" + (hanyadikember + 5).ToString());
-                MyX.Rácsoz(munkalap, "B6:B" + (hanyadikember + 5).ToString());
-
-                // napok rácsozása
-                oszlop = 3;
-                int sor = 1;
-                for (int ii = 0; ii < 6; ii++)
-                {
-                    MyX.Rácsoz(munkalap, MyF.Oszlopnév(oszlop) + "6:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 5).ToString());
-                    MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + "6:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 5).ToString());
+                    MyX.Rácsoz(munkalap, MyF.Oszlopnév(oszlop) + "6:" + MyF.Oszlopnév(2 + oszlop) + (hanyadikember + 5).ToString());
+                    MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + $"{hanyadikember + 6}:" + MyF.Oszlopnév(2 + 7 * 3) + (hanyadikember + 6).ToString());
                     oszlop += 3;
                 }
 
                 // igazoló rész
                 MyX.Sormagasság(munkalap, (hanyadikember + 6).ToString() + ":" + (hanyadikember + 6).ToString(), 36);
-                MyX.Vastagkeret(munkalap, MyF.Oszlopnév(1) + (hanyadikember + 6).ToString() + ":" + MyF.Oszlopnév(2 + 7 * 3).ToString() + (hanyadikember + 6).ToString());
-                sor = 9 + hanyadikember;
+                int sor = 9 + hanyadikember;
                 MyX.Kiir(" Az igazoló aláírása", $"a{sor}");
                 // színezés
                 oszlop = 3;
@@ -1031,7 +981,7 @@ namespace Villamos
                 {
 
                     if (MyF.Szöveg_Tisztítás(Napszíne, i, 1) == "1")
-                        MyX.Háttérszín(munkalap, MyF.Oszlopnév(oszlop) + "5:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 6).ToString(), Color.Cyan);
+                        MyX.Háttérszín(munkalap, MyF.Oszlopnév(oszlop) + "4:" + MyF.Oszlopnév(oszlop + 2) + (hanyadikember + 6).ToString(), Color.Cyan);
                     oszlop += 3;
                 }
 
@@ -1057,13 +1007,24 @@ namespace Villamos
                     MyX.Igazít_függőleges(munkalap, "1:23", "alsó");
                     MyX.Oszlopszélesség(munkalap, "B:B");
                 }
-                // **********************************************
-                // **Nyomtatási beállítások                    **
-                //// **********************************************
-                //MyX.NyomtatásiTerület_részletes(munkalap, $"a1:w{sor}",
-                //   10, 10, 15, 15, 13, 13,
-                //   "1", "1", false, RdBtnA4.Checked == true ? "A4" : "A3", true, false);
 
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"a1:w{sor}",
+                    LapMagas = 1,
+                    LapSzéles = 1,
+                    Álló = false,
+                    Papírméret = RdBtnA4.Checked ? "A4" : "A3",
+                    BalMargó = 10,
+                    JobbMargó = 10,
+                    FelsőMargó = 15,
+                    AlsóMargó = 15,
+                    FejlécMéret = 13,
+                    LáblécMéret = 13,
+                    VízKözép = true
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
                 Holtart.Ki();
 
@@ -1073,8 +1034,7 @@ namespace Villamos
                 List<string> Fájlok = new List<string> { fájlexc };
                 if (RdBtnNyomtat.Checked) MyF.ExcelNyomtatás(Fájlok);
 
-                if (RdBtnFájlTöröl.Checked)
-                    File.Delete(fájlexc);
+                if (RdBtnFájlTöröl.Checked) File.Delete(fájlexc);
 
                 MessageBox.Show("A nyomtatvány elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1173,7 +1133,7 @@ namespace Villamos
                 MyX.ExcelLétrehozás(munkalap);
 
                 MyX.Munkalap_betű(munkalap, beállBetű);
-                MyX.Oszlopszélesség(munkalap, "a:a", 9);
+                MyX.Oszlopszélesség(munkalap, "a:a", 10);
                 MyX.Oszlopszélesség(munkalap, "b:b", 30);
                 MyX.Oszlopszélesség(munkalap, "c:c", 18);
                 MyX.Oszlopszélesség(munkalap, "d:d", 20);
@@ -1223,6 +1183,7 @@ namespace Villamos
                 MyX.Betű(munkalap, "A14:D14", beállB12V);
                 MyX.Igazít_függőleges(munkalap, "A14", "alsó");
                 MyX.Sormagasság(munkalap, "14:14", 35);
+                MyX.Sortörésseltöbbsorba(munkalap, "A14:D14");
                 int sor = 14;
                 int sorszám = 0;
                 int hanyadikember = 0;
@@ -1245,23 +1206,29 @@ namespace Villamos
                 }
 
                 hanyadikember += 2;
-                MyX.Rácsoz(munkalap, $"a14:d{sor}");
-                MyX.Vastagkeret(munkalap, $"a14:d14");
-                MyX.Vastagkeret(munkalap, $"a15:d{sor}");
+                MyX.Rácsoz(munkalap, $"a14:d14");
+                MyX.Rácsoz(munkalap, $"a15:d{sor}");
 
-                // **********************************************
-                // **Nyomtatás                                 **
-                // **********************************************
-                //MyX.NyomtatásiTerület_részletes(munkalap, $"a1:d{sor}", "$1:$14", "",
-                //    "", "", "&P/&N",
-                //    "Budapest, " + Dátum.Value.ToString("yyyy.MM.dd"), "", "..........................................\nVizsgálatot végző aláírása", "",
-                //    10, 10,
-                //    25, 15,
-                //    13, 13,
-                //    false, false,
-                //    "1", "", true, RdBtnA4.Checked ? "A4" : "A3");
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"a1:w{hanyadikember + 10}",
+                    LapSzéles = 1,
+                    Papírméret = RdBtnA4.Checked ? "A4" : "A3",
+                    BalMargó = 10,
+                    JobbMargó = 10,
+                    FelsőMargó = 15,
+                    AlsóMargó = 15,
+                    FejlécMéret = 13,
+                    LáblécMéret = 13,
+                    VízKözép = true,
+                    IsmétlődőSorok = "$1:$14",
+                    FejlécJobb = "&P/&N",
+                    LáblécBal = $"Budapest, {Dátum.Value:yyyy.MM.dd}",
+                    LáblécJobb = "..........................................\nVizsgálatot végző aláírása"
 
-
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
                 Holtart.Ki();
                 MyX.ExcelMentés(fájlexc);
@@ -1269,11 +1236,7 @@ namespace Villamos
 
                 List<string> Fájlok = new List<string> { fájlexc };
                 if (RdBtnNyomtat.Checked) MyF.ExcelNyomtatás(Fájlok);
-
-
-
-                if (RdBtnFájlTöröl.Checked)
-                    File.Delete(fájlexc);
+                if (RdBtnFájlTöröl.Checked) File.Delete(fájlexc);
 
                 MessageBox.Show("A nyomtatvány elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1372,19 +1335,19 @@ namespace Villamos
 
                 hanyadikember += 2;
                 // sormagasság
-                MyX.Sormagasság(munkalap, "10:" + (hanyadikember + 10).ToString(), 24);
-                MyX.Sormagasság(munkalap, hanyadikember + 10.ToString() + ":" + (hanyadikember + 13).ToString(), 35);
-                MyX.Egyesít(munkalap, "a" + (hanyadikember + 10).ToString() + ":b" + (hanyadikember + 10).ToString());
+                MyX.Sormagasság(munkalap, $"10:{hanyadikember + 10}", 24);
+                MyX.Sormagasság(munkalap, $"{hanyadikember + 10}:{hanyadikember + 13}", 35);
+                MyX.Egyesít(munkalap, $"a{hanyadikember + 10}:b{hanyadikember + 10}");
                 MyX.Kiir("Vizsgálatot végezte", "a" + (hanyadikember + 10).ToString());
-                MyX.Sormagasság(munkalap, "a" + (hanyadikember + 10).ToString(), 35);
+
                 hanyadikember += 1;
                 MyX.Egyesít(munkalap, "a" + (hanyadikember + 10).ToString() + ":b" + (hanyadikember + 10).ToString());
                 MyX.Kiir("Vizsgáltot végző aláírása", "a" + (hanyadikember + 10).ToString());
-                MyX.Sormagasság(munkalap, "a" + (hanyadikember + 10).ToString(), 35);
+
                 hanyadikember += 1;
                 MyX.Egyesít(munkalap, "a" + (hanyadikember + 10).ToString() + ":b" + (hanyadikember + 10).ToString());
                 MyX.Kiir("Jelen volt", "a" + (hanyadikember + 10).ToString());
-                MyX.Sormagasság(munkalap, "a" + (hanyadikember + 10).ToString(), 35);
+
                 oszlop = 3;
                 for (int i = 0; i < mennyi; i++)
                     oszlop += 2;
@@ -1403,21 +1366,28 @@ namespace Villamos
                     MyX.Egyesít(munkalap, MyF.Oszlopnév(i) + (hanyadikember + 8).ToString() + ":" + MyF.Oszlopnév(i + 1) + (hanyadikember + 8).ToString());
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(i) + "7:" + MyF.Oszlopnév(i + 1) + (hanyadikember + 10).ToString());
                 }
-                MyX.Igazít_függőleges(munkalap, "A:P", "alsó");
-                MyX.Igazít_vízszintes(munkalap, "A:P", "közép");
+                MyX.Igazít_függőleges(munkalap, $"A{7}:P{hanyadikember + 10}", "alsó");
+                MyX.Igazít_vízszintes(munkalap, $"A{7}:P{hanyadikember + 10}", "közép");
                 MyX.Igazít_vízszintes(munkalap, "A1:A3", "bal");
                 MyX.Igazít_vízszintes(munkalap, "A5", "bal");
 
-                // **********************************************
-                // **Nyomtatás                                 **
-                // **********************************************
-                //MyX.NyomtatásiTerület_részletes(munkalap, "a1:" + MyF.Oszlopnév(2 + mennyi * 2) + (hanyadikember + 10).ToString(),
-                //        10, 10,
-                //        15, 15,
-                //        13, 13,
-                //        "1", "1",
-                //        false, RdBtnA4.Checked ? "A4" : "A3",
-                //        true, false);
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"a1:w{hanyadikember + 10}",
+                    LapMagas = 1,
+                    LapSzéles = 1,
+                    Álló = false,
+                    Papírméret = RdBtnA4.Checked ? "A4" : "A3",
+                    BalMargó = 10,
+                    JobbMargó = 10,
+                    FelsőMargó = 15,
+                    AlsóMargó = 15,
+                    FejlécMéret = 13,
+                    LáblécMéret = 13,
+                    VízKözép = true
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
                 Holtart.Ki();
 
@@ -1426,8 +1396,7 @@ namespace Villamos
                 if (RdBtnNyomtat.Checked) MyF.ExcelNyomtatás(Fájlok);
                 MyX.ExcelBezárás();
 
-                if (RdBtnFájlTöröl.Checked)
-                    File.Delete(fájlexc);
+                if (RdBtnFájlTöröl.Checked) File.Delete(fájlexc);
                 MessageBox.Show("A nyomtatvány elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
