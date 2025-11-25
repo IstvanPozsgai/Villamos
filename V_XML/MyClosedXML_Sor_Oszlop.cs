@@ -116,6 +116,12 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="munkalapnév"></param>
+        /// <param name="mit"></param>
+        /// <param name="mekkora">0 esetén automatikus</param>
         public static void Sormagasság(string munkalapnév, string mit, int mekkora)
         {
             try

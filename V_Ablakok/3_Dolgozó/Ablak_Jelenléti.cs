@@ -447,7 +447,8 @@ namespace Villamos
                 // sormagasság
                 MyX.Sormagasság(munkalap, "6:" + (hanyadikember + 6).ToString(), 24);
                 MyX.Egyesít(munkalap, "a" + (hanyadikember + 6).ToString() + ":b" + (hanyadikember + 6).ToString());
-                MyX.Kiir(" Az igazoló aláírása:\n" + LstKiadta.Text.Trim(), "a" + (hanyadikember + 6).ToString());
+                MyX.Kiir(" Az igazoló aláírása:\n" + LstKiadta.Text.Trim(), $"a{hanyadikember + 6}" );
+                MyX.Sortörésseltöbbsorba (munkalap , $"a{hanyadikember + 6}" ,true );
                 oszlop = 3;
                 // formázunk
                 MyX.Vastagkeret(munkalap, "a4:a5");
@@ -556,7 +557,7 @@ namespace Villamos
 
                 MyX.Kiir("1. oldal", "a6");
                 MyX.Kiir("Szellemi állomány", "a2");
-                MyX.Oszlopszélesség(munkalap, "a:a", 7);
+                MyX.Oszlopszélesség(munkalap, "a:a", 10);
                 MyX.Oszlopszélesség(munkalap, "b:b", 25);
                 MyX.Oszlopszélesség(munkalap, "c:w", 8);
 
@@ -599,7 +600,7 @@ namespace Villamos
                 }
 
                 MyX.Sormagasság(munkalap, "7:7", 31);
-                MyX.Sormagasság(munkalap, "8:8", 90);
+                MyX.Sormagasság(munkalap, "8:8",105);
                 MyX.Kiir("Hr azonosító", "a8");
                 MyX.Kiir("Dolgozó neve", "b8");
                 MyX.SzövegIrány(munkalap, "A8", 90);
@@ -623,7 +624,9 @@ namespace Villamos
                 hanyadikember += 3;
 
                 MyX.Egyesít(munkalap, "a" + (hanyadikember + 8).ToString() + ":b" + (hanyadikember + 8).ToString());
-                MyX.Kiir("Igazolta:" + LstKiadta.Text.Trim(), "a" + (hanyadikember + 8).ToString());
+                MyX.Kiir("Igazolta:\n" + LstKiadta.Text.Trim(), "a" + (hanyadikember + 8).ToString());
+                MyX.Sortörésseltöbbsorba(munkalap, $"a{hanyadikember +8}", true);
+               
 
                 // formázunk
                 // fejléc rácsozás
@@ -697,6 +700,7 @@ namespace Villamos
                 }
                 MyX.Vastagkeret(munkalap, $"A{hanyadikember + 8}:B{(hanyadikember + 8)}");
                 MyX.Sormagasság(munkalap, "9:" + (hanyadikember + 8).ToString(), 20);
+                MyX.Sormagasság(munkalap, $"{hanyadikember + 8}:{hanyadikember + 8}" , 40);
                 int sor = hanyadikember + 10;
                 // kiirjuk a személyeket az ellenőrző személyeket
                 Adat_Kiegészítő_főkönyvtábla Elem;
