@@ -2,10 +2,13 @@
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using iTextSharp.text;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 
@@ -150,5 +153,39 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        ///  Kép_beillesztés
+        /// </summary>
+        /// <param name="munkalap"></param>
+        /// <param name="mit"></param>
+        /// <param name="hely"></param>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <param name="Magas"></param>
+        /// <param name="Széles"></param>
+        public static void Kép_beillesztés(  string munkalapnév, String mit, string hely, int X, int Y, double  százalék)
+        {
+            try
+            {
+                // Kép hozzáadása
+                using (var imageStream = File.OpenRead(hely))
+                {
+                    IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
+                    munkalap.AddPicture(hely)
+                            .WithPlacement(ClosedXML.Excel.Drawings.XLPicturePlacement.FreeFloating)
+                            .MoveTo(X, Y)          // X és Y: pixelben vagy pontban (ClosedXML alapértelmezetten EMU-t használ, de van pont / pixel konverzió)
+                            .Scale(százalék ); // ClosedXML nem teszi lehetővé közvetlen pixelméret megadását — relatív skálázás szükséges
+                }
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Kép_beillesztés(munkalap {munkalapnév}, mit {mit}, hely {hely}, X {X}, Y {Y}, százalék {százalék}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                           MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);          
+            }
+        }
+
     }
 }

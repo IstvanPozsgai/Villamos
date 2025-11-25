@@ -38,7 +38,6 @@ namespace Villamos
         readonly private Beállítás_Betű beállB12D = new Beállítás_Betű { Méret = 12, Dőlt = true };
         readonly private Beállítás_Betű beállB14 = new Beállítás_Betű { Méret = 14 };
         readonly private Beállítás_Betű beállB14V = new Beállítás_Betű { Méret = 14, Vastag = true };
-        readonly private Beállítás_Betű beállB16 = new Beállítás_Betű { Méret = 16 };
         readonly private Beállítás_Betű beállB16V = new Beállítás_Betű { Méret = 16, Vastag = true };
         readonly private Beállítás_Betű beállB20 = new Beállítás_Betű { Méret = 20 };
         readonly private Beállítás_Betű beállB20V = new Beállítás_Betű { Méret = 20, Vastag = true };

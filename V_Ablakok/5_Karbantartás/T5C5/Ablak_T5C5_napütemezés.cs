@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
@@ -1103,7 +1104,7 @@ namespace Villamos
                     InitialDirectory = "MyDocuments",
 
                     Title = "Vezénylés készítés mentése Excel fájlba",
-                    FileName = $"Vezénylés-{Program.PostásNév.Trim()}-{Dátum.Value:yyyyMMddHHmmss}",
+                    FileName = $"Vezénylés-{Program.PostásNév.Trim()}-{DateTime.Now :yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1115,56 +1116,66 @@ namespace Villamos
 
                 Holtart.Be();
                 // megnyitjuk
-                MyE.ExcelLétrehozás();
-
-                MyE.Munkalap_betű("Times New Roman CE", 24);
                 string munkalap = "Munka1";
+                MyX.ExcelLétrehozás(munkalap);
+
+                Beállítás_Betű bebetű = new Beállítás_Betű
+                {
+                    Méret = 24,
+                    Név = "Times New Roman CE"
+                };
+                MyX.Munkalap_betű(munkalap, bebetű);
+
 
                 // oszlop szélességek beállítása
-                MyE.Oszlopszélesség(munkalap, "A:A", 3);
-                MyE.Oszlopszélesség(munkalap, "C:C", 3);
-                MyE.Oszlopszélesség(munkalap, "B:B", 90);
+                MyX.Oszlopszélesség(munkalap, "A:A", 3);
+                MyX.Oszlopszélesség(munkalap, "C:C", 3);
+                MyX.Oszlopszélesség(munkalap, "B:B", 90);
 
                 // az első sor színezése
-                MyE.Háttérszín("A1:C1", Color.Yellow);
+                MyX.Háttérszín(munkalap, "A1:C1", Color.Yellow);
 
                 // Két széle színez
                 for (int i = 2; i <= 8; i++)
                 {
-                    MyE.Háttérszín("A" + i.ToString(), Color.Yellow);
-                    MyE.Háttérszín("C" + i.ToString(), Color.Yellow);
+                    MyX.Háttérszín(munkalap, $"A{i}", Color.Yellow);
+                    MyX.Háttérszín(munkalap, $"C{i}", Color.Yellow);
                 }
 
                 // képet beilleszt
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\Villamos_T5C5.png";
-                if (File.Exists(hely)) MyE.Kép_beillesztés(munkalap, "A1", hely, 40, 30, 200, 450);
+                    if (File.Exists(hely)) MyX.Kép_beillesztés(munkalap, "A1", hely,50, 40, 0.7d);
                 Holtart.Lép();
                 int sor = 8;
-                MyE.Kiir("Feladatterv", "b" + sor.ToString());
-                MyE.Igazít_vízszintes("B" + sor, "közép");
+                MyX.Kiir("Feladatterv", "b" + sor.ToString());
+                MyX.Igazít_vízszintes(munkalap, "B" + sor, "közép");
                 sor += 1;
                 // kiírjuk a dátumot
-                MyE.Sormagasság(sor.ToString() + ":" + sor.ToString(), 45);
+                MyX.Sormagasság(munkalap, sor.ToString() + ":" + sor.ToString(), 45);
 
                 // két széle sárga
-                MyE.Háttérszín("A" + sor.ToString(), Color.Yellow);
-                MyE.Háttérszín("C" + sor.ToString(), Color.Yellow);
-                MyE.Kiir(Dátum.Value.ToString("yyyy.MMMM.dd."), "B" + sor.ToString());
-                MyE.Igazít_vízszintes("B" + sor, "közép");
-                MyE.Betű("b" + sor.ToString(), 36);
+                MyX.Háttérszín(munkalap, "A" + sor.ToString(), Color.Yellow);
+                MyX.Háttérszín(munkalap, "C" + sor.ToString(), Color.Yellow);
+                MyX.Kiir(Dátum.Value.ToString("yyyy.MMMM.dd."), "B" + sor.ToString());
+                MyX.Igazít_vízszintes(munkalap, "B" + sor, "közép");
+                bebetű = new Beállítás_Betű
+                {
+                    Méret = 36,
+                };
+                MyX.Betű(munkalap, $"b{sor}", bebetű);
 
                 Holtart.Lép();
                 sor += 1;
                 // kiírjuk az E3
-                MyE.Sormagasság(sor.ToString() + ":" + sor.ToString(), 45);
+                MyX.Sormagasság(munkalap, sor.ToString() + ":" + sor.ToString(), 45);
 
                 // két széle sárga
-                MyE.Háttérszín("A" + sor.ToString(), Color.Yellow);
-                MyE.Háttérszín("C" + sor.ToString(), Color.Yellow);
+                MyX.Háttérszín(munkalap, "A" + sor.ToString(), Color.Yellow);
+                MyX.Háttérszín(munkalap, "C" + sor.ToString(), Color.Yellow);
 
-                MyE.Kiir("E3", "b" + sor.ToString());
-                MyE.Betű("B" + sor.ToString(), 36);
-                MyE.Igazít_vízszintes("B" + sor, "közép");
+                MyX.Kiir("E3", "b" + sor.ToString());
+                MyX.Betű(munkalap, "B" + sor.ToString(), bebetű);
+                MyX.Igazít_vízszintes(munkalap, "B" + sor, "közép");
 
                 // megnyitjuk a táblázatot
                 string szöveg1 = "";
@@ -1192,10 +1203,10 @@ namespace Villamos
                             if (szöveg1.Trim() != "")
                             {
                                 sor += 1;
-                                MyE.Kiir(szöveg1, "B" + sor.ToString());
-                                MyE.Igazít_vízszintes("B" + sor, "közép");
-                                MyE.Háttérszín("A" + sor.ToString(), Color.Yellow);
-                                MyE.Háttérszín("C" + sor.ToString(), Color.Yellow);
+                                MyX.Kiir(szöveg1, "B" + sor.ToString());
+                                MyX.Igazít_vízszintes(munkalap, "B" + sor, "közép");
+                                MyX.Háttérszín(munkalap, "A" + sor.ToString(), Color.Yellow);
+                                MyX.Háttérszín(munkalap, "C" + sor.ToString(), Color.Yellow);
                             }
                             szöveg1 = rekord.Azonosító.Trim() + "-";
                             szerelvény = rekord.Szerelvényszám;
@@ -1204,26 +1215,26 @@ namespace Villamos
                 }
 
                 sor += 1;
-                MyE.Kiir(szöveg1, "b" + sor.ToString());
-                MyE.Igazít_vízszintes("B" + sor, "közép");
-                MyE.Háttérszín("A" + sor.ToString(), Color.Yellow);
-                MyE.Háttérszín("C" + sor.ToString(), Color.Yellow);
+                MyX.Kiir(szöveg1, "b" + sor.ToString());
+                MyX.Igazít_vízszintes(munkalap, "B" + sor, "közép");
+                MyX.Háttérszín(munkalap, "A" + sor.ToString(), Color.Yellow);
+                MyX.Háttérszín(munkalap, "C" + sor.ToString(), Color.Yellow);
 
                 // üres sor
                 sor += 1;
-                MyE.Háttérszín("A" + sor.ToString(), Color.Yellow);
-                MyE.Háttérszín("C" + sor.ToString(), Color.Yellow);
+                MyX.Háttérszín(munkalap, "A" + sor.ToString(), Color.Yellow);
+                MyX.Háttérszín(munkalap, "C" + sor.ToString(), Color.Yellow);
 
                 // kiírjuk az V1
                 sor += 1;
-                MyE.Sormagasság(sor.ToString() + ":" + sor.ToString(), 45);
+                MyX.Sormagasság(munkalap, sor.ToString() + ":" + sor.ToString(), 45);
 
                 // két széle sárga
-                MyE.Háttérszín("A" + sor.ToString(), Color.Yellow);
-                MyE.Háttérszín("C" + sor.ToString(), Color.Yellow);
-                MyE.Kiir("V1", "b" + sor.ToString());
-                MyE.Igazít_vízszintes("B" + sor, "közép");
-                MyE.Betű("B" + sor.ToString(), 36);
+                MyX.Háttérszín(munkalap, "A" + sor.ToString(), Color.Yellow);
+                MyX.Háttérszín(munkalap, "C" + sor.ToString(), Color.Yellow);
+                MyX.Kiir("V1", "b" + sor.ToString());
+                MyX.Igazít_vízszintes(munkalap, "B" + sor, "közép");
+                MyX.Betű(munkalap, "B" + sor.ToString(), bebetű);
 
                 Holtart.Lép();
                 szöveg1 = "";
@@ -1234,25 +1245,32 @@ namespace Villamos
                     {
                         szöveg1 = rekord.Azonosító.Trim() + " - " + rekord.Rendelésiszám.Trim();
                         sor += 1;
-                        MyE.Kiir(szöveg1, "b" + sor.ToString());
-                        MyE.Igazít_vízszintes("B" + sor, "közép");
-                        MyE.Háttérszín("A" + sor.ToString(), Color.Yellow);
-                        MyE.Háttérszín("C" + sor.ToString(), Color.Yellow);
+                        MyX.Kiir(szöveg1, "b" + sor.ToString());
+                        MyX.Igazít_vízszintes(munkalap, "B" + sor, "közép");
+                        MyX.Háttérszín(munkalap, "A" + sor.ToString(), Color.Yellow);
+                        MyX.Háttérszín(munkalap, "C" + sor.ToString(), Color.Yellow);
                     }
 
                 }
 
                 sor += 1;
-                MyE.Háttérszín("a" + sor.ToString() + ":c" + sor.ToString(), Color.Yellow);
+                MyX.Háttérszín(munkalap, "a" + sor.ToString() + ":c" + sor.ToString(), Color.Yellow);
 
                 // nyomtatási beállítások
-                MyE.NyomtatásiTerület_részletes(munkalap, $"A1:C{sor}", "", "");
+                Beállítás_Nyomtatás benyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:C{sor}",
+                    LapSzéles = 1,
+                    LapMagas = 1
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, benyom);
                 Holtart.Ki();
 
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
