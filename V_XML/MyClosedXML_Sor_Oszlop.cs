@@ -197,6 +197,44 @@ namespace Villamos
             }
         }
 
+        public static int Utolsósor(string munkalapnév)
+        {
+            int maxRow = 0;
+            try
+            {
+                IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
+                var utolsóSor = munkalap.LastRowUsed();
+                maxRow = utolsóSor?.RowNumber() ?? 0;
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Utolsósor(munkalap {munkalapnév}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return maxRow;
+        }
 
+
+        public static int Utolsóoszlop(string munkalapnév)
+        {
+            int maxColumn = 0;
+            try
+            {
+                IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
+
+                // Opció 1: legnagyobb oszlopszám (ajánlott legtöbb esetben)
+                maxColumn = munkalap.LastColumnUsed()?.ColumnNumber() ?? 0;
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Utolsósor(munkalap {munkalapnév}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return maxColumn;
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using ClosedXML.Excel;
+using Microsoft.Office.Interop.Excel;
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 
@@ -113,6 +115,28 @@ namespace Villamos
                 string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
                 HibaNapló.Log(ex.Message, $"FerdeVonal(Kijelöltterület: {beáll.Terület}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public static void Pontvonal(string Kijelöltterület)
+        {
+            try
+            {
+                // JAVÍTANDÓ:
+                //MyExcel.Range Táblaterület = Module_Excel.xlApp.get_Range(Kijelöltterület);
+                //Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].LineStyle = XlLineStyle.xlContinuous;
+                //Táblaterület.Borders[XlBordersIndex.xlEdgeTop].ColorIndex = XlColorIndex.xlColorIndexAutomatic;
+                //Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].TintAndShade = 0;
+                //Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlHairline;
+
+
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Pontvonal(Kijelöltterület {Kijelöltterület}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
