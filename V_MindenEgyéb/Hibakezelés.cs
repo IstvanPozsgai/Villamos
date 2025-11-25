@@ -104,8 +104,9 @@ namespace Villamos
 
         private static void Email(string hely, string hiba, int hibakod)
         {
-            if (hibakod != -2146777998 || hibakod != -2146233088)
+            if (!hiba.Contains ("0x800AC472"))
             {
+          
                 MyO._Application _app = new MyO.Application();
                 MyO.MailItem mail = (MyO.MailItem)_app.CreateItem(MyO.OlItemType.olMailItem);
                 // címzett
