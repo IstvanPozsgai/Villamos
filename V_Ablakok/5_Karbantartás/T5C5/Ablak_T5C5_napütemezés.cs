@@ -11,7 +11,7 @@ using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
+
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -1080,7 +1080,7 @@ namespace Villamos
                 Holtart.Ki();
 
                 MessageBox.Show("Elkészült az Excel tábla: " + FájlExcel_, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(FájlExcel_);
+                MyF.Megnyitás(FájlExcel_);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1104,7 +1104,7 @@ namespace Villamos
                     InitialDirectory = "MyDocuments",
 
                     Title = "Vezénylés készítés mentése Excel fájlba",
-                    FileName = $"Vezénylés-{Program.PostásNév.Trim()}-{DateTime.Now :yyyyMMddHHmmss}",
+                    FileName = $"Vezénylés-{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1144,7 +1144,7 @@ namespace Villamos
 
                 // képet beilleszt
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\Villamos_T5C5.png";
-                    if (File.Exists(hely)) MyX.Kép_beillesztés(munkalap, "A1", hely,50, 40, 0.7d);
+                if (File.Exists(hely)) MyX.Kép_beillesztés(munkalap, "A1", hely, 50, 40, 0.7d);
                 Holtart.Lép();
                 int sor = 8;
                 MyX.Kiir("Feladatterv", "b" + sor.ToString());
@@ -1306,12 +1306,12 @@ namespace Villamos
 
                 Holtart.Be();
                 // megnyitjuk
-                MyE.ExcelLétrehozás();
+                MyX.ExcelLétrehozás(munkalap);
 
                 long szerelvény = 0;
 
                 int sor = 1;
-                MyE.Kiir(Dátum.Value.ToString("yyyy.MM.dd") + "-i tervezett karbantartásokhoz járműveinek 1 hónapos hibalistája", "A" + sor.ToString());
+                MyX.Kiir(Dátum.Value.ToString("yyyy.MM.dd") + "-i tervezett karbantartásokhoz járműveinek 1 hónapos hibalistája", "A" + sor.ToString());
                 sor += 2;
 
                 List<Adat_Vezénylés> AdatVez = KézVezénylés.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value); //rekord
@@ -1332,8 +1332,8 @@ namespace Villamos
                     if (szerelvény == 0)
                         szerelvény = rekord.Szerelvényszám;
 
-                    MyE.Kiir(rekord.Azonosító.Trim(), "A" + sor.ToString());
-                    MyE.Kiir(rekord.Vizsgálat.Trim(), "B" + sor.ToString());
+                    MyX.Kiir(rekord.Azonosító.Trim(), "A" + sor.ToString());
+                    MyX.Kiir(rekord.Vizsgálat.Trim(), "B" + sor.ToString());
                     sor += 1;
 
                     // hibák felsorolása az aktuális évben
@@ -1348,9 +1348,9 @@ namespace Villamos
                     {
                         foreach (Adat_Menetkimaradás rekordhiba in Adatokhiba)
                         {
-                            MyE.Kiir(rekordhiba.Bekövetkezés.ToString(), $"c{sor}");
-                            MyE.Kiir(rekordhiba.Jvbeírás.Trim(), $"d{sor}");
-                            MyE.Kiir(rekordhiba.Javítás.Trim(), $"e{sor}");
+                            MyX.Kiir(rekordhiba.Bekövetkezés.ToString(), $"c{sor}");
+                            MyX.Kiir(rekordhiba.Jvbeírás.Trim(), $"d{sor}");
+                            MyX.Kiir(rekordhiba.Javítás.Trim(), $"e{sor}");
                             sor += 1;
                         }
                     }
@@ -1359,19 +1359,25 @@ namespace Villamos
                     Holtart.Lép();
                 }
 
-                MyE.Oszlopszélesség(munkalap, "C:C");
-                MyE.Oszlopszélesség(munkalap, "D:D");
-                MyE.Oszlopszélesség(munkalap, "E:E");
+                MyX.Oszlopszélesség(munkalap, "C:C");
+                MyX.Oszlopszélesség(munkalap, "D:D");
+                MyX.Oszlopszélesség(munkalap, "E:E");
 
                 // nyomtatási beállítások
-                MyE.NyomtatásiTerület_részletes(munkalap, "A1:E" + sor, "", "", true);
+                Beállítás_Nyomtatás benyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:E{sor}",
+                    LapSzéles = 1
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, benyom);
 
                 Holtart.Ki();
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
 
-                MyE.Megnyitás(fájlexc);
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
+
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
