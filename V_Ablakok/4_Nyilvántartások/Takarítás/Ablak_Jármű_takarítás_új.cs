@@ -5003,7 +5003,7 @@ namespace Villamos
                 }
                 Holtart.Lép();
 
-                MyX.Kép_beillesztés("Munka1", "A1", $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\képek\Villamos.png", 50, 30, 0.75d);
+                MyX.Kép_beillesztés("Munka1", "A1", $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\képek\Villamos.png", 50, 30, 0.75d, 0.75d);
 
                 sor = 8;
                 MyX.Kiir("Takarítási terv", $"B{sor}");

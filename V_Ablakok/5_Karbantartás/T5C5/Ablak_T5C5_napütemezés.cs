@@ -1144,7 +1144,7 @@ namespace Villamos
 
                 // képet beilleszt
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\Villamos_T5C5.png";
-                if (File.Exists(hely)) MyX.Kép_beillesztés(munkalap, "A1", hely, 50, 40, 0.7d);
+                if (File.Exists(hely)) MyX.Kép_beillesztés(munkalap, "A1", hely, 50, 40, 0.7d, 0.70d);
                 Holtart.Lép();
                 int sor = 8;
                 MyX.Kiir("Feladatterv", "b" + sor.ToString());

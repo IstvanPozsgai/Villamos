@@ -164,7 +164,7 @@ namespace Villamos
         /// <param name="Y"></param>
         /// <param name="Magas"></param>
         /// <param name="Széles"></param>
-        public static void Kép_beillesztés(  string munkalapnév, String mit, string hely, int X, int Y, double  százalék)
+        public static void Kép_beillesztés(  string munkalapnév, String mit, string hely, int X, int Y, double  Wszázalék, double HSzázalék)
         {
             try
             {
@@ -175,14 +175,15 @@ namespace Villamos
                     munkalap.AddPicture(hely)
                             .WithPlacement(ClosedXML.Excel.Drawings.XLPicturePlacement.FreeFloating)
                             .MoveTo(X, Y)          // X és Y: pixelben vagy pontban (ClosedXML alapértelmezetten EMU-t használ, de van pont / pixel konverzió)
-                            .Scale(százalék ); // ClosedXML nem teszi lehetővé közvetlen pixelméret megadását — relatív skálázás szükséges
+                            .ScaleWidth(Wszázalék)
+                            .ScaleHeight(HSzázalék); // ClosedXML nem teszi lehetővé közvetlen pixelméret megadását — relatív skálázás szükséges
                 }
             }
             catch (Exception ex)
             {
                 StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
                 string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
-                HibaNapló.Log(ex.Message, $"Kép_beillesztés(munkalap {munkalapnév}, mit {mit}, hely {hely}, X {X}, Y {Y}, százalék {százalék}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, $"Kép_beillesztés(munkalap {munkalapnév}, mit {mit}, hely {hely}, X {X}, Y {Y}, Wszázalék {Wszázalék}), HSzázalék {HSzázalék}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
                            MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);          
             }
         }
