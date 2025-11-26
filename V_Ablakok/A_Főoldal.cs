@@ -367,7 +367,7 @@ namespace Villamos
                 jogosultságKiosztásToolStripMenuItem.Enabled = false;
                 SzoftverkulcsKészítésMenü.Enabled = false;
                 //az új esetén az új beállítással megyünk be.
-                if (!panels2.Text.Any(c => c != '0')) Menü_Beállítása_Új();
+                if (panels2.Text.Substring(0,1) == "R") Menü_Beállítása_Új();
             }
             catch (HibásBevittAdat ex)
             {
