@@ -63,14 +63,15 @@
             this.Hibanaplo_Tablazat.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Hibanaplo_Tablazat.FilterAndSortEnabled = true;
             this.Hibanaplo_Tablazat.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.Hibanaplo_Tablazat.Location = new System.Drawing.Point(3, 3);
+            this.Hibanaplo_Tablazat.Location = new System.Drawing.Point(2, 2);
+            this.Hibanaplo_Tablazat.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Hibanaplo_Tablazat.MaxFilterButtonImageHeight = 23;
             this.Hibanaplo_Tablazat.Name = "Hibanaplo_Tablazat";
             this.Hibanaplo_Tablazat.ReadOnly = true;
             this.Hibanaplo_Tablazat.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Hibanaplo_Tablazat.RowHeadersWidth = 51;
             this.Hibanaplo_Tablazat.RowTemplate.Height = 24;
-            this.Hibanaplo_Tablazat.Size = new System.Drawing.Size(794, 444);
+            this.Hibanaplo_Tablazat.Size = new System.Drawing.Size(596, 362);
             this.Hibanaplo_Tablazat.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Hibanaplo_Tablazat.TabIndex = 0;
             // 
@@ -82,30 +83,34 @@
             this.tableLayoutPanel1.Controls.Add(this.btn_rejtett_joghoz, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 0F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 450);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(600, 366);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // btn_rejtett_joghoz
             // 
-            this.btn_rejtett_joghoz.Location = new System.Drawing.Point(3, 3);
+            this.btn_rejtett_joghoz.Location = new System.Drawing.Point(2, 2);
+            this.btn_rejtett_joghoz.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_rejtett_joghoz.Name = "btn_rejtett_joghoz";
-            this.btn_rejtett_joghoz.Size = new System.Drawing.Size(75, 1);
+            this.btn_rejtett_joghoz.Size = new System.Drawing.Size(56, 1);
             this.btn_rejtett_joghoz.TabIndex = 1;
             this.btn_rejtett_joghoz.UseVisualStyleBackColor = true;
             // 
             // Ablak_Hibanaplo
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(600, 366);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Ablak_Hibanaplo";
             this.Text = "Hibanapló";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Ablak_Hibanaplo_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Hibanaplo_Tablazat)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
