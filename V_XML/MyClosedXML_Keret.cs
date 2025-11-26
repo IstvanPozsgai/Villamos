@@ -16,7 +16,7 @@ namespace Villamos
             {
                 // Tartomány lekérése az aktuális (aktív) munkalapon
                 IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
-                IXLRange tartomány = xlWorkSheet.Range(Kijelöltterület);
+                IXLRange tartomány = munkalap.Range(Kijelöltterület);
 
                 // === Külső szegélyek: MEDIUM ===
                 tartomány.Style.Border.LeftBorder = XLBorderStyleValues.Medium;
