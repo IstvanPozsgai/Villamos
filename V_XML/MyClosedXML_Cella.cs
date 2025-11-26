@@ -9,16 +9,35 @@ namespace Villamos
     public static partial class MyClosedXML_Excel
     {
         /// <summary>
-        /// Kiírja a szöveget a megfelelő cellába
+        /// Az mit-ben átküldött szöveget kiírja a hova helyre
+        /// képletet akarunk kiírni akkor #KÉPLET# szöveget kell a szövegbe beírni
+        /// #SZÁMD# double számot lehet kiiratni
+        /// #SZÁME# int számot lehet kiiratni
         /// </summary>
-        /// <param name="mit">szöveg</param>
-        /// <param name="hova">szöveg</param>
-        public static void Kiir(string mit, string hova)
+        /// <param name="mit"></param>
+        /// <param name="hova"></param>
+        /// <param name="szám"></param>
+        public static void Kiir(string mit, string hova, double szám = 0)
         {
             try
             {
-                // Érték beírása a megadott cellába vagy tartományba
-                xlWorkSheet.Range(hova).Value = mit;
+                if (mit.Contains("#SZÁMD#"))
+                {
+                    xlWorkSheet.Range(hova).Value = szám;
+                }
+                else if (mit.Contains("#SZÁME#"))
+                {
+                    xlWorkSheet.Range(hova).Value = (int)szám;
+                }
+                else if (mit.Contains("#KÉPLET#"))
+                {
+                    xlWorkSheet.Range(hova).FormulaR1C1 = mit.Replace("#KÉPLET#", "");
+                }
+                else
+                {
+                    // Érték beírása a megadott cellába vagy tartományba
+                    xlWorkSheet.Range(hova).Value = mit;
+                }
             }
             catch (Exception ex)
             {

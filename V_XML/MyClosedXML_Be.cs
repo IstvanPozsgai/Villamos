@@ -14,6 +14,7 @@ namespace Villamos
             {
                 IXLWorksheet lap = xlWorkBook.Worksheet(munkalapnév);
                 válasz = lap.Cell(honnan).Value.ToStrTrim();
+                if(válasz.Trim ()=="") válasz = "_";
             }
             catch (Exception ex)
             {
