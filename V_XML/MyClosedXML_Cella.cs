@@ -17,17 +17,17 @@ namespace Villamos
         /// <param name="mit"></param>
         /// <param name="hova"></param>
         /// <param name="szám"></param>
-        public static void Kiir(string mit, string hova, double szám = 0)
+        public static void Kiir(string mit, string hova)
         {
             try
             {
                 if (mit.Contains("#SZÁMD#"))
                 {
-                    xlWorkSheet.Range(hova).Value = szám;
+                    xlWorkSheet.Range(hova).Value = mit.Replace("#SZÁMD#", "").ToÉrt_Double ();
                 }
                 else if (mit.Contains("#SZÁME#"))
                 {
-                    xlWorkSheet.Range(hova).Value = (int)szám;
+                    xlWorkSheet.Range(hova).Value = mit.Replace("#SZÁME#", "").ToÉrt_Int();
                 }
                 else if (mit.Contains("#KÉPLET#"))
                 {

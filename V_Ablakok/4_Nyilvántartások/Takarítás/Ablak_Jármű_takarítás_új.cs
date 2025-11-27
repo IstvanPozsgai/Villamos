@@ -3543,10 +3543,10 @@ namespace Villamos
                 foreach (Adat_Jármű_Takarítás_Létszám rekord in AdatLétsz)
                 {
                     i = rekord.Dátum.Day;
-                    MyX.Kiir("#SZÁME#", "b" + (i + 2), rekord.Előírt);
-                    MyX.Kiir("#SZÁME#", "c" + (i + 2), rekord.Megjelent);
-                    MyX.Kiir("#KÉPLET#=IF(RC[-2]-RC[-1]>0,RC[-2]-RC[-1],0)", "d" + (i + 2));
-                    MyX.Kiir("#SZÁME#", "e" + (i + 2), rekord.Ruhátlan);
+                    MyX.Kiir($"#SZÁME#{rekord.Előírt}", "b" + (i + 2));
+                    MyX.Kiir($"#SZÁME#{rekord.Megjelent}", "c" + (i + 2));
+                    MyX.Kiir("#KÉPLET#=IF(RC[-2]-RC[-1]>0,RC[-2]-RC[-1],0)", $"d{i + 2}");
+                    MyX.Kiir($"#SZÁME#{rekord.Ruhátlan}", "e" + (i + 2));
                     Holtart.Lép();
                 }
 
@@ -3567,10 +3567,10 @@ namespace Villamos
                 foreach (Adat_Jármű_Takarítás_Létszám rekord in AdatLétsz)
                 {
                     i = rekord.Dátum.Day;
-                    MyX.Kiir("#SZÁME#", "f" + (i + 2), rekord.Előírt);
-                    MyX.Kiir("#SZÁME#", "g" + (i + 2), rekord.Megjelent);
+                    MyX.Kiir($"#SZÁME#{rekord.Előírt}", "f" + (i + 2));
+                    MyX.Kiir($"#SZÁME#{rekord.Megjelent}", "g" + (i + 2));
                     MyX.Kiir("#KÉPLET#=IF(RC[-2]-RC[-1]>0,RC[-2]-RC[-1],0)", "h" + (i + 2));
-                    MyX.Kiir("#SZÁME#", "i" + (i + 2), rekord.Ruhátlan);
+                    MyX.Kiir($"#SZÁME#{rekord.Ruhátlan}", "i" + (i + 2));
                     Holtart.Lép();
                 }
 
@@ -3697,17 +3697,17 @@ namespace Villamos
                     {
                         // ha nappal
                         MyX.Kiir("#KÉPLET#=RC[1]+RC[2]", MyF.Oszlopnév(oszlop) + (nap + 3));
-                        MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 1) + (nap + 3), rekord.J1megfelelő);
-                        MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 2) + (nap + 3), rekord.J1nemmegfelelő);
-                        MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 3) + (nap + 3), eredmény);
+                        MyX.Kiir($"#SZÁME#{rekord.J1megfelelő}", MyF.Oszlopnév(oszlop + 1) + (nap + 3));
+                        MyX.Kiir($"#SZÁME#{rekord.J1nemmegfelelő}", MyF.Oszlopnév(oszlop + 2) + (nap + 3));
+                        MyX.Kiir($"#SZÁME#{eredmény}", MyF.Oszlopnév(oszlop + 3) + (nap + 3));
                     }
                     else
                     {
                         // ha éjszaka
                         MyX.Kiir("#KÉPLET#=RC[1]+RC[2]", MyF.Oszlopnév(oszlop + 4) + (nap + 3));
-                        MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 5) + (nap + 3), rekord.J1megfelelő);
-                        MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 6) + (nap + 3), rekord.J1nemmegfelelő);
-                        MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 7) + (nap + 3), eredmény);
+                        MyX.Kiir($"#SZÁME#{rekord.J1megfelelő}", MyF.Oszlopnév(oszlop + 5) + (nap + 3));
+                        MyX.Kiir($"#SZÁME#{rekord.J1nemmegfelelő}", MyF.Oszlopnév(oszlop + 6) + (nap + 3));
+                        MyX.Kiir($"#SZÁME#{eredmény}", MyF.Oszlopnév(oszlop + 7) + (nap + 3));
                     }
 
                     // összesítjük
@@ -3887,9 +3887,9 @@ namespace Villamos
 
                         if (MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop + 1) + (nap + 3)) == "_" && MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop + 2) + (nap + 3)) == "_")
                         {
-                            MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 1) + (nap + 3), 0);
-                            MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 2) + (nap + 3), 0);
-                            MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 3) + (nap + 3), 0);
+                            MyX.Kiir($"#SZÁME#0", MyF.Oszlopnév(oszlop + 1) + (nap + 3));
+                            MyX.Kiir($"#SZÁME#0", MyF.Oszlopnév(oszlop + 2) + (nap + 3));
+                            MyX.Kiir($"#SZÁME#0", MyF.Oszlopnév(oszlop + 3) + (nap + 3));
                             MyX.Kiir("#KÉPLET#=RC[1]+RC[2]", MyF.Oszlopnév(oszlop) + (nap + 3));
                         }
 
@@ -3904,7 +3904,7 @@ namespace Villamos
                                     else
                                         mennyi = int.Parse(MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop + 1) + (nap + 3)));
 
-                                    MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 1) + (nap + 3), (mennyi + 1));
+                                    MyX.Kiir($"#SZÁME#{mennyi + 1}", MyF.Oszlopnév(oszlop + 1) + (nap + 3));
                                     break;
                                 }
                             case 2:
@@ -3915,7 +3915,7 @@ namespace Villamos
                                     else
                                         mennyi = int.Parse(MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop + 2) + (nap + 3)));
 
-                                    MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 2) + (nap + 3), (mennyi + 1));
+                                    MyX.Kiir($"#SZÁME#{mennyi + 1}", MyF.Oszlopnév(oszlop + 2) + (nap + 3));
 
                                     // kötbér
                                     if (MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop + 3) + (nap + 3)) == "")
@@ -3931,7 +3931,7 @@ namespace Villamos
                                         if (rekord.Pótdátum == true)
                                             mennyi += Póthatáridő;
                                     }
-                                    MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 3) + (nap + 3), mennyi);
+                                    MyX.Kiir($"#SZÁME#{mennyi}", MyF.Oszlopnév(oszlop + 3) + (nap + 3));
                                     break;
                                 }
 
@@ -3950,9 +3950,9 @@ namespace Villamos
 
                         if (MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop + 5) + (nap + 3)) == "_" && MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop + 6) + (nap + 3)) == "_")
                         {
-                            MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 5) + (nap + 3), 0);
-                            MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 6) + (nap + 3), 0);
-                            MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 7) + (nap + 3), 0);
+                            MyX.Kiir($"#SZÁME#0", MyF.Oszlopnév(oszlop + 5) + (nap + 3));
+                            MyX.Kiir($"#SZÁME#0", MyF.Oszlopnév(oszlop + 6) + (nap + 3));
+                            MyX.Kiir($"#SZÁME#0", MyF.Oszlopnév(oszlop + 7) + (nap + 3));
                             MyX.Kiir("#KÉPLET#=RC[1]+RC[2]", MyF.Oszlopnév(oszlop + 4) + (nap + 3));
                         }
 
@@ -3966,7 +3966,7 @@ namespace Villamos
                                     if (!int.TryParse(MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop + 5) + (nap + 3)), out mennyi))
                                         mennyi = 0;
 
-                                    MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 5) + (nap + 3), (mennyi + 1));
+                                    MyX.Kiir($"#SZÁME#{mennyi + 1}", MyF.Oszlopnév(oszlop + 5) + (nap + 3));
                                     break;
                                 }
                             case 2:
@@ -3974,7 +3974,7 @@ namespace Villamos
                                     // ha nem megfelelő
                                     if (!int.TryParse(MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop + 6) + (nap + 3)), out mennyi))
                                         mennyi = 0;
-                                    MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 6) + (nap + 3), (mennyi + 1));
+                                    MyX.Kiir($"#SZÁME#{mennyi + 1}", MyF.Oszlopnév(oszlop + 6) + (nap + 3));
 
                                     // kötbér
                                     if (!int.TryParse(MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop + 7) + (nap + 3)), out mennyi))
@@ -3988,7 +3988,7 @@ namespace Villamos
                                         if (rekord.Pótdátum == true)
                                             mennyi += Póthatáridő;
                                     }
-                                    MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 7) + (nap + 3), mennyi);
+                                    MyX.Kiir($"#SZÁME#{mennyi}", MyF.Oszlopnév(oszlop + 7) + (nap + 3));
                                     break;
                                 }
 
@@ -4122,7 +4122,7 @@ namespace Villamos
                     {
                         MyX.Kiir("db", $"B{sor}");
                     }
-                    MyX.Kiir("#SZÁME#", $"c{sor}", 0);
+                    MyX.Kiir($"#SZÁME#0", $"c{sor}");
 
                     sor += 1;
                     Lekérdezés_Kategória.Text = Lekérdezés_Kategória.Items[ii].ToString();
@@ -4135,7 +4135,7 @@ namespace Villamos
                     {
                         MyX.Kiir("db", $"B{sor}");
                     }
-                    MyX.Kiir("#SZÁME#", $"c{sor}", 0);
+                    MyX.Kiir($"#SZÁME#0", $"c{sor}");
                 }
                 vége = sor;
                 int melyiksor = 0;
@@ -4174,7 +4174,7 @@ namespace Villamos
                             oszlop += 1;
                             típus = típusnév[i].ToStrTrim();
                             for (int j = 7; j <= 16; j++)
-                                MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop) + j.ToString(), 0);
+                                MyX.Kiir("#SZÁME#0", MyF.Oszlopnév(oszlop) + j.ToString());
                         }
                         if (típus.Trim() == rekord.Típus.Trim())
                         {
@@ -4187,8 +4187,8 @@ namespace Villamos
                                 volt += rekord.J1megfelelő;
                             }
                             MyX.Kiir(típusnév[i].ToStrTrim(), MyF.Oszlopnév(oszlop) + "6");
-                            MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop) + "7", mennyi);
-                            MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop) + "8", volt);
+                            MyX.Kiir($"#SZÁME#{mennyi}", MyF.Oszlopnév(oszlop) + "7");
+                            MyX.Kiir($"#SZÁME#{volt}", MyF.Oszlopnév(oszlop) + "8");
                         }
                     }
                     mennyi = 0d;
@@ -4230,7 +4230,7 @@ namespace Villamos
                                     oszlop += 1;
                                     típus = típusnév[i].ToStrTrim();
                                     for (int j = 7; j <= 16; j++)
-                                        MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop) + j, 0);
+                                        MyX.Kiir("#SZÁME#0", MyF.Oszlopnév(oszlop) + j);
                                 }
                                 if (típus.Trim() == rekord.Típus.Trim())
                                 {
@@ -4243,8 +4243,8 @@ namespace Villamos
                                         volt += 1;
                                     }
                                     MyX.Kiir(típusnév[i].ToStrTrim(), MyF.Oszlopnév(oszlop) + "6");
-                                    MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop) + melyiksor.ToString(), mennyi);
-                                    MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop) + (melyiksor + 1).ToString(), volt);
+                                    MyX.Kiir($"#SZÁME#{mennyi}", MyF.Oszlopnév(oszlop) + melyiksor.ToString());
+                                    MyX.Kiir($"#SZÁME#{volt}", MyF.Oszlopnév(oszlop) + (melyiksor + 1).ToString());
                                 }
                             }
                             mennyi = 0;
@@ -4288,7 +4288,7 @@ namespace Villamos
                                     oszlop += 1;
                                     típus = típusnév[i].ToStrTrim();
                                     for (int j = 7; j <= 16; j++)
-                                        MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop) + i, 0);
+                                        MyX.Kiir("#SZÁME#0", MyF.Oszlopnév(oszlop) + i);
                                 }
                                 if (típus.Trim() == rekord.Típus.ToStrTrim())
                                 {
@@ -4301,8 +4301,8 @@ namespace Villamos
                                         éjszaka += rekord.Mérték;
                                     }
                                     MyX.Kiir(típusnév[i].ToStrTrim(), MyF.Oszlopnév(oszlop) + "6");
-                                    MyX.Kiir("#SZÁMD#", MyF.Oszlopnév(oszlop) + melyiksor, nappal);
-                                    MyX.Kiir("#SZÁMD#", MyF.Oszlopnév(oszlop) + (melyiksor + 1), éjszaka);
+                                    MyX.Kiir($"#SZÁMD#{nappal}", MyF.Oszlopnév(oszlop) + melyiksor);
+                                    MyX.Kiir($"#SZÁMD#{éjszaka}", MyF.Oszlopnév(oszlop) + (melyiksor + 1));
                                 }
                             }
                             nappal = 0d;
@@ -4766,8 +4766,8 @@ namespace Villamos
                         for (int alma = 0; alma <= hónapnap - 1; alma++)
                         {
                             // kinullázzuk
-                            MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop) + (alma + 4), 0);
-                            MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + 1) + (alma + 4), 0);
+                            MyX.Kiir($"#SZÁME#0", MyF.Oszlopnév(oszlop) + (alma + 4));
+                            MyX.Kiir($"#SZÁME#0", MyF.Oszlopnév(oszlop + 1) + (alma + 4));
                             MyX.Kiir("#KÉPLET#=SUM(RC[-2]:RC[-1])", MyF.Oszlopnév(oszlop + 2) + (alma + 4));
                         }
                     }
@@ -4779,7 +4779,7 @@ namespace Villamos
 
                     mennyi = double.Parse(MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop + korrektor) + (nap + 3)));
                     mennyi += rekord.Mérték;
-                    MyX.Kiir("#SZÁME#", MyF.Oszlopnév(oszlop + korrektor) + (nap + 3), mennyi);
+                    MyX.Kiir($"#SZÁMD#{mennyi}", MyF.Oszlopnév(oszlop + korrektor) + (nap + 3));
 
                     Holtart.Lép();
                 }
