@@ -26,6 +26,12 @@ namespace Villamos
             return válasz;
         }
 
+        /// <summary>
+        /// CSak adott munkalapon belül másol
+        /// </summary>
+        /// <param name="munkalapnév"></param>
+        /// <param name="honnan">kijelölt táblázat</param>
+        /// <param name="hova">a bal felső cella ahova akarunk másolni</param>
         public static void Értékmásol(string munkalapnév, string honnan, string hova)
         {
             try

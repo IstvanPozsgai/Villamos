@@ -16,12 +16,13 @@ namespace Villamos
             try
             {
                 IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
-                IXLRange cella = munkalap.Range (mit);
+                IXLRange cella = munkalap.Range(mit);
                 cella.Style.Font.FontColor = XLColor.FromColor(beállítás.Szín);
                 cella.Style.Font.Italic = beállítás.Dőlt;
                 cella.Style.Font.Bold = beállítás.Vastag;
                 cella.Style.Font.SetFontName(beállítás.Név);
                 cella.Style.Font.FontSize = beállítás.Méret;
+                if (!string.IsNullOrWhiteSpace(beállítás.Formátum)) cella.Style.NumberFormat.Format = beállítás.Formátum;
                 if (beállítás.Aláhúzott) cella.Style.Font.Underline = XLFontUnderlineValues.Single;
             }
             catch (Exception ex)
