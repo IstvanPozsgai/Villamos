@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Adatszerkezet;
 using Villamos.V_Kezelők;
@@ -48,6 +50,19 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
         List<Adat_ÉpJár_Takarítás_TIG> AdatokTIG = new List<Adat_ÉpJár_Takarítás_TIG>();
         List<string> TIGTípusok = new List<string>();
 #pragma warning restore IDE0044 // Add readonly modifie
+
+
+        readonly Beállítás_Betű BeBetűG14 = new Beállítás_Betű { Név = "Garamond", Méret = 14 };
+        readonly Beállítás_Betű BeBetűG14V = new Beállítás_Betű { Név = "Garamond", Méret = 14, Vastag = true };
+        readonly Beállítás_Betű BeBetűGFt = new Beállítás_Betű { Név = "Garamond", Méret = 12, Formátum = "#,###.## Ft" };
+        readonly Beállítás_Betű BeBetűGS = new Beállítás_Betű { Név = "Garamond", Méret = 12, Formátum = "#,###.##" };
+        readonly Beállítás_Betű BeBetűGSV = new Beállítás_Betű { Név = "Garamond", Méret = 12, Formátum = "#,###.##", Vastag = true };
+        readonly Beállítás_Betű BeBetűGFt0 = new Beállítás_Betű { Név = "Garamond", Méret = 12, Formátum = "#,##0 Ft" };
+        readonly Beállítás_Betű BeBetűG0 = new Beállítás_Betű { Név = "Garamond", Méret = 12, Formátum = "#,##0" };
+        readonly Beállítás_Betű BeBetűGSP = new Beállítás_Betű { Név = "Garamond", Méret = 12, Formátum = "#,###" };
+        readonly Beállítás_Betű BeBetűGFtV = new Beállítás_Betű { Név = "Garamond", Méret = 12, Formátum = "#,###.## Ft", Vastag = true };
+        readonly Beállítás_Betű BeBetűGV = new Beállítás_Betű { Név = "Garamond", Méret = 12, Vastag = true };
+        readonly Beállítás_Betű BeBetűGA = new Beállítás_Betű { Név = "Garamond", Méret = 12, Aláhúzott = true };
 
         public Takarítás_teljesítés_Igazolás(DateTime dátum, bool jármű, string telephely)
         {
@@ -129,7 +144,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
         {
             try
             {
-                string munkalap = "Munka1";
+                string munkalap = "Összesítő";
+                MyX.Munkalap_átnevezés("Munka1", munkalap);
                 // *********************************************
                 // ********* Osztály tábla *********************
                 // *********************************************
@@ -153,15 +169,20 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                         sor += 1;
                     }
                 }
-              
+
                 MyX.Oszlopszélesség(munkalap, "A:A");
                 MyX.Oszlopszélesség(munkalap, "B:B");
-                // JAVÍTANDÓ:      MyX.OszlopRejtés(munkalap, "B:B");
+                MyX.OszlopRejtés(munkalap, "B:B");
                 MyX.Oszlopszélesség(munkalap, "C:E");
 
                 MyX.Rácsoz(munkalap, $"a1:e{sor - 1}");
-                MyX.Munkalap_átnevezés(munkalap, "Összesítő");
-                // JAVÍTANDÓ:    MyX.NyomtatásiTerület_részletes("Összesítő", $"a1:e{sor - 1}", "", "", true);
+
+                Beállítás_Nyomtatás benyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = "Összesítő",
+                    NyomtatásiTerület = $"a1:e{sor - 1}"
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, benyom);
 
             }
             catch (HibásBevittAdat ex)
@@ -247,7 +268,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                         sor += 1;
                         MyX.Egyesít(munkalap, $"b{sor}:p{sor}");
                         MyX.Igazít_vízszintes(munkalap, $"b{sor}:p{sor}", "bal");
-                        // JAVÍTANDÓ:      MyX.Háttérszín(munkalap, $"b{sor}:p{sor}", 13434828);
+                        MyX.Háttérszín(munkalap, $"b{sor}:p{sor}", Color.MediumVioletRed);
                         MyX.Kiir(rekord.Osztály.Trim(), $"b{sor}");
                         MyX.Sormagasság(munkalap, $"{sor}:{sor}", 20);
 
@@ -293,20 +314,20 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                                 MyX.Kiir(idE3db.ToString(), $"i{sor}");
 
                                 MyX.Kiir(rekord.E1Ft.ToString().Replace(",", "."), $"j{sor}");
-                                // JAVÍTANDÓ:    MyX.Betű($"j{sor}", "", "#,###.## $");
+                                MyX.Betű(munkalap, $"j{sor}", BeBetűGFt);
                                 MyX.Kiir((rekord.E2Ft * rekord1.Méret).ToString().Replace(",", "."), $"k{sor}");
-                                // JAVÍTANDÓ:  MyX.Betű($"k{sor}", "", "#,###.## $");
+                                MyX.Betű(munkalap, $"k{sor}", BeBetűGFt);
                                 MyX.Kiir((rekord.E3Ft * rekord1.Méret).ToString().Replace(",", "."), $"l{sor}");
-                                // JAVÍTANDÓ:        MyX.Betű($"l{sor}", "", "#,###.## $");
+                                MyX.Betű(munkalap, $"l{sor}", BeBetűGFt);
 
                                 MyX.Kiir("=RC[-3]*RC[-8]", $"m{sor}");
-                                // JAVÍTANDÓ:    MyX.Betű($"M{sor}", "", "#,###.## $");
+                                MyX.Betű(munkalap, $"M{sor}", BeBetűGFt);
                                 MyX.Kiir("=RC[-3]*RC[-7]", $"n{sor}");
-                                // JAVÍTANDÓ:    MyX.Betű($"N{sor}", "", "#,###.## $");
+                                MyX.Betű(munkalap, $"N{sor}", BeBetűGFt);
                                 MyX.Kiir("=RC[-3]*RC[-6]", $"o{sor}");
-                                // JAVÍTANDÓ:     MyX.Betű($"O{sor}", "", "#,###.## $");
+                                MyX.Betű(munkalap, $"O{sor}", BeBetűGFt);
                                 MyX.Kiir("=SUM(RC[-3]:RC[-1])", $"p{sor}");
-                                // JAVÍTANDÓ: MyX.Betű($"P{sor}", "", "#,###.## $");
+                                MyX.Betű(munkalap, $"P{sor}", BeBetűGFt);
 
                                 E1SzumMennyi += (idE1db);
                                 E2SzumMennyi += (idE2db * rekord1.Méret);
@@ -322,32 +343,28 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                             }
                             sor++;
                             MyX.Kiir($"{rekord.Osztály} Összesen", $"B{sor}");
-                            // JAVÍTANDÓ:    MyX.Betű($"B{sor}", false, false, true);
+                            MyX.Betű(munkalap, $"B{sor}", BeBetűGV);
 
                             MyX.Kiir(E1SzumMennyi.ToString().Replace(",", "."), $"E{sor}");
-                            // JAVÍTANDÓ:       MyX.Betű($"E{sor}", false, false, true);
+                            MyX.Betű(munkalap, $"E{sor}", BeBetűGV);
 
                             MyX.Kiir(E2SzumMennyi.ToString().Replace(",", "."), $"G{sor}");
-                            // JAVÍTANDÓ:       MyX.Betű($"G{sor}", false, false, true);
+                            MyX.Betű(munkalap, $"G{sor}", BeBetűGV);
 
                             MyX.Kiir(E3SzumMennyi.ToString().Replace(",", "."), $"I{sor}");
-                            // JAVÍTANDÓ:       MyX.Betű($"I{sor}", false, false, true);
+                            MyX.Betű(munkalap, $"I{sor}", BeBetűGV);
 
                             MyX.Kiir(E1Szum.ToString().Replace(",", "."), $"m{sor}");
-                            // JAVÍTANDÓ:     MyX.Betű($"M{sor}", "", "#,###.## $");
-                            // JAVÍTANDÓ:     MyX.Betű($"M{sor}", false, false, true);
+                            MyX.Betű(munkalap, $"M{sor}", BeBetűGFtV);
 
                             MyX.Kiir(E2Szum.ToString().Replace(",", "."), $"n{sor}");
-                            // JAVÍTANDÓ:     MyX.Betű($"N{sor}", "", "#,###.## $");
-                            // JAVÍTANDÓ:     MyX.Betű($"N{sor}", false, false, true);
+                            MyX.Betű(munkalap, $"N{sor}", BeBetűGFtV);
 
                             MyX.Kiir(E3Szum.ToString().Replace(",", "."), $"o{sor}");
-                            // JAVÍTANDÓ:    MyX.Betű($"O{sor}", "", "#,###.## $");
-                            // JAVÍTANDÓ:     MyX.Betű($"O{sor}", false, false, true);
+                            MyX.Betű(munkalap, $"O{sor}", BeBetűGFtV);
 
                             MyX.Kiir((E1Szum + E2Szum + E3Szum).ToString().Replace(",", "."), $"p{sor}");
-                            // JAVÍTANDÓ:      MyX.Betű($"P{sor}", "", "#,###.## $");
-                            // JAVÍTANDÓ:      MyX.Betű($"P{sor}", false, false, true);
+                            MyX.Betű(munkalap, $"P{sor}", BeBetűGFtV);
 
                             Adat_ÉpJár_Takarítás_TIG TigElem;
                             if (idE1Ö != 0)
@@ -373,24 +390,29 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                 // összesítő sor
                 sor += 1;
                 MyX.Igazít_vízszintes(munkalap, $"b{sor}:p{sor}", "bal");
-                // JAVÍTANDÓ: MyX.Háttérszín(munkalap,$"b{sor}:p{sor}", 13434828);
+                MyX.Háttérszín(munkalap, $"b{sor}:p{sor}", Color.MediumVioletRed);
                 MyX.Egyesít(munkalap, $"b{sor}:o{sor}");
                 MyX.Kiir(Telephely + " Összesen/hó", $"b{sor}:o{sor}");
 
-                // JAVÍTANDÓ:     MyX.Betű($"b{sor}:o{sor}", false, false, true);
+                MyX.Betű(munkalap, $"b{sor}:o{sor}", BeBetűGV);
                 MyX.Egyesít(munkalap, $"b{sor}:o{sor}");
                 MyX.Kiir(NagySum.ToString().Replace(",", "."), $"p{sor}");
-                // JAVÍTANDÓ:    MyX.Betű($"P{sor}", "", "#,###.## $");
-                // JAVÍTANDÓ:    MyX.Betű($"P{sor}", false, false, true);
+                MyX.Betű(munkalap, $"P{sor}", BeBetűGFtV);
 
                 MyX.Rácsoz(munkalap, $"b1:p{sor}");
                 MyX.Sormagasság(munkalap, $"{sor}:{sor}", 25);
 
-                // JAVÍTANDÓ:    MyX.OszlopRejtés(munkalap, "A:A");
+                MyX.OszlopRejtés(munkalap, "A:A");
                 // bezárjuk az Excel-t
-                // JAVÍTANDÓ:   MyX.Aktív_Cella(munkalap, "A1");
+                Beállítás_Nyomtatás benyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:P{sor}",
+                    IsmétlődőSorok = "$1:$1",
+                    Álló = false
 
-                // JAVÍTANDÓ: MyX.NyomtatásiTerület_részletes(munkalap, $"A1:P{sor}", "$1:$1", "", false);
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, benyom);
 
             }
             catch (HibásBevittAdat ex)
@@ -583,18 +605,18 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                 foreach (string Típus in TIGTípusok)
                 {
 
-                    TigMellékletFejléc(sor);
-                    J1_Adatok_Melléklet(++sor, 1, "Nappal", Típus, hónapelsőnapja, hónaputolsónapja);
-                    J1_Adatok_Melléklet(++sor, 2, "Éjszaka", Típus, hónapelsőnapja, hónaputolsónapja);
+                    TigMellékletFejléc(munkalap, sor);
+                    J1_Adatok_Melléklet(munkalap, ++sor, 1, "Nappal", Típus, hónapelsőnapja, hónaputolsónapja);
+                    J1_Adatok_Melléklet(munkalap, ++sor, 2, "Éjszaka", Típus, hónapelsőnapja, hónaputolsónapja);
 
                     for (int ii = 0; ii <= Lekérdezés_Kategória.Count - 1; ii++)
                     {
                         MyX.Kiir(Telephely, $"A{++sor}");
-                        Többi_Adatok_Melléklet(Lekérdezés_Kategória[ii], sor, 1, "Nappal", Típus, hónapelsőnapja, hónaputolsónapja);
+                        Többi_Adatok_Melléklet(munkalap, Lekérdezés_Kategória[ii], sor, 1, "Nappal", Típus, hónapelsőnapja, hónaputolsónapja);
                         MyX.Kiir(Telephely, $"A{++sor}");
-                        Többi_Adatok_Melléklet(Lekérdezés_Kategória[ii], sor, 2, "Éjszaka", Típus, hónapelsőnapja, hónaputolsónapja);
+                        Többi_Adatok_Melléklet(munkalap, Lekérdezés_Kategória[ii], sor, 2, "Éjszaka", Típus, hónapelsőnapja, hónaputolsónapja);
                     }
-                    MyX.Rácsoz(munkalap,$"A{eleje}:F{sor}");
+                    MyX.Rácsoz(munkalap, $"A{eleje}:F{sor}");
                     sor++;
                     MyX.Kiir("=SUM(R[-18]C[-1]:R[-1]C[-1])", $"F{sor}");
                     MyX.Kiir($"{Típus} Összesen", $"E{sor}");
@@ -604,21 +626,25 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                     eleje = sor;
                 }
                 MyX.Kiir($"=SUM(R[-{sor - 1}]C:R[-2]C)", $"F{sor}");
-                // JAVÍTANDÓ:     MyX.Betű($"F{sor}", "", "#,##0 $");
+                MyX.Betű(munkalap, $"F{sor}", BeBetűGFt);
                 MyX.Kiir($"Végösszesen", $"E{sor}");
                 MyX.Rácsoz(munkalap, $"A{sor}:F{sor}");
-
-                // JAVÍTANDÓ:           MyX.NyomtatásiTerület_részletes(munkalap, $"A1:F{sor}", "", "",
-                // JAVÍTANDÓ:    $"{Telephely} Járműtakarítás", $"{Dátum.Year}.{Dátum.Month}. Hónap", "&P/&N",
-                // JAVÍTANDÓ:        "", "", "", "",
-                // JAVÍTANDÓ:        10, 10,
-                // JAVÍTANDÓ:        25, 25,
-                // JAVÍTANDÓ:        13, 13,
-                // JAVÍTANDÓ:        false, false,
-                // JAVÍTANDÓ:        "1", "", false, "A4");
-
-
-                // JAVÍTANDÓ:    MyX.Aktív_Cella(munkalap, "A1");
+                Beállítás_Nyomtatás benyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:F{sor}",
+                    IsmétlődőSorok = "$1:$1",
+                    Álló = false
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, benyom);
+                //           MyX.NyomtatásiTerület_részletes(munkalap, $"A1:F{sor}", "", "",
+                //    $"{Telephely} Járműtakarítás", $"{Dátum.Year}.{Dátum.Month}. Hónap", "&P/&N",
+                //        "", "", "", "",
+                //        10, 10,
+                //        25, 25,
+                //        13, 13,
+                //        false, false,
+                //        "1", "", false, "A4");
             }
             catch (HibásBevittAdat ex)
             {
@@ -653,7 +679,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             TIGTípusok.AddRange(Ideig);
         }
 
-        private void J1_Adatok_Melléklet(int sor, int napszak, string ÉjNAP, string típus, DateTime hónapelsőnapja, DateTime hónaputolsónapja)
+        private void J1_Adatok_Melléklet(string munkalap, int sor, int napszak, string ÉjNAP, string típus, DateTime hónapelsőnapja, DateTime hónaputolsónapja)
         {
 
             List<Adat_Jármű_Takarítás_J1> RészAdatokJ1 = (from a in AdatokJ1
@@ -682,13 +708,14 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                 MyX.Kiir(RészAdatokÁr.Ár.ToString(), $"D{sor}");
                 Ár = RészAdatokÁr.Ár;
             }
-            MyX.Kiir("=RC[-2]*RC[-1]", $"E{sor}");
-            // JAVÍTANDÓ:    MyX.Betű($"E{sor}", "", "#,##0 $");
+            MyX.Kiir("#KÉPLET#=RC[-2]*RC[-1]", $"E{sor}");
+
+            MyX.Betű(munkalap, $"E{sor}", BeBetűGFt0);
             Adat_ÉpJár_Takarítás_TIG Elemek = new Adat_ÉpJár_Takarítás_TIG(Telephely, $"{típus} J1 {ÉjNAP}", Mennyiség, ME, Ár, Mennyiség * Ár);
             if (Mennyiség * Ár != 0) AdatokTIG.Add(Elemek);
         }
 
-        private void Többi_Adatok_Melléklet(string takarításfajta, int sor, int napszak, string ÉjNAP, string típus, DateTime hónapelsőnapja, DateTime hónaputolsónapja)
+        private void Többi_Adatok_Melléklet(string munkalap, string takarításfajta, int sor, int napszak, string ÉjNAP, string típus, DateTime hónapelsőnapja, DateTime hónaputolsónapja)
         {
 
             List<Adat_Jármű_Takarítás_Teljesítés> RészAdatok = (from a in AdatokTelj
@@ -734,22 +761,21 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                 MyX.Kiir("0", $"D{sor}");
             }
             MyX.Kiir("=RC[-2]*RC[-1]", $"E{sor}");
-            // JAVÍTANDÓ:   MyX.Betű($"E{sor}", "", "#,##0 $");
+            MyX.Betű(munkalap, $"E{sor}", BeBetűGFt0);
             Adat_ÉpJár_Takarítás_TIG Elemek = new Adat_ÉpJár_Takarítás_TIG(Telephely, $"{típus} {takarításfajta} {ÉjNAP}", Mennyiség, ME, Ár, Mennyiség * Ár);
             if (Mennyiség * Ár != 0) AdatokTIG.Add(Elemek);
         }
 
-        private void TigMellékletFejléc(int sor)
+        private void TigMellékletFejléc(string munkalap, int sor)
         {
-            // JAVÍTANDÓ:    MyX.Sortörésseltöbbsorba($"A{sor}:F{sor}");
+            MyX.Sortörésseltöbbsorba(munkalap, $"A{sor}:F{sor}");
             MyX.Kiir("Telephely", $"A{sor}");
             MyX.Kiir("Tevékenység\nJárműtípus, takarítási fokozat", $"B{sor}");
             MyX.Kiir("Tarakítási mennyiségek\n(db/hó)", $"C{sor}");
             MyX.Kiir("Egységár\nFt/db", $"D{sor}");
             MyX.Kiir("Összesen\n(Ft/hó)", $"E{sor}");
             MyX.Kiir("Típus Összesen", $"F{sor}");
-            // JAVÍTANDÓ:   MyX.Rácsoz($"A{sor}:F{sor}");
-            // JAVÍTANDÓ:   MyX.Vastagkeret($"A{sor}:F{sor}");
+            MyX.Rácsoz(munkalap, $"A{sor}:F{sor}");
         }
         #endregion
 
@@ -761,7 +787,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             {
                 MyX.Új_munkalap(munkalap);
                 MyX.Munkalap_aktív(munkalap);
-                // JAVÍTANDÓ:      MyX.Munkalap_betű("Garamond", 12);
+                MyX.Munkalap_betű(munkalap, BeBetűG14);
                 MyX.Egyesít(munkalap, "a1:d1");
 
                 MyX.Oszlopszélesség(munkalap, "B:B", 10);
@@ -779,16 +805,15 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                 sor += 2;
                 MyX.Egyesít(munkalap, $"A{sor}:H{sor}");
                 MyX.Kiir("TELJESÍTÉSIGAZOLÁS", $"A{sor}");
-                // JAVÍTANDÓ:  MyX.Betű($"A{sor}", 14);
-                // JAVÍTANDÓ:  MyX.Betű($"A{sor}", false, false, true);
+                MyX.Betű(munkalap, $"A{sor}", BeBetűGV);
+
 
                 sor += 2;
                 MyX.Egyesít(munkalap, $"A{sor}:H{sor}");
                 MyX.Kiir($"A Villamos Üzemeltetési Igazgatóság, {Telephely} Járműfenntartó Üzemben végzett {munka} munkákról.", $"A{sor}");
-                MyX.Sormagasság(munkalap,$"A{sor}", 35);
+                MyX.Sormagasság(munkalap, $"A{sor}", 35);
                 MyX.Sortörésseltöbbsorba(munkalap, $"A{sor}", true);
-                // JAVÍTANDÓ:MyX.Betű($"A{sor}", 14);
-                // JAVÍTANDÓ:MyX.Betű($"A{sor}", false, false, true);
+                MyX.Betű(munkalap, $"A{sor}", BeBetűGV);
 
                 sor = Megrendelő(munkalap, sor);
                 sor = Vállalkozó(munkalap, sor);
@@ -800,17 +825,17 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                     "tárgyban vállalkozási megbízási szerződést (a továbbiakban: Szerződés) kötöttek. \r\nFelek rögzítik, hogy Szerződéshez kapcsolódó,  BMR ";
                 string iratvége = " számú megrendelésben(a továbbiakban: Megrendelés) foglaltakat a Vállalkozó a következők szerint végezte el:";
                 MyX.Kiir($"{irateleje}-{BMRszám}-{iratvége}", $"A{sor}");
-                // JAVÍTANDÓ:      MyX.Cella_Betű($"A{sor}", false, false, true, irateleje.Length, BMRszám.Length + 2);
+                MyX.Cella_Betű($"A{sor}", false, false, true, irateleje.Length, BMRszám.Length + 2);
                 MyX.Sormagasság(munkalap, $"{sor}:{sor}", 70);
                 MyX.Igazít_vízszintes(munkalap, $"A{sor}", "bal");
 
                 sor += 2;
-                sor = TáblázatTIGhez(sor, out double Nettó);
+                sor = TáblázatTIGhez(munkalap, sor, out double Nettó);
 
                 sor += 2;
                 MyX.Egyesít(munkalap, $"A{sor}:H{sor}");
                 MyX.Kiir($"A teljesítés ideje: {Dátum:yyyy. MMMM} hó", $"A{sor}");
-                // JAVÍTANDÓ:   MyX.Betű($"A{sor}", false, false, true);
+                MyX.Betű(munkalap, $"A{sor}", BeBetűGV);
                 MyX.Igazít_vízszintes(munkalap, $"A{sor}", "bal");
 
                 sor += 2;
@@ -823,8 +848,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                 string irat = irateleje + iratközepe + iratvége + irateleje1 + iratvége1;
 
                 MyX.Kiir($"{irat}", $"A{sor}");
-                // JAVÍTANDÓ:     MyX.Cella_Betű($"A{sor}", false, false, true, irateleje.Length, iratközepe.Length + 2);
-                // JAVÍTANDÓ:     MyX.Cella_Betű($"A{sor}", false, false, true, irateleje.Length + iratközepe.Length + iratvége.Length, irateleje1.Length + 2);
+                MyX.Cella_Betű($"A{sor}", false, false, true, irateleje.Length, iratközepe.Length + 2);
+                MyX.Cella_Betű($"A{sor}", false, false, true, irateleje.Length + iratközepe.Length + iratvége.Length, irateleje1.Length + 2);
                 MyX.Igazít_vízszintes(munkalap, $"A{sor}", "bal");
                 MyX.Sormagasság(munkalap, $"{sor}:{sor}", 32);
 
@@ -834,28 +859,33 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                     sor++;
                     MyX.Egyesít(munkalap, $"A{sor}:H{sor}");
                     MyX.Kiir($"Jelen Teljesítési Igazolás 1. számú mellékletét képezi a Vállalkozó jelen Teljesítés Igazolás kiállítását megalapozó lejelentése.", $"A{sor}");
-                    MyX.Igazít_vízszintes(munkalap,$"A{sor}", "bal");
+                    MyX.Igazít_vízszintes(munkalap, $"A{sor}", "bal");
                 }
 
                 sor++;
                 MyX.Egyesít(munkalap, $"A{sor}:H{sor}");
                 MyX.Kiir($"A teljesítés a Szerződésben és a Megrendelésben meghatározottak szerint történt.", $"A{sor}");
-                MyX.Igazít_vízszintes(munkalap,$"A{sor}", "bal");
+                MyX.Igazít_vízszintes(munkalap, $"A{sor}", "bal");
 
 
                 sor = Aláírások(munkalap, sor);
                 MyX.Oszlopszélesség(munkalap, "A:A");
-
-                // JAVÍTANDÓ:  MyX.NyomtatásiTerület_részletes(munkalap, $"A1:H{sor}", "", "",
-                // JAVÍTANDÓ:            $"", $"", "",
-                // JAVÍTANDÓ:            "", "", "", "",
-                // JAVÍTANDÓ:            10, 10,
-                // JAVÍTANDÓ:            25, 10,
-                // JAVÍTANDÓ:            13, 13,
-                // JAVÍTANDÓ:            false, false,
-                // JAVÍTANDÓ:            "1", "", true, "A4");
-
-                // JAVÍTANDÓ:    MyX.Aktív_Cella(munkalap, "A1");
+                Beállítás_Nyomtatás benyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:H{sor}",
+                    IsmétlődőSorok = "$1:$1",
+                    Álló = false
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, benyom);
+                //   MyX.NyomtatásiTerület_részletes(munkalap, $"A1:H{sor}", "", "",
+                //             $"", $"", "",
+                //             "", "", "", "",
+                //             10, 10,
+                //             25, 10,
+                //             13, 13,
+                //             false, false,
+                //             "1", "", true, "A4");
 
             }
             catch (HibásBevittAdat ex)
@@ -909,7 +939,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
 
             sor += 4;
             MyX.Kiir($"Szállítóiminősítés:", $"A{sor}");
-            // JAVÍTANDÓ:   MyX.Betű($"A{sor}", true, false, false);
+            MyX.Betű(munkalap, $"A{sor}", BeBetűGA);
 
             sor++;
             MyX.Kiir($"Szolgáltatás minősége: ", $"A{sor}");
@@ -979,8 +1009,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             sor++;
             MyX.Egyesít(munkalap, $"A{sor}:H{sor}");
             MyX.Kiir("Budapesti Közlekedési Zártkörűen Működő Részvénytársaság", $"A{sor}");
-            // JAVÍTANDÓ:   MyX.Betű($"B{sor}", 14);
-            // JAVÍTANDÓ:   MyX.Betű($"B{sor}", false, false, true);
+            MyX.Betű(munkalap, $"B{sor}", BeBetűG14V);
             MyX.Igazít_vízszintes(munkalap, $"B{sor}", "bal");
 
             sor++;
@@ -1004,16 +1033,16 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             MyX.Egyesít(munkalap, $"D{sor}:H{sor}");
             MyX.Kiir("Adószám:", $"B{sor}");
             MyX.Kiir("12154481-4-44", $"D{sor}");
-            MyX.Igazít_vízszintes(munkalap,$"B{sor}", "bal");
-            MyX.Igazít_vízszintes(munkalap,$"D{sor}", "bal");
+            MyX.Igazít_vízszintes(munkalap, $"B{sor}", "bal");
+            MyX.Igazít_vízszintes(munkalap, $"D{sor}", "bal");
 
             sor++;
             MyX.Egyesít(munkalap, $"B{sor}:C{sor}");
             MyX.Egyesít(munkalap, $"D{sor}:H{sor}");
             MyX.Kiir("Csoport azonosító:", $"B{sor}");
             MyX.Kiir("17781372-5-44", $"D{sor}");
-            MyX.Igazít_vízszintes(munkalap,$"B{sor}", "bal");
-            MyX.Igazít_vízszintes(munkalap,$"D{sor}", "bal");
+            MyX.Igazít_vízszintes(munkalap, $"B{sor}", "bal");
+            MyX.Igazít_vízszintes(munkalap, $"D{sor}", "bal");
 
             sor++;
             MyX.Egyesít(munkalap, $"B{sor}:H{sor}");
@@ -1030,8 +1059,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             sor++;
             MyX.Egyesít(munkalap, $"A{sor}:H{sor}");
             MyX.Kiir("B+N Referencia Ipari, Kereskedelmi és Szolgáltató Zártkörűen Működő Részvénytársaság", $"A{sor}");
-            // JAVÍTANDÓ:  MyX.Betű($"B{sor}", 14);
-            // JAVÍTANDÓ:  MyX.Betű($"B{sor}", false, false, true);
+            MyX.Betű(munkalap, $"B{sor}", BeBetűG14V);
+
             MyX.Igazít_vízszintes(munkalap, $"B{sor}", "bal");
 
             sor++;
@@ -1073,7 +1102,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             return sor;
         }
 
-        private int TáblázatTIGhez(int sor, out double Összesen)
+        private int TáblázatTIGhez(string munkalap, int sor, out double Összesen)
         {
             int eleje = sor;
             MyX.Kiir("Leírás", $"A{sor}");
@@ -1094,34 +1123,33 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                 MyX.Kiir(Elem.Mennyiség.ToString().Replace(",", "."), $"B{sor}");
                 MyX.Kiir(Elem.ME, $"C{sor}");
                 MyX.Kiir(Elem.Egységár.ToString().Replace(",", "."), $"D{sor}");
-                // JAVÍTANDÓ:     MyX.Betű($"D{sor}", "", "#,###.##");
+                MyX.Betű(munkalap, $"D{sor}", BeBetűGS);
                 MyX.Kiir(Math.Round(Elem.Összesen).ToString(), $"E{sor}");
-                // JAVÍTANDÓ:    MyX.Betű($"E{sor}", "", "#,###.##");
+                MyX.Betű(munkalap, $"E{sor}", BeBetűGS);
                 Összesen += Math.Round(Elem.Összesen);
 
-                // JAVÍTANDÓ:     MyX.Betű($"E{sor}", "", "#,##0");
+                MyX.Betű(munkalap, $"E{sor}", BeBetűG0);
                 MyX.Kiir("27", $"F{sor}");
-                MyX.Kiir("=RC[-1]*RC[-2]/100", $"G{sor}");
-                // JAVÍTANDÓ:      MyX.Betű($"G{sor}", "", "#,###.##");
-                MyX.Kiir("=RC[-1]+RC[-3]", $"H{sor}");
-                // JAVÍTANDÓ:      MyX.Betű($"H{sor}", "", "#,###.##");
+                MyX.Kiir("#KÉPLET#=RC[-1]*RC[-2]/100", $"G{sor}");
+                MyX.Betű(munkalap, $"G{sor}", BeBetűGS);
+                MyX.Kiir("#KÉPLET#=RC[-1]+RC[-3]", $"H{sor}");
+                MyX.Betű(munkalap, $"H{sor}", BeBetűGS);
             }
-            // JAVÍTANDÓ:  MyX.Rácsoz($"A{eleje}:H{sor}");
-            // JAVÍTANDÓ:  MyX.Vastagkeret($"A{eleje}:H{sor}");
-            // JAVÍTANDÓ:  MyX.Vastagkeret($"A{eleje}:H{eleje}");
+            MyX.Rácsoz(munkalap, $"B{eleje}:H{sor}");
+            MyX.Rácsoz(munkalap, $"A{eleje}:H{eleje}");
             sor++;
             MyX.Kiir("Összesen:", $"A{sor}");
-            // JAVÍTANDÓ:   MyX.Betű($"A{sor}", false, false, true);
+            MyX.Betű(munkalap, $"A{sor}", BeBetűGV);
             MyX.Kiir($"=SUM(R[-{sor - eleje}]C:R[-1]C)", $"E{sor}");
-            // JAVÍTANDÓ:    MyX.Betű($"E{sor}", "", "#,###");
-            // JAVÍTANDÓ:   MyX.Betű($"E{sor}", false, false, true);
+            MyX.Betű(munkalap, $"E{sor}", BeBetűGSP);
+
             MyX.Kiir($"=SUM(R[-{sor - eleje}]C:R[-1]C)", $"G{sor}");
-            // JAVÍTANDÓ:   MyX.Betű($"G{sor}", "", "#,###.##");
-            // JAVÍTANDÓ:    MyX.Betű($"G{sor}", false, false, true);
+            MyX.Betű(munkalap, $"G{sor}", BeBetűGSV);
+
             MyX.Kiir($"=SUM(R[-{sor - eleje}]C:R[-1]C)", $"H{sor}");
-            // JAVÍTANDÓ:    MyX.Betű($"H{sor}", "", "#,###.##");
-            // JAVÍTANDÓ:    MyX.Betű($"H{sor}", false, false, true);
-            // JAVÍTANDÓ:  MyX.Rácsoz($"A{sor}:H{sor}");
+            MyX.Betű(munkalap, $"H{sor}", BeBetűGSV);
+
+            MyX.Rácsoz(munkalap, $"A{sor}:H{sor}");
 
 
             return sor;
