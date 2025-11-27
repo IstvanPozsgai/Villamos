@@ -758,6 +758,7 @@ namespace Villamos
         #region Üzenet
         private void Btnüzenetfrissítés_Click(object sender, EventArgs e)
         {
+            if (!ÜzenetekToolStripMenuItem.Enabled) return;
             Üzenetkiírása();
         }
 
@@ -859,6 +860,7 @@ namespace Villamos
 
         private void Btnutasításfrissítés_Click(object sender, EventArgs e)
         {
+            if (!UtasításokToolStripMenuItem.Enabled) return;
             Utasításkiírása();
         }
         #endregion
@@ -1083,6 +1085,7 @@ namespace Villamos
 
         private void Üzenetektext_DoubleClick(object sender, EventArgs e)
         {
+            if(!ÜzenetekToolStripMenuItem.Enabled ) return;
             if (Új_Ablak_üzenet == null)
             {
                 Új_Ablak_üzenet = new Ablak_üzenet();
@@ -1116,6 +1119,7 @@ namespace Villamos
 
         private void Utasításoktext_DoubleClick(object sender, EventArgs e)
         {
+            if (!UtasításokToolStripMenuItem.Enabled) return;
             if (Új_Ablak_utasítás == null)
             {
                 Új_Ablak_utasítás = new Ablak_Utasítás();
