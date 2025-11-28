@@ -15,6 +15,7 @@ namespace Villamos
         private static readonly Dictionary<string, int> FagyasztandóSorok = new Dictionary<string, int>();
         private static readonly Dictionary<string, Beállítás_Nyomtatás> NyomtatásiBeállítások = new Dictionary<string, Beállítás_Nyomtatás>();
         private static readonly List<Beállítás_Ferde> FerdeVonalak = new List<Beállítás_Ferde>();
+        private static readonly List<Beállítás_CellaSzöveg> CellaBeállítás = new List<Beállítás_CellaSzöveg>();
 
         public static int sor;
         public static int oszlop;
@@ -73,6 +74,12 @@ namespace Villamos
                 {
                     AlkalmazNyomtatásiBeállításokat(fájlnév, NyomtatásiBeállítások);
                     NyomtatásiBeállítások.Clear(); // Opcionális
+                }
+
+                if (CellaBeállítás.Count > 0)
+                {
+                    AlkalmazCellaFormázás(fájlnév, CellaBeállítás);
+                    CellaBeállítás.Clear();
                 }
             }
             catch (Exception ex)

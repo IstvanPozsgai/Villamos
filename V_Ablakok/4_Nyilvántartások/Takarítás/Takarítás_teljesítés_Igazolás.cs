@@ -63,7 +63,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
         readonly Beállítás_Betű BeBetűGFtV = new Beállítás_Betű { Név = "Garamond", Méret = 12, Formátum = "#,###.## Ft", Vastag = true };
         readonly Beállítás_Betű BeBetűGV = new Beállítás_Betű { Név = "Garamond", Méret = 12, Vastag = true };
         readonly Beállítás_Betű BeBetűGA = new Beállítás_Betű { Név = "Garamond", Méret = 12, Aláhúzott = true };
-        readonly Beállítás_Betű BeBetűG12 = new Beállítás_Betű { Név = "Garamond", Méret = 12, Aláhúzott = true };
+        readonly Beállítás_Betű BeBetűG12 = new Beállítás_Betű { Név = "Garamond", Méret = 12 };
 
         public Takarítás_teljesítés_Igazolás(DateTime dátum, bool jármű, string telephely)
         {
@@ -637,10 +637,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                     NyomtatásiTerület = $"A1:F{sor}",
                     IsmétlődőSorok = "$1:$1",
                     Álló = false,
-                    LapSzéles=1,
-                    FejlécBal= $"{Telephely} Járműtakarítás",
+                    LapSzéles = 1,
+                    FejlécBal = $"{Telephely} Járműtakarítás",
                     FejlécKözép = $"{Dátum.Year}.{Dátum.Month}. Hónap",
-                    FejlécJobb= "&P/&N"
+                    FejlécJobb = "&P/&N"
                 };
                 MyX.NyomtatásiTerület_részletes(munkalap, benyom);
             }
@@ -823,7 +823,25 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                     "tárgyban vállalkozási megbízási szerződést (a továbbiakban: Szerződés) kötöttek. \r\nFelek rögzítik, hogy Szerződéshez kapcsolódó,  BMR ";
                 string iratvége = " számú megrendelésben(a továbbiakban: Megrendelés) foglaltakat a Vállalkozó a következők szerint végezte el:";
                 MyX.Kiir($"{irateleje}-{BMRszám}-{iratvége}", $"A{sor}");
-                MyX.Cella_Betű($"A{sor}", false, false, true, irateleje.Length, BMRszám.Length + 2);
+
+                RichTextRun BeállításCella = new RichTextRun
+                {
+                    Vastag = true,
+                    Start = irateleje.Length,
+                    Hossz = BMRszám.Length + 2
+                };
+                List<RichTextRun> Beállítások = new List<RichTextRun> { BeállításCella };
+
+                Beállítás_CellaSzöveg BeSzöv = new Beállítás_CellaSzöveg
+                {
+                    Cella = $"A{sor}",
+                    MunkalapNév = munkalap,
+                    FullText = $"{irateleje}-{BMRszám}-{iratvége}",
+                    Beállítások = Beállítások,
+                    Betű = BeBetűG12
+                };
+                MyX.Cella_Betű(BeSzöv);
+
                 MyX.Sormagasság(munkalap, $"{sor}:{sor}", 70);
                 MyX.Igazít_vízszintes(munkalap, $"A{sor}", "bal");
 
@@ -838,6 +856,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
 
                 sor += 2;
                 MyX.Egyesít(munkalap, $"A{sor}:H{sor}");
+                MyX.Sortörésseltöbbsorba(munkalap, $"A{sor}:H{sor}");
                 irateleje = "A Megrendelésben foglalt feladatok ellenértéke összesen nettó ";
                 string iratközepe = Math.Round(Nettó, 0).ToStrTrim();
                 iratvége = " Ft.+ ÁFA,\n azaz ";
@@ -846,8 +865,30 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                 string irat = irateleje + iratközepe + iratvége + irateleje1 + iratvége1;
 
                 MyX.Kiir($"{irat}", $"A{sor}");
-                MyX.Cella_Betű($"A{sor}", false, false, true, irateleje.Length, iratközepe.Length + 2);
-                MyX.Cella_Betű($"A{sor}", false, false, true, irateleje.Length + iratközepe.Length + iratvége.Length, irateleje1.Length + 2);
+                RichTextRun BeállításCella1 = new RichTextRun
+                {
+                    Vastag = true,
+                    Start = irateleje.Length,
+                    Hossz = iratközepe.Length + 2
+                };
+                RichTextRun BeállításCella2 = new RichTextRun
+                {
+                    Vastag = true,
+                    Start = irateleje.Length + iratközepe.Length + iratvége.Length,
+                    Hossz = irateleje1.Length + 2
+                };
+                Beállítások = new List<RichTextRun> { BeállításCella1, BeállításCella2 };
+
+                Beállítás_CellaSzöveg BeSzöv1 = new Beállítás_CellaSzöveg
+                {
+                    Cella = $"A{sor}",
+                    MunkalapNév = munkalap,
+                    FullText = irat,
+                    Beállítások = Beállítások,
+                    Betű = BeBetűG12
+                };
+                MyX.Cella_Betű(BeSzöv1);
+
                 MyX.Igazít_vízszintes(munkalap, $"A{sor}", "bal");
                 MyX.Sormagasság(munkalap, $"{sor}:{sor}", 32);
 

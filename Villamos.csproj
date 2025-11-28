@@ -354,6 +354,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Csúsztatás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Szabadság.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Túlóra.cs" />
+    <Compile Include="V_Adatszerkezet\Beállítás_CellaSzöveg.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Ferde.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Betű.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Nyomtatás.cs" />
