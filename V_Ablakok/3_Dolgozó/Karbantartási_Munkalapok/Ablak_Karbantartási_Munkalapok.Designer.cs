@@ -65,7 +65,6 @@
             this.Hiba_sor = new System.Windows.Forms.NumericUpDown();
             this.Chk_szerszám = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.PDFmentés = new System.Windows.Forms.Button();
             this.FelExcel = new System.Windows.Forms.Button();
             this.Digitális = new System.Windows.Forms.Button();
             this.BtnCsoportosítás = new System.Windows.Forms.Button();
@@ -480,19 +479,6 @@
             // 
             this.toolTip1.IsBalloon = true;
             // 
-            // PDFmentés
-            // 
-            this.PDFmentés.BackgroundImage = global::Villamos.Properties.Resources.pdf;
-            this.PDFmentés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.PDFmentés.Location = new System.Drawing.Point(16, 589);
-            this.PDFmentés.Name = "PDFmentés";
-            this.PDFmentés.Size = new System.Drawing.Size(45, 45);
-            this.PDFmentés.TabIndex = 245;
-            this.toolTip1.SetToolTip(this.PDFmentés, "Munkalap készítés a beállítottaknak megfelelően PDF");
-            this.PDFmentés.UseVisualStyleBackColor = true;
-            this.PDFmentés.Visible = false;
-            this.PDFmentés.Click += new System.EventHandler(this.PDFmentés_Click);
-            // 
             // FelExcel
             // 
             this.FelExcel.BackgroundImage = global::Villamos.Properties.Resources.Button_Upload_01;
@@ -691,7 +677,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.PaleGreen;
             this.ClientSize = new System.Drawing.Size(1307, 637);
-            this.Controls.Add(this.PDFmentés);
             this.Controls.Add(this.FelExcel);
             this.Controls.Add(this.Digitális);
             this.Controls.Add(this.Beosztás);
@@ -810,6 +795,5 @@
         private System.Windows.Forms.CheckBox Beosztás;
         internal System.Windows.Forms.Button Digitális;
         internal System.Windows.Forms.Button FelExcel;
-        internal System.Windows.Forms.Button PDFmentés;
     }
 }
