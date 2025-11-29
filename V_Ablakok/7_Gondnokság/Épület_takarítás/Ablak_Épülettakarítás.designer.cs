@@ -90,7 +90,6 @@ namespace Villamos
             this.BMR = new System.Windows.Forms.Button();
             this.Opció_kifizetés = new System.Windows.Forms.Button();
             this.Opció_Megrendelés = new System.Windows.Forms.Button();
-            this.Maxsor = new System.Windows.Forms.TextBox();
             this.List1 = new System.Windows.Forms.CheckedListBox();
             this.Tábla1 = new System.Windows.Forms.DataGridView();
             this.Dátum1 = new System.Windows.Forms.DateTimePicker();
@@ -747,7 +746,6 @@ namespace Villamos
             this.TabPage2.Controls.Add(this.BMR);
             this.TabPage2.Controls.Add(this.Opció_kifizetés);
             this.TabPage2.Controls.Add(this.Opció_Megrendelés);
-            this.TabPage2.Controls.Add(this.Maxsor);
             this.TabPage2.Controls.Add(this.List1);
             this.TabPage2.Controls.Add(this.Tábla1);
             this.TabPage2.Controls.Add(this.Dátum1);
@@ -791,7 +789,7 @@ namespace Villamos
             this.Opció_kifizetés.Name = "Opció_kifizetés";
             this.Opció_kifizetés.Size = new System.Drawing.Size(45, 45);
             this.Opció_kifizetés.TabIndex = 194;
-            this.ToolTip1.SetToolTip(this.Opció_kifizetés, "Takarítási Terv-Tény-Eltérés");
+            this.ToolTip1.SetToolTip(this.Opció_kifizetés, "Opció kifizetés");
             this.Opció_kifizetés.UseVisualStyleBackColor = true;
             this.Opció_kifizetés.Click += new System.EventHandler(this.Opció_kifizetés_Click);
             // 
@@ -804,18 +802,9 @@ namespace Villamos
             this.Opció_Megrendelés.Name = "Opció_Megrendelés";
             this.Opció_Megrendelés.Size = new System.Drawing.Size(45, 45);
             this.Opció_Megrendelés.TabIndex = 193;
-            this.ToolTip1.SetToolTip(this.Opció_Megrendelés, "Takarítási Terv-Tény-Eltérés");
+            this.ToolTip1.SetToolTip(this.Opció_Megrendelés, "Opciós megrendelés");
             this.Opció_Megrendelés.UseVisualStyleBackColor = true;
             this.Opció_Megrendelés.Click += new System.EventHandler(this.Opció_Megrendelés_Click);
-            // 
-            // Maxsor
-            // 
-            this.Maxsor.Location = new System.Drawing.Point(752, 97);
-            this.Maxsor.Name = "Maxsor";
-            this.Maxsor.Size = new System.Drawing.Size(26, 26);
-            this.Maxsor.TabIndex = 192;
-            this.Maxsor.Text = "0";
-            this.Maxsor.Visible = false;
             // 
             // List1
             // 
@@ -1099,7 +1088,6 @@ namespace Villamos
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
             this.TabPage2.ResumeLayout(false);
-            this.TabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).EndInit();
             this.TabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Naptár_Tábla)).EndInit();
@@ -1180,7 +1168,6 @@ namespace Villamos
         internal DataGridViewCheckBoxColumn Munkanap;
         internal DataGridViewCheckBoxColumn Hétvége;
         internal CheckBox Chk_CTRL;
-        internal TextBox Maxsor;
         internal Panel Idő_lakat;
         internal Button Opció_kifizetés;
         internal Button Opció_Megrendelés;
