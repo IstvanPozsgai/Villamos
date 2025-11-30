@@ -44,6 +44,8 @@ namespace Villamos
         readonly private string munkalap = "Munka1";
 
         #endregion
+
+
         #region Alap
         public Ablak_Jelenléti()
         {

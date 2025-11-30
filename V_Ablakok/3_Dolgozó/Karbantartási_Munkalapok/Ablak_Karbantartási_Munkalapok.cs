@@ -43,10 +43,15 @@ namespace Villamos.Villamos_Ablakok
         List<Adat_Technológia_Új> AdatokTechnológia = new List<Adat_Technológia_Új>();
         List<Adat_Kiegészítő_Csoportbeosztás> AdatokCsoport = new List<Adat_Kiegészítő_Csoportbeosztás>();
 
-        List<string> Fájlok = new List<string> { fájlexc };
+
         List<string> PályaszámLista = new List<string>();
         List<string> Pályaszám_TáblaAdatok = new List<string>();
+#pragma warning disable IDE0044
+        List<string> Fájlok = new List<string>();
         Dictionary<string, string> Személy = new Dictionary<string, string>();
+#pragma warning restore IDE0044
+
+
 
         /// <summary>
         /// Betű beállítások
@@ -938,10 +943,7 @@ namespace Villamos.Villamos_Ablakok
                     Excel_tábla(fájlexc);
                     if (Nyomtat_igen.Checked) MyF.ExcelNyomtatás(Fájlok);
                     //fájl törlése
-                    if (Töröl_igen.Checked)
-                        MyF.FájlTörlés(Fájlok);
-                    else
-                        MyF.Megnyitás(fájlexc);
+                    if (!Töröl_igen.Checked) MyF.Megnyitás(fájlexc);
                 }
                 else
                 {
@@ -953,12 +955,7 @@ namespace Villamos.Villamos_Ablakok
                         Excel_tábla(fájlexc);
                     }
                     if (Nyomtat_igen.Checked) MyF.ExcelNyomtatás(Fájlok, Töröl_igen.Checked);
-
-                    //fájl törlése
-                    if (Töröl_igen.Checked)
-                        MyF.FájlTörlés(Fájlok);
-                    else
-                        MyF.Megnyitások(Fájlok);
+                    if (!Töröl_igen.Checked) MyF.Megnyitások(Fájlok);
                 }
 
                 DateTime Vége = DateTime.Now;
@@ -2345,19 +2342,23 @@ namespace Villamos.Villamos_Ablakok
             PdfPTable Válasz = new PdfPTable(1);
             try
             {
-                PdfPTable pdfTable = new PdfPTable(2);
-                pdfTable.WidthPercentage = 100;
+                PdfPTable pdfTable = new PdfPTable(2)
+                {
+                    WidthPercentage = 100
+                };
                 pdfTable.SetWidths(new float[] { 1, 3 });
 
                 //Kép
                 iTextSharp.text.Image Kép = iTextSharp.text.Image.GetInstance($@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\Villamos_{Járműtípus.Text.Trim()}.png");
                 Kép.ScaleToFit(200, 500);
-                PdfPCell imageCell = new PdfPCell(Kép);
-                imageCell.Border = PdfPCell.NO_BORDER;
-                imageCell.PaddingLeft = 5; // Move image 5 points to the jobbra
-                imageCell.PaddingTop = 2; // Move image 2 points le
-                imageCell.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
-                imageCell.VerticalAlignment = PdfPCell.ALIGN_CENTER;
+                PdfPCell imageCell = new PdfPCell(Kép)
+                {
+                    Border = PdfPCell.NO_BORDER,
+                    PaddingLeft = 5, // Move image 5 points to the jobbra
+                    PaddingTop = 2, // Move image 2 points le
+                    HorizontalAlignment = PdfPCell.ALIGN_CENTER,
+                    VerticalAlignment = PdfPCell.ALIGN_CENTER
+                };
 
                 PdfPTable Tábla = new PdfPTable(1);
                 Tábla.AddCell(MyPDF.Cella(MyPDF.Kiírás("Km óra állás:", "VD")));
@@ -2365,8 +2366,10 @@ namespace Villamos.Villamos_Ablakok
                 Tábla.AddCell(MyPDF.Cella(MyPDF.Kiírás("Verzió:", "VD"), true));
                 Tábla.AddCell(MyPDF.Cella(MyPDF.Kiírás(verzió, "VD"), true));
 
-                PdfPCell TáblaCell = new PdfPCell(Tábla);
-                TáblaCell.Border = PdfPCell.NO_BORDER;
+                PdfPCell TáblaCell = new PdfPCell(Tábla)
+                {
+                    Border = PdfPCell.NO_BORDER
+                };
                 pdfTable.AddCell(TáblaCell);
                 pdfTable.AddCell(imageCell);
 
@@ -2389,23 +2392,29 @@ namespace Villamos.Villamos_Ablakok
             PdfPTable Válasz = new PdfPTable(1);
             try
             {
-                PdfPTable pdfTable = new PdfPTable(2);
-                pdfTable.WidthPercentage = 100;
+                PdfPTable pdfTable = new PdfPTable(2)
+                {
+                    WidthPercentage = 100
+                };
                 pdfTable.SetWidths(new float[] { 1, 2 });
 
                 //Kép
                 iTextSharp.text.Image Kép = iTextSharp.text.Image.GetInstance($@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\BKV.png");
                 Kép.ScaleToFit(100, 250);
-                PdfPCell imageCell = new PdfPCell(Kép);
-                imageCell.Border = PdfPCell.NO_BORDER;
-                imageCell.PaddingLeft = 5; // Move image 5 points to the jobbra
-                imageCell.PaddingTop = 2; // Move image 2 points le
+                PdfPCell imageCell = new PdfPCell(Kép)
+                {
+                    Border = PdfPCell.NO_BORDER,
+                    PaddingLeft = 5, // Move image 5 points to the jobbra
+                    PaddingTop = 2 // Move image 2 points le
+                };
                 pdfTable.AddCell(imageCell);
 
 
                 //Szöveg jobbra igazítva
-                PdfPCell textCell = new PdfPCell();
-                textCell.Border = PdfPCell.NO_BORDER;
+                PdfPCell textCell = new PdfPCell
+                {
+                    Border = PdfPCell.NO_BORDER
+                };
 
                 // Betűtípus az adott cella szövegszínével
                 // Betűtípus betöltése (Arial, Unicode támogatás)
@@ -2415,10 +2424,14 @@ namespace Villamos.Villamos_Ablakok
                 iTextSharp.text.Font betűvastagZöld = new iTextSharp.text.Font(alapFont, 10f, iTextSharp.text.Font.BOLD, BaseColor.GREEN);
                 string szöveg = "Budapesti Közlekedési Zártkörűen Működő Részvénytársaság";
                 string szöveg1 = "MEGELŐZŐ KARBANTARTÁS MUNKACSOMAG";
-                Paragraph p1 = new Paragraph(szöveg, betűvastagFekete);
-                p1.Alignment = Element.ALIGN_RIGHT;
-                Paragraph p2 = new Paragraph(szöveg1, betűvastagZöld);
-                p2.Alignment = Element.ALIGN_RIGHT;
+                Paragraph p1 = new Paragraph(szöveg, betűvastagFekete)
+                {
+                    Alignment = Element.ALIGN_RIGHT
+                };
+                Paragraph p2 = new Paragraph(szöveg1, betűvastagZöld)
+                {
+                    Alignment = Element.ALIGN_RIGHT
+                };
 
                 textCell.AddElement(p1);
                 textCell.AddElement(p2);

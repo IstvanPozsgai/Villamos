@@ -115,12 +115,14 @@ public static partial class Függvénygyűjtemény
                     if (törlés)
                     {
                         File.Delete(Fájl);
-                        // MessageBox.Show($"Törölve: {filePath}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 catch (Exception delEx)
                 {
-                    // MessageBox.Show($"Nem sikerült törölni: {filePath} – {delEx.Message}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                    string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                    HibaNapló.Log(delEx.Message, $"Megnyitás(Fájlhelye {Fájl}) \n Hívó: {hívóInfo}", delEx.StackTrace, delEx.Source, delEx.HResult);
+                    MessageBox.Show(delEx.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -143,12 +145,12 @@ public static partial class Függvénygyűjtemény
             }
             catch (Exception delEx)
             {
-                // MessageBox.Show($"Nem sikerült törölni: {filePath} – {delEx.Message}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(delEx.Message, $"FájlTörlés(Fájlhelye {Fájl}) \n Hívó: {hívóInfo}", delEx.StackTrace, delEx.Source, delEx.HResult);
+                MessageBox.Show(delEx.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
     }
-
-
 }
 
