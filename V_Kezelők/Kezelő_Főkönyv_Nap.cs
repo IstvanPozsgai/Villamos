@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
         readonly string jelszó = "lilaakác";
         string hely = "";
 
+
         private void FájlBeállítás(string Telephely, DateTime Dátum, string Napszak, bool Létrejön = true)
         {
             hely = $@"{Application.StartupPath}\{Telephely}\adatok\főkönyv\{Dátum.Year}\nap\{Dátum:yyyyMMdd}{Napszak}nap.mdb";
