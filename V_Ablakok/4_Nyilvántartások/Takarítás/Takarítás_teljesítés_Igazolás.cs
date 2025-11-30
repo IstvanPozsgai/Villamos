@@ -957,8 +957,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             MyX.Egyesít(munkalap, $"F{sor}:H{sor}");
             MyX.Kiir(AláíróNév, $"A{sor}");
             MyX.Kiir($"Mong Péter", $"F{sor}");
-            MyX.Aláírásvonal($"A{sor}:B{sor}");
-            MyX.Aláírásvonal($"F{sor}:H{sor}");
+            MyX.Aláírásvonal(munkalap, $"A{sor}:B{sor}");
+            MyX.Aláírásvonal(munkalap, $"F{sor}:H{sor}");
 
             sor++;
             MyX.Egyesít(munkalap, $"A{sor}:B{sor}");
@@ -986,14 +986,14 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             MyX.Kiir($"Szolgáltatás minősége: ", $"A{sor}");
             MyX.Kiir($"%", $"B{sor}");
             MyX.Igazít_vízszintes(munkalap, $"B{sor}", "jobb");
-            MyX.Aláírásvonal($"B{++sor}");
+            MyX.Aláírásvonal(munkalap, $"B{++sor}");
 
 
             sor++;
             MyX.Kiir($"Szolgáltatás határideje:", $"A{sor}");
             MyX.Kiir($"%", $"B{sor}");
             MyX.Igazít_vízszintes(munkalap, $"B{sor}", "jobb");
-            MyX.Aláírásvonal($"B{++sor}");
+            MyX.Aláírásvonal(munkalap, $"B{++sor}");
             return sor;
         }
 

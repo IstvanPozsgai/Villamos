@@ -4313,11 +4313,11 @@ namespace Villamos
                 MyX.Kiir("Budapest, " + DateTime.Today.ToString("yyyy.MM.dd"), "a" + (vége + 3));
                 MyX.Kiir("Vállalkozó", "a" + (vége + 8));
                 MyX.Igazít_vízszintes(munkalap, "a" + (vége + 8), "közép");
-                MyX.Pontvonal("a" + (vége + 8));
+                MyX.Pontvonal(munkalap, "a" + (vége + 8));
 
                 MyX.Kiir("BKV Zrt.", "D" + (vége + 8));
                 MyX.Igazít_vízszintes(munkalap, "D" + (vége + 8), "közép");
-                MyX.Pontvonal("D" + (vége + 8));
+                MyX.Pontvonal(munkalap, "D" + (vége + 8));
 
 
 
@@ -4339,7 +4339,7 @@ namespace Villamos
             {
                 int hónapnap = DateTime.DaysInMonth(ListaDátum.Value.Year, ListaDátum.Value.Month);
                 DateTime hónaputolsónapja = new DateTime(ListaDátum.Value.Year, ListaDátum.Value.Month, hónapnap);
-                Beállítás_Betű beBetű = new Beállítás_Betű { Formátum = "#,##0 Ft", Méret=11,Név = "Calibri" };
+                Beállítás_Betű beBetű = new Beállítás_Betű { Formátum = "#,##0 Ft", Méret = 11, Név = "Calibri" };
                 string munkalap = "Összesítő_minden";
 
                 MyX.Munkalap_aktív("Összesítő_minden");

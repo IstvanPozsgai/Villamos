@@ -1,8 +1,6 @@
 ﻿using ClosedXML.Excel;
-using Microsoft.Office.Interop.Excel;
 using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 
@@ -45,7 +43,7 @@ namespace Villamos
             try
             {
                 IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
-                IXLRange tartomány = xlWorkSheet.Range(Kijelöltterület);
+                IXLRange tartomány = munkalap.Range(Kijelöltterület);
 
                 // Bal szegély
                 tartomány.Style.Border.LeftBorder = XLBorderStyleValues.Medium;
@@ -70,11 +68,12 @@ namespace Villamos
             }
         }
 
-        public static void Aláírásvonal(string Kijelöltterület)
+        public static void Aláírásvonal(string munkalapnév, string Kijelöltterület)
         {
             try
             {
-                IXLRange tartomány = xlWorkSheet.Range(Kijelöltterület);
+                IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
+                IXLRange tartomány = munkalap.Range(Kijelöltterület);
 
                 // Bal szegély
                 tartomány.Style.Border.LeftBorder = XLBorderStyleValues.None;
@@ -118,18 +117,24 @@ namespace Villamos
             }
         }
 
-        public static void Pontvonal(string Kijelöltterület)
+        public static void Pontvonal(string munkalapnév, string Kijelöltterület)
         {
             try
             {
-                // JAVÍTANDÓ:
-                //MyExcel.Range Táblaterület = Module_Excel.xlApp.get_Range(Kijelöltterület);
-                //Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].LineStyle = XlLineStyle.xlContinuous;
-                //Táblaterület.Borders[XlBordersIndex.xlEdgeTop].ColorIndex = XlColorIndex.xlColorIndexAutomatic;
-                //Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].TintAndShade = 0;
-                //Táblaterület.Borders.Item[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlHairline;
+                IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
+                IXLRange tartomány = munkalap.Range(Kijelöltterület);
 
+                // Bal szegély
+                tartomány.Style.Border.LeftBorder = XLBorderStyleValues.None;
 
+                // Jobb szegély
+                tartomány.Style.Border.RightBorder = XLBorderStyleValues.None;
+
+                // Felső szegély
+                tartomány.Style.Border.TopBorder = XLBorderStyleValues.Dotted;
+
+                // Alsó szegély ← ez a kritikus!
+                tartomány.Style.Border.BottomBorder = XLBorderStyleValues.None;
             }
             catch (Exception ex)
             {

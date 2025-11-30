@@ -1,6 +1,8 @@
 ﻿using ClosedXML.Excel;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -143,8 +145,8 @@ namespace Villamos
         /// </summary>
         /// <param name="munkalapnév"></param>
         /// <param name="mit"></param>
-        /// <param name="mekkora">0 esetén automatikus</param>
-        public static void Sormagasság(string munkalapnév, string mit, int mekkora)
+        /// <param name="mekkora">0 esetén automatikus, -1 esetén a program számolja ki</param>
+        public static void Sormagasság(string munkalapnév, string mit, int mekkora, string BetűNév = "Arial", float BetűMéret = 12)
         {
             try
             {
@@ -164,6 +166,14 @@ namespace Villamos
                         munkalap.Row(sor).Height = mekkora;
                     }
                 }
+                else if (mekkora == -1)
+                {
+                    // Mepróbáljuk kiszámolni
+                    foreach (int sor in érintettSorok)
+                    {
+                        munkalap.Row(sor).Height = SormagasságSzámítás(munkalap, sor, BetűNév, BetűMéret);
+                    }
+                }
                 else
                 {
                     // ⚠️ ClosedXML NEM támogatja natívan az AutoFit sor magasságot!
@@ -171,14 +181,10 @@ namespace Villamos
                     // 1. Távolítsuk el a fix magasságot (állítsuk "alapértelmezett" értékre)
                     // 2. Bekapcsoljuk a WrapText-et (ha többsoros szöveg van)
                     // 3. Megbízunk abban, hogy az Excel majd AutoFit-tel nyitja meg
-
                     foreach (int sor in érintettSorok)
                     {
                         // Alapértelmezett sor magasság visszaállítása (~15 pont)
                         munkalap.Row(sor).Height = 15.0;
-
-                        // Opcionális: ha a cellákban sortörés van, az Excel AutoFit-tel fog működni
-                        // (ezt már korábban beállíthattad a stílusban)
                     }
                 }
             }
@@ -190,6 +196,131 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+        /// <summary>
+        /// Kiszámolja a megadott sorhoz szükséges magasságot a cellák tartalma, betűtípusa, betűmérete és oszlopszélessége alapján.
+        /// Nem módosítja a munkafüzetet – csak visszaadja a javasolt sor magasságot Excel egységben.
+        /// </summary>
+        /// <param name="worksheet">A munkalap, amely tartalmazza a sort</param>
+        /// <param name="Sor">A sor indexe (1-től indul)</param>
+        /// <param name="BetűNév">Alapértelmezett betűcsalád, ha a cellában nincs megadva</param>
+        /// <param name="BetűMéret">Alapértelmezett betűméret (pontban), ha a cellában nincs megadva</param>
+        /// <returns>Javasolt sor magasság Excel egységben (pontban)</returns>
+        public static double SormagasságSzámítás(IXLWorksheet worksheet, int Sor, string BetűNév, float BetűMéret)
+        {
+            const double AlapMagasság = 15.0;
+            if (Sor < 1) throw new ArgumentOutOfRangeException(nameof(Sor), "A sor indexe 1-től indul.");
+
+            IXLRow row = worksheet.Row(Sor);
+            var cellsUsed = row.CellsUsed();
+
+            if (!cellsUsed.Any()) return AlapMagasság;
+
+            int maxSorok = 1;
+
+            // Opcionális: gyorsító szótár merged cellákhoz (nem feltétlenül szükséges kis munkafüzeteknél)
+            var mergedRangeLookup = new Dictionary<(int Row, int Col), IXLRange>();
+            foreach (var range in worksheet.MergedRanges)
+            {
+                for (int r = range.RangeAddress.FirstAddress.RowNumber; r <= range.RangeAddress.LastAddress.RowNumber; r++)
+                {
+                    for (int c = range.RangeAddress.FirstAddress.ColumnNumber; c <= range.RangeAddress.LastAddress.ColumnNumber; c++)
+                    {
+                        mergedRangeLookup[(r, c)] = range;
+                    }
+                }
+            }
+
+            using (var dummyBitmap = new Bitmap(1, 1))
+            using (Graphics g = Graphics.FromImage(dummyBitmap))
+            {
+                g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+
+                foreach (IXLCell cell in cellsUsed)
+                {
+                    string text = "";
+                    if (cell != null) text = cell.Value.ToStrTrim();
+                    if (string.IsNullOrEmpty(text)) continue;
+
+                    // === Egyesített cellák kezelése – tényleges szélesség meghatározása ===
+                    double effectiveColumnWidth = 0.0;
+
+                    if (cell.IsMerged() && mergedRangeLookup.TryGetValue((cell.Address.RowNumber, cell.Address.ColumnNumber), out var mergedRange))
+                    {
+                        // Összegezzük az összes oszlop szélességét a merged tartományban
+                        for (int col = mergedRange.RangeAddress.FirstAddress.ColumnNumber;
+                                 col <= mergedRange.RangeAddress.LastAddress.ColumnNumber;
+                                 col++)
+                        {
+                            double colWidth = worksheet.Column(col).Width;
+                            if (colWidth > 0) // elrejtett oszlopokat kihagyjuk
+                                effectiveColumnWidth += colWidth;
+                        }
+                    }
+                    else
+                    {
+                        // Nem merged, vagy nem találtuk meg – csak saját oszlop
+                        effectiveColumnWidth = worksheet.Column(cell.Address.ColumnNumber).Width;
+                    }
+
+                    if (effectiveColumnWidth <= 0) continue; // elrejtett oszlop
+
+                    float maxWidthPx = (float)(effectiveColumnWidth * 7.0); // karakter-egység → pixel
+
+                    // Betűtípus és méret lekérése
+                    string fontFamily = !string.IsNullOrEmpty(cell.Style.Font.FontName)
+                        ? cell.Style.Font.FontName
+                        : BetűNév;
+
+                    float fontSizePt = cell.Style.Font.FontSize > 0
+                        ? (float)cell.Style.Font.FontSize
+                        : BetűMéret;
+
+                    // Biztonsági ellenőrzés: érvényes font?
+                    if (fontSizePt <= 0) fontSizePt = BetűMéret;
+
+                    try
+                    {
+                        using (Font font = new Font(fontFamily, fontSizePt, FontStyle.Regular, GraphicsUnit.Point))
+                        {
+                            string[] manualLines = text.Replace("\r", "").Split('\n');
+                            int sorokSzama = 0;
+
+                            foreach (string manualLine in manualLines)
+                            {
+                                if (string.IsNullOrEmpty(manualLine))
+                                {
+                                    sorokSzama++;
+                                    continue;
+                                }
+
+                                // Mérés korlátozott szélességgel
+                                SizeF layoutSize = new SizeF(maxWidthPx, float.MaxValue);
+                                SizeF measured = g.MeasureString(manualLine, font, layoutSize, StringFormat.GenericTypographic);
+
+                                // Egy sor magassága (font-magasság alapján)
+                                float lineHeight = g.MeasureString("X", font, new SizeF(float.MaxValue, float.MaxValue), StringFormat.GenericTypographic).Height;
+
+                                int linesForThis = (int)Math.Ceiling(measured.Height / lineHeight);
+                                sorokSzama += Math.Max(1, linesForThis);
+                            }
+
+                            if (sorokSzama > maxSorok) maxSorok = sorokSzama;
+                        }
+                    }
+                    catch (ArgumentException)
+                    {
+                        // Érvénytelen betűtípus – alapértelmezett használata
+                        // (pl. ha a font nincs telepítve)
+                        // Opcionális: logolás, vagy figyelmen kívül hagyás
+                        continue;
+                    }
+                }
+            }
+            return maxSorok * AlapMagasság;
+        }
+
 
         /// <summary>
         /// A cellába beírt szöveg olvasási irányát lehet beállítani
@@ -237,7 +368,6 @@ namespace Villamos
             }
             return maxRow;
         }
-
 
         public static int Utolsóoszlop(string munkalapnév)
         {

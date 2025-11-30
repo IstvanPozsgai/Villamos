@@ -22,5 +22,7 @@ public partial class Függvénygyűjtemény
         return Érték;
 
     }
+
+
 }
 

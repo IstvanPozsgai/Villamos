@@ -7,13 +7,14 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.MindenEgyéb;
+using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok;
 using Villamos.Villamos_Adatszerkezet;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
 using MyF = Függvénygyűjtemény;
-using MyIO = System.IO;
 using MyLista = Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok.Karbantartási_ListaFeltöltés;
 using MyPDF = Villamos.MindenEgyéb.PDF_Töltés;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -42,9 +43,21 @@ namespace Villamos.Villamos_Ablakok
         List<Adat_Technológia_Új> AdatokTechnológia = new List<Adat_Technológia_Új>();
         List<Adat_Kiegészítő_Csoportbeosztás> AdatokCsoport = new List<Adat_Kiegészítő_Csoportbeosztás>();
 
+        List<string> Fájlok = new List<string> { fájlexc };
         List<string> PályaszámLista = new List<string>();
         List<string> Pályaszám_TáblaAdatok = new List<string>();
         Dictionary<string, string> Személy = new Dictionary<string, string>();
+
+        /// <summary>
+        /// Betű beállítások
+        /// </summary>
+        #region Betű Beállítás
+        readonly Beállítás_Betű BeBetű = new Beállítás_Betű { Név = "Arial", Méret = 12 };
+        readonly Beállítás_Betű BeBetűV = new Beállítás_Betű { Név = "Arial", Méret = 12, Vastag = true };
+        readonly Beállítás_Betű BeBetűVD = new Beállítás_Betű { Név = "Arial", Méret = 12, Vastag = true, Dőlt = true };
+        readonly Beállítás_Betű BeBetűD = new Beállítás_Betű { Név = "Arial", Méret = 12, Dőlt = true };
+        readonly Beállítás_Betű BeBetűVG = new Beállítás_Betű { Név = "Arial", Méret = 12, Vastag = true, Szín = Color.Green };
+        #endregion
 
         Byte[] bytes;
 
@@ -910,6 +923,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
+                Fájlok.Clear();
                 DateTime Eleje = DateTime.Now;
                 if (Combo_KarbCiklus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve egy ciklus fokozat sem!");
                 if (Járműtípus.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve egy járműtípus sem!");
@@ -922,12 +936,12 @@ namespace Villamos.Villamos_Ablakok
                     string fájlnév = $"Technológia_{Program.PostásNév}_{Járműtípus.Text.Trim()}_{Combo_KarbCiklus.Text.Trim()}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
                     string fájlexc = $@"{könyvtár}\{fájlnév}";
                     Excel_tábla(fájlexc);
-
+                    if (Nyomtat_igen.Checked) MyF.ExcelNyomtatás(Fájlok);
                     //fájl törlése
                     if (Töröl_igen.Checked)
-                        MyIO.File.Delete(fájlexc);
+                        MyF.FájlTörlés(Fájlok);
                     else
-                        Module_Excel.Megnyitás(fájlexc);
+                        MyF.Megnyitás(fájlexc);
                 }
                 else
                 {
@@ -937,13 +951,14 @@ namespace Villamos.Villamos_Ablakok
                         string fájlexc = $@"{könyvtár}\{fájlnév}";
                         Pályaszám.Text = psz;
                         Excel_tábla(fájlexc);
-
-                        //fájl törlése
-                        if (Töröl_igen.Checked)
-                            MyIO.File.Delete(fájlexc);
-                        else
-                            Module_Excel.Megnyitás(fájlexc);
                     }
+                    if (Nyomtat_igen.Checked) MyF.ExcelNyomtatás(Fájlok, Töröl_igen.Checked);
+
+                    //fájl törlése
+                    if (Töröl_igen.Checked)
+                        MyF.FájlTörlés(Fájlok);
+                    else
+                        MyF.Megnyitások(Fájlok);
                 }
 
                 DateTime Vége = DateTime.Now;
@@ -1033,7 +1048,7 @@ namespace Villamos.Villamos_Ablakok
                 if (Járműtípus.Text.Trim().Length > 15) Verzió = $"{Járműtípus.Text.Trim()}\n_{Combo_KarbCiklus.Text.Trim()}_{AdatCikk.Verzió}";
 
 
-                MyX.ExcelLétrehozás();
+                MyX.ExcelLétrehozás(munkalap);
                 ExcelMunkalap();
                 int sormagagasság = 30;
                 sor = 1;
@@ -1063,27 +1078,34 @@ namespace Villamos.Villamos_Ablakok
                 if (Chk_szerszám.Checked == true) sor = SzerszámokSorok(sor);
                 Holtart.Lép();
 
-                //Pályaszámok
-                //   if (csoportos && Munkalap_Változatnév.Text.Trim() == "Egyszerűsített") sor = CsoportosPályaszámok(sor);
-                Holtart.Lép();
-
                 //Megjegyzések
                 sor = MegjegyzésSorok(sor);
                 Holtart.Lép();
 
                 //     Nyomtatási beállítások
-                // JAVÍTANDÓ: MyX.NyomtatásiTerület_részletes(munkalap, $"A1:Q{sor}",
-                //                                munkafejléchelye,
-                //                                hatályos_str, "&P / &N oldal", Verzió);
+                Beállítás_Nyomtatás Benyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:Q{sor}",
+                    IsmétlődőSorok = munkafejléchelye,
+                    LáblécBal = hatályos_str,
+                    LáblécKözép = "&P / &N oldal",
+                    LáblécJobb = Verzió,
+                    LapSzéles = 1,
+                    AlsóMargó = 14,
+                    FelsőMargó = 9,
+                    BalMargó = 6,
+                    JobbMargó = 6,
+                    FejlécMéret = 8,
+                    LáblécMéret = 8
 
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, Benyom);
 
-                //nyomtatás
-                // JAVÍTANDÓ:    if (Nyomtat_igen.Checked) MyX.Nyomtatás(munkalap, 1, 1);
                 Holtart.Lép();
 
-
                 MyX.ExcelMentés(fájlexc);
-                MyX.ExcelBezárás();
+                Fájlok.Add(fájlexc);
                 Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
@@ -1150,7 +1172,7 @@ namespace Villamos.Villamos_Ablakok
             MyX.Kiir("Aláírás", $"P{sor - 1}");
 
             MyX.Rácsoz(munkalap, $"A{sor - 1}:Q{sor}");
-            // JAVÍTANDÓ:      MyX.Betű($"{sor - 1}:{sor}", false, false, true);
+            MyX.Betű(munkalap, $"{sor - 1}:{sor}", BeBetűV);
             MyX.Háttérszín(munkalap, $"A{sor - 1}:Q{sor}", System.Drawing.Color.Gainsboro);
             MyX.Sormagasság(munkalap, $"{sor - 1}:{sor}", 20);
 
@@ -1180,16 +1202,18 @@ namespace Villamos.Villamos_Ablakok
             MyX.Igazít_vízszintes(munkalap, $"{sor}:{sor}", "bal");
 
             sor++;
-            MyX.Egyesít(munkalap, "N" + sor + ":Q" + sor);
-            MyX.Pontvonal("N" + sor + ":Q" + sor);
+            MyX.Egyesít(munkalap, $"M{sor}:Q{sor}");
+            MyX.Pontvonal(munkalap, $"M{sor}:Q{sor}");
             if (Kiadta.Text.Trim() == "")
-                MyX.Kiir("Irányító", "N" + sor);
+                MyX.Kiir("Irányító", $"M{sor}");
             else
             {
                 string ideig = Kiadta.Text.Trim().Replace("-", "\n");
-                MyX.Kiir(ideig, "N" + sor);
+                MyX.Kiir(ideig, $"M{sor}");
                 MyX.Sormagasság(munkalap, $"{sor}:{sor}", 52);
+                MyX.Sortörésseltöbbsorba(munkalap, $"M{sor}", true);
             }
+            MyX.Igazít_vízszintes(munkalap, $"{sor}:{sor}", "közép");
             return sor;
         }
 
@@ -1198,7 +1222,7 @@ namespace Villamos.Villamos_Ablakok
             sor++;
             MyX.Egyesít(munkalap, $"A{sor}:Q{sor}");
             MyX.Kiir("A KARBANTARTÓ TEVÉKENYSÉG SORÁN HASZNÁLT KALIBRÁLT ESZKÖZÖK, SZERSZÁMOK LISTÁJA", $"A{sor}");
-            // JAVÍTANDÓ: MyX.Vastagkeret($"A{sor}:Q{sor}");
+            MyX.Vastagkeret(munkalap, $"A{sor}:Q{sor}");
             MyX.Sormagasság(munkalap, $"{sor}:{sor}", sormagagasság);
             MyX.Háttérszín(munkalap, $"A{sor}:Q{sor}", System.Drawing.Color.Gainsboro);
 
@@ -1236,7 +1260,7 @@ namespace Villamos.Villamos_Ablakok
             sor++;
             MyX.Egyesít(munkalap, $"A{sor}:Q{sor}");
             MyX.Kiir("A KARBANTARTÓ TEVÉKENYSÉG SORÁN FELMERÜLŐ ÉSZREVÉTELEK, JAVÍTÁSOK", $"A{sor}");
-            // JAVÍTANDÓ: MyX.Vastagkeret($"A{sor}:Q{sor}");
+            MyX.Vastagkeret(munkalap, $"A{sor}:Q{sor}");
             MyX.Sormagasság(munkalap, $"{sor}:{sor}", sormagagasság);
             MyX.Háttérszín(munkalap, $"A{sor}:Q{sor}", System.Drawing.Color.Gainsboro);
 
@@ -1273,64 +1297,38 @@ namespace Villamos.Villamos_Ablakok
                     else
                     {
                         MyX.Egyesít(munkalap, $"B{sor}:I{sor}");
+                        MyX.Sortörésseltöbbsorba(munkalap, $"B{sor}:I{sor}", true);
                         MyX.Egyesít(munkalap, $"M{sor}:O{sor}");
                         MyX.Egyesít(munkalap, $"P{sor}:Q{sor}");
                         MyX.Kiir(a.Részegység.Trim() + ". " + a.Munka_utasítás_szám.Trim(), $"A{sor}");
-                        string szövegelem = a.Paraméter.Trim() == "_" ? "" : "\n" + a.Paraméter.Trim();
+
+
                         if (Chk_paraméter.Checked && Chk_utasítás.Checked)
                         {
                             //Minden kiírás
-                            Minden_kiírása(sor, a.Utasítás_Cím, a.Utasítás_leírás, szövegelem, a.Paraméter);
-
+                            Minden_kiírása(sor, a.Utasítás_Cím, a.Utasítás_leírás, a.Paraméter);
                         }
                         else if (Chk_paraméter.Checked && !Chk_utasítás.Checked)
                         {
-
                             //Paraméter
-                            MyX.Kiir(a.Utasítás_Cím.Trim() + szövegelem, "B" + sor);
-                            //Vastag
-                            // JAVÍTANDÓ:     MyX.Cella_Betű("B" + sor, false, false, true, 1, a.Utasítás_Cím.Trim().Length);
-                            //dőlt
-                            // JAVÍTANDÓ:       MyX.Cella_Betű("B" + sor, false, true, false, (a.Utasítás_Cím.Trim() + "\n").Length + 2, a.Paraméter.Trim().Length);
-
-                            MyX.Kiir(a.Utasítás_Cím.Trim() + szövegelem + "\n", "AS" + sor);
-                            // JAVÍTANDÓ:    // JAVÍTANDÓ:      MyX.Betű($"AS{sor}", false, false, true);
+                            Minden_kiírása(sor, a.Utasítás_Cím, a.Utasítás_leírás, a.Paraméter);
                         }
                         else if (!Chk_paraméter.Checked && Chk_utasítás.Checked)
                         {
-                            //Utasítás szövege
-                            MyX.Kiir(a.Utasítás_Cím.Trim() + "\n" + a.Utasítás_leírás.Trim(), "B" + sor);
-                            //Vastag
-                            // JAVÍTANDÓ:       MyX.Cella_Betű("B" + sor, false, false, true, 1, a.Utasítás_Cím.Trim().Length);
-
-                            MyX.Kiir(a.Utasítás_Cím.Trim() + "\n" + a.Utasítás_leírás.Trim() + "\n", "AS" + sor);
-                            // JAVÍTANDÓ:   MyX.Betű($"AS{sor}", false, false, true);
-
+                            Utasítás_kiírása(sor, a.Utasítás_Cím, a.Utasítás_leírás);
                         }
                         else
                         {
                             //csak utasítás cím
-                            if (a.Utasítás_Cím.Trim().Length < 55)
-                            {
-                                MyX.Kiir(a.Utasítás_Cím.Trim(), "B" + sor);
-                                // JAVÍTANDÓ:    MyX.Betű("B" + sor, false, false, true);
-                            }
-                            else
-                            {
-                                MyX.Kiir(a.Utasítás_Cím.Trim(), "B" + sor);
-                                // JAVÍTANDÓ:  MyX.Betű("B" + sor, false, false, true);
-                                MyX.Kiir(a.Utasítás_Cím.Trim() + "\n", "AS" + sor);
-                                // JAVÍTANDÓ:      MyX.Betű($"AS{sor}", false, false, true);
-                            }
+                            Cím_kiírása(sor, a.Utasítás_Cím);
                         }
-
+                        MyX.Sortörésseltöbbsorba(munkalap, $"B{sor}", true);
                         if (VÁLTAdatok.Count > 0)
                         {
                             string ideignév = Dolgozónév_kiíratása(VÁLTAdatok, a.ID, Személy);
                             ideignév = ideignév.Trim() != "_" ? ideignév : "";
-                            MyX.Kiir(ideignév.Replace("_", "\n"), "M" + sor);// kicseréljük a _-t sortörésre, hogy a cella magassága jó legyen.
-                            MyX.Kiir(ideignév.Replace("_", "\n"), "AT" + sor);
-                            MyX.Sortörésseltöbbsorba(munkalap, "M" + sor, true);
+                            MyX.Kiir(ideignév.Replace("_", "\n"), $"M{sor}");// kicseréljük a _-t sortörésre, hogy a cella magassága jó legyen.
+                            MyX.Sortörésseltöbbsorba(munkalap, $"M{sor}", true);
                         }
 
                         MyX.Igazít_vízszintes(munkalap, $"B{sor}", "bal");
@@ -1346,6 +1344,60 @@ namespace Villamos.Villamos_Ablakok
             return sor;
         }
 
+        private void Cím_kiírása(int sor, string utasítás_Cím)
+        {
+            MyX.Kiir(utasítás_Cím.Trim(), "B" + sor);
+            MyX.Betű(munkalap, "B" + sor, BeBetűV);
+        }
+
+        private void Utasítás_kiírása(int sor, string utasítás_Cím, string utasítás_leírás)
+        {
+            //Utasítás szövege
+            MyX.Kiir($"{utasítás_Cím.Trim()}\n{utasítás_leírás.Trim()}", $"B{sor}");
+            //Vastag
+            RichTextRun TextBe = new RichTextRun
+            {
+                Start = 0,
+                Hossz = utasítás_Cím.Trim().Length,
+                Vastag = true
+            };
+            Beállítás_CellaSzöveg BeCell = new Beállítás_CellaSzöveg
+            {
+                MunkalapNév = munkalap,
+                Cella = $"B{sor}",
+                FullText = $"{utasítás_Cím.Trim()}\n{utasítás_leírás.Trim()}",
+                Betű = BeBetű,
+                Beállítások = new List<RichTextRun> { TextBe }
+            };
+            MyX.Cella_Betű(BeCell);
+        }
+
+        private void Paraméter_kiírása(int sor, string utasítás_Cím, string utasítás_leírás, string szövegelem, string paraméter)
+        {
+            MyX.Kiir(utasítás_Cím.Trim() + szövegelem, $"B{sor}");
+            RichTextRun TextBeV = new RichTextRun
+            {
+                Start = 0,
+                Hossz = utasítás_Cím.Trim().Length,
+                Vastag = true
+            };
+            RichTextRun TextBeD = new RichTextRun
+            {
+                Start = ($"{utasítás_Cím.Trim()}\n").Length,
+                Hossz = paraméter.Trim().Length,
+                Dőlt = true
+            };
+            Beállítás_CellaSzöveg BeCell = new Beállítás_CellaSzöveg
+            {
+                MunkalapNév = munkalap,
+                Cella = $"B{sor}",
+                FullText = $"{utasítás_Cím.Trim()}\n{utasítás_leírás.Trim()}{szövegelem}",
+                Betű = BeBetű,
+                Beállítások = new List<RichTextRun> { TextBeV, TextBeD }
+            };
+            MyX.Cella_Betű(BeCell);
+        }
+
         private void Főcím_kiírása(int sor, int sormagasság, string munkalap, string Részegység, string Utasítás_Cím)
         {
             //főcímsor
@@ -1359,17 +1411,46 @@ namespace Villamos.Villamos_Ablakok
             MyX.Rácsoz(munkalap, $"A{sor}:Q{sor}");
         }
 
-        private void Minden_kiírása(int sor, string Utasítás_Cím, string Utasítás_leírás, string szövegelem, string Paraméter)
+        private void Minden_kiírása(int sor, string Utasítás_Cím, string Utasítás_leírás, string Paraméter)
         {
             //Minden kiírás
-            MyX.Kiir($"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}{szövegelem}", $"B{sor}");
-            //vastag
-            // JAVÍTANDÓ:        MyX.Cella_Betű($"B{sor}", false, false, true, 1, Utasítás_Cím.Trim().Length);
-            //dőlt
-            // JAVÍTANDÓ:        MyX.Cella_Betű($"B{sor}", false, true, false, (Utasítás_Cím.Trim() + "\n" + Utasítás_leírás.Trim()).Length + 2, Paraméter.Trim().Length);
-
-            MyX.Kiir($"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}{szövegelem}\n", $"AS{sor}");
-            // JAVÍTANDÓ: // JAVÍTANDÓ:      MyX.Betű($"AS{sor}", false, false, true);
+            MyX.Kiir($"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}\n{Paraméter}", $"B{sor}");
+            RichTextRun TextBeV = new RichTextRun
+            {
+                Start = 0,
+                Hossz = Utasítás_Cím.Trim().Length,
+                Vastag = true
+            };
+            RichTextRun TextBeD = new RichTextRun
+            {
+                Start = ($"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}").Length,
+                Hossz = Paraméter.Trim().Length,
+                Dőlt = true
+            };
+            if (Paraméter.Trim() != "_")
+            {
+                Beállítás_CellaSzöveg BeCell = new Beállítás_CellaSzöveg
+                {
+                    MunkalapNév = munkalap,
+                    Cella = $"B{sor}",
+                    FullText = $"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}\n{Paraméter}",
+                    Betű = BeBetű,
+                    Beállítások = new List<RichTextRun> { TextBeV, TextBeD }
+                };
+                MyX.Cella_Betű(BeCell);
+            }
+            else
+            {
+                Beállítás_CellaSzöveg BeCell = new Beállítás_CellaSzöveg
+                {
+                    MunkalapNév = munkalap,
+                    Cella = $"B{sor}",
+                    FullText = $"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}",
+                    Betű = BeBetű,
+                    Beállítások = new List<RichTextRun> { TextBeV }
+                };
+                MyX.Cella_Betű(BeCell);
+            }
         }
 
         private string Dolgozónév_kiíratása(List<Adat_Technológia_Változat> VÁLTAdatok, long ID, Dictionary<string, string> Személy)
@@ -1423,7 +1504,7 @@ namespace Villamos.Villamos_Ablakok
 
         private void ExcelMunkalap()
         {
-            // JAVÍTANDÓ:     MyX.Munkalap_betű("Arial", 12);
+            MyX.Munkalap_betű(munkalap, BeBetű);
             MyX.Oszlopszélesség(munkalap, "A:A", 8);
             MyX.Oszlopszélesség(munkalap, "B:Q", 7);
             MyX.Oszlopszélesség(munkalap, "AS:AS", 70);
@@ -1440,50 +1521,55 @@ namespace Villamos.Villamos_Ablakok
                 sor++;
                 MyX.Egyesít(munkalap, $"E{sor}:Q{sor}");
                 MyX.Kiir("Budapesti Közlekedési Zártkörűen Működő Részvénytársaság", $"E{sor}");
-                // JAVÍTANDÓ:      MyX.Betű($"E{sor}", 12);
-                // JAVÍTANDÓ:      MyX.Betű($"E{sor}", false, false, true);
+                MyX.Betű(munkalap, $"E{sor}", BeBetűV);
+
                 MyX.Igazít_vízszintes(munkalap, $"E{sor}", "jobb");
 
                 sor++;
                 MyX.Egyesít(munkalap, $"E{sor}:Q{sor}");
                 MyX.Kiir("MEGELŐZŐ KARBANTARTÁS MUNKACSOMAG", $"E{sor}");
-                // JAVÍTANDÓ:      MyX.Betű($"E{sor}", 12);
-                // JAVÍTANDÓ:      MyX.Betű($"E{sor}", false, false, true);
-                // JAVÍTANDÓ:      MyX.Betű($"E{sor}", Color.Green);
+                MyX.Betű(munkalap, $"E{sor}", BeBetűVG);
                 MyX.Igazít_vízszintes(munkalap, $"E{sor}", "jobb");
                 sor++;
-                // JAVÍTANDÓ: MyX.Vastagkeret($"A1:Q{sor}");
+                MyX.Vastagkeret(munkalap, $"A1:Q{sor}");
 
                 sor += 5;
+                MyX.Vastagkeret(munkalap, $"A5:Q10");
                 MyX.Sormagasság(munkalap, $"{sor}:{sor}", sormagagasság);
                 MyX.Egyesít(munkalap, $"A{sor}:D{sor}");
                 MyX.Kiir("Km óra állás:", $"A{sor}");
-                // JAVÍTANDÓ:      MyX.Betű($"{sor}:{sor}", false, true, true);
+                MyX.Betű(munkalap, $"{sor}:{sor}", BeBetűVD);
+                MyX.Vastagkeret(munkalap, $"A{sor}:D{sor}");
 
                 MyX.Egyesít(munkalap, $"N{sor}:Q{sor}");
                 MyX.Kiir("Verzió:", $"N{sor}");
-                // JAVÍTANDÓ:      MyX.Betű($"{sor}:{sor}", false, true, true);
+                MyX.Betű(munkalap, $"{sor}:{sor}", BeBetűVD);
 
                 sor++;
                 MyX.Sormagasság(munkalap, $"{sor}:{sor}", sormagagasság);
-                MyX.Egyesít(munkalap, $"A{sor}:D{sor}");
+
                 MyX.Rácsoz(munkalap, $"A{sor - 1}:D{sor}");
+                MyX.Egyesít(munkalap, $"A{sor}:D{sor}");
+
                 if (csoportos)
                 {
-                    // JAVÍTANDÓ:      MyX.FerdeVonal($"A{sor}:D{sor}");
+                    //Beállítás_Ferde Beállítás = new Beállítás_Ferde { Terület = $"A{sor}:D{sor}", Munkalap = munkalap };
+                    //MyX.FerdeVonal(Beállítás);
+                    MyX.Kiir("-------------------------", $"A{sor}");
                 }
                 else
                     MyX.Kiir($"{KM_korr}", $"A{sor}");
 
                 MyX.Egyesít(munkalap, $"N{sor}:Q{sor}");
                 MyX.Kiir(Verzió, $"N{sor}");
-                // JAVÍTANDÓ:      MyX.Betű($"{sor}:{sor}", false, true, true);
+                MyX.Betű(munkalap, $"{sor}:{sor}", BeBetűVD);
                 MyX.Rácsoz(munkalap, $"N{sor - 1}:Q{sor}");
+                MyX.Rácsoz(munkalap, $"A{sor - 1}:D{sor}");
 
                 sor++;
                 Kép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\Villamos_{Járműtípus.Text.Trim()}.png";
-                if (File.Exists(Kép)) MyX.Kép_beillesztés(munkalap, "F5", Kép, 255, 60, 0.5, 0.5);
-                // JAVÍTANDÓ: MyX.Vastagkeret($"A5:Q{sor}");
+                if (File.Exists(Kép)) MyX.Kép_beillesztés(munkalap, "F5", Kép, 300, 100, 0.4, 0.4);
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -1509,7 +1595,7 @@ namespace Villamos.Villamos_Ablakok
             MyX.Kiir("Befejező Dátum", $"E{sor}");
             MyX.Kiir("Rendelés Szám:", $"I{sor}");
             MyX.Kiir("Telephely", $"N{sor}");
-            // JAVÍTANDÓ:     MyX.Betű($"{sor}:{sor}", false, true, true);
+            MyX.Betű(munkalap, $"{sor}:{sor}", BeBetűVD);
             MyX.Sormagasság(munkalap, $"{sor}:{sor}", sormagagasság);
             sor++;
             MyX.Egyesít(munkalap, $"A{sor}:D{sor}");
@@ -1564,17 +1650,17 @@ namespace Villamos.Villamos_Ablakok
             if (!csoportos)
             {
                 MyX.Kiir($"Pályaszám:{Pályaszám.Text.Trim()}", $"A{sor}");
-                // JAVÍTANDÓ:      MyX.Betű($"A{sor}", false, false, true);
+                MyX.Betű(munkalap, $"A{sor}", BeBetűV);
             }
             string szöveg = Járműtípus.Text.Trim();
             if (Járműtípus.Text.Trim().Length > 15) szöveg += "\n";
             szöveg += $" - {Combo_KarbCiklus.Text.Trim()} Karbantartási munkalap";
 
             MyX.Kiir(szöveg, $"F{sor}");
-            // JAVÍTANDÓ:      MyX.Betű($"F{sor}", false, false, true);
+            MyX.Betű(munkalap, $"F{sor}", BeBetűV);
 
             MyX.Kiir($"Készítve: {DateTime.Now}", $"M{sor}");
-            // JAVÍTANDÓ:      MyX.Betű($"M{sor}", false, true, false);
+            MyX.Betű(munkalap, $"M{sor}", BeBetűD);
 
             MyX.Sormagasság(munkalap, $"{sor}:{sor}", sormagagasság);
             MyX.Rácsoz(munkalap, $"A{sor}:Q{sor}");

@@ -1,5 +1,4 @@
-﻿using Microsoft.Office.Interop.Excel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -34,16 +33,44 @@ public static partial class Függvénygyűjtemény
         }
     }
 
-    public static void ExcelNyomtatás(List<string> excelFiles, bool törlés = false)
+    public static void Megnyitások(List<string> Fájlok)
+    {
+        string Fájlhelye = "";
+        try
+        {
+            foreach (string Fájl in Fájlok)
+            {
+                Fájlhelye = Fájl;
+                if (!Exists(Fájlhelye)) return;
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = Fájlhelye,
+                    UseShellExecute = true, // Fontos: ezzel a rendszer alapértelmezett alkalmazását használja
+                    Verb = "open"           // Explicit "megnyitás" parancs
+                };
+                Process.Start(psi);
+            }
+        }
+        catch (Exception ex)
+        {
+            StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+            string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+            HibaNapló.Log(ex.Message, $"Megnyitás(Fájlhelye {Fájlhelye}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+            MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+        }
+    }
+
+    public static void ExcelNyomtatás(List<string> Fájlok, bool törlés = false)
     {
         MyE.Application excelApp = null;
-        Workbook workbook = null;
+        MyE.Workbook workbook = null;
 
-        foreach (string filePath in excelFiles)
+        foreach (string Fájl in Fájlok)
         {
-            if (!File.Exists(filePath))
+            if (!File.Exists(Fájl))
             {
-                MessageBox.Show($"Fájl nem található: {filePath}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Fájl nem található: {Fájl}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 continue;
             }
 
@@ -57,7 +84,7 @@ public static partial class Függvénygyűjtemény
                 };
 
                 // Munkafüzet megnyitása
-                workbook = excelApp.Workbooks.Open(filePath);
+                workbook = excelApp.Workbooks.Open(Fájl);
 
                 // Nyomtatás az alapértelmezett nyomtatóra (minden munkalap)
                 workbook.PrintOut(); // Esetleg megadhatsz From, To paramétereket is
@@ -69,7 +96,7 @@ public static partial class Függvénygyűjtemény
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Hiba a(z) {filePath} fájl nyomtatása közben: {ex.Message}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Hiba a(z) {Fájl} fájl nyomtatása közben: {ex.Message}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             finally
@@ -87,7 +114,7 @@ public static partial class Függvénygyűjtemény
                 {
                     if (törlés)
                     {
-                        File.Delete(filePath);
+                        File.Delete(Fájl);
                         // MessageBox.Show($"Törölve: {filePath}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
@@ -98,5 +125,30 @@ public static partial class Függvénygyűjtemény
             }
         }
     }
+
+    public static void FájlTörlés(List<string> Fájlok)
+    {
+        foreach (string Fájl in Fájlok)
+        {
+            if (!File.Exists(Fájl))
+            {
+                MessageBox.Show($"Fájl nem található: {Fájl}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                continue;
+            }
+            // Fájl törlése (akár sikeres, akár sikertelen volt a nyomtatás – ízlés szerint)
+            try
+            {
+                File.Delete(Fájl);
+                // MessageBox.Show($"Törölve: {filePath}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception delEx)
+            {
+                // MessageBox.Show($"Nem sikerült törölni: {filePath} – {delEx.Message}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+        }
+    }
+
+
 }
 
