@@ -388,5 +388,28 @@ namespace Villamos
             }
             return maxColumn;
         }
+
+        public static void OszlopTörlés(string munkalapnév, string oszlopBetű)
+        {
+            try
+            {
+                // 1. Oszlop tartalmának teljes törlése (érték + formázás)
+                IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
+                IXLColumn oszlop = munkalap.Column(oszlopBetű);
+                oszlop.Clear(XLClearOptions.All); // ez törli: érték, formázás, szélesség, stb.
+
+                // 2. Oszlopszélesség visszaállítása automatikusra (azaz nincs fix szélesség)
+                // A Clear() már ezt is megteszi, de biztos ami biztos:
+                oszlop.Width = 0; // 0 = automatikus szélesség (ClosedXML-ben ez a standard)
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"SzövegIrány(munkalap {munkalapnév}, oszlopBetű: {oszlopBetű}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+        }
     }
 }
