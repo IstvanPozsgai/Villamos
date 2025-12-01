@@ -532,6 +532,31 @@ namespace Villamos.Kezelők
                 .FirstOrDefault();
         }
 
+        private List<int> NemTortentPvizsgalat()
+        {
+            List<int> NemTortentPvizsgalat = new List<int>();
+
+            List<int> azonositoLista = OsszesPalyaszam();
+
+            for (int i = 0; i <= azonositoLista.Count() - 1; i++)
+            {
+                string Palyaszam = $"{azonositoLista[i]}";
+                if (KézAdatok.Lista_Adatok().FirstOrDefault(a => a.Azonosító == Palyaszam && a.IDŐvKM == 2) == null)
+                {
+                    NemTortentPvizsgalat.Add(Palyaszam.ToÉrt_Int());
+                }
+            }
+            return NemTortentPvizsgalat;
+        }
+
+        private List<int> OsszesPalyaszam()
+        {
+            return KézJármű.Lista_Adatok("Főmérnökség")
+                   .Where(a => a.Típus.Contains("CAF") && !a.Azonosító.StartsWith("V"))
+                   .Select(a => int.Parse(a.Azonosító))
+                   .ToList();
+        }
+
 
         // JAVÍTANDÓ: A pályaszám, helyett a típust használd
         // KÉSZ
@@ -541,24 +566,33 @@ namespace Villamos.Kezelők
         // De teljesen jogos, most jutott eszembe, hogy 1 LINQ lekérdezés elég lett volna és a StartsWith szerepelhetett volna 2x &&-el, ha nem típust használnánk.
         public void Tabla_Feltoltese()
         {
-
-            List<int> azonositoLista = KézJármű.Lista_Adatok("Főmérnökség")
-                .Where(a => a.Típus.Contains("CAF"))
-                .Select(a => int.Parse(a.Azonosító))
-                .ToList();           
+            List<int> azonositoLista = OsszesPalyaszam();
+            List<int> TortentPvizsgalat = NemTortentPvizsgalat();
 
             for (int i = 0; i <= azonositoLista.Count()-1; i++)
             {
                 string Palyaszam = $"{azonositoLista[i]}";
-                Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(Palyaszam, Utolso_Vizsgalat_Valos_Allasa(Palyaszam), Kovetkezo_P0_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P1_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P2_Vizsgalat_KM_Erteke(Palyaszam), P0_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), P1_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), Utolso_P3_es_P2_kozotti_futas(Palyaszam), Elso_P2_rendben_van_e(Palyaszam), Elso_P3_rendben_van_e(Palyaszam), Utolso_P0_Sorszam(Palyaszam), Utolso_P1_Sorszam(Palyaszam), Utolso_P2_Sorszam(Palyaszam), Utolso_P3_Sorszam(Palyaszam));
-                Rögzítés_Elso(teszt);
+                if (!TortentPvizsgalat.Contains(Palyaszam.ToÉrt_Int()))
+                {
+                    Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(Palyaszam, Utolso_Vizsgalat_Valos_Allasa(Palyaszam), Kovetkezo_P0_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P1_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P2_Vizsgalat_KM_Erteke(Palyaszam), P0_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), P1_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), Utolso_P3_es_P2_kozotti_futas(Palyaszam), Elso_P2_rendben_van_e(Palyaszam), Elso_P3_rendben_van_e(Palyaszam), Utolso_P0_Sorszam(Palyaszam), Utolso_P1_Sorszam(Palyaszam), Utolso_P2_Sorszam(Palyaszam), Utolso_P3_Sorszam(Palyaszam));
+                    Rögzítés_Elso(teszt);
+                }                           
             }
         }
 
         public void Erteket_Frissit(string palya)
         {
-            Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(palya, Utolso_Vizsgalat_Valos_Allasa(palya), Kovetkezo_P0_Vizsgalat_KM_Erteke(palya), Kovetkezo_P1_Vizsgalat_KM_Erteke(palya), Kovetkezo_P2_Vizsgalat_KM_Erteke(palya), P0_vizsgalatok_kozott_megtett_KM_Erteke(palya), P1_vizsgalatok_kozott_megtett_KM_Erteke(palya), Utolso_P3_es_P2_kozotti_futas(palya), Elso_P2_rendben_van_e(palya), Elso_P3_rendben_van_e(palya), Utolso_P0_Sorszam(palya), Utolso_P1_Sorszam(palya), Utolso_P2_Sorszam(palya), Utolso_P3_Sorszam(palya));
-            Erteket_Frissit(teszt);
+            List<int> TortentPvizsgalat = NemTortentPvizsgalat();
+
+            if (!TortentPvizsgalat.Contains(palya.ToÉrt_Int()))
+            {
+                Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(palya, Utolso_Vizsgalat_Valos_Allasa(palya), Kovetkezo_P0_Vizsgalat_KM_Erteke(palya), Kovetkezo_P1_Vizsgalat_KM_Erteke(palya), Kovetkezo_P2_Vizsgalat_KM_Erteke(palya), P0_vizsgalatok_kozott_megtett_KM_Erteke(palya), P1_vizsgalatok_kozott_megtett_KM_Erteke(palya), Utolso_P3_es_P2_kozotti_futas(palya), Elso_P2_rendben_van_e(palya), Elso_P3_rendben_van_e(palya), Utolso_P0_Sorszam(palya), Utolso_P1_Sorszam(palya), Utolso_P2_Sorszam(palya), Utolso_P3_Sorszam(palya));
+                Erteket_Frissit(teszt);
+            }
+            else
+            {
+                MessageBox.Show($"A {palya} pályaszámú villamoshoz még nem került rögzítésre KM alapú vizsgálat!", "Figyelem!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }
