@@ -205,7 +205,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             {
 
                 string munkalap = Telephely;
-                MyX.Új_munkalap(Telephely);
+                MyX.Munkalap_Új(Telephely);
                 MyX.Munkalap_aktív(munkalap);
                 Beállítás_Betű BeB = new Beállítás_Betű { Név = "Calibri", Méret = 10 };
                 MyX.Munkalap_betű(munkalap, BeB);
@@ -786,7 +786,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
         {
             try
             {
-                MyX.Új_munkalap(munkalap);
+                MyX.Munkalap_Új(munkalap);
                 MyX.Munkalap_aktív(munkalap);
                 MyX.Munkalap_betű(munkalap, BeBetűG12);
                 MyX.Egyesít(munkalap, "a1:d1");

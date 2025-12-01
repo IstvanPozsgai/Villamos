@@ -219,7 +219,7 @@ namespace Villamos.Villamos_Ablakok.MEO
                 }
                 // Másik lap elkészítése
 
-                MyX.Új_munkalap("Szűkített");
+                MyX.Munkalap_Új("Szűkített");
                 //Fejléc
 
                 sor = 1;
@@ -460,7 +460,7 @@ namespace Villamos.Villamos_Ablakok.MEO
                     Holtart.Lép();
                 }
                 // Másik lap elkészítése
-                MyX.Új_munkalap("Szűkített");
+                MyX.Munkalap_Új("Szűkített");
                 //Fejléc
 
                 sor = 1;

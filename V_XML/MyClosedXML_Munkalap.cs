@@ -2,13 +2,11 @@
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using iTextSharp.text;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 
@@ -123,7 +121,7 @@ namespace Villamos
             }
         }
 
-        public static void Új_munkalap(string munkalap)
+        public static void Munkalap_Új(string munkalap)
         {
             try
             {
@@ -164,7 +162,7 @@ namespace Villamos
         /// <param name="Y"></param>
         /// <param name="Magas"></param>
         /// <param name="Széles"></param>
-        public static void Kép_beillesztés(  string munkalapnév, String mit, string hely, int X, int Y, double  Wszázalék, double HSzázalék)
+        public static void Kép_beillesztés(string munkalapnév, String mit, string hely, int X, int Y, double Wszázalék, double HSzázalék)
         {
             try
             {
@@ -184,7 +182,7 @@ namespace Villamos
                 StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
                 string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
                 HibaNapló.Log(ex.Message, $"Kép_beillesztés(munkalap {munkalapnév}, mit {mit}, hely {hely}, X {X}, Y {Y}, Wszázalék {Wszázalék}), HSzázalék {HSzázalék}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
-                           MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);          
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

@@ -3443,7 +3443,7 @@ namespace Villamos
                 //Elkészítjük a munkalapokat
                 for (int i = 0; i < Munkalapnév.Count; i++)
                 {
-                    MyX.Új_munkalap(Munkalapnév[i].ToString());
+                    MyX.Munkalap_Új(Munkalapnév[i].ToString());
                 }
 
 
