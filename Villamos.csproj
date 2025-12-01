@@ -343,6 +343,7 @@
       <DependentUpon>Ablak_Bejelentkezés_Új.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Beálló.cs" />
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Háromnapos.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Anyagtörzs.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Anyagok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Ciklus_Sorrend.cs" />
