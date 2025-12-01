@@ -57,8 +57,15 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private void Ablak_Eszterga_Karbantartás_Napló_Load(object sender, EventArgs e)
         {
-            GombLathatosagKezelo.Beallit(this);
-            JogosultsagKiosztas();
+            if (Program.PostásJogkör.Any(c => c != '0'))
+            {
+                JogosultsagKiosztas();
+            }
+            else
+            {
+                GombLathatosagKezelo.Beallit(this, "Baross");
+            }
+
             TablaMuvelet.ClearSelection();
             TablaNaplo.ClearSelection();
             UzemoraKiolvasasEsBeiras(DtmPckr.Value, TxtBxUzemora);

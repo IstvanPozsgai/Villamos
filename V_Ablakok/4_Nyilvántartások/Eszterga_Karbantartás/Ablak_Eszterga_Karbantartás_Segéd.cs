@@ -27,8 +27,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
         {
             InitializeComponent();
 
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultsagkiosztas();
+            if (Program.PostásJogkör.Any(c => c != '0'))
+            {
+                Jogosultsagkiosztas();
+            }
+            else
+            {
+                GombLathatosagKezelo.Beallit(this, "Baross");
+            }
         }
 
         /// <summary>
