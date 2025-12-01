@@ -893,7 +893,7 @@ namespace Villamos
 
                         for (int i = 0; i < 5; i++)
                         {
-                            Tábla.Columns[oszlop + i].HeaderText = rekord.Viszonylat.Trim();
+                            Tábla.Columns[oszlop + i].HeaderText = $"{rekord.Viszonylat}-{rekord.Típus}-{szöveg1[i]}";
                             Tábla.Rows[0].Cells[oszlop + i].Value = rekord.Típus.Trim();
                             Tábla.Rows[1].Cells[oszlop + i].Value = szöveg1[i].Trim();
                         }
