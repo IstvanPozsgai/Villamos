@@ -102,22 +102,47 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            //Ez szabályozza, hogy melyikbe lépünk be
-            if (Program.PostásJogkör.Any(c => c != '0'))
-            {
-                Jogosultsagkiosztas();
-            }
-            else
-            {
-                GombLathatosagKezelo.Beallit(this, "Baross");
-            }
-
-            TablaListazas();
-            AtlagUzemoraFrissites(Alap_Napi_Atlag);
-            Tabla.DataBindingComplete += (s, ev) => SorSzinezes();
-            Tabla.ClearSelection();
+            // A további kezdő inicializálás (jogkiosztás + tábla + átlag)
+            // már a Start metódusban történik – ugyanúgy, mint az Akkumulátor ablakban.
+            Start();
         }
+        private void Start()
+        {
+            try
+            {
+                // Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                // ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Any(c => c != '0'))
+                {
+                    // régi, Vanjoga alapú rendszer
+                    Jogosultsagkiosztas();
+                }
+                else
+                {
+                    // új, GombLathatosagKezelo alapú rendszer
+                    // Az Eszterga fizikailag Baross-hoz tartozik, ezért fix telephelyet adunk át,
+                    // ugyanúgy, ahogy eddig is: GombLathatosagKezelo.Beallit(this, "Baross");
+                    GombLathatosagKezelo.Beallit(this, "Baross");
+                }
 
+                // Tábla és átlag üzemóra beállítása
+                TablaListazas();
+                AtlagUzemoraFrissites(Alap_Napi_Atlag);
+
+                // Sorok színezése adatkötés után is
+                Tabla.DataBindingComplete += (s, ev) => SorSzinezes();
+                Tabla.ClearSelection();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         /// <summary>
         /// Beállítja a felhasználó jogosultságait a gombok (rögzítés, módosítás) elérhetőségéhez.  
         /// A jogosultságokat azonosító alapján kérdezi le, és engedélyezi vagy tiltja az adott funkciókat.  
