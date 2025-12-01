@@ -102,8 +102,6 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            // A további kezdő inicializálás (jogkiosztás + tábla + átlag)
-            // már a Start metódusban történik – ugyanúgy, mint az Akkumulátor ablakban.
             Start();
         }
         private void Start()
@@ -114,14 +112,10 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 // ha mind 0 akkor a GombLathatosagKezelo-t használjuk
                 if (Program.PostásJogkör.Any(c => c != '0'))
                 {
-                    // régi, Vanjoga alapú rendszer
                     Jogosultsagkiosztas();
                 }
                 else
                 {
-                    // új, GombLathatosagKezelo alapú rendszer
-                    // Az Eszterga fizikailag Baross-hoz tartozik, ezért fix telephelyet adunk át,
-                    // ugyanúgy, ahogy eddig is: GombLathatosagKezelo.Beallit(this, "Baross");
                     GombLathatosagKezelo.Beallit(this, "Baross");
                 }
 
