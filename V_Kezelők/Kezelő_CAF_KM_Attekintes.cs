@@ -532,6 +532,31 @@ namespace Villamos.Kezelők
                 .FirstOrDefault();
         }
 
+        public List<int> NemTortentPvizsgalat()
+        {
+            List<int> NemTortentPvizsgalat = new List<int>();
+
+            List<int> azonositoLista = OsszesPalyaszam();
+
+            for (int i = 0; i <= azonositoLista.Count() - 1; i++)
+            {
+                string Palyaszam = $"{azonositoLista[i]}";
+                if (KézAdatok.Lista_Adatok().FirstOrDefault(a => a.Azonosító == Palyaszam && a.IDŐvKM == 2) == null)
+                {
+                    NemTortentPvizsgalat.Add(Palyaszam.ToÉrt_Int());
+                }
+            }
+            return NemTortentPvizsgalat;
+        }
+
+        private List<int> OsszesPalyaszam()
+        {
+            return KézJármű.Lista_Adatok("Főmérnökség")
+                   .Where(a => a.Típus.Contains("CAF") && !a.Azonosító.StartsWith("V"))
+                   .Select(a => int.Parse(a.Azonosító))
+                   .ToList();
+        }
+
 
         // JAVÍTANDÓ: A pályaszám, helyett a típust használd
         // KÉSZ
@@ -541,11 +566,7 @@ namespace Villamos.Kezelők
         // De teljesen jogos, most jutott eszembe, hogy 1 LINQ lekérdezés elég lett volna és a StartsWith szerepelhetett volna 2x &&-el, ha nem típust használnánk.
         public void Tabla_Feltoltese()
         {
-
-            List<int> azonositoLista = KézJármű.Lista_Adatok("Főmérnökség")
-                .Where(a => a.Típus.Contains("CAF") && !a.Azonosító.StartsWith("V"))
-                .Select(a => int.Parse(a.Azonosító))
-                .ToList();           
+            List<int> azonositoLista = OsszesPalyaszam();
 
             for (int i = 0; i <= azonositoLista.Count()-1; i++)
             {
