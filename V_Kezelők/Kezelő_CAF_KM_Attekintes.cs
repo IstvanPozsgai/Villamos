@@ -543,7 +543,7 @@ namespace Villamos.Kezelők
         {
 
             List<int> azonositoLista = KézJármű.Lista_Adatok("Főmérnökség")
-                .Where(a => a.Típus.Contains("CAF"))
+                .Where(a => a.Típus.Contains("CAF") && !a.Azonosító.StartsWith("V"))
                 .Select(a => int.Parse(a.Azonosító))
                 .ToList();           
 
