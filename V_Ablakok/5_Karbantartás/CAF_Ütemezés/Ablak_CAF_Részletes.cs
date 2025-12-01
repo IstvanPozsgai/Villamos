@@ -924,7 +924,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             try
             {
                 //KézCafKm.Tabla_Feltoltese();
-                KézCafKm.Erteket_Frissit(Posta_Segéd.Azonosító);
+                KézCafKm.Erteket_Frissit_Egyeni(Posta_Segéd.Azonosító);
                 KiirPvizsgalat();
                 MessageBox.Show("Sikeres frissítés!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
