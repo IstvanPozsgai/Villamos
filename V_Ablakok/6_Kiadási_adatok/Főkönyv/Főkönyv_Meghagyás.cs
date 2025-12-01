@@ -1,60 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Adatszerkezet;
+using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.Villamos_Nyomtatványok
 {
     public class Főkönyv_Meghagyás
     {
-        // JAVÍTANDÓ:
+        readonly Kezelő_Nap_Hiba KNH_kéz = new Kezelő_Nap_Hiba();
+        readonly Kezelő_Szerelvény_Napló KSZN_kéz = new Kezelő_Szerelvény_Napló();
+
+        readonly Beállítás_Betű BeBetű = new Beállítás_Betű { Méret = 11, Név = "Calibri" };
+        readonly Beállítás_Betű BeBetűAV = new Beállítás_Betű { Méret = 11, Név = "Calibri", Vastag = true, Aláhúzott = true };
+        readonly Beállítás_Betű BeBetűV = new Beállítás_Betű { Méret = 11, Név = "Calibri", Vastag = true };
+        readonly Beállítás_Betű BeBetű18V = new Beállítás_Betű { Méret = 18, Név = "Calibri", Vastag = true };
+
+        readonly string munkalap = "Munka1";
         public void Főkönyv_Meghagyáskészítés(string fájlexc, string Cmbtelephely, DateTime Dátum, string papírméret, string papírelrendezés)
         {
             try
             {
-                MyE.ExcelLétrehozás();
-                string munkalap = "Munka1";
-
+                MyX.ExcelLétrehozás(munkalap);
                 // egész tábla betűméret
-                MyE.Munkalap_betű("Calibri", 11);
+                MyX.Munkalap_betű(munkalap, BeBetű);
 
                 // oszlop szélesség
-                MyE.Oszlopszélesség(munkalap, MyE.Oszlopnév(1) + ":" + MyE.Oszlopnév(30), 6);
-                MyE.Oszlopszélesség(munkalap, "d:d", 2);
-                MyE.Oszlopszélesség(munkalap, "h:h", 2);
-                MyE.Oszlopszélesség(munkalap, "l:l", 2);
-                MyE.Oszlopszélesség(munkalap, "r:r", 10);
+                MyX.Oszlopszélesség(munkalap, MyF.Oszlopnév(1) + ":" + MyF.Oszlopnév(30), 6);
+                MyX.Oszlopszélesség(munkalap, "d:d", 2);
+                MyX.Oszlopszélesség(munkalap, "h:h", 2);
+                MyX.Oszlopszélesség(munkalap, "l:l", 2);
+                MyX.Oszlopszélesség(munkalap, "r:r", 10);
                 // vastag keret
-                MyE.Vastagkeret("a1:ad1");
+                MyX.Vastagkeret(munkalap, "a1:ad1");
 
-                MyE.Betű("e1", 18);
-                MyE.Betű("t1", 18);
-                MyE.Betű("e1", false, false, true);
-                MyE.Betű("t1", false, false, true);
-                MyE.Kiir(DateTime.Today.ToString("yyyy.MM.dd dddd"), "e1");
-                MyE.Egyesít(munkalap, "e1:k1");
-                MyE.Kiir(DateTime.Today.ToString("yyyy.MM.dd dddd"), "t1");
-                MyE.Egyesít(munkalap, "t1:z1");
-                MyE.Kiir("Csatolások:", "q20");
-                MyE.Betű("q20", false, false, true);
-                MyE.Kiir("Szétcsatolások:", "y20");
-                MyE.Betű("y20", false, false, true);
+
+                MyX.Betű(munkalap, "e1", BeBetű18V);
+                MyX.Betű(munkalap, "t1", BeBetű18V);
+                MyX.Kiir(DateTime.Today.ToString("yyyy.MM.dd dddd"), "e1");
+                MyX.Egyesít(munkalap, "e1:k1");
+                MyX.Kiir(DateTime.Today.ToString("yyyy.MM.dd dddd"), "t1");
+                MyX.Egyesít(munkalap, "t1:z1");
+                MyX.Kiir("Csatolások:", "q20");
+                MyX.Betű(munkalap, "q20", BeBetűV);
+                MyX.Kiir("Szétcsatolások:", "y20");
+                MyX.Betű(munkalap, "y20", BeBetűV);
                 //
                 // frissítjük a táblát
                 // elkészítjük a formanyomtatványt
                 Főkönyv_Funkciók.Napiállók(Cmbtelephely.Trim());
                 // kiirjuk a V2-t
-                string jelszó = "pozsgaii";
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\villamos\Új_napihiba.mdb";
-                string szöveg = "SELECT * FROM hiba order by azonosító asc";
-
-                Kezelő_Nap_Hiba KNH_kéz = new Kezelő_Nap_Hiba();
-                List<Adat_Nap_Hiba> Adatok = KNH_kéz.Lista_adatok(hely, jelszó, szöveg);
-
+                List<Adat_Nap_Hiba> Adatok = KNH_kéz.Lista_Adatok(Cmbtelephely.Trim());
+                Adatok = Adatok.OrderBy(y => y.Azonosító).ToList();
                 int sor = 2;
                 int oszlop = 17;
                 Kiirja_Karb_("V3", Adatok, sor, oszlop);
@@ -88,15 +89,15 @@ namespace Villamos.Villamos_Nyomtatványok
                 // benn maradók csoportba kiirása
                 oszlop = 20;
                 sor += 2;
-                MyE.Kiir("Vizsgálatra maradjon:", MyE.Oszlopnév(17) + $"{sor}");
-                MyE.Betű(MyE.Oszlopnév(17) + $"{sor}", false, false, true);
+                MyX.Kiir("Vizsgálatra maradjon:", MyF.Oszlopnév(17) + $"{sor}");
+                MyX.Betű(munkalap, MyF.Oszlopnév(17) + $"{sor}", BeBetűV);
 
                 for (int j = 0; j < csoportpsz.Count; j++)
                 {
 
                     if (csoportpsz[j].Trim() != "")
                     {
-                        MyE.Kiir(csoportpsz[j].Trim(), MyE.Oszlopnév(oszlop) + $"{sor}");
+                        MyX.Kiir(csoportpsz[j].Trim(), MyF.Oszlopnév(oszlop) + $"{sor}");
 
                         oszlop += 1;
                         if (oszlop > 28)
@@ -113,11 +114,6 @@ namespace Villamos.Villamos_Nyomtatványok
                 // csoportosításhoz alaphelyzetbe állítjuk a váltózókat
                 csoportpsz.Clear();
 
-
-                szöveg = "SELECT * FROM hiba order by azonosító asc";
-                Adatok = KNH_kéz.Lista_adatok(hely, jelszó, szöveg);
-
-
                 foreach (Adat_Nap_Hiba rekord in Adatok)
                 {
                     if (rekord.Üzemképtelen.ToUpper().Contains("MOSÓ"))
@@ -128,15 +124,15 @@ namespace Villamos.Villamos_Nyomtatványok
 
 
                 // a mosók kiirása
-                MyE.Kiir("Mosásra maradjon:", MyE.Oszlopnév(17) + $"{sor}");
-                MyE.Betű(MyE.Oszlopnév(17) + $"{sor}", false, false, true);
+                MyX.Kiir("Mosásra maradjon:", MyF.Oszlopnév(17) + $"{sor}");
+                MyX.Betű(munkalap, MyF.Oszlopnév(17) + $"{sor}", BeBetűV);
 
                 oszlop = 20;
                 for (int j = 0; j < csoportpsz.Count; j++)
                 {
                     if (csoportpsz[j].Trim() != "")
                     {
-                        MyE.Kiir(csoportpsz[j], MyE.Oszlopnév(oszlop) + $"{sor}");
+                        MyX.Kiir(csoportpsz[j], MyF.Oszlopnév(oszlop) + $"{sor}");
                         oszlop += 1;
                         if (oszlop > 28)
                         {
@@ -160,8 +156,8 @@ namespace Villamos.Villamos_Nyomtatványok
 
                 // a mosók kiirása
                 sor += 2;
-                MyE.Kiir("Mosás:", MyE.Oszlopnév(17) + $"{sor}");
-                MyE.Betű(MyE.Oszlopnév(17) + $"{sor}", false, false, true);
+                MyX.Kiir("Mosás:", MyF.Oszlopnév(17) + $"{sor}");
+                MyX.Betű(munkalap, MyF.Oszlopnév(17) + $"{sor}", BeBetűV);
 
                 oszlop = 19;
                 for (int j = 0; j < csoportpsz.Count; j++)
@@ -169,7 +165,7 @@ namespace Villamos.Villamos_Nyomtatványok
 
                     if (csoportpsz[j].Trim() != "")
                     {
-                        MyE.Kiir(csoportpsz[j], MyE.Oszlopnév(oszlop) + $"{sor}");
+                        MyX.Kiir(csoportpsz[j], MyF.Oszlopnév(oszlop) + $"{sor}");
                         oszlop += 1;
                         if (oszlop > 28)
                         {
@@ -183,8 +179,8 @@ namespace Villamos.Villamos_Nyomtatványok
                 // hibák
                 oszlop = 1;
                 int sorúj = 2;
-                MyE.Kiir("Hibák:", MyE.Oszlopnév(1) + sorúj.ToString());
-                MyE.Betű(MyE.Oszlopnév(1) + sorúj.ToString(), false, false, true);
+                MyX.Kiir("Hibák:", MyF.Oszlopnév(1) + sorúj.ToString());
+                MyX.Betű(munkalap, MyF.Oszlopnév(1) + sorúj.ToString(), BeBetűV);
                 sorúj += 1;
 
 
@@ -195,18 +191,18 @@ namespace Villamos.Villamos_Nyomtatványok
                     sorúj += 1;
                     if (rekord.Státus == 3)
                     {
-                        MyE.Kiir("*" + rekord.Azonosító.Trim(), MyE.Oszlopnév(1) + sorúj.ToString());
+                        MyX.Kiir("*" + rekord.Azonosító.Trim(), MyF.Oszlopnév(1) + sorúj.ToString());
                     }
                     else
                     {
-                        MyE.Kiir(rekord.Azonosító.Trim(), MyE.Oszlopnév(1) + sorúj.ToString());
+                        MyX.Kiir(rekord.Azonosító.Trim(), MyF.Oszlopnév(1) + sorúj.ToString());
                     }
                     if (rekord.Státus == 4)
                     {
-                        MyE.Betű(MyE.Oszlopnév(1) + sorúj.ToString(), true, false, true);
+                        MyX.Betű(munkalap, MyF.Oszlopnév(1) + sorúj.ToString(), BeBetűAV);
                     }
-                    MyE.Kiir(rekord.Típus.Trim(), MyE.Oszlopnév(2) + sorúj.ToString());
-                    MyE.Egyesít(munkalap, MyE.Oszlopnév(2) + sorúj.ToString() + ":" + MyE.Oszlopnév(3) + sorúj.ToString());
+                    MyX.Kiir(rekord.Típus.Trim(), MyF.Oszlopnév(2) + sorúj.ToString());
+                    MyX.Egyesít(munkalap, MyF.Oszlopnév(2) + sorúj.ToString() + ":" + MyF.Oszlopnév(3) + sorúj.ToString());
                     szöveg1 = "";
                     if (rekord.Üzemképtelen.Trim() != "_")
                     {
@@ -221,61 +217,60 @@ namespace Villamos.Villamos_Nyomtatványok
                         szöveg1 += "+" + rekord.Üzemképeshiba.Trim();
                     }
                     szöveg1 = szöveg1.Length > 100 ? szöveg1.Substring(0, 100) : szöveg1;
-                    MyE.Kiir(szöveg1, MyE.Oszlopnév(4) + sorúj.ToString());
+                    MyX.Kiir(szöveg1, MyF.Oszlopnév(4) + sorúj.ToString());
                 }
 
 
 
                 // összecsatolások
                 // megnézzük, hogy van-e adott szerelvény napló
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\hibanapló\" + Dátum.ToString("yyyyMM") + "szerelvény.mdb";
+
+                List<Adat_Szerelvény_Napló> SzAdatokÖ = KSZN_kéz.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
 
                 // ha van akkor kiirjuk
-                if (System.IO.File.Exists(hely))
+                if (SzAdatokÖ != null)
                 {
+                    List<Adat_Szerelvény_Napló> SzAdatok = (from a in SzAdatokÖ
+                                                            where a.Szerelvényhossz > 0 &&
+                                                            a.Mikor > Dátum
+                                                            orderby a.Mikor
+                                                            select a).ToList();
                     oszlop = 17;
-
-                    szöveg = "SELECT * FROM szerelvénytáblanapló where [szerelvényhossz]>0 and [mikor]> # " + Dátum.ToString("MM-dd-yyyy") + " #";
-                    szöveg += " order by mikor";
-
                     long szerelvény = 0;
                     sor = 22;
-                    Kezelő_Szerelvény_Napló KSZN_kéz = new Kezelő_Szerelvény_Napló();
-                    List<Adat_Szerelvény_Napló> SzAdatok = KSZN_kéz.Lista_Adatok(hely, jelszó, szöveg);
-                    if (SzAdatok != null)
+
+                    foreach (Adat_Szerelvény_Napló rekord in SzAdatok)
                     {
-                        foreach (Adat_Szerelvény_Napló rekord in SzAdatok)
+                        if (rekord.Kocsi2.Trim() != "0")
                         {
+                            // ha a szerelvény id nem egyezik akkor sort emel
+                            if (szerelvény != rekord.ID && szerelvény != 0)
+                                sor++;
+                            if (rekord.Kocsi1.Trim() != "0")
+                                MyX.Kiir(rekord.Kocsi1, MyF.Oszlopnév(oszlop) + $"{sor}");
                             if (rekord.Kocsi2.Trim() != "0")
-                            {
-                                // ha a szerelvény id nem egyezik akkor sort emel
-                                if (szerelvény != rekord.ID && szerelvény != 0)
-                                    sor++;
-                                if (rekord.Kocsi1.Trim() != "0")
-                                    MyE.Kiir(rekord.Kocsi1, MyE.Oszlopnév(oszlop) + $"{sor}");
-                                if (rekord.Kocsi2.Trim() != "0")
-                                    MyE.Kiir(rekord.Kocsi2, MyE.Oszlopnév(oszlop + 1) + $"{sor}");
-                                if (rekord.Kocsi3.Trim() != "0")
-                                    MyE.Kiir(rekord.Kocsi3, MyE.Oszlopnév(oszlop + 2) + $"{sor}");
-                                if (rekord.Kocsi4.Trim() != "0")
-                                    MyE.Kiir(rekord.Kocsi4, MyE.Oszlopnév(oszlop + 3) + $"{sor}");
-                                if (rekord.Kocsi5.Trim() != "0")
-                                    MyE.Kiir(rekord.Kocsi5, MyE.Oszlopnév(oszlop + 4) + $"{sor}");
-                                if (rekord.Kocsi6.Trim() != "0")
-                                    MyE.Kiir(rekord.Kocsi6, MyE.Oszlopnév(oszlop + 6) + $"{sor}");
-                                szerelvény = rekord.ID;
-                            }
+                                MyX.Kiir(rekord.Kocsi2, MyF.Oszlopnév(oszlop + 1) + $"{sor}");
+                            if (rekord.Kocsi3.Trim() != "0")
+                                MyX.Kiir(rekord.Kocsi3, MyF.Oszlopnév(oszlop + 2) + $"{sor}");
+                            if (rekord.Kocsi4.Trim() != "0")
+                                MyX.Kiir(rekord.Kocsi4, MyF.Oszlopnév(oszlop + 3) + $"{sor}");
+                            if (rekord.Kocsi5.Trim() != "0")
+                                MyX.Kiir(rekord.Kocsi5, MyF.Oszlopnév(oszlop + 4) + $"{sor}");
+                            if (rekord.Kocsi6.Trim() != "0")
+                                MyX.Kiir(rekord.Kocsi6, MyF.Oszlopnév(oszlop + 6) + $"{sor}");
+                            szerelvény = rekord.ID;
                         }
                     }
+
 
                     // Szétcsatolások
                     oszlop = 25;
                     sor = 22;
-
-                    szöveg = "SELECT * FROM szerelvénytáblanapló where [szerelvényhossz]=0 and [mikor]> # " + Dátum.ToString("MM-dd-yyyy") + " #";
-                    szöveg += " order by mikor";
-
-                    SzAdatok = KSZN_kéz.Lista_Adatok(hely, jelszó, szöveg);
+                    SzAdatok = (from a in SzAdatokÖ
+                                where a.Szerelvényhossz == 0 &&
+                                a.Mikor > Dátum
+                                orderby a.Mikor
+                                select a).ToList();
                     if (SzAdatok != null)
                     {
                         foreach (Adat_Szerelvény_Napló rekord in SzAdatok)
@@ -284,17 +279,17 @@ namespace Villamos.Villamos_Nyomtatványok
                             if (rekord.Kocsi2.Trim() != "0")
                             {
                                 if (rekord.Kocsi1.Trim() != "0")
-                                    MyE.Kiir(rekord.Kocsi1.Trim(), MyE.Oszlopnév(oszlop) + $"{sor}");
+                                    MyX.Kiir(rekord.Kocsi1.Trim(), MyF.Oszlopnév(oszlop) + $"{sor}");
                                 if (rekord.Kocsi2.Trim() != "0")
-                                    MyE.Kiir(rekord.Kocsi2.Trim(), MyE.Oszlopnév(oszlop + 1) + $"{sor}");
+                                    MyX.Kiir(rekord.Kocsi2.Trim(), MyF.Oszlopnév(oszlop + 1) + $"{sor}");
                                 if (rekord.Kocsi3.Trim() != "0")
-                                    MyE.Kiir(rekord.Kocsi3.Trim(), MyE.Oszlopnév(oszlop + 2) + $"{sor}");
+                                    MyX.Kiir(rekord.Kocsi3.Trim(), MyF.Oszlopnév(oszlop + 2) + $"{sor}");
                                 if (rekord.Kocsi4.Trim() != "0")
-                                    MyE.Kiir(rekord.Kocsi4.Trim(), MyE.Oszlopnév(oszlop + 3) + $"{sor}");
+                                    MyX.Kiir(rekord.Kocsi4.Trim(), MyF.Oszlopnév(oszlop + 3) + $"{sor}");
                                 if (rekord.Kocsi5.Trim() != "0")
-                                    MyE.Kiir(rekord.Kocsi5.Trim(), MyE.Oszlopnév(oszlop + 4) + $"{sor}");
+                                    MyX.Kiir(rekord.Kocsi5.Trim(), MyF.Oszlopnév(oszlop + 4) + $"{sor}");
                                 if (rekord.Kocsi6.Trim() != "0")
-                                    MyE.Kiir(rekord.Kocsi6.Trim(), MyE.Oszlopnév(oszlop + 6) + $"{sor}");
+                                    MyX.Kiir(rekord.Kocsi6.Trim(), MyF.Oszlopnév(oszlop + 6) + $"{sor}");
                                 sor += 1;
                             }
                         }
@@ -303,26 +298,35 @@ namespace Villamos.Villamos_Nyomtatványok
                 if (sorúj >= sor)
                     sor = sorúj;
                 // vastag keret
-                MyE.Vastagkeret("a1:ad" + $"{sor}");
+                MyX.Vastagkeret(munkalap, "a2:ad" + $"{sor}");
                 // nyomtatási beállítások
-                bool papírelrendez;
-                if (papírelrendezés == "--")
-                    papírelrendez = false;
-                else if (papírelrendezés == "Álló")
-                    papírelrendez = true;
-                else
-                    papírelrendez = false;
+                bool papírelrendez = true;
+                if (papírelrendezés != "Álló") papírelrendez = false;
+
                 if (papírméret == "--") papírméret = "A3";
-
-                MyE.NyomtatásiTerület_részletes(munkalap, "a1:ad" + $"{sor}", 5, 5, 5, 5,
-                    5, 5, "1", "1", papírelrendez, papírméret, true, true);
-
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = "a1:ad" + $"{sor}",
+                    Álló = papírelrendez,
+                    Papírméret = papírméret,
+                    VízKözép = true,
+                    FüggKözép = true,
+                    LapMagas = 1,
+                    LapSzéles = 1,
+                    BalMargó = 5,
+                    JobbMargó = 5,
+                    FelsőMargó = 5,
+                    AlsóMargó = 5,
+                    LáblécMéret = 5,
+                    FejlécMéret = 5
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
                 // bezárjuk az Excel-t
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (Exception ex)
             {
@@ -330,12 +334,12 @@ namespace Villamos.Villamos_Nyomtatványok
 
             }
         }
-        void Kiirja_Karb_(string Karbantartás, List<Adat_Nap_Hiba> Adatok, int sor, int oszlop)
+        private void Kiirja_Karb_(string Karbantartás, List<Adat_Nap_Hiba> Adatok, int sor, int oszlop)
         {
             if (Adatok.Count > 0)
             {
-                MyE.Kiir(Karbantartás, MyE.Oszlopnév(oszlop) + $"{sor}");
-                MyE.Betű(MyE.Oszlopnév(oszlop) + $"{sor}", false, false, true);
+                MyX.Kiir(Karbantartás, MyF.Oszlopnév(oszlop) + $"{sor}");
+                MyX.Betű(munkalap, MyF.Oszlopnév(oszlop) + $"{sor}", BeBetűV);
                 foreach (Adat_Nap_Hiba rekord in Adatok)
                 {
                     // kiirjuk a v3-t
@@ -347,8 +351,8 @@ namespace Villamos.Villamos_Nyomtatványok
                             oszlop = 18;
                             sor += 1;
                         }
-                        MyE.Kiir(rekord.Azonosító.Trim(), MyE.Oszlopnév(oszlop) + $"{sor}");
-                        MyE.Betű(MyE.Oszlopnév(oszlop) + $"{sor}", true, false, true);
+                        MyX.Kiir(rekord.Azonosító.Trim(), MyF.Oszlopnév(oszlop) + $"{sor}");
+                        MyX.Betű(munkalap, MyF.Oszlopnév(oszlop) + $"{sor}", BeBetűAV);
                     }
                     // kiirjuk a v3-t
                     if (rekord.Beálló.ToUpper().Contains(Karbantartás))
@@ -359,7 +363,7 @@ namespace Villamos.Villamos_Nyomtatványok
                             oszlop = 18;
                             sor += 1;
                         }
-                        MyE.Kiir(rekord.Azonosító.Trim(), MyE.Oszlopnév(oszlop) + $"{sor}");
+                        MyX.Kiir(rekord.Azonosító.Trim(), MyF.Oszlopnév(oszlop) + $"{sor}");
                     }
                 }
             }

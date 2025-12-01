@@ -96,6 +96,7 @@ namespace Villamos
                     workbookPart.NyomtatásiTerület(beállítás, lapNév, i);
 
                     worksheet.Save();
+                    
                 }
             }
         }

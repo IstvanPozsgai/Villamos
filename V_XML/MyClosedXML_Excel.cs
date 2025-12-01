@@ -55,6 +55,7 @@ namespace Villamos
                 }
 
                 xlWorkBook.SaveAs(fájlnév);
+                xlWorkBook.Dispose();
                 // Utólagos OpenXml módosítás – CSAK ha van fagyasztás
                 if (FagyasztandóSorok.Count > 0)
                 {
