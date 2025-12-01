@@ -226,7 +226,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     
                     //Frissítem a km adatokat a CAF_KM_Attekintes táblában
                     foreach (Adat_CAF_alap rekord in Adatok)
-                        KézCafKm.Erteket_Frissit(rekord.Azonosító);
+                        KézCafKm.Erteket_Frissit_Osszes(rekord.Azonosító);
                 }
                 Holtart.Ki();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -580,7 +580,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Erteket_Frissit(string palya)
+        public void Erteket_Frissit_Egyeni(string palya)
         {
             List<int> TortentPvizsgalat = NemTortentPvizsgalat();
 
@@ -593,6 +593,17 @@ namespace Villamos.Kezelők
             {
                 MessageBox.Show($"A {palya} pályaszámú villamoshoz még nem került rögzítésre KM alapú vizsgálat!", "Figyelem!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        public void Erteket_Frissit_Osszes(string palya)
+        {
+            List<int> TortentPvizsgalat = NemTortentPvizsgalat();
+
+            if (!TortentPvizsgalat.Contains(palya.ToÉrt_Int()))
+            {
+                Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(palya, Utolso_Vizsgalat_Valos_Allasa(palya), Kovetkezo_P0_Vizsgalat_KM_Erteke(palya), Kovetkezo_P1_Vizsgalat_KM_Erteke(palya), Kovetkezo_P2_Vizsgalat_KM_Erteke(palya), P0_vizsgalatok_kozott_megtett_KM_Erteke(palya), P1_vizsgalatok_kozott_megtett_KM_Erteke(palya), Utolso_P3_es_P2_kozotti_futas(palya), Elso_P2_rendben_van_e(palya), Elso_P3_rendben_van_e(palya), Utolso_P0_Sorszam(palya), Utolso_P1_Sorszam(palya), Utolso_P2_Sorszam(palya), Utolso_P3_Sorszam(palya));
+                Erteket_Frissit(teszt);
+            }          
         }
     }
 }
