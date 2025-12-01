@@ -63,13 +63,21 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             Eszterga_Valtozas?.Invoke();
             TablaMuvelet.ClearSelection();
 
-            GombLathatosagKezelo.Beallit(this);
-            JogosultsagKiosztas();
+            if (Program.PostásJogkör.Any(c => c != '0'))
+            {
+                JogosultsagKiosztas();
+            }
+            else
+            {
+                GombLathatosagKezelo.Beallit(this, "Baross");
+            }
+
             Btn_Csere.Visible = false;
             Btn_Sorrend.Visible = false;
-            // A DataGridView adatforrásának kötése után automatikusan meghívja a ToroltTablaSzinezes metódust,
-            // hogy a törölt státuszú sorokat színezve jelenítse meg.
+
+            // A DataGridView adatforrásának kötése után színezés
             TablaMuvelet.DataBindingComplete += (s, ev) => TablaSzinezes(TablaMuvelet);
+
             EgysegBeallitasa();
             TxtBxMennyiNap.Text = "0";
         }
