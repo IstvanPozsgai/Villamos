@@ -346,6 +346,7 @@
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Háromnapos.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Jegykezelő.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Meghagyás.cs" />
+    <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Takarítás.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Anyagtörzs.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Anyagok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Ciklus_Sorrend.cs" />
