@@ -109,13 +109,13 @@ namespace Villamos.Villamos_Nyomtatványok
                 for (int ii = 1; ii < oszlop + 3; ii += 4)
                 {
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(ii) + "1:" + MyF.Oszlopnév(ii + 3) + "26");
-                    MyX.Betű(munkalap, MyF.Oszlopnév(ii) + "1:" + MyF.Oszlopnév(ii) + "26", BeBetűV);
+                    MyX.Betű(munkalap, MyF.Oszlopnév(ii) + "1:" + MyF.Oszlopnév(ii) + "26", BeBetűD);
                 }
                 for (int ii = 1; ii < oszlop + 3; ii += 4)
                 {
                     MyX.Oszlopszélesség(munkalap, MyF.Oszlopnév(ii) + ":" + MyF.Oszlopnév(ii + 3), 10);
                     MyX.Oszlopszélesség(munkalap, MyF.Oszlopnév(ii + 1) + ":" + MyF.Oszlopnév(ii + 1), 25);
-                    MyX.Igazít_vízszintes(munkalap, MyF.Oszlopnév(ii) + ":" + MyF.Oszlopnév(ii), "közép");
+                    MyX.Igazít_vízszintes(munkalap, $"{MyF.Oszlopnév(ii)}1:{MyF.Oszlopnév(ii)}26", "közép");
                 }
                 MyX.Sormagasság(munkalap, "1:26", 25);
                 MyX.Betű(munkalap, $"A1:{MyF.Oszlopnév(oszlop + 3)}1", BeBetűV);
@@ -129,8 +129,8 @@ namespace Villamos.Villamos_Nyomtatványok
                     FejlécBal = mit[j],
                     FejlécKözép = "E2 vizsgálati",
                     FejlécJobb = DateTime.Today.ToString("yyyy.MM.dd"),
-                    LáblécBal = "&\"Arial,Normál\"&14........................................................" + '\n' + "nappalos aláírás",
-                    LáblécJobb = "&\"Arial,Normál\"&14........................................................" + '\n' + "éjszakás aláírás",
+                    LáblécBal = "........................................................" + '\n' + "nappalos aláírás",
+                    LáblécJobb = "........................................................" + '\n' + "éjszakás aláírás",
                     LapSzéles = 1,
                     LapMagas = 1,
                     FelsőMargó = 15,
