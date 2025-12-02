@@ -358,7 +358,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 foreach (Adat_Eszterga_Muveletek rekord in AdatokMuvelet)
                 {
                     int ID = rekord.ID;
-                    DateTime UtolsoDatum = rekord.Utolsó_Dátum;
+                    DateTime UtolsoDatum = rekord.Utolsó_Dátum.Date;
                     long UtolsoUzemora = rekord.Utolsó_Üzemóra_Állás;
                     long BecsultUzemora = this.BecsultUzemora(TervDatum);
 
@@ -379,10 +379,34 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                                 break;
 
                             case EsztergaEgyseg.Üzemóra:
-                                if ((BecsultUzemora - UtolsoUzemora) >= rekord.Mennyi_Óra)
+                                long aktualisMaxUzemora = AdatokUzemora.Where(a => !a.Státus).Max(a => a.Uzemora);
+
+                                long kovetkezoCel = UtolsoUzemora + rekord.Mennyi_Óra;
+                                if (UtolsoDatum <= DateTime.Today && kovetkezoCel > aktualisMaxUzemora)
+                                {
+                                    long maradekOra = kovetkezoCel - aktualisMaxUzemora;
+
+                                    if (AtlagosNapiUzemNovekedes > 0)
+                                    {
+                                        double szuksegesNap = Math.Ceiling(maradekOra / AtlagosNapiUzemNovekedes);
+
+                                        if (DateTime.Today.AddDays(szuksegesNap) <= TervDatum)
+                                        {
+                                            Esedekes = true;
+                                            UtolsoDatum = DateTime.Today.AddDays(szuksegesNap);
+                                            UtolsoUzemora = kovetkezoCel;
+                                        }
+                                    }
+                                }
+                                else if ((BecsultUzemora - UtolsoUzemora) >= rekord.Mennyi_Óra)
                                 {
                                     Esedekes = true;
-                                    SzuksegesNapok = Math.Ceiling(rekord.Mennyi_Óra / AtlagosNapiUzemNovekedes);
+
+                                    if (AtlagosNapiUzemNovekedes > 0)
+                                        SzuksegesNapok = Math.Ceiling(rekord.Mennyi_Óra / AtlagosNapiUzemNovekedes);
+                                    else
+                                        SzuksegesNapok = 0;
+
                                     UtolsoDatum = UtolsoDatum.AddDays(SzuksegesNapok);
                                     UtolsoUzemora += rekord.Mennyi_Óra;
                                 }
@@ -749,15 +773,17 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 if (Rekordok.Count < 2)
                     return 0;
-
-                List<Adat_Eszterga_Uzemora> utolsoNUzemora = Rekordok.Skip(Math.Max(0, Rekordok.Count - 5)).ToList();
+                int napokSzama = int.TryParse(TxtBxNapiUzemoraAtlag.Text, out int n) ? n : 30;
+                List<Adat_Eszterga_Uzemora> utolsoNUzemora = Rekordok.Skip(Math.Max(0, Rekordok.Count - napokSzama)).ToList();
 
                 for (int i = 1; i < utolsoNUzemora.Count; i++)
                 {
                     double Napok = (utolsoNUzemora[i].Dátum - utolsoNUzemora[i - 1].Dátum).TotalDays;
-                    if (Napok > 0)
+                    double Kulonbseg = utolsoNUzemora[i].Uzemora - utolsoNUzemora[i - 1].Uzemora;
+
+                    if (Napok > 0 && Kulonbseg > 0)
                     {
-                        Osszeg += (utolsoNUzemora[i].Uzemora - utolsoNUzemora[i - 1].Uzemora) / Napok;
+                        Osszeg += Kulonbseg / Napok;
                         Szamlalo++;
                     }
                 }
@@ -782,7 +808,11 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         {
             double NapiNovekedes = 0;
             double NapokEloDatumhoz = 0;
+            double osszegRate = 0;
+            int aktivNapokSzama = 0;
+            long tenylegesMaximum = 0;
             Adat_Eszterga_Uzemora UtolsoRekord = null;
+
             try
             {
                 if (AdatokUzemora == null || AdatokUzemora.Count < 2)
@@ -795,24 +825,33 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 if (rekord.Count < 2)
                     return 0;
-
+                tenylegesMaximum = rekord.Max(r => r.Uzemora);
                 NapiNovekedes = 0;
 
                 for (int i = 1; i < rekord.Count; i++)
                 {
                     double Napok = (rekord[i].Dátum - rekord[i - 1].Dátum).TotalDays;
-                    if (Napok > 0)
-                        NapiNovekedes += (rekord[i].Uzemora - rekord[i - 1].Uzemora) / Napok;
+                    double Kulonbseg = rekord[i].Uzemora - rekord[i - 1].Uzemora;
+
+                    if (Napok > 0 && Kulonbseg > 0)
+                    {
+                        osszegRate += Kulonbseg / Napok;
+                        aktivNapokSzama++;
+                    }
                 }
-                NapiNovekedes /= rekord.Count - 1;
+
+                if (aktivNapokSzama > 0)
+                    NapiNovekedes = osszegRate / aktivNapokSzama;
+                else
+                    NapiNovekedes = 0;
+
                 NapiNovekedes = Math.Floor(NapiNovekedes);
 
-                UtolsoRekord = rekord
-                  .Where(a => !a.Státus)
-                  .LastOrDefault();
-
+                UtolsoRekord = rekord.Where(a => !a.Státus).LastOrDefault();
                 NapokEloDatumhoz = (EloDatum - UtolsoRekord.Dátum).TotalDays;
 
+                if (rekord.Count > 0)
+                    tenylegesMaximum = rekord.Max(r => r.Uzemora);
             }
             catch (HibásBevittAdat ex)
             {
@@ -823,7 +862,14 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            return UtolsoRekord.Uzemora + (long)(NapiNovekedes * NapokEloDatumhoz);
+            if (UtolsoRekord == null) return 0;
+
+            long becsultErtek = UtolsoRekord.Uzemora + (long)(NapiNovekedes * NapokEloDatumhoz);
+
+            if (EloDatum.Date <= DateTime.Today)
+                return Math.Max(becsultErtek, tenylegesMaximum);
+
+            return becsultErtek;
         }
 
         /// <summary>
