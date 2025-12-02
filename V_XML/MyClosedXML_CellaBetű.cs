@@ -85,30 +85,30 @@ namespace Villamos
 
                     // Szöveg felbontása futásokra (formázott + nem formázott részek)
                     var runs = SplitTextIntoRuns(beállítás.FullText, beállítás.Beállítások);
-
                     foreach (var run in runs)
                     {
+                        // Új Run csak akkor, ha van szöveg
+                        if (string.IsNullOrEmpty(run.Text)) continue; // vagy dobjon figyelmeztetést, de ne adj hozzá üres Text-et
+
                         var runElement = new Run();
 
-                        // RunProperties – minden futáshoz, még a nem formázottakhoz is
                         var runProps = new RunProperties();
-
-                        // Alap stílus (a kézi verzió alapján: Garamond, 12, charset=238, theme=1)
                         runProps.Append(new FontSize { Val = beállítás.Betű.Méret });
                         runProps.Append(new RunFont { Val = beállítás.Betű.Név });
                         runProps.Append(new Color { Theme = 1 });
                         runProps.Append(new FontFamily { Val = 1 });
 
-                        // Formázások feltételesen
                         if (run.Bold) runProps.Append(new Bold());
                         if (run.Italic) runProps.Append(new Italic());
                         if (run.Underline) runProps.Append(new Underline());
 
                         runElement.Append(runProps);
 
-                        // Szöveg
+                        // Csak akkor hozz létre Text elemet, ha van nem-null szöveg
                         var text = new Text { Text = run.Text };
-                        if (run.Text.Contains(" ") || run.Text.StartsWith(" ") || run.Text.EndsWith(" "))
+
+                        // Space attribútum csak akkor, ha whitespace fontos ÉS a szöveg nem üres
+                        if (run.Text.Length > 0 && (run.Text.Contains(" ") || run.Text.StartsWith(" ") || run.Text.EndsWith(" ")))
                             text.Space = SpaceProcessingModeValues.Preserve;
 
                         runElement.Append(text);

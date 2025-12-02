@@ -1148,6 +1148,8 @@ namespace Villamos.Villamos_Ablakok
             MyX.Kiir("Státusz** ", $"K{sor}");
 
             sor++;
+            MyX.Sormagasság(munkalap, $"{sor}:{sor}", 20);
+            MyX.Sormagasság(munkalap, $"{sor - 1}:{sor - 1}", 20);
             MyX.Egyesít(munkalap, $"A{sor - 1}:A{sor}");
             MyX.Kiir("Nr.", $"A{sor - 1}");
 
@@ -1170,8 +1172,8 @@ namespace Villamos.Villamos_Ablakok
 
             MyX.Rácsoz(munkalap, $"A{sor - 1}:Q{sor}");
             MyX.Betű(munkalap, $"{sor - 1}:{sor}", BeBetűV);
-            MyX.Háttérszín(munkalap, $"A{sor - 1}:Q{sor}", System.Drawing.Color.Gainsboro);
-            MyX.Sormagasság(munkalap, $"{sor - 1}:{sor}", 20);
+            MyX.Háttérszín(munkalap, $"A{sor - 1}:Q{sor}", Color.Gainsboro);
+
 
             munkafejléchelye = $"${sor - 1}:${sor + 1}";
             return sor;
@@ -1187,7 +1189,7 @@ namespace Villamos.Villamos_Ablakok
                 "(***) Aláírásommal igazolom, hogy a felsorolt járműveken, a típusra aktuálisan" +
                 " érvényes Főtechnológia jelölt karbantartási ciklusban előírt feladatait elvégeztem.";
             MyX.Kiir(szövegrész, $"A{sor}");
-            MyX.Igazít_vízszintes(munkalap, $"{sor}:{sor}", "bal");
+            MyX.Igazít_vízszintes(munkalap, $"A{sor}:Q{sor}", "bal");
             MyX.Sormagasság(munkalap, $"{sor}:{sor}", 83);
 
             sor += 2;
@@ -1196,7 +1198,7 @@ namespace Villamos.Villamos_Ablakok
             MyX.Egyesít(munkalap, "N" + sor + ":Q" + sor);
             MyX.Kiir("Az ellenőrzések, javítások elvégzését követően a jármű forgalomképes.", $"A{sor}");
             MyX.Kiir("Ellenőrizte:", "K" + sor);
-            MyX.Igazít_vízszintes(munkalap, $"{sor}:{sor}", "bal");
+            MyX.Igazít_vízszintes(munkalap, $"A{sor}:Q{sor}", "bal");
 
             sor++;
             MyX.Egyesít(munkalap, $"M{sor}:Q{sor}");
@@ -1210,7 +1212,7 @@ namespace Villamos.Villamos_Ablakok
                 MyX.Sormagasság(munkalap, $"{sor}:{sor}", 52);
                 MyX.Sortörésseltöbbsorba(munkalap, $"M{sor}", true);
             }
-            MyX.Igazít_vízszintes(munkalap, $"{sor}:{sor}", "közép");
+            MyX.Igazít_vízszintes(munkalap, $"A{sor}:Q{sor}", "közép");
             return sor;
         }
 
@@ -1343,8 +1345,8 @@ namespace Villamos.Villamos_Ablakok
 
         private void Cím_kiírása(int sor, string utasítás_Cím)
         {
-            MyX.Kiir(utasítás_Cím.Trim(), "B" + sor);
-            MyX.Betű(munkalap, "B" + sor, BeBetűV);
+            MyX.Kiir(utasítás_Cím.Trim(), $"B{sor}");
+            MyX.Betű(munkalap, $"B{sor}", BeBetűV);
         }
 
         private void Utasítás_kiírása(int sor, string utasítás_Cím, string utasítás_leírás)
@@ -1369,42 +1371,16 @@ namespace Villamos.Villamos_Ablakok
             MyX.Cella_Betű(BeCell);
         }
 
-        private void Paraméter_kiírása(int sor, string utasítás_Cím, string utasítás_leírás, string szövegelem, string paraméter)
-        {
-            MyX.Kiir(utasítás_Cím.Trim() + szövegelem, $"B{sor}");
-            RichTextRun TextBeV = new RichTextRun
-            {
-                Start = 0,
-                Hossz = utasítás_Cím.Trim().Length,
-                Vastag = true
-            };
-            RichTextRun TextBeD = new RichTextRun
-            {
-                Start = ($"{utasítás_Cím.Trim()}\n").Length,
-                Hossz = paraméter.Trim().Length,
-                Dőlt = true
-            };
-            Beállítás_CellaSzöveg BeCell = new Beállítás_CellaSzöveg
-            {
-                MunkalapNév = munkalap,
-                Cella = $"B{sor}",
-                FullText = $"{utasítás_Cím.Trim()}\n{utasítás_leírás.Trim()}{szövegelem}",
-                Betű = BeBetű,
-                Beállítások = new List<RichTextRun> { TextBeV, TextBeD }
-            };
-            MyX.Cella_Betű(BeCell);
-        }
-
         private void Főcím_kiírása(int sor, int sormagasság, string munkalap, string Részegység, string Utasítás_Cím)
         {
             //főcímsor
-            MyX.Egyesít(munkalap, "B" + sor + ":Q" + sor);
+            MyX.Egyesít(munkalap, $"B{sor}" + ":Q" + sor);
             MyX.Sormagasság(munkalap, $"{sor}:{sor}", sormagasság);
-            MyX.Háttérszín(munkalap, $"A{sor}:Q{sor}", System.Drawing.Color.YellowGreen);
+            MyX.Háttérszín(munkalap, $"A{sor}:Q{sor}", Color.YellowGreen);
             MyX.Kiir(Részegység.Trim(), $"A{sor}");
             MyX.Igazít_vízszintes(munkalap, $"A{sor}", "bal");
-            MyX.Kiir(Utasítás_Cím.Trim(), "B" + sor);
-            MyX.Igazít_vízszintes(munkalap, "B" + sor, "bal");
+            MyX.Kiir(Utasítás_Cím.Trim(), $"B{sor}");
+            MyX.Igazít_vízszintes(munkalap, $"B{sor}", "bal");
             MyX.Rácsoz(munkalap, $"A{sor}:Q{sor}");
         }
 
@@ -1413,9 +1389,9 @@ namespace Villamos.Villamos_Ablakok
             //Minden kiírás
             string szöveg = "";
             if (Paraméter.Trim() != "_")
-                szöveg = $"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}\n{Paraméter}";
+                szöveg = $"{Utasítás_Cím.Trim()} \n{Utasítás_leírás.Trim()} \n{Paraméter} ";
             else
-                szöveg = $"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}";
+                szöveg = $"{Utasítás_Cím.Trim()} \n{Utasítás_leírás.Trim()}";
 
             MyX.Kiir(szöveg, $"B{sor}");
             RichTextRun TextBeV = new RichTextRun
@@ -1426,7 +1402,7 @@ namespace Villamos.Villamos_Ablakok
             };
             RichTextRun TextBeD = new RichTextRun
             {
-                Start = ($"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}").Length,
+                Start = ($"{Utasítás_Cím.Trim()} \n{Utasítás_leírás.Trim()}").Length - 1,
                 Hossz = Paraméter.Trim().Length,
                 Dőlt = true
             };
@@ -1436,7 +1412,7 @@ namespace Villamos.Villamos_Ablakok
                 {
                     MunkalapNév = munkalap,
                     Cella = $"B{sor}",
-                    FullText = $"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}\n{Paraméter}",
+                    FullText = $"{Utasítás_Cím.Trim()} \n{Utasítás_leírás.Trim()} \n{Paraméter} ",
                     Betű = BeBetű,
                     Beállítások = new List<RichTextRun> { TextBeV, TextBeD }
                 };
@@ -1448,7 +1424,7 @@ namespace Villamos.Villamos_Ablakok
                 {
                     MunkalapNév = munkalap,
                     Cella = $"B{sor}",
-                    FullText = $"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}",
+                    FullText = $"{Utasítás_Cím.Trim()} \n{Utasítás_leírás.Trim()} ",
                     Betű = BeBetű,
                     Beállítások = new List<RichTextRun> { TextBeV }
                 };
@@ -1565,7 +1541,7 @@ namespace Villamos.Villamos_Ablakok
 
                 MyX.Egyesít(munkalap, $"N{sor}:Q{sor}");
                 MyX.Kiir(Verzió, $"N{sor}");
-                MyX.Betű(munkalap, $"{sor}:{sor}", BeBetűVD);
+                MyX.Betű(munkalap, $"A{sor}:Q{sor}", BeBetűVD);
                 MyX.Rácsoz(munkalap, $"N{sor - 1}:Q{sor}");
                 MyX.Rácsoz(munkalap, $"A{sor - 1}:D{sor}");
 
