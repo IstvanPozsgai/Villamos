@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Adatszerkezet;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -21,6 +20,11 @@ namespace Villamos.Villamos_Nyomtatványok
         readonly Kezelő_Főkönyv_SegédTábla KézSegédTábla = new Kezelő_Főkönyv_SegédTábla();
         readonly Kezelő_jármű_hiba KézJárműHiba = new Kezelő_jármű_hiba();
         readonly Kezelő_Menetkimaradás Kéz_Menet = new Kezelő_Menetkimaradás();
+        readonly Kezelő_Jármű_Xnapos KJX_kéz = new Kezelő_Jármű_Xnapos();
+        readonly Kezelő_Főkönyv_Nap KFN_kép = new Kezelő_Főkönyv_Nap();
+        readonly Kezelő_kiegészítő_Hibaterv KKH_kéz = new Kezelő_kiegészítő_Hibaterv();
+        readonly Kezelő_Dolgozó_Alap kézDolg = new Kezelő_Dolgozó_Alap();
+        readonly Kezelő_Kiegészítő_főkönyvtábla KKF_kéz = new Kezelő_Kiegészítő_főkönyvtábla();
         #endregion
 
         readonly Beállítás_Betű BeBetű = new Beállítás_Betű();
@@ -63,7 +67,7 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Egyesít(munkalap, "A1:d1");
             MyX.Kiir(Cmbtelephely.Trim() + " Üzem", "a1");
             MyX.Egyesít(munkalap, "e1:i1");
-            MyX.Kiir("©Főkönyv", "e1");
+            MyX.Kiir("Főkönyv", "e1");
             MyX.Egyesít(munkalap, "j1:l1");
             MyX.Kiir(szövegd, "j1");
             sor = 2;
@@ -89,15 +93,12 @@ namespace Villamos.Villamos_Nyomtatványok
             utolsó = oszlop;
 
             MyX.Rácsoz(munkalap, "a" + $"{sor}" + ":" + MyF.Oszlopnév(oszlop - 1) + $"{sor}");
-            // JAVÍTANDÓ: MyX.Vastagkeret("a" + $"{sor}" + ":" + MyF.Oszlopnév(oszlop - 1) + $"{sor}");
+
 
             // napi adatok tábla
             // megnézzük kicsinálta
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\főkönyv\{Dátum.Year}\nap\{Dátum:yyyyMMdd}{napszak.Trim()}nap.mdb";
-            string jelszó = "lilaakác";
-            string szöveg = "SELECT * FROM segédtábla WHERE id=1 ";
-
-            Adat_Főkönyv_SegédTábla ElemSegéd = KézSegédTábla.Egy_Adat(hely, jelszó, szöveg);
+            List<Adat_Főkönyv_SegédTábla> Adatoksegéd = KézSegédTábla.Lista_adatok(Cmbtelephely.Trim(), Dátum, napszak.Trim());
+            Adat_Főkönyv_SegédTábla ElemSegéd = Adatoksegéd.Where(y => y.Id == 1).FirstOrDefault();
 
             if (ElemSegéd != null)
                 kicsinálta = ElemSegéd.Bejelentkezésinév;
@@ -107,13 +108,15 @@ namespace Villamos.Villamos_Nyomtatványok
             // ******************************************
             // ***** Forgalomba adott járművek kezdete **
             // ******************************************
-            szöveg = "SELECT * FROM adattábla where Adattábla.viszonylat <>'-'";
+            List<Adat_Főkönyv_Nap> Adatok = KFN_kép.Lista_Adatok(Cmbtelephely.Trim(), Dátum, napszak.Trim());
+            Adatok = (from a in Adatok
+                      where a.Viszonylat.Trim() != "-"
+                      orderby a.Viszonylat.Trim(), a.Tényindulás, a.Forgalmiszám, a.Azonosító.Trim()
+                      select a).ToList();
             if (napszak == "de")
-                szöveg += " AND napszak='DE' ";
+                Adatok = Adatok.Where(a => a.Napszak.Trim() == "DE").ToList();
             else
-                szöveg += " AND napszak='DU' ";
-            szöveg += " order by Adattábla.viszonylat,adattábla.tényindulás, Adattábla.forgalmiszám, Adattábla.azonosító ";
-
+                Adatok = Adatok.Where(a => a.Napszak.Trim() == "DU").ToList();
             sor += 1;
             oszlop1 = 2;
             viszonylatelőző = "";
@@ -126,10 +129,8 @@ namespace Villamos.Villamos_Nyomtatványok
 
             MyX.Kiir("Forgalomba adott járművek", MyF.Oszlopnév(1) + $"{sor}");
             MyX.Betű(munkalap, MyF.Oszlopnév(1) + $"{sor}", BeBetűVD);
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
-
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
             MyX.Háttérszín(munkalap, MyF.Oszlopnév(1) + $"{sor}", Color.GreenYellow);
-
             MyX.Egyesít(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
 
             sor += 1;
@@ -155,8 +156,8 @@ namespace Villamos.Villamos_Nyomtatványok
                 személyzet[j] = 0;
             }
 
-            Kezelő_Főkönyv_Nap KFN_kép = new Kezelő_Főkönyv_Nap();
-            List<Adat_Főkönyv_Nap> Adatok = KFN_kép.Lista_adatok(hely, jelszó, szöveg);
+
+
 
             int előzőkocsihossz;
             int nemelső;
@@ -423,7 +424,7 @@ namespace Villamos.Villamos_Nyomtatványok
 
             }
             MyX.Rácsoz(munkalap, "a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
-            // JAVÍTANDÓ: MyX.Vastagkeret("a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
+
             sor += 1;
             // ******************************************
             // ***** Forgalomba adott járművek Vége    **
@@ -434,7 +435,7 @@ namespace Villamos.Villamos_Nyomtatványok
             // '**********************************
             MyX.Kiir("Személyzet hiány", MyF.Oszlopnév(1) + $"{sor}");
             MyX.Betű(munkalap, MyF.Oszlopnév(1) + $"{sor}", BeBetűV);
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
             MyX.Háttérszín(munkalap, MyF.Oszlopnév(1) + $"{sor}", Color.GreenYellow);
 
             MyX.Egyesít(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
@@ -465,16 +466,18 @@ namespace Villamos.Villamos_Nyomtatványok
             // **********************************
             MyX.Kiir("Üzemképes Tartalék", MyF.Oszlopnév(1) + $"{sor}");
             MyX.Betű(munkalap, MyF.Oszlopnév(1) + $"{sor}", BeBetűV);
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
             MyX.Háttérszín(munkalap, MyF.Oszlopnév(1) + $"{sor}", Color.GreenYellow);
 
             MyX.Egyesít(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
 
             // tartalékok kiírása
+            Adatok = KFN_kép.Lista_Adatok(Cmbtelephely.Trim(), Dátum, napszak.Trim());
+            Adatok = (from a in Adatok
+                      where a.Napszak == "_"
+                      orderby a.Típus, a.Kocsikszáma descending, a.Szerelvény, a.Azonosító
+                      select a).ToList();
 
-            szöveg = "SELECT * FROM adattábla where napszak ='_' ";
-            szöveg += " order by  típus asc,adattábla.kocsikszáma  desc, adattábla.szerelvény, Adattábla.azonosító ";
-            Adatok = KFN_kép.Lista_adatok(hely, jelszó, szöveg);
 
             string előzőtípus = "-";
             szerelvényhossz = 0;
@@ -695,7 +698,7 @@ namespace Villamos.Villamos_Nyomtatványok
                 }
             }
             MyX.Rácsoz(munkalap, "a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
-            // JAVÍTANDÓ: MyX.Vastagkeret("a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
+
             sor += 1;
 
             // ******************************************
@@ -703,7 +706,7 @@ namespace Villamos.Villamos_Nyomtatványok
             // ******************************************
             MyX.Kiir("Üzemképes Villamosok", MyF.Oszlopnév(1) + $"{sor}");
             MyX.Betű(munkalap, MyF.Oszlopnév(1) + $"{sor}", BeBetűV);
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
             MyX.Háttérszín(munkalap, MyF.Oszlopnév(1) + $"{sor}", Color.GreenYellow);
 
             MyX.Egyesít(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
@@ -726,7 +729,7 @@ namespace Villamos.Villamos_Nyomtatványok
                 }
             }
             MyX.Rácsoz(munkalap, "a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
-            // JAVÍTANDÓ: MyX.Vastagkeret("a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
+
 
             // ******************************************
             // ide kerül a kocsiszíni javítás
@@ -735,7 +738,7 @@ namespace Villamos.Villamos_Nyomtatványok
             sor += 1;
             MyX.Kiir("Kocsiszíni javítás", MyF.Oszlopnév(1) + $"{sor}");
             MyX.Betű(munkalap, MyF.Oszlopnév(1) + $"{sor}", BeBetűV);
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
             MyX.Háttérszín(munkalap, MyF.Oszlopnév(1) + $"{sor}", Color.GreenYellow);
 
             MyX.Egyesít(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
@@ -752,15 +755,15 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Betű(munkalap, MyF.Oszlopnév(4) + $"{sor}", BeBetűD);
             MyX.Egyesít(munkalap, MyF.Oszlopnév(eleje) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
             MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop - 1) + $"{sor}");
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop - 1) + $"{sor}");
+
 
             int soreleje = sor;
             int sorvége;
-
-
-            szöveg = "SELECT * FROM adattábla where adattábla.státus=4 and  (Adattábla.napszak ='-' or Adattábla.napszak ='_') ";
-            szöveg += " order by azonosító";
-            Adatok = KFN_kép.Lista_adatok(hely, jelszó, szöveg);
+            Adatok = KFN_kép.Lista_Adatok(Cmbtelephely.Trim(), Dátum, napszak.Trim());
+            Adatok = (from a in Adatok
+                      where a.Státus == 4 && (a.Napszak == "-" || a.Napszak == "_")
+                      orderby a.Azonosító
+                      select a).ToList();
 
             foreach (Adat_Főkönyv_Nap rekord in Adatok)
             {
@@ -806,19 +809,13 @@ namespace Villamos.Villamos_Nyomtatványok
                 {
                     // ha egy sor
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(utolsó - 1) + sorvége.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(2) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(3) + sorvége.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(4) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(11) + sorvége.ToString());
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(oszlop - 1) + (soreleje - 1).ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(oszlop - 1) + (soreleje - 1).ToString());
                 }
                 if (soreleje + 1 <= sorvége)
                 {
                     // ha több sor
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + soreleje.ToString() + ":" + MyF.Oszlopnév(utolsó - 1) + sorvége.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(2) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(3) + sorvége.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(4) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(11) + sorvége.ToString());
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(oszlop - 1) + (soreleje - 1).ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(oszlop - 1) + (soreleje - 1).ToString());
                 }
             }
 
@@ -839,7 +836,7 @@ namespace Villamos.Villamos_Nyomtatványok
 
             }
             MyX.Rácsoz(munkalap, "a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
-            // JAVÍTANDÓ: MyX.Vastagkeret("a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
+            // MyX.Vastagkeret(munkalap, "a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
             // ******************************************
             // ide kerül a kocsiszíni javítás  vége
             // ******************************************
@@ -850,7 +847,7 @@ namespace Villamos.Villamos_Nyomtatványok
             sor++;
             MyX.Kiir("Telephelyen kívüli javítás", MyF.Oszlopnév(1) + $"{sor}");
             MyX.Betű(munkalap, MyF.Oszlopnév(1) + $"{sor}", BeBetűV);
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
             MyX.Háttérszín(munkalap, MyF.Oszlopnév(1) + $"{sor}", Color.GreenYellow);
 
             MyX.Egyesít(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
@@ -867,12 +864,12 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Betű(munkalap, MyF.Oszlopnév(4) + $"{sor}", BeBetűD);
             MyX.Egyesít(munkalap, MyF.Oszlopnév(eleje) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
             MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop - 1) + $"{sor}");
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop - 1) + $"{sor}");
 
-            szöveg = "SELECT * FROM adattábla where adattábla.státus=4 and Adattábla.viszonylat ='-'";
-            szöveg += " order by azonosító";
-            Adatok = KFN_kép.Lista_adatok(hely, jelszó, szöveg);
-
+            Adatok = KFN_kép.Lista_Adatok(Cmbtelephely.Trim(), Dátum, napszak.Trim());
+            Adatok = (from a in Adatok
+                      where a.Státus == 4 && a.Viszonylat == "-"
+                      orderby a.Azonosító
+                      select a).ToList();
             soreleje = sor;
 
             foreach (Adat_Főkönyv_Nap rekord in Adatok)
@@ -920,19 +917,13 @@ namespace Villamos.Villamos_Nyomtatványok
                 {
                     // ha egy sor
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(utolsó - 1) + sorvége.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(2) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(3) + sorvége.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(4) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(11) + sorvége.ToString());
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(oszlop - 1) + (soreleje - 1).ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(oszlop - 1) + (soreleje - 1).ToString());
                 }
                 if (soreleje + 1 <= sorvége)
                 {
                     // ha több sor
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + soreleje.ToString() + ":" + MyF.Oszlopnév(utolsó - 1) + sorvége.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(2) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(3) + sorvége.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(4) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(11) + sorvége.ToString());
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(oszlop - 1) + (soreleje - 1).ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(oszlop - 1) + (soreleje - 1).ToString());
                 }
             }
 
@@ -954,7 +945,7 @@ namespace Villamos.Villamos_Nyomtatványok
 
             }
             MyX.Rácsoz(munkalap, "a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
-            // JAVÍTANDÓ: MyX.Vastagkeret("a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
+            // MyX.Vastagkeret(munkalap, "a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
             // ******************************************
             // ide kerül a telepen kívüli javítás vége
             // ******************************************
@@ -967,7 +958,7 @@ namespace Villamos.Villamos_Nyomtatványok
             sor++;
             MyX.Kiir("Félreállítás", MyF.Oszlopnév(1) + $"{sor}");
             MyX.Betű(munkalap, MyF.Oszlopnév(1) + $"{sor}", BeBetűV);
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
             MyX.Háttérszín(munkalap, MyF.Oszlopnév(1) + $"{sor}", Color.GreenYellow);
 
             MyX.Egyesít(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
@@ -984,7 +975,6 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Betű(munkalap, MyF.Oszlopnév(4) + $"{sor}", BeBetűD);
             MyX.Egyesít(munkalap, MyF.Oszlopnév(eleje) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
             MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop - 1) + $"{sor}");
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop - 1) + $"{sor}");
 
             soreleje = 0;
 
@@ -998,9 +988,7 @@ namespace Villamos.Villamos_Nyomtatványok
                         soreleje = sor;
                     MyX.Kiir(rekord.Azonosító.Trim(), "a" + $"{sor}");
 
-                    // JAVÍTANDÓ: MyX.Vastagkeret("a" + $"{sor}");
                     MyX.Egyesít(munkalap, MyF.Oszlopnév(2) + $"{sor}" + ":" + MyF.Oszlopnév(3) + $"{sor}");
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(2) + $"{sor}" + ":" + MyF.Oszlopnév(3) + $"{sor}");
                     MyX.Kiir(rekord.Miótaáll.ToString("yyyy.MM.dd"), MyF.Oszlopnév(2) + $"{sor}");
 
                     MyX.Egyesít(munkalap, MyF.Oszlopnév(4) + $"{sor}" + ":" + MyF.Oszlopnév(11) + $"{sor}");
@@ -1034,19 +1022,13 @@ namespace Villamos.Villamos_Nyomtatványok
                 {
                     // ha egy sor
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(utolsó - 1) + sorvége.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(2) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(3) + sorvége.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(4) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(11) + sorvége.ToString());
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(oszlop - 1) + (soreleje - 1).ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(oszlop - 1) + (soreleje - 1).ToString());
                 }
                 if (soreleje < sorvége)
                 {
                     // ha több sor
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + soreleje.ToString() + ":" + MyF.Oszlopnév(utolsó - 1) + sorvége.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(2) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(3) + sorvége.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(4) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(11) + sorvége.ToString());
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(oszlop - 1) + (soreleje - 1).ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(oszlop - 1) + (soreleje - 1).ToString());
                 }
             }
 
@@ -1067,7 +1049,6 @@ namespace Villamos.Villamos_Nyomtatványok
                 }
             }
             MyX.Rácsoz(munkalap, "a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
-            // JAVÍTANDÓ: MyX.Vastagkeret("a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
 
             // ***********************************
             // ide a félre áLlítás vége
@@ -1081,7 +1062,7 @@ namespace Villamos.Villamos_Nyomtatványok
             sor++;
             MyX.Kiir("Főjavítás", MyF.Oszlopnév(1) + $"{sor}");
             MyX.Betű(munkalap, MyF.Oszlopnév(1) + $"{sor}", BeBetűV);
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
             MyX.Háttérszín(munkalap, MyF.Oszlopnév(1) + $"{sor}", Color.GreenYellow);
 
             MyX.Egyesít(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
@@ -1099,9 +1080,6 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Betű(munkalap, MyF.Oszlopnév(4) + $"{sor}", BeBetűD);
             MyX.Egyesít(munkalap, MyF.Oszlopnév(eleje) + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
             MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop - 1) + $"{sor}");
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop - 1) + $"{sor}");
-
-
             soreleje = 0;
 
             foreach (Adat_Főkönyv_Nap rekord in Adatok)
@@ -1114,9 +1092,7 @@ namespace Villamos.Villamos_Nyomtatványok
                         soreleje = sor;
                     MyX.Kiir(rekord.Azonosító.Trim(), "a" + $"{sor}");
 
-                    // JAVÍTANDÓ: MyX.Vastagkeret("a" + $"{sor}");
                     MyX.Egyesít(munkalap, MyF.Oszlopnév(2) + $"{sor}" + ":" + MyF.Oszlopnév(3) + $"{sor}");
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(2) + $"{sor}" + ":" + MyF.Oszlopnév(3) + $"{sor}");
                     MyX.Kiir(rekord.Miótaáll.ToString("yyyy.MM.dd"), MyF.Oszlopnév(2) + $"{sor}");
 
                     MyX.Egyesít(munkalap, MyF.Oszlopnév(4) + $"{sor}" + ":" + MyF.Oszlopnév(11) + $"{sor}");
@@ -1150,19 +1126,13 @@ namespace Villamos.Villamos_Nyomtatványok
                 {
                     // ha egy sor
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(utolsó - 1) + sorvége.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(2) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(3) + sorvége.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(4) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(11) + sorvége.ToString());
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(oszlop - 1) + (soreleje - 1).ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(oszlop - 1) + (soreleje - 1).ToString());
                 }
                 if (soreleje + 1 <= sorvége)
                 {
                     // ha több sor
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + soreleje.ToString() + ":" + MyF.Oszlopnév(utolsó - 1) + sorvége.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(2) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(3) + sorvége.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(4) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(11) + sorvége.ToString());
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(oszlop - 1) + (soreleje - 1).ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(1) + (soreleje - 1).ToString() + ":" + MyF.Oszlopnév(oszlop - 1) + (soreleje - 1).ToString());
                 }
             }
 
@@ -1182,7 +1152,6 @@ namespace Villamos.Villamos_Nyomtatványok
                 }
             }
             MyX.Rácsoz(munkalap, "a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
-            // JAVÍTANDÓ: MyX.Vastagkeret("a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
 
             // ********************************************
             // ide a Főjavítás vége 
@@ -1206,7 +1175,6 @@ namespace Villamos.Villamos_Nyomtatványok
             }
 
             MyX.Rácsoz(munkalap, "a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
-            // JAVÍTANDÓ: MyX.Vastagkeret("a" + $"{sor}" + ":" + MyF.Oszlopnév(utolsó - 1) + $"{sor}");
             MyX.Oszlopszélesség(munkalap, "A:A");
 
             // *******************************************
@@ -1233,14 +1201,10 @@ namespace Villamos.Villamos_Nyomtatványok
 
             // egyesítjük kettesével
             // itt kell majd beolvasni a menetkimaradásokat.
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\főkönyv\menet" + Dátum.ToString("yyyy") + ".mdb";
-
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Menekimaradás_telephely(hely);
             int napia = 0;
             int napib = 0;
             int napic = 0;
             int napi = 0;
-            jelszó = "lilaakác";
 
             List<Adat_Menetkimaradás> Madatok = Kéz_Menet.Lista_Adatok(Cmbtelephely.Trim(), Dátum.Year);
             Madatok = (from a in Madatok
@@ -1299,7 +1263,6 @@ namespace Villamos.Villamos_Nyomtatványok
                     napi += Convert.ToInt32(rekord.Kimaradtmenet);
 
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + (újsor + 1).ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + (újsor + 1).ToString());
                     újsor += 2;
                 }
             }
@@ -1315,7 +1278,6 @@ namespace Villamos.Villamos_Nyomtatványok
                 MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 13) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 13) + (újsor + 1).ToString());
                 MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 14) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + (újsor + 1).ToString());
                 MyX.Rácsoz(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + (újsor + 1).ToString());
-                // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + (újsor + 1).ToString());
                 újsor += 2;
             }
 
@@ -1370,7 +1332,6 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Kiir("Napi összes kimaradt menet:", MyF.Oszlopnév(utolsó + 8) + újsor.ToString());
             MyX.Kiir(napi.ToString(), MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
             MyX.Rácsoz(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
 
             újsor += 1;
             MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 1) + újsor.ToString());
@@ -1385,7 +1346,6 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Kiir("Göngyölt összes kimaradt menet:", MyF.Oszlopnév(utolsó + 8) + újsor.ToString());
             MyX.Kiir(göngymenet.ToString(), MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
             MyX.Rácsoz(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
 
             újsor += 1;
             MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 1) + újsor.ToString());
@@ -1398,7 +1358,6 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Kiir(göngyc.ToString(), MyF.Oszlopnév(utolsó + 6) + újsor.ToString());
             MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 8) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
             MyX.Rácsoz(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
 
             újsor += 1;
             MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 1) + újsor.ToString());
@@ -1411,7 +1370,6 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Kiir((göngya + göngyb + göngyc).ToString(), MyF.Oszlopnév(utolsó + 6) + újsor.ToString());
             MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 8) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
             MyX.Rácsoz(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
 
             // ****************************************
             // ******* Napi változások  kezdete 
@@ -1466,8 +1424,8 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Kiir("Érkező járművek", MyF.Oszlopnév(utolsó) + újsor.ToString());
             MyX.Igazít_vízszintes(munkalap, MyF.Oszlopnév(utolsó + 7) + újsor.ToString(), "közép");
             MyX.Kiir("Átadott járművek", MyF.Oszlopnév(utolsó + 7) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 6) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó + 7) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 6) + újsor.ToString());
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó + 7) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
             újsor++;
             MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 1) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 3) + újsor.ToString());
             MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 4) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 6) + újsor.ToString());
@@ -1479,8 +1437,8 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Kiir("Psz", MyF.Oszlopnév(utolsó + 7) + újsor.ToString());
             MyX.Kiir("Típus", MyF.Oszlopnév(utolsó + 8) + újsor.ToString());
             MyX.Kiir("Telephely", MyF.Oszlopnév(utolsó + 11) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 6) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó + 7) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 6) + újsor.ToString());
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó + 7) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
             // **************************************************
             // ******* Aláírás helyek                    ********
             // **************************************************
@@ -1496,13 +1454,9 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó) + (újsor + 1).ToString() + ":" + MyF.Oszlopnév(utolsó + 2) + (újsor + 1).ToString());
             MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 6) + (újsor + 1).ToString() + ":" + MyF.Oszlopnév(utolsó + 8) + (újsor + 1).ToString());
             MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 12) + (újsor + 1).ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + (újsor + 1).ToString());
-            // MyX.Kiirjuk a készítő nevét és beosztását
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\Dolgozók.mdb";
-            jelszó = "forgalmiutasítás";
-            szöveg = "SELECT * FROM dolgozóadatok where [Bejelentkezésinév]='" + kicsinálta.Trim() + "'";
-
-            Kezelő_Dolgozó_Alap kézDolg = new Kezelő_Dolgozó_Alap();
-            Adat_Dolgozó_Alap Adat = kézDolg.Egy_Adat(hely, jelszó, szöveg);
+            // Kiirjuk a készítő nevét és beosztását
+            List<Adat_Dolgozó_Alap> AdatokDolg = kézDolg.Lista_Adatok(Cmbtelephely.Trim());
+            Adat_Dolgozó_Alap Adat = AdatokDolg.Where(a => a.Bejelentkezésinév == kicsinálta.Trim()).FirstOrDefault();
             string dolgozónév = "_";
             string főkönyvtitulus = "_";
 
@@ -1517,14 +1471,9 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Kiir(főkönyvtitulus, MyF.Oszlopnév(utolsó) + (újsor + 1).ToString());
 
             // MyX.Kiirjuk a személyeket az ellenőrző személyeket
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\segéd\kiegészítő.mdb";
-            jelszó = "Mocó";
-
-            szöveg = "SELECT * FROM főkönyvtábla order by id";
             int ii = 6;
 
-            Kezelő_Kiegészítő_főkönyvtábla KKF_kéz = new Kezelő_Kiegészítő_főkönyvtábla();
-            List<Adat_Kiegészítő_főkönyvtábla> adatok = KKF_kéz.Lista_Adatok(hely, jelszó, szöveg);
+            List<Adat_Kiegészítő_főkönyvtábla> adatok = KKF_kéz.Lista_Adatok(Cmbtelephely.Trim());
 
             foreach (Adat_Kiegészítő_főkönyvtábla rekord in adatok)
             {
@@ -1569,14 +1518,25 @@ namespace Villamos.Villamos_Nyomtatványok
             //***************************************
             //*Nyomtatási beállítások
             //***************************************
-            if (sor > újsor)
-                újsor = sor;
-            // JAVÍTANDÓ:
-            //MyX.NyomtatásiTerület_részletes(munkalap, "A1:" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString(),
-            //    5, 5, 5, 5,
-            //    8, 8, "1", "1", false, "A3", true, true);
-
-
+            if (sor > újsor) újsor = sor;
+            Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+            {
+                Munkalap = munkalap,
+                NyomtatásiTerület = $"A1:{MyF.Oszlopnév(utolsó + 14)}{újsor}",
+                BalMargó = 5,
+                JobbMargó = 5,
+                FelsőMargó = 5,
+                AlsóMargó = 5,
+                FejlécMéret = 8,
+                LáblécMéret = 8,
+                LapMagas = 1,
+                LapSzéles = 1,
+                Papírméret = "A3",
+                Álló = false,
+                VízKözép = true,
+                FüggKözép = true
+            };
+            MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
             MyX.ExcelMentés(fájlexc);
             MyX.ExcelBezárás();
             MyF.Megnyitás(fájlexc);
@@ -1598,7 +1558,7 @@ namespace Villamos.Villamos_Nyomtatványok
 
                 List<Adat_Jármű_hiba> Adatok;
 
-                Kezelő_kiegészítő_Hibaterv KKH_kéz = new Kezelő_kiegészítő_Hibaterv();
+
                 List<Adat_Kiegészítő_Hibaterv> KiAdatokÖ = KKH_kéz.Lista_Adatok(Cmbtelephely.Trim());
                 List<Adat_Kiegészítő_Hibaterv> KiAdatok = (from a in KiAdatokÖ
                                                            where a.Főkönyv == true
@@ -1610,15 +1570,6 @@ namespace Villamos.Villamos_Nyomtatványok
                     mennyi = 3;
                     MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 3) + újsor.ToString());
                     MyX.Kiir(rekordkieg.Szöveg.Trim(), MyF.Oszlopnév(utolsó) + újsor.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 3) + újsor.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó + 4) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
-                    //szöveg = "";
-                    //szöveg = "SELECT * FROM hibatábla where idő>=#" + Dátum.ToString("MM-dd-yyyy") + " 06:00:0#";
-                    //szöveg += " and idő<#" + Dátum.AddDays(1).ToString("MM-dd-yyyy") + " 06:00:0#";
-                    //szöveg += " and javítva=true";
-                    //szöveg += " order by azonosító";
-                    //Adatok = KJH_kéz.Lista_adatok(hely, jelszó, szöveg);
-
                     Adatok = KézJárműHiba.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
                     Adatok = (from a in Adatok
                               where a.Idő >= MyF.Nap0600(Dátum)
@@ -1633,8 +1584,6 @@ namespace Villamos.Villamos_Nyomtatványok
                             mennyi += 1;
                             if (mennyi == 15)
                             {
-                                // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 3) + újsor.ToString());
-                                // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó + 4) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
                                 újsor += 1;
                                 MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 3) + újsor.ToString());
                                 MyX.Kiir(rekordkieg.Szöveg.Trim(), MyF.Oszlopnév(utolsó) + újsor.ToString());
@@ -1643,10 +1592,7 @@ namespace Villamos.Villamos_Nyomtatványok
                             MyX.Kiir(rekord.Azonosító.Trim(), MyF.Oszlopnév(utolsó + mennyi) + újsor.ToString());
                         }
                     }
-
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 3) + újsor.ToString());
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(utolsó + 4) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó + 4) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
                     mennyi = 4;
                 }
             }
@@ -1661,10 +1607,10 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Kiir("Karbantartás", MyF.Oszlopnév(utolsó) + újsor.ToString());
             MyX.Igazít_vízszintes(munkalap, MyF.Oszlopnév(utolsó + 4) + újsor.ToString(), "közép");
             MyX.Kiir("Pályaszám(ok)", MyF.Oszlopnév(utolsó + 4) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó + 4) + újsor.ToString());
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString());
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó + 4) + újsor.ToString());
         }
-        //
+
         private void Jobb_Személyzet_Fejléc(string Cmbtelephely, DateTime Dátum)
         {
             // megnézzük, hogy volt-e személyzet hiány ezen a napon
@@ -1683,9 +1629,9 @@ namespace Villamos.Villamos_Nyomtatványok
                     case 1:
                         {
                             újsor += 1;
-                            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 4) + újsor.ToString());
-                            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó + 5) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 9) + újsor.ToString());
-                            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó + 10) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
+                            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 4) + újsor.ToString());
+                            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó + 5) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 9) + újsor.ToString());
+                            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó + 10) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
                             MyX.Kiir(rekord.Viszonylat.Trim() + "/" + rekord.Forgalmiszám.Trim(), MyF.Oszlopnév(utolsó) + újsor.ToString());
                             MyX.Kiir(rekord.Tervindulás.ToString("hh: mm"), MyF.Oszlopnév(utolsó + 1) + újsor.ToString());
                             MyX.Kiir(rekord.Típus.Trim(), MyF.Oszlopnév(utolsó + 2) + újsor.ToString());
@@ -1738,9 +1684,9 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Kiir("Típus", MyF.Oszlopnév(utolsó + 12) + újsor.ToString());
             MyX.Kiir("Napszak", MyF.Oszlopnév(utolsó + 13) + újsor.ToString());
             MyX.Kiir("Psz", MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 4) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó + 5) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 9) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó + 10) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 4) + újsor.ToString());
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó + 5) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 9) + újsor.ToString());
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó + 10) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
         }
 
         private void Jobb_Típuscsere(string Cmbtelephely, DateTime Dátum)
@@ -1773,8 +1719,8 @@ namespace Villamos.Villamos_Nyomtatványok
                     MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 4) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 5) + újsor.ToString());
                     MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 10) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 11) + újsor.ToString());
                     MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 12) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 13) + újsor.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 7) + újsor.ToString());
-                    // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó + 8) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
+                    MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 7) + újsor.ToString());
+                    MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó + 8) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
                     MyX.Kiir(rekord.Viszonylat.Trim() + "/" + rekord.Forgalmiszám.Trim(), MyF.Oszlopnév(utolsó) + újsor.ToString());
                     MyX.Kiir(rekord.Tervindulás.ToString("hh: mm"), MyF.Oszlopnév(utolsó + 1) + újsor.ToString());
                     MyX.Kiir(rekord.Típuselőírt.Trim(), MyF.Oszlopnév(utolsó + 2) + újsor.ToString());
@@ -1803,8 +1749,8 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Kiir("kiadott típus", MyF.Oszlopnév(utolsó + 12) + újsor.ToString());
             MyX.Kiir("Psz", MyF.Oszlopnév(utolsó + 6) + újsor.ToString());
             MyX.Kiir("Psz", MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 7) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó + 8) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 7) + újsor.ToString());
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó + 8) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
         }
 
         private void Jobb_NapiVáltozások(string Cmbtelephely, DateTime Dátum)
@@ -1866,8 +1812,6 @@ namespace Villamos.Villamos_Nyomtatványok
                 MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 1) + (újsor + i).ToString() + ":" + MyF.Oszlopnév(utolsó + 5) + (újsor + i).ToString());
                 MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 7) + (újsor + i).ToString() + ":" + MyF.Oszlopnév(utolsó + 8) + (újsor + i).ToString());
                 MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 10) + (újsor + i).ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + (újsor + i).ToString());
-                // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + (újsor + i).ToString() + ":" + MyF.Oszlopnév(utolsó + 5) + (újsor + i).ToString());
-                // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó + 6) + (újsor + i).ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + (újsor + i).ToString());
             }
 
             hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\hibanapló\Elkészült{Dátum.Year}.mdb";
@@ -1877,7 +1821,7 @@ namespace Villamos.Villamos_Nyomtatványok
             szöveg += " order by azonosító";
 
 
-            Kezelő_Jármű_Xnapos KJX_kéz = new Kezelő_Jármű_Xnapos();
+
             List<Adat_Jármű_Xnapos> Adatok = KJX_kéz.Lista_Adatok(hely, jelszó, szöveg);
 
 
@@ -1935,10 +1879,10 @@ namespace Villamos.Villamos_Nyomtatványok
             újsor += 1;
             MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 5) + újsor.ToString());
             MyX.Kiir("Leálló Kocsik", MyF.Oszlopnév(utolsó) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString());
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString());
             MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 6) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
             MyX.Kiir("Elkészült kocsik", MyF.Oszlopnév(utolsó + 6) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó + 6) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó + 6) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
 
             újsor += 1;
             MyX.Kiir("Psz", MyF.Oszlopnév(utolsó) + újsor.ToString());
@@ -1950,8 +1894,8 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Kiir("Állás Nap", MyF.Oszlopnév(utolsó + 9) + újsor.ToString());
             MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 10) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
             MyX.Kiir("Oka", MyF.Oszlopnév(utolsó + 10) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 5) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó + 6) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 5) + újsor.ToString());
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó + 6) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
         }
 
         private void Menet_fejléc()
@@ -1964,7 +1908,6 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 13) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 13) + (újsor + 2).ToString());
             MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 14) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + (újsor + 2).ToString());
             MyX.Rácsoz(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + (újsor + 2).ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + (újsor + 2).ToString());
 
 
             MyX.Kiir("Esemény jele", MyF.Oszlopnév(utolsó) + újsor.ToString());
@@ -1987,7 +1930,7 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
             MyX.Igazít_vízszintes(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString(), "közép");
             MyX.Kiir(név, MyF.Oszlopnév(utolsó) + újsor.ToString());
-            // JAVÍTANDÓ: MyX.Vastagkeret(MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
+            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString());
             MyX.Háttérszín(munkalap, MyF.Oszlopnév(utolsó) + újsor.ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + újsor.ToString(), Color.GreenYellow);
         }
     }
