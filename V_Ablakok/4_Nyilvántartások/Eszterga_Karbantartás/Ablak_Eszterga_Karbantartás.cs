@@ -598,7 +598,7 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
                     int id = sor.Cells[0].Value.ToÉrt_Int();
                     string muvelet = sor.Cells[1].Value?.ToStrTrim() ?? string.Empty;
                     int mennyiNap = sor.Cells[3].Value.ToÉrt_Int();
-                    int mennyiOra = sor.Cells[2].Value.ToÉrt_Int();
+                    int mennyiOra = sor.Cells[4].Value.ToÉrt_Int();
                     string megjegyzes = sor.Cells[10].Value.ToStrTrim();
 
                     naploLista.Add(new Adat_Eszterga_Muveletek_Naplo(
@@ -1067,8 +1067,8 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
 
                 for (int i = 0; i < adatLista.Count; i++)
                 {
-                    naplozandoSorok[i].Cells[4].Value = DateTime.Today;
-                    naplozandoSorok[i].Cells[5].Value = adatLista[i].Utolsó_Üzemóra_Állás;
+                    naplozandoSorok[i].Cells[6].Value = DateTime.Today.ToShortDateString();
+                    naplozandoSorok[i].Cells[7].Value = adatLista[i].Utolsó_Üzemóra_Állás;
                 }
 
                 Naplozas(naplozandoSorok, adatLista);
