@@ -29,9 +29,12 @@ namespace Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv
         {
             Dátumról.Value = DateTime.Today;
             Dátumra.Value = DateTime.Today;
-
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
+                GombLathatosagKezelo.Beallit(this);
+            else
+                Jogosultságkiosztás();
         }
 
         private void Jogosultságkiosztás()

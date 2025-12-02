@@ -28,15 +28,15 @@ namespace Villamos.Villamos_Ablakok
         {
             InitializeComponent();
             Sorszám = sorszám;
-            if (Program.PostásJogkör.Any(c => c != '0'))
-            {
-                Jogosultságkiosztás();
-            }
-            else
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
             {
                 TelephelyekFeltöltéseÚj();
                 GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
             }
+            else
+                Jogosultságkiosztás();
         }
 
         private void TelephelyekFeltöltéseÚj()

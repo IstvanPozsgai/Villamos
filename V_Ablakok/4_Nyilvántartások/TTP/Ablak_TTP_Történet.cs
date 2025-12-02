@@ -44,14 +44,13 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             Pályaszámok_feltöltése();
             StátusokFeltöltése();
 
-            if (Program.PostásJogkör.Any(c => c != '0'))
-            {
-                Jogosultságkiosztás();
-            }
-            else
-            {
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
                 GombLathatosagKezelo.Beallit(this);
-            }
+            else
+                Jogosultságkiosztás();
+
             AdatokTeljes = KézTábla.Lista_Adatok();
             CmbAzonosító.Text = Azonosító;
             TáblaListázás();

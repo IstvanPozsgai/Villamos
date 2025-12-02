@@ -44,14 +44,12 @@ namespace Villamos
             AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség").Where(a => a.Törölt == false).ToList();
             AdatokOsztály = KézOsztály.Lista_Adat();
             AdatokNév = KézNév.Lista_Adat();
-            if (Program.PostásJogkör.Any(c => c != '0'))
-            {
-                Jogosultságkiosztás();
-            }
-            else
-            {
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
                 GombLathatosagKezelo.Beallit(this, "Főmérnökség");
-            }
+            else
+                Jogosultságkiosztás();
 
             Fülekkitöltése();
             Pályaszámfeltöltés();

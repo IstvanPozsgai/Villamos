@@ -32,9 +32,12 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             Végdát = végdát;
             Elsődát = elsődát;
             Start();
-
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
+                GombLathatosagKezelo.Beallit(this);
+            else
+                Jogosultságkiosztás();
         }
 
         public Ablak_Caf_Lista()

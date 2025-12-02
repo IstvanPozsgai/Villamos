@@ -59,9 +59,13 @@ namespace Villamos
                 //KézAdatok.StatustVizsgal(KézAdatok.Lista_Adatok());
 
                 ELő_Pályaszámokfeltöltése();
+                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+                //ha nem akkor a régit használjuk
+                if (Program.PostásJogkör.Substring(0, 1) == "R")
+                    GombLathatosagKezelo.Beallit(this);
+                else
+                    Jogosultságkiosztás();
 
-                GombLathatosagKezelo.Beallit(this);
-                Jogosultságkiosztás();
                 DateTime elsődát = MyF.Hónap_elsőnapja(DateTime.Today).AddDays(-10);
                 DateTime végdát = MyF.Hónap_elsőnapja(DateTime.Today).AddDays(40);
                 Elő_Dátumig.Value = végdát;
@@ -1829,13 +1833,13 @@ namespace Villamos
             {
                 Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
                 if (Cmbtelephely.Text.Trim() == "") return;
-                if (Program.PostásJogkör.Any(c => c != '0'))
-                {
-
-                }
+                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+                //ha nem akkor a régit használjuk
+                if (Program.PostásJogkör.Substring(0, 1) == "R")
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 else
                 {
-                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+
                 }
 
             }

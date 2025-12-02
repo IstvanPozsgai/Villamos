@@ -45,17 +45,17 @@ namespace Villamos
         {
             try
             {
-                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
-                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
-                if (Program.PostásJogkör.Any(c => c != '0'))
-                {
-                    Telephelyekfeltöltése();
-                    Jogosultságkiosztás();
-                }
-                else
+                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+                //ha nem akkor a régit használjuk
+                if (Program.PostásJogkör.Substring(0, 1) == "R")
                 {
                     TelephelyekFeltöltéseÚj();
                     GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+                else
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
                 }
                 Dátumtól.Value = new DateTime(DateTime.Now.Year, 1, 1);
                 Dátumig.Value = DateTime.Today;
@@ -1710,13 +1710,13 @@ namespace Villamos
             {
                 Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
                 if (Cmbtelephely.Text.Trim() == "") return;
-                if (Program.PostásJogkör.Any(c => c != '0'))
-                {
-
-                }
+                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+                //ha nem akkor a régit használjuk
+                if (Program.PostásJogkör.Substring(0, 1) == "R")
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 else
                 {
-                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+
                 }
 
             }

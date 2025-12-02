@@ -49,17 +49,17 @@ namespace Villamos
         {
             try
             {
-                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
-                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
-                if (Program.PostásJogkör.Any(c => c != '0'))
-                {
-                    Telephelyekfeltöltése();
-                    Jogosultságkiosztás();
-                }
-                else
+                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+                //ha nem akkor a régit használjuk
+                if (Program.PostásJogkör.Substring(0, 1) == "R")
                 {
                     TelephelyekFeltöltéseÚj();
                     GombLathatosagKezelo.Beallit(this, CmbTelephely.Text.Trim());
+                }
+                else
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
                 }
 
                 Évek_Feltöltése();
@@ -434,13 +434,13 @@ namespace Villamos
             {
                 CmbTelephely.Text = CmbTelephely.Items[CmbTelephely.SelectedIndex].ToStrTrim();
                 if (CmbTelephely.Text.Trim() == "") return;
-                if (Program.PostásJogkör.Any(c => c != '0'))
-                {
-
-                }
+                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+                //ha nem akkor a régit használjuk
+                if (Program.PostásJogkör.Substring(0, 1) == "R")
+                    GombLathatosagKezelo.Beallit(this, CmbTelephely.Text.Trim());
                 else
                 {
-                    GombLathatosagKezelo.Beallit(this, CmbTelephely.Text.Trim());
+                    
                 }
 
             }

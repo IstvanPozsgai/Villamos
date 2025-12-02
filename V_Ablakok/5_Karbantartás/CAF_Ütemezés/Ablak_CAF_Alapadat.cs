@@ -45,8 +45,14 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
         private void Start()
         {
             AdatokCiklus = KézCiklus.Lista_Adatok(true);
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
+
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
+                GombLathatosagKezelo.Beallit(this);
+            else
+                Jogosultságkiosztás();
+
             Pályaszámokfeltöltése();
             Vizsgsorszámcombofeltölés();
             Üzemek_listázása();

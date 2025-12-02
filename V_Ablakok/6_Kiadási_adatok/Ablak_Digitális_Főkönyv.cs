@@ -46,7 +46,12 @@ namespace Villamos
             Panel5.Visible = false;
             Típusfeltöltés_melyik();
             Telephelyfeltöltés_Melyik();
-            GombLathatosagKezelo.Beallit(this);
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
+                GombLathatosagKezelo.Beallit(this);
+            else
+            { }    
         }
 
         private void BtnSúgó_Click(object sender, EventArgs e)

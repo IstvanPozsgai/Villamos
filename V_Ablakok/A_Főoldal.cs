@@ -2726,7 +2726,14 @@ namespace Villamos
         {
             try
             {
-                if (Program.PostásJogkör.Any(c => c != '0'))
+                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+                //ha nem akkor a régit használjuk
+                if (Program.PostásJogkör.Substring(0, 1) == "R")
+                { // Új jogosultságok
+                    Program.PostásJogosultságok = KézJog.Lista_Adatok().Where(a => a.UserId == Program.PostásNévId).ToList();
+                    Menü_Beállítása_Új();
+                }
+                else
                 {
                     //Régi jogosultságok lekérése
                     List<Adat_Belépés_Jogosultságtábla> Adatok = Kéz_Jogosultság.Lista_Adatok(lbltelephely.Text.Trim());
@@ -2741,12 +2748,6 @@ namespace Villamos
                         Program.PostásJogkör = Elem.Jogkörúj1;
                         Menükbeállítása();
                     }
-                }
-                else
-                {
-                    // Új jogosultságok
-                    Program.PostásJogosultságok = KézJog.Lista_Adatok().Where(a => a.UserId == Program.PostásNévId).ToList();
-                    Menü_Beállítása_Új();
                 }
             }
             catch (HibásBevittAdat ex)

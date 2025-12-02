@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Windows.Forms;
 using Villamos.V_Kezelők;
 using Villamos.Villamos_Adatszerkezet;
@@ -28,14 +27,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
         private void Start()
         {
-            //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
-            //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
-            if (Program.PostásJogkör.Any(c => c != '0'))
-            {
-            }
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
+                GombLathatosagKezelo.Beallit(this, "Főmérnökség");
             else
             {
-                GombLathatosagKezelo.Beallit(this, "Főmérnökség");
             }
             TáblaÍrás();
         }

@@ -54,9 +54,13 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
             Üzemek_listázása();
             CiklusrendCombo_feltöltés();
             this.Text = $"Pályaszámú {Adat.Azonosító} jármű {Adat.ID} számú vizsgálata";
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
+                GombLathatosagKezelo.Beallit(this);
+            else
+                Jogosultságkiosztás();
 
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
             AdatokKmAdatok = KézKmAdatok.Lista_Adatok();
         }
 
