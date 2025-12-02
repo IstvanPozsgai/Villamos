@@ -474,7 +474,7 @@ namespace Villamos.Villamos_Nyomtatványok
             // tartalékok kiírása
             Adatok = KFN_kép.Lista_Adatok(Cmbtelephely.Trim(), Dátum, napszak.Trim());
             Adatok = (from a in Adatok
-                      where a.Napszak == "_"
+                      where a.Napszak.Trim () == "_"
                       orderby a.Típus, a.Kocsikszáma descending, a.Szerelvény, a.Azonosító
                       select a).ToList();
 
@@ -761,7 +761,7 @@ namespace Villamos.Villamos_Nyomtatványok
             int sorvége;
             Adatok = KFN_kép.Lista_Adatok(Cmbtelephely.Trim(), Dátum, napszak.Trim());
             Adatok = (from a in Adatok
-                      where a.Státus == 4 && (a.Napszak == "-" || a.Napszak == "_")
+                      where a.Státus == 4 && (a.Napszak.Trim () == "-" || a.Napszak.Trim() == "_")
                       orderby a.Azonosító
                       select a).ToList();
 
