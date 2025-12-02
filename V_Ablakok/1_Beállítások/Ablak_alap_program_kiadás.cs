@@ -196,14 +196,12 @@ namespace Villamos
             {
                 Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
                 if (Cmbtelephely.Text.Trim() == "") return;
-                if (Program.PostásJogkör.Any(c => c != '0'))
-                {
-                    Fülekkitöltése();
-                }
-                else
-                {
+                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+                //ha nem akkor a régit használjuk
+                if (Program.PostásJogkör.Substring(0, 1) == "R")
                     GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
-                }
+                else
+                    Fülekkitöltése();
 
             }
             catch (HibásBevittAdat ex)

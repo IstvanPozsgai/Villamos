@@ -434,13 +434,13 @@ namespace Villamos
             {
                 CmbTelephely.Text = CmbTelephely.Items[CmbTelephely.SelectedIndex].ToStrTrim();
                 if (CmbTelephely.Text.Trim() == "") return;
-                if (Program.PostásJogkör.Any(c => c != '0'))
-                {
-
-                }
+                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+                //ha nem akkor a régit használjuk
+                if (Program.PostásJogkör.Substring(0, 1) == "R")
+                    GombLathatosagKezelo.Beallit(this, CmbTelephely.Text.Trim());
                 else
                 {
-                    GombLathatosagKezelo.Beallit(this, CmbTelephely.Text.Trim());
+                    
                 }
 
             }
