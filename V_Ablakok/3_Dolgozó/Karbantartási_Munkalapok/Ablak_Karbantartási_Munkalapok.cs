@@ -1411,7 +1411,13 @@ namespace Villamos.Villamos_Ablakok
         private void Minden_kiírása(int sor, string Utasítás_Cím, string Utasítás_leírás, string Paraméter)
         {
             //Minden kiírás
-            MyX.Kiir($"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}\n{Paraméter}", $"B{sor}");
+            string szöveg = "";
+            if (Paraméter.Trim() != "_")
+                szöveg = $"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}\n{Paraméter}";
+            else
+                szöveg = $"{Utasítás_Cím.Trim()}\n{Utasítás_leírás.Trim()}";
+
+            MyX.Kiir(szöveg, $"B{sor}");
             RichTextRun TextBeV = new RichTextRun
             {
                 Start = 0,
@@ -1535,12 +1541,12 @@ namespace Villamos.Villamos_Ablakok
                 MyX.Sormagasság(munkalap, $"{sor}:{sor}", sormagagasság);
                 MyX.Egyesít(munkalap, $"A{sor}:D{sor}");
                 MyX.Kiir("Km óra állás:", $"A{sor}");
-                MyX.Betű(munkalap, $"{sor}:{sor}", BeBetűVD);
+                MyX.Betű(munkalap, $"A{sor}:Q{sor}", BeBetűVD);
                 MyX.Vastagkeret(munkalap, $"A{sor}:D{sor}");
 
                 MyX.Egyesít(munkalap, $"N{sor}:Q{sor}");
                 MyX.Kiir("Verzió:", $"N{sor}");
-                MyX.Betű(munkalap, $"{sor}:{sor}", BeBetűVD);
+                MyX.Betű(munkalap, $"A{sor}:Q{sor}", BeBetűVD);
 
                 sor++;
                 MyX.Sormagasság(munkalap, $"{sor}:{sor}", sormagagasság);
@@ -1592,7 +1598,7 @@ namespace Villamos.Villamos_Ablakok
             MyX.Kiir("Befejező Dátum", $"E{sor}");
             MyX.Kiir("Rendelés Szám:", $"I{sor}");
             MyX.Kiir("Telephely", $"N{sor}");
-            MyX.Betű(munkalap, $"{sor}:{sor}", BeBetűVD);
+            MyX.Betű(munkalap, $"A{sor}:Q{sor}", BeBetűVD);
             MyX.Sormagasság(munkalap, $"{sor}:{sor}", sormagagasság);
             sor++;
             MyX.Egyesít(munkalap, $"A{sor}:D{sor}");
