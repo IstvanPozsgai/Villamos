@@ -33,10 +33,12 @@ namespace Villamos.V_Ablakok._1_Beállítások
             Típusfeltöltés();
             Táblaíró();
 
-            if (Program.PostásJogkör.Any(c => c != '0'))
-            { }
-            else
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
                 GombLathatosagKezelo.Beallit(this, "Főmérnökség");
+            else
+            { }
         }
 
         private void Ablak_Ciklus_Sorrend_Load(object sender, EventArgs e)

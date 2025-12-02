@@ -63,14 +63,12 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
             Eszterga_Valtozas?.Invoke();
             TablaMuvelet.ClearSelection();
 
-            if (Program.PostásJogkör.Any(c => c != '0'))
-            {
-                JogosultsagKiosztas();
-            }
-            else
-            {
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
                 GombLathatosagKezelo.Beallit(this, "Baross");
-            }
+            else
+                JogosultsagKiosztas();
 
             Btn_Csere.Visible = false;
             Btn_Sorrend.Visible = false;

@@ -23,9 +23,12 @@ namespace Villamos.Villamos_Ablakok.ICS_KCSV
             Dátum_ütem = dátum_ütem;
             Telephely = telephely;
             Adat = adat;
-
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
+                GombLathatosagKezelo.Beallit(this);
+            else
+                Jogosultságkiosztás();
         }
 
         public Ablak_ICS_KCSV_segéd()

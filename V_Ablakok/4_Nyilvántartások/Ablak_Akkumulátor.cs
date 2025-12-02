@@ -43,19 +43,18 @@ namespace Villamos
             {
                 MérésDátuma.MaxDate = DateTime.Today;
 
-                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
-                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
-                if (Program.PostásJogkör.Any(c => c != '0'))
+                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+                //ha nem akkor a régit használjuk
+                if (Program.PostásJogkör.Substring(0, 1) == "R")
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, CmbTelephely.Text.Trim());
+                }
+                else
                 {
                     Telephelyekfeltöltése();
                     Jogosultságkiosztás();
                     Rögzítésvezérlő.Visible = true;
-                }
-                else
-                {
-                    TelephelyekFeltöltéseÚj();
-                    GombLathatosagKezelo.Beallit(this, CmbTelephely.Text.Trim());
-
                 }
                 Fülekkitöltése();
                 Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;

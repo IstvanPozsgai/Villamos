@@ -57,14 +57,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         /// </summary>
         private void Ablak_Eszterga_Karbantartás_Napló_Load(object sender, EventArgs e)
         {
-            if (Program.PostásJogkör.Any(c => c != '0'))
-            {
-                JogosultsagKiosztas();
-            }
-            else
-            {
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
                 GombLathatosagKezelo.Beallit(this, "Baross");
-            }
+            else
+                JogosultsagKiosztas();
 
             TablaMuvelet.ClearSelection();
             TablaNaplo.ClearSelection();

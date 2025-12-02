@@ -32,14 +32,12 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
         private void Start()
         {
-            if (Program.PostásJogkör.Any(c => c != '0'))
-            {
-                Jogosultságkiosztás();
-            }
-            else
-            {
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
                 GombLathatosagKezelo.Beallit(this, "Főmérnökség");
-            }
+            else
+                Jogosultságkiosztás();
             Státuscombo_Feltöltés();
             Dátumtól.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
             dátumig.Value = new DateTime(DateTime.Today.Year, 12, 31);

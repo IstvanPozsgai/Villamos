@@ -34,8 +34,12 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         private void Start()
         {
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
+                GombLathatosagKezelo.Beallit(this);
+            else
+                Jogosultságkiosztás();
 
             if (Adat != null)
             {

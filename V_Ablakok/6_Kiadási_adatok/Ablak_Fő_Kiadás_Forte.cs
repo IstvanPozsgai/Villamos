@@ -33,9 +33,12 @@ namespace Villamos
         {
             Dátum.Value = DateTime.Today;
             Dátumról.Value = DateTime.Today;
-
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
+                GombLathatosagKezelo.Beallit(this);
+            else
+                Jogosultságkiosztás();
             Adatok_Forte = Kéz_Forte.Lista_Adatok(Dátum.Value.Year);
         }
 

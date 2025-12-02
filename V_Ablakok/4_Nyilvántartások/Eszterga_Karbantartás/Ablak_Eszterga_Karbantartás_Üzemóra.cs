@@ -58,14 +58,13 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         {
             TablaListazas();
 
-            if (Program.PostásJogkör.Any(c => c != '0'))
-            {
-                Jogosultsagkiosztas();
-            }
-            else
-            {
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
                 GombLathatosagKezelo.Beallit(this, "Baross");
-            }
+            else
+                Jogosultsagkiosztas();
+
             // A DataGridView adatforrásának kötése után automatikusan meghívja a ToroltTablaSzinezes metódust,
             // hogy a törölt státuszú sorokat színezve jelenítse meg.
             Tabla.DataBindingComplete += (s, ev) => Szinezes(Tabla);

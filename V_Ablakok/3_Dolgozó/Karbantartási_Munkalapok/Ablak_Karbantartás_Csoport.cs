@@ -37,15 +37,15 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
 
         private void Ablak_Karbantartás_Csoport_Load(object sender, EventArgs e)
         {
-            if (Program.PostásJogkör.Any(c => c != '0'))
-            {
-                Jogosultságkiosztás();
-            }
-            else
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
             {
                 TelephelyekFeltöltéseÚj();
                 GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
             }
+            else
+                Jogosultságkiosztás();
 
 
             Csoport_Típus_feltöltés();

@@ -60,9 +60,12 @@ namespace Villamos
             AdatokTelep = KézTelep.Lista_Adatok();
             Táblaalaphelyzet();
             Gombokfel();
-
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
+                GombLathatosagKezelo.Beallit(this);
+            else
+                Jogosultságkiosztás();
         }
 
         private void Ablak_Fő_Napiadatok_Load(object sender, EventArgs e)

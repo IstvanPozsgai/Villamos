@@ -72,14 +72,13 @@ namespace Villamos.Villamos_Ablakok
             }
 
             IgénylistaFeltötlés();
-            if (Program.PostásJogkör.Any(c => c != '0'))
-            {
-                Jogosultságkiosztás();
-            }
-            else
-            {
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
                 GombLathatosagKezelo.Beallit(this, "Baross");
-            }
+            else
+                Jogosultságkiosztás();
+
             Text_Dátum.Text = DátumésIdő.ToString("yyyy.MM.dd");
             Text_Idő.Text = DátumésIdő.ToString("HH:mm");
             Kiírás();

@@ -123,9 +123,13 @@ namespace Villamos.Villamos_Ablakok
             }
 
             Kiírja_Vizsgálat();
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
+                GombLathatosagKezelo.Beallit(this);
+            else
+                Jogosultságkiosztás();
 
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
             Vonalfeltöltés();
             Panel_Váltás();
         }

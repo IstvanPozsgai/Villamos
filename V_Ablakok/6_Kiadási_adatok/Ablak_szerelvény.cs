@@ -60,17 +60,17 @@ namespace Villamos.Ablakok
         {
             try
             {
-                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
-                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
-                if (Program.PostásJogkör.Any(c => c != '0'))
-                {
-                    Telephelyekfeltöltése();
-                    Jogosultságkiosztás();
-                }
-                else
+                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+                //ha nem akkor a régit használjuk
+                if (Program.PostásJogkör.Substring(0, 1) == "R")
                 {
                     TelephelyekFeltöltéseÚj();
                     GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+                else
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
                 }
                 Ellenőrzés();
                 List<Adat_Szerelvény> Adatok = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim(), true);

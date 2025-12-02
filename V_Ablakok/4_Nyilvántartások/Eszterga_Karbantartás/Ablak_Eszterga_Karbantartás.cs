@@ -108,16 +108,12 @@ namespace Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás
         {
             try
             {
-                // Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
-                // ha mind 0 akkor a GombLathatosagKezelo-t használjuk
-                if (Program.PostásJogkör.Any(c => c != '0'))
-                {
-                    Jogosultsagkiosztas();
-                }
-                else
-                {
+                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+                //ha nem akkor a régit használjuk
+                if (Program.PostásJogkör.Substring(0, 1) == "R")
                     GombLathatosagKezelo.Beallit(this, "Baross");
-                }
+                else
+                    Jogosultsagkiosztas();
 
                 // Tábla és átlag üzemóra beállítása
                 TablaListazas();

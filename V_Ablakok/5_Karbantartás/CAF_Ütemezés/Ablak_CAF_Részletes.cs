@@ -66,8 +66,12 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 AdatokKeresés();
                 KiírJobbOldal();
             }
-            GombLathatosagKezelo.Beallit(this);
-            Jogosultságkiosztás();
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
+                GombLathatosagKezelo.Beallit(this);
+            else
+                Jogosultságkiosztás();
         }
 
         private void Ablak_CAF_Részletes_Load(object sender, EventArgs e)
@@ -239,7 +243,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     {
                         Ütem_Köv_Számláló.BackColor = Color.LightPink;
                     }
-                }                
+                }
                 KiirPvizsgalat();
             }
             catch (HibásBevittAdat ex)
