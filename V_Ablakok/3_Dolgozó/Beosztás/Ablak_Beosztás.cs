@@ -1891,8 +1891,6 @@ namespace Villamos
 
                 Adat_egyeztetés_eseménye();
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-
                 Holtart.Be(hónap_hossz + 1);
                 Holtart.BackColor = Color.BlueViolet;
                 Cursor = Cursors.WaitCursor; // homok óra kezdete
@@ -1902,8 +1900,7 @@ namespace Villamos
 
                 MyX.Kiir(Cmbtelephely.Text.Trim() + $" telephely {Dátum.Value:yyyy.MMMM} havi beosztása", "A1");
                 MyX.Betű(munkalap, "A1", BeBetűV);
-                
-                MyX.Munkalap_átnevezés("Munka1", munkalap);
+                MyX.Munkalap_aktív(munkalap);
 
                 //Fejléc
                 MyX.Oszlopszélesség(munkalap, "A:A", 10);
@@ -2125,7 +2122,6 @@ namespace Villamos
                 MyX.NyomtatásiTerület_részletes(munkalap, BeNYom2);
 
                 // az excel tábla bezárása
-                MyX.Munkalap_aktív("Beosztás");
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
                 
