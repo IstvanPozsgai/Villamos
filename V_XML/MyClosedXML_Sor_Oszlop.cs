@@ -411,5 +411,33 @@ namespace Villamos
 
             }
         }
+        /// <summary>
+        /// Munkalapon a jelölt sor elé beszúr meghatározott számú üres sort.
+        /// </summary>
+        /// <param name="munkalap">munkalap neve</param>
+        /// <param name="sor">a sorszám ahova kell beszúrni (ez a sor lejjebb csúszik)</param>
+        /// <param name="beszúrás">beszúrandó sorok száma</param>
+        public static void SorBeszúrás(string munkalap, int sor, int beszúrás)
+        {
+            try
+            {
+                IXLWorksheet worksheet = xlWorkBook.Worksheet(munkalap);
+
+                if (sor <= 0) throw new ArgumentOutOfRangeException(nameof(sor), "A sorindexnek 1-nél nagyobbnak kell lennie.");
+                if (beszúrás <= 0) return;
+
+                worksheet.Row(sor).InsertRowsAbove(beszúrás);
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"SorBeszúrás(munkalap: {munkalap}, sor: {sor}, db: {beszúrás}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
     }
 }
