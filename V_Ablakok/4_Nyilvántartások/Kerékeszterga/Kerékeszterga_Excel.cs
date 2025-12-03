@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Excel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
-using MyX = Villamos.MyClosedXML_Excel;
-using MyF = Függvénygyűjtemény;
 using Villamos.V_Adatszerkezet;
+using Villamos.Villamos_Adatszerkezet;
+using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
+using MyE = Villamos.Module_Excel;
 
 namespace Villamos.Villamos_Ablakok.Kerékeszterga
 {
@@ -24,7 +27,9 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         readonly Kezelő_Dolgozó_Beosztás_Új KézBeo = new Kezelő_Dolgozó_Beosztás_Új();
         readonly Kezelő_Kerék_Eszterga_Naptár KézEsztNaptár = new Kezelő_Kerék_Eszterga_Naptár();
 
-        readonly Beállítás_Betű BeBetu = new Beállítás_Betű() { Vastag = true };
+        readonly Beállítás_Betű BeBetu = new Beállítás_Betű() { };
+        readonly Beállítás_Betű BeBetuVastag = new Beállítás_Betű() { Vastag = true };
+        readonly Beállítás_Betű BeBetuSzazalek = new Beállítás_Betű() { Formátum = "0%"};
 
         public Kerékeszterga_Excel(string fájl, DateTime dátum)
         {
@@ -95,11 +100,20 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 }
                 MyX.Rácsoz(munkalap,"A1:G" + sor);
                 MyX.Vastagkeret(munkalap,"A1:G" + sor);
-                MyX.Betű(munkalap, "A1:G1", BeBetu);
+                MyX.Betű(munkalap, "A1:G1", BeBetuVastag);
                 MyX.Háttérszín(munkalap,"A1:G1", System.Drawing.Color.Yellow);
                 MyX.Szűrés(munkalap, "A", "G", 1);
                 MyX.Oszlopszélesség(munkalap, "A:G");
-                MyX.NyomtatásiTerület_részletes(munkalap, "A1:G" + sor, "1:1", "", true);
+                //Munkalap, terület, sorismétlődés, oszlopismétlődés, álló
+                Beállítás_Nyomtatás beallitas_fejlec = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:G{sor}",
+                    IsmétlődőSorok = "1:1",
+                    IsmétlődőOszlopok = "",
+                    Álló = true
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, beallitas_fejlec);
             }
             catch (Exception ex)
             {
@@ -115,7 +129,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             {
 
                 string munkalap = "Beosztás";
-                MyX.Új_munkalap(munkalap);
+                MyX.Munkalap_Új(munkalap);
                 MyX.Kiir("Hr Azonosító", "A1");
                 MyX.Kiir("Név", "B1");
                 DateTime Hételső = MyF.Hét_elsőnapja(Dátum);
@@ -177,8 +191,16 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 MyX.Vastagkeret(munkalap,"A1:I" + sor);
                 MyX.Oszlopszélesség(munkalap, "A:B");
                 MyX.Oszlopszélesség(munkalap, "C:I", 5);
-                MyX.NyomtatásiTerület_részletes(munkalap, "A1:I" + sor, "1:1", "", true);
-                MyX.Aktív_Cella(munkalap, "A1");
+                Beállítás_Nyomtatás beallitas_dolgozoi = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:I{sor}",
+                    IsmétlődőSorok = "1:1",
+                    IsmétlődőOszlopok = "",
+                    Álló = true
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, beallitas_dolgozoi);
+                
             }
             catch (Exception ex)
             {
@@ -252,7 +274,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                           select a).ToList();
 
                 string munkalap = "Elvégzett";
-                MyX.Új_munkalap(munkalap);
+                MyX.Munkalap_Új(munkalap);
 
 
                 MyX.Oszlopszélesség(munkalap, "F:F", 70);
@@ -331,8 +353,16 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
                 MyX.Háttérszín(munkalap,"A1:G1", System.Drawing.Color.Yellow);
                 MyX.Szűrés(munkalap, "A", "G", 1);
-                MyX.NyomtatásiTerület_részletes(munkalap, "A1:G" + sor, "1:1", "", true);
-                MyX.Aktív_Cella(munkalap, "A1");
+                Beállítás_Nyomtatás beallitas_elvegzett = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:G{sor}",
+                    IsmétlődőSorok = "1:1",
+                    IsmétlődőOszlopok = "",
+                    Álló = true
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, beallitas_elvegzett);
+                
             }
             catch (Exception ex)
             {
@@ -357,7 +387,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                           select a).ToList();
 
                 string munkalap = "GépIdő";
-                MyX.Új_munkalap(munkalap);
+                MyX.Munkalap_Új(munkalap);
                 MyX.Kiir("Tevékenység", "A1");
                 MyX.Kiir("Gépidő", "B1");
                 MyX.Kiir("%-os megoszlás", "C1");
@@ -398,7 +428,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 for (int i = 2; i <= sor; i++)
                 {
                     MyX.Kiir($"=RC[-1]/{összesen}", "C" + i);
-                    MyX.Betű("C" + i, "Percent", "");
+                    MyX.Betű(munkalap, "C" + i, BeBetuSzazalek);
                 }
 
                 MyX.Diagram(munkalap, 10, 150, 500, 500, "A1", "B" + sor);
@@ -417,7 +447,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
 
                 MyX.NyomtatásiTerület_részletes(munkalap, "A1:Q" + sor, "1:1", "", true);
-                MyX.Aktív_Cella(munkalap, "A1");
+                
             }
             catch (Exception ex)
             {
