@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
+using Villamos.V_Adatszerkezet;
 
 
 namespace Villamos
@@ -16,6 +17,7 @@ namespace Villamos
         private static readonly Dictionary<string, Beállítás_Nyomtatás> NyomtatásiBeállítások = new Dictionary<string, Beállítás_Nyomtatás>();
         private static readonly List<Beállítás_Ferde> FerdeVonalak = new List<Beállítás_Ferde>();
         private static readonly List<Beállítás_CellaSzöveg> CellaBeállítás = new List<Beállítás_CellaSzöveg>();
+        private static readonly List<Beállítás_Diagram> DiagramBeállítások = new List<Beállítás_Diagram>();
 
         public static int sor;
         public static int oszlop;
@@ -56,6 +58,13 @@ namespace Villamos
 
                 xlWorkBook.SaveAs(fájlnév);
                 xlWorkBook.Dispose();
+
+                if (DiagramBeállítások.Count > 0)
+                {
+                    AlkalmazDiagramokat(fájlnév, DiagramBeállítások);
+                    DiagramBeállítások.Clear();
+                }
+
                 // Utólagos OpenXml módosítás – CSAK ha van fagyasztás
                 if (FagyasztandóSorok.Count > 0)
                 {
@@ -130,6 +139,7 @@ namespace Villamos
 
             }
         }
+
 
 
     }

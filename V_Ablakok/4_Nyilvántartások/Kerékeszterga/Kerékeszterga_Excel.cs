@@ -10,6 +10,7 @@ using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 using MyE = Villamos.Module_Excel;
+using ClosedXML.Excel;
 
 namespace Villamos.Villamos_Ablakok.Kerékeszterga
 {
@@ -435,7 +436,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                     MyX.Betű(munkalap, "C" + i, BeBetuSzazalek);
                 }
 
-                //MyX.Diagram(munkalap, 10, 150, 500, 500, "A1", "B" + sor);
+                MyX.Diagram_Beallit(munkalap, 10, 150, 500, 500, "A1", "B" + sor);
                 MyX.Rácsoz(munkalap,"A1:C" + sor);
                 MyX.Vastagkeret(munkalap,"A1:C" + sor);
                 MyX.Oszlopszélesség(munkalap, "A:C");
@@ -447,7 +448,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 MyX.Vastagkeret(munkalap,"l1:m3");
                 MyX.Oszlopszélesség(munkalap, "l:m");
                 MyX.Háttérszín(munkalap,"l1:m1", System.Drawing.Color.Yellow);
-                //MyX.Diagram(munkalap, 600, 150, 500, 500, "l1", "m3");
+                MyX.Diagram_Beallit(munkalap, 600, 150, 500, 500, "l1", "m3");
 
                 Beállítás_Nyomtatás beallitas_gepido = new Beállítás_Nyomtatás
                 {
