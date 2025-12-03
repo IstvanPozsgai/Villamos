@@ -350,6 +350,7 @@
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\list.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Anyagtörzs.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Anyagok.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Beallitas_Diagram.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Ciklus_Sorrend.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Beosztás_Új.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztagia_Futás.cs" />
@@ -1404,6 +1405,7 @@
     <Compile Include="V_XML\MyClosedXML_Betű.cs" />
     <Compile Include="V_XML\MyClosedXML_Cella.cs" />
     <Compile Include="V_XML\MyClosedXML_CellaBetű.cs" />
+    <Compile Include="V_XML\MyClosedXML_Diagram.cs" />
     <Compile Include="V_XML\MyClosedXML_Excel.cs" />
     <Compile Include="V_XML\MyClosedXML_Ferde.cs" />
     <Compile Include="V_XML\MyClosedXML_Keret.cs" />
