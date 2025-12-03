@@ -13,24 +13,34 @@ namespace Villamos
 {
     public static partial class MyClosedXML_Excel
     {
+        // EREDETI, kompatibilis hívás: cím nélkül
         public static void Diagram_Beallit(
             string munkalap,
             int felsőx,
             int felsőy,
-            int alsóx,
-            int alsóy,
             string táblafelső,
             string táblaalsó)
+        {
+            Diagram_Beallit(munkalap, felsőx, felsőy, táblafelső, táblaalsó, null);
+        }
+
+        // ÚJ overload: opcionális diagramcím
+        public static void Diagram_Beallit(
+            string munkalap,
+            int felsőx,
+            int felsőy,
+            string táblafelső,
+            string táblaalsó,
+            string diagramCim)
         {
             DiagramBeállítások.Add(new Beállítás_Diagram
             {
                 Munkalap = munkalap,
                 FelsőX = felsőx,
                 FelsőY = felsőy,
-                AlsóX = alsóx,
-                AlsóY = alsóy,
                 TáblaFelső = táblafelső,
-                TáblaAlsó = táblaalsó
+                TáblaAlsó = táblaalsó,
+                DiagramCim = diagramCim
             });
         }
 
@@ -79,18 +89,18 @@ namespace Villamos
 
         /// <summary>
         /// Kördiagram létrehozása megadott munkalapra és tartományra.
-        /// felsőx/felsőy/alsóx/alsóy: most nem használjuk (csak a régi Interop szignatúra miatt maradnak).
+        /// felsőx/felsőy/alsóx/alsóy: most pozicionálásra vannak használva (oszlop/sor becslés).
         /// tábla: 2 oszlop (bal = kategória, jobb = érték), fejléc az első sorban.
+        /// diagramCim: ha nem null/üres, akkor chart title-ként megjelenik.
         /// </summary>
         public static void Diagram(
             SpreadsheetDocument document,
             string munkalap,
             int felsőx,
             int felsőy,
-            int alsóx,
-            int alsóy,
             string táblafelső,
-            string táblaalsó)
+            string táblaalsó,
+            string diagramCim)
         {
             var wbPart = document.WorkbookPart;
             var sheet = wbPart.Workbook.Descendants<Sheet>()
@@ -172,7 +182,34 @@ namespace Villamos
             chartSpace.Append(new C.EditingLanguage() { Val = "hu-HU" });
 
             var chart = new C.Chart();
-            chart.Append(new C.AutoTitleDeleted() { Val = true });
+
+            // Cím: ha van diagramCim, akkor Title, különben AutoTitleDeleted
+            if (!string.IsNullOrWhiteSpace(diagramCim))
+            {
+                var title = new C.Title();
+
+                var chartText = new C.ChartText();
+                var richText = new C.RichText();
+
+                richText.Append(new A.BodyProperties());
+                richText.Append(new A.ListStyle());
+
+                var para = new A.Paragraph();
+                var run = new A.Run();
+                run.Append(new A.RunProperties() { Language = "hu-HU" });
+                run.Append(new A.Text(diagramCim));
+                para.Append(run);
+
+                richText.Append(para);
+                chartText.Append(richText);
+                title.Append(chartText);
+
+                chart.Append(title);
+            }
+            else
+            {
+                chart.Append(new C.AutoTitleDeleted() { Val = true });
+            }
 
             var plotArea = new C.PlotArea();
             plotArea.Append(new C.Layout());
@@ -185,19 +222,18 @@ namespace Villamos
             series.Append(new C.Index() { Val = idx });
             series.Append(new C.Order() { Val = idx });
 
-            // ➜ ADATCÍMKÉK (feliratok) beállítása
+            // Feliratok beállítása
             var dLbls = new C.DataLabels(
                 new C.ShowLegendKey() { Val = false },
-                new C.ShowValue() { Val = true },   // numerikus érték
-                new C.ShowCategoryName() { Val = true },   // kategórianév
+                new C.ShowValue() { Val = false },   
+                new C.ShowCategoryName() { Val = true },   
                 new C.ShowSeriesName() { Val = false },
-                new C.ShowPercent() { Val = false },  // ha %-ot szeretnél, tedd true-ra, és Value-t false-ra
+                new C.ShowPercent() { Val = true },  
                 new C.ShowBubbleSize() { Val = false },
                 new C.ShowLeaderLines() { Val = true }
             );
             series.Append(dLbls);
 
-            // Kategóriák literalban
             var stringLit = new C.StringLiteral();
             stringLit.Append(new C.PointCount() { Val = (uint)pontok.Count });
             for (uint i = 0; i < pontok.Count; i++)
@@ -237,22 +273,29 @@ namespace Villamos
             chartPart.ChartSpace = chartSpace;
             chartPart.ChartSpace.Save();
 
-            // 4) Elhelyezés a munkalapon (TwoCellAnchor)
+            // 4) Elhelyezés a munkalapon (TwoCellAnchor) – felsőx/felsőy alapján
             var wsDr = drawingsPart.WorksheetDrawing;
-
             var twoCellAnchor = new Xdr.TwoCellAnchor();
 
+            // felsőx / felsőy → kb. oszlop/sor index (durva skálázás)
+            int colStart = Math.Max(0, felsőx / 100);  // pl. 10 → 0, 600 → 6 körül
+            int rowStart = Math.Max(0, felsőy / 25);   // pl. 150 → 6 körül
+
+            // adunk neki egy fix "méretet" (6 oszlop széles, 15 sor magas)
+            int colEnd = colStart + 6;
+            int rowEnd = rowStart + 15;
+
             var fromMarker = new Xdr.FromMarker(
-                new Xdr.ColumnId("4"),   // E oszlop
+                new Xdr.ColumnId(colStart.ToString()),
                 new Xdr.ColumnOffset("0"),
-                new Xdr.RowId("1"),      // 2. sor
+                new Xdr.RowId(rowStart.ToString()),
                 new Xdr.RowOffset("0")
             );
 
             var toMarker = new Xdr.ToMarker(
-                new Xdr.ColumnId("11"),  // L oszlop
+                new Xdr.ColumnId(colEnd.ToString()),
                 new Xdr.ColumnOffset("0"),
-                new Xdr.RowId("20"),     // 21. sor
+                new Xdr.RowId(rowEnd.ToString()),
                 new Xdr.RowOffset("0")
             );
 
@@ -306,10 +349,9 @@ namespace Villamos
                         beállítás.Munkalap,
                         beállítás.FelsőX,
                         beállítás.FelsőY,
-                        beállítás.AlsóX,
-                        beállítás.AlsóY,
                         beállítás.TáblaFelső,
-                        beállítás.TáblaAlsó);
+                        beállítás.TáblaAlsó,
+                        beállítás.DiagramCim);
                 }
             }
         }
