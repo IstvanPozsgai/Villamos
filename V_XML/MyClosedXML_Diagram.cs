@@ -184,7 +184,18 @@ namespace Villamos
             var series = new C.PieChartSeries();
             series.Append(new C.Index() { Val = idx });
             series.Append(new C.Order() { Val = idx });
-            // SeriesText most szándékosan nincs – opcionális
+
+            // ➜ ADATCÍMKÉK (feliratok) beállítása
+            var dLbls = new C.DataLabels(
+                new C.ShowLegendKey() { Val = false },
+                new C.ShowValue() { Val = true },   // numerikus érték
+                new C.ShowCategoryName() { Val = true },   // kategórianév
+                new C.ShowSeriesName() { Val = false },
+                new C.ShowPercent() { Val = false },  // ha %-ot szeretnél, tedd true-ra, és Value-t false-ra
+                new C.ShowBubbleSize() { Val = false },
+                new C.ShowLeaderLines() { Val = true }
+            );
+            series.Append(dLbls);
 
             // Kategóriák literalban
             var stringLit = new C.StringLiteral();
