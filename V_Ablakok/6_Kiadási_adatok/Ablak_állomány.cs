@@ -9,7 +9,6 @@ using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -106,7 +105,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\állomány.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -438,7 +437,7 @@ namespace Villamos
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
 
-                MyE.Megnyitás(fájlexc);
+                MyX.ExcelMegnyitás(fájlexc);
                 Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
