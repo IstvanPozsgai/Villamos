@@ -2202,6 +2202,7 @@ namespace Villamos
             try
             {
                 MyX.ExcelLétrehozás();
+                // JAVÍTANDÓ:Ha adatok néven hozzuk létre akkor nem kell átnevezni
                 string munkalap = "Adatok";
                 MyX.Munkalap_átnevezés("Munka1", munkalap);
                 DataTable dataTable = MyF.ToDataTable(KézKmAdatok.Lista_Adatok().OrderBy(a => a.Azonosító).ToList());
@@ -2214,6 +2215,7 @@ namespace Villamos
                 MyX.Betű(munkalap, "K:K", BeBetűD);
 
                 // kiírjuk az évet, hónapot és a 2 betűs vizsgálatot
+                // JAVÍTANDÓ:Reggel elmondtam, hogy #KÉPLET#, meg kellene nézni a kódot
                 MyX.Kiir("=YEAR(RC[-15])", "v2");
                 MyX.Kiir("=MONTH(RC[-16])", "w2");
                 MyX.Kiir("=LEFT(RC[-19],2)", "x2");
@@ -2236,6 +2238,7 @@ namespace Villamos
 
                 //Nyomtatási terület kijelülése
                 // MyX.NyomtatásiTerület_részletes("Adatok", "A1:X" + utolsósor, "$1:$1", "", true);
+                // JAVÍTANDÓ:alapértéket miért kell beállítani mégegyszer?
                 Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
                 {
                     NyomtatásiTerület = "A1:X" + utolsósor, 
@@ -2274,7 +2277,7 @@ namespace Villamos
 
                 MyX.ExcelMentés(_fájlexc);
                 MyX.ExcelBezárás();
-
+                // JAVÍTANDÓ:Nem jó
                 MyX.ExcelMegnyitás(_fájlexc);
                 FőHoltart.Ki();
 

@@ -1173,9 +1173,11 @@ namespace Villamos
                 if (TáblaOktatás.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem.");
 
                 int hányember = TáblaOktatás.SelectedRows.Count;
+                // JAVÍTANDÓ:Ezt hogy tesztelted? Hiányzik .xlsx!
                 string fájlexc = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Jelenléti_Oktatáshoz-{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}";
 
                 // formázáshoz
+                // JAVÍTANDÓ:
                 MyX.ExcelLétrehozás();
                 string munkalap = "Munka1";
                 MyX.Munkalap_betű(munkalap, Bebetű);
@@ -1318,6 +1320,7 @@ namespace Villamos
                         MyX.Kiir($"{TáblaOktatás.Rows[j].Cells[1].Value}", $"c{sor}");
                         // E-mail
                         TextBox1.Text += $"{TáblaOktatás.Rows[j].Cells[1].Value}\n\r";
+                        // JAVÍTANDÓ:nem kell
                         MyX.Aktív_Cella(munkalap, $"c{sor}");
                         if (AdatokDolg != null)
                         {
@@ -1327,8 +1330,8 @@ namespace Villamos
                             if (munkakör != null)
                             {
                                 MyX.Kiir(munkakör, $"d{sor}");
-                                if (munkakör.Length > 30)
-                                    MyX.Sortörésseltöbbsorba(munkalap, $"d{sor}");
+                                // JAVÍTANDÓ:csak azokat a cellákat kell kijelölni amire szükség van!
+                                if (munkakör.Length > 30)                                    MyX.Sortörésseltöbbsorba(munkalap, $"d{sor}");
                             }
                         }
                         MyX.Aktív_Cella(munkalap, $"d{sor}");
@@ -1363,6 +1366,7 @@ namespace Villamos
                 //                                10, 13,
                 //                                true, false,
                 //                                "Álló");
+                // JAVÍTANDÓ:Csak azokat kell beállítani amiket használni akarunk az alapértéket nem kell ismételten megadni.
                 Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
                 {
                     NyomtatásiTerület = $"a1:g{sor}",
@@ -1391,11 +1395,12 @@ namespace Villamos
                     LapMagas = 1,
                     Papírméret = "A4"
                 };
-                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
+          //      MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
-                MyX.ExcelMegnyitás(fájlexc);
+                // JAVÍTANDÓ:Nem jó függvény
+              //  MyX.ExcelMegnyitás(fájlexc);
 
                 Holtart.Ki();
                 MessageBox.Show("A nyomtatvány elkészült. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
