@@ -437,7 +437,7 @@ namespace Villamos
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
 
-                MyX.ExcelMegnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
                 Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
