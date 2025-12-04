@@ -1183,7 +1183,7 @@ namespace Villamos
             Cursor = Cursors.WaitCursor; // homok óra kezdete
             Visszacsukcsoport();
             Csoport_listáz();
-            Panel2.Visible = false;
+            Panel2.Visible = true ;
             Cursor = Cursors.Default; // homokóra vége
         }
 
