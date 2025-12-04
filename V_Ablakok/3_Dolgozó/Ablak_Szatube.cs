@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
+using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -30,6 +33,13 @@ namespace Villamos
         readonly Kezelő_Kiegészítő_főkönyvtábla KézFő = new Kezelő_Kiegészítő_főkönyvtábla();
 
         List<Adat_Szatube_Szabadság> Adatok_Szabadság = new List<Adat_Szatube_Szabadság>();
+
+        readonly Beállítás_Betű BeBetu = new Beállítás_Betű() { };
+        readonly Beállítás_Betű BeBetuDoltVastag = new Beállítás_Betű() { Dőlt = true, Vastag = true};
+        readonly Beállítás_Betű BeBetuSzazados = new Beállítás_Betű() { Formátum = "0.00" };
+
+        readonly Beállítás_Betű BeBetuCalibri10 = new Beállítás_Betű() { Név="Calibri", Méret=10 };
+        readonly Beállítás_Betű BeBetuCalibri12 = new Beállítás_Betű() { Név = "Calibri", Méret = 12 };
 
 
         public Ablak_Szatube()
@@ -800,7 +810,7 @@ namespace Villamos
                     // ha négy név van vagy ha a jelöltek számát elértük, akkor nyomtat majd a beírt adatokat törli
                     if (elem == 4)
                     {
-                        MyX.Nyomtatás(munkalap, 1, 1);
+                        //MyX.Nyomtatás(munkalap, 1, 1);
                         Laptisztítás();
                         elem = 0;
                     }
@@ -808,7 +818,7 @@ namespace Villamos
                 }
                 if (elem != 0)
                 {
-                    MyX.Nyomtatás(munkalap, 1, 1);
+                    //MyX.Nyomtatás(munkalap, 1, 1);
                     Laptisztítás();
                 }
                 Laptisztítás();
@@ -1296,11 +1306,9 @@ namespace Villamos
                     Holtart.Lép();
                 }
                 MyX.Kiir("Összesen:", "a" + sor);
-                //JAV:BETŰ
-                MyX.Betű("A" + sor, false, true, true);
+                MyX.Betű(munkalap, "A" + sor, BeBetuDoltVastag);
                 MyX.Kiir(összesen.ToString(), "b" + sor);
-                //JAV:BETŰ
-                MyX.Betű("B" + sor, false, true, true);
+                MyX.Betű(munkalap, "B" + sor, BeBetuDoltVastag);
 
                 MyX.Rácsoz(munkalap, "a9:b" + sor);
                 MyX.Vastagkeret(munkalap, "a9:b" + sor);
@@ -1343,11 +1351,9 @@ namespace Villamos
                 }
 
                 MyX.Kiir("Összesen:", "a" + sor);
-                //JAV:BETŰ
-                MyX.Betű("A" + sor, false, true, true);
+                MyX.Betű(munkalap, "A" + sor, BeBetuDoltVastag);
                 MyX.Kiir(kivett.ToString(), "d" + sor);
-                //JAV:BETŰ
-                MyX.Betű("D" + sor, false, true, true);
+                MyX.Betű(munkalap, "D" + sor, BeBetuDoltVastag);
                 MyX.Rácsoz(munkalap, "a" + eleje.ToString() + ":e" + sor);
                 MyX.Vastagkeret(munkalap, "a" + eleje.ToString() + ":e" + sor);
                 MyX.Vastagkeret(munkalap, "a" + eleje.ToString() + ":e" + (eleje + 1).ToString());
@@ -1355,11 +1361,14 @@ namespace Villamos
                 sor += 2;
                 MyX.Kiir("A " + Text.Substring(0, 4) + " évről marad:", "a" + sor);
                 MyX.Kiir((összesen - kivett).ToString(), "d" + sor);
-                //JAV:BETŰ
-                MyX.Betű(sor + ":" + sor, false, true, true);
-
-                //JAV:NYOMTAT
-                MyX.NyomtatásiTerület_részletes(munkalap, "a1:e" + sor, "", "", true);
+                MyX.Betű(munkalap, sor + ":" + sor, BeBetuDoltVastag);
+                Beállítás_Nyomtatás beallitas_szabadsag = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:E{sor}",
+                    Álló = true
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, beallitas_szabadsag);
 
                 MyX.ExcelMentés(fájlexc + ".xlsx");
                 MyX.ExcelBezárás();
@@ -1413,7 +1422,7 @@ namespace Villamos
                     MyX.Kiir(darabol[1].Trim(), "aa10");
                 }
                 //JAV:NYOMTAT
-                MyX.Nyomtatás(munkalap, 1, 1);
+                //MyX.Nyomtatás(munkalap, 1, 1);
                 for (int i = 1; i < 11; i++)
                     MyX.Kiir("", "AA" + i);
 
@@ -1544,7 +1553,7 @@ namespace Villamos
                 // excel tábla érdemi része
                 // ************************
                 string munkalap = "Munka1";
-                MyX.Munkalap_betű("Calibri", 12);
+                MyX.Munkalap_betű(munkalap, BeBetuCalibri12);
 
                 MyX.Oszlopszélesség(munkalap, "A:A", 4);
                 MyX.Oszlopszélesség(munkalap, "b:b", 30);
@@ -1645,8 +1654,7 @@ namespace Villamos
 
 
                         MyX.Kiir("=" + Tábla.Rows[i].Cells[4].Value.ToStrTrim() + "/60", "g" + sor);
-                        //JAV:BETŰ
-                        MyX.Betű("g" + sor, "", "0.00");
+                        MyX.Betű(munkalap, "g" + sor, BeBetuSzazados);
                         MyX.Igazít_vízszintes(munkalap, $"G{sor}", "bal");
 
                         válasz = Tábla.Rows[i].Cells[5].Value.ToStrTrim();
@@ -1746,9 +1754,14 @@ namespace Villamos
                 // ****************************
                 // excel tábla érdemi rész vége
                 // ****************************
-                //JAV:NYOMTAT
-                MyX.NyomtatásiTerület_részletes(munkalap, "a1:k" + sor, "", "", false);
-                MyX.Nyomtatás(munkalap, 1, 1);
+                Beállítás_Nyomtatás beallitas_tulora = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:K{sor}",
+                    Álló = true
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, beallitas_tulora);
+                //MyX.Nyomtatás(munkalap, 1, 1);
 
 
                 Holtart.Ki();
@@ -1798,7 +1811,7 @@ namespace Villamos
                 // ************************
                 // excel tábla érdemi része
                 // ************************
-                MyX.Munkalap_betű("Calibri", 10);
+                MyX.Munkalap_betű(munkalap, BeBetuCalibri10);
 
                 MyX.Oszlopszélesség(munkalap, "A:A", 19);
                 MyX.Oszlopszélesség(munkalap, "b:g", 7);
@@ -1991,8 +2004,15 @@ namespace Villamos
                     MyX.Kiir(Beosztás, "d30");
                     MyX.Kiir(Beosztás, "m30");
                 }
-                //JAV: NYOMTAT
-                MyX.NyomtatásiTerület_részletes(munkalap, "a1:p30", "", "", false, "1", "1");
+                Beállítás_Nyomtatás beallitas_egyeni = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:P30",                    
+                    Álló = false,
+                    LapSzéles=1,
+                    LapMagas=1
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, beallitas_egyeni);
 
                 List<Adat_Dolgozó_Alap> DolgAdatok = KézDolgAlap.Lista_Adatok(CmbTelephely.Text.Trim());
 
@@ -2090,7 +2110,7 @@ namespace Villamos
                     MyX.Kiir(Math.Round((double.Parse(Tábla.SelectedRows[i].Cells[4].Value.ToString()) / 60d), 2) + " óra", "l14");
 
                     //JAV:NYOMTAT
-                    MyX.Nyomtatás(munkalap, 1, 1);
+                    //MyX.Nyomtatás(munkalap, 1, 1);
                 }
                 // a státusokat átállítja
                 List<double> Sorszámok = new List<double>();
