@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás;
 using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Kezelők;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -798,7 +797,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -841,7 +840,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga
                 PDFtabla(fajlNev, TablaMuvelet);
 
                 MessageBox.Show($"Elkészült a PDF fájl:\n{fajlNev}", "Sikeres mentés", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fajlNev);
+                MyF.Megnyitás(fajlNev);
             }
             catch (HibásBevittAdat ex)
             {
