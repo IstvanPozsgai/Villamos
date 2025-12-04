@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -23,6 +23,7 @@ namespace Villamos
         List<Adat_Épület_Adattábla> AdatokÉptakarításAdat = new List<Adat_Épület_Adattábla>();
         List<Adat_Takarítás_Opció> AdatokTakOpció = new List<Adat_Takarítás_Opció>();
 
+        readonly string munkalap = "Munka1";
 #pragma warning disable IDE0044 // Add readonly modifier
         DataTable AdatTábla = new DataTable();
         DataTable AdatTábla1 = new DataTable();
@@ -227,7 +228,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Épület_törzsadatok.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -503,7 +504,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, Tábla1);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -539,17 +540,18 @@ namespace Villamos
                     fájlexc = OpenFileDialog1.FileName;
                 else
                     return;
-                MyE.ExcelMegnyitás(fájlexc);
-                MyE.Munkalap_aktív("Munka1");
+                
+                MyX.ExcelMegnyitás(fájlexc);
+                MyX.Munkalap_aktív(munkalap);
                 int sor = 2;
                 List<Adat_Épület_Takarítás_Osztály> AdatokGyM = new List<Adat_Épület_Takarítás_Osztály>();
                 List<Adat_Épület_Takarítás_Osztály> AdatokGyR = new List<Adat_Épület_Takarítás_Osztály>();
-                while (MyE.Beolvas($"A{sor}").Trim() != "_")
+                while (MyX.Beolvas(munkalap,$"A{sor}").Trim() != "_")
                 {
-                    string osztály = MyE.Beolvas("A" + sor.ToString()).Trim();
-                    double E3 = double.TryParse(MyE.Beolvas($"D{sor}").Trim(), out double E3P) ? E3P : 0;
-                    double E1 = double.TryParse(MyE.Beolvas($"B{sor}").Trim(), out double E1P) ? E1P : 0;
-                    double E2 = double.TryParse(MyE.Beolvas($"C{sor}").Trim(), out double E2P) ? E2P : 0;
+                    string osztály = MyX.Beolvas(munkalap, "A" + sor.ToString()).Trim();
+                    double E3 = double.TryParse(MyX.Beolvas(munkalap, $"D{sor}").Trim(), out double E3P) ? E3P : 0;
+                    double E1 = double.TryParse(MyX.Beolvas(munkalap, $"B{sor}").Trim(), out double E1P) ? E1P : 0;
+                    double E2 = double.TryParse(MyX.Beolvas(munkalap, $"C{sor}").Trim(), out double E2P) ? E2P : 0;
 
                     Adat_Épület_Takarítás_Osztály AdatTakOsztály = (from a in AdatokTakOsztály
                                                                     where a.Osztály == osztály.Trim()
@@ -569,7 +571,7 @@ namespace Villamos
                 }
                 if (AdatokGyR.Count > 1) KézOsztály.Rögzítés(Cmbtelephely.Text.Trim(), AdatokGyR);
                 if (AdatokGyM.Count > 1) KézOsztály.Módosítás(Cmbtelephely.Text.Trim(), AdatokGyM);
-                MyE.ExcelBezárás();
+                MyX.ExcelBezárás();
                 MessageBox.Show("Az Excel tábla feldolgozása megtörtént. !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Osztálykiirás();
 
@@ -612,12 +614,12 @@ namespace Villamos
                     return;
 
                 fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
-                MyE.ExcelLétrehozás();
+                MyX.ExcelLétrehozás();
 
-                MyE.Kiir("Megnevezés", "A1");
-                MyE.Kiir("E1 Egységár", "B1");
-                MyE.Kiir("E2 Egységár", "C1");
-                MyE.Kiir("E3 Egységár", "D1");
+                MyX.Kiir("Megnevezés", "A1");
+                MyX.Kiir("E1 Egységár", "B1");
+                MyX.Kiir("E2 Egységár", "C1");
+                MyX.Kiir("E3 Egységár", "D1");
                 int sor = 1;
                 //kitöljük az megnevezéseket
                 List<Adat_Épület_Takarítás_Osztály> Adatok = KézOsztály.Lista_Adatok(Cmbtelephely.Text.Trim());
@@ -628,14 +630,42 @@ namespace Villamos
                 foreach (Adat_Épület_Takarítás_Osztály rekord in Adatok)
                 {
                     sor++;
-                    MyE.Kiir(rekord.Osztály, "A" + sor);
+                    MyX.Kiir(rekord.Osztály, "A" + sor);
                 }
 
-                MyE.Oszlopszélesség("Munka1", "A:D");
-                MyE.Rácsoz("a1:D" + sor);
-                MyE.NyomtatásiTerület_részletes("Munka1", "A1:D" + sor, "", "", true);
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
+                MyX.Oszlopszélesség(munkalap, "A:D");
+                MyX.Rácsoz(munkalap, "a1:D" + sor);
+                //MyX.NyomtatásiTerület_részletes(munkalap, "A1:D" + sor, "", "", true);
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    NyomtatásiTerület = "A1:D" + sor,
+                    IsmétlődőSorok = "",       
+                    IsmétlődőOszlopok = "",
+                    Álló = true,              
+
+                    LapSzéles = 1,
+                    LapMagas = 1,
+                    Papírméret = "A4",
+                    BalMargó = 15,
+                    JobbMargó = 15,
+                    FelsőMargó = 20,
+                    AlsóMargó = 20,
+                    FejlécMéret = 13,
+                    LáblécMéret = 13,
+
+                    FejlécKözép = Program.PostásNév.Trim(),
+                    FejlécJobb = DateTime.Now.ToString("yyyy.MM.dd HH:mm"),
+                    LáblécKözép = "&P/&N",
+
+                    FüggKözép = false,
+                    VízKözép = false
+                };
+
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
+
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
+                MyF.Megnyitás(fájlexc);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Module_Excel.Megnyitás(fájlexc + ".xlsx");
@@ -801,7 +831,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, Tábla2);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1199,7 +1229,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, Opció_Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
