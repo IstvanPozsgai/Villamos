@@ -635,7 +635,6 @@ namespace Villamos
 
                 MyX.Oszlopszélesség(munkalap, "A:D");
                 MyX.Rácsoz(munkalap, "a1:D" + sor);
-                //MyX.NyomtatásiTerület_részletes(munkalap, "A1:D" + sor, "", "", true);
                 Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
                 {
                     NyomtatásiTerület = "A1:D" + sor,
