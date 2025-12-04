@@ -1145,7 +1145,7 @@ namespace Villamos
                 MyX.DataTableToXML(fájlexc, TáblaAdat);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyX.ExcelMegnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

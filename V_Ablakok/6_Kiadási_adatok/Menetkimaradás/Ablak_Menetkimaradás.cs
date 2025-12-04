@@ -328,7 +328,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\menetkimaradás.html";
-                Module_Excel.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -456,7 +456,7 @@ namespace Villamos
                     return;
 
                 MyX.DataGridViewToXML(fájlexc, Tábla);
-                MyX.ExcelMegnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
@@ -696,7 +696,7 @@ namespace Villamos
                 Html_szöveg += "</body></html>";
 
                 Holtart.Ki();
-                MyX.ExcelMegnyitás(EgyTerjesztés.Szöveg);
+                MyF.Megnyitás(EgyTerjesztés.Szöveg);
             }
             catch (HibásBevittAdat ex)
             {
