@@ -613,7 +613,7 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
+
                 MyX.ExcelLétrehozás();
 
                 MyX.Kiir("Megnevezés", "A1");
@@ -664,10 +664,8 @@ namespace Villamos
 
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
-                MyF.Megnyitás(fájlexc);
-
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyF.Megnyitás(fájlexc + ".xlsx");
+                MyF.Megnyitás(fájlexc );
             }
             catch (HibásBevittAdat ex)
             {
