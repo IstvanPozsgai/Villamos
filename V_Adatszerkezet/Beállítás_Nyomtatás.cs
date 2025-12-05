@@ -103,5 +103,9 @@
         /// Papríron elhelyezkedés alapérték false 
         /// </summary>
         public bool FüggKözép { get; set; } = false;
+        /// <summary>
+        /// Logó elhelyezése a fejlécben bal oldalra
+        /// </summary>
+        public string Képútvonal { get; set; } = "";
     }
 }

@@ -1345,7 +1345,8 @@ namespace Villamos
                 MyX.Rácsoz(munkalap, "a12:g12");
                 MyX.Rácsoz(munkalap, $"a13:g{sor}");
 
-                string fénykép = $@"{Application.StartupPath}\Főmérnökség\adatok\BKV.png";
+                string fénykép = $@"{Application.StartupPath}\Főmérnökség\adatok\Ábrák\BKV.png";
+         
                 // '**********************************************
                 // '**Nyomtatási beállítások                    **
                 // '**********************************************
@@ -1366,6 +1367,7 @@ namespace Villamos
                     VízKözép = true,
                     Álló = true,
                     LapSzéles = 1,
+                    Képútvonal= fénykép
                 };
                 MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 

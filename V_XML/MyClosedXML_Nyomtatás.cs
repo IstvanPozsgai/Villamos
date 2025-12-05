@@ -1,8 +1,10 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Vml;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
@@ -43,8 +45,10 @@ namespace Villamos
                     WorksheetPart worksheetPart = (WorksheetPart)workbookPart.GetPartById(sheet.Id);
                     Worksheet worksheet = worksheetPart.Worksheet;
 
-                    //// 1. PageSetup létrehozása/frissítése
-                    PageSetup pageSetup = worksheet.GetFirstChild<PageSetup>();
+          //          if (beállítás.Képútvonal.Trim() != "") worksheetPart.KépBeállítás(beállítás);
+
+                        // 1. PageSetup létrehozása/frissítése
+                        PageSetup pageSetup = worksheet.GetFirstChild<PageSetup>();
                     if (pageSetup == null)
                     {
                         pageSetup = new PageSetup();
@@ -55,7 +59,6 @@ namespace Villamos
 
                     worksheet.OldaltörésBeállítása(beállítás);
                     worksheet.Papírkitöltés(beállítás);
-
 
 
                     // 2.
@@ -91,12 +94,11 @@ namespace Villamos
                     printOptions.VerticalCentered = beállítás.FüggKözép;
                     printOptions.HorizontalCentered = beállítás.VízKözép;
 
-
                     workbookPart.SorOszlopIsmétlődés(beállítás, lapNév, i);
                     workbookPart.NyomtatásiTerület(beállítás, lapNév, i);
 
                     worksheet.Save();
-                    
+
                 }
             }
         }
@@ -265,14 +267,21 @@ namespace Villamos
                 headerFooter.DifferentFirst = false;
                 headerFooter.DifferentOddEven = false;
 
-                headerFooter.OddHeader = new OddHeader
-                {
-                    Text = $"&L{beállítás.FejlécBal}&C{beállítás.FejlécKözép}&R{beállítás.FejlécJobb}"
-                };
+
 
                 headerFooter.OddFooter = new OddFooter
                 {
                     Text = $"&L{beállítás.LáblécBal}&C{beállítás.LáblécKözép}&R{beállítás.LáblécJobb}"
+                };
+
+                if (beállítás.Képútvonal.Trim() != "")
+                {
+                    beállítás.FejlécBal += "&G";
+                }
+
+                headerFooter.OddHeader = new OddHeader
+                {
+                    Text = $"&L{beállítás.FejlécBal}&C{beállítás.FejlécKözép}&R{beállítás.FejlécJobb}"
                 };
             }
             catch (HibásBevittAdat ex)
@@ -371,6 +380,34 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, "NyomtatásiTerület", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        // JAVÍTANDÓ:
+        private static  void KépBeállítás(this WorksheetPart worksheetPart, Beállítás_Nyomtatás beállítás) 
+        {
+            // ✅ Helyes hívás Open XML SDK 3.3.0-ban:
+            ImagePart imagePart = worksheetPart.AddImagePart(ImagePartType.Png);
+            using (FileStream fileStream = File.OpenRead(beállítás.Képútvonal))
+            {
+                imagePart.FeedData(fileStream);
+            }
+
+            // 2. Rajz (drawing) létrehozása
+            if (worksheetPart.DrawingsPart == null)
+            {
+                worksheetPart.AddNewPart<DrawingsPart>();
+            }
+            DrawingsPart drawingsPart = worksheetPart.DrawingsPart;
+
+            // 3. Új kép hozzáadása a drawings.xml-hez
+            int imageCount = drawingsPart.ImageParts.Count();
+            string relId = drawingsPart.GetIdOfPart(imagePart);
+
+            // Alapértelmezett pozíció: A1 fölé, de **láthatatlanul** (pl. nagyon kicsi méret)
+            // Mivel a fejlécben akarjuk, a pozíció irreleváns – a képnek csak **léteznie** kell.
+            Drawing drawing = new Drawing { Id = relId };
+            worksheetPart.Worksheet.Append(drawing);
+
         }
     }
 }
