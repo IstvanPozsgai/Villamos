@@ -31,7 +31,7 @@ namespace Villamos
         DateTime Hónap_első;
         string munkalap = "";
         readonly Beállítás_Betű BeBetű = new Beállítás_Betű { };
-        readonly Beállítás_Betű BeBetűV = new Beállítás_Betű {Vastag = true};
+        readonly Beállítás_Betű BeBetűV = new Beállítás_Betű { Vastag = true };
 
         readonly Kezelő_Dolgozó_Alap KézDolg = new Kezelő_Dolgozó_Alap();
         readonly Kezelő_Kiegészítő_Csoportbeosztás KézCsop = new Kezelő_Kiegészítő_Csoportbeosztás();
@@ -346,7 +346,7 @@ namespace Villamos
                     GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 else
                 {
-                    
+
                 }
 
             }
@@ -1922,7 +1922,7 @@ namespace Villamos
                     MyX.Kiir(Hónap_első.AddDays(i).ToString("dd"), MyF.Oszlopnév(oszlop + i) + sor.ToString());
                     Holtart.Lép();
                 }
-                
+
                 MyX.Betű(munkalap, "3:4", BeBetűV);
                 MyX.Háttérszín(munkalap, $"A3:{MyF.Oszlopnév(hónap_hossz + oszlop - 1)}4", Color.DarkGray);
                 MyX.Rácsoz(munkalap, $"A3:{MyF.Oszlopnév(hónap_hossz + oszlop - 1)}4");
@@ -1977,10 +1977,6 @@ namespace Villamos
                 }
                 MyX.Rácsoz(munkalap, $"A5:{MyF.Oszlopnév(hónap_hossz + oszlop + 2)}{sor + Tábla.Rows.Count - 1}");
 
-                //JAVÍTÁS
-                //MyX.NyomtatásiTerület_részletes(munkalap, $"a1:{MyF.Oszlopnév(hónap_hossz + oszlop + 2)}{(sor + Tábla.Rows.Count - 1)}",
-                //                                10, 10, 15, 15, 13, 13,
-                //                                "1", "1", false, "A4", true, false);
                 Beállítás_Nyomtatás BeNYom = new Beállítás_Nyomtatás
                 {
                     Munkalap = munkalap,
@@ -1992,7 +1988,8 @@ namespace Villamos
                     FejlécMéret = 13,
                     LáblécMéret = 13,
                     LapSzéles = 1,
-                    LapMagas = 1,
+                    IsmétlődőSorok = "$1:$4",
+                    Álló = false,
                     VízKözép = true
                 };
                 MyX.NyomtatásiTerület_részletes(munkalap, BeNYom);
@@ -2000,6 +1997,7 @@ namespace Villamos
                 munkalap = "Részletes";
                 MyX.Munkalap_Új(munkalap);
                 MyX.Munkalap_betű(munkalap, BeBetű);
+                MyX.Munkalap_aktív(munkalap);
 
                 sor = 1;
                 // fejlév
@@ -2098,33 +2096,26 @@ namespace Villamos
                 }
                 MyX.Rácsoz(munkalap, $"A1:F{sor}");
 
-                //JAVÍTÁS
-                //MyX.NyomtatásiTerület_részletes(munkalap, $"a1:F{sor}",
-                //            10, 10, 15, 15, 13, 13,
-                //            "1", "1", false, "A4", true, false);
-
-                Beállítás_Nyomtatás BeNYom2 = new Beállítás_Nyomtatás
+                Beállítás_Nyomtatás BeNYom1 = new Beállítás_Nyomtatás
                 {
                     Munkalap = munkalap,
-                    NyomtatásiTerület = $"a1:F{sor}",
-
+                    NyomtatásiTerület = $"A1:F{sor}",
                     BalMargó = 10,
                     JobbMargó = 10,
                     FelsőMargó = 15,
                     AlsóMargó = 15,
                     FejlécMéret = 13,
                     LáblécMéret = 13,
-                    VízKözép = true,
                     LapSzéles = 1,
-                    LapMagas = 1
+                    Álló = false,
+                    VízKözép = true
                 };
-
-                MyX.NyomtatásiTerület_részletes(munkalap, BeNYom2);
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNYom1);
 
                 // az excel tábla bezárása
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
-                
+
                 Cursor = Cursors.Default; // homokóra vége
                 Holtart.Ki();
                 MessageBox.Show("Az Excel táblázat elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
