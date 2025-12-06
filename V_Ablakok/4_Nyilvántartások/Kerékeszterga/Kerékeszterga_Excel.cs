@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
@@ -37,11 +38,13 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
         public void Excel_alaptábla()
         {
-            MyX.ExcelLétrehozás();
+            string munkalap = "Esztergára_Várók";
+            MyX.ExcelLétrehozás(munkalap);
             Beosztás();
             Elvégzett();
             Gépidő();
             Várakozók();
+            MyX.Munkalap_aktív(munkalap);
             MyX.ExcelMentés(Fájl);
             MyX.ExcelBezárás();
         }
@@ -51,8 +54,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             try
             {
                 string munkalap = "Esztergára_Várók";
-                // JAVÍTANDÓ:Ha létrehohozáskor ezen a néven hozzuk létre, akkor nem kell átnevezni
-                MyX.Munkalap_átnevezés("Munka1", munkalap);
                 MyX.Munkalap_aktív(munkalap);
                 int sor = 1;
                 for (int ii = -1; ii < 1; ii++)
@@ -99,11 +100,9 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
                 }
                 MyX.Rácsoz(munkalap, "A1:G" + sor);
-                // JAVÍTANDÓ:agyonüti a rácsozást.
-                MyX.Vastagkeret(munkalap, "A1:G" + sor);
                 MyX.Betű(munkalap, "A1:G1", BeBetuVastag);
-                // JAVÍTANDÓ:szebb lenne ha usingolva lenne a  System.Drawing
-                MyX.Háttérszín(munkalap, "A1:G1", System.Drawing.Color.Yellow);
+         
+                MyX.Háttérszín(munkalap, "A1:G1", Color.Yellow);
                 MyX.Szűrés(munkalap, "A", "G", 1);
                 MyX.Oszlopszélesség(munkalap, "A:G");
                 //Munkalap, terület, sorismétlődés, oszlopismétlődés, álló
@@ -191,8 +190,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                     }
                 }
                 MyX.Rácsoz(munkalap, "A1:I" + sor);
-                // JAVÍTANDÓ:Agyonüti a rácsozást.
-                MyX.Vastagkeret(munkalap, "A1:I" + sor);
                 MyX.Oszlopszélesség(munkalap, "A:B");
                 MyX.Oszlopszélesség(munkalap, "C:I", 5);
                 Beállítás_Nyomtatás beallitas_dolgozoi = new Beállítás_Nyomtatás
@@ -353,8 +350,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 MyX.Oszlopszélesség(munkalap, "A:E");
                 MyX.Oszlopszélesség(munkalap, "G:G");
                 MyX.Rácsoz(munkalap, "A1:G" + sor);
-                // JAVÍTANDÓ:Agyonüti a rácsozást.
-                MyX.Vastagkeret(munkalap, "A1:G" + sor);
 
                 MyX.Háttérszín(munkalap, "A1:G1", System.Drawing.Color.Yellow);
                 MyX.Szűrés(munkalap, "A", "G", 1);
@@ -437,18 +432,14 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                     MyX.Betű(munkalap, "C" + i, BeBetuSzazalek);
                 }
 
-                MyX.Diagram_Beallit(munkalap, 10, 150, "A1", "B" + sor, "Gépidő");
+                MyX.Diagram_Beallit(munkalap, 10, 150, "A1",  $"B{sor}" , "Gépidő");
                 MyX.Rácsoz(munkalap, "A1:C" + sor);
-                // JAVÍTANDÓ:agyonüti a rácsozást.
-                MyX.Vastagkeret(munkalap, "A1:C" + sor);
                 MyX.Oszlopszélesség(munkalap, "A:C");
                 MyX.Háttérszín(munkalap, "A1:C1", System.Drawing.Color.Yellow);
                 MyX.Szűrés(munkalap, "A", "C", 1);
 
                 //kis tábla
                 MyX.Rácsoz(munkalap, "l1:m3");
-                // JAVÍTANDÓ:agyonüti a rácsozást.
-                MyX.Vastagkeret(munkalap, "l1:m3");
                 MyX.Oszlopszélesség(munkalap, "l:m");
                 MyX.Háttérszín(munkalap, "l1:m1", System.Drawing.Color.Yellow);
                 MyX.Diagram_Beallit(munkalap, 600, 150, "l1", "m3");
