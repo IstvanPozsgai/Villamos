@@ -1354,7 +1354,7 @@ namespace Villamos
                 {
                     Munkalap = munkalap,
                     NyomtatásiTerület = $"a1:g{sor}",
-                    FejlécBal = "&G",
+                    FejlécBal = "",
                     FejlécJobb = $"Budapesti Közlekedési Zártkörűen Működő Részvénytársaság\nJELENLÉTI ÍV",
                     LáblécBal = "Hatálybalépés dátuma: 2020.10.15",
                     LáblécKözép = "&P/&N",
