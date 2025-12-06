@@ -45,7 +45,6 @@ namespace Villamos
         int Hónapok = 24;
         long Havikm = 5000;
         string munkalap = "";
-        readonly Beállítás_Betű BeBetű = new Beállítás_Betű();
         readonly Beállítás_Betű BeBetűF = new Beállítás_Betű {Szín = Color.Black };
         readonly Beállítás_Betű BeBetűD = new Beállítás_Betű {Formátum = "M/d/yyyy" };
 
@@ -2178,7 +2177,7 @@ namespace Villamos
                 InitialDirectory = "MyDocuments",
 
                 Title = "Vizsgálatok tény adatai",
-                FileName = $"T5C5_adatbázis_mentés_{Program.PostásNév.Trim()}_{DateTime.Now:yyyyMMddhhmmss}",
+                FileName = $"T5C5_adatbázis_mentés_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddhhmmss}",
                 Filter = "Excel |*.xlsx"
             };
             // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -2201,10 +2200,11 @@ namespace Villamos
         private void SZál_Kimutatás_Eljárás()
         {
             try
-            {    string munkalap = "Adatok";
-                MyX.ExcelLétrehozás(munkalap);
-                MyX.Munkalap_betű(munkalap, BeBetű);
-
+            {
+                MyX.ExcelLétrehozás();
+                // JAVÍTANDÓ:Ha adatok néven hozzuk létre akkor nem kell átnevezni
+                string munkalap = "Adatok";
+                MyX.Munkalap_átnevezés("Munka1", munkalap);
                 DataTable dataTable = MyF.ToDataTable(KézKmAdatok.Lista_Adatok().OrderBy(a => a.Azonosító).ToList());
                 utolsósor = MyX.Munkalap(dataTable, 1, munkalap) + 1;
 
@@ -2214,9 +2214,11 @@ namespace Villamos
                 MyX.Betű(munkalap, "G:G", BeBetűD);
                 MyX.Betű(munkalap, "K:K", BeBetűD);
 
-                MyX.Kiir("#KÉPLET#=YEAR(RC[-15])", "v2");
-                MyX.Kiir("#KÉPLET#=MONTH(RC[-16])", "w2");
-                MyX.Kiir("#KÉPLET#=LEFT(RC[-19],2)", "x2");
+                // kiírjuk az évet, hónapot és a 2 betűs vizsgálatot
+                // JAVÍTANDÓ:Reggel elmondtam, hogy #KÉPLET#, meg kellene nézni a kódot
+                MyX.Kiir("=YEAR(RC[-15])", "v2");
+                MyX.Kiir("=MONTH(RC[-16])", "w2");
+                MyX.Kiir("=LEFT(RC[-19],2)", "x2");
 
                 MyX.Képlet_másol(munkalap, "V2:X2", "V3:X" + utolsósor);
 
@@ -2231,20 +2233,36 @@ namespace Villamos
                 // rácsozás
                 MyX.Rácsoz(munkalap,"A1:X" + utolsósor);
 
-                MyX.Betű(munkalap, $"D1:D{utolsósor}", BeBetűD);
-                MyX.Betű(munkalap, $"F1:F{utolsósor}", BeBetűD);
-                MyX.Betű(munkalap, $"G1:G{utolsósor}", BeBetűD);
-                MyX.Betű(munkalap, $"K1:K{utolsósor}", BeBetűD);
-
                 //szűrést felteszük
                 MyX.Szűrés("Adatok", "A", "X", 1);
 
                 //Nyomtatási terület kijelülése
+                // MyX.NyomtatásiTerület_részletes("Adatok", "A1:X" + utolsósor, "$1:$1", "", true);
+                // JAVÍTANDÓ:alapértéket miért kell beállítani mégegyszer?
                 Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
                 {
-                    Munkalap=munkalap ,
                     NyomtatásiTerület = "A1:X" + utolsósor, 
-                    IsmétlődőSorok = "$1:$1",                                      
+                    IsmétlődőSorok = "$1:$1",                
+                    IsmétlődőOszlopok = "",                  
+                    Álló = true,                          
+
+                    LapSzéles = 1,
+                    LapMagas = 1, 
+                    Papírméret = "A4",
+                    BalMargó = 15,
+                    JobbMargó = 15,
+                    FelsőMargó = 20,
+                    AlsóMargó = 20,
+                    FejlécMéret = 13,
+                    LáblécMéret = 13,
+
+                    // Fejléc/Lábléc (ha a Program.PostásNév nem elérhető itt, írd át fix szövegre)
+                    FejlécKözép = Program.PostásNév.Trim(),
+                    FejlécJobb = DateTime.Now.ToString("yyyy.MM.dd HH:mm"),
+                    LáblécKözép = "&P/&N",
+
+                    FüggKözép = false,
+                    VízKözép = false
                 };
 
                 // Meghívjuk a függvényt az objektummal
@@ -2252,14 +2270,15 @@ namespace Villamos
 
                 munkalap = "Kimutatás";
                 MyX.Munkalap_Új(munkalap);
-            //    Kimutatás3(munkalap);
+
+                Kimutatás3();
 
                 MyX.Munkalap_aktív("Adatok");
 
                 MyX.ExcelMentés(_fájlexc);
                 MyX.ExcelBezárás();
-
-                MyF.Megnyitás(_fájlexc);
+                // JAVÍTANDÓ:Nem jó
+                MyX.ExcelMegnyitás(_fájlexc);
                 FőHoltart.Ki();
 
             }
@@ -2274,10 +2293,12 @@ namespace Villamos
             }
         }
 
-        private void Kimutatás3(string munkalap)
+        private void Kimutatás3()
         {
             try
             {
+                string munkalap = "Kimutatás";
+
                 string munkalap_adat = "Adatok";
                 string balfelső = "A1";
                 string jobbalsó = "X" + utolsósor;
