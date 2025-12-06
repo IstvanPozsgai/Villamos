@@ -9,6 +9,7 @@ using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
+using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -39,17 +40,17 @@ namespace Villamos
         {
             try
             {
-                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
-                //ha nem akkor a régit használjuk
-                if (Program.PostásJogkör.Substring(0, 1) == "R")
-                {
-                    TelephelyekFeltöltéseÚj();
-                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
-                }
-                else
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Substring(0, 1) != "R")
                 {
                     Telephelyekfeltöltése();
                     Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 }
                 Kocsikiirása_gombok();
                 Telephelyeklistázasa();
@@ -105,7 +106,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\állomány.html";
-                MyF.Megnyitás(hely);
+                MyE.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -329,7 +330,7 @@ namespace Villamos
                 MyX.NyomtatásiTerület_részletes(munkalap, beállítás);
 
                 munkalap = "Színes";
-                MyX.Munkalap_Új(munkalap);
+                MyX.Új_munkalap(munkalap);
 
                 //***************************************************************************************
                 beállBetű = new Beállítás_Betű();
@@ -437,7 +438,7 @@ namespace Villamos
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
 
-                MyF.Megnyitás(fájlexc);
+                MyE.Megnyitás(fájlexc);
                 Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
@@ -551,13 +552,13 @@ namespace Villamos
             {
                 Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
                 if (Cmbtelephely.Text.Trim() == "") return;
-                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
-                //ha nem akkor a régit használjuk
-                if (Program.PostásJogkör.Substring(0, 1) == "R")
-                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
-                else
+                if (Program.PostásJogkör.Any(c => c != '0'))
                 {
 
+                }
+                else
+                {
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 }
 
             }
