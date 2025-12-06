@@ -142,5 +142,33 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Beállítja az aktív cellát és munkalapot a fájlban.
+        /// (Amikor a felhasználó megnyitja az Excelt, ez lesz kijelölve).
+        /// </summary>
+        /// <param name="munkalap">Munkalap neve</param>
+        /// <param name="mit">Cella címe (pl. "A1")</param>
+        public static void Aktív_Cella(string munkalap, string mit)
+        {
+            try
+            {
+                IXLWorksheet worksheet = xlWorkBook.Worksheet(munkalap);
+                IXLCell cella = worksheet.Cell(mit);
+
+                worksheet.SetTabActive();
+
+                cella.SetActive();
+
+                cella.Select();
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Aktív_Cella(munkalap {munkalap}, mit {mit}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

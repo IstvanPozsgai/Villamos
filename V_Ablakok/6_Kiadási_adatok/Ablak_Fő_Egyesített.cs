@@ -55,15 +55,17 @@ namespace Villamos
             {
                 Dátum.Value = DateTime.Today;
                 ElőzőDátum = Dátum.Value;
-                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
-                //ha nem akkor a régit használjuk
-                if (Program.PostásJogkör.Substring(0, 1) == "R")
-                    GombLathatosagKezelo.Beallit(this);
-                else
-                    Jogosultságkiosztás();
-
                 Kategóriák();
                 Listák_Feltöltés();
+
+                if (Program.PostásJogkör.Substring(0, 1) != "R")
+                {
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    GombLathatosagKezelo.Beallit(this);
+                }
             }
 
             catch (Exception ex)

@@ -570,12 +570,13 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 if (CiklusrendCombo.SelectedIndex == CiklusrendCombo.Items.Count - 1) throw new HibásBevittAdat("Nincs több választható cillus rend.");
                 if (CiklusrendCombo.Items.Count <= index + 1) throw new HibásBevittAdat("A kiválasztott Ciklus rend az utolós így nem lehet tovább léptetni.");
                 if (!Adat.KövV.Contains("V3")) throw new HibásBevittAdat($"A következő sorszámú {Adat.KövV_sorszám} vizsgálata {Adat.KövV}, \nmely esetén nem lehet ciklus rendet változtatni.");
-
+                string VizsgfokEzőlző= Vizsgfok.Text.Trim ();
 
                 //Megnézzük, hogy mi volt az utolsó rögzített
                 Adat_T5C5_Kmadatok UtolsóKM = (from a in AdatokKmAdatok
                                                where a.Azonosító == Adat.Azonosító
                                                && a.Vizsgdátumk < Adat.Vizsgdátumk
+                                               && a .Törölt == false
                                                orderby a.Vizsgdátumk descending
                                                select a).FirstOrDefault();
                 if (UtolsóKM == null) return;
@@ -592,7 +593,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 if (sorszámIndex < 0) throw new HibásBevittAdat("A kiválasztott Mezőben lévő sorszám nem eleme a választási listának.");
 
                 Vizsgsorszám.Text = Vizsgsorszám.Items[sorszámIndex].ToString();
-
+                Vizsgfok.Text = VizsgfokEzőlző;
                 AdatokRögzítés();
                 Változás?.Invoke();
                 this.Close();
@@ -692,9 +693,9 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 if (!UtolsóElem) throw new HibásBevittAdat("A jármű utolsó karbantartási sora esetén lehet elvégezni.");
                 if (!Vizsgfok.Text.Contains("V1")) throw new HibásBevittAdat("Csak V1 vizsgálat után lehet alkalmazni.");
                 string[] darabol = Vizsgfok.Text.Split('_');
-                if (darabol[1] == "B")
+                if (darabol[1] == "5")
                 {
-                    //Ha V1_B volt az utolsó akkor az eredetinek megfelelő sorszámot léptetjük
+                    //Ha V1_5 volt az utolsó akkor az eredetinek megfelelő sorszámot léptetjük
                     Adat_Ciklus EgyCiklus = (from a in AdatokCiklus
                                              where a.Sorszám == Vizsgsorszám.Text.ToÉrt_Long()
                                              select a).FirstOrDefault();

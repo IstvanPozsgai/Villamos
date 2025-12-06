@@ -3,9 +3,13 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
+using A = DocumentFormat.OpenXml.Drawing;
+using Xdr = DocumentFormat.OpenXml.Drawing.Spreadsheet;
+
 
 namespace Villamos
 {
@@ -43,7 +47,9 @@ namespace Villamos
                     WorksheetPart worksheetPart = (WorksheetPart)workbookPart.GetPartById(sheet.Id);
                     Worksheet worksheet = worksheetPart.Worksheet;
 
-                    //// 1. PageSetup létrehozása/frissítése
+                    // JAVÍTANDÓ: if (beállítás.Képútvonal.Trim() != "") worksheetPart.KépBeállítás(beállítás);
+
+                    // 1. PageSetup létrehozása/frissítése
                     PageSetup pageSetup = worksheet.GetFirstChild<PageSetup>();
                     if (pageSetup == null)
                     {
@@ -55,7 +61,6 @@ namespace Villamos
 
                     worksheet.OldaltörésBeállítása(beállítás);
                     worksheet.Papírkitöltés(beállítás);
-
 
 
                     // 2.
@@ -91,12 +96,11 @@ namespace Villamos
                     printOptions.VerticalCentered = beállítás.FüggKözép;
                     printOptions.HorizontalCentered = beállítás.VízKözép;
 
-
                     workbookPart.SorOszlopIsmétlődés(beállítás, lapNév, i);
                     workbookPart.NyomtatásiTerület(beállítás, lapNév, i);
 
                     worksheet.Save();
-                    
+
                 }
             }
         }
@@ -265,14 +269,21 @@ namespace Villamos
                 headerFooter.DifferentFirst = false;
                 headerFooter.DifferentOddEven = false;
 
-                headerFooter.OddHeader = new OddHeader
-                {
-                    Text = $"&L{beállítás.FejlécBal}&C{beállítás.FejlécKözép}&R{beállítás.FejlécJobb}"
-                };
+
 
                 headerFooter.OddFooter = new OddFooter
                 {
                     Text = $"&L{beállítás.LáblécBal}&C{beállítás.LáblécKözép}&R{beállítás.LáblécJobb}"
+                };
+
+                if (beállítás.Képútvonal.Trim() != "" || !beállítás.Képútvonal.Contains("&G"))
+                {
+                    beállítás.FejlécBal += "&G";
+                }
+
+                headerFooter.OddHeader = new OddHeader
+                {
+                    Text = $"&L{beállítás.FejlécBal}&C{beállítás.FejlécKözép}&R{beállítás.FejlécJobb}"
                 };
             }
             catch (HibásBevittAdat ex)
@@ -370,6 +381,66 @@ namespace Villamos
             {
                 HibaNapló.Log(ex.Message, "NyomtatásiTerület", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // JAVÍTANDÓ:
+
+        private static void KépBeállítás(this WorksheetPart worksheetPart, Beállítás_Nyomtatás beállítás)
+        {
+            // 1. DrawingsPart létrehozása
+            DrawingsPart drawingsPart = worksheetPart.DrawingsPart;
+            if (drawingsPart == null)
+                drawingsPart = worksheetPart.AddNewPart<DrawingsPart>();
+
+            // 2. Kép hozzáadása
+            ImagePart imagePart = drawingsPart.AddImagePart(ImagePartType.Png);
+            using (var stream = File.OpenRead(beállítás.Képútvonal))
+                imagePart.FeedData(stream);
+
+            string imageRelId = drawingsPart.GetIdOfPart(imagePart);
+
+            // 3. Érvényes WorksheetDrawing létrehozása
+            var worksheetDrawing = new Xdr.WorksheetDrawing();
+
+            var anchor = new Xdr.TwoCellAnchor(
+                new Xdr.FromMarker(
+                    new Xdr.ColumnId("0"),
+                    new Xdr.RowId("0")
+                ),
+                new Xdr.ToMarker(
+                    new Xdr.ColumnId("1"),
+                    new Xdr.RowId("1")
+                ),
+                new Xdr.Picture(
+                    new Xdr.NonVisualPictureProperties(
+                        new Xdr.NonVisualDrawingProperties() { Id = (UInt32Value)1024U, Name = "Image" },
+                        new Xdr.NonVisualPictureDrawingProperties()
+                    ),
+                    new Xdr.BlipFill(
+                        new A.Blip { Embed = imageRelId },
+                        new A.SourceRectangle(),
+                        new A.Stretch(new A.FillRectangle())
+                    ),
+                    new Xdr.ShapeProperties(
+                        new A.Transform2D(
+                            new A.Offset() { X = 0L, Y = 0L },
+                            new A.Extents() { Cx = 100000L, Cy = 100000L }
+                        )
+                    )
+                )
+                { Macro = "" }
+            )
+            { EditAs = Xdr.EditAsValues.TwoCell };
+
+            worksheetDrawing.Append(anchor);
+            drawingsPart.WorksheetDrawing = worksheetDrawing;
+
+            // 4. Drawing hivatkozás a munkalapon
+            if (worksheetPart.Worksheet.Descendants<Drawing>().FirstOrDefault() == null)
+            {
+                string drawingRelId = worksheetPart.GetIdOfPart(drawingsPart);
+                worksheetPart.Worksheet.Append(new Drawing { Id = drawingRelId });
             }
         }
     }

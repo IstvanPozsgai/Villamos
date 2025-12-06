@@ -89,11 +89,11 @@
             this.Btn_V1Plusz = new System.Windows.Forms.Button();
             this.Btn_Biztonsági = new System.Windows.Forms.Button();
             this.Btn_SelejtreFutat = new System.Windows.Forms.Button();
-            this.Vezényel = new System.Windows.Forms.Button();
             this.JJavítás = new System.Windows.Forms.Button();
             this.Töröl = new System.Windows.Forms.Button();
             this.SAP_adatok = new System.Windows.Forms.Button();
             this.Új_adat = new System.Windows.Forms.Button();
+            this.Vezényel = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
@@ -107,9 +107,9 @@
             // 
             // KövV2km
             // 
-            this.KövV2km.Location = new System.Drawing.Point(185, 178);
+            this.KövV2km.Location = new System.Drawing.Point(228, 178);
             this.KövV2km.Name = "KövV2km";
-            this.KövV2km.Size = new System.Drawing.Size(136, 26);
+            this.KövV2km.Size = new System.Drawing.Size(136, 30);
             this.KövV2km.TabIndex = 134;
             // 
             // Label35
@@ -118,58 +118,58 @@
             this.Label35.BackColor = System.Drawing.Color.OrangeRed;
             this.Label35.Location = new System.Drawing.Point(3, 175);
             this.Label35.Name = "Label35";
-            this.Label35.Size = new System.Drawing.Size(147, 20);
+            this.Label35.Size = new System.Drawing.Size(180, 25);
             this.Label35.TabIndex = 133;
             this.Label35.Text = "V2-V3-tól futott km:";
             // 
             // KövV2_Sorszám
             // 
-            this.KövV2_Sorszám.Location = new System.Drawing.Point(327, 108);
+            this.KövV2_Sorszám.Location = new System.Drawing.Point(370, 108);
             this.KövV2_Sorszám.Name = "KövV2_Sorszám";
-            this.KövV2_Sorszám.Size = new System.Drawing.Size(136, 26);
+            this.KövV2_Sorszám.Size = new System.Drawing.Size(136, 30);
             this.KövV2_Sorszám.TabIndex = 132;
             // 
             // KövV_Sorszám
             // 
-            this.KövV_Sorszám.Location = new System.Drawing.Point(327, 3);
+            this.KövV_Sorszám.Location = new System.Drawing.Point(370, 3);
             this.KövV_Sorszám.Name = "KövV_Sorszám";
-            this.KövV_Sorszám.Size = new System.Drawing.Size(136, 26);
+            this.KövV_Sorszám.Size = new System.Drawing.Size(136, 30);
             this.KövV_Sorszám.TabIndex = 131;
             // 
             // KövV2_számláló
             // 
-            this.KövV2_számláló.Location = new System.Drawing.Point(185, 143);
+            this.KövV2_számláló.Location = new System.Drawing.Point(228, 143);
             this.KövV2_számláló.Name = "KövV2_számláló";
-            this.KövV2_számláló.Size = new System.Drawing.Size(136, 26);
+            this.KövV2_számláló.Size = new System.Drawing.Size(136, 30);
             this.KövV2_számláló.TabIndex = 108;
             // 
             // KövV2
             // 
-            this.KövV2.Location = new System.Drawing.Point(185, 108);
+            this.KövV2.Location = new System.Drawing.Point(228, 108);
             this.KövV2.Name = "KövV2";
-            this.KövV2.Size = new System.Drawing.Size(136, 26);
+            this.KövV2.Size = new System.Drawing.Size(136, 30);
             this.KövV2.TabIndex = 130;
             // 
             // KövV1km
             // 
-            this.KövV1km.Location = new System.Drawing.Point(185, 73);
+            this.KövV1km.Location = new System.Drawing.Point(228, 73);
             this.KövV1km.Name = "KövV1km";
-            this.KövV1km.Size = new System.Drawing.Size(136, 26);
+            this.KövV1km.Size = new System.Drawing.Size(136, 30);
             this.KövV1km.TabIndex = 129;
             // 
             // KövV
             // 
-            this.KövV.Location = new System.Drawing.Point(185, 3);
+            this.KövV.Location = new System.Drawing.Point(228, 3);
             this.KövV.Name = "KövV";
-            this.KövV.Size = new System.Drawing.Size(136, 26);
+            this.KövV.Size = new System.Drawing.Size(136, 30);
             this.KövV.TabIndex = 128;
             // 
             // Sorszám
             // 
             this.Sorszám.Enabled = false;
-            this.Sorszám.Location = new System.Drawing.Point(223, 3);
+            this.Sorszám.Location = new System.Drawing.Point(276, 3);
             this.Sorszám.Name = "Sorszám";
-            this.Sorszám.Size = new System.Drawing.Size(136, 26);
+            this.Sorszám.Size = new System.Drawing.Size(136, 30);
             this.Sorszám.TabIndex = 92;
             // 
             // Label34
@@ -178,108 +178,108 @@
             this.Label34.BackColor = System.Drawing.Color.Silver;
             this.Label34.Location = new System.Drawing.Point(3, 0);
             this.Label34.Name = "Label34";
-            this.Label34.Size = new System.Drawing.Size(76, 20);
+            this.Label34.Size = new System.Drawing.Size(96, 25);
             this.Label34.TabIndex = 127;
             this.Label34.Text = "Sorszám:";
             // 
             // Jjavszám
             // 
-            this.Jjavszám.Location = new System.Drawing.Point(220, 38);
+            this.Jjavszám.Location = new System.Drawing.Point(262, 38);
             this.Jjavszám.Name = "Jjavszám";
-            this.Jjavszám.Size = new System.Drawing.Size(136, 26);
+            this.Jjavszám.Size = new System.Drawing.Size(136, 30);
             this.Jjavszám.TabIndex = 109;
             // 
             // KMUkm
             // 
-            this.KMUkm.Location = new System.Drawing.Point(220, 108);
+            this.KMUkm.Location = new System.Drawing.Point(262, 108);
             this.KMUkm.Name = "KMUkm";
-            this.KMUkm.Size = new System.Drawing.Size(136, 26);
+            this.KMUkm.Size = new System.Drawing.Size(136, 30);
             this.KMUkm.TabIndex = 105;
             // 
             // VizsgKm
             // 
-            this.VizsgKm.Location = new System.Drawing.Point(223, 213);
+            this.VizsgKm.Location = new System.Drawing.Point(276, 213);
             this.VizsgKm.Name = "VizsgKm";
-            this.VizsgKm.Size = new System.Drawing.Size(136, 26);
+            this.VizsgKm.Size = new System.Drawing.Size(136, 30);
             this.VizsgKm.TabIndex = 102;
             // 
             // Vizsgfok
             // 
-            this.Vizsgfok.Location = new System.Drawing.Point(223, 73);
+            this.Vizsgfok.Location = new System.Drawing.Point(276, 73);
             this.Vizsgfok.Name = "Vizsgfok";
-            this.Vizsgfok.Size = new System.Drawing.Size(136, 26);
+            this.Vizsgfok.Size = new System.Drawing.Size(136, 30);
             this.Vizsgfok.TabIndex = 96;
             // 
             // HaviKm
             // 
-            this.HaviKm.Location = new System.Drawing.Point(597, 73);
+            this.HaviKm.Location = new System.Drawing.Point(689, 73);
             this.HaviKm.Name = "HaviKm";
-            this.HaviKm.Size = new System.Drawing.Size(136, 26);
+            this.HaviKm.Size = new System.Drawing.Size(136, 30);
             this.HaviKm.TabIndex = 121;
             // 
             // TEljesKmText
             // 
-            this.TEljesKmText.Location = new System.Drawing.Point(597, 38);
+            this.TEljesKmText.Location = new System.Drawing.Point(689, 38);
             this.TEljesKmText.Name = "TEljesKmText";
-            this.TEljesKmText.Size = new System.Drawing.Size(136, 26);
+            this.TEljesKmText.Size = new System.Drawing.Size(136, 30);
             this.TEljesKmText.TabIndex = 113;
             // 
             // CiklusrendCombo
             // 
             this.CiklusrendCombo.FormattingEnabled = true;
-            this.CiklusrendCombo.Location = new System.Drawing.Point(223, 38);
+            this.CiklusrendCombo.Location = new System.Drawing.Point(276, 38);
             this.CiklusrendCombo.Name = "CiklusrendCombo";
-            this.CiklusrendCombo.Size = new System.Drawing.Size(136, 28);
+            this.CiklusrendCombo.Size = new System.Drawing.Size(136, 33);
             this.CiklusrendCombo.TabIndex = 116;
             this.CiklusrendCombo.SelectedIndexChanged += new System.EventHandler(this.CiklusrendCombo_SelectedIndexChanged);
             // 
             // Üzemek
             // 
             this.Üzemek.FormattingEnabled = true;
-            this.Üzemek.Location = new System.Drawing.Point(223, 248);
+            this.Üzemek.Location = new System.Drawing.Point(276, 248);
             this.Üzemek.Name = "Üzemek";
-            this.Üzemek.Size = new System.Drawing.Size(136, 28);
+            this.Üzemek.Size = new System.Drawing.Size(136, 33);
             this.Üzemek.TabIndex = 103;
             // 
             // Vizsgsorszám
             // 
             this.Vizsgsorszám.FormattingEnabled = true;
-            this.Vizsgsorszám.Location = new System.Drawing.Point(223, 108);
+            this.Vizsgsorszám.Location = new System.Drawing.Point(276, 108);
             this.Vizsgsorszám.Name = "Vizsgsorszám";
-            this.Vizsgsorszám.Size = new System.Drawing.Size(136, 28);
+            this.Vizsgsorszám.Size = new System.Drawing.Size(136, 33);
             this.Vizsgsorszám.TabIndex = 93;
             this.Vizsgsorszám.SelectedIndexChanged += new System.EventHandler(this.Vizsgsorszám_SelectedIndexChanged);
             // 
             // KMUdátum
             // 
             this.KMUdátum.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.KMUdátum.Location = new System.Drawing.Point(597, 108);
+            this.KMUdátum.Location = new System.Drawing.Point(689, 108);
             this.KMUdátum.Name = "KMUdátum";
-            this.KMUdátum.Size = new System.Drawing.Size(118, 26);
+            this.KMUdátum.Size = new System.Drawing.Size(118, 30);
             this.KMUdátum.TabIndex = 123;
             // 
             // Utolsófelújításdátuma
             // 
             this.Utolsófelújításdátuma.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Utolsófelújításdátuma.Location = new System.Drawing.Point(220, 73);
+            this.Utolsófelújításdátuma.Location = new System.Drawing.Point(262, 73);
             this.Utolsófelújításdátuma.Name = "Utolsófelújításdátuma";
-            this.Utolsófelújításdátuma.Size = new System.Drawing.Size(118, 26);
+            this.Utolsófelújításdátuma.Size = new System.Drawing.Size(118, 30);
             this.Utolsófelújításdátuma.TabIndex = 112;
             // 
             // Vizsgdátumk
             // 
             this.Vizsgdátumk.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Vizsgdátumk.Location = new System.Drawing.Point(223, 143);
+            this.Vizsgdátumk.Location = new System.Drawing.Point(276, 143);
             this.Vizsgdátumk.Name = "Vizsgdátumk";
-            this.Vizsgdátumk.Size = new System.Drawing.Size(118, 26);
+            this.Vizsgdátumk.Size = new System.Drawing.Size(118, 30);
             this.Vizsgdátumk.TabIndex = 97;
             // 
             // Vizsgdátumv
             // 
             this.Vizsgdátumv.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Vizsgdátumv.Location = new System.Drawing.Point(223, 178);
+            this.Vizsgdátumv.Location = new System.Drawing.Point(276, 178);
             this.Vizsgdátumv.Name = "Vizsgdátumv";
-            this.Vizsgdátumv.Size = new System.Drawing.Size(118, 26);
+            this.Vizsgdátumv.Size = new System.Drawing.Size(118, 30);
             this.Vizsgdátumv.TabIndex = 99;
             // 
             // Label33
@@ -288,7 +288,7 @@
             this.Label33.BackColor = System.Drawing.Color.OrangeRed;
             this.Label33.Location = new System.Drawing.Point(3, 0);
             this.Label33.Name = "Label33";
-            this.Label33.Size = new System.Drawing.Size(102, 20);
+            this.Label33.Size = new System.Drawing.Size(130, 25);
             this.Label33.TabIndex = 126;
             this.Label33.Text = "Következő V:";
             // 
@@ -298,7 +298,7 @@
             this.Label32.BackColor = System.Drawing.Color.OrangeRed;
             this.Label32.Location = new System.Drawing.Point(3, 105);
             this.Label32.Name = "Label32";
-            this.Label32.Size = new System.Drawing.Size(132, 20);
+            this.Label32.Size = new System.Drawing.Size(167, 25);
             this.Label32.TabIndex = 125;
             this.Label32.Text = "Következő V2-V3";
             // 
@@ -308,7 +308,7 @@
             this.Label31.BackColor = System.Drawing.Color.OrangeRed;
             this.Label31.Location = new System.Drawing.Point(3, 70);
             this.Label31.Name = "Label31";
-            this.Label31.Size = new System.Drawing.Size(163, 20);
+            this.Label31.Size = new System.Drawing.Size(197, 25);
             this.Label31.TabIndex = 124;
             this.Label31.Text = "Utolsó V-től futott km:";
             // 
@@ -318,7 +318,7 @@
             this.Label30.BackColor = System.Drawing.Color.OrangeRed;
             this.Label30.Location = new System.Drawing.Point(3, 140);
             this.Label30.Name = "Label30";
-            this.Label30.Size = new System.Drawing.Size(160, 20);
+            this.Label30.Size = new System.Drawing.Size(202, 25);
             this.Label30.TabIndex = 122;
             this.Label30.Text = "V2-V3 számláló állás:";
             // 
@@ -326,9 +326,9 @@
             // 
             this.Label29.AutoSize = true;
             this.Label29.BackColor = System.Drawing.Color.Orange;
-            this.Label29.Location = new System.Drawing.Point(362, 105);
+            this.Label29.Location = new System.Drawing.Point(404, 105);
             this.Label29.Name = "Label29";
-            this.Label29.Size = new System.Drawing.Size(174, 20);
+            this.Label29.Size = new System.Drawing.Size(213, 25);
             this.Label29.TabIndex = 120;
             this.Label29.Text = "Adatok utolsófrissítése:";
             // 
@@ -336,9 +336,9 @@
             // 
             this.Label28.AutoSize = true;
             this.Label28.BackColor = System.Drawing.Color.Orange;
-            this.Label28.Location = new System.Drawing.Point(362, 70);
+            this.Label28.Location = new System.Drawing.Point(404, 70);
             this.Label28.Name = "Label28";
-            this.Label28.Size = new System.Drawing.Size(167, 20);
+            this.Label28.Size = new System.Drawing.Size(206, 25);
             this.Label28.TabIndex = 117;
             this.Label28.Text = "Havi futásteljesítmény:";
             // 
@@ -348,7 +348,7 @@
             this.Label27.BackColor = System.Drawing.Color.Silver;
             this.Label27.Location = new System.Drawing.Point(3, 35);
             this.Label27.Name = "Label27";
-            this.Label27.Size = new System.Drawing.Size(133, 20);
+            this.Label27.Size = new System.Drawing.Size(163, 25);
             this.Label27.TabIndex = 114;
             this.Label27.Text = "Ütemezés típusa:";
             // 
@@ -356,9 +356,9 @@
             // 
             this.Label26.AutoSize = true;
             this.Label26.BackColor = System.Drawing.Color.DarkKhaki;
-            this.Label26.Location = new System.Drawing.Point(362, 35);
+            this.Label26.Location = new System.Drawing.Point(404, 35);
             this.Label26.Name = "Label26";
-            this.Label26.Size = new System.Drawing.Size(229, 20);
+            this.Label26.Size = new System.Drawing.Size(279, 25);
             this.Label26.TabIndex = 111;
             this.Label26.Text = "Üzembehelyezés óta futott km:";
             // 
@@ -368,7 +368,7 @@
             this.Label25.BackColor = System.Drawing.Color.Salmon;
             this.Label25.Location = new System.Drawing.Point(3, 70);
             this.Label25.Name = "Label25";
-            this.Label25.Size = new System.Drawing.Size(180, 20);
+            this.Label25.Size = new System.Drawing.Size(220, 25);
             this.Label25.TabIndex = 107;
             this.Label25.Text = "Utolsó Felújítás dátuma:";
             // 
@@ -378,7 +378,7 @@
             this.Label24.BackColor = System.Drawing.Color.Salmon;
             this.Label24.Location = new System.Drawing.Point(3, 35);
             this.Label24.Name = "Label24";
-            this.Label24.Size = new System.Drawing.Size(145, 20);
+            this.Label24.Size = new System.Drawing.Size(180, 25);
             this.Label24.TabIndex = 106;
             this.Label24.Text = "Felújítás sorszáma:";
             // 
@@ -388,7 +388,7 @@
             this.Label23.BackColor = System.Drawing.Color.Salmon;
             this.Label23.Location = new System.Drawing.Point(3, 105);
             this.Label23.Name = "Label23";
-            this.Label23.Size = new System.Drawing.Size(211, 20);
+            this.Label23.Size = new System.Drawing.Size(253, 25);
             this.Label23.TabIndex = 104;
             this.Label23.Text = "Utolsó felújítás óta futott km:";
             // 
@@ -398,7 +398,7 @@
             this.Label22.BackColor = System.Drawing.Color.Silver;
             this.Label22.Location = new System.Drawing.Point(3, 70);
             this.Label22.Name = "Label22";
-            this.Label22.Size = new System.Drawing.Size(113, 20);
+            this.Label22.Size = new System.Drawing.Size(140, 25);
             this.Label22.TabIndex = 101;
             this.Label22.Text = "Vizsgálat foka:";
             // 
@@ -408,7 +408,7 @@
             this.Label21.BackColor = System.Drawing.Color.Silver;
             this.Label21.Location = new System.Drawing.Point(3, 105);
             this.Label21.Name = "Label21";
-            this.Label21.Size = new System.Drawing.Size(151, 20);
+            this.Label21.Size = new System.Drawing.Size(188, 25);
             this.Label21.TabIndex = 100;
             this.Label21.Text = "Vizsgálat sorszáma:";
             // 
@@ -418,7 +418,7 @@
             this.Label20.BackColor = System.Drawing.Color.Silver;
             this.Label20.Location = new System.Drawing.Point(3, 140);
             this.Label20.Name = "Label20";
-            this.Label20.Size = new System.Drawing.Size(174, 20);
+            this.Label20.Size = new System.Drawing.Size(215, 25);
             this.Label20.TabIndex = 98;
             this.Label20.Text = "Vizsgálat kezdő dátum:";
             // 
@@ -428,7 +428,7 @@
             this.Label19.BackColor = System.Drawing.Color.Silver;
             this.Label19.Location = new System.Drawing.Point(3, 175);
             this.Label19.Name = "Label19";
-            this.Label19.Size = new System.Drawing.Size(173, 20);
+            this.Label19.Size = new System.Drawing.Size(215, 25);
             this.Label19.TabIndex = 95;
             this.Label19.Text = "Vizsgálat végző dátum:";
             // 
@@ -438,7 +438,7 @@
             this.Label18.BackColor = System.Drawing.Color.Silver;
             this.Label18.Location = new System.Drawing.Point(3, 210);
             this.Label18.Name = "Label18";
-            this.Label18.Size = new System.Drawing.Size(214, 20);
+            this.Label18.Size = new System.Drawing.Size(267, 25);
             this.Label18.TabIndex = 94;
             this.Label18.Text = "Vizsgálat km számláló állása:";
             // 
@@ -448,7 +448,7 @@
             this.Label17.BackColor = System.Drawing.Color.Silver;
             this.Label17.Location = new System.Drawing.Point(3, 245);
             this.Label17.Name = "Label17";
-            this.Label17.Size = new System.Drawing.Size(205, 20);
+            this.Label17.Size = new System.Drawing.Size(255, 25);
             this.Label17.TabIndex = 91;
             this.Label17.Text = "Vizsgálatot végző telephely:";
             // 
@@ -457,16 +457,16 @@
             this.Label15.AutoSize = true;
             this.Label15.Location = new System.Drawing.Point(3, 0);
             this.Label15.Name = "Label15";
-            this.Label15.Size = new System.Drawing.Size(89, 20);
+            this.Label15.Size = new System.Drawing.Size(114, 25);
             this.Label15.TabIndex = 135;
             this.Label15.Text = "Pályaszám:";
             // 
             // Pályaszám
             // 
             this.Pályaszám.AutoSize = true;
-            this.Pályaszám.Location = new System.Drawing.Point(220, 0);
+            this.Pályaszám.Location = new System.Drawing.Point(262, 0);
             this.Pályaszám.Name = "Pályaszám";
-            this.Pályaszám.Size = new System.Drawing.Size(89, 20);
+            this.Pályaszám.Size = new System.Drawing.Size(114, 25);
             this.Pályaszám.TabIndex = 136;
             this.Pályaszám.Text = "Pályaszám:";
             // 
@@ -574,7 +574,7 @@
             // 
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(327, 178);
+            this.panel1.Location = new System.Drawing.Point(370, 178);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(395, 28);
             this.panel1.TabIndex = 143;
@@ -585,7 +585,7 @@
             this.label3.BackColor = System.Drawing.Color.OrangeRed;
             this.label3.Location = new System.Drawing.Point(230, 3);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(156, 20);
+            this.label3.Size = new System.Drawing.Size(196, 25);
             this.label3.TabIndex = 123;
             this.label3.Text = "V2-V3 számláló állás";
             // 
@@ -595,7 +595,7 @@
             this.label1.BackColor = System.Drawing.Color.Salmon;
             this.label1.Location = new System.Drawing.Point(3, 3);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(229, 20);
+            this.label1.Size = new System.Drawing.Size(276, 25);
             this.label1.TabIndex = 105;
             this.label1.Text = "= Utolsó felújítás óta futott km -";
             // 
@@ -603,7 +603,7 @@
             // 
             this.panel2.Controls.Add(this.label4);
             this.panel2.Controls.Add(this.label5);
-            this.panel2.Location = new System.Drawing.Point(327, 73);
+            this.panel2.Location = new System.Drawing.Point(370, 73);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(406, 28);
             this.panel2.TabIndex = 144;
@@ -614,7 +614,7 @@
             this.label4.BackColor = System.Drawing.Color.OrangeRed;
             this.label4.Location = new System.Drawing.Point(230, 3);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(172, 20);
+            this.label4.Size = new System.Drawing.Size(213, 25);
             this.label4.TabIndex = 136;
             this.label4.Text = "Utolsó V számláló állás";
             // 
@@ -624,15 +624,15 @@
             this.label5.BackColor = System.Drawing.Color.Salmon;
             this.label5.Location = new System.Drawing.Point(3, 3);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(229, 20);
+            this.label5.Size = new System.Drawing.Size(276, 25);
             this.label5.TabIndex = 105;
             this.label5.Text = "= Utolsó felújítás óta futott km -";
             // 
             // UtolsóVSzámláló
             // 
-            this.UtolsóVSzámláló.Location = new System.Drawing.Point(185, 38);
+            this.UtolsóVSzámláló.Location = new System.Drawing.Point(228, 38);
             this.UtolsóVSzámláló.Name = "UtolsóVSzámláló";
-            this.UtolsóVSzámláló.Size = new System.Drawing.Size(136, 26);
+            this.UtolsóVSzámláló.Size = new System.Drawing.Size(136, 30);
             this.UtolsóVSzámláló.TabIndex = 136;
             // 
             // label2
@@ -641,7 +641,7 @@
             this.label2.BackColor = System.Drawing.Color.OrangeRed;
             this.label2.Location = new System.Drawing.Point(3, 35);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(176, 20);
+            this.label2.Size = new System.Drawing.Size(219, 25);
             this.label2.TabIndex = 135;
             this.label2.Text = "Utolsó V számláló állás:";
             // 
@@ -747,18 +747,6 @@
             this.Btn_SelejtreFutat.UseVisualStyleBackColor = true;
             this.Btn_SelejtreFutat.Click += new System.EventHandler(this.Btn_SelejtreFutat_Click);
             // 
-            // Vezényel
-            // 
-            this.Vezényel.BackgroundImage = global::Villamos.Properties.Resources.leadott;
-            this.Vezényel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Vezényel.Location = new System.Drawing.Point(223, 168);
-            this.Vezényel.Name = "Vezényel";
-            this.Vezényel.Size = new System.Drawing.Size(49, 49);
-            this.Vezényel.TabIndex = 148;
-            this.ToolTip1.SetToolTip(this.Vezényel, "Beütemezzük a soronkövetkező Vizsgálatot");
-            this.Vezényel.UseVisualStyleBackColor = true;
-            this.Vezényel.Click += new System.EventHandler(this.Vezényel_Click);
-            // 
             // JJavítás
             // 
             this.JJavítás.BackgroundImage = global::Villamos.Properties.Resources.J_eleje;
@@ -807,6 +795,18 @@
             this.Új_adat.UseVisualStyleBackColor = true;
             this.Új_adat.Click += new System.EventHandler(this.Új_adat_Click);
             // 
+            // Vezényel
+            // 
+            this.Vezényel.BackgroundImage = global::Villamos.Properties.Resources.leadott;
+            this.Vezényel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Vezényel.Location = new System.Drawing.Point(223, 168);
+            this.Vezényel.Name = "Vezényel";
+            this.Vezényel.Size = new System.Drawing.Size(49, 49);
+            this.Vezényel.TabIndex = 148;
+            this.ToolTip1.SetToolTip(this.Vezényel, "Beütemezzük a soronkövetkező Vizsgálatot");
+            this.Vezényel.UseVisualStyleBackColor = true;
+            this.Vezényel.Click += new System.EventHandler(this.Vezényel_Click);
+            // 
             // timer1
             // 
             this.timer1.Interval = 500;
@@ -823,7 +823,7 @@
             // 
             // Karbantartás_Rögzítés
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DarkOrange;
             this.ClientSize = new System.Drawing.Size(765, 700);

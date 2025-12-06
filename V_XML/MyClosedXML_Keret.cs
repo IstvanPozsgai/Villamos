@@ -144,5 +144,82 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public static void Vékonykeret(string munkalapnév, string Kijelöltterület)
+        {
+            try
+            {
+                IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
+                IXLRange tartomány = munkalap.Range(Kijelöltterület);
+
+                // Külső keret: vékony vonal (Thin)
+                tartomány.Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                tartomány.Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                tartomány.Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                tartomány.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+
+                // Belső rács törlése – az eredeti BorderAround is csak a külső keretet rajzolja
+                tartomány.Style.Border.InsideBorder = XLBorderStyleValues.None;
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Vékonykeret(Kijelöltterület {Kijelöltterület}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public static void VékonyFelső(string munkalapnév, string Kijelöltterület)
+        {
+            try
+            {
+                IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
+                IXLRange tartomány = munkalap.Range(Kijelöltterület);
+
+
+                // Bal szegély kikapcsolása
+                tartomány.Style.Border.LeftBorder = XLBorderStyleValues.None;
+
+                // Felső szegély: vékony folytonos vonal
+                tartomány.Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                // Szín: alapértelmezett automatikus (nem kell külön állítani, mint Interopnál)
+
+                // A jobb és alsó szegélyt nem piszkáljuk, ugyanúgy, mint az eredeti Interop kódban
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"VékonyFelső(Kijelöltterület {Kijelöltterület}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public static void VastagFelső(string munkalapnév, string Kijelöltterület)
+        {
+            try
+            {
+                IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
+                IXLRange tartomány = munkalap.Range(Kijelöltterület);                
+
+                // Bal szegély kikapcsolása
+                tartomány.Style.Border.LeftBorder = XLBorderStyleValues.None;
+
+                // Felső szegély: vastagabb (Medium) folytonos vonal
+                tartomány.Style.Border.TopBorder = XLBorderStyleValues.Medium;
+                // Szín automatikus, nem kell külön állítani
+
+                // A jobb és alsó szegélyhez nem nyúlunk – ugyanúgy, mint az Interop verzió
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"VastagFelső(Kijelöltterület {Kijelöltterület}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 }

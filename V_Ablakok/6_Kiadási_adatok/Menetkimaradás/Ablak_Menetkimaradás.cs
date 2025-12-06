@@ -11,7 +11,6 @@ using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 using MyO = Microsoft.Office.Interop.Outlook;
@@ -32,6 +31,7 @@ namespace Villamos
         string Telephely = "";
         DateTime DátumKüld = DateTime.Now;
         string Fájlexc = "";
+        string munkalap = "";
 
         Adat_Kiegészítő_Adatok_Terjesztés EgyTerjesztés;
 
@@ -328,7 +328,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\menetkimaradás.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -456,7 +456,7 @@ namespace Villamos
                     return;
 
                 MyX.DataGridViewToXML(fájlexc, Tábla);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
@@ -574,8 +574,9 @@ namespace Villamos
                 Html_szöveg = "<html><body>";
                 // ha létezik, akkor benyitjuk az excel táblát.
                 Holtart.Be(10);
+                munkalap = EgyTerjesztés.Szöveg;
 
-                MyE.ExcelMegnyitás(EgyTerjesztés.Szöveg);
+                MyX.ExcelMegnyitás(munkalap);
 
                 int vége = 0;
 
@@ -586,7 +587,7 @@ namespace Villamos
                 while (vége == 0)
                 {
                     i++;
-                    if (MyE.Beolvas(MyE.Oszlopnév(i) + "1") == "_")
+                    if (MyX.Beolvas(munkalap,MyF.Oszlopnév(i) + "1") == "_")
                     {
                         vége = 1;
                         oszlopmax = i - 1;
@@ -601,18 +602,18 @@ namespace Villamos
                 while (vége == 0)
                 {
                     i++;
-                    if (MyE.Beolvas($"a{i}").ToUpper() == "X")
+                    if (MyX.Beolvas(munkalap,$"a{i}").ToUpper() == "X")
                     {
                         vége = 1;
                         szám = i;
                     }
                 }
                 // töröljük az utolsó hogy melyik dátum volt az utolsó
-                MyE.Kiir("", $"a{szám}");
+                MyX.Kiir("", $"a{szám}");
                 string szöveg1;
                 string szöveg2;
                 string szöveg_html;
-                DateTime utolsónap = DateTime.Parse(MyE.Beolvas($"b{szám}"));
+                DateTime utolsónap = DateTime.Parse(MyX.Beolvas(munkalap, $"b{szám}"));
                 i = 1;
                 Holtart.Lép();
 
@@ -622,12 +623,12 @@ namespace Villamos
                     utolsónap = utolsónap.AddDays(1);
                     szám++;
                     Html_szöveg += $"<p>{utolsónap:yyyy.MM.dd}</p> ";
-                    MyE.Kiir(utolsónap.ToString("yyyy.MM.dd"), $"b{szám}");
-                    MyE.Kiir(utolsónap.ToString("ddd"), $"c{szám}");
+                    MyX.Kiir(utolsónap.ToString("yyyy.MM.dd"), $"b{szám}");
+                    MyX.Kiir(utolsónap.ToString("ddd"), $"c{szám}");
                     for (int j = 4; j <= oszlopmax; j++)
                     {
                         Holtart.Lép();
-                        string telep = MyE.Beolvas(MyE.Oszlopnév(j) + "1").Trim();
+                        string telep = MyX.Beolvas(munkalap,MyF.Oszlopnév(j) + "1").Trim();
                         //Megvizsgáljuk, hogy telephelynév-e
                         if (Lstüzemek.Items.Contains(telep))
                         {
@@ -680,23 +681,22 @@ namespace Villamos
                             szöveg_html += "</table>";
                             Html_szöveg += szöveg_html;
 
-                            szöveg2 = MyE.Beolvas(MyE.Oszlopnév(j) + $"{szám}");
+                            szöveg2 = MyX.Beolvas(munkalap,MyF.Oszlopnév(j) + $"{szám}");
                             if (szöveg2.Trim() != "_")
                                 szöveg1 = szöveg2 + "\n" + szöveg1;
-                            MyE.Kiir(szöveg1, MyE.Oszlopnév(j) + szám.ToString());
+                            MyX.Kiir(szöveg1, MyF.Oszlopnév(j) + szám.ToString());
 
                         }
                     }
                 }
-                MyE.Kiir("X", "a" + szám.ToString());
-                MyE.Kiir(szám.ToString(), "aa1");
-                MyE.Aktív_Cella("Munka1", "A" + szám.ToString());
-                MyE.ExcelMentés();
-                MyE.ExcelBezárás();
+                MyX.Kiir("X", "a" + szám.ToString());
+                MyX.Kiir(szám.ToString(), "aa1");
+                MyX.ExcelMentés(munkalap);
+                MyX.ExcelBezárás();
                 Html_szöveg += "</body></html>";
 
                 Holtart.Ki();
-                MyE.Megnyitás(EgyTerjesztés.Szöveg);
+                MyF.Megnyitás(EgyTerjesztés.Szöveg);
             }
             catch (HibásBevittAdat ex)
             {

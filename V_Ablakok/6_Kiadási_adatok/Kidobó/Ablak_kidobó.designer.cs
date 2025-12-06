@@ -266,7 +266,7 @@ namespace Villamos
             this.Btn_Ittasági.Name = "Btn_Ittasági";
             this.Btn_Ittasági.Size = new System.Drawing.Size(45, 45);
             this.Btn_Ittasági.TabIndex = 214;
-            this.toolTip1.SetToolTip(this.Btn_Ittasági, "Kiválogatja az embereket");
+            this.toolTip1.SetToolTip(this.Btn_Ittasági, "Ittassági nyomtatványt generál");
             this.Btn_Ittasági.UseVisualStyleBackColor = true;
             this.Btn_Ittasági.Click += new System.EventHandler(this.Btn_Ittasági_Click);
             // 
