@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ArrayToExcel;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -11,6 +12,7 @@ using Villamos.Kezelők;
 using Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
+using DataTable = System.Data.DataTable;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;

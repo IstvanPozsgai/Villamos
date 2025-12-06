@@ -330,7 +330,7 @@ namespace Villamos
                 MyX.NyomtatásiTerület_részletes(munkalap, beállítás);
 
                 munkalap = "Színes";
-                MyX.Új_munkalap(munkalap);
+                MyX.Munkalap_Új(munkalap);
 
                 //***************************************************************************************
                 beállBetű = new Beállítás_Betű();

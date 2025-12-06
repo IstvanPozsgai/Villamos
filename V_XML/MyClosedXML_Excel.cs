@@ -139,8 +139,5 @@ namespace Villamos
 
             }
         }
-
-
-
     }
 }
