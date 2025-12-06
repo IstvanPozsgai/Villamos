@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Adatszerkezet;
 using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
@@ -28,7 +27,6 @@ namespace Villamos
         readonly Kezelő_Kiegészítő_Szolgálat KézKiegSzolgálat = new Kezelő_Kiegészítő_Szolgálat();
 
 
-
         List<Adat_FőKiadási_adatok> AdatokKiad = new List<Adat_FőKiadási_adatok>();
         List<Adat_Személyzet_Adatok> AdatokSzem = new List<Adat_Személyzet_Adatok>();
         List<Adat_Típuscsere_Adatok> AdatokTípCsere = new List<Adat_Típuscsere_Adatok>();
@@ -40,11 +38,6 @@ namespace Villamos
         DateTime ElőzőDátum;
         int hónapnap;
         int Oszlop_Max;
-
-        string munkalap = "";
-        readonly Beállítás_Betű BeBetűkukac = new Beállítás_Betű { Formátum = "@" };
-        readonly Beállítás_Betű BeBetűVD = new Beállítás_Betű { Dőlt = true, Vastag = true };
-        readonly Beállítás_Betű BeBetűV = new Beállítás_Betű { Vastag = true };
 
         private string[] Cím = new string[21];
         private string[] Leírás = new string[21];
@@ -62,15 +55,17 @@ namespace Villamos
             {
                 Dátum.Value = DateTime.Today;
                 ElőzőDátum = Dátum.Value;
-                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
-                //ha nem akkor a régit használjuk
-                if (Program.PostásJogkör.Substring(0, 1) == "R")
-                    GombLathatosagKezelo.Beallit(this);
-                else
-                    Jogosultságkiosztás();
-
                 Kategóriák();
                 Listák_Feltöltés();
+
+                if (Program.PostásJogkör.Substring(0, 1) != "R")
+                {
+                    Jogosultságkiosztás();
+                }
+                else
+                {
+                    GombLathatosagKezelo.Beallit(this);
+                }
             }
 
             catch (Exception ex)
@@ -161,7 +156,7 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\Főmérnökség_napi_lekérdezés.html";
-                MyF.Megnyitás(hely);
+                MyE.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -684,7 +679,7 @@ namespace Villamos
                 MyX.DataGridViewToXML(fájlexc, Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyF.Megnyitás(fájlexc);
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -897,20 +892,19 @@ namespace Villamos
                 else
                     return;
 
-                munkalap = "Munka1";
-                MyX.ExcelLétrehozás();
+                MyE.ExcelLétrehozás();
 
                 Holtart.Be(50);
 
                 // szöveg formátumban írjuk ki a psz-okat
 
-                MyX.Betű(munkalap, "A:A", BeBetűkukac);
+                MyE.Betű("A:A", "", "@");
 
                 // kiírjuk a főmérnökségi pályaszámokat
                 int sor = 1;
-                MyX.Kiir("Pályaszám", "a1");
-                MyX.Kiir("Főmérnökségi Típus", "b1");
-                MyX.Kiir("Jármű Típus", "c1");
+                MyE.Kiir("Pályaszám", "a1");
+                MyE.Kiir("Főmérnökségi Típus", "b1");
+                MyE.Kiir("Jármű Típus", "c1");
 
                 List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
                 AdatokJármű = (from a in AdatokJármű
@@ -920,9 +914,9 @@ namespace Villamos
                 foreach (Adat_Jármű rekord in AdatokJármű)
                 {
                     sor += 1;
-                    MyX.Kiir(rekord.Azonosító, "a" + sor);
-                    MyX.Kiir(rekord.Valóstípus2, "b" + sor);
-                    MyX.Kiir(rekord.Valóstípus, "c" + sor);
+                    MyE.Kiir(rekord.Azonosító, "a" + sor);
+                    MyE.Kiir(rekord.Valóstípus2, "b" + sor);
+                    MyE.Kiir(rekord.Valóstípus, "c" + sor);
                     Holtart.Lép();
                 }
 
@@ -934,7 +928,7 @@ namespace Villamos
                 {
                     oszlop += 1;
 
-                    MyX.Kiir(rekord.Telephelykönyvtár.ToStrTrim(), MyF.Oszlopnév(oszlop) + "1");
+                    MyE.Kiir(rekord.Telephelykönyvtár.ToStrTrim(), MyE.Oszlopnév(oszlop) + "1");
 
                     List<Adat_Főkönyv_Nap> AdatokFőNap = KézFőNap.Lista_Adatok(rekord.Telephelykönyvtár, Dátum.Value, Délelőtt.Checked ? "de" : "du");
 
@@ -942,16 +936,16 @@ namespace Villamos
 
                     foreach (Adat_Főkönyv_Nap elem in AdatokFőNap)
                     {
-                        while (String.Compare(MyX.Beolvas(munkalap, "A" + i.ToString()).Trim(), elem.Azonosító) < 0)
+                        while (String.Compare(MyE.Beolvas("A" + i.ToString()).Trim(), elem.Azonosító) < 0)
                         {
                             i += 1;
-                            string valami = MyX.Beolvas(munkalap, "A" + i.ToString()).Trim();
+                            string valami = MyE.Beolvas("A" + i.ToString()).Trim();
                             if (valami == "_") break;
                         }
 
-                        if (elem.Azonosító == MyX.Beolvas(munkalap, "a" + i).Trim())
+                        if (elem.Azonosító == MyE.Beolvas("a" + i).Trim())
                         {
-                            MyX.Kiir("1", MyF.Oszlopnév(oszlop) + i.ToString());
+                            MyE.Kiir("1", MyE.Oszlopnév(oszlop) + i.ToString());
                         }
                         if (sormax == i)
                             break;
@@ -962,27 +956,27 @@ namespace Villamos
                     Holtart.Lép();
                 }
                 oszlop += 1;
-                MyX.Kiir("Összesen", MyF.Oszlopnév(oszlop) + "1");
+                MyE.Kiir("Összesen", MyE.Oszlopnév(oszlop) + "1");
 
                 for (int i = 2; i <= sormax; i++)
-                    MyX.Kiir("=SUM(RC[-" + (oszlop - 3).ToString() + "]:RC[-1])", MyF.Oszlopnév(oszlop) + i.ToString());
+                    MyE.Kiir("=SUM(RC[-" + (oszlop - 3).ToString() + "]:RC[-1])", MyE.Oszlopnév(oszlop) + i.ToString());
                 // szűrés
-                MyX.Szűrés("Munka1", "A", MyF.Oszlopnév(oszlop), sormax);
+                MyE.Szűrés("Munka1", "A", MyE.Oszlopnév(oszlop), sormax);
 
                 // rácsozás
-                MyX.Rácsoz(munkalap, "a1:" + MyF.Oszlopnév(oszlop) + sormax.ToString());
-                MyX.Vastagkeret(munkalap, "a1:" + MyF.Oszlopnév(oszlop) + "1");
-                MyX.Vastagkeret(munkalap, "a1:" + MyF.Oszlopnév(oszlop) + sormax.ToString());
+                MyE.Rácsoz("a1:" + MyE.Oszlopnév(oszlop) + sormax.ToString());
+                MyE.Vastagkeret("a1:" + MyE.Oszlopnév(oszlop) + "1");
+                MyE.Vastagkeret("a1:" + MyE.Oszlopnév(oszlop) + sormax.ToString());
                 // oszlop szélesség
-                MyX.Oszlopszélesség("Munka1", "A:" + MyF.Oszlopnév(oszlop));
+                MyE.Oszlopszélesség("Munka1", "A:" + MyE.Oszlopnév(oszlop));
 
-                MyX.Aktív_Cella("Munka1", "A1");
+                MyE.Aktív_Cella("Munka1", "A1");
 
-                MyX.ExcelMentés(fájlexc);
-                MyX.ExcelBezárás();
+                MyE.ExcelMentés(fájlexc);
+                MyE.ExcelBezárás();
 
                 Holtart.Ki();
-                MyF.Megnyitás(fájlexc);
+                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -998,7 +992,6 @@ namespace Villamos
 
 
         #region Kimutatás
-
         private void Kimutatás_Click(object sender, EventArgs e)
         {
             try
@@ -1012,7 +1005,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Járműpark Kimutatás készítése",
-                    FileName = "Nóta_" + Dátum.Value.ToString("yyyy") + "_év_" + Dátum.Value.ToString("MM") + "_hó_" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                    FileName = $"Nóta_{Dátum.Value:yyyy}_év_{Dátum.Value:MM}_hó_{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 string fájlexc;
@@ -1021,7 +1014,6 @@ namespace Villamos
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
-
 
                 Holtartfő.Visible = true;
                 Holtart.Visible = true;
@@ -1126,11 +1118,9 @@ namespace Villamos
                 MyE.ExcelBezárás();
 
                 Holtartfő.Visible = false;
-                Holtart_Ki();
+                Holtart.Ki();
                 MyE.Megnyitás(fájlexc);
-
             }
-
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1141,7 +1131,6 @@ namespace Villamos
                 MessageBox.Show(ex.StackTrace + "\n" + ex.Message + "\n" + ex.Source, "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Állomány1tábla()
         {
@@ -1156,18 +1145,14 @@ namespace Villamos
                 // ****************************************************
                 // Elkészítjük a táblázatot
                 // ****************************************************
-                string helykieg = Application.StartupPath + @"\főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszókieg = "Mocó";
-                string szöveg = "SELECT * FROM szolgálattábla order by sorszám";
-                Kezelő_Kiegészítő_Szolgálat KézKiegSzolgálat = new Kezelő_Kiegészítő_Szolgálat();
-                List<Adat_Kiegészítő_Szolgálat> AdatokKiegSzolgálat = KézKiegSzolgálat.Lista_Adatok(helykieg, jelszókieg, szöveg);
+                List<Adat_Kiegészítő_Szolgálat> AdatokKiegSzolgálat = KézKiegSzolgálat.Lista_Adatok();
 
-                szöveg = Délelőtt.Checked ? "Reggeli " : "Délutáni ";
+                string szöveg = Délelőtt.Checked ? "Reggeli " : "Délutáni ";
                 szöveg += "Állományi darabszámok";
                 int jj = 3;
                 MyE.Kiir(szöveg, MyE.Oszlopnév(jj) + 3.ToString());
 
-                Holtart_Be(hónapnap + 1);
+                Holtart.Be(hónapnap + 1);
 
                 bool volt = false;
                 foreach (Adat_Kiegészítő_Szolgálat rekordkieg in AdatokKiegSzolgálat)
@@ -1219,7 +1204,7 @@ namespace Villamos
                         }
                         jj += 1;
 
-                        Holtart_Lép();
+                        Holtart.Lép();
                     }
                     if (volt == true)
                     {
@@ -1325,7 +1310,6 @@ namespace Villamos
             }
         }
 
-
         private void Állomány2tábla()
         {
             try
@@ -1348,7 +1332,7 @@ namespace Villamos
                 bool volt = false;
                 int pj = 3;
                 int oszlopmax;
-                Holtart_Be(hónapnap + 1);
+                Holtart.Be(hónapnap + 1);
 
                 string előzőtípus = "";
 
@@ -1416,7 +1400,7 @@ namespace Villamos
                         }
                         oszlopmax = pj;
                         pj += 1;
-                        Holtart_Lép();
+                        Holtart.Lép();
                     }
                 }
 
@@ -1546,12 +1530,11 @@ namespace Villamos
                 // Elkészítjük a táblázatot
                 // ****************************************************
                 List<Adat_Kiegészítő_Típusaltípustábla> AdatokKiegTípusal = Kézkiegtípusal.Lista_Adatok();
-
                 List<Adat_Kiegészítő_Szolgálat> AdatokKiegSzolgtábl = KézKiegSzolgálat.Lista_Adatok();
 
                 int pj = 3;
                 int oszlopmax;
-                Holtart_Be(hónapnap + 1);
+                Holtart.Be(hónapnap + 1);
 
                 string előzőtípus = "";
                 string előzőaltípus = "";
@@ -1674,7 +1657,7 @@ namespace Villamos
                             if (Elemek.Count > 1)
                             {
                                 DateTime ElőzőDátum = new DateTime(1900, 1, 1);
-                                Holtart_Be(hónapnap + 1);
+                                Holtart.Be(hónapnap + 1);
 
                                 int sor = 0;
                                 long forgalomban = 0;
@@ -1736,14 +1719,13 @@ namespace Villamos
                                 MunkaLap = "Üzemképes 3"; MyE.Munkalap_aktív(MunkaLap);
                                 MyE.Kiir(érték.ToString(), MyE.Oszlopnév(pj) + (sor + 6).ToString());
 
-                                Holtart_Lép();
+                                Holtart.Lép();
                                 pj += 1;
                             }
                         }
 
                     }
                     oszlopmax = pj;
-
                 }
 
                 MunkaLap = "állomány 3"; MyE.Munkalap_aktív(MunkaLap);
@@ -1779,7 +1761,6 @@ namespace Villamos
             }
         }
 
-
         private void Rácsoz_3(string MunkaLap)
         {
             int oszlopmax = Oszlop_Max;
@@ -1796,7 +1777,7 @@ namespace Villamos
             MyE.Vastagkeret("A4:B" + (hónapnap + 5).ToString());
 
             // megnézzük az 5 sort ha van Összesen, akkor összesít
-            Holtart_Be(hónapnap + 1);
+            Holtart.Be(hónapnap + 1);
 
             // ha több kategória volt
             // részösszegek
@@ -1812,7 +1793,7 @@ namespace Villamos
                     for (int i = 1; i <= hónapnap; i++)
                     {
                         MyE.Kiir("=SUM(RC[-" + (j - eleje).ToString() + "]:RC[-1])", MyE.Oszlopnév(j) + (i + 5).ToString());
-                        Holtart_Lép();
+                        Holtart.Lép();
                     }
 
                     MyE.Egyesít(MunkaLap, MyE.Oszlopnév(eleje) + "4:" + MyE.Oszlopnév(j) + "4");
@@ -1869,7 +1850,7 @@ namespace Villamos
                     for (int k = 1; k <= hónapnap; k++)
                     {
                         MyE.Kiir(szöveg, MyE.Oszlopnév(i) + (k + 5).ToString());
-                        Holtart_Lép();
+                        Holtart.Lép();
                     }
                     eleje = i + 1;
                 }
@@ -1904,7 +1885,7 @@ namespace Villamos
             for (int k = 1; k <= hónapnap; k++)
             {
                 MyE.Kiir(szöveg, MyE.Oszlopnév(oszlopmax + 1) + (k + 5).ToString());
-                Holtart_Lép();
+                Holtart.Lép();
             }
         }
 
@@ -1919,17 +1900,12 @@ namespace Villamos
                 bool volt = false;
                 Napok_kiírása();
                 MunkaVHétvége();
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM szolgálattábla order by sorszám";
-                Kezelő_Kiegészítő_Szolgálat KézKiegSzolg = new Kezelő_Kiegészítő_Szolgálat();
-                List<Adat_Kiegészítő_Szolgálat> AdatokKiegSzolg = KézKiegSzolg.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kiegészítő_Szolgálat> AdatokKiegSzolg = KézKiegSzolgálat.Lista_Adatok();
 
                 int pj = 3;
                 int szolgálat = 0;
-                Holtart_Be(hónapnap + 1);
-                szöveg = Délelőtt.Checked ? "Reggeli " : "Délutáni ";
+                Holtart.Be(hónapnap + 1);
+                string szöveg = Délelőtt.Checked ? "Reggeli " : "Délutáni ";
                 szöveg += "Forgalomba adott darabszámok";
                 MyE.Kiir(szöveg, MyE.Oszlopnév(pj) + 3.ToString());
 
@@ -1972,7 +1948,7 @@ namespace Villamos
                             {
                                 MyE.Kiir("0", MyE.Oszlopnév(pj) + (i + 5).ToString());
                             }
-                            Holtart_Lép();
+                            Holtart.Lép();
                         }
                         pj += 1;
                     }
@@ -2026,7 +2002,7 @@ namespace Villamos
                             for (int i = 1; i <= hónapnap; i++)
                             {
                                 MyE.Kiir("=SUM(RC[-" + (j - eleje).ToString() + "]:RC[-1])", MyE.Oszlopnév(j) + (i + 5).ToString());
-                                Holtart_Lép();
+                                Holtart.Lép();
                             }
                             MyE.Egyesít(MunkaLap, MyE.Oszlopnév(eleje) + "4:" + MyE.Oszlopnév(j) + "4");
                             MyE.Rácsoz(MyE.Oszlopnév(eleje) + "4:" + MyE.Oszlopnév(j) + (hónapnap + 5).ToString());
@@ -2066,7 +2042,7 @@ namespace Villamos
                     for (int i = 1; i <= hónapnap; i++)
                     {
                         MyE.Kiir(szöveg, MyE.Oszlopnév(oszlopmax) + (i + 5).ToString());
-                        Holtart_Lép();
+                        Holtart.Lép();
                     }
                 }
                 Havi_Összesítő_rész(oszlopmax);
@@ -2078,7 +2054,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Kiadott2tábla()
         {
@@ -2103,7 +2078,7 @@ namespace Villamos
                 bool volt = false;
                 int pj = 3;
                 int oszlopmax;
-                Holtart_Be(hónapnap + 1);
+                Holtart.Be(hónapnap + 1);
 
                 string előzőtípus = "";
 
@@ -2164,7 +2139,7 @@ namespace Villamos
                         }
                         oszlopmax = pj;
                         pj += 1;
-                        Holtart_Lép();
+                        Holtart.Lép();
                     }
                 }
 
@@ -2277,7 +2252,6 @@ namespace Villamos
 
         }
 
-
         private void Kiadott3tábla()
         {
             try
@@ -2313,18 +2287,15 @@ namespace Villamos
                 // ****************************************************
                 // Elkészítjük a táblázatot
                 // ****************************************************
-                string helykieg = Application.StartupPath + @"\főmérnökség\adatok\Kiegészítő.mdb";
-                string jelszókieg = "Mocó";
-                string szöveg = "SELECT * FROM szolgálattábla order by sorszám";
-                Kezelő_Kiegészítő_Szolgálat KézKiegSzolgálat = new Kezelő_Kiegészítő_Szolgálat();
-                List<Adat_Kiegészítő_Szolgálat> AdatokKiegSzolgálat = KézKiegSzolgálat.Lista_Adatok(helykieg, jelszókieg, szöveg);
 
-                szöveg = Délelőtt.Checked ? "Reggeli " : "Délutáni ";
+                List<Adat_Kiegészítő_Szolgálat> AdatokKiegSzolgálat = KézKiegSzolgálat.Lista_Adatok();
+
+                string szöveg = Délelőtt.Checked ? "Reggeli " : "Délutáni ";
                 szöveg += "Üzemképes darabszámok";
                 int jj = 3;
                 MyE.Kiir(szöveg, MyE.Oszlopnév(jj) + 3.ToString());
 
-                Holtart_Be(hónapnap + 1);
+                Holtart.Be(hónapnap + 1);
 
                 bool volt = false;
                 foreach (Adat_Kiegészítő_Szolgálat rekordkieg in AdatokKiegSzolgálat)
@@ -2372,7 +2343,7 @@ namespace Villamos
                         }
                         jj += 1;
 
-                        Holtart_Lép();
+                        Holtart.Lép();
                     }
                     if (volt == true)
                     {
@@ -2479,7 +2450,6 @@ namespace Villamos
 
         }
 
-
         private void Üzemképes2tábla()
         {
             try
@@ -2502,7 +2472,7 @@ namespace Villamos
                 bool volt = false;
                 int pj = 3;
                 int oszlopmax;
-                Holtart_Be(hónapnap + 1);
+                Holtart.Be(hónapnap + 1);
 
                 string előzőtípus = "";
 
@@ -2566,7 +2536,7 @@ namespace Villamos
                         }
                         oszlopmax = pj;
                         pj += 1;
-                        Holtart_Lép();
+                        Holtart.Lép();
                     }
                 }
 
@@ -2676,6 +2646,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void Üzemképes3tábla()
         {
             try
@@ -2698,7 +2669,6 @@ namespace Villamos
             }
         }
 
-
         private void Adatkiiró1()
         {
             try
@@ -2712,7 +2682,6 @@ namespace Villamos
                 int hónapnap = MyF.Hónap_hossza(Dátum.Value);
                 DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
                 DateTime hónapelsőnapja = MyF.Hónap_elsőnapja(Dátum.Value);
-                int i;
 
                 // fejléc elkészítése
                 MyE.Kiir("Dátum", "A5");
@@ -2734,8 +2703,7 @@ namespace Villamos
                 MyE.Kiir("Munkanap", "q5");
                 MyE.Kiir("Tart.+Szem.hiány", "r5");
 
-                Holtart.Maximum = 50;
-                Holtart.Value = 1;
+                Holtart.Be(50);
 
                 List<Adat_FőKiadási_adatok> AdatokKiadAd = KézKiad.Lista_adatok(Dátum.Value.Year);
                 AdatokKiadAd = (from a in AdatokKiadAd
@@ -2744,7 +2712,7 @@ namespace Villamos
                                 && a.Napszak == (Délelőtt.Checked ? "de" : "du")
                                 orderby a.Dátum
                                 select a).ToList();
-                i = 6;
+                int i = 6;
 
                 foreach (Adat_FőKiadási_adatok rekord in AdatokKiadAd)
                 {
@@ -2774,9 +2742,7 @@ namespace Villamos
                         + int.Parse(rekord.Félreállítás.ToString()) + int.Parse(rekord.Főjavítás.ToString()) + int.Parse(rekord.Személyzet.ToString());
                     MyE.Kiir(összesen.ToString(), "o" + i.ToString());
 
-                    Holtart.Value += 1;
-                    if (Holtart.Value == 50)
-                        Holtart.Value = 1;
+                    Holtart.Lép();
                     i += 1;
                 }
 
@@ -2805,7 +2771,6 @@ namespace Villamos
                 DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
                 DateTime hónapelsőnapja = MyF.Hónap_elsőnapja(Dátum.Value);
 
-                int i;
                 // fejléc elkészítése
                 MyE.Kiir("Dátum", "A5");
                 MyE.Kiir("Napszak", "B5");
@@ -2817,9 +2782,7 @@ namespace Villamos
                 MyE.Kiir("tervindulás", "H5");
                 MyE.Kiir("Azonosító", "I5");
 
-                Holtart.Maximum = 50;
-                Holtart.Value = 1;
-
+                Holtart.Be(50);
 
                 List<Adat_Személyzet_Adatok> AdatokSzemAd = KézSzem.Lista_adatok(Dátum.Value.Year);
                 AdatokSzemAd = (from a in AdatokSzemAd
@@ -2828,7 +2791,7 @@ namespace Villamos
                                 && a.Napszak == (Délelőtt.Checked ? "de" : "du")
                                 orderby a.Dátum, a.Viszonylat, a.Tervindulás
                                 select a).ToList();
-                i = 6;
+                int i = 6;
                 foreach (Adat_Személyzet_Adatok rekord in AdatokSzemAd)
                 {
 
@@ -2841,9 +2804,7 @@ namespace Villamos
                     MyE.Kiir(rekord.Forgalmiszám, "G" + i.ToString());
                     MyE.Kiir(rekord.Tervindulás.ToString(), "H" + i.ToString());
                     MyE.Kiir(rekord.Azonosító, "I" + i.ToString());
-                    Holtart.Value += 1;
-                    if (Holtart.Value == 50)
-                        Holtart.Value = 1;
+                    Holtart.Lép();
                     i += 1;
                 }
                 MyE.Oszlopszélesség(MunkaLap, "A:i");
@@ -2869,8 +2830,6 @@ namespace Villamos
                 DateTime hónaputolsónapja = MyF.Hónap_utolsónapja(Dátum.Value);
                 DateTime hónapelsőnapja = MyF.Hónap_elsőnapja(Dátum.Value);
 
-                int i;
-
                 // fejléc elkészítése
                 MyE.Kiir("Dátum", "A5");
                 MyE.Kiir("Napszak", "B5");
@@ -2883,10 +2842,7 @@ namespace Villamos
                 MyE.Kiir("tervindulás", "I5");
                 MyE.Kiir("Azonosító", "J5");
 
-
-                Holtart.Maximum = 50;
-                Holtart.Value = 1;
-
+                Holtart.Be(50);
 
                 List<Adat_Típuscsere_Adatok> AdatokTípuscsereAdatok = KézTípCsere.Lista_adatok(Dátum.Value.Year);
                 AdatokTípuscsereAdatok = (from a in AdatokTípuscsereAdatok
@@ -2895,7 +2851,7 @@ namespace Villamos
                                           && a.Napszak == (Délelőtt.Checked ? "de" : "du")
                                           orderby a.Dátum, a.Viszonylat, a.Tervindulás
                                           select a).ToList();
-                i = 6;
+                int i = 6;
                 foreach (Adat_Típuscsere_Adatok rekord in AdatokTípuscsereAdatok)
                 {
 
@@ -2909,9 +2865,7 @@ namespace Villamos
                     MyE.Kiir(rekord.Forgalmiszám, "h" + i.ToString());
                     MyE.Kiir(rekord.Tervindulás.ToString(), "i" + i.ToString());
                     MyE.Kiir(rekord.Azonosító, "j" + i.ToString());
-                    Holtart.Value += 1;
-                    if (Holtart.Value == 50)
-                        Holtart.Value = 1;
+                    Holtart.Lép();
                     i += 1;
                 }
                 MyE.Oszlopszélesség(MunkaLap, "A:j");
@@ -2938,11 +2892,10 @@ namespace Villamos
                 Napok_kiírása();
                 MunkaVHétvége();
 
-                Kezelő_kiegészítő_telephely KézKiegTeleph = new Kezelő_kiegészítő_telephely();
-                List<Adat_kiegészítő_telephely> AdatokKiegTeleph = KézKiegTeleph.Lista_Adatok();
+                List<Adat_kiegészítő_telephely> AdatokKiegTeleph = KézKiegTelep.Lista_Adatok();
 
                 int oszlopmax = 0, eleje;
-                Holtart_Be(hónapnap + 1);
+                Holtart.Be(hónapnap + 1);
                 int pj = 3;
 
                 for (int k = 0; k <= Kategórilista.CheckedItems.Count - 1; k++)
@@ -3049,7 +3002,7 @@ namespace Villamos
                 for (int i = 1; i <= hónapnap; i++)
                 {
                     MyE.Kiir(szöveg, MyE.Oszlopnév(oszlopmax) + (i + 5).ToString());
-                    Holtart_Lép();
+                    Holtart.Lép();
                 }
                 // megformázzuk
                 // MyE.Egyesít("c3:" + oszlopnév(oszlopmax) + "3")
@@ -3070,8 +3023,8 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
+
         private void Kimutatásvarázsló()
         {
             try
@@ -3114,6 +3067,7 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
             }
         }
+
         private void Telephelytábla_1()
         {
             try
@@ -3126,12 +3080,10 @@ namespace Villamos
                 string szöveg = "Kocsiszíni kiadási darabszámok";
                 MyE.Kiir(szöveg, MyE.Oszlopnév(3) + 3.ToString());
 
-
-                Kezelő_kiegészítő_telephely KézKiegTeleph = new Kezelő_kiegészítő_telephely();
-                List<Adat_kiegészítő_telephely> AdatokKiegTeleph = KézKiegTeleph.Lista_Adatok();
+                List<Adat_kiegészítő_telephely> AdatokKiegTeleph = KézKiegTelep.Lista_Adatok();
 
                 int oszlopmax = 0, eleje;
-                Holtart_Be(hónapnap + 1);
+                Holtart.Be(hónapnap + 1);
                 int pj = 3;
 
                 for (int k = 0; k <= Kategórilista.CheckedItems.Count - 1; k++)
@@ -3238,7 +3190,7 @@ namespace Villamos
                 for (int i = 1; i <= hónapnap; i++)
                 {
                     MyE.Kiir(szöveg, MyE.Oszlopnév(oszlopmax) + (i + 5).ToString());
-                    Holtart_Lép();
+                    Holtart.Lép();
                 }
                 // megformázzuk
                 MyE.Rácsoz("c4:" + MyE.Oszlopnév(oszlopmax) + (hónapnap + 5).ToString());
@@ -3259,7 +3211,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Napok_kiírása()
         {
@@ -3399,32 +3350,8 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
 
-
-
-        #region Holtartok
-
-        void Holtart_Be(int maximum = 20)
-        {
-            Holtart.Maximum = maximum;
-            Holtart.Visible = true;
-            Holtart.Value = 1;
-        }
-
-        void Holtart_Lép()
-        {
-            Holtart.Value++;
-            if (Holtart.Value >= Holtart.Maximum) Holtart.Value = 1;
-        }
-
-        void Holtart_Ki()
-        {
-            Holtart.Visible = false;
-        }
-
-        #endregion
 
         #region Listák
         private void Listák_Feltöltés()

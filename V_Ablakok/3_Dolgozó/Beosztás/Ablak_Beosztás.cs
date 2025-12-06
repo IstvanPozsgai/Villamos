@@ -168,6 +168,7 @@ namespace Villamos
             Csoportfeltöltés();
             Névfeltöltés();
             Dátum.Value = DateTime.Today;
+            Dátum.MaxDate =MyF.Év_utolsónapja (DateTime.Today.AddYears (1));
 
             Visszacsukcsoport();
             Visszacsukjadolgozó();
