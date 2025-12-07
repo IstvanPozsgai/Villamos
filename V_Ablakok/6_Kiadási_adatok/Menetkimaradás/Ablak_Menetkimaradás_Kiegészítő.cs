@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.V_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
@@ -382,9 +382,23 @@ namespace Villamos.Villamos_Ablakok
 
                 SzűrőNév.Add("szolgálat");
                 SzűrőNév.Add("telephely");
-
-                MyX.Kimutatás_Fő(munkalap_adat, balfelső, jobbalsó, kimutatás_Munkalap, Kimutatás_cella, Kimutatás_név
-                                , összesítNév, Összesít_módja, sorNév, oszlopNév, SzűrőNév);
+                Beállítás_Kimutatás Bekimutat = new Beállítás_Kimutatás
+                {
+                    Munkalapnév = munkalap_adat,
+                    Balfelső = balfelső,
+                    Jobbalsó = jobbalsó,
+                    Kimutatás_Munkalapnév = kimutatás_Munkalap,
+                    Kimutatás_cella = Kimutatás_cella,
+                    Kimutatás_név = Kimutatás_név,
+                    ÖsszesítNév = összesítNév,
+                    Összesítés_módja = Összesít_módja,
+                    SorNév = sorNév,
+                    OszlopNév = oszlopNév,
+                    SzűrőNév = SzűrőNév
+                };
+                MyX.Kimutatás_Fő(Bekimutat);
+                //MyX.Kimutatás_Fő(munkalap_adat, balfelső, jobbalsó, kimutatás_Munkalap, Kimutatás_cella, Kimutatás_név
+                //                , összesítNév, Összesít_módja, sorNév, oszlopNév, SzűrőNév);
                 MyX.Aktív_Cella(munkalap, "A1");
             }
             catch (HibásBevittAdat ex)
@@ -433,8 +447,23 @@ namespace Villamos.Villamos_Ablakok
 
                 oszlopNév.Add("Eseményjele");
 
-                MyX.Kimutatás_Fő(munkalap_adat, balfelső, jobbalsó, kimutatás_Munkalap, Kimutatás_cella, Kimutatás_név
-                                , összesítNév, Összesít_módja, sorNév, oszlopNév, SzűrőNév);
+                Beállítás_Kimutatás Bekimutat = new Beállítás_Kimutatás
+                {
+                    Munkalapnév = munkalap_adat,
+                    Balfelső = balfelső,
+                    Jobbalsó = jobbalsó,
+                    Kimutatás_Munkalapnév = kimutatás_Munkalap,
+                    Kimutatás_cella = Kimutatás_cella,
+                    Kimutatás_név = Kimutatás_név,
+                    ÖsszesítNév = összesítNév,
+                    Összesítés_módja = Összesít_módja,
+                    SorNév = sorNév,
+                    OszlopNév = oszlopNév,
+                    SzűrőNév = SzűrőNév
+                };
+                MyX.Kimutatás_Fő(Bekimutat);
+                //MyX.Kimutatás_Fő(munkalap_adat, balfelső, jobbalsó, kimutatás_Munkalap, Kimutatás_cella, Kimutatás_név
+                //                , összesítNév, Összesít_módja, sorNév, oszlopNév, SzűrőNév);
                 MyX.Aktív_Cella(munkalap, "A1");
             }
             catch (HibásBevittAdat ex)
@@ -481,9 +510,24 @@ namespace Villamos.Villamos_Ablakok
                 SzűrőNév.Add("telephely");
 
                 oszlopNév.Add("Eseményjele");
+                Beállítás_Kimutatás Bekimutat = new Beállítás_Kimutatás
+                {
+                    Munkalapnév = munkalap_adat,
+                    Balfelső = balfelső,
+                    Jobbalsó = jobbalsó,
+                    Kimutatás_Munkalapnév = kimutatás_Munkalap,
+                    Kimutatás_cella = Kimutatás_cella,
+                    Kimutatás_név = Kimutatás_név,
+                    ÖsszesítNév = összesítNév,
+                    Összesítés_módja = Összesít_módja,
+                    SorNév = sorNév,
+                    OszlopNév = oszlopNév,
+                    SzűrőNév = SzűrőNév
+                };
+                MyX.Kimutatás_Fő(Bekimutat);
 
-                MyX.Kimutatás_Fő(munkalap_adat, balfelső, jobbalsó, kimutatás_Munkalap, Kimutatás_cella, Kimutatás_név
-                                , összesítNév, Összesít_módja, sorNév, oszlopNév, SzűrőNév);
+                //MyX.Kimutatás_Fő(munkalap_adat, balfelső, jobbalsó, kimutatás_Munkalap, Kimutatás_cella, Kimutatás_név
+                //                , összesítNév, Összesít_módja, sorNév, oszlopNév, SzűrőNév);
                 MyX.Aktív_Cella(munkalap, "A1");
             }
             catch (HibásBevittAdat ex)

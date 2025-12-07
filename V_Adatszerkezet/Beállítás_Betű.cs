@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Villamos.V_Adatszerkezet
+namespace Villamos.Adatszerkezet
 {
     public class Beállítás_Betű
     {
