@@ -2236,7 +2236,35 @@ namespace Villamos
                 MyE.Szűrés("Adatok", "A", "X", 1);
 
                 //Nyomtatási terület kijelülése
-                MyE.NyomtatásiTerület_részletes("Adatok", "A1:X" + utolsósor, "$1:$1", "", true);
+                // MyX.NyomtatásiTerület_részletes("Adatok", "A1:X" + utolsósor, "$1:$1", "", true);
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    NyomtatásiTerület = "A1:X" + utolsósor,
+                    IsmétlődőSorok = "$1:$1",
+                    IsmétlődőOszlopok = "",
+                    Álló = true,
+
+                    LapSzéles = 1,
+                    LapMagas = 1,
+                    Papírméret = "A4",
+                    BalMargó = 15,
+                    JobbMargó = 15,
+                    FelsőMargó = 20,
+                    AlsóMargó = 20,
+                    FejlécMéret = 13,
+                    LáblécMéret = 13,
+
+                    // Fejléc/Lábléc (ha a Program.PostásNév nem elérhető itt, írd át fix szövegre)
+                    FejlécKözép = Program.PostásNév.Trim(),
+                    FejlécJobb = DateTime.Now.ToString("yyyy.MM.dd HH:mm"),
+                    LáblécKözép = "&P/&N",
+
+                    FüggKözép = false,
+                    VízKözép = false
+                };
+
+                // Meghívjuk a függvényt az objektummal
+                MyX.NyomtatásiTerület_részletes("Adatok", BeNyom);
 
                 Kimutatás3();
 
