@@ -7,8 +7,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 
 
 namespace Villamos
@@ -214,117 +214,7 @@ namespace Villamos
             }
         }
 
-        /// <summary>
-        /// Kimutatás (Pivot Table) készítése ClosedXML segítségével.
-        /// Ez a FŐ metódus, amely kezeli az összesítési módokat is.
-        /// </summary>
-        public static void Kimutatás_Fő(string munkalap_adat, string balfelső, string jobbalsó,
-                                        string kimutatás_Munkalap, string Kimutatás_cella, string Kimutatás_név,
-                                        List<string> összesítNév, List<string> Összesítés_módja,
-                                        List<string> sorNév, List<string> oszlopNév, List<string> SzűrőNév)
-        {
-            try
-            {
-                IXLWorksheet Adatok_lap = xlWorkBook.Worksheet(munkalap_adat);
 
-                IXLWorksheet Kimutatás_lap;
-                try { Kimutatás_lap = xlWorkBook.Worksheet(kimutatás_Munkalap); }
-                catch { Kimutatás_lap = xlWorkBook.Worksheets.Add(kimutatás_Munkalap); }
-
-                IXLRange AdatRange = Adatok_lap.Range(balfelső, jobbalsó);
-
-                IXLCell celCella = Kimutatás_lap.Cell(Kimutatás_cella);
-                IXLPivotTable pivotTable = Kimutatás_lap.PivotTables.Add(Kimutatás_név, celCella, AdatRange);
-
-                // Sorok
-                if (sorNév != null && sorNév.Count > 0)
-                    foreach (string nev in sorNév)
-                        pivotTable.RowLabels.Add(nev);
-
-                // Oszlopok
-                if (oszlopNév != null && oszlopNév.Count > 0)
-                    foreach (string nev in oszlopNév)
-                        pivotTable.ColumnLabels.Add(nev);
-
-                // Szűrők
-                if (SzűrőNév != null && SzűrőNév.Count > 0)
-                    foreach (string nev in SzűrőNév)
-                        pivotTable.ReportFilters.Add(nev);
-
-                // Értékek
-                if (összesítNév != null && összesítNév.Count > 0)
-                {
-                    for (int i = 0; i < összesítNév.Count; i++)
-                    {
-                        string mezoNev = összesítNév[i];
-                        string mod = (Összesítés_módja != null && i < Összesítés_módja.Count) ? Összesítés_módja[i] : "xlSum";
-
-                        IXLPivotValue valueField = pivotTable.Values.Add(mezoNev);
-
-                        switch (mod)
-                        {
-                            case "xlCount": // Darabszám
-                                valueField.SummaryFormula = XLPivotSummary.Count;
-                                valueField.CustomName = mezoNev + " Összeg";
-                                break;
-
-                            case "xlSum": // Összeg
-                            default:
-                                valueField.SummaryFormula = XLPivotSummary.Sum;
-                                valueField.CustomName = mezoNev + " db";
-                                break;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
-                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
-                HibaNapló.Log(ex.Message, $"Kimutatás_Fő \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\nA hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        
-        /// <summary>
-         /// KOMPATIBILITÁSI TÚLTERHELÉS (Overload)
-         /// Ez teszi lehetővé, hogy a régi kódod (ami 11 paramétert használ és nincs benne az összesítés módja)
-         /// továbbra is működjön.
-         /// </summary>
-        public static void Kimutatás_Fő(
-            string munkalap_extra, 
-            string munkalap_adat,  
-            string balfelső,
-            string jobbalsó,
-            string kimutatás_Munkalap,
-            string Kimutatás_cella,
-            string Kimutatás_név,
-            List<string> összesítNév,
-            List<string> sorNév,
-            List<string> oszlopNév,
-            List<string> SzűrőNév)
-        {
-
-            List<string> alapertelmezettModok = new List<string>();
-
-            if (összesítNév != null)
-                for (int i = 0; i < összesítNév.Count; i++)
-                    alapertelmezettModok.Add("xlSum");
-
-            Kimutatás_Fő(
-                munkalap_adat,
-                balfelső,
-                jobbalsó,
-                kimutatás_Munkalap,
-                Kimutatás_cella,
-                Kimutatás_név,
-                összesítNév,
-                alapertelmezettModok,
-                sorNév,
-                oszlopNév,
-                SzűrőNév
-            );
-        }
 
         /// <summary>
         /// Automata szűrés kikapcsolása (ClosedXML)
@@ -383,38 +273,49 @@ namespace Villamos
         /// <param name="munkalap">Munkalap neve</param>
         /// <param name="honnan">Forrás tartomány (pl. "A1:A10")</param>
         /// <param name="hova">Cél tartomány bal felső cellája (pl. "B1")</param>
-        public static void Képlet_másol(string munkalap, string honnan, string hova)
+        public static void Képlet_másol(string munkalapnév, string honnan, string hova)
         {
             try
             {
-                IXLWorksheet worksheet = xlWorkBook.Worksheet(munkalap);
+                IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
 
-                IXLRange sourceRange = worksheet.Range(honnan);
+                IXLRange forrás = munkalap.Range(honnan);
+                IXLRange cél = munkalap.Range(hova);
 
-                IXLCell targetStartCell = worksheet.Range(hova).FirstCell();
+                int forrásSorok = forrás.RowCount();
+                int forrásOszlopok = forrás.ColumnCount();
+                int célSorok = cél.RowCount();
+                int célOszlopok = cél.ColumnCount();
 
-                int startRow = sourceRange.RangeAddress.FirstAddress.RowNumber;
-                int startCol = sourceRange.RangeAddress.FirstAddress.ColumnNumber;
+                int célKezdőSor = cél.RangeAddress.FirstAddress.RowNumber;
+                int célKezdőOszlop = cél.RangeAddress.FirstAddress.ColumnNumber;
+                int forrásKezdőSor = forrás.RangeAddress.FirstAddress.RowNumber;
+                int forrásKezdőOszlop = forrás.RangeAddress.FirstAddress.ColumnNumber;
 
-                foreach (IXLCell sourceCell in sourceRange.Cells())
+                for (int r = 0; r < célSorok; r++)
                 {
-                    int rowOffset = sourceCell.Address.RowNumber - startRow;
-                    int colOffset = sourceCell.Address.ColumnNumber - startCol;
+                    for (int c = 0; c < célOszlopok; c++)
+                    {
+                        // Forrás pozíció (csempézve)
+                        int forrásSor = forrásKezdőSor + (r % forrásSorok);
+                        int forrásOszlop = forrásKezdőOszlop + (c % forrásOszlopok);
 
-                    IXLCell targetCell = worksheet.Cell(targetStartCell.Address.RowNumber + rowOffset,
-                                                        targetStartCell.Address.ColumnNumber + colOffset);
+                        // Cél pozíció
+                        int aktuálisCélSor = célKezdőSor + r;
+                        int aktuálisCélOszlop = célKezdőOszlop + c;
 
-                    if (sourceCell.HasFormula)
-                        targetCell.FormulaR1C1 = sourceCell.FormulaR1C1;
-                    else
-                        targetCell.Value = sourceCell.Value;
+                        IXLCell forrásCella = munkalap.Cell(forrásSor, forrásOszlop);
+                        IXLCell célCella = munkalap.Cell(aktuálisCélSor, aktuálisCélOszlop);
+
+                        célCella.FormulaR1C1 = forrásCella.FormulaR1C1;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
                 string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
-                HibaNapló.Log(ex.Message, $"Képlet_másol(munkalap {munkalap}, honnan {honnan}, hova {hova}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, $"Képlet_másol(munkalap {munkalapnév}, honnan {honnan}, hova {hova}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
 
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
