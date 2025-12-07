@@ -101,6 +101,9 @@ public static class FVGyűjtemény
     {
         if (!DateTime.TryParse(str.ToStrTrim(), out DateTime válasz))
             válasz = new DateTime(1900, 1, 1);
+        else
+        if (válasz < new DateTime(1900, 1, 1))
+            válasz = new DateTime(1900, 1, 1);
         return válasz;
     }
     /// <summary>
@@ -111,6 +114,9 @@ public static class FVGyűjtemény
     public static DateTime ToÉrt_DaTeTime(this string str)
     {
         if (!DateTime.TryParse(str, out DateTime válasz))
+            válasz = new DateTime(1900, 1, 1);
+        else
+        if (válasz < new DateTime(1900, 1, 1))   
             válasz = new DateTime(1900, 1, 1);
         return válasz;
     }
