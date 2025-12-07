@@ -8,7 +8,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Adatszerkezet;
 
 
 namespace Villamos
@@ -192,7 +191,7 @@ namespace Villamos
         /// <param name="munkalap">Annak a munkalapnak a neve, ahová a linket tesszük.</param>
         /// <param name="hova">A cella címe (pl. "A1"), ahová a link kerül.</param>
         /// <param name="hivatkozottlap">A cél munkalap neve, amire a link mutatni fog (kattintáskor ide ugrik).</param>
-        public static void Link_beillesztés(String munkalap, string hova, string hivatkozottlap)
+        public static void Link_beillesztés(string munkalap, string hova, string hivatkozottlap)
         {
             try
             {
@@ -321,5 +320,41 @@ namespace Villamos
             }
         }
 
+        /// <summary>
+        /// A KÉSZ munkalapon elhelyezi az adattáblát
+        /// </summary>
+        /// <param name="munkalapnév"></param>
+        /// <param name="dataTable"></param>
+        public static void Munkalap_Adattábla(string munkalapnév, System.Data.DataTable dataTable)
+        {
+            try
+            {
+                IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
+                //  munkalap.Cell(1, 1).InsertTable(dataTable, "", true); // true = első sor fejléc
+                // vagy cellánként:
+                for (int r = 0; r < dataTable.Rows.Count; r++)
+                {
+                    for (int c = 0; c < dataTable.Columns.Count; c++)
+                    {
+                        var érték = dataTable.Rows[r][c];
+                        if (érték == DBNull.Value) munkalap.Cell(r + 2, c + 1).Value = "";
+                        else if (érték is DateTime dt) munkalap.Cell(r + 2, c + 1).Value = dt;
+                        else munkalap.Cell(r + 2, c + 1).Value = érték.ToString();
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Képlet_másol(munkalap {munkalapnév}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
