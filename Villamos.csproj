@@ -364,6 +364,7 @@
     <Compile Include="V_Adatszerkezet\Beállítás_CellaSzöveg.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Ferde.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Betű.cs" />
+    <Compile Include="V_Adatszerkezet\Beállítás_Kimutatás.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Nyomtatás.cs" />
     <Compile Include="V_Excel\Excel_Betű.cs" />
     <Compile Include="V_Excel\Excel_Keretez.cs" />
@@ -1409,6 +1410,7 @@
     <Compile Include="V_XML\MyClosedXML_Excel.cs" />
     <Compile Include="V_XML\MyClosedXML_Ferde.cs" />
     <Compile Include="V_XML\MyClosedXML_Keret.cs" />
+    <Compile Include="V_XML\MyClosedXML_Kimutatás.cs" />
     <Compile Include="V_XML\MyClosedXML_Munkalap.cs" />
     <Compile Include="V_XML\MyClosedXML_Nyomtatás.cs" />
     <Compile Include="V_XML\MyClosedXML_Sor_Oszlop.cs" />
