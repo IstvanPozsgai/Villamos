@@ -102,8 +102,6 @@ namespace Villamos.Villamos_Adatbázis_Funkció
             szöveg += "[KövV_sorszám] Long,";
             szöveg += "[KövV]  char (10),";
             szöveg += "[törölt] YESNO, ";
-            szöveg += "[Módosító]  char (50),";
-            szöveg += "[Mikor] DATE,";
 
             szöveg += "[Honostelephely]  char (50),";
             szöveg += "[tervsorszám] Long,";
