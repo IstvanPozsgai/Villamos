@@ -25,6 +25,12 @@ namespace Villamos
 
         private const double MmToInch = 1.0 / 25.4;
 
+        /// <summary>
+        /// Ha az Excel fájlt kell megnyitni, kell használni ezt a függvényt,
+        /// hogy adatokat lehessen írni, vagy olvasni a fájlból
+        /// Ha csak meg akarunk nyitni valamit, akkor használjuk a Process.Start()-ot amit a Függvényeknél találunk
+        /// </summary>
+        /// <param name="hely"></param>
         public static void ExcelMegnyitás(string hely)
         {
             try
