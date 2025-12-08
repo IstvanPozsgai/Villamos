@@ -7,7 +7,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
@@ -849,6 +848,7 @@ namespace Villamos
 
                 Holtart.Be(20);
                 int i = 0;
+                if (Adatok.Count < 1) sor += 1;
                 foreach (Adat_Kidobó rekord in Adatok)
                 {
                     sor += 1;
