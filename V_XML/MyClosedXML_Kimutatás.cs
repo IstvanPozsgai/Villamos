@@ -20,9 +20,8 @@ namespace Villamos
             {
                 IXLWorksheet Adatok_lap = xlWorkBook.Worksheet(beállítás.Munkalapnév);
 
-                // → ÚJ SOR: Adatok tisztítása XML-hibás karakterektől
+                // Adatok tisztítása XML-hibás karakterektől (ha van ilyen metódusod)
                 TisztitsdMegAdatLapotXmlHibakarakterektol(Adatok_lap);
-
 
                 //Ha nincs kimutatás lap akkor létrehoz egyet
                 IXLWorksheet Kimutatás_lap;
@@ -39,7 +38,7 @@ namespace Villamos
                 IXLCell celCella = Kimutatás_lap.Cell(beállítás.Kimutatás_cella);
                 IXLPivotTable pivotTable = Kimutatás_lap.PivotTables.Add(beállítás.Kimutatás_név, celCella, AdatRange);
 
-                //  Sorok
+                // Sorok
                 if (beállítás.SorNév != null && beállítás.SorNév.Count > 0)
                     foreach (string nev in beállítás.SorNév)
                         pivotTable.RowLabels.Add(nev);
@@ -49,12 +48,12 @@ namespace Villamos
                     foreach (string nev in beállítás.OszlopNév)
                         pivotTable.ColumnLabels.Add(nev);
 
-                //    Szűrők
+                // Szűrők
                 if (beállítás.SzűrőNév != null && beállítás.SzűrőNév.Count > 0)
                     foreach (string nev in beállítás.SzűrőNév)
                         pivotTable.ReportFilters.Add(nev);
 
-                //   Értékek
+                // Értékek
                 if (beállítás.ÖsszesítNév != null && beállítás.ÖsszesítNév.Count > 0)
                 {
                     for (int i = 0; i < beállítás.ÖsszesítNév.Count; i++)
@@ -89,21 +88,19 @@ namespace Villamos
             }
         }
 
-        /// <summary>
-        /// KOMPATIBILITÁSI TÚLTERHELÉS (Overload)
-        /// </summary>
+        //11 PARAMÉTERES TÚLTERHELÉS
         public static void Kimutatás_Fő(
-     string munkalap_adat,
-     string balfelső,
-     string jobbalsó,
-     string kimutatás_Munkalap,
-     string Kimutatás_cella,
-     string Kimutatás_név,
-     List<string> összesítNév,
-     List<string> összesít_módja,
-     List<string> sorNév,
-     List<string> oszlopNév,
-     List<string> szűrőNév)
+            string munkalap_adat,
+            string balfelső,
+            string jobbalsó,
+            string kimutatás_Munkalap,
+            string Kimutatás_cella,
+            string Kimutatás_név,
+            List<string> összesítNév,
+            List<string> összesít_módja,
+            List<string> sorNév,
+            List<string> oszlopNév,
+            List<string> szűrőNév)
         {
             Beállítás_Kimutatás beállítás = new Beállítás_Kimutatás
             {
@@ -113,15 +110,41 @@ namespace Villamos
                 Kimutatás_Munkalapnév = kimutatás_Munkalap,
                 Kimutatás_cella = Kimutatás_cella,
                 Kimutatás_név = Kimutatás_név,
-
                 ÖsszesítNév = összesítNév,
                 Összesítés_módja = összesít_módja,
-
                 SorNév = sorNév,
                 OszlopNév = oszlopNév,
                 SzűrőNév = szűrőNév
             };
             Kimutatás_Fő(beállítás);
+        }
+
+        // 10 PARAMÉTERES TÚLTERHELÉS 
+        public static void Kimutatás_Fő(
+            string munkalap_adat,
+            string balfelső,
+            string jobbalsó,
+            string kimutatás_Munkalap,
+            string Kimutatás_cella,
+            string Kimutatás_név,
+            List<string> összesítNév,
+            List<string> sorNév,
+            List<string> oszlopNév,
+            List<string> szűrőNév)
+        {
+            Kimutatás_Fő(
+                munkalap_adat,
+                balfelső,
+                jobbalsó,
+                kimutatás_Munkalap,
+                Kimutatás_cella,
+                Kimutatás_név,
+                összesítNév,
+                null,
+                sorNév,
+                oszlopNév,
+                szűrőNév
+            );
         }
 
 
