@@ -93,18 +93,21 @@ public static class FVGyűjtemény
         return válasz;
     }
     /// <summary>
-    /// Objectumot alakít át DATETIME abban az esetben, ha nem jó értéket kap 1900.01.01-el tér vissza
+    /// Objectumot alakít át DATETIME abban az esetben,
+    /// ha nem alakítható át dátummá akkor 1900.01.01 00:00:00-el tér vissza
+    /// Ha régebbi mint 1900.01.01, akkor az időt visszi magával
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
     public static DateTime ToÉrt_DaTeTime(this object str)
     {
-        if (!DateTime.TryParse(str.ToStrTrim(), out DateTime válasz))
-            válasz = new DateTime(1900, 1, 1);
-        else
-        if (válasz < new DateTime(1900, 1, 1))
-            válasz = new DateTime(1900, 1, 1);
-        return válasz;
+        DateTime Válasz = new DateTime(1900, 1, 1, 0, 0, 0);
+        if (DateTime.TryParse(str.ToStrTrim(), out DateTime dátum))
+            if (dátum < new DateTime(1900, 1, 1, 0, 0, 0))
+                Válasz = new DateTime(1900, 1, 1, dátum.Hour, dátum.Minute, dátum.Second);
+            else
+                Válasz = dátum;
+        return Válasz;
     }
     /// <summary>
     ///  Szöveget alakít át DATETIME abban az esetben, ha nem jó értéket kap 1900.01.01-el tér vissza
@@ -113,12 +116,13 @@ public static class FVGyűjtemény
     /// <returns></returns>
     public static DateTime ToÉrt_DaTeTime(this string str)
     {
-        if (!DateTime.TryParse(str, out DateTime válasz))
-            válasz = new DateTime(1900, 1, 1);
-        else
-        if (válasz < new DateTime(1900, 1, 1))   
-            válasz = new DateTime(1900, 1, 1);
-        return válasz;
+        DateTime Válasz = new DateTime(1900, 1, 1, 0, 0, 0);
+        if (DateTime.TryParse(str.ToStrTrim(), out DateTime dátum))
+            if (dátum < new DateTime(1900, 1, 1, 0, 0, 0))
+                Válasz = new DateTime(1900, 1, 1, dátum.Hour, dátum.Minute, dátum.Second);
+            else
+                Válasz = dátum;
+        return Válasz;
     }
     /// <summary>
     /// Objectumot alakít át BOOL abban az esetben, ha nem jó értéket kap 0-val tér vissza
