@@ -574,9 +574,10 @@ namespace Villamos
                 Html_szöveg = "<html><body>";
                 // ha létezik, akkor benyitjuk az excel táblát.
                 Holtart.Be(10);
-                munkalap = EgyTerjesztés.Szöveg;
-
-                MyX.ExcelMegnyitás(munkalap);
+                munkalap = "Munka1";
+                string fájlnév = EgyTerjesztés.Szöveg;
+                MyX.ExcelMegnyitás(fájlnév);
+                MyX.Munkalap_aktív ( munkalap);
 
                 int vége = 0;
 
@@ -689,14 +690,15 @@ namespace Villamos
                         }
                     }
                 }
-                MyX.Kiir("X", "a" + szám.ToString());
-                MyX.Kiir(szám.ToString(), "aa1");
-                MyX.ExcelMentés(munkalap);
+                MyX.Kiir("X", $"a{szám}" );
+                MyX.Kiir($"#SZÁME#{szám}", "aa1");
+                MyX.Aktív_Cella(munkalap, $"a{szám}");
+                MyX.ExcelMentés(fájlnév);
                 MyX.ExcelBezárás();
                 Html_szöveg += "</body></html>";
 
                 Holtart.Ki();
-                MyF.Megnyitás(EgyTerjesztés.Szöveg);
+                MyF.Megnyitás(fájlnév);
             }
             catch (HibásBevittAdat ex)
             {
