@@ -1360,7 +1360,7 @@ namespace Villamos
                     LáblécKözép = "&P/&N",
                     BalMargó = 15,
                     JobbMargó = 15,
-                    FelsőMargó = 19,
+                    FelsőMargó = 21,
                     AlsóMargó = 19,
                     FejlécMéret = 10,
                     LáblécMéret = 13,
@@ -1373,10 +1373,9 @@ namespace Villamos
 
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
-                MyF.Megnyitás(fájlexc);
-
                 Holtart.Ki();
                 MessageBox.Show("A nyomtatvány elkészült. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
