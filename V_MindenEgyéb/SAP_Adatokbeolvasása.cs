@@ -710,8 +710,9 @@ namespace Villamos.V_MindenEgyéb
 
                     TimeSpan számhossz = tervérkezés - tervindulás;
                     TimeSpan menethossz = tényérkezés - tényindulás;
-
-                    if (számhossz.TotalMinutes != menethossz.TotalMinutes && menethossz.TotalMinutes != 0)
+                    //Akkor számolunk ha a terv és tény indulás és érkezések időkülönbsége nem egyezik
+                    //Ha a két hossz érték nagyobb mint 0
+                    if (számhossz.TotalMinutes != menethossz.TotalMinutes && menethossz.TotalMinutes > 0 && számhossz.TotalMinutes >0)
                     {
                         //Ha nem a teljes számot járja le akkor kiszámoljuk a töredék km-t.
                         km = (int)((km * menethossz.TotalMinutes) / számhossz.TotalMinutes);
