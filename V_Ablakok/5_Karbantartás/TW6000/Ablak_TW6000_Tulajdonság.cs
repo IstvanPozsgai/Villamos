@@ -741,56 +741,7 @@ namespace Villamos
                     return;
 
                 Holtart.Be();
-                MyE.ExcelLétrehozás();
-                // megnyitjuk és kitöltjük az excel táblát
-                string munkalap = "Munka1";
-                MyE.Munkalap_betű("arial", 12);
-
-                // fejléc kiírása
-                for (int oszlop = 0; oszlop < Táblaütemezés.ColumnCount; oszlop++)
-                {
-                    MyE.Kiir(Táblaütemezés.Columns[oszlop].HeaderText, MyE.Oszlopnév(oszlop + 1) + "1");
-                    MyE.Háttérszín(MyE.Oszlopnév(oszlop + 1) + "1", Color.Yellow);
-                    Holtart.Lép();
-                }
-
-                // tartalom kiírása
-                for (int sor = 0; sor < Táblaütemezés.RowCount; sor++)
-                {
-                    Color ideigsor = Táblaütemezés.Rows[sor].DefaultCellStyle.BackColor;
-                    if (ideigsor.Name == "0") ideigsor = Color.White;
-                    MyE.Háttérszín($"A{sor + 2}:{MyE.Oszlopnév(Táblaütemezés.ColumnCount - 2)}{sor + 2}", ideigsor);
-
-                    for (int oszlop = 0; oszlop < Táblaütemezés.ColumnCount; oszlop++)
-                    {
-                        if (Táblaütemezés.Rows[sor].Cells[oszlop].Value != null)
-                        {
-                            MyE.Kiir(Táblaütemezés.Rows[sor].Cells[oszlop].Value.ToStrTrim(), MyE.Oszlopnév(oszlop + 1) + (sor + 2).ToString());
-
-                            Color ideig = Táblaütemezés.Rows[sor].Cells[oszlop].Style.BackColor;
-                            if (ideig.Name != "0")
-                                MyE.Háttérszín(MyE.Oszlopnév(oszlop + 1) + (sor + 2).ToString(), ideig);
-                        }
-                    }
-                    Holtart.Lép();
-                }
-                // megformázzuk
-                int utolsóSor = Táblaütemezés.RowCount + 1;
-                string utolsóOszlop = MyE.Oszlopnév(Táblaütemezés.ColumnCount);
-                MyE.Rácsoz("A1:" + utolsóOszlop + utolsóSor);
-                MyE.Vastagkeret("A1:" + utolsóOszlop + "1");
-
-
-                MyE.Oszlopszélesség(munkalap, $"A:{utolsóOszlop}");
-                MyE.NyomtatásiTerület_részletes(munkalap, "A1:" + utolsóOszlop + utolsóSor, 15, 15,
-                    20, 15, 13, 13, "1", "1", true, "A4", true, true);
-
-                // bezárjuk az Excel-t
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
-                Holtart.Ki();
-                MyE.Megnyitás(fájlexc);
+                
             }
             catch (HibásBevittAdat ex)
             {
