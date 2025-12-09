@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Ablakok._5_Karbantartás.TW6000;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.TW6000;
 using Villamos.Villamos_Adatbázis_Funkció;
@@ -741,7 +742,8 @@ namespace Villamos
                     return;
 
                 Holtart.Be();
-                
+                TW6000_Excel_Kimenet excel_kimenet = new TW6000_Excel_Kimenet();
+                excel_kimenet.Excel_Kimenet(fájlexc, Táblaütemezés);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2271,18 +2273,8 @@ namespace Villamos
         {
             try
             {
-                string[] cím = new string[4];
-                string[] leírás = new string[4];
 
-                // paraméter tábla feltöltése
-                cím[1] = "Adatok";
-                leírás[1] = "Előtervezett adatok";
-                cím[2] = "Vizsgálatok";
-                leírás[2] = "Vizsgálati adatok havonta";
-                cím[3] = "Éves_terv";
-                leírás[3] = "Vizsgálati adatok éves";
                 string fájlexc;
-
                 // kimeneti fájl helye és neve
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
                 {
@@ -2296,50 +2288,10 @@ namespace Villamos
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
+                TW6000_Excel_Kimutatas excel_Kimutatas = new TW6000_Excel_Kimutatas();
+                string[] VizsgalatLista_Kivalasztott = VizsgálatLista.CheckedItems.OfType<string>().ToArray();
+                excel_Kimutatas.Kimutatast_Keszit(fájlexc,VizsgalatLista_Kivalasztott, KézElőterv);
 
-                // ****************************************************
-                // elkészítjük a lapokat
-                // ****************************************************
-                string munkalap = "Tartalom";
-                MyE.ExcelLétrehozás();
-                MyE.Munkalap_átnevezés("Munka1", munkalap);
-
-                for (int i = 1; i < 4; i++)
-                    MyE.Új_munkalap(cím[i]);
-
-                // ****************************************************
-                // Elkészítjük a tartalom jegyzéket
-                // ****************************************************
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.Kiir("Munkalapfül", "a1");
-                MyE.Kiir("Leírás", "b1");
-
-                for (int i = 1; i <= 3; i++)
-                {
-
-                    MyE.Link_beillesztés(munkalap, "A" + (i + 1).ToString(), cím[i].Trim());
-                    MyE.Kiir(leírás[i], "b" + (i + 1).ToString());
-                }
-                MyE.Oszlopszélesség(munkalap, "A:B");
-
-
-                //// ****************************************************
-                //// Elkészítjük a munkalapokat
-                //// ****************************************************
-
-                long sor = Adatoklistázása();
-                if (sor > 2)        //Azért kell mert nem tud csak 2 soros táblából kimutatást készíteni
-                {
-                    Kimutatás();
-                    Kimutatás1();
-                }
-
-                MyE.Munkalap_aktív("Tartalom");
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
-
-                MyE.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2355,202 +2307,7 @@ namespace Villamos
         /// <summary>
         /// Kiírja a vizsgálati adatokat
         /// </summary>
-        private long Adatoklistázása()
-        {
-            long válasz = 0;
-            try
-            {
-                string munkalap = "Adatok";
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.Link_beillesztés(munkalap, "A1", "Tartalom");
-
-                // fejlécet kiírjuk
-                MyE.Kiir("Pályaszám", "a3");
-                MyE.Kiir("ciklusrend", "b3");
-                MyE.Kiir("elkészült", "c3");
-                MyE.Kiir("Megjegyzés", "d3");
-                MyE.Kiir("státus", "e3");
-                MyE.Kiir("elkészülés", "f3");
-                MyE.Kiir("esedékesség", "g3");
-                MyE.Kiir("vizsgálat", "h3");
-                MyE.Kiir("v. sorszám", "i3");
-                MyE.Kiir("ütemezés", "j3");
-                MyE.Kiir("végezte", "k3");
-                MyE.Kiir("Év", "l3");
-                MyE.Kiir("Hónap", "m3");
-
-                string hely = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\TW6000adatok.mdb";
-                if (VizsgálatLista.CheckedItems.Count < 1) return válasz;
-
-                AdatokÜtem = KézElőterv.Lista_AdatokÜtem(hely);
-
-                List<Adat_TW6000_Ütemezés> AdatokGy = new List<Adat_TW6000_Ütemezés>();
-                for (int i = 0; i < VizsgálatLista.CheckedItems.Count; i++)
-                {
-                    List<Adat_TW6000_Ütemezés> Ideig = (from a in AdatokÜtem
-                                                        where a.Vizsgfoka == VizsgálatLista.CheckedItems[i].ToStrTrim()
-                                                        select a).ToList();
-                    AdatokGy.AddRange(Ideig);
-                }
-
-                AdatokGy = (from a in AdatokGy
-                            orderby a.Azonosító, a.Vütemezés
-                            select a).ToList();
-                int sor = 4;
-                if (AdatokGy.Count > 0) válasz = AdatokGy.Count;
-                foreach (Adat_TW6000_Ütemezés rekord in AdatokGy)
-                {
-                    MyE.Kiir(rekord.Azonosító.Trim(), "a" + sor);
-                    MyE.Kiir(rekord.Ciklusrend.Trim(), "b" + sor);
-                    MyE.Kiir(rekord.Elkészült.ToString(), "c" + sor);
-                    MyE.Kiir(rekord.Megjegyzés.Trim(), "d" + sor);
-                    MyE.Kiir(rekord.Státus.ToString(), "e" + sor);
-                    MyE.Kiir(rekord.Velkészülés.ToString("yyyy.MM.dd"), "f" + sor);
-                    MyE.Kiir(rekord.Vesedékesség.ToString("yyyy.MM.dd"), "g" + sor);
-                    MyE.Kiir(rekord.Vizsgfoka.Trim(), "h" + sor);
-                    MyE.Kiir(rekord.Vsorszám.ToString(), "i" + sor);
-                    MyE.Kiir(rekord.Vütemezés.ToString("yyyy.MM.dd"), "j" + sor);
-                    MyE.Kiir(rekord.Vvégezte.Trim(), "k" + sor);
-                    MyE.Kiir(rekord.Vütemezés.Year.ToString(), "l" + sor);
-                    MyE.Kiir(rekord.Vütemezés.Month.ToString(), "m" + sor);
-                    sor++;
-                    Holtart.Lép();
-                }
-
-                // megformázzuk
-                MyE.Aktív_Cella(munkalap, "A:m");
-                MyE.Aktív_Cella(munkalap, "m1");
-                MyE.Oszlopszélesség(munkalap, "A:m");
-                MyE.Vastagkeret("a3:m3");
-                MyE.Rácsoz("a3:m" + (sor - 1).ToString());
-                MyE.Vastagkeret("a3:m" + (sor - 1).ToString());
-                MyE.Vastagkeret("a3:m3");
-
-                // szűrő
-                MyE.Szűrés(munkalap, $"A", "M", sor, 3);
-
-                // ablaktábla rögzítése
-                MyE.Tábla_Rögzítés(3);
-
-                // kiírjuk a tábla méretét
-                MyE.Munkalap_aktív("Vizsgálatok");
-                MyE.Kiir((sor - 1).ToString(), "aa1");
-                MyE.Munkalap_aktív("Éves_terv");
-                MyE.Kiir((sor - 1).ToString(), "aa1");
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return válasz;
-        }
-
-        private void Kimutatás()
-        {
-            try
-            {
-                string munkalap = "Vizsgálatok";
-
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.Link_beillesztés(munkalap, "A1", "Tartalom");
-                // beolvassuk a sor végét
-                int sor = int.Parse(MyE.Beolvas("aa1"));
-
-
-                string munkalap_adat = "Adatok";
-                string balfelső = "A3";
-                string jobbalsó = "M" + sor;
-                string kimutatás_Munkalap = munkalap;
-                string Kimutatás_cella = "A6";
-                string Kimutatás_név = "Kimutatás";
-
-                List<string> összesítNév = new List<string>();
-                List<string> Összesít_módja = new List<string>();
-                List<string> sorNév = new List<string>();
-                List<string> oszlopNév = new List<string>();
-                List<string> SzűrőNév = new List<string>();
-
-                összesítNév.Add("Pályaszám");
-
-                Összesít_módja.Add("xlCount");
-
-                sorNév.Add("Hónap");
-
-
-                SzűrőNév.Add("végezte");
-                SzűrőNév.Add("év");
-
-                oszlopNév.Add("vizsgálat");
-
-                MyE.Kimutatás_Fő(munkalap_adat, balfelső, jobbalsó, kimutatás_Munkalap, Kimutatás_cella, Kimutatás_név
-                                , összesítNév, Összesít_módja, sorNév, oszlopNév, SzűrőNév);
-                MyE.Aktív_Cella(munkalap, "A1");
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Kimutatás1()
-        {
-            try
-            {
-                string munkalap = "Éves_terv";
-
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.Link_beillesztés(munkalap, "A1", "Tartalom");
-                // beolvassuk a sor végét
-                int sor = int.Parse(MyE.Beolvas("aa1"));
-
-
-                string munkalap_adat = "Adatok";
-                string balfelső = "A3";
-                string jobbalsó = "M" + sor;
-                string kimutatás_Munkalap = munkalap;
-                string Kimutatás_cella = "A6";
-                string Kimutatás_név = "Kimutatás";
-
-                List<string> összesítNév = new List<string>();
-                List<string> Összesít_módja = new List<string>();
-                List<string> sorNév = new List<string>();
-                List<string> oszlopNév = new List<string>();
-                List<string> SzűrőNév = new List<string>();
-
-                összesítNév.Add("Pályaszám");
-
-                Összesít_módja.Add("xlCount");
-
-                sorNév.Add("év");
-
-                SzűrőNév.Add("végezte");
-
-                oszlopNév.Add("vizsgálat");
-
-                MyE.Kimutatás_Fő(munkalap_adat, balfelső, jobbalsó, kimutatás_Munkalap, Kimutatás_cella, Kimutatás_név
-                                , összesítNév, Összesít_módja, sorNév, oszlopNév, SzűrőNév);
-                MyE.Aktív_Cella(munkalap, "A1");
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+        
         #endregion
 
 

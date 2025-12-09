@@ -347,6 +347,7 @@
       <DependentUpon>Ablak_Bejelentkezés_Új.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\5_Karbantartás\TW6000\TW6000_Excel_Kimenet.cs" />
+    <Compile Include="V_Ablakok\5_Karbantartás\TW6000\TW6000_Excel_Kimutatas.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Beálló.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Háromnapos.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Jegykezelő.cs" />
