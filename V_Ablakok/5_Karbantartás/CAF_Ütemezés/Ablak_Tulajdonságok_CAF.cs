@@ -1098,7 +1098,7 @@ namespace Villamos
                     return;
 
                 CAF_Elo_Havi_Excel elo_Havi_Excel = new CAF_Elo_Havi_Excel();
-                elo_Havi_Excel.elo_havi_excel_keszit(fájlexc, KézSzín, Tábla_elő);
+                elo_Havi_Excel.elo_havi_excel_keszit(fájlexc, KézSzín, Tábla_elő, Előterv_listázás_excelhez_negát);
                 
 
                 Holtart.Ki();

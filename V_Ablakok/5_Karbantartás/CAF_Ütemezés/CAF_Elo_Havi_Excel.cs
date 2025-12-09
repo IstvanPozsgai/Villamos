@@ -17,7 +17,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
     public class CAF_Elo_Havi_Excel
     {
         Beállítás_Betű BeBetű = new Beállítás_Betű() { Név = "Calibri", Méret = 11 };
-        public void elo_havi_excel_keszit(string fájlexc, Kezelő_CAF_Szinezés KézSzín, DataGridView Tábla_elő)
+        public void elo_havi_excel_keszit(string fájlexc, Kezelő_CAF_Szinezés KézSzín, DataGridView Tábla_elő, Action eloterveListazasExcelhezNegat)
         {
             // megnyitjuk az excelt
             string munkalap = "Munka1";
@@ -194,7 +194,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
 
             // * Kiegészítő adatok eleje       *
             // *********************************
-            Előterv_listázás_excelhez_negát();
+            eloterveListazasExcelhezNegat?.Invoke();      
 
 
             // feltöltjük a vizsgálatokat
