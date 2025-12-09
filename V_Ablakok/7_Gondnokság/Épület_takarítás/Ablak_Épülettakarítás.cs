@@ -359,7 +359,7 @@ namespace Villamos
                                            where a.Hónap == Dátum2.Value.Month
                                            select a).FirstOrDefault();
                 // ha nincs ilyen akkor átvesszük a munkaidő naptárból ha van.
-                if (Elem == null || Elem.Hónap .ToStrTrim ()=="")
+                if (Elem == null || Elem.Hónap.ToStrTrim() == "")
                 {
                     Naptár_átvétel();
                     AdatokÉNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum2.Value.Year);
@@ -1874,52 +1874,52 @@ namespace Villamos
 
                 List<Adat_Épület_Takarításrakijelölt> AdatokM = new List<Adat_Épület_Takarításrakijelölt>();
                 List<Adat_Épület_Takarításrakijelölt> AdatokR = new List<Adat_Épület_Takarításrakijelölt>();
-                for (int i = 0; i < Helyiséglista.CheckedItems.Count; i++)
+                for (int i = 0; i < Helyiséglista.Items.Count; i++)
                 {
-
-                    // töröljük a pipát
-
-
-                    string[] darabol = Helyiséglista.CheckedItems[i].ToString().Split('-');
-                    string helységkód = darabol[0];
-                    string Megnevezés = darabol[1];
-                    Helyiséglista.SetItemChecked(i, false);
-
-                    Adat_Épület_Adattábla ÉpAdat = (from a in AdatokAdatTábla
-                                                    where a.Helységkód == helységkód.Trim()
-                                                    select a).FirstOrDefault();
-                    if (ÉpAdat != null)
+                    if (Helyiséglista.GetItemChecked(i))
                     {
-                        Megnevezés = ÉpAdat.Megnevezés.Trim();
-                        string osztály = ÉpAdat.Osztály.Trim();
-                        Adat_Épület_Takarításrakijelölt KijelöltElem = (from a in AdatokKijelöltek
-                                                                        where a.Hónap == Dátum.Value.Month
-                                                                        && a.Helységkód == helységkód.Trim()
-                                                                        select a).FirstOrDefault();
+                        string[] darabol = Helyiséglista.Items[i].ToString().Split('-');
+                        string helységkód = darabol[0];
+                        string Megnevezés = darabol[1];
+                        // töröljük a pipát
+                        Helyiséglista.SetItemChecked(i, false);
 
-                        if (KijelöltElem == null)
+                        Adat_Épület_Adattábla ÉpAdat = (from a in AdatokAdatTábla
+                                                        where a.Helységkód == helységkód.Trim()
+                                                        select a).FirstOrDefault();
+                        if (ÉpAdat != null)
                         {
-                            Adat_Épület_Takarításrakijelölt Adat = new Adat_Épület_Takarításrakijelölt(
-                                          0, E1db, e1.Trim(),
-                                          0, E2db, e2.Trim(),
-                                          0, E3db, e3.Trim(),
-                                          helységkód,
-                                          Dátum.Value.Month,
-                                          Megnevezés.Trim().Replace(",", "."),
-                                          osztály.Trim().Replace(",", "."));
-                            AdatokR.Add(Adat);
+                            Megnevezés = ÉpAdat.Megnevezés.Trim();
+                            string osztály = ÉpAdat.Osztály.Trim();
+                            Adat_Épület_Takarításrakijelölt KijelöltElem = (from a in AdatokKijelöltek
+                                                                            where a.Hónap == Dátum.Value.Month
+                                                                            && a.Helységkód == helységkód.Trim()
+                                                                            select a).FirstOrDefault();
+
+                            if (KijelöltElem == null)
+                            {
+                                Adat_Épület_Takarításrakijelölt Adat = new Adat_Épület_Takarításrakijelölt(
+                                              0, E1db, e1.Trim(),
+                                              0, E2db, e2.Trim(),
+                                              0, E3db, e3.Trim(),
+                                              helységkód,
+                                              Dátum.Value.Month,
+                                              Megnevezés.Trim().Replace(",", "."),
+                                              osztály.Trim().Replace(",", "."));
+                                AdatokR.Add(Adat);
+                            }
+                            else
+                            {
+                                Adat_Épület_Takarításrakijelölt Adat = new Adat_Épület_Takarításrakijelölt(
+                                            E1db, E2db, E3db,
+                                            helységkód.Trim(),
+                                            Dátum.Value.Month,
+                                            e1.Trim(), e2.Trim(), e3.Trim());
+                                AdatokM.Add(Adat);
+                            }
                         }
-                        else
-                        {
-                            Adat_Épület_Takarításrakijelölt Adat = new Adat_Épület_Takarításrakijelölt(
-                                        E1db, E2db, E3db,
-                                        helységkód.Trim(),
-                                        Dátum.Value.Month,
-                                        e1.Trim(), e2.Trim(), e3.Trim());
-                            AdatokM.Add(Adat);
-                        }
+                        Holtart.Lép();
                     }
-                    Holtart.Lép();
                 }
                 if (AdatokR.Count > 0) KézTakarításrakijelölt.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value.Year, AdatokR);
                 if (AdatokM.Count > 0) KézTakarításrakijelölt.Módosítás(AdatokM, Dátum.Value.Year, Cmbtelephely.Text.Trim());
