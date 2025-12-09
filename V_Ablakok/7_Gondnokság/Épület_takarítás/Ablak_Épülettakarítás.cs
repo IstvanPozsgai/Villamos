@@ -359,7 +359,7 @@ namespace Villamos
                                            where a.Hónap == Dátum2.Value.Month
                                            select a).FirstOrDefault();
                 // ha nincs ilyen akkor átvesszük a munkaidő naptárból ha van.
-                if (Elem == null)
+                if (Elem == null || Elem.Hónap .ToStrTrim ()=="")
                 {
                     Naptár_átvétel();
                     AdatokÉNaptár = KézÉpületNaptár.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum2.Value.Year);
