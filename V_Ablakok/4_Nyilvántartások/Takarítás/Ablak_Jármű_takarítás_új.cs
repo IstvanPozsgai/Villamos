@@ -353,10 +353,10 @@ namespace Villamos
         private void Gombok()
         {
             // színek alaphelyzetbe
-            J1Mentés.BackColor = Color.Silver;
-            LétszámMentés.BackColor = Color.Silver;
-            JK_Mentés.BackColor = Color.Silver;
-            Opció_mentés.BackColor = Color.Silver;
+            J1Mentés.BackColor = Color.WhiteSmoke;
+            LétszámMentés.BackColor = Color.WhiteSmoke;
+            JK_Mentés.BackColor = Color.WhiteSmoke;
+            Opció_mentés.BackColor = Color.WhiteSmoke;
 
             GroupBox1.BackColor = Color.Blue;
             GroupBox2.BackColor = Color.Blue;
@@ -1713,6 +1713,7 @@ namespace Villamos
                 Takarítottkocsik();
 
                 AcceptButton = JK_Mentés;
+                Gombok();
                 JK_Mentés.BackColor = Color.LimeGreen;
                 GroupBox4.BackColor = Color.SaddleBrown;
             }
@@ -1967,8 +1968,10 @@ namespace Villamos
                 MessageBox.Show("Az adatok rögzítése megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 AcceptButton = J1Mentés;
+                Gombok();
                 J1Mentés.BackColor = Color.LimeGreen;
                 GroupBox1.BackColor = Color.SaddleBrown;
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -2059,6 +2062,7 @@ namespace Villamos
                 Lét_Viselt.Text = "";
 
                 AcceptButton = LétszámMentés;
+                Gombok();
                 LétszámMentés.BackColor = Color.LimeGreen;
                 GroupBox2.BackColor = Color.SaddleBrown;
                 MessageBox.Show("Az adatok rögzítése megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2167,6 +2171,7 @@ namespace Villamos
                                                                     && a.Napszak == napsz
                                                                     && a.Státus == 1
                                                                     && a.Takarítási_fajta == Opció_lista.Text.Trim()
+                                                                    orderby a.Azonosító
                                                                     select a).ToList();
 
                 foreach (Adat_Jármű_Takarítás_Teljesítés rekord in Teljesítés)
@@ -2252,7 +2257,7 @@ namespace Villamos
                 Opció_psz.Focus();
 
                 OpciósKocsik();
-
+                Gombok();
                 AcceptButton = Opció_mentés;
                 Opció_mentés.BackColor = Color.LimeGreen;
                 GroupBox3.BackColor = Color.SaddleBrown;

@@ -886,13 +886,14 @@ namespace Villamos
             // 
             // Opció_Töröl
             // 
+            this.Opció_Töröl.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Opció_Töröl.Image = global::Villamos.Properties.Resources.Kuka;
             this.Opció_Töröl.Location = new System.Drawing.Point(505, 113);
             this.Opció_Töröl.Name = "Opció_Töröl";
             this.Opció_Töröl.Size = new System.Drawing.Size(40, 40);
             this.Opció_Töröl.TabIndex = 5;
             this.ToolTip1.SetToolTip(this.Opció_Töröl, "Listában kijelöltek törlése");
-            this.Opció_Töröl.UseVisualStyleBackColor = true;
+            this.Opció_Töröl.UseVisualStyleBackColor = false;
             this.Opció_Töröl.Click += new System.EventHandler(this.Opció_Töröl_Click);
             // 
             // Opció_terület
@@ -906,6 +907,7 @@ namespace Villamos
             // Button2
             // 
             this.Button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button2.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Button2.Image = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Button2.Location = new System.Drawing.Point(505, 68);
             this.Button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -913,7 +915,7 @@ namespace Villamos
             this.Button2.Size = new System.Drawing.Size(40, 40);
             this.Button2.TabIndex = 4;
             this.ToolTip1.SetToolTip(this.Button2, "Frissít");
-            this.Button2.UseVisualStyleBackColor = true;
+            this.Button2.UseVisualStyleBackColor = false;
             this.Button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // Opció_lista
@@ -937,13 +939,14 @@ namespace Villamos
             // Opció_mentés
             // 
             this.Opció_mentés.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Opció_mentés.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Opció_mentés.Image = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.Opció_mentés.Location = new System.Drawing.Point(505, 23);
             this.Opció_mentés.Name = "Opció_mentés";
             this.Opció_mentés.Size = new System.Drawing.Size(40, 40);
             this.Opció_mentés.TabIndex = 3;
             this.ToolTip1.SetToolTip(this.Opció_mentés, "Rögzít");
-            this.Opció_mentés.UseVisualStyleBackColor = true;
+            this.Opció_mentés.UseVisualStyleBackColor = false;
             this.Opció_mentés.Click += new System.EventHandler(this.Opció_mentés_Click);
             // 
             // GroupBox2
@@ -1020,13 +1023,14 @@ namespace Villamos
             // 
             // LétszámMentés
             // 
+            this.LétszámMentés.BackColor = System.Drawing.Color.WhiteSmoke;
             this.LétszámMentés.Image = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.LétszámMentés.Location = new System.Drawing.Point(507, 41);
             this.LétszámMentés.Name = "LétszámMentés";
             this.LétszámMentés.Size = new System.Drawing.Size(45, 45);
             this.LétszámMentés.TabIndex = 3;
             this.ToolTip1.SetToolTip(this.LétszámMentés, "Rögzít");
-            this.LétszámMentés.UseVisualStyleBackColor = true;
+            this.LétszámMentés.UseVisualStyleBackColor = false;
             this.LétszámMentés.Click += new System.EventHandler(this.LétszámMentés_Click);
             // 
             // GroupBox4
@@ -1075,18 +1079,20 @@ namespace Villamos
             // 
             // JK_törlés
             // 
+            this.JK_törlés.BackColor = System.Drawing.Color.WhiteSmoke;
             this.JK_törlés.Image = global::Villamos.Properties.Resources.Kuka;
             this.JK_törlés.Location = new System.Drawing.Point(502, 113);
             this.JK_törlés.Name = "JK_törlés";
             this.JK_törlés.Size = new System.Drawing.Size(40, 40);
             this.JK_törlés.TabIndex = 7;
             this.ToolTip1.SetToolTip(this.JK_törlés, "Listában kijelöltek törlése");
-            this.JK_törlés.UseVisualStyleBackColor = true;
+            this.JK_törlés.UseVisualStyleBackColor = false;
             this.JK_törlés.Click += new System.EventHandler(this.JK_törlés_Click);
             // 
             // Button1
             // 
             this.Button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button1.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Button1.Image = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Button1.Location = new System.Drawing.Point(502, 68);
             this.Button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -1094,7 +1100,7 @@ namespace Villamos
             this.Button1.Size = new System.Drawing.Size(40, 40);
             this.Button1.TabIndex = 3;
             this.ToolTip1.SetToolTip(this.Button1, "Frissít");
-            this.Button1.UseVisualStyleBackColor = true;
+            this.Button1.UseVisualStyleBackColor = false;
             this.Button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // JK_pót
@@ -1224,13 +1230,14 @@ namespace Villamos
             // 
             // JK_Mentés
             // 
+            this.JK_Mentés.BackColor = System.Drawing.Color.WhiteSmoke;
             this.JK_Mentés.Image = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.JK_Mentés.Location = new System.Drawing.Point(502, 23);
             this.JK_Mentés.Name = "JK_Mentés";
             this.JK_Mentés.Size = new System.Drawing.Size(40, 40);
             this.JK_Mentés.TabIndex = 2;
             this.ToolTip1.SetToolTip(this.JK_Mentés, "Rögzít");
-            this.JK_Mentés.UseVisualStyleBackColor = true;
+            this.JK_Mentés.UseVisualStyleBackColor = false;
             this.JK_Mentés.Click += new System.EventHandler(this.JK_Mentés_Click);
             // 
             // GroupBox1
@@ -1864,7 +1871,7 @@ namespace Villamos
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_Jármű_takarítás_új_FormClosed);
             this.Load += new System.EventHandler(this.Ablak_Jármű_takarítás_új_Load);
-                      this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ESC_KeyDown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ESC_KeyDown);
             this.Panel2.ResumeLayout(false);
             this.Panel2.PerformLayout();
             this.Lapfülek.ResumeLayout(false);
