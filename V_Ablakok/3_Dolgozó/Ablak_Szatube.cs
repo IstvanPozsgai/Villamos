@@ -8,9 +8,9 @@ using Villamos.Kezelők;
 using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
-using MyE = Villamos.Module_Excel;
-using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
+using MyF = Függvénygyűjtemény;
+using Villamos.V_Ablakok._3_Dolgozó.Szatube;
 
 
 namespace Villamos
@@ -35,7 +35,7 @@ namespace Villamos
         List<Adat_Szatube_Szabadság> Adatok_Szabadság = new List<Adat_Szatube_Szabadság>();
 
         readonly Beállítás_Betű BeBetu = new Beállítás_Betű() { };
-        readonly Beállítás_Betű BeBetuDoltVastag = new Beállítás_Betű() { Dőlt = true, Vastag = true};
+       
         readonly Beállítás_Betű BeBetuSzazados = new Beállítás_Betű() { Formátum = "0.00" };
 
         readonly Beállítás_Betű BeBetuCalibri10 = new Beállítás_Betű() { Név="Calibri", Méret=10 };
@@ -1253,128 +1253,12 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, (fájlexc).Length - 5);
-                string munkalap = "Munka1";
-                MyX.ExcelLétrehozás();
+                string Telephely_ = CmbTelephely.Text.Trim();
+                int Evek_ = Adat_Évek.Text.Trim().ToÉrt_Int();
 
-                // elkészítjük a fejlécet
-                MyX.Oszlopszélesség(munkalap, "A:A", 35);
-                MyX.Oszlopszélesség(munkalap, "B:D", 12);
-                MyX.Oszlopszélesség(munkalap, "e:e", 18);
-                // dolgozó törzszáma
+                Szatube_Eves_Osszesito eves_osszesito_excel = new Szatube_Eves_Osszesito();
+                eves_osszesito_excel.Eves_Osszesito(fájlexc, darabol, KézSzabadság, Telephely_, Evek_);
 
-                MyX.Egyesít(munkalap, "b1:d1");
-                MyX.Kiir("Szabadság Összesítő a " + Text.Substring(0, 4) + " évre", "b1");
-                //MyX.Betű("b1");
-
-                MyX.Kiir("Név:", "a3");
-                MyX.Egyesít(munkalap, "b3:e3");
-                MyX.Kiir(darabol[0].Trim(), "b3");
-                //MyX.Betű("b3");
-
-                MyX.Kiir("Azonosító:", "a5");
-                MyX.Egyesít(munkalap, "b5:e5");
-                MyX.Kiir(darabol[1].Trim(), "b5");
-                //MyX.Betű("b5");
-
-                MyX.Egyesít(munkalap, "a9:b9");
-                MyX.Kiir("Felhasználható szabadságok", "a9");
-                //MyX.Betű("a9");
-                MyX.Kiir("Jogcím", "a10");
-                //MyX.Betű("a10");
-                MyX.Kiir("Nap", "b10");
-                //MyX.Betű("b10");
-
-                int sor = 11;
-                int összesen = 0;
-
-                List<Adat_Szatube_Szabadság> AdatokÖ = KézSzabadság.Lista_Adatok(CmbTelephely.Text.Trim(), Adat_Évek.Text.Trim().ToÉrt_Int());
-                List<Adat_Szatube_Szabadság> Adatok = (from a in AdatokÖ
-                                                       where a.Törzsszám == darabol[1].Trim() &&
-                                                       a.Státus != 3 &&
-                                                       (a.Szabiok.ToLower().Contains("pót") || a.Szabiok.ToLower().Contains("alap"))
-                                                       orderby a.Kezdődátum
-                                                       select a).ToList();
-
-                foreach (Adat_Szatube_Szabadság rekord in Adatok)
-                {
-                    // ha nincs dátum akkor jogcím
-                    MyX.Kiir(rekord.Szabiok.Trim(), "a" + sor);
-                    MyX.Kiir(rekord.Kivettnap.ToString(), "b" + sor);
-                    összesen += rekord.Kivettnap;
-                    sor += 1;
-                    Holtart.Lép();
-                }
-                MyX.Kiir("Összesen:", "a" + sor);
-                MyX.Betű(munkalap, "A" + sor, BeBetuDoltVastag);
-                MyX.Kiir(összesen.ToString(), "b" + sor);
-                MyX.Betű(munkalap, "B" + sor, BeBetuDoltVastag);
-
-                MyX.Rácsoz(munkalap, "a9:b" + sor);
-                MyX.Vastagkeret(munkalap, "a9:b" + sor);
-                MyX.Vastagkeret(munkalap, "a10:b" + sor);
-                MyX.Vastagkeret(munkalap, "a" + sor + ":b" + sor);
-                sor += 3;
-                int eleje = sor;
-                MyX.Egyesít(munkalap, "a" + sor + ":e" + sor);
-                MyX.Kiir("Szabadság felhasználás", "a" + sor);
-                //MyX.Betű("a" + sor);
-                sor += 1;
-                MyX.Kiir("Sorszám", "a" + sor);
-                MyX.Kiir("Kezdete", "b" + sor);
-                MyX.Kiir("Vége", "c" + sor);
-                MyX.Kiir("Kivett nap", "d" + sor);
-                MyX.Kiir("Kivétel oka", "e" + sor);
-                //MyX.Betű("a" + sor + ":e" + sor);
-                sor += 1;
-
-                int kivett = 0;
-
-                Adatok = (from a in AdatokÖ
-                          where a.Törzsszám == darabol[1].Trim() &&
-                          a.Státus != 3 &&
-                          a.Szabiok.ToLower().Contains("kivétel")
-                          orderby a.Kezdődátum
-                          select a).ToList();
-
-                foreach (Adat_Szatube_Szabadság rekord in Adatok)
-                {
-                    // ha nincs dátum akkor jogcím
-                    MyX.Kiir(rekord.Sorszám.ToString(), "a" + sor);
-                    MyX.Kiir(rekord.Kezdődátum.ToString("yyyy.MM.dd"), "b" + sor);
-                    MyX.Kiir(rekord.Befejeződátum.ToString("yyyy.MM.dd"), "c" + sor);
-                    MyX.Kiir(rekord.Kivettnap.ToString(), "d" + sor);
-                    MyX.Kiir(rekord.Szabiok.Trim(), "e" + sor);
-                    kivett += rekord.Kivettnap;
-                    sor += 1;
-                    Holtart.Lép();
-                }
-
-                MyX.Kiir("Összesen:", "a" + sor);
-                MyX.Betű(munkalap, "A" + sor, BeBetuDoltVastag);
-                MyX.Kiir(kivett.ToString(), "d" + sor);
-                MyX.Betű(munkalap, "D" + sor, BeBetuDoltVastag);
-                MyX.Rácsoz(munkalap, "a" + eleje.ToString() + ":e" + sor);
-                MyX.Vastagkeret(munkalap, "a" + eleje.ToString() + ":e" + sor);
-                MyX.Vastagkeret(munkalap, "a" + eleje.ToString() + ":e" + (eleje + 1).ToString());
-                MyX.Vastagkeret(munkalap, "a" + sor + ":e" + sor);
-                sor += 2;
-                MyX.Kiir("A " + Text.Substring(0, 4) + " évről marad:", "a" + sor);
-                MyX.Kiir((összesen - kivett).ToString(), "d" + sor);
-                MyX.Betű(munkalap, sor + ":" + sor, BeBetuDoltVastag);
-                Beállítás_Nyomtatás beallitas_szabadsag = new Beállítás_Nyomtatás
-                {
-                    Munkalap = munkalap,
-                    NyomtatásiTerület = $"A1:E{sor}",
-                    Álló = true
-                };
-                MyX.NyomtatásiTerület_részletes(munkalap, beallitas_szabadsag);
-
-                MyX.ExcelMentés(fájlexc + ".xlsx");
-                MyX.ExcelBezárás();
-                Holtart.Ki();
-
-                MessageBox.Show("Elkészült az Excel tábla.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
             catch (HibásBevittAdat ex)
