@@ -60,7 +60,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             MyX.VastagFelső(munkalap, "A5:K5");
 
             // logó beszúrása
-            MyX.Kép_beillesztés(munkalap, "A1", Application.StartupPath + @"\Főmérnökség\adatok\BKV.png", 5, 5, 40, 100);
+            MyX.Kép_beillesztés(munkalap, "A1", Application.StartupPath + @"\Főmérnökség\adatok\BKV.png", 5, 5, 0.8, 1);
 
             MyX.Egyesít(munkalap, "a7:k7");
             MyX.Kiir("Rendkívüli munka elrendelő lap (csoportos)", "a7");

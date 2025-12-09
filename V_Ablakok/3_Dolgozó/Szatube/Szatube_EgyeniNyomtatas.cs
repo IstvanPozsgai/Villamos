@@ -71,8 +71,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             }
 
             // logók beszúrása
-            MyX.Kép_beillesztés(munkalap, "A1", Application.StartupPath + @"\Főmérnökség\adatok\BKV.png", 5, 5, 40, 120);
-            MyX.Kép_beillesztés(munkalap, "A1", Application.StartupPath + @"\Főmérnökség\adatok\BKV.png", 370, 5, 40, 120);
+            MyX.Kép_beillesztés(munkalap, "A1", Application.StartupPath + @"\Főmérnökség\adatok\BKV.png", 5, 5, 0.8, 1);
 
             // tábla fejléc
             MyX.Egyesít(munkalap, "a5:g5");
