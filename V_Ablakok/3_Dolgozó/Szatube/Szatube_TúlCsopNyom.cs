@@ -13,7 +13,7 @@ using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
 {
-    public class TúlCsopNyom
+    public class Szatube_TúlCsopNyom
     {
         readonly Beállítás_Betű BeBetuSzazados = new Beállítás_Betű() { Formátum = "0.00" };
         readonly Beállítás_Betű BeBetuCalibri12 = new Beállítás_Betű() { Név = "Calibri", Méret = 12 };

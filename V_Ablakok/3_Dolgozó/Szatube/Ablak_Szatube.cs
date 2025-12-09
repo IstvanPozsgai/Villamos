@@ -32,11 +32,7 @@ namespace Villamos
         readonly Kezelő_Kiegészítő_Jelenlétiív KézJelenléti = new Kezelő_Kiegészítő_Jelenlétiív();
         readonly Kezelő_Kiegészítő_főkönyvtábla KézFő = new Kezelő_Kiegészítő_főkönyvtábla();
 
-        List<Adat_Szatube_Szabadság> Adatok_Szabadság = new List<Adat_Szatube_Szabadság>();
-
-        readonly Beállítás_Betű BeBetu = new Beállítás_Betű() { };       
-        
-
+        List<Adat_Szatube_Szabadság> Adatok_Szabadság = new List<Adat_Szatube_Szabadság>();         
 
         public Ablak_Szatube()
         {
@@ -1429,7 +1425,7 @@ namespace Villamos
                 string fájlexc = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Túlóra_{Program.PostásTelephely.Trim()}_{DateTime.Now:yyyyMMddhhmmss}";
                 string Telephely_ = CmbTelephely.Text.Trim();
 
-                TúlCsopNyom TúlCsopNyomtatas = new TúlCsopNyom();
+                Szatube_TúlCsopNyom TúlCsopNyomtatas = new Szatube_TúlCsopNyom();
                 TúlCsopNyomtatas.TúlCsopNyomtat(KézJelenléti,KézFő,KézDolgAlap,Telephely_,fájlexc,Tábla);
 
                 if (!CheckBox2.Checked)
