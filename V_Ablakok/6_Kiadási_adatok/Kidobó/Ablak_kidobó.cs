@@ -838,7 +838,7 @@ namespace Villamos
                 MyX.Kiir("Típus", $"j{sor}");
                 MyX.Rácsoz(munkalap, $"a{sor}:j{sor}");
 
-                DateTime Határóra = new DateTime(1899, 12, 30, 12, 0, 0);
+                DateTime Határóra = new DateTime(1900, 01, 01, 12, 0, 0);
                 List<Adat_Kidobó> AdatokÖ = KézKidobó.Lista_Adat(Cmbtelephely.Text.Trim(), Dátum.Value);
                 List<Adat_Kidobó> Adatok = (from a in AdatokÖ
                                             where a.Kezdéshely == AlsóPanels.Trim()
@@ -1046,7 +1046,7 @@ namespace Villamos
                 MyX.Kiir("Típus", $"i{sor}");
                 MyX.Vastagkeret(munkalap, $"a{sor}" + $":i{sor}");
 
-                DateTime Határóra = new DateTime(1899, 12, 30, 12, 0, 0);
+                DateTime Határóra = new DateTime(1900, 1, 1, 12, 0, 0);
                 List<Adat_Kidobó> AdatokÖ = KézKidobó.Lista_Adat(Cmbtelephely.Text.Trim(), Dátum.Value);
                 List<Adat_Kidobó> Adatok = (from a in AdatokÖ
                                             where a.Kezdéshely == AlsóPanels.Trim()
@@ -1266,7 +1266,7 @@ namespace Villamos
                 int[] típusdb = new int[Forte_típus.Count + 1];
 
                 // érdemi rész
-                DateTime Határóra = new DateTime(1899, 12, 30, 12, 0, 0);
+                DateTime Határóra = new DateTime(1900, 1, 1, 12, 0, 0);
                 List<Adat_Kidobó> AdatokÖ = KézKidobó.Lista_Adat(Cmbtelephely.Text.Trim(), Dátum.Value);
                 List<Adat_Kidobó> Adatok = (from a in AdatokÖ
                                             where a.Kezdéshely == AlsóPanels.Trim()
