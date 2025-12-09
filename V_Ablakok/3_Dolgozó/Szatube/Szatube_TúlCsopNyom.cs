@@ -60,7 +60,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             MyX.VastagFelső(munkalap, "A5:K5");
 
             // logó beszúrása
-            MyX.Kép_beillesztés(munkalap, "A1", Application.StartupPath + @"\Főmérnökség\adatok\BKV.png", 5, 5, 0.8, 1);
+            MyX.Kép_beillesztés(munkalap, "A1", Application.StartupPath + @"\Főmérnökség\adatok\BKV.png", 5, 5, 0, 0);
 
             MyX.Egyesít(munkalap, "a7:k7");
             MyX.Kiir("Rendkívüli munka elrendelő lap (csoportos)", "a7");
@@ -94,10 +94,10 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
                     MyX.Sormagasság(munkalap, $"{sor}:{sor}", 45);
 
                     // adatok kiírsa
-                    MyX.Kiir(Tábla.Rows[i].Cells[0].Value.ToStrTrim(), "a" + sor);
+                    MyX.Kiir($"#SZÁME#{Tábla.Rows[i].Cells[0].Value}", "a" + sor);
                     MyX.Igazít_vízszintes(munkalap, $"A{sor}", "bal");
                     MyX.Kiir(Tábla.Rows[i].Cells[2].Value.ToStrTrim(), "b" + sor);
-                    MyX.Kiir(Tábla.Rows[i].Cells[1].Value.ToStrTrim(), "c" + sor);
+                    MyX.Kiir($"#SZÁME#{Tábla.Rows[i].Cells[1].Value}", "c" + sor);
                     MyX.Igazít_vízszintes(munkalap, $"C{sor}", "bal");
                     string Munkakör = (from a in DolgAdatok
                                        where a.Dolgozószám.Trim() == Tábla.Rows[i].Cells[1].Value.ToStrTrim()
@@ -124,7 +124,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
                     }
 
 
-                    MyX.Kiir("=" + Tábla.Rows[i].Cells[4].Value.ToStrTrim() + "/60", "g" + sor);
+                    MyX.Kiir($"#KÉPLET#={Tábla.Rows[i].Cells[4].Value}/60", "g" + sor);
                     MyX.Betű(munkalap, "g" + sor, BeBetuSzazados);
                     MyX.Igazít_vízszintes(munkalap, $"G{sor}", "bal");
 
