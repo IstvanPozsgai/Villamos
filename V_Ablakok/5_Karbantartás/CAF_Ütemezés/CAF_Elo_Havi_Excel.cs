@@ -9,7 +9,6 @@ using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
-using MyE = Villamos.Module_Excel;
 using Villamos.V_Adatszerkezet;
 
 namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
