@@ -15,7 +15,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
 {
     public class Szatube_TúlCsopNyom
     {
-        readonly Beállítás_Betű BeBetuSzazados = new Beállítás_Betű() { Formátum = "0.00" };
+        readonly Beállítás_Betű BeBetuSzazados = new Beállítás_Betű() { Formátum = "0.00", Név = "Calibri" };
         readonly Beállítás_Betű BeBetuCalibri12 = new Beállítás_Betű() { Név = "Calibri", Méret = 12 };
         public void TúlCsopNyomtat(Kezelő_Kiegészítő_Jelenlétiív KézJelenléti, Kezelő_Kiegészítő_főkönyvtábla KézFő, Kezelő_Dolgozó_Alap KézDolgAlap, string CmbTelephely, string fájlexc, DataGridView Tábla)
         {
@@ -60,7 +60,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             MyX.VastagFelső(munkalap, "A5:K5");
 
             // logó beszúrása
-            MyX.Kép_beillesztés(munkalap, "A1", Application.StartupPath + @"\Főmérnökség\adatok\BKV.png", 5, 5, 0, 0);
+            MyX.Kép_beillesztés(munkalap, "A1", Application.StartupPath + @"\Főmérnökség\adatok\BKV.png", 5, 5, 0.6901, 0.788);
 
             MyX.Egyesít(munkalap, "a7:k7");
             MyX.Kiir("Rendkívüli munka elrendelő lap (csoportos)", "a7");
