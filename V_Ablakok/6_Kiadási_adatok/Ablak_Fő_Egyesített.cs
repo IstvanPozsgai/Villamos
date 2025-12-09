@@ -1024,7 +1024,6 @@ namespace Villamos
                 Holtartfő.Visible = true;
                 Holtart.Visible = true;
                 Holtartfő.Maximum = 16;
-
                 // paraméter tábla feltöltése
                 Cím[1] = "állomány 1";
                 Cím[2] = "állomány 2";
@@ -1515,7 +1514,190 @@ namespace Villamos
             }
         }
 
+        //jo szinezes, tobb felesleges adat, + metodusokkal
         private void Állomány3tábla()
+        {
+            try
+            {
+                munkalap = "állomány 3";
+                MyX.Munkalap_aktív(munkalap);
+                MyX.Link_beillesztés(munkalap, "A1", "Tartalom");
+
+                Napok_kiírása();
+                MunkaVHétvége();
+
+                string szöveg = Délelőtt.Checked ? "Reggeli " : "Délutáni ";
+                szöveg += "Állományi darabszámok";
+                MyX.Kiir(szöveg, MyF.Oszlopnév(3) + 2.ToString());
+
+                // Adatok betöltése
+                List<Adat_Kiegészítő_Típusaltípustábla> AdatokKiegTípusal = Kézkiegtípusal.Lista_Adatok();
+                List<Adat_Kiegészítő_Szolgálat> AdatokKiegSzolgtábl = KézKiegSzolgálat.Lista_Adatok();
+
+                int pj = 3;
+                Holtart.Be(hónapnap + 1);
+
+                string előzőtípus = "";
+                string előzőaltípus = "";
+
+                for (int k = 0; k < Kategórilista.CheckedItems.Count; k++)
+                {
+                    if (előzőtípus.Trim() == "")
+                    {
+                        // Első Főkategória
+                        KiirMindharomLapra(pj, 3, Kategórilista.CheckedItems[k].ToStrTrim());
+                        előzőtípus = Kategórilista.CheckedItems[k].ToStrTrim();
+                    }
+                    else
+                    {
+                        // Főkategória váltás: Lezárjuk az előzőt
+                        
+                        // 1. Utolsó altípus lezárása az előző kategóriából
+                        KiirMindharomLapra(pj, 5, "Összesen");
+                        pj += 1;
+
+                        // 2. Előző főkategória lezárása
+                        KiirMindharomLapra(pj, 4, "Összesen");
+                        pj += 1;
+
+                        // 3. Új főkategória neve
+                        KiirMindharomLapra(pj, 3, Kategórilista.CheckedItems[k].ToStrTrim());
+                        előzőtípus = Kategórilista.CheckedItems[k].ToStrTrim();
+                        előzőaltípus = ""; // Reseteljük az altípust
+                    }
+
+                    // Altípusok lekérése
+                    List<Adat_Kiegészítő_Típusaltípustábla> Adatok = (from a in AdatokKiegTípusal
+                                                                      where a.Főkategória == Kategórilista.CheckedItems[k].ToStrTrim()
+                                                                      orderby a.AlTípus
+                                                                      select a).ToList();
+
+                    foreach (Adat_Kiegészítő_Típusaltípustábla elem in Adatok)
+                    {
+                        if (előzőaltípus.Trim() == "") előzőaltípus = elem.AlTípus;
+
+                        if (előzőaltípus != elem.AlTípus)
+                        {
+                            // Altípus váltás: Lezárjuk az előző altípust
+                            KiirMindharomLapra(pj, 5, "Összesen");
+                            pj += 1;
+                            előzőaltípus = elem.AlTípus;
+                        }
+
+                        // Altípus neve a 4. sorba
+                        KiirMindharomLapra(pj, 4, elem.AlTípus);
+
+                        foreach (Adat_Kiegészítő_Szolgálat rekordkieg1 in AdatokKiegSzolgtábl)
+                        {
+                            // Szolgálat neve az 5. sorba
+                            KiirMindharomLapra(pj, 5, rekordkieg1.Szolgálatnév);
+
+                            // Adatok lekérése (LINQ) - Eredeti logika szerint
+                            List<Adat_FőKiadási_adatok> Elemek;
+                            if (Délelőtt.Checked)
+                                Elemek = (from a in AdatokKiad
+                                          where a.Napszak == "de"
+                                          && a.Főkategória == Kategórilista.CheckedItems[k].ToStrTrim()
+                                          && a.Altípus == elem.AlTípus
+                                          && a.Szolgálat == rekordkieg1.Szolgálatnév // Itt a fix string helyett a változót használjuk, gyorsabb és biztosabb
+                                          && a.Dátum >= hónapelsőnapja
+                                          && a.Dátum <= hónaputolsónapja
+                                          orderby a.Dátum
+                                          select a).ToList();
+                            else
+                                Elemek = (from a in AdatokKiad
+                                          where a.Napszak == "du"
+                                          && a.Főkategória == Kategórilista.CheckedItems[k].ToStrTrim()
+                                          && a.Altípus == elem.AlTípus
+                                          && a.Szolgálat == rekordkieg1.Szolgálatnév
+                                          && a.Dátum >= hónapelsőnapja
+                                          && a.Dátum <= hónaputolsónapja
+                                          orderby a.Dátum
+                                          select a).ToList();
+
+                            if (Elemek.Count > 0)
+                            {
+                                DateTime ElőzőDátumLoop = new DateTime(1900, 1, 1);
+                                Holtart.Be(hónapnap + 1);
+
+                                int sor = 0;
+                                long forgalomban = 0, tartalék = 0, kocsiszíni = 0, félreállítás = 0, főjavítás = 0, személyzet = 0;
+
+                                foreach (Adat_FőKiadási_adatok rekord in Elemek)
+                                {
+                                    if (ElőzőDátumLoop == new DateTime(1900, 1, 1)) ElőzőDátumLoop = rekord.Dátum;
+                                    
+                                    if (ElőzőDátumLoop != rekord.Dátum)
+                                    {
+                                        sor = ElőzőDátumLoop.Day;
+                                        KiirNapiAdatok(pj, sor, forgalomban, tartalék, kocsiszíni, félreállítás, főjavítás, személyzet);
+
+                                        forgalomban = 0; tartalék = 0; kocsiszíni = 0; félreállítás = 0; főjavítás = 0; személyzet = 0;
+                                        ElőzőDátumLoop = rekord.Dátum;
+                                    }
+                                    forgalomban += rekord.Forgalomban;
+                                    tartalék += rekord.Tartalék;
+                                    kocsiszíni += rekord.Kocsiszíni;
+                                    félreállítás += rekord.Félreállítás;
+                                    főjavítás += rekord.Főjavítás;
+                                    személyzet += rekord.Személyzet;
+                                }
+                                // Utolsó nap kiírása
+                                sor = ElőzőDátumLoop.Day;
+                                KiirNapiAdatok(pj, sor, forgalomban, tartalék, kocsiszíni, félreállítás, főjavítás, személyzet);
+                            }
+                            pj += 1;
+                            Holtart.Lép();
+                        }
+                    }
+                }
+
+                // 1. Utolsó altípus lezárása (az utolsó kategóriában)
+                KiirMindharomLapra(pj, 5, "Összesen");
+                pj += 1;
+
+                // 2. Utolsó főkategória lezárása
+                KiirMindharomLapra(pj, 4, "Összesen");
+                
+                Oszlop_Max = pj;
+
+                // Formázás és képletek futtatása
+                munkalap = "állomány 3"; MyX.Munkalap_aktív(munkalap);
+                Rácsoz_3(munkalap);
+                Havi_Összesítő_rész(Oszlop_Max);
+                MyX.Aktív_Cella(munkalap, "A1");
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void KiirMindharomLapra(int col, int row, string text)
+        {
+            string pos = MyF.Oszlopnév(col) + row.ToString();
+            MyX.Munkalap_aktív("állomány 3"); MyX.Kiir(text, pos);
+            MyX.Munkalap_aktív("Forgalmi 3"); MyX.Kiir(text, pos);
+            MyX.Munkalap_aktív("Üzemképes 3"); MyX.Kiir(text, pos);
+        }
+
+        private void KiirNapiAdatok(int pj, int sor, long forgalomban, long tartalék, long kocsiszíni, long félreállítás, long főjavítás, long személyzet)
+        {
+            long allomany = forgalomban + tartalék + kocsiszíni + félreállítás + főjavítás + személyzet;
+            long uzemkepes = forgalomban + tartalék;
+
+            MyX.Munkalap_aktív("állomány 3");
+            MyX.Kiir("#SZÁME#" + allomany.ToString(), MyF.Oszlopnév(pj) + (sor + 5).ToString());
+
+            MyX.Munkalap_aktív("Forgalmi 3");
+            MyX.Kiir("#SZÁME#" + forgalomban.ToString(), MyF.Oszlopnév(pj) + (sor + 5).ToString());
+
+            MyX.Munkalap_aktív("Üzemképes 3");
+            MyX.Kiir("#SZÁME#" + uzemkepes.ToString(), MyF.Oszlopnév(pj) + (sor + 5).ToString());
+        }
+        //rossz szinezes, jo adatok
+        private void Állomány34tábla()
         {
             try
             {
@@ -1766,6 +1948,243 @@ namespace Villamos
             }
         }
 
+        //jo szinezes, tobb felesleges adat, + metodusok nelkul
+        private void Állomány35tábla()
+        {
+            try
+            {
+                // 1. Alapbeállítások és előkészületek
+                munkalap = "állomány 3";
+                MyX.Munkalap_aktív(munkalap);
+                MyX.Link_beillesztés(munkalap, "A1", "Tartalom");
+
+                Napok_kiírása();
+                MunkaVHétvége();
+
+                string szöveg = Délelőtt.Checked ? "Reggeli " : "Délutáni ";
+                szöveg += "Állományi darabszámok";
+                MyX.Kiir(szöveg, MyF.Oszlopnév(3) + 2.ToString());
+
+                // Listák betöltése
+                List<Adat_Kiegészítő_Típusaltípustábla> AdatokKiegTípusal = Kézkiegtípusal.Lista_Adatok();
+                List<Adat_Kiegészítő_Szolgálat> AdatokKiegSzolgtábl = KézKiegSzolgálat.Lista_Adatok();
+
+                int pj = 3;
+                int oszlopmax;
+                Holtart.Be(hónapnap + 1);
+
+                string előzőtípus = "";
+                string előzőaltípus = "";
+
+                // 2. Főkategóriák ciklusa (amit a listából kijelöltél)
+                for (int k = 0; k < Kategórilista.CheckedItems.Count; k++)
+                {
+                    string aktualisFokategoria = Kategórilista.CheckedItems[k].ToStrTrim();
+
+                    // Ha új főkategória jön, és nem az első, akkor kell egy Összesen oszlop az előzőnek
+                    if (előzőtípus.Trim() == "")
+                    {
+                        // Első futás: Fejlécek kiírása a 3. sorba
+                        munkalap = "állomány 3"; MyX.Munkalap_aktív(munkalap);
+                        MyX.Kiir(aktualisFokategoria, MyF.Oszlopnév(pj) + 3.ToString());
+
+                        munkalap = "Forgalmi 3"; MyX.Munkalap_aktív(munkalap);
+                        MyX.Kiir(aktualisFokategoria, MyF.Oszlopnév(pj) + 3.ToString());
+
+                        munkalap = "Üzemképes 3"; MyX.Munkalap_aktív(munkalap);
+                        MyX.Kiir(aktualisFokategoria, MyF.Oszlopnév(pj) + 3.ToString());
+
+                        előzőtípus = aktualisFokategoria;
+                    }
+                    else
+                    {
+                        // Kategória váltás: Összesítő oszlop beszúrása
+                        munkalap = "állomány 3"; MyX.Munkalap_aktív(munkalap);
+                        MyX.Kiir("Összesen", MyF.Oszlopnév(pj) + 5.ToString());
+
+                        munkalap = "Forgalmi 3"; MyX.Munkalap_aktív(munkalap);
+                        MyX.Kiir("Összesen", MyF.Oszlopnév(pj) + 5.ToString());
+
+                        munkalap = "Üzemképes 3"; MyX.Munkalap_aktív(munkalap);
+                        MyX.Kiir("Összesen", MyF.Oszlopnév(pj) + 5.ToString());
+                        pj += 1;
+
+                        munkalap = "állomány 3"; MyX.Munkalap_aktív(munkalap);
+                        MyX.Kiir("Összesen", MyF.Oszlopnév(pj) + 4.ToString());
+
+                        munkalap = "Forgalmi 3"; MyX.Munkalap_aktív(munkalap);
+                        MyX.Kiir("Összesen", MyF.Oszlopnév(pj) + 4.ToString());
+
+                        munkalap = "Üzemképes 3"; MyX.Munkalap_aktív(munkalap);
+                        MyX.Kiir("Összesen", MyF.Oszlopnév(pj) + 4.ToString());
+                        pj += 1;
+
+                        // Új kategória nevének kiírása
+                        munkalap = "állomány 3"; MyX.Munkalap_aktív(munkalap);
+                        MyX.Kiir(aktualisFokategoria, MyF.Oszlopnév(pj) + 3.ToString());
+
+                        munkalap = "Forgalmi 3"; MyX.Munkalap_aktív(munkalap);
+                        MyX.Kiir(aktualisFokategoria, MyF.Oszlopnév(pj) + 3.ToString());
+
+                        munkalap = "Üzemképes 3"; MyX.Munkalap_aktív(munkalap);
+                        MyX.Kiir(aktualisFokategoria, MyF.Oszlopnév(pj) + 3.ToString());
+
+                        előzőtípus = aktualisFokategoria;
+                        előzőaltípus = "";
+                    }
+
+                    // 3. Altípusok lekérdezése az aktuális kategóriához
+                    List<Adat_Kiegészítő_Típusaltípustábla> Adatok = (from a in AdatokKiegTípusal
+                                                                      where a.Főkategória == aktualisFokategoria
+                                                                      orderby a.AlTípus
+                                                                      select a).ToList();
+
+                    // Végigmegyünk az Altípusokon
+                    foreach (Adat_Kiegészítő_Típusaltípustábla elem in Adatok)
+                    {
+                        if (előzőaltípus.Trim() == "") előzőaltípus = elem.AlTípus;
+
+                        // Ha változik az altípus, beszúrunk összesítőt (ha nem az első)
+                        // Megjegyzés: A te logikád szerint itt minden altípus után jön összesítő?
+                        // A kódban így volt, meghagyom a logikát, de ellenőrizd, hogy biztosan kell-e minden altípus után.
+                        // Az eredeti kód szerint: if (előzőaltípus != elem.AlTípus) -> Összesen.
+
+                        if (előzőaltípus != elem.AlTípus)
+                        {
+                            munkalap = "állomány 3"; MyX.Munkalap_aktív(munkalap);
+                            MyX.Kiir("Összesen", MyF.Oszlopnév(pj) + 5.ToString());
+
+                            munkalap = "Forgalmi 3"; MyX.Munkalap_aktív(munkalap);
+                            MyX.Kiir("Összesen", MyF.Oszlopnév(pj) + 5.ToString());
+
+                            munkalap = "Üzemképes 3"; MyX.Munkalap_aktív(munkalap);
+                            MyX.Kiir("Összesen", MyF.Oszlopnév(pj) + 5.ToString());
+                            pj += 1;
+                            előzőaltípus = elem.AlTípus;
+                        }
+
+                        // 4. Szolgálatok ciklusa - ITT VOLT A HIBA
+                        foreach (Adat_Kiegészítő_Szolgálat rekordkieg1 in AdatokKiegSzolgtábl)
+                        {
+                            // Fejlécek kiírása (Altípus a 4. sorba, Szolgálat az 5. sorba)
+                            munkalap = "állomány 3"; MyX.Munkalap_aktív(munkalap);
+                            MyX.Kiir(elem.AlTípus, MyF.Oszlopnév(pj) + 4.ToString());
+                            MyX.Kiir(rekordkieg1.Szolgálatnév, MyF.Oszlopnév(pj) + 5.ToString());
+
+                            munkalap = "Forgalmi 3"; MyX.Munkalap_aktív(munkalap);
+                            MyX.Kiir(elem.AlTípus, MyF.Oszlopnév(pj) + 4.ToString());
+                            MyX.Kiir(rekordkieg1.Szolgálatnév, MyF.Oszlopnév(pj) + 5.ToString());
+
+                            munkalap = "Üzemképes 3"; MyX.Munkalap_aktív(munkalap);
+                            MyX.Kiir(elem.AlTípus, MyF.Oszlopnév(pj) + 4.ToString());
+                            MyX.Kiir(rekordkieg1.Szolgálatnév, MyF.Oszlopnév(pj) + 5.ToString());
+
+                            // Adatok lekérdezése az adott Kategória+Altípus+Szolgálat kombinációra
+                            List<Adat_FőKiadási_adatok> Elemek;
+                            if (Délelőtt.Checked)
+                                Elemek = (from a in AdatokKiad
+                                          where a.Napszak == "de"
+                                          && a.Főkategória == aktualisFokategoria
+                                          && a.Altípus == elem.AlTípus
+                                          && a.Szolgálat == rekordkieg1.Szolgálatnév
+                                          && a.Dátum >= hónapelsőnapja
+                                          && a.Dátum <= hónaputolsónapja
+                                          select a).ToList();
+                            else
+                                Elemek = (from a in AdatokKiad
+                                          where a.Napszak == "du"
+                                          && a.Főkategória == aktualisFokategoria
+                                          && a.Altípus == elem.AlTípus
+                                          && a.Szolgálat == rekordkieg1.Szolgálatnév
+                                          && a.Dátum >= hónapelsőnapja
+                                          && a.Dátum <= hónaputolsónapja
+                                          select a).ToList();
+
+                            // Napok feltöltése (1-től hónapnapig)
+                            for (int i = 1; i <= hónapnap; i++)
+                            {
+                                DateTime aktNap = new DateTime(Dátum.Value.Year, Dátum.Value.Month, i);
+
+                                // Megkeressük az adott napra vonatkozó adatokat (lehet több sor is, ezért Sum)
+                                var napiAdatok = Elemek.Where(x => x.Dátum == aktNap).ToList();
+
+                                long forgalomban = 0;
+                                long tartalek = 0;
+                                long kocsiszini = 0;
+                                long felreallitas = 0;
+                                long fojavitas = 0;
+                                long szemelyzet = 0;
+
+                                if (napiAdatok.Count > 0)
+                                {
+                                    forgalomban = napiAdatok.Sum(x => x.Forgalomban);
+                                    tartalek = napiAdatok.Sum(x => x.Tartalék);
+                                    kocsiszini = napiAdatok.Sum(x => x.Kocsiszíni);
+                                    felreallitas = napiAdatok.Sum(x => x.Félreállítás);
+                                    fojavitas = napiAdatok.Sum(x => x.Főjavítás);
+                                    szemelyzet = napiAdatok.Sum(x => x.Személyzet);
+                                }
+
+                                long allomanyErtek = forgalomban + tartalek + kocsiszini + felreallitas + fojavitas + szemelyzet;
+                                long uzemkepesErtek = forgalomban + tartalek;
+
+                                // Kiírás az Excelbe
+                                munkalap = "állomány 3"; MyX.Munkalap_aktív(munkalap);
+                                MyX.Kiir("#SZÁME#" + allomanyErtek.ToString(), MyF.Oszlopnév(pj) + (i + 5).ToString());
+
+                                munkalap = "Forgalmi 3"; MyX.Munkalap_aktív(munkalap);
+                                MyX.Kiir("#SZÁME#" + forgalomban.ToString(), MyF.Oszlopnév(pj) + (i + 5).ToString());
+
+                                munkalap = "Üzemképes 3"; MyX.Munkalap_aktív(munkalap);
+                                MyX.Kiir("#SZÁME#" + uzemkepesErtek.ToString(), MyF.Oszlopnév(pj) + (i + 5).ToString());
+                            }
+
+                            // FONTOS JAVÍTÁS:
+                            // Mindig léptetjük az oszlopot, akkor is, ha nem volt adat (ilyenkor 0-k íródtak).
+                            // Így az Oszlop_Max pontos lesz.
+                            Holtart.Lép();
+                            pj += 1;
+                        }
+                    }
+                    oszlopmax = pj; // Frissítjük a max oszlopot
+                }
+
+                // 5. Utolsó összesítők (Kategória vége)
+                munkalap = "állomány 3"; MyX.Munkalap_aktív(munkalap);
+                MyX.Kiir("Összesen", MyF.Oszlopnév(pj) + 5.ToString());
+
+                munkalap = "Forgalmi 3"; MyX.Munkalap_aktív(munkalap);
+                MyX.Kiir("Összesen", MyF.Oszlopnév(pj) + 5.ToString());
+
+                munkalap = "Üzemképes 3"; MyX.Munkalap_aktív(munkalap);
+                MyX.Kiir("Összesen", MyF.Oszlopnév(pj) + 5.ToString());
+                pj += 1;
+
+                // Végösszesen (Grand Total)
+                munkalap = "állomány 3"; MyX.Munkalap_aktív(munkalap);
+                MyX.Kiir("Összesen", MyF.Oszlopnév(pj) + 4.ToString());
+
+                munkalap = "Forgalmi 3"; MyX.Munkalap_aktív(munkalap);
+                MyX.Kiir("Összesen", MyF.Oszlopnév(pj) + 4.ToString());
+
+                munkalap = "Üzemképes 3"; MyX.Munkalap_aktív(munkalap);
+                MyX.Kiir("Összesen", MyF.Oszlopnév(pj) + 4.ToString());
+
+                // Itt tároljuk el a tényleges végső oszlopot
+                Oszlop_Max = pj;
+
+                // 6. Formázás és Összesítő képletek futtatása
+                munkalap = "állomány 3"; MyX.Munkalap_aktív(munkalap);
+                Rácsoz_3(munkalap);
+                Havi_Összesítő_rész(Oszlop_Max);
+                MyX.Aktív_Cella(munkalap, "A1");
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private void Rácsoz_3(string munkalap)
         {
             int oszlopmax = Oszlop_Max;
@@ -3342,7 +3761,7 @@ namespace Villamos
                     MyX.Kiir("#KÉPLET#=R[-1]C/R[-2]C", MyF.Oszlopnév(j) + "46");
 
                     // összesen
-                    MyX.Kiir((hétvégedb + hétköznapdb).ToString(), MyF.Oszlopnév(j) + "48");
+                    MyX.Kiir("#SZÁME#" + (hétvégedb + hétköznapdb).ToString(), MyF.Oszlopnév(j) + "48");
                     MyX.Kiir("#KÉPLET#=SUM(R[-43]C:R[-13]C)", MyF.Oszlopnév(j) + "49");
                     MyX.Kiir("#KÉPLET#=R[-1]C/R[-2]C", MyF.Oszlopnév(j) + "50");
 
