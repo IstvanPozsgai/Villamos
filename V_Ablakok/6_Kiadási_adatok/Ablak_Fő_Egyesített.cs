@@ -1024,7 +1024,6 @@ namespace Villamos
                 Holtartfő.Visible = true;
                 Holtart.Visible = true;
                 Holtartfő.Maximum = 16;
-
                 // paraméter tábla feltöltése
                 Cím[1] = "állomány 1";
                 Cím[2] = "állomány 2";
@@ -3342,7 +3341,7 @@ namespace Villamos
                     MyX.Kiir("#KÉPLET#=R[-1]C/R[-2]C", MyF.Oszlopnév(j) + "46");
 
                     // összesen
-                    MyX.Kiir((hétvégedb + hétköznapdb).ToString(), MyF.Oszlopnév(j) + "48");
+                    MyX.Kiir("#SZÁME#" + (hétvégedb + hétköznapdb).ToString(), MyF.Oszlopnév(j) + "48");
                     MyX.Kiir("#KÉPLET#=SUM(R[-43]C:R[-13]C)", MyF.Oszlopnév(j) + "49");
                     MyX.Kiir("#KÉPLET#=R[-1]C/R[-2]C", MyF.Oszlopnév(j) + "50");
 
