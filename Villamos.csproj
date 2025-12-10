@@ -258,6 +258,10 @@
       <DependentUpon>Ablak_Karbantartás_Csoport.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\3_Dolgozó\Karbantartási_Munkalapok\Karbantartási_ListaFeltöltés.cs" />
+    <Compile Include="V_Ablakok\3_Dolgozó\Szatube\Szatube_EgyeniNyomtatas.cs" />
+    <Compile Include="V_Ablakok\3_Dolgozó\Szatube\Szatube_Eves_Osszesito.cs" />
+    <Compile Include="V_Ablakok\3_Dolgozó\Szatube\Szatube_NyomtatasSzabi.cs" />
+    <Compile Include="V_Ablakok\3_Dolgozó\Szatube\Szatube_TúlCsopNyom.cs" />
     <Compile Include="V_Ablakok\4_Nyilvántartások\Ablak_reklám.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -655,10 +659,10 @@
     <Compile Include="V_Ablakok\7_Gondnokság\Ablak_Behajtási.designer.cs">
       <DependentUpon>Ablak_Behajtási.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Szatube.cs">
+    <Compile Include="V_Ablakok\3_Dolgozó\Szatube\Ablak_Szatube.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Szatube.designer.cs">
+    <Compile Include="V_Ablakok\3_Dolgozó\Szatube\Ablak_Szatube.designer.cs">
       <DependentUpon>Ablak_Szatube.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\3_Dolgozó\Beosztás\Beosztás_Rögzítés.cs" />
@@ -1664,7 +1668,7 @@
     <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_Jelenléti.resx">
       <DependentUpon>Ablak_Jelenléti.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_Szatube.resx">
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Szatube\Ablak_Szatube.resx">
       <DependentUpon>Ablak_Szatube.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\ICS_KCSV\Ablak_ICS_KCSV_segéd.resx">
