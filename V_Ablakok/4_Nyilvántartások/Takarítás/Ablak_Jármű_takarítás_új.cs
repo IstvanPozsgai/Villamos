@@ -1131,7 +1131,7 @@ namespace Villamos
                                                                      orderby a.Szerelvényszám, a.Azonosító ascending
                                                                      select a).ToList();
 
-
+                Ütemezés_lista.Items.Add(fajta);
                 foreach (Adat_Jármű_Takarítás_Vezénylés rekord in EgyVezénylés)
                 {
                     if (szerelvény == 0) szerelvény = rekord.Szerelvényszám;
@@ -5011,7 +5011,7 @@ namespace Villamos
                 }
                 Holtart.Lép();
 
-                MyX.Kép_beillesztés("Munka1", "A1", $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\képek\Villamos.png", 50, 30, 0.75d, 0.75d);
+                MyX.Kép_beillesztés("Munka1", "A1", $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\képek\Villamos.png", 60, 45, 0.7d, 0.7d);
 
                 sor = 8;
                 MyX.Kiir("Takarítási terv", $"B{sor}");
@@ -5081,7 +5081,9 @@ namespace Villamos
                 Beállítás_Nyomtatás benyom = new Beállítás_Nyomtatás
                 {
                     Munkalap = "Munka1",
-                    NyomtatásiTerület = $"A1:C{sor}"
+                    NyomtatásiTerület = $"A1:C{sor}",
+                    LapMagas=1,
+                    LapSzéles=1
                 };
                 MyX.NyomtatásiTerület_részletes("Munka1", benyom);
 
