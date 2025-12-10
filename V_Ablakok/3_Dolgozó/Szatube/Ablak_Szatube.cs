@@ -666,10 +666,6 @@ namespace Villamos
                 if (Tábla.SelectedRows.Count < 1)
                     throw new HibásBevittAdat("Nincs kijelölve egy sor sem.");
 
-
-                string munkalap = "Munka1";
-                DateTime IdeigDátum;
-
                 //Beolvassuk a táblázat adatait egy listába
                 List<Adat_Szatube_Szabadság> Adatok = KézSzabadság.Lista_Adatok(CmbTelephely.Text.Trim(), Adat_Évek.Text.ToÉrt_Int());
                 Adatok = (from a in Adatok
@@ -700,123 +696,12 @@ namespace Villamos
                 Sorszámok = Sorszámok.OrderBy(num => num).ToList();
                 List<double> SzűrtLista = Sorszámok.Distinct().ToList();
 
-                string utolsókivettnap;
-                // excel tábla megnyitása
-                MyX.ExcelMegnyitás(fájlexcel);
-                int elem = 0;
-                Holtart.Be();
-                for (int i = 0; i < SzűrtLista.Count; i++)
-                {
-                    elem++;
-                    List<Adat_Szatube_Szabadság> Szabadság = (from a in Adatok
-                                                              where a.Sorszám == SzűrtLista[i]
-                                                              select a).ToList();
-                    double mostKivesz = Szabadság.Sum(szám => szám.Kivettnap);
-                    Adat_Szatube_Szabadság Kezdet = Szabadság.First(a => a.Kezdődátum == Szabadság.Min(b => b.Kezdődátum));
-                    Adat_Szatube_Szabadság Vége = Szabadság.First(a => a.Kezdődátum == Szabadság.Max(b => b.Kezdődátum));
+                string Telephely_ = CmbTelephely.Text.Trim();
+                int Évek_ = Adat_Évek.Text.ToÉrt_Int();
 
-                    utolsókivettnap = Tábla.SelectedRows[i].Cells[5].Value.ToString();
-                    switch (elem)
-                    {
-                        case 1:
-                            {
-                                IdeigDátum = Kezdet.Kezdődátum;
-                                MyX.Kiir(Kezdet.Sorszám + " /_" + Text.Substring(0, 4), "m1");
-                                MyX.Kiir(Kezdet.Szabiok.Trim(), "f4");
-                                MyX.Kiir(DateTime.Now.Year.ToString(), "i5");
-                                MyX.Kiir(DateTime.Now.Month.ToString(), "k5");
-                                MyX.Kiir(DateTime.Now.Day.ToString(), "m5");
-                                MyX.Kiir(Kezdet.Dolgozónév.Trim(), "B9");
-                                MyX.Kiir(Kezdet.Törzsszám.Trim(), "i9");
-                                MyX.Kiir(Kezdet.Kezdődátum.ToString("yyyy.MM.dd"), "b27");
-                                MyX.Kiir(Vége.Befejeződátum.ToString("yyyy.MM.dd"), "B30");
-                                MyX.Kiir(mostKivesz.ToString(), "g27");
-                                MyX.Kiir(IdeigDátum.Year.ToString(), "d17");
-                                MyX.Kiir(Összesnapja(Kezdet.Törzsszám.Trim()).ToString(), "g17");
-                                MyX.Kiir(IdeigDátum.Year.ToString(), "d21");
-                                MyX.Kiir(Kivettnapja(Kezdet.Törzsszám.Trim(), IdeigDátum).ToString(), "g21");
-                                MyX.Kiir(Texttelephely.Trim(), "B13");
-                                break;
-                            }
-                        case 2:
-                            {
-                                IdeigDátum = Kezdet.Kezdődátum;
-                                MyX.Kiir(Kezdet.Sorszám + " /_" + Text.Substring(0, 4), "ab1");
-                                MyX.Kiir(Kezdet.Szabiok.Trim(), "u4");
-                                MyX.Kiir(DateTime.Now.Year.ToString(), "x5");
-                                MyX.Kiir(DateTime.Now.Month.ToString(), "z5");
-                                MyX.Kiir(DateTime.Now.Day.ToString(), "ab5");
-                                MyX.Kiir(Kezdet.Dolgozónév.Trim(), "q9");
-                                MyX.Kiir(Kezdet.Törzsszám.Trim(), "x9");
-                                MyX.Kiir(Kezdet.Kezdődátum.ToString("yyyy.MM.dd"), "q27");
-                                MyX.Kiir(Vége.Befejeződátum.ToString("yyyy.MM.dd"), "q30");
-                                MyX.Kiir(mostKivesz.ToString(), "v27");
-                                MyX.Kiir(IdeigDátum.Year.ToString(), "s17");
-                                MyX.Kiir(Összesnapja(Kezdet.Törzsszám.Trim()).ToString(), "v17");
-                                MyX.Kiir(IdeigDátum.Year.ToString(), "s21");
-                                MyX.Kiir(Kivettnapja(Kezdet.Törzsszám.Trim(), IdeigDátum).ToString(), "v21");
-                                MyX.Kiir(Texttelephely.Trim(), "q13");
-                                break;
-                            }
-                        case 3:
-                            {
-                                IdeigDátum = Kezdet.Kezdődátum;
-                                MyX.Kiir(Kezdet.Sorszám + " /_" + Text.Substring(0, 4), "m33");
-                                MyX.Kiir(Kezdet.Szabiok.Trim(), "f36");
-                                MyX.Kiir(DateTime.Now.Year.ToString(), "i37");
-                                MyX.Kiir(DateTime.Now.Month.ToString(), "k37");
-                                MyX.Kiir(DateTime.Now.Day.ToString(), "m37");
-                                MyX.Kiir(Kezdet.Dolgozónév.Trim(), "B41");
-                                MyX.Kiir(Kezdet.Törzsszám.Trim(), "i41");
-                                MyX.Kiir(Kezdet.Kezdődátum.ToString("yyyy.MM.dd"), "b59");
-                                MyX.Kiir(Vége.Befejeződátum.ToString("yyyy.MM.dd"), "B62");
-                                MyX.Kiir(mostKivesz.ToString(), "g59");
-                                MyX.Kiir(IdeigDátum.Year.ToString(), "d49");
-                                MyX.Kiir(Összesnapja(Kezdet.Törzsszám.Trim()).ToString(), "g49");
-                                MyX.Kiir(IdeigDátum.Year.ToString(), "d53");
-                                MyX.Kiir(Kivettnapja(Kezdet.Törzsszám.Trim(), IdeigDátum).ToString(), "g53");
-                                MyX.Kiir(Texttelephely.Trim(), "B45");
-                                break;
-                            }
-                        case 4:
-                            {
-                                IdeigDátum = Kezdet.Kezdődátum;
-                                MyX.Kiir(Kezdet.Sorszám + " /_" + Text.Substring(0, 4), "ab33");
-                                MyX.Kiir(Kezdet.Szabiok.Trim(), "u36");
-                                MyX.Kiir(DateTime.Now.Year.ToString(), "x37");
-                                MyX.Kiir(DateTime.Now.Month.ToString(), "z37");
-                                MyX.Kiir(DateTime.Now.Day.ToString(), "ab37");
-                                MyX.Kiir(Kezdet.Dolgozónév.Trim(), "q41");
-                                MyX.Kiir(Kezdet.Törzsszám.Trim(), "x41");
-                                MyX.Kiir(Kezdet.Kezdődátum.ToString("yyyy.MM.dd"), "q59");
-                                MyX.Kiir(Vége.Befejeződátum.ToString("yyyy.MM.dd"), "q62");
-                                MyX.Kiir(mostKivesz.ToString(), "v59");
-                                MyX.Kiir(IdeigDátum.Year.ToString(), "s49");
-                                MyX.Kiir(Összesnapja(Kezdet.Törzsszám.Trim()).ToString(), "v49");
-                                MyX.Kiir(IdeigDátum.Year.ToString(), "s53");
-                                MyX.Kiir(Kivettnapja(Kezdet.Törzsszám.Trim(), IdeigDátum).ToString(), "v53");
-                                MyX.Kiir(Texttelephely.Trim(), "q45");
-                                break;
-                            }
-                    }
-                    // ha négy név van vagy ha a jelöltek számát elértük, akkor nyomtat majd a beírt adatokat törli
-                    if (elem == 4)
-                    {
-                        //MyX.Nyomtatás(munkalap, 1, 1);
-                        Laptisztítás();
-                        elem = 0;
-                    }
-                    Holtart.Lép();
-                }
-                if (elem != 0)
-                {
-                    //MyX.Nyomtatás(munkalap, 1, 1);
-                    Laptisztítás();
-                }
-                Laptisztítás();
-                MyX.ExcelMentés(fájlexcel);
-                MyX.ExcelBezárás();
-
+                Szatube_NyomtatasSzabi NyomtatSzabi = new Szatube_NyomtatasSzabi(KézSzabadság, Telephely_, Évek_);
+                NyomtatSzabi.Kiir(fájlexcel,Tábla,SzűrtLista,Adatok);
+                
                 // a státusokat átállítja
                 List<double> Idek = new List<double>();
                 for (int i = 0; i < SzűrtLista.Count; i++)
@@ -842,72 +727,7 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void Laptisztítás()
-        {
-            MyX.Kiir("", "i5");
-            MyX.Kiir("", "k5");
-            MyX.Kiir("", "m5");
-            MyX.Kiir("", "B9");
-            MyX.Kiir("", "i9");
-            MyX.Kiir("", "d17");
-            MyX.Kiir("", "g17");
-            MyX.Kiir("", "d21");
-            MyX.Kiir("", "g21");
-            MyX.Kiir("", "b27");
-            MyX.Kiir("", "B30");
-            MyX.Kiir("", "g27");
-            MyX.Kiir("", "x5");
-            MyX.Kiir("", "z5");
-            MyX.Kiir("", "ab5");
-            MyX.Kiir("", "q9");
-            MyX.Kiir("", "x9");
-            MyX.Kiir("", "s17");
-            MyX.Kiir("", "v17");
-            MyX.Kiir("", "s21");
-            MyX.Kiir("", "v21");
-            MyX.Kiir("", "q27");
-            MyX.Kiir("", "q30");
-            MyX.Kiir("", "v27");
-            MyX.Kiir("", "i37");
-            MyX.Kiir("", "k37");
-            MyX.Kiir("", "m37");
-            MyX.Kiir("", "B41");
-            MyX.Kiir("", "i41");
-            MyX.Kiir("", "d49");
-            MyX.Kiir("", "g49");
-            MyX.Kiir("", "d53");
-            MyX.Kiir("", "g53");
-            MyX.Kiir("", "b59");
-            MyX.Kiir("", "B62");
-            MyX.Kiir("", "g59");
-            MyX.Kiir("", "x37");
-            MyX.Kiir("", "z37");
-            MyX.Kiir("", "ab37");
-            MyX.Kiir("", "q41");
-            MyX.Kiir("", "x41");
-            MyX.Kiir("", "s49");
-            MyX.Kiir("", "v49");
-            MyX.Kiir("", "s53");
-            MyX.Kiir("", "v53");
-            MyX.Kiir("", "q59");
-            MyX.Kiir("", "q62");
-            MyX.Kiir("", "v59");
-            MyX.Kiir("", "m1");
-            MyX.Kiir("", "ab1");
-            MyX.Kiir("", "m33");
-            MyX.Kiir("", "ab33");
-            MyX.Kiir("", "f4");
-            MyX.Kiir("", "u4");
-            MyX.Kiir("", "f36");
-            MyX.Kiir("", "u36");
-
-            MyX.Kiir("", "b13");
-            MyX.Kiir("", "q13");
-            MyX.Kiir("", "b45");
-            MyX.Kiir("", "q45");
-        }
+        }        
 
         private void BtnÖsszSzabiLista_Click(object sender, EventArgs e)
         {
@@ -1092,57 +912,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private int Kivettnapja(string törzsszám, DateTime dátum)
-        {
-            int válasz = 0;
-            List<Adat_Szatube_Szabadság> Adatok = KézSzabadság.Lista_Adatok(CmbTelephely.Text.Trim(), dátum.Year);
-            Adatok = (from a in Adatok
-                      where a.Törzsszám == törzsszám.Trim() &&
-                      a.Kezdődátum < dátum
-                      orderby a.Kezdődátum
-                      select a).ToList();
-
-            foreach (Adat_Szatube_Szabadság rekord in Adatok)
-            {
-                if (rekord.Szabiok.ToUpper().Contains("KIVÉTEL") && rekord.Státus != 3)
-                    válasz += rekord.Kivettnap;
-            }
-            return válasz;
-        }
-
-        private int Összesnapja(string törzsszám)
-        {
-            int válasz = 0;
-            try
-            {
-                List<Adat_Szatube_Szabadság> Adatok = KézSzabadság.Lista_Adatok(CmbTelephely.Text.Trim(), Adat_Évek.Text.ToÉrt_Int());
-                Adatok = (from a in Adatok
-                          where a.Törzsszám == törzsszám.Trim()
-                          orderby a.Kezdődátum
-                          select a).ToList();
-
-                foreach (Adat_Szatube_Szabadság rekord in Adatok)
-                {
-                    if (rekord.Szabiok.Trim() == "Alap")
-                        válasz += rekord.Kivettnap;
-                    // 3 a törölt szabadság
-                    if (rekord.Szabiok.ToUpper().Contains("PÓT") && rekord.Státus != 3)
-                        válasz += rekord.Kivettnap;
-                }
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return válasz;
         }
 
         private void Mind_Click(object sender, EventArgs e)
