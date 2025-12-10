@@ -3020,6 +3020,69 @@ namespace Villamos
         {
             try
             {
+                munkalap = "Kimutatás";
+                MyX.Link_beillesztés(munkalap, "A1", "Tartalom");
+
+                string munkalap_adat = "Adatok 1";
+                string balfelső = "A5";
+                string jobbalsó = "R" + alsóPanels4.Text.Trim();
+                string Kimutatás_cella = "A8";
+                string Kimutatás_név = "Kimutatás1";
+
+                List<string> összesítNév = new List<string>();
+                List<string> sorNév = new List<string>();
+                List<string> oszlopNév = new List<string>();
+                List<string> SzűrőNév = new List<string>();
+                List<string> Összesít_módja = new List<string>();
+
+                összesítNév.Add("Kiadás");
+                összesítNév.Add("Forgalomban");
+                összesítNév.Add("Tartalék");
+                összesítNév.Add("Kocsiszíni");
+                összesítNév.Add("Félreállítás");
+                összesítNév.Add("Főjavítás");
+                összesítNév.Add("Állomány");
+                összesítNév.Add("Személyzethiány");
+                összesítNév.Add("Tart.+Szem.hiány");
+
+                sorNév.Add("AlTípus");
+                sorNév.Add("Telephely");
+
+                SzűrőNév.Add("Dátum");
+                SzűrőNév.Add("Főkategória");
+
+                Beállítás_Kimutatás Bekimutat = new Beállítás_Kimutatás
+                {
+                    Munkalapnév = munkalap_adat,
+                    Balfelső = balfelső,
+                    Jobbalsó = jobbalsó,
+                    Kimutatás_Munkalapnév = munkalap,
+                    Kimutatás_cella = Kimutatás_cella,
+                    Kimutatás_név = Kimutatás_név,
+                    ÖsszesítNév = összesítNév,
+                    Összesítés_módja = Összesít_módja,
+                    SorNév = sorNév,
+                    OszlopNév = oszlopNév,
+                    SzűrőNév = SzűrőNév
+                };
+
+                MyX.Kimutatás_Fő(Bekimutat);
+
+                MyX.SzövegIrány(munkalap, "B12:R12", 90);
+
+                MyX.Oszlopszélesség(munkalap, "B:J");
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+            }
+        }
+
+        //elso
+        private void Kimutatásvarázsló1()
+        {
+            try
+            {
                 munkalap = "Adatok 1";
                 string balfelső = "A5";
                 string jobbalsó = "R" + alsóPanels4.Text.Trim();
@@ -3047,8 +3110,8 @@ namespace Villamos
                 SzűrőNév.Add("Dátum");
                 SzűrőNév.Add("Főkategória");
 
-                MyX.Kimutatás_Fő(munkalap, balfelső, jobbalsó, kimutatás_munkalap, Kimutatás_cella, Kimutatás_név
-                , összesítNév, sorNév, oszlopNév, SzűrőNév);
+                //MyX.Kimutatás_Fő(munkalap, balfelső, jobbalsó, kimutatás_munkalap, Kimutatás_cella, Kimutatás_név
+                //, összesítNév, sorNév, oszlopNév, SzűrőNév);
                 MyX.SzövegIrány("Kimutatás", "9:9", 90);
                 MyX.Oszlopszélesség("Kimutatás", "B:J");
             }
