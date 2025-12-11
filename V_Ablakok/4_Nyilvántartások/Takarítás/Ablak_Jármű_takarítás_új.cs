@@ -2305,8 +2305,41 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void Opció_psz_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Right)
+            {
+                Opció_terület.Focus(); // Átvált a cél szövegdobozra
+                e.Handled = true;    // Megakadályozza a további feldolgozást
+            }
+        }
+
+        private void Opció_psz_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Right)
+            {
+                e.IsInputKey = true; // Fontos: így a KeyDown esemény is meghívódik
+            }
+        }
         #endregion
 
+        private void Opció_terület_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Left)
+            {
+                e.IsInputKey = true; // Fontos: így a KeyDown esemény is meghívódik
+            }
+        }
+
+        private void Opció_terület_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Left)
+            {
+                Opció_psz.Focus(); // Átvált a cél szövegdobozra
+                e.Handled = true;    // Megakadályozza a további feldolgozást
+            }
+        }
 
         #region Alapadatok Takarítások
         private void Előzmény_lista_takarítás()
@@ -5678,5 +5711,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
     }
 }

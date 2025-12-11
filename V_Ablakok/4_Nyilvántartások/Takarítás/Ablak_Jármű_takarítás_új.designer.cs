@@ -903,6 +903,8 @@ namespace Villamos
             this.Opció_terület.Name = "Opció_terület";
             this.Opció_terület.Size = new System.Drawing.Size(97, 26);
             this.Opció_terület.TabIndex = 2;
+            this.Opció_terület.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Opció_terület_KeyDown);
+            this.Opció_terület.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Opció_terület_PreviewKeyDown);
             // 
             // Button2
             // 
@@ -935,6 +937,8 @@ namespace Villamos
             this.Opció_psz.Name = "Opció_psz";
             this.Opció_psz.Size = new System.Drawing.Size(130, 26);
             this.Opció_psz.TabIndex = 1;
+            this.Opció_psz.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Opció_psz_KeyDown);
+            this.Opció_psz.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Opció_psz_PreviewKeyDown);
             // 
             // Opció_mentés
             // 
