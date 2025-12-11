@@ -135,12 +135,8 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
                 }
 
                 // megformázzuk
-                // MyX.Aktív_Cella(munkalap, "A:m");
-                //MyX.Aktív_Cella(munkalap, "m1");
                 MyX.Oszlopszélesség(munkalap, "A:m");
-                //MyX.Vastagkeret(munkalap, "a3:m3");
-                 MyX.Rácsoz(munkalap, $"a3:m{(sor - 1)}");
-                //MyX.Vastagkeret(munkalap, $"a3:m{(sor - 1)}");
+                MyX.Rácsoz(munkalap, $"a3:m{(sor - 1)}");
                 MyX.Vastagkeret(munkalap, "a3:m3");
 
                 // szűrő
