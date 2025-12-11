@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
@@ -78,6 +76,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
             try
             {
                 string munkalap = "Adatok";
+                MyX.Munkalap_aktív(munkalap);
                 MyX.Aktív_Cella(munkalap, "A1");
                 MyX.Link_beillesztés(munkalap, "A1", "Tartalom");
 
@@ -135,19 +134,19 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
                 }
 
                 // megformázzuk
-                MyX.Aktív_Cella(munkalap, "A:m");
-                MyX.Aktív_Cella(munkalap, "m1");
+                // MyX.Aktív_Cella(munkalap, "A:m");
+                //MyX.Aktív_Cella(munkalap, "m1");
                 MyX.Oszlopszélesség(munkalap, "A:m");
-                MyX.Vastagkeret(munkalap,"a3:m3");
-                MyX.Rácsoz(munkalap,"a3:m" + (sor - 1).ToString());
-                MyX.Vastagkeret(munkalap,"a3:m" + (sor - 1).ToString());
-                MyX.Vastagkeret(munkalap,"a3:m3");
+                MyX.Vastagkeret(munkalap, "a3:m3");
+                MyX.Rácsoz(munkalap, "a3:m" + (sor - 1).ToString());
+                MyX.Vastagkeret(munkalap, "a3:m" + (sor - 1).ToString());
+                MyX.Vastagkeret(munkalap, "a3:m3");
 
                 // szűrő
                 MyX.Szűrés(munkalap, $"A", "M", sor, 3);
 
                 // ablaktábla rögzítése
-                MyX.Tábla_Rögzítés(munkalap,3);
+                MyX.Tábla_Rögzítés(munkalap, 3);
 
                 // kiírjuk a tábla méretét
                 MyX.Munkalap_aktív("Vizsgálatok");
@@ -186,13 +185,11 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
                 string Kimutatás_cella = "A6";
                 string Kimutatás_név = "Kimutatás";
 
-                List<string> összesítNév = new List<string>();
+                string összesítNév = "Pályaszám";
                 List<string> Összesít_módja = new List<string>();
                 List<string> sorNév = new List<string>();
                 List<string> oszlopNév = new List<string>();
                 List<string> SzűrőNév = new List<string>();
-
-                összesítNév.Add("Pályaszám");
 
                 Összesít_módja.Add("xlCount");
 
@@ -228,7 +225,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
                 MyX.Aktív_Cella(munkalap, "A1");
                 MyX.Link_beillesztés(munkalap, "A1", "Tartalom");
                 // beolvassuk a sor végét
-                int sor = int.Parse(MyX.Beolvas(munkalap,"aa1"));
+                int sor = int.Parse(MyX.Beolvas(munkalap, "aa1"));
 
 
                 string munkalap_adat = "Adatok";
@@ -238,13 +235,11 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
                 string Kimutatás_cella = "A6";
                 string Kimutatás_név = "Kimutatás";
 
-                List<string> összesítNév = new List<string>();
+                string összesítNév = "Pályaszám";
                 List<string> Összesít_módja = new List<string>();
                 List<string> sorNév = new List<string>();
                 List<string> oszlopNév = new List<string>();
                 List<string> SzűrőNév = new List<string>();
-
-                összesítNév.Add("Pályaszám");
 
                 Összesít_módja.Add("xlCount");
 
