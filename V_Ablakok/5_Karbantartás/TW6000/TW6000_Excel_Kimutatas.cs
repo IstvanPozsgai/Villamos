@@ -117,19 +117,19 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
                 if (AdatokGy.Count > 0) válasz = AdatokGy.Count;
                 foreach (Adat_TW6000_Ütemezés rekord in AdatokGy)
                 {
-                    MyX.Kiir(rekord.Azonosító.Trim(), "a" + sor);
+                    MyX.Kiir($"#SZÁME#{rekord.Azonosító}", "a" + sor);
                     MyX.Kiir(rekord.Ciklusrend.Trim(), "b" + sor);
                     MyX.Kiir(rekord.Elkészült.ToString(), "c" + sor);
                     MyX.Kiir(rekord.Megjegyzés.Trim(), "d" + sor);
-                    MyX.Kiir(rekord.Státus.ToString(), "e" + sor);
+                    MyX.Kiir($"#SZÁME#{rekord.Státus}", "e" + sor);
                     MyX.Kiir(rekord.Velkészülés.ToString("yyyy.MM.dd"), "f" + sor);
                     MyX.Kiir(rekord.Vesedékesség.ToString("yyyy.MM.dd"), "g" + sor);
                     MyX.Kiir(rekord.Vizsgfoka.Trim(), "h" + sor);
-                    MyX.Kiir(rekord.Vsorszám.ToString(), "i" + sor);
+                    MyX.Kiir($"#SZÁME#{rekord.Vsorszám}", "i" + sor);
                     MyX.Kiir(rekord.Vütemezés.ToString("yyyy.MM.dd"), "j" + sor);
                     MyX.Kiir(rekord.Vvégezte.Trim(), "k" + sor);
-                    MyX.Kiir(rekord.Vütemezés.Year.ToString(), "l" + sor);
-                    MyX.Kiir(rekord.Vütemezés.Month.ToString(), "m" + sor);
+                    MyX.Kiir($"#SZÁME#{rekord.Vütemezés.Year}", "l" + sor);
+                    MyX.Kiir($"#SZÁME#{rekord.Vütemezés.Month}", "m" + sor);
                     sor++;
                     //Holtart.Lép();
                 }
@@ -138,9 +138,9 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
                 // MyX.Aktív_Cella(munkalap, "A:m");
                 //MyX.Aktív_Cella(munkalap, "m1");
                 MyX.Oszlopszélesség(munkalap, "A:m");
-                MyX.Vastagkeret(munkalap, "a3:m3");
-                MyX.Rácsoz(munkalap, "a3:m" + (sor - 1).ToString());
-                MyX.Vastagkeret(munkalap, "a3:m" + (sor - 1).ToString());
+                //MyX.Vastagkeret(munkalap, "a3:m3");
+                 MyX.Rácsoz(munkalap, $"a3:m{(sor - 1)}");
+                //MyX.Vastagkeret(munkalap, $"a3:m{(sor - 1)}");
                 MyX.Vastagkeret(munkalap, "a3:m3");
 
                 // szűrő
