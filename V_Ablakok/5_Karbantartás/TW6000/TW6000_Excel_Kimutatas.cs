@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
@@ -116,30 +117,26 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
                 if (AdatokGy.Count > 0) válasz = AdatokGy.Count;
                 foreach (Adat_TW6000_Ütemezés rekord in AdatokGy)
                 {
-                    MyX.Kiir(rekord.Azonosító.Trim(), "a" + sor);
+                    MyX.Kiir($"#SZÁME#{rekord.Azonosító}", "a" + sor);
                     MyX.Kiir(rekord.Ciklusrend.Trim(), "b" + sor);
                     MyX.Kiir(rekord.Elkészült.ToString(), "c" + sor);
                     MyX.Kiir(rekord.Megjegyzés.Trim(), "d" + sor);
-                    MyX.Kiir(rekord.Státus.ToString(), "e" + sor);
+                    MyX.Kiir($"#SZÁME#{rekord.Státus}", "e" + sor);
                     MyX.Kiir(rekord.Velkészülés.ToString("yyyy.MM.dd"), "f" + sor);
                     MyX.Kiir(rekord.Vesedékesség.ToString("yyyy.MM.dd"), "g" + sor);
                     MyX.Kiir(rekord.Vizsgfoka.Trim(), "h" + sor);
-                    MyX.Kiir(rekord.Vsorszám.ToString(), "i" + sor);
+                    MyX.Kiir($"#SZÁME#{rekord.Vsorszám}", "i" + sor);
                     MyX.Kiir(rekord.Vütemezés.ToString("yyyy.MM.dd"), "j" + sor);
                     MyX.Kiir(rekord.Vvégezte.Trim(), "k" + sor);
-                    MyX.Kiir(rekord.Vütemezés.Year.ToString(), "l" + sor);
-                    MyX.Kiir(rekord.Vütemezés.Month.ToString(), "m" + sor);
+                    MyX.Kiir($"#SZÁME#{rekord.Vütemezés.Year}", "l" + sor);
+                    MyX.Kiir($"#SZÁME#{rekord.Vütemezés.Month}", "m" + sor);
                     sor++;
                     //Holtart.Lép();
                 }
 
                 // megformázzuk
-                // MyX.Aktív_Cella(munkalap, "A:m");
-                //MyX.Aktív_Cella(munkalap, "m1");
                 MyX.Oszlopszélesség(munkalap, "A:m");
-                MyX.Vastagkeret(munkalap, "a3:m3");
-                MyX.Rácsoz(munkalap, "a3:m" + (sor - 1).ToString());
-                MyX.Vastagkeret(munkalap, "a3:m" + (sor - 1).ToString());
+                MyX.Rácsoz(munkalap, $"a3:m{(sor - 1)}");
                 MyX.Vastagkeret(munkalap, "a3:m3");
 
                 // szűrő
@@ -185,11 +182,13 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
                 string Kimutatás_cella = "A6";
                 string Kimutatás_név = "Kimutatás";
 
-                string összesítNév = "Pályaszám";
+                List<string> összesítNév = new List<string>();
                 List<string> Összesít_módja = new List<string>();
                 List<string> sorNév = new List<string>();
                 List<string> oszlopNév = new List<string>();
                 List<string> SzűrőNév = new List<string>();
+
+                összesítNév.Add("Pályaszám");
 
                 Összesít_módja.Add("xlCount");
 
@@ -201,8 +200,22 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
 
                 oszlopNév.Add("vizsgálat");
 
-                MyX.Kimutatás_Fő(munkalap_adat, balfelső, jobbalsó, kimutatás_Munkalap, Kimutatás_cella, Kimutatás_név
-                                , összesítNév, Összesít_módja, sorNév, oszlopNév, SzűrőNév);
+                Beállítás_Kimutatás Bekimutat = new Beállítás_Kimutatás
+                {
+                    Munkalapnév = munkalap_adat,
+                    Balfelső = balfelső,
+                    Jobbalsó = jobbalsó,
+                    Kimutatás_Munkalapnév = kimutatás_Munkalap,
+                    Kimutatás_cella = Kimutatás_cella,
+                    Kimutatás_név = Kimutatás_név,
+                    ÖsszesítNév = összesítNév,
+                    Összesítés_módja = Összesít_módja,
+                    SorNév = sorNév,
+                    OszlopNév = oszlopNév,
+                    SzűrőNév = SzűrőNév
+                };
+
+                MyX.Kimutatás_Fő(Bekimutat);
                 MyX.Aktív_Cella(munkalap, "A1");
             }
             catch (HibásBevittAdat ex)
@@ -235,11 +248,13 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
                 string Kimutatás_cella = "A6";
                 string Kimutatás_név = "Kimutatás";
 
-                string összesítNév = "Pályaszám";
+                List<string> összesítNév = new List<string>();
                 List<string> Összesít_módja = new List<string>();
                 List<string> sorNév = new List<string>();
                 List<string> oszlopNév = new List<string>();
                 List<string> SzűrőNév = new List<string>();
+
+                összesítNév.Add("Pályaszám");
 
                 Összesít_módja.Add("xlCount");
 
@@ -249,8 +264,21 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
 
                 oszlopNév.Add("vizsgálat");
 
-                MyX.Kimutatás_Fő(munkalap_adat, balfelső, jobbalsó, kimutatás_Munkalap, Kimutatás_cella, Kimutatás_név
-                                , összesítNév, Összesít_módja, sorNév, oszlopNév, SzűrőNév);
+                Beállítás_Kimutatás Bekimutat = new Beállítás_Kimutatás
+                {
+                    Munkalapnév = munkalap_adat,
+                    Balfelső = balfelső,
+                    Jobbalsó = jobbalsó,
+                    Kimutatás_Munkalapnév = kimutatás_Munkalap,
+                    Kimutatás_cella = Kimutatás_cella,
+                    Kimutatás_név = Kimutatás_név,
+                    ÖsszesítNév = összesítNév,
+                    Összesítés_módja = Összesít_módja,
+                    SorNév = sorNév,
+                    OszlopNév = oszlopNév,
+                    SzűrőNév = SzűrőNév
+                };
+                MyX.Kimutatás_Fő(Bekimutat);
                 MyX.Aktív_Cella(munkalap, "A1");
             }
             catch (HibásBevittAdat ex)

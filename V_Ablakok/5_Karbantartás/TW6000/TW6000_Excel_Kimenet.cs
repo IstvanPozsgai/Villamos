@@ -39,13 +39,26 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
                 if (ideigsor.Name == "0") ideigsor = Color.White;
                 MyX.Háttérszín(munkalap,$"A{sor + 2}:{MyF.Oszlopnév(Táblaütemezés.ColumnCount - 2)}{sor + 2}", ideigsor);
 
+                int utolsoOszlopIndex = Táblaütemezés.ColumnCount - 1;
+                int utolsoElottiOszlopIndex = Táblaütemezés.ColumnCount - 2;
+
                 for (int oszlop = 0; oszlop < Táblaütemezés.ColumnCount; oszlop++)
                 {
                     if (Táblaütemezés.Rows[sor].Cells[oszlop].Value != null)
                     {
-                        MyX.Kiir(Táblaütemezés.Rows[sor].Cells[oszlop].Value.ToStrTrim(), MyF.Oszlopnév(oszlop + 1) + (sor + 2).ToString());
+                        bool utolsoKetOszlop = (oszlop == utolsoOszlopIndex || oszlop == utolsoElottiOszlopIndex);
 
-                        Color ideig = Táblaütemezés.Rows[sor].Cells[oszlop].Style.BackColor;
+                        if (utolsoKetOszlop)
+                        {
+                            MyX.Kiir($"#SZÁME#{Táblaütemezés.Rows[sor].Cells[oszlop].Value}", MyF.Oszlopnév(oszlop + 1) + (sor + 2).ToString());
+                        }
+                        else
+                        {
+                            MyX.Kiir(Táblaütemezés.Rows[sor].Cells[oszlop].Value.ToStrTrim(), MyF.Oszlopnév(oszlop + 1) + (sor + 2).ToString());
+                        }
+
+
+                            Color ideig = Táblaütemezés.Rows[sor].Cells[oszlop].Style.BackColor;
                         if (ideig.Name != "0")
                             MyX.Háttérszín(munkalap,MyF.Oszlopnév(oszlop + 1) + (sor + 2).ToString(), ideig);
                     }
@@ -62,7 +75,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
             MyX.Oszlopszélesség(munkalap, $"A:{utolsóOszlop}");
 
             Beállítás_Nyomtatás NyomtatásBeállít = new Beállítás_Nyomtatás() { Munkalap = munkalap, NyomtatásiTerület = "A1:" + utolsóOszlop + utolsóSor
-            ,BalMargó=15, JobbMargó=15, AlsóMargó=20, FelsőMargó=15, FejlécMéret=13, LáblécMéret=13, LapSzéles = 1, LapMagas = 1, Álló = true, Papírméret = "A4", VízKözép = true, FüggKözép = true };
+            ,BalMargó=15, JobbMargó=15, AlsóMargó=20, FelsőMargó=15, FejlécMéret=13, LáblécMéret=13, LapSzéles = 1, LapMagas = 1, Álló = false, Papírméret = "A4", VízKözép = true, FüggKözép = true };
 
             MyX.NyomtatásiTerület_részletes(munkalap, NyomtatásBeállít);
 
