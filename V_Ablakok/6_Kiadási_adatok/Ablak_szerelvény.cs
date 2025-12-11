@@ -881,8 +881,8 @@ namespace Villamos.Ablakok
                     }
                 }
                 HibásTábla.Visible = true;
-                HibásTábla.ClearSelection();
                 HibásTábla.Refresh();
+                HibásTábla.ClearSelection();
             }
             catch (Exception ex)
             {
