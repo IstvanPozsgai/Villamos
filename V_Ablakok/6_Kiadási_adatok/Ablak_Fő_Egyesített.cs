@@ -1051,7 +1051,6 @@ namespace Villamos
                 // ****************************************************
                 // elkészítjük a lapokat
                 // ****************************************************
-                //MyX.Munkalap_átnevezés("Munka1", "Tartalom");
 
                 for (int i = 1; i <= 15; i++)
                 {
@@ -1066,10 +1065,10 @@ namespace Villamos
 
                 for (int i = 1; i <= 15; i++)
                 {
-                    MyX.Link_beillesztés("Tartalom", "a" + (i + 1).ToString(), Cím[i]);
+                    MyX.Link_beillesztés(munkalap, "a" + (i + 1).ToString(), Cím[i]);
                     MyX.Kiir(Cím[i], "b" + (i + 1).ToString());
                 }
-                MyX.Oszlopszélesség("Tartalom", "A:B");
+                MyX.Oszlopszélesség(munkalap, "A:B");
 
                 // ****************************************************
                 // Elkészítjük a munkalapokat
@@ -3021,6 +3020,7 @@ namespace Villamos
             try
             {
                 munkalap = "Kimutatás";
+                MyX.Munkalap_aktív(munkalap);
                 MyX.Link_beillesztés(munkalap, "A1", "Tartalom");
 
                 string munkalap_adat = "Adatok 1";
