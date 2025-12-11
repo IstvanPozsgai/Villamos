@@ -185,13 +185,11 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
                 string Kimutatás_cella = "A6";
                 string Kimutatás_név = "Kimutatás";
 
-                List<string> összesítNév = new List<string>();
+                string összesítNév = "Pályaszám";
                 List<string> Összesít_módja = new List<string>();
                 List<string> sorNév = new List<string>();
                 List<string> oszlopNév = new List<string>();
                 List<string> SzűrőNév = new List<string>();
-
-                összesítNév.Add("Pályaszám");
 
                 Összesít_módja.Add("xlCount");
 
@@ -237,13 +235,11 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
                 string Kimutatás_cella = "A6";
                 string Kimutatás_név = "Kimutatás";
 
-                List<string> összesítNév = new List<string>();
+                string összesítNév = "Pályaszám";
                 List<string> Összesít_módja = new List<string>();
                 List<string> sorNév = new List<string>();
                 List<string> oszlopNév = new List<string>();
                 List<string> SzűrőNév = new List<string>();
-
-                összesítNév.Add("Pályaszám");
 
                 Összesít_módja.Add("xlCount");
 
