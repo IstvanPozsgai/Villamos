@@ -2171,7 +2171,7 @@ namespace Villamos
                                                                     && a.Napszak == napsz
                                                                     && a.Státus == 1
                                                                     && a.Takarítási_fajta == Opció_lista.Text.Trim()
-                                                                    orderby a.Azonosító
+                                                                    orderby a.Azonosító descending
                                                                     select a).ToList();
 
                 foreach (Adat_Jármű_Takarítás_Teljesítés rekord in Teljesítés)
