@@ -221,10 +221,10 @@
     <Compile Include="V_Ablakok\2_Információ\Ablak_Üzenet_Generálás.Designer.cs">
       <DependentUpon>Ablak_Üzenet_Generálás.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_DolgozóiLekérdezések.cs">
+    <Compile Include="V_Ablakok\3_Dolgozó\DolgozoiLekerdezesek\Ablak_DolgozóiLekérdezések.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_DolgozóiLekérdezések.designer.cs">
+    <Compile Include="V_Ablakok\3_Dolgozó\DolgozoiLekerdezesek\Ablak_DolgozóiLekérdezések.designer.cs">
       <DependentUpon>Ablak_DolgozóiLekérdezések.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Oktatások.cs">
@@ -239,6 +239,9 @@
     <Compile Include="V_Ablakok\3_Dolgozó\Beosztás\Ablak_Beosztás.designer.cs">
       <DependentUpon>Ablak_Beosztás.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\3_Dolgozó\DolgozoiLekerdezesek\DolgozoiLekerdezesek_Alaplista.cs" />
+    <Compile Include="V_Ablakok\3_Dolgozó\DolgozoiLekerdezesek\DolgozoiLekerdezesek_Felepites_Aktualis.cs" />
+    <Compile Include="V_Ablakok\3_Dolgozó\DolgozoiLekerdezesek\DolgozoiLekerdezesek_Felepites_Uzemenkent_Excel.cs" />
     <Compile Include="V_Ablakok\3_Dolgozó\Karbantartási_Munkalapok\Ablak_Karbantartási_Munkalapok.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1463,7 +1466,7 @@
     <EmbeddedResource Include="V_Ablakok\2_Információ\Ablak_Üzenet_Generálás.resx">
       <DependentUpon>Ablak_Üzenet_Generálás.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_DolgozóiLekérdezések.resx">
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\DolgozoiLekerdezesek\Ablak_DolgozóiLekérdezések.resx">
       <DependentUpon>Ablak_DolgozóiLekérdezések.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_Oktatások.resx">
