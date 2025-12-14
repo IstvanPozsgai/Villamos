@@ -318,7 +318,7 @@ namespace Villamos.Villamos_Ablakok
                     MyX.Kiir(rekord.Típus, "C" + i.ToString());
                     MyX.Kiir(rekord.Eseményjele, "d" + i.ToString());
                     MyX.Kiir(rekord.Bekövetkezés.ToString(), "e" + i.ToString());
-                    MyX.Kiir(rekord.Kimaradtmenet.ToString(), "F" + i.ToString());
+                    MyX.Kiir($"#SZÁME#{rekord.Kimaradtmenet}", "F" + i.ToString());
                     MyX.Kiir(rekord.Jvbeírás, "g" + i.ToString());
                     MyX.Kiir(rekord.Vmbeírás, "h" + i.ToString());
                     MyX.Kiir(rekord.Javítás, "i" + i.ToString());
