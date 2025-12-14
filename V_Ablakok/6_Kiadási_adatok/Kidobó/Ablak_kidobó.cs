@@ -1424,7 +1424,7 @@ namespace Villamos
 
                         MyX.Kiir(ideig + "_", $"a{sor}");
                         if (MyF.Szöveg_Tisztítás(rekord.Szerelvénytípus, 0, 3) == "CAF" && rekord.Kezdés.Hour < 12)
-                            MyX.Háttérszíninverz(munkalap, $"a{sor}", Color.Black);
+                            MyX.Betű (munkalap, $"a{sor}", BeBetű10V);
 
                         MyX.Kiir(rekord.Forgalmiszám.Trim(), $"b{sor}");
                         DateTime ideigdátum = rekord.Kezdés.AddMinutes(20);
@@ -1436,8 +1436,7 @@ namespace Villamos
                         MyX.Betű(munkalap, $"g{sor}", BeBetű12);
 
                         MyX.Kiir(rekord.Jvez.Trim(), $"f{sor}");
-                        MyX.Kicsinyít(munkalap, $"f{sor}");
-
+                      
                         if (ideigdátum.Hour > 12)
                         {
                             MyX.Betű(munkalap, $"a{sor}:g{sor}", BeBetű10V);
@@ -1457,7 +1456,7 @@ namespace Villamos
                         ideig = ideig.Replace(rekord.Viszonylat.Trim() + '/', "");
                         MyX.Kiir(ideig + "_", $"h{sor}");
                         if (MyF.Szöveg_Tisztítás(rekord.Szerelvénytípus, 0, 3) == "CAF")
-                            MyX.Háttérszíninverz(munkalap, $"h{sor}", Color.Black);
+                            MyX.Betű(munkalap, $"h{sor}", BeBetű10V);
 
                         MyX.Kiir(rekord.Forgalmiszám.Trim(), $"i{sor}");
                         DateTime ideigdátum = rekord.Kezdés.AddMinutes(20);
@@ -1468,7 +1467,7 @@ namespace Villamos
                         MyX.Betű(munkalap, $"j{sor}", BeBetű12);
                         MyX.Betű(munkalap, $"o{sor}", BeBetű12);
                         MyX.Kiir(rekord.Jvez.Trim(), $"m{sor}");
-                        MyX.Kicsinyít(munkalap, $"m{sor}");
+             
 
                         if (ideigdátum.Hour > 12)
                         {

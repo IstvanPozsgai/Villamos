@@ -165,15 +165,5 @@ namespace Villamos
             colLetter = match.Groups[1].Value.ToUpper();
             return uint.TryParse(match.Groups[2].Value, out row);
         }
-
-        internal static void Kicsinyít(string munkalap, string v)
-        {
-            // JAVÍTANDÓ:
-        }
-
-        internal static void Háttérszíninverz(string munkalap, string v, System.Drawing.Color black)
-        {
-            // JAVÍTANDÓ:
-        }
     }
 }
