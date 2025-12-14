@@ -98,13 +98,6 @@ namespace Villamos
                     AlkalmazCellaFormázás(fájlnév, CellaBeállítás);
                     CellaBeállítás.Clear();
                 }
-
-                if (KimutatásTöbbszintű.Trim ()!="")
-                {
-                   
-                    Kimutatás_Pivot_Subtotal_AlTipus(fájlnév, KimutatásTöbbszintű);
-                    KimutatásTöbbszintű = "";
-                }
             }
             catch (Exception ex)
             {
