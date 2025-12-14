@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -1066,7 +1065,7 @@ namespace Villamos
                 for (int i = 1; i <= 15; i++)
                 {
                     MyX.Link_beillesztés(munkalap, "a" + (i + 1).ToString(), Cím[i]);
-                    MyX.Kiir(Cím[i], "b" + (i + 1).ToString());
+                    MyX.Kiir(Leírás[i], "b" + (i + 1).ToString());
                 }
                 MyX.Oszlopszélesség(munkalap, "A:B");
 
@@ -3063,10 +3062,11 @@ namespace Villamos
                     Összesítés_módja = Összesít_módja,
                     SorNév = sorNév,
                     OszlopNév = oszlopNév,
-                    SzűrőNév = SzűrőNév
+                    SzűrőNév = SzűrőNév,
+                    Többszintű =true 
                 };
 
-                MyX.Kimutatás_Fő(Bekimutat);
+                   MyX.Kimutatás_Fő(Bekimutat);
 
                 Dictionary<string, double> oszlopMeretek = new Dictionary<string, double>
                 {

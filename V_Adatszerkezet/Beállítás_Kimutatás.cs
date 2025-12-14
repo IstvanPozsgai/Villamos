@@ -22,5 +22,9 @@ namespace Villamos.Adatszerkezet
         public List<string> SorNév { get; set; }
         public List<string> OszlopNév { get; set; }
         public List<string> SzűrőNév { get; set; }
+        /// <summary>
+        /// Többszintű a sorokban lévő összesítés
+        /// </summary>
+        public bool Többszintű { get; set; }=false;
     }
 }

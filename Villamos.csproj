@@ -1418,6 +1418,7 @@
     <Compile Include="V_XML\MyClosedXML_Ferde.cs" />
     <Compile Include="V_XML\MyClosedXML_Keret.cs" />
     <Compile Include="V_XML\MyClosedXML_Kimutatás.cs" />
+    <Compile Include="V_XML\MyClosedXML_Kimutatás_Open.cs" />
     <Compile Include="V_XML\MyClosedXML_Munkalap.cs" />
     <Compile Include="V_XML\MyClosedXML_Nyomtatás.cs" />
     <Compile Include="V_XML\MyClosedXML_Sor_Oszlop.cs" />

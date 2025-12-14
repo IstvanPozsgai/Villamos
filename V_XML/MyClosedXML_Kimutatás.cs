@@ -1,6 +1,5 @@
 ﻿using ClosedXML.Excel;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Windows.Forms;
@@ -42,7 +41,10 @@ namespace Villamos
                 //  Sorok
                 if (beállítás.SorNév != null && beállítás.SorNév.Count > 0)
                     foreach (string nev in beállítás.SorNév)
-                        pivotTable.RowLabels.Add(nev);
+                    {
+                        IXLPivotField field = pivotTable.RowLabels.Add(nev);
+                        field.AddSubtotal(XLSubtotalFunction.Automatic);
+                    }
 
                 // Oszlopok
                 if (beállítás.OszlopNév != null && beállítás.OszlopNév.Count > 0)
@@ -79,6 +81,8 @@ namespace Villamos
                         }
                     }
                 }
+           
+    
             }
             catch (Exception ex)
             {
