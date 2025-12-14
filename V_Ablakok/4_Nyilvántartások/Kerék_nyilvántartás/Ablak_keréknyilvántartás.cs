@@ -1247,7 +1247,7 @@ namespace Villamos
                 else
                     Jármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
 
-                if (Típus_Szűrő.Text.Trim() == "")
+                if (Típus_Szűrő.Text.Trim() != "")
                     Jármű = Jármű.Where(a => a.Típus.Trim() == Típus_Szűrő.Text.Trim()).ToList();
 
                 Jármű = (from a in Jármű
@@ -1290,11 +1290,11 @@ namespace Villamos
                 {
                     for (int k = 1; k <= oszlop; k++)
                     {
-                        Tábla2.Columns[7 + 3 * (k - 1)].HeaderText = "Poz.:";
+                        Tábla2.Columns[7 + 3 * (k - 1)].HeaderText = $"Poz.:{k}";
                         Tábla2.Columns[7 + 3 * (k - 1)].Width = 60;
-                        Tábla2.Columns[8 + 3 * (k - 1)].HeaderText = "Áll.:";
+                        Tábla2.Columns[8 + 3 * (k - 1)].HeaderText = $"Áll.:{k}";
                         Tábla2.Columns[8 + 3 * (k - 1)].Width = 60;
-                        Tábla2.Columns[9 + 3 * (k - 1)].HeaderText = "Átm.:";
+                        Tábla2.Columns[9 + 3 * (k - 1)].HeaderText = $"Átm.:{k}";
                         Tábla2.Columns[9 + 3 * (k - 1)].Width = 60;
                     }
                 }

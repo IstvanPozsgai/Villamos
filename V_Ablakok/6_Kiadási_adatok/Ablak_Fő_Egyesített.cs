@@ -3063,22 +3063,11 @@ namespace Villamos
                     SorNév = sorNév,
                     OszlopNév = oszlopNév,
                     SzűrőNév = SzűrőNév,
-                    Többszintű =true 
+                    Többszintű = true
                 };
 
-                   MyX.Kimutatás_Fő(Bekimutat);
-
-                Dictionary<string, double> oszlopMeretek = new Dictionary<string, double>
-                {
-                    { "A:A", 16 },
-                    { "B:B", 9 },
-                    { "C:C", 15 },
-                    { "D:F", 13 },
-                    { "G:H", 12 },
-                    { "I:J", 19 }
-                };
-
-                MyX.Oszlopszélesség_Csoportos(munkalap, oszlopMeretek);
+                MyX.Kimutatás_Fő(Bekimutat);
+                MyX.Oszlopszélesség(munkalap, "A:J", 20);
             }
             catch (Exception ex)
             {
