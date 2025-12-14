@@ -9,7 +9,6 @@ using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -106,7 +105,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\állomány.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -309,8 +308,8 @@ namespace Villamos
                 }
                 // megformázzuk
                 MyX.Rácsoz(munkalap, $"A1:C{sor}");
-                MyX.Vastagkeret(munkalap, "A1:C1");
-                MyX.Vastagkeret(munkalap, $"A1:C{sor}");
+                MyX.Rácsoz(munkalap, "A1:C1");
+               // MyX.Vastagkeret(munkalap, $"A1:C{sor}");
 
                 //Első sor sárga
                 MyX.Háttérszín(munkalap, "A1:C1", Color.Yellow);
@@ -336,7 +335,7 @@ namespace Villamos
                 beállBetű = new Beállítás_Betű();
                 MyX.Munkalap_betű(munkalap, beállBetű);
 
-                // fejlécet kéazítünk
+                // fejlécet készítünk
                 munkalap = "Színes";
                 MyX.Munkalap_aktív(munkalap);
                 MyX.Kiir("Típus", "A1");
@@ -364,13 +363,13 @@ namespace Villamos
                             MyX.Egyesít(munkalap, $"a{elsősor}:a{j}");
                             MyX.Egyesít(munkalap, $"v{elsősor}:v{j}");
                             MyX.Kiir(előzőtípus, $"a{elsősor}");
-                            MyX.Kiir(darab.ToString(), $"v{elsősor}");
+                            MyX.Kiir($"#SZÁME#{darab}", $"v{elsősor}");
                             darab = 0;
                         }
                         else
                         {
                             MyX.Kiir(előzőtípus, $"a{elsősor}");
-                            MyX.Kiir(darab.ToString(), $"v{elsősor}");
+                            MyX.Kiir($"#SZÁME#{darab}", $"v{elsősor}");
                             darab = 0;
                         }
                         k = 2;
@@ -413,13 +412,13 @@ namespace Villamos
                     MyX.Egyesít(munkalap, $"a{elsősor}:a{j}");
                     MyX.Egyesít(munkalap, $"v{elsősor}:v{j}");
                     MyX.Kiir(utolsótípus, $"a{elsősor}");
-                    MyX.Kiir(darab.ToString(), $"v{elsősor}");
+                    MyX.Kiir($"#SZÁME#{darab}", $"v{elsősor}");
                     darab = 0;
                 }
                 else
                 {
                     MyX.Kiir(utolsótípus, $"a{elsősor}");
-                    MyX.Kiir(darab.ToString(), $"v{elsősor}");
+                    MyX.Kiir($"#SZÁME#{darab}", $"v{elsősor}");
                     darab = 0;
                 }
 
@@ -438,7 +437,7 @@ namespace Villamos
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
                 Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
