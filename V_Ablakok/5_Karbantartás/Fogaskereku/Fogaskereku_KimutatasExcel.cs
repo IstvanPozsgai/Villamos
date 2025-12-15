@@ -11,7 +11,6 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Fogaskereku
         {
             MyX.ExcelLétrehozás();
 
-
             string munkalap = "Adatok";
             MyX.Munkalap_átnevezés("Munka1", munkalap);
 
@@ -30,14 +29,25 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Fogaskereku
             MyX.Kiir("#KÉPLET#=LEFT(RC[-18],2)", "x2");
             //Holtart.Lép();
 
+            // A B oszlopot a Munkalap metódus nem számként írta ki, itt formázom át számmá.
+            for (int i = 2; i <= utolsósor + 1; i++)
+            {
+                string azonosito_atalakit = MyX.Beolvas(munkalap, $"B{i}");
+                MyX.Kiir($"#SZÁME#{azonosito_atalakit}", $"B{i}");
+
+            }
+
+
             MyX.Képlet_másol(munkalap, "V2:X2", "V3:X" + (utolsósor + 1));
             MyX.Rácsoz(munkalap, "A1:X" + (utolsósor + 1));
 
             MyX.Oszlopszélesség(munkalap, "A:X");
+            // A T oszlopot valamiért nem méretezte megfelelően automatikusan.
+            MyX.Oszlopszélesség(munkalap, "T:T", 6.15);
             //Holtart.Lép();
 
             MyX.Aktív_Cella(munkalap, "A1");
-            Beállítás_Nyomtatás NyomtatásBeállít = new Beállítás_Nyomtatás() { Munkalap = munkalap, NyomtatásiTerület = "A1:X" + (utolsósor + 1), IsmétlődőSorok = "$1:$1", Álló = true };
+            Beállítás_Nyomtatás NyomtatásBeállít = new Beállítás_Nyomtatás() { Munkalap = munkalap, NyomtatásiTerület = "A1:X" + (utolsósor + 1), IsmétlődőSorok = "i:i", Álló = true };
             MyX.NyomtatásiTerület_részletes(munkalap, NyomtatásBeállít);
             //Holtart.Lép();
 
@@ -49,7 +59,6 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Fogaskereku
             //Holtart.Lép();
             MyX.ExcelMentés(fájlexc);
             MyX.ExcelBezárás();
-
         }
 
         private void Kimutatás3(long utolsósor)
