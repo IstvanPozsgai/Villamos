@@ -1725,28 +1725,46 @@ namespace Villamos
                 // Csak a fejlécet írjuk ki
                 Dolgozó_Tábla_fejléc();
                 Dolg_tábla.Visible = true;
-
-                MyE.ExcelLétrehozás();
-                MyE.Munkalap_betű("Arial", 12);
                 string munkalap = "Munka1";
+                MyX.ExcelLétrehozás(munkalap);
+                MyX.Munkalap_betű(munkalap, BeBetű);
 
                 for (int oszlop = 0; oszlop < Dolg_tábla.ColumnCount; oszlop++)
                 {
-                    MyE.Kiir(Dolg_tábla.Columns[oszlop].HeaderText, MyE.Oszlopnév(oszlop + 1) + "1");
-                    MyE.Oszlopszélesség(munkalap, $"{MyE.Oszlopnév(oszlop + 1)}:{MyE.Oszlopnév(oszlop + 1)}", 30);
+                    MyX.Kiir(Dolg_tábla.Columns[oszlop].HeaderText, MyF.Oszlopnév(oszlop + 1) + "1");
+                    MyX.Oszlopszélesség(munkalap, $"{MyF.Oszlopnév(oszlop + 1)}:{MyF.Oszlopnév(oszlop + 1)}", 30);
                 }
-                MyE.Rácsoz($"A1:{MyE.Oszlopnév(Dolg_tábla.ColumnCount)}2");
-                MyE.Háttérszín($"A1:{MyE.Oszlopnév(Dolg_tábla.ColumnCount)}1", Color.Yellow);
-                MyE.Betű($"A1:{MyE.Oszlopnév(Dolg_tábla.ColumnCount)}1", false, false, true);
+                MyX.Rácsoz(munkalap,$"A1:{MyF.Oszlopnév(Dolg_tábla.ColumnCount)}2");
+                MyX.Háttérszín(munkalap,$"A1:{MyF.Oszlopnév(Dolg_tábla.ColumnCount)}1", Color.Yellow);
+                MyX.Betű(munkalap,$"A1:{MyF.Oszlopnév(Dolg_tábla.ColumnCount)}1", BeBetűV);
 
-                MyE.NyomtatásiTerület_részletes(munkalap, $"A1:{MyE.Oszlopnév(Dolg_tábla.ColumnCount)}2", "", "", true);
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:{MyF.Oszlopnév(Dolg_tábla.ColumnCount)}2",
 
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
+                    BalMargó = 5,
+                    JobbMargó = 5,
+                    FelsőMargó = 5,
+                    AlsóMargó = 5,
+                    FejlécMéret = 8,
+                    LáblécMéret = 8,
+
+                    LapMagas = 1,
+                    LapSzéles = 1,
+                    Papírméret = "A4",
+                    Álló = false,  
+                    VízKözép = true,
+                    FüggKözép = true
+                };
+
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
+                MyX.Aktív_Cella(munkalap, "A1");
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyF.Megnyitás(fájlexc + ".xlsx");
             }
             catch (HibásBevittAdat ex)
             {
