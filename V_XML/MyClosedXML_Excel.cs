@@ -18,7 +18,6 @@ namespace Villamos
         private static readonly List<Beállítás_Ferde> FerdeVonalak = new List<Beállítás_Ferde>();
         private static readonly List<Beállítás_CellaSzöveg> CellaBeállítás = new List<Beállítás_CellaSzöveg>();
         private static readonly List<Beállítás_Diagram> DiagramBeállítások = new List<Beállítás_Diagram>();
-        private static  string  KimutatásTöbbszintű = "";
 
         public static int sor;
         public static int oszlop;
