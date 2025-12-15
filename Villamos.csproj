@@ -442,7 +442,9 @@
     <Compile Include="V_Ablakok\4_Nyilvántartások\Nóta\Ablak_Nóta_Összesítés.Designer.cs">
       <DependentUpon>Ablak_Nóta_Összesítés.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\4_Nyilvántartások\Sérülés\Ablak_sérülés.cs" />
+    <Compile Include="V_Ablakok\4_Nyilvántartások\Sérülés\Ablak_sérülés.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="V_Ablakok\4_Nyilvántartások\Sérülés\Ablak_sérülés.designer.cs">
       <DependentUpon>Ablak_sérülés.cs</DependentUpon>
     </Compile>

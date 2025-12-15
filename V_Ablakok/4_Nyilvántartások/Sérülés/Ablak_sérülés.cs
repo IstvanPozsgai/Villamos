@@ -65,11 +65,14 @@ namespace Villamos
         readonly Beállítás_Betű BeBetű16V = new Beállítás_Betű { Méret = 16, Vastag = true };
         readonly Beállítás_Betű BeBetű14V = new Beállítás_Betű { Méret = 14, Vastag = true };
         readonly Beállítás_Betű BeBetű14VD = new Beállítás_Betű { Méret = 14, Vastag = true, Dőlt = true };
-        readonly Beállítás_Betű BeBetű18 = new Beállítás_Betű { Méret = 18};
+        readonly Beállítás_Betű BeBetű18 = new Beállítás_Betű { Méret = 18 };
         readonly Beállítás_Betű BeBetű18V = new Beállítás_Betű { Méret = 18, Vastag = true };
         readonly Beállítás_Betű BeBetű20V = new Beállítás_Betű { Méret = 20, Vastag = true };
         readonly Beállítás_Betű BeBetű22V = new Beállítás_Betű { Méret = 22, Vastag = true };
         readonly Beállítás_Betű BeBetű20 = new Beállítás_Betű { Méret = 20 };
+        readonly Beállítás_Betű BeBetűCal = new Beállítás_Betű { Név = "Calibri", Méret = 11 };
+        readonly Beállítás_Betű BeBetűCal18 = new Beállítás_Betű { Név = "Calibri", Méret = 18 };
+        readonly Beállítás_Betű BeBetűCalA = new Beállítás_Betű { Név = "Calibri", Méret = 11, Vastag = true };
         #endregion
 
 
@@ -2382,7 +2385,7 @@ namespace Villamos
 
                 Holtart.Be();
                 string munkalap = "Munka1";
-                MyX.ExcelLétrehozás();
+                MyX.ExcelLétrehozás(munkalap);
 
                 List<Adat_Alap_Beolvasás> Adatok = KézBeolvas.Lista_Adatok();
                 Adatok = (from a in Adatok
@@ -2409,7 +2412,6 @@ namespace Villamos
                 //MyX.Betű("C:C", "", "0.00");
                 //MyX.Betű("E:E", "", "0.00");
 
-                MyX.Aktív_Cella(munkalap, "A1");
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
 
@@ -3595,7 +3597,7 @@ namespace Villamos
                 {
                     sor += 2;
                     MyX.Kiir("Kelt, az elektronikus aláírás időbélyegzője szerinti időpontban", $"a{sor}");
-                    MyX.Betű(munkalap,$"a{sor}",BeBetűD);
+                    MyX.Betű(munkalap, $"a{sor}", BeBetűD);
 
                     sor += 3;
                     MyX.Sormagasság(munkalap, $"a{sor}", 80);
@@ -3918,7 +3920,7 @@ namespace Villamos
                 // excel kitöltése
 
                 // betű beállítása
-                MyX.Munkalap_betű(munkalap,BeBetű);
+                MyX.Munkalap_betű(munkalap, BeBetű);
 
                 MyX.Oszlopszélesség(munkalap, "a:b", 13);
                 MyX.Oszlopszélesség(munkalap, "c:g", 12);
@@ -3955,7 +3957,7 @@ namespace Villamos
                 Holtart.Lép();
                 // fix kiírások
                 MyX.Kiir("Fékvizsgálati jelentés", "e2");
-                MyX.Betű(munkalap,"e2", BeBetűV);
+                MyX.Betű(munkalap, "e2", BeBetűV);
                 MyX.Kiir("pályaszámú", "b7");
                 MyX.Kiir("típusú villamos", "d7");
                 MyX.Kiir("számú viszonylaton", "f7");
@@ -3981,7 +3983,7 @@ namespace Villamos
                 MyX.Sortörésseltöbbsorba(munkalap, "A26:G27", true);
 
                 MyX.Kiir("Az esemény leírása", "a29");
-                MyX.Betű(munkalap,"a29", BeBetűV);
+                MyX.Betű(munkalap, "a29", BeBetűV);
                 MyX.Kiir("Baleset helyszíne:", "a30");
                 MyX.Kiir("Mivel ütközött:", "a31");
                 MyX.Kiir("Személyi sérülés:", "a32");
@@ -4092,8 +4094,7 @@ namespace Villamos
         {
             try
             {
-                if (Sorszám.Text.ToStrTrim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva sorszám!");
+                if (Sorszám.Text.ToStrTrim() == "") throw new HibásBevittAdat("Nincs kiválasztva sorszám!");
                 Holtart.Be();
                 Cafkiiró();
 
@@ -4103,7 +4104,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "CAF jegyzőkönyv készítés",
-                    FileName = $"CAF_{Dátum.Value:yyyyMMdd}_{Pályaszám.Text.ToStrTrim()}",
+                    FileName = $"CAF_{Dátum.Value:yyyyMMdd}_{Pályaszám.Text.ToStrTrim()}_{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -4120,36 +4121,36 @@ namespace Villamos
                 // formázáshoz
 
                 // betű beállítása
-                MyX.Munkalap_betű(munkalap,BeBetű);
+                MyX.Munkalap_betű(munkalap, BeBetűCal);
 
                 MyX.Oszlopszélesség(munkalap, "a:c", 26);
                 sor = 1;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
-                MyX.Betű(munkalap,"a1",BeBetű18);
+                MyX.Betű(munkalap, "a1", BeBetűCal18);
 
                 MyX.Kiir($"{Pályaszám.Text} pályaszám - sérülés utáni járműszemle", $"a{sor}");
-                MyX.Háttérszín(munkalap, $"a{sor}", 13619151);
+                MyX.Háttérszín(munkalap, $"a{sor}", Color.Silver);
                 MyX.Igazít_vízszintes(munkalap, $"a{sor}", "közép");
-                MyX.Vastagkeret(munkalap, $"a{sor}:c{sor}");
+                MyX.Rácsoz(munkalap, $"a{sor}:c{sor}");
                 sor++;
 
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
                 MyX.Kiir($"Járműszemle dátuma időpontja: {DateTime.Today}", $"a{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor}:c{sor}");
+                MyX.Rácsoz(munkalap, $"a{sor}:c{sor}");
                 MyX.Igazít_vízszintes(munkalap, $"a{sor}", "bal");
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
                 MyX.Kiir("Jelen vannak", $"a{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor}:c{sor}");
+                MyX.Rácsoz(munkalap, $"a{sor}:c{sor}");
 
-                MyX.Háttérszín(munkalap, $"a{sor}", 13619151);
+                MyX.Háttérszín(munkalap, $"a{sor}", Color.Silver);
 
                 sor++;
                 MyX.Kiir("Szervezet", $"a{sor}");
                 MyX.Kiir("Név", $"b{sor}");
                 MyX.Kiir("Beosztás", $"c{sor}");
                 MyX.Rácsoz(munkalap, $"a{sor}:c{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor}:c{sor}");
+
                 if (CafTábla.Rows.Count > 0)
                 {
                     for (int i = 0; i < CafTábla.Rows.Count; i++)
@@ -4160,71 +4161,70 @@ namespace Villamos
                         MyX.Kiir(CafTábla.Rows[i].Cells[2].Value.ToStrTrim(), $"b{sor}");
                     }
                     MyX.Rácsoz(munkalap, $"a{sor - CafTábla.Rows.Count - 1}:c{sor}");
-                    MyX.Vastagkeret(munkalap, $"a{(sor - CafTábla.Rows.Count - 1)}:c{sor}");
                 }
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
+                MyX.Vastagkeret(munkalap, $"a{sor}:c{sor}");
                 MyX.Kiir("Baleset / Rongálás bekövetkezésének időpontja.", $"a{sor}:c{sor}");
-                MyX.Háttérszín(munkalap, $"a{sor}:c{sor}", 13619151);
+                MyX.Háttérszín(munkalap, $"a{sor}:c{sor}", Color.Silver);
 
                 sor++;
                 MyX.Kiir("Dátum / idő", $"a{sor}");
                 MyX.Kiir($"{Dátum.Value:yyyy.MM.dd}", $"b{sor}");
                 MyX.Kiir($"{Idő.Value:HH:mm}", $"c{sor}");
                 MyX.Rácsoz(munkalap, $"a{sor - 1}:c{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor - 1}:c{sor}");
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
                 MyX.Kiir("Baleset / Rongálás bekövetkezésének időpontjában a jármű Km állása.", $"a{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor - 1}:c{sor}");
+                MyX.Háttérszín(munkalap, $"a{sor - 1}:c{sor}", Color.Silver);
 
                 sor++;
                 MyX.Kiir("KM állás", $"a{sor}");
                 MyX.Kiir(KmóraÁllás.Text, $"b{sor}");
                 MyX.Kiir("km", $"c{sor}");
                 MyX.Rácsoz(munkalap, $"a{sor - 1}:c{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor - 1}:c{sor}");
+
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
                 MyX.Kiir("Baleset/vagy rongálásal érintett kocsirészek (pl C1, S, stb)", $"a{sor}");
-                MyX.Háttérszín(munkalap, $"a{sor}", 13619151);
+                MyX.Rácsoz(munkalap, $"a{sor}");
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
                 MyX.Kiir(Leírás.Text, $"a{sor}");
                 MyX.Rácsoz(munkalap, $"a{sor - 1}:c{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor - 1}:c{sor}");
+
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
                 MyX.Kiir("Biztosítói hibaszemle történt e? (megfelelő aláhúzandó)", $"a{sor}");
-                MyX.Háttérszín(munkalap, $"a{sor}", 13619151);
+                MyX.Háttérszín(munkalap, $"a{sor}", Color.Silver);
                 sor++;
                 MyX.Kiir("Igen", $"a{sor}");
                 MyX.Kiir("Nem", $"b{sor}");
                 if (Biztosító.Text.ToStrTrim() == "_")
-                    MyX.Betű(munkalap,$"b{sor}",BeBetűA );
+                    MyX.Betű(munkalap, $"b{sor}", BeBetűCalA);
                 else
-                    MyX.Betű(munkalap,$"a{sor}", BeBetűA);
+                    MyX.Betű(munkalap, $"a{sor}", BeBetűCalA);
 
                 MyX.Rácsoz(munkalap, $"a{sor - 1}:c{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor - 1}:c{sor}");
+
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
                 MyX.Kiir("Baleset / Rongálás leírása (pontosan mely elemek sérültek, leírás szövegesen)." +
                     " Mindenképpen szükséges fotókat készíteni", $"a{sor}:c{sor}");
-                MyX.Háttérszín(munkalap, $"a{sor}:c{sor}", 13619151);
+                MyX.Háttérszín(munkalap, $"a{sor}:c{sor}", Color.Silver);
                 MyX.Sormagasság(munkalap, $"{sor}:{sor}", 32);
                 MyX.Sortörésseltöbbsorba(munkalap, $"a{sor}:c{sor}", true);
-                MyX.Vastagkeret(munkalap, $"a{sor - 6}:c{sor}");
+                MyX.Rácsoz(munkalap, $"a{sor - 6}:c{sor}");
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor + 5}");
                 MyX.Kiir(Leírás.Text, $"b{sor}");
                 MyX.Sortörésseltöbbsorba(munkalap, $"a{sor}:c{sor + 6}", true);
-                MyX.Vastagkeret(munkalap, $"a{sor}:c{sor + 6}");
+                MyX.Rácsoz(munkalap, $"a{sor}:c{sor + 6}");
                 Holtart.Lép();
                 sor += 6;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
                 MyX.Kiir("A baleset / rongálás okozója", $"a{sor}");
-                MyX.Háttérszín(munkalap, $"a{sor}", 13619151);
+                MyX.Háttérszín(munkalap, $"a{sor}", Color.Silver);
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor + 1}");
                 string szöveg = "";
@@ -4235,24 +4235,24 @@ namespace Villamos
                 MyX.Kiir(szöveg, $"a{sor}");
                 sor++;
                 MyX.Rácsoz(munkalap, $"a{sor - 2}:c{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor - 2}:c{sor}");
+
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
                 MyX.Kiir("Baleset / Rongálás javításához felhasznált alkatrészek", $"a{sor}");
-                MyX.Háttérszín(munkalap, $"a{sor}", 13619151);
+                MyX.Háttérszín(munkalap, $"a{sor}", Color.Silver);
                 sor++;
                 MyX.Kiir("Megnevezés", $"a{sor}");
                 MyX.Kiir("Cikkszám", $"b{sor}");
                 MyX.Kiir("Darabszám", $"c{sor}");
                 MyX.Rácsoz(munkalap, $"a{sor - 1}:c{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor - 1}:c{sor}");
+
                 sor += 5;
                 MyX.Rácsoz(munkalap, $"a{sor - 4}:c{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor - 4}:c{sor}");
+
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor + 1}");
                 MyX.Kiir("Javítási módszer meghatározása, ha van rá pontos technológia annak számát kell beírni, ha nincs szövegesen kell leírni a javítást.", $"a{sor}:c{sor + 1}");
-                MyX.Háttérszín(munkalap, $"a{sor}", 13619151);
+                MyX.Háttérszín(munkalap, $"a{sor}", Color.Silver);
                 MyX.Sortörésseltöbbsorba(munkalap, $"a{sor}", true);
                 sor += 2;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
@@ -4265,25 +4265,25 @@ namespace Villamos
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
                 MyX.Rácsoz(munkalap, $"a{sor - 4}:c{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor - 4}:c{sor}");
+
                 Holtart.Lép();
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
-                MyX.Háttérszín(munkalap, $"a{sor}", 13619151);
+                MyX.Háttérszín(munkalap, $"a{sor}", Color.Silver);
                 MyX.Kiir("A fenti javítást ki végzi el? (megfelelő aláhúzandó)", $"a{sor}");
                 sor++;
                 MyX.Vastagkeret(munkalap, $"a{sor - 3}:c{sor}");
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
-                MyX.Háttérszín(munkalap, $"a{sor}", 13619151);
+                MyX.Háttérszín(munkalap, $"a{sor}", Color.Silver);
                 MyX.Kiir("A fenti javítási technológiát elfogadják, javítás megkezdhető:", $"a{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor}:c{sor}");
+                MyX.Rácsoz(munkalap, $"a{sor}:c{sor}");
                 sor++;
                 MyX.Kiir("Szervezet", $"a{sor}");
                 MyX.Kiir("Név", $"b{sor}");
                 MyX.Kiir("Aláírás", $"c{sor}");
                 MyX.Rácsoz(munkalap, $"a{sor}:c{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor}:c{sor}");
+
                 if (CafTábla.Rows.Count > 0)
                 {
                     for (int i = 0; i < CafTábla.Rows.Count; i++)
@@ -4294,36 +4294,36 @@ namespace Villamos
                         MyX.Sormagasság(munkalap, $"{sor - CafTábla.Rows.Count + 2}:{sor}", 32);
                     }
                     MyX.Rácsoz(munkalap, $"a{sor - CafTábla.Rows.Count + 1}:c{sor}");
-                    MyX.Vastagkeret(munkalap, $"a{sor - CafTábla.Rows.Count}:c{sor}");
+
 
                 }
                 Holtart.Lép();
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
-                MyX.Betű(munkalap,$"a{sor}",BeBetű18);
+                MyX.Betű(munkalap, $"a{sor}", BeBetűCal18);
                 MyX.Kiir("Javítás utáni visszaellenőrzés", $"a{sor}");
-                MyX.Háttérszín(munkalap, $"a{sor}", 13619151);
-                MyX.Vastagkeret(munkalap, $"a{sor}:c{sor}");
+                MyX.Háttérszín(munkalap, $"a{sor}", Color.Silver);
+                MyX.Rácsoz(munkalap, $"a{sor}:c{sor}");
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor}:c{sor}");
+                MyX.Rácsoz(munkalap, $"a{sor}:c{sor}");
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
                 MyX.Kiir("Dátum:", $"a{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor}:c{sor}");
+                MyX.Rácsoz(munkalap, $"a{sor}:c{sor}");
                 MyX.Igazít_vízszintes(munkalap, $"a{sor}", "bal");
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
                 MyX.Kiir("A Javítást felek átnézték, az alábbi észrevételeket teszik:", $"a{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor}:c{sor}");
-                MyX.Háttérszín(munkalap, $"a{sor}", 13619151);
+                MyX.Rácsoz(munkalap, $"a{sor}:c{sor}");
+                MyX.Háttérszín(munkalap, $"a{sor}", Color.Silver);
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor + 3}");
-                MyX.Vastagkeret(munkalap, $"a{sor}:c{sor + 3}");
+                MyX.Rácsoz(munkalap, $"a{sor}:c{sor + 3}");
                 sor += 4;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
                 MyX.Kiir("Javításnál BKV készletből felhasznált erőforrások (idő, anyag):", $"a{sor}");
-                MyX.Háttérszín(munkalap, $"a{sor}", 13619151);
+                MyX.Háttérszín(munkalap, $"a{sor}", Color.Silver);
                 sor++;
                 MyX.Kiir("Megnevezés", $"a{sor}");
                 MyX.Kiir("Cikkszám/rendelési szám", $"b{sor}");
@@ -4331,11 +4331,11 @@ namespace Villamos
                 sor += 2;
                 MyX.Kiir("Munkaidő", $"a{sor}");
                 MyX.Rácsoz(munkalap, $"a{sor - 3}:c{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor - 3}:c{sor}");
+
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
                 MyX.Kiir("Megjegyzések", $"a{sor}");
-                MyX.Háttérszín(munkalap, $"a{sor}", 13619151);
+                MyX.Háttérszín(munkalap, $"a{sor}", Color.Silver);
                 sor++;
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
                 MyX.Kiir("A felek a javítás eredményét együttesen átnézték, BKV nyilatkozik hogy az előírt technológiának megfelelően végezte el a javítást." +
@@ -4344,13 +4344,13 @@ namespace Villamos
                 MyX.Sormagasság(munkalap, $"{sor}:{sor}", 60);
                 MyX.Sortörésseltöbbsorba(munkalap, $"a{sor}:c{sor}", true);
                 MyX.Rácsoz(munkalap, $"a{sor - 1}:c{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor - 1}:c{sor}");
+
                 sor++;
                 MyX.Kiir("Szervezet", $"a{sor}");
                 MyX.Kiir("Név", $"b{sor}");
                 MyX.Kiir("Aláírás", $"c{sor}");
                 MyX.Rácsoz(munkalap, $"a{sor}:c{sor}");
-                MyX.Vastagkeret(munkalap, $"a{sor}:c{sor}");
+
                 Holtart.Lép();
                 if (CafTábla.Rows.Count > 0)
                 {
@@ -4362,12 +4362,20 @@ namespace Villamos
                         MyX.Sormagasság(munkalap, $"{sor - CafTábla.Rows.Count + 2}:{sor}", 32);
                     }
                     MyX.Rácsoz(munkalap, $"a{sor - CafTábla.Rows.Count + 1}:c{sor}");
-                    MyX.Vastagkeret(munkalap, $"a{sor - CafTábla.Rows.Count}:c{sor}");
+
 
                 }
                 // nyomtatási terület
-                // JAVÍTANDÓ: MyX.NyomtatásiTerület_részletes(munkalap, $"a1:c{sor}", "", "", true);
-                MyX.Aktív_Cella(munkalap, "A1");
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"a1:c{sor}",
+                    LapSzéles = 1,
+                    FejlécKözép = Program.PostásNév,
+                    FejlécJobb = DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss"),
+                    LáblécKözép = "&P/&N"
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
