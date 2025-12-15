@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Ablakok._5_Karbantartás.Fogaskereku;
 using Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
@@ -1097,45 +1098,11 @@ namespace Villamos
                     return;
 
                 Holtart.Be();
-                MyE.ExcelLétrehozás();
 
+                Fogaskereku_KimutatasExcel FogasKimutat = new Fogaskereku_KimutatasExcel();
+                FogasKimutat.KimutatastKeszit(fájlexc, Tábla);
 
-                string munkalap = "Adatok";
-                MyE.Munkalap_átnevezés("Munka1", munkalap);
-
-                utolsósor = MyE.Munkalap(Tábla, 1, munkalap);
-
-                Holtart.Lép();
-
-
-                MyE.Kiir("Év", "v1");
-                MyE.Kiir("hó", "w1");
-                MyE.Kiir("Vizsgálat rövid", "x1");
-
-                // kiírjuk az évet, hónapot és a 2 betűs vizsgálatot
-                MyE.Kiir("=YEAR(RC[-15])", "v2");
-                MyE.Kiir("=MONTH(RC[-16])", "w2");
-                MyE.Kiir("=LEFT(RC[-18],2)", "x2");
-                Holtart.Lép();
-
-                MyE.Képlet_másol(munkalap, "V2:X2", "V3:X" + (utolsósor + 1));
-                MyE.Rácsoz("A1:X" + (utolsósor + 1));
-
-                MyE.Oszlopszélesség(munkalap, "A:X");
-                Holtart.Lép();
-
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.NyomtatásiTerület_részletes(munkalap, "A1:X" + (utolsósor + 1), "$1:$1", "", true);
-                Holtart.Lép();
-
-                MyE.Új_munkalap("Kimutatás");
-
-                Kimutatás3();
-                Holtart.Lép();
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
-
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
                 Holtart.Ki();
 
                 MessageBox.Show("Az Excel tábla elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1841,53 +1808,6 @@ namespace Villamos
             }
         }
 
-        private void Kimutatás3()
-        {
-            try
-            {
-                string munkalap = "Kimutatás";
-                MyE.Munkalap_aktív(munkalap);
-
-
-                string munkalap_adat = "Adatok";
-                string balfelső = "A1";
-                string jobbalsó = "X" + (utolsósor + 1);
-                string kimutatás_Munkalap = munkalap;
-                string Kimutatás_cella = "A6";
-                string Kimutatás_név = "Kimutatás";
-
-                List<string> összesítNév = new List<string>();
-                List<string> Összesít_módja = new List<string>();
-                List<string> sorNév = new List<string>();
-                List<string> oszlopNév = new List<string>();
-                List<string> SzűrőNév = new List<string>();
-
-                összesítNév.Add("azonosító");
-
-                Összesít_módja.Add("xlCount");
-
-                sorNév.Add("Vizsgálat rövid");
-
-
-                SzűrőNév.Add("Év");
-                SzűrőNév.Add("hó");
-
-                oszlopNév.Add("V2végezte");
-
-                MyE.Kimutatás_Fő(munkalap_adat, balfelső, jobbalsó, kimutatás_Munkalap, Kimutatás_cella, Kimutatás_név
-                                , összesítNév, Összesít_módja, sorNév, oszlopNév, SzűrőNév);
-                MyE.Aktív_Cella(munkalap, "A1");
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
         #endregion
 
 
