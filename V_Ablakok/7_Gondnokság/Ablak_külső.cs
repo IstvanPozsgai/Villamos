@@ -4,7 +4,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -40,6 +42,10 @@ namespace Villamos
         List<Adat_Külső_Telephelyek> Adatok_Külső_Telephelyek = new List<Adat_Külső_Telephelyek>();
         List<Adat_Kiegészítő_Jelenlétiív> Adatok_Kieg_Jelenlétiív = new List<Adat_Kiegészítő_Jelenlétiív>();
         List<Adat_Külső_Email> Adatok_Külső_Email = new List<Adat_Külső_Email>();
+
+
+        readonly Beállítás_Betű BeBetű = new Beállítás_Betű ();
+        readonly Beállítás_Betű BeBetűV = new Beállítás_Betű { Vastag = true};
 
         #region alap
         public Ablak_külső()
@@ -1324,31 +1330,51 @@ namespace Villamos
 
                 Autó_fejléc();
                 Tábla_autó.Visible = true;
-
-                MyE.ExcelLétrehozás();
-                MyE.Munkalap_betű("Arial", 12);
                 string munkalap = "Munka1";
+                MyX.ExcelLétrehozás(munkalap);
+                MyX.Munkalap_betű(munkalap, BeBetű);
+                
 
                 // fejléc kiírása
                 for (int oszlop = 0; oszlop < Tábla_autó.ColumnCount; oszlop++)
                 {
-                    MyE.Kiir(Tábla_autó.Columns[oszlop].HeaderText.Trim(), MyE.Oszlopnév(oszlop + 1) + "1");
-                    MyE.Oszlopszélesség(munkalap, $"{MyE.Oszlopnév(oszlop + 1)}:{MyE.Oszlopnév(oszlop + 1)}", 30);
+                    MyX.Kiir(Tábla_autó.Columns[oszlop].HeaderText.Trim(), MyE.Oszlopnév(oszlop + 1) + "1");
+                    MyX.Oszlopszélesség(munkalap, $"{MyE.Oszlopnév(oszlop + 1)}:{MyE.Oszlopnév(oszlop + 1)}", 30);
                 }
 
                 // megformázzuk
-                MyE.Rácsoz($"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}2");
+                MyX.Rácsoz(munkalap,$"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}2");
 
-                MyE.Betű($"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}1", false, false, true);
-                MyE.Háttérszín($"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}1", Color.Yellow);
-                MyE.NyomtatásiTerület_részletes(munkalap, $"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}2", "", "", true);
+                MyX.Betű(munkalap,$"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}1", BeBetűV);
+                MyX.Háttérszín(munkalap, $"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}1", Color.Yellow);
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}2",
 
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
+                    BalMargó = 5,
+                    JobbMargó = 5,
+                    FelsőMargó = 5,
+                    AlsóMargó = 5,
+                    FejlécMéret = 8,
+                    LáblécMéret = 8,
+
+                    LapMagas = 1,
+                    LapSzéles = 1,
+
+                    Papírméret = "A4",
+                    Álló = false,  
+                    VízKözép = true,
+                    FüggKözép = true
+                };
+
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
+                MyX.Aktív_Cella(munkalap, "A1");
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
                 MessageBox.Show($"Elkészült az Excel tábla: {fájlexc}.xlsx", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyF.Megnyitás(fájlexc + ".xlsx");
             }
             catch (HibásBevittAdat ex)
             {
