@@ -2845,15 +2845,15 @@ namespace Villamos
                 {
 
                     MyX.Kiir(DateTime.Parse(rekord.Dátum.ToString()).ToString("yyyy.MM.dd"), "A" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Napszak, "B" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Telephely, "C" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Szolgálat, "D" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Típuselőírt, "E" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Típuskiadott, "f" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Viszonylat, "g" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Forgalmiszám, "h" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Tervindulás.ToString(), "i" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Azonosító, "j" + i.ToString());
+                    MyX.Kiir( rekord.Napszak, "B" + i.ToString());
+                    MyX.Kiir( rekord.Telephely, "C" + i.ToString());
+                    MyX.Kiir( rekord.Szolgálat, "D" + i.ToString());
+                    MyX.Kiir( rekord.Típuselőírt, "E" + i.ToString());
+                    MyX.Kiir( rekord.Típuskiadott, "f" + i.ToString());
+                    MyX.Kiir( rekord.Viszonylat, "g" + i.ToString());
+                    MyX.Kiir(rekord.Forgalmiszám, "h" + i.ToString());
+                    MyX.Kiir( rekord.Tervindulás.ToString("HH:mm:ss"), "i" + i.ToString());
+                    MyX.Kiir( rekord.Azonosító, "j" + i.ToString());
                     Holtart.Lép();
                     i += 1;
                 }
