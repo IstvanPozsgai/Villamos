@@ -317,6 +317,8 @@
       <DependentUpon>Ablak_Vételezés.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\CAF_Elo_Havi_Excel.cs" />
+    <Compile Include="V_Ablakok\5_Karbantartás\Fogaskerekű\Fogaskereku_Javitasok_Elotervezese_Excel.cs" />
+    <Compile Include="V_Ablakok\5_Karbantartás\Fogaskerekű\Fogaskereku_KimutatasExcel.cs" />
     <Compile Include="V_Ablakok\5_Karbantartás\Karbantartás_Közös\Karbantartás_Rögzítés.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1111,10 +1113,10 @@
     <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Felvétel.designer.cs">
       <DependentUpon>Ablak_Felvétel.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\Ablak_Fogaskerekű_Tulajdonságok.cs">
+    <Compile Include="V_Ablakok\5_Karbantartás\Fogaskerekű\Ablak_Fogaskerekű_Tulajdonságok.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\Ablak_Fogaskerekű_Tulajdonságok.designer.cs">
+    <Compile Include="V_Ablakok\5_Karbantartás\Fogaskerekű\Ablak_Fogaskerekű_Tulajdonságok.designer.cs">
       <DependentUpon>Ablak_Fogaskerekű_Tulajdonságok.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\Közös\Ablak_Kereső.cs">
@@ -1717,7 +1719,7 @@
     <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_Felvétel.resx">
       <DependentUpon>Ablak_Felvétel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\Ablak_Fogaskerekű_Tulajdonságok.resx">
+    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\Fogaskerekű\Ablak_Fogaskerekű_Tulajdonságok.resx">
       <DependentUpon>Ablak_Fogaskerekű_Tulajdonságok.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_BMR.resx">
