@@ -320,6 +320,7 @@
       <DependentUpon>Ablak_Vételezés.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\CAF_Elo_Havi_Excel.cs" />
+    <Compile Include="V_Ablakok\5_Karbantartás\Fogaskereku\Fogaskereku_Javitasok_Elotervezese_Excel.cs" />
     <Compile Include="V_Ablakok\5_Karbantartás\Fogaskereku\Fogaskereku_KimutatasExcel.cs" />
     <Compile Include="V_Ablakok\5_Karbantartás\Karbantartás_Közös\Karbantartás_Rögzítés.cs">
       <SubType>Form</SubType>
