@@ -359,6 +359,8 @@
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Meghagyás.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Takarítás.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\list.cs" />
+    <Compile Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Epulettakaritas_Takaritasi_Megrendelo_Excel.cs" />
+    <Compile Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Epulettakaritas_Takaritasi_Naplo_Excel.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Anyagtörzs.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Anyagok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Beallitas_Diagram.cs" />
