@@ -4,7 +4,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -40,6 +42,10 @@ namespace Villamos
         List<Adat_Külső_Telephelyek> Adatok_Külső_Telephelyek = new List<Adat_Külső_Telephelyek>();
         List<Adat_Kiegészítő_Jelenlétiív> Adatok_Kieg_Jelenlétiív = new List<Adat_Kiegészítő_Jelenlétiív>();
         List<Adat_Külső_Email> Adatok_Külső_Email = new List<Adat_Külső_Email>();
+
+
+        readonly Beállítás_Betű BeBetű = new Beállítás_Betű ();
+        readonly Beállítás_Betű BeBetűV = new Beállítás_Betű { Vastag = true};
 
         #region alap
         public Ablak_külső()
@@ -1324,31 +1330,51 @@ namespace Villamos
 
                 Autó_fejléc();
                 Tábla_autó.Visible = true;
-
-                MyE.ExcelLétrehozás();
-                MyE.Munkalap_betű("Arial", 12);
                 string munkalap = "Munka1";
+                MyX.ExcelLétrehozás(munkalap);
+                MyX.Munkalap_betű(munkalap, BeBetű);
+                
 
                 // fejléc kiírása
                 for (int oszlop = 0; oszlop < Tábla_autó.ColumnCount; oszlop++)
                 {
-                    MyE.Kiir(Tábla_autó.Columns[oszlop].HeaderText.Trim(), MyE.Oszlopnév(oszlop + 1) + "1");
-                    MyE.Oszlopszélesség(munkalap, $"{MyE.Oszlopnév(oszlop + 1)}:{MyE.Oszlopnév(oszlop + 1)}", 30);
+                    MyX.Kiir(Tábla_autó.Columns[oszlop].HeaderText.Trim(), MyE.Oszlopnév(oszlop + 1) + "1");
+                    MyX.Oszlopszélesség(munkalap, $"{MyE.Oszlopnév(oszlop + 1)}:{MyE.Oszlopnév(oszlop + 1)}", 30);
                 }
 
                 // megformázzuk
-                MyE.Rácsoz($"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}2");
+                MyX.Rácsoz(munkalap,$"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}2");
 
-                MyE.Betű($"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}1", false, false, true);
-                MyE.Háttérszín($"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}1", Color.Yellow);
-                MyE.NyomtatásiTerület_részletes(munkalap, $"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}2", "", "", true);
+                MyX.Betű(munkalap,$"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}1", BeBetűV);
+                MyX.Háttérszín(munkalap, $"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}1", Color.Yellow);
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}2",
 
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
+                    BalMargó = 5,
+                    JobbMargó = 5,
+                    FelsőMargó = 5,
+                    AlsóMargó = 5,
+                    FejlécMéret = 8,
+                    LáblécMéret = 8,
+
+                    LapMagas = 1,
+                    LapSzéles = 1,
+
+                    Papírméret = "A4",
+                    Álló = false,  
+                    VízKözép = true,
+                    FüggKözép = true
+                };
+
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
+                MyX.Aktív_Cella(munkalap, "A1");
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
                 MessageBox.Show($"Elkészült az Excel tábla: {fájlexc}.xlsx", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyF.Megnyitás(fájlexc + ".xlsx");
             }
             catch (HibásBevittAdat ex)
             {
@@ -1699,28 +1725,46 @@ namespace Villamos
                 // Csak a fejlécet írjuk ki
                 Dolgozó_Tábla_fejléc();
                 Dolg_tábla.Visible = true;
-
-                MyE.ExcelLétrehozás();
-                MyE.Munkalap_betű("Arial", 12);
                 string munkalap = "Munka1";
+                MyX.ExcelLétrehozás(munkalap);
+                MyX.Munkalap_betű(munkalap, BeBetű);
 
                 for (int oszlop = 0; oszlop < Dolg_tábla.ColumnCount; oszlop++)
                 {
-                    MyE.Kiir(Dolg_tábla.Columns[oszlop].HeaderText, MyE.Oszlopnév(oszlop + 1) + "1");
-                    MyE.Oszlopszélesség(munkalap, $"{MyE.Oszlopnév(oszlop + 1)}:{MyE.Oszlopnév(oszlop + 1)}", 30);
+                    MyX.Kiir(Dolg_tábla.Columns[oszlop].HeaderText, MyF.Oszlopnév(oszlop + 1) + "1");
+                    MyX.Oszlopszélesség(munkalap, $"{MyF.Oszlopnév(oszlop + 1)}:{MyF.Oszlopnév(oszlop + 1)}", 30);
                 }
-                MyE.Rácsoz($"A1:{MyE.Oszlopnév(Dolg_tábla.ColumnCount)}2");
-                MyE.Háttérszín($"A1:{MyE.Oszlopnév(Dolg_tábla.ColumnCount)}1", Color.Yellow);
-                MyE.Betű($"A1:{MyE.Oszlopnév(Dolg_tábla.ColumnCount)}1", false, false, true);
+                MyX.Rácsoz(munkalap,$"A1:{MyF.Oszlopnév(Dolg_tábla.ColumnCount)}2");
+                MyX.Háttérszín(munkalap,$"A1:{MyF.Oszlopnév(Dolg_tábla.ColumnCount)}1", Color.Yellow);
+                MyX.Betű(munkalap,$"A1:{MyF.Oszlopnév(Dolg_tábla.ColumnCount)}1", BeBetűV);
 
-                MyE.NyomtatásiTerület_részletes(munkalap, $"A1:{MyE.Oszlopnév(Dolg_tábla.ColumnCount)}2", "", "", true);
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:{MyF.Oszlopnév(Dolg_tábla.ColumnCount)}2",
 
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
+                    BalMargó = 5,
+                    JobbMargó = 5,
+                    FelsőMargó = 5,
+                    AlsóMargó = 5,
+                    FejlécMéret = 8,
+                    LáblécMéret = 8,
+
+                    LapMagas = 1,
+                    LapSzéles = 1,
+                    Papírméret = "A4",
+                    Álló = false,  
+                    VízKözép = true,
+                    FüggKözép = true
+                };
+
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
+                MyX.Aktív_Cella(munkalap, "A1");
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc + ".xlsx");
+                MyF.Megnyitás(fájlexc + ".xlsx");
             }
             catch (HibásBevittAdat ex)
             {
@@ -2831,17 +2875,18 @@ namespace Villamos
                     return;
 
                 // megnyitjuk az excelt
-                MyE.ExcelLétrehozás();
-                MyE.Munkalap_betű("Arial", 12);
                 string munkalap = "Munka1";
+                MyX.ExcelLétrehozás(munkalap);
+                MyX.Munkalap_betű(munkalap,BeBetű);
+                
 
                 // oszlopszélességek
-                MyE.Oszlopszélesség(munkalap, "a:a", 30);
-                MyE.Oszlopszélesség(munkalap, "b:b", 15);
-                MyE.Oszlopszélesség(munkalap, "c:c", 30);
-                MyE.Oszlopszélesség(munkalap, "d:d", 15);
-                MyE.Oszlopszélesség(munkalap, "e:e", 30);
-                MyE.Oszlopszélesség(munkalap, "f:f", 15);
+                MyX.Oszlopszélesség(munkalap, "a:a", 30);
+                MyX.Oszlopszélesség(munkalap, "b:b", 15);
+                MyX.Oszlopszélesség(munkalap, "c:c", 30);
+                MyX.Oszlopszélesség(munkalap, "d:d", 15);
+                MyX.Oszlopszélesség(munkalap, "e:e", 30);
+                MyX.Oszlopszélesség(munkalap, "f:f", 15);
 
                 Holtart.Be(Adatok_Dolg.Count + 2);
 
@@ -2865,47 +2910,47 @@ namespace Villamos
                         // előső dolgozó nevek formázása
                         if (blokkeleje > 3)
                         {
-                            MyE.Rácsoz($"a{blokkeleje}:f{sor}");
-                            MyE.Vastagkeret($"a{blokkeleje}:f{sor}");
+                            MyX.Rácsoz(munkalap, $"a{blokkeleje}:f{sor}");
+                            //MyX.Vastagkeret($"a{blokkeleje}:f{sor}");
                         }
 
                         // Cégfejléc készítés
                         sor++;
-                        MyE.Egyesít(munkalap, $"a{sor}:b{sor}");
-                        MyE.Egyesít(munkalap, $"c{sor}:f{sor}");
-                        MyE.Kiir("Cég neve", $"a{sor}");
-                        MyE.Kiir("Munkaleírása", $"c{sor}");
-                        MyE.Háttérszín($"a{sor}:f{sor}", Color.Yellow);
-                        MyE.Rácsoz($"a{sor}:f{sor}");
-                        MyE.Vastagkeret($"a{sor}:f{sor}");
+                        MyX.Egyesít(munkalap, $"a{sor}:b{sor}");
+                        MyX.Egyesít(munkalap, $"c{sor}:f{sor}");
+                        MyX.Kiir("Cég neve", $"a{sor}");
+                        MyX.Kiir("Munkaleírása", $"c{sor}");
+                        MyX.Háttérszín(munkalap,$"a{sor}:f{sor}", Color.Yellow);
+                        MyX.Rácsoz(munkalap, $"a{sor}:f{sor}");
+                       // MyX.Vastagkeret($"a{sor}:f{sor}");
                         // Cégadatok
                         sor++;
                         cégneve = rekord.Cég.Trim();
                         munkaleírása = rekord.Munkaleírás.Trim();
-                        MyE.Egyesít(munkalap, $"a{sor}:b{sor}");
-                        MyE.Egyesít(munkalap, $"c{sor}:f{sor}");
-                        MyE.Kiir(cégneve, $"a{sor}");
-                        MyE.Kiir(munkaleírása, $"c{sor}");
-                        MyE.Sormagasság($"{sor}:{sor}", 30);
-                        MyE.Igazít_vízszintes($"{sor}:{sor}", "közép");
-                        MyE.Igazít_függőleges($"{sor}:{sor}", "közép");
+                        MyX.Egyesít(munkalap, $"a{sor}:b{sor}");
+                        MyX.Egyesít(munkalap, $"c{sor}:f{sor}");
+                        MyX.Kiir(cégneve, $"a{sor}");
+                        MyX.Kiir(munkaleírása, $"c{sor}");
+                        MyX.Sormagasság(munkalap,$"{sor}:{sor}", 30);
+                        MyX.Igazít_vízszintes(munkalap, $"{sor}:{sor}", "közép");
+                        MyX.Igazít_függőleges(munkalap, $"{sor}:{sor}", "közép");
 
-                        MyE.Rácsoz($"a{sor}:f{sor}");
-                        MyE.Vastagkeret($"a{sor}:f{sor}");
+                        MyX.Rácsoz(munkalap, $"a{sor}:f{sor}");
+                        //MyX.Vastagkeret($"a{sor}:f{sor}");
                         // Dolgozó fejléc készítés
                         sor++;
 
-                        MyE.Kiir("Név", $"a{sor}");
-                        MyE.Kiir("Név", $"c{sor}");
-                        MyE.Kiir("Név", $"e{sor}");
+                        MyX.Kiir("Név", $"a{sor}");
+                        MyX.Kiir("Név", $"c{sor}");
+                        MyX.Kiir("Név", $"e{sor}");
 
-                        MyE.Kiir("Szem.ig.", $"b{sor}");
-                        MyE.Kiir("Szem.ig.", $"d{sor}");
-                        MyE.Kiir("Szem.ig.", $"f{sor}");
+                        MyX.Kiir("Szem.ig.", $"b{sor}");
+                        MyX.Kiir("Szem.ig.", $"d{sor}");
+                        MyX.Kiir("Szem.ig.", $"f{sor}");
 
-                        MyE.Rácsoz($"a{sor}:f{sor}");
-                        MyE.Vastagkeret($"a{sor}:f{sor}");
-                        MyE.Háttérszín($"a{sor}:f{sor}", Color.Yellow);
+                        MyX.Rácsoz(munkalap, $"a{sor}:f{sor}");
+                      //  MyX.Vastagkeret($"a{sor}:f{sor}");
+                        MyX.Háttérszín(munkalap,$"a{sor}:f{sor}", Color.Yellow);
                         blokkeleje = sor + 1;
                         sor += 1;
                         három = 1;
@@ -2921,33 +2966,33 @@ namespace Villamos
                     {
                         case 1:
                             {
-                                MyE.Kiir(rekord.Név.Trim(), "a" + sor.ToString());
-                                MyE.Kiir(rekord.Okmányszám.Trim(), "b" + sor.ToString());
+                                MyX.Kiir(rekord.Név.Trim(), "a" + sor.ToString());
+                                MyX.Kiir(rekord.Okmányszám.Trim(), "b" + sor.ToString());
                                 break;
                             }
                         case 2:
                             {
-                                MyE.Kiir(rekord.Név.Trim(), "c" + sor.ToString());
-                                MyE.Kiir(rekord.Okmányszám.Trim(), "d" + sor.ToString());
+                                MyX.Kiir(rekord.Név.Trim(), "c" + sor.ToString());
+                                MyX.Kiir(rekord.Okmányszám.Trim(), "d" + sor.ToString());
                                 break;
                             }
                         case 3:
                             {
-                                MyE.Kiir(rekord.Név.Trim(), "e" + sor.ToString());
-                                MyE.Kiir(rekord.Okmányszám.Trim(), "f" + sor.ToString());
+                                MyX.Kiir(rekord.Név.Trim(), "e" + sor.ToString());
+                                MyX.Kiir(rekord.Okmányszám.Trim(), "f" + sor.ToString());
                                 break;
                             }
                     }
                     három += 1;
                     Holtart.Lép();
                 }
-                MyE.Rácsoz($"a{blokkeleje}:f{sor}");
-                MyE.Vastagkeret($"a{blokkeleje}:f{sor}");
+                MyX.Rácsoz(munkalap,$"a{blokkeleje}:f{sor}");
+             //   MyX.Vastagkeret($"a{blokkeleje}:f{sor}");
 
                 sor += 5;
 
-                MyE.Kiir("Budapest," + DateTime.Today.ToString("yyyy.MM.dd"), $"a{sor}");
-                MyE.Kiir("Gondnok", $"c{sor}");
+                MyX.Kiir("Budapest," + DateTime.Today.ToString("yyyy.MM.dd"), $"a{sor}");
+                MyX.Kiir("Gondnok", $"c{sor}");
 
                 // nyomtatási terület kijelölése
 
@@ -2957,22 +3002,40 @@ namespace Villamos
                                     where a.Id == 4
                                     select a.Szervezet).FirstOrDefault() ?? "";
 
-                MyE.NyomtatásiTerület_részletes(munkalap, $"A1:F{sor}", "", "",
-                                              $"&G\n{telephely}", "Gépjármű Behajtási Engedély Külső cég", "&D",
-                                              "", "", "&P/&N",
-                                              helyicsop,
-                                              10, 10,
-                                              15, 30,
-                                              13, 13,
-                                              false, false, "1", "",
-                                              true, "A4");
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:F{sor}",
+
+                    FejlécBal = $"&G\n{telephely}",
+                    FejlécKözép = "Gépjármű Behajtási Engedély Külső cég",
+                    FejlécJobb = "&D",
+
+                    LáblécBal = "",
+                    LáblécKözép = helyicsop,
+                    LáblécJobb = "&P/&N",
+                    BalMargó = 10,
+                    JobbMargó = 10,
+                    FelsőMargó = 15,
+                    AlsóMargó = 30,
+
+                    FejlécMéret = 13,
+                    LáblécMéret = 13,
+                    VízKözép = false,
+                    FüggKözép = false,
+                    LapSzéles = 1,
+                    Álló = true,
+                    Papírméret = "A4"
+                };
+
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
                 Holtart.Ki();
                 // bezárjuk az Excel-t
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
-                MyE.Megnyitás(fájlexc);
+                MyX.Aktív_Cella(munkalap, "A1");
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -3136,19 +3199,19 @@ namespace Villamos
                     return;
 
                 // megnyitjuk az excelt
-                MyE.ExcelLétrehozás();
-                MyE.Munkalap_betű("Arial", 12);
                 string munkalap = "Munka1";
-
-                MyE.Háttérszín("A1:c1", Color.Yellow);
-                MyE.Kiir("Rendszám", "a1");
-                MyE.Kiir("Cég neve", "b1");
-                MyE.Kiir("Munkaleírása", "c1");
-                MyE.Oszlopszélesség(munkalap, "a:a", 15);
-                MyE.Oszlopszélesség(munkalap, "b:b", 45);
-                MyE.Oszlopszélesség(munkalap, "c:c", 75);
-                MyE.Rácsoz("a1:c1");
-                MyE.Vastagkeret("a1:c1");
+                MyX.ExcelLétrehozás(munkalap);
+                MyX.Munkalap_betű(munkalap, BeBetű);
+               
+                MyX.Háttérszín(munkalap, "A1:c1", Color.Yellow);
+                MyX.Kiir("Rendszám", "a1");
+                MyX.Kiir("Cég neve", "b1");
+                MyX.Kiir("Munkaleírása", "c1");
+                MyX.Oszlopszélesség(munkalap, "a:a", 15);
+                MyX.Oszlopszélesség(munkalap, "b:b", 45);
+                MyX.Oszlopszélesség(munkalap, "c:c", 75);
+                MyX.Rácsoz(munkalap,"a1:c1");
+                //MyX.Vastagkeret("a1:c1");
 
                 int sor;
                 int blokkeleje;
@@ -3182,7 +3245,7 @@ namespace Villamos
                     }
 
                     // kiírjuk a rendszámot
-                    MyE.Kiir(Rekord.Frsz.Trim(), $"a{sor}");
+                    MyX.Kiir(Rekord.Frsz.Trim(), $"a{sor}");
                     sor += 1;
                     Holtart.Lép();
                 }
@@ -3191,8 +3254,8 @@ namespace Villamos
 
                 sor += 5;
 
-                MyE.Kiir("Budapest," + DateTime.Today.ToString("yyyy.MM.dd"), $"A{sor}");
-                MyE.Kiir("Gondnok", $"C{sor}");
+                MyX.Kiir("Budapest," + DateTime.Today.ToString("yyyy.MM.dd"), $"A{sor}");
+                MyX.Kiir("Gondnok", $"C{sor}");
 
                 // nyomtatási terület kijelölése
 
@@ -3202,22 +3265,54 @@ namespace Villamos
                                     where a.Id == 4
                                     select a.Szervezet).FirstOrDefault() ?? "";
 
-                MyE.NyomtatásiTerület_részletes(munkalap, $"A1:C{sor}", "$1:$1", "",
-                    $"&G\n{telephely}", "Gépjármű Behajtási Engedély Külső cég", "&D",
-                    "", "", "&P/&N",
-                    helyicsop,
-                    10, 10,
-                    15, 30,
-                    13, 13,
-                    false, false, "1", "",
-                    true, "A4");
+                //MyX.NyomtatásiTerület_részletes(munkalap, $"A1:C{sor}", "$1:$1", "",
+                //    $"&G\n{telephely}", "Gépjármű Behajtási Engedély Külső cég", "&D",
+                //    "", "", "&P/&N",
+                //    helyicsop,
+                //    10, 10,
+                //    15, 30,
+                //    13, 13,
+                //    false, false, "1", "",
+                //    true, "A4");
+                Beállítás_Nyomtatás BeNyom_Engedély = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:C{sor}",
 
+                    IsmétlődőSorok = "$1:$1",
+
+                    FejlécBal = $"&G\n{telephely}",
+                    FejlécKözép = "Gépjármű Behajtási Engedély Külső cég",
+                    FejlécJobb = "&D",
+
+                    LáblécBal = "",
+                    LáblécKözép = helyicsop,
+                    LáblécJobb = "&P/&N",
+
+                    BalMargó = 10,
+                    JobbMargó = 10,
+                    FelsőMargó = 15,
+                    AlsóMargó = 30,
+                    FejlécMéret = 13,
+                    LáblécMéret = 13,
+
+                    VízKözép = false,
+                    FüggKözép = false,
+
+                    LapSzéles = 1,
+
+                    Álló = true,
+                    Papírméret = "A4"
+                };
+
+                // 2. Hívás
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom_Engedély);
                 Holtart.Ki();
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
+                MyX.Aktív_Cella(munkalap, "A1");
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
 
             }
             catch (HibásBevittAdat ex)
