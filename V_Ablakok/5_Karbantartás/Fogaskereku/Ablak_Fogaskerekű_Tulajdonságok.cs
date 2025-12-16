@@ -233,16 +233,16 @@ namespace Villamos
 
                 switch (Fülek.SelectedIndex)
                 {
-                    case 1:
+                    case 0:
                         {
                             break;
                         }
-                    case 2:
+                    case 1:
                         {
                             Kiirjaatörténelmet();
                             break;
                         }
-                    case 3:
+                    case 2:
                         {
 
                             Pszlista();
@@ -270,18 +270,18 @@ namespace Villamos
         {
             switch (Fülek.SelectedIndex)
             {
-                case 1:
+                case 0:
                     {
                         break;
                     }
 
-                case 2:
+                case 1:
                     {
                         Kiirjaatörténelmet();
                         break;
                     }
 
-                case 3:
+                case 2:
                     {
 
                         Pszlista();
