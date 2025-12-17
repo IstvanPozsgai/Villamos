@@ -11,6 +11,9 @@ namespace InputForms
         string rule;
         readonly string Tartalom;
         readonly int MaxLength;
+        bool Többsor;
+        readonly int WidthMax;
+        public int Height => ((TextBox)input).Height;
 
         /// <summary>
         /// 
@@ -18,10 +21,12 @@ namespace InputForms
         /// <param name="LabelSzöveg">Label felirat</param>
         /// <param name="parent"></param>
         /// <param name="MaxLength"></param>
-        public InputTextbox(string LabelSzöveg, string tartalom, int maxLength = 15, Control parent = null) : base(parent)
+        public InputTextbox(string LabelSzöveg, string tartalom, int maxLength = 15, int widthMax = 800, Control parent = null) : base(parent)
         {
             MaxLength = maxLength;
             Tartalom = tartalom;
+            WidthMax = widthMax;
+            Többsor = false;
             label = new Label
             {
                 Text = LabelSzöveg,
@@ -49,6 +54,7 @@ namespace InputForms
             input.Top = y;
             label.Left = x;
             input.Left = label.Left + label.Width + 10;
+        
             return this;
         }
 
@@ -57,6 +63,7 @@ namespace InputForms
             this.rule = rule;
             return this;
         }
+
 
         public bool IsValid()
         {
@@ -72,7 +79,9 @@ namespace InputForms
                 Font = new Font("sans-serif", 12f),
                 Width = Szélesség(),
                 MaxLength = MaxLength,
-                Text = Tartalom
+                Text = Tartalom,
+                Multiline = Többsor,
+                Height = Többsor ? 78 : 26
             };
             return textBox;
         }
@@ -92,6 +101,12 @@ namespace InputForms
 
                 // Margó hozzáadása (a kurzor, belső padding miatt)
                 válasz = textSize.Width + 8;
+            }
+            //Ha hosszabb, akkor nem engedjük szélesebbre, de bekapcsoljuk a több soros módot.
+            if (WidthMax < válasz)
+            {
+                válasz = WidthMax;
+                Többsor = true;
             }
             return válasz;
         }

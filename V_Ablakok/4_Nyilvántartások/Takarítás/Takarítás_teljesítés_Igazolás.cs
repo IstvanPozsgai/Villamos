@@ -110,7 +110,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             RészletesMunkalap();
        
             AdatokSzolgáltató = KézSzolg.Lista_Adatok();
-            Adat_Szolgáltató TakarítóCég= AdatokSzolgáltató.FirstOrDefault ();
+            Adat_Szolgáltató TakarítóCég = AdatokSzolgáltató.Where(a => a.ID == 1).FirstOrDefault();
 
             if (AdatokTIG.Count != 0) TIGElkészítés("TIG", "Épület takarítási", TakarítóCég);
             OpcióslapAdata();
@@ -514,7 +514,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             MellékletElkészítés();
 
             AdatokSzolgáltató = KézSzolg.Lista_Adatok();
-            Adat_Szolgáltató TakarítóCég = AdatokSzolgáltató.FirstOrDefault();
+            Adat_Szolgáltató TakarítóCég = AdatokSzolgáltató.Where(a => a.ID == 1).FirstOrDefault();
             TIGElkészítés("TIG", "Jármű takarítási", TakarítóCég);
 
             // az excel tábla bezárása

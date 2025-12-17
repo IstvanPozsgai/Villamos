@@ -215,6 +215,7 @@
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_technológia.Designer.cs">
       <DependentUpon>Ablak_technológia.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\1_Beállítások\Takarítás_Szolgáltató.cs" />
     <Compile Include="V_Ablakok\2_Információ\Ablak_Üzenet_Generálás.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -12,6 +12,7 @@ namespace InputForms
         readonly Button button;
         Action clickAction;
         int LeftMax = 0;
+        int Ymax = 0;
 
         public InputForm(Control parent)
         {
@@ -53,12 +54,12 @@ namespace InputForms
 
         public InputForm Add(string name, InputTextbox field)
         {
-            int y = 10 + (fields.Count * 40);
+            int y = 10 + Ymax;
 
             fields.Add(name, field);
             field.Add(this);
             field.MoveTo(5, y);
-
+            Ymax = Ymax + field.Height + 10;
             //Gomb új pozíció
             y += 80;
             button.Top = y;
@@ -66,8 +67,6 @@ namespace InputForms
             //Panel új magasság
             y += 50;
             Height = y;
-
-
             return this;
         }
 

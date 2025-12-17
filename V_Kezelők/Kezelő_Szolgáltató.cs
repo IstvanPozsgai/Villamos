@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatszerkezet;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
@@ -14,7 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
         readonly string jelszó = "Mocó";
-        readonly string táblanév="TakarításSzolgáltató";
+        readonly string táblanév = "TakarításSzolgáltató";
 
         public List<Adat_Szolgáltató> Lista_Adatok()
         {
@@ -36,7 +33,8 @@ namespace Villamos.Kezelők
                             while (rekord.Read())
                             {
                                 Adat = new Adat_Szolgáltató(
-                                           rekord["SzerződésSzám"].ToStrTrim (),
+                                           rekord["ID"].ToÉrt_Int (),
+                                           rekord["SzerződésSzám"].ToStrTrim(),
                                            rekord["IratEleje"].ToStrTrim(),
                                            rekord["IratVége"].ToStrTrim(),
                                            rekord["Aláíró"].ToStrTrim(),
@@ -54,6 +52,36 @@ namespace Villamos.Kezelők
                 }
             }
             return Adatok;
+        }
+
+        public void Módosítás(Adat_Szolgáltató Adat)
+        {
+            try
+            {
+                string szöveg = $"UPDATE {táblanév} SET  ";
+                szöveg += $"SzerződésSzám='{Adat.SzerződésSzám}',";
+                szöveg += $"IratEleje='{Adat.IratEleje}',";
+                szöveg += $"IratVége='{Adat.IratVége}',";
+                szöveg += $"Aláíró='{Adat.Aláíró}',";
+                szöveg += $"CégNévAlá='{Adat.CégNévAlá}',";
+                szöveg += $"CégCím='{Adat.CégCím}',";
+                szöveg += $"CégAdó='{Adat.CégAdó}',";
+                szöveg += $"CégHosszúNév='{Adat.CégHosszúNév}',";
+                szöveg += $"Cégjegyzékszám='{Adat.Cégjegyzékszám}',";
+                szöveg += $"CsoportAzonosító='{Adat.CsoportAzonosító}'";
+                szöveg += $" WHERE [ID]={Adat.ID}";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
     }
 }
