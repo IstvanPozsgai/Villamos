@@ -2094,12 +2094,43 @@ namespace Villamos
 
 
         #region Takarítócég
-
+        InputForm form;
         private void Takarítócég_Click(object sender, EventArgs e)
         {
             try
             {
 
+                List<Adat_Szolgáltató> AdatokSzolgáltató = KézSzolg.Lista_Adatok();
+                Adat_Szolgáltató TakarítóCég = AdatokSzolgáltató.FirstOrDefault();
+                Form Ablak = new Form();
+
+                form = new InputForm(Ablak);
+                form.Add("SzerződésSzám", (new InputTextbox("Vezetéknév", "Kiss", 10)).AddRule(null))
+                    .Add("IratEleje", (new InputTextbox("Keresztnév", "Aladár")).AddRule(null))
+                    .Add("IratVége", (new InputTextbox("Keresztnév", "Aladár")).AddRule(null))
+                    .Add("Aláíró", (new InputTextbox("Keresztnév", "Aladár")).AddRule(null))
+                    .Add("CégNévAlá", (new InputTextbox("Keresztnév", "Aladár")).AddRule(null))
+                    .Add("CégCím", (new InputTextbox("Keresztnév", "Aladár")).AddRule(null))
+                    .Add("CégAdó", (new InputTextbox("Keresztnév", "Aladár")).AddRule(null))
+                    .Add("CégHosszúNév", (new InputTextbox("Keresztnév", "Aladár")).AddRule(null))
+                    .Add("Cégjegyzékszám", (new InputTextbox("Keresztnév", "Aladár")).AddRule(null))
+                    .Add("CsoportAzonosító", (new InputTextbox("Keresztnév", "Aladár")).AddRule(null))
+
+                    .MoveTo(10, 10)
+                    .FieldIgazítás()
+                    .SetButton("Elküld")
+                    .OnSubmit(() =>
+                    {
+                        string name = form["Vezetéknév"] + " " + form["Keresztnév"];
+                        string Nem = form["Nem"];
+                        string Dátum = form["Dátum"];
+                        string törölt = form["Törölt"];
+                        MessageBox.Show($"{name} ({Nem})\n {Dátum}\n {törölt}");
+                    });
+                Ablak.Width = form.Width + 40;
+                Ablak.Height = form.Height + 60;
+
+                Ablak.Show();
             }
             catch (HibásBevittAdat ex)
             {
@@ -2112,6 +2143,7 @@ namespace Villamos
             }
         }
         #endregion
+
 
     }
 }
