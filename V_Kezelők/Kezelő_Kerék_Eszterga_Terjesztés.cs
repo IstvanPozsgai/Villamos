@@ -54,7 +54,7 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(Adat_Kerék_Eszterga_Terjesztés Adat)
+        public void Módosítás (Adat_Kerék_Eszterga_Terjesztés Adat)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(Adat_Kerék_Eszterga_Terjesztés Adat)
+        public void Rögzítés(Adat_Kerék_Eszterga_Terjesztés Adat)
         {
             try
             {
