@@ -384,7 +384,9 @@
     <Compile Include="V_Input_Forms\InputCheckbox.cs" />
     <Compile Include="V_Input_Forms\InputDate.cs" />
     <Compile Include="V_Input_Forms\InputField.cs" />
-    <Compile Include="V_Input_Forms\InputForm.cs" />
+    <Compile Include="V_Input_Forms\InputForm.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="V_Input_Forms\InputSelect.cs" />
     <Compile Include="V_Input_Forms\InputTextbox.cs" />
     <Compile Include="V_Kezelők\Kezelő_AnyagTörzs.cs" />
