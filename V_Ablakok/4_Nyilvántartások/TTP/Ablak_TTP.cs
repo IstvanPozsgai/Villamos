@@ -825,7 +825,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 if (Tábla.SelectedRows.Count < 1 || DtGvw_Naptár.SelectedCells.Count < 1) return;   //Ha nincs kiválasztva mindkét táblázatban elem akkor kilép
                 string szöveg = "";
                 int oszlop = DtGvw_Naptár.SelectedCells[0].ColumnIndex;
-                DateTime ÜtemezésDátuma = DtGvw_Naptár.Columns[oszlop].HeaderText.ToÉrt_DaTeTime();
+
+                DateTime ÜtemezésDátuma = MelyikNap(DtGvw_Naptár.Columns[oszlop].HeaderText.ToStrTrim());
                 if (DtGvw_Naptár.Rows[0].Cells[oszlop].Style.BackColor == Color.Red) throw new HibásBevittAdat("Erre a napra nem lehet ütemezni, mert nem munkanap.");
                 if (DtGvw_Naptár.Rows[0].Cells[oszlop].Value.ToStrTrim() != "") throw new HibásBevittAdat("Erre a napra nem lehet ütemezni, mert már van ütemezve.");
 
@@ -874,6 +875,28 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             }
         }
 
+        private DateTime MelyikNap(string Fejléc)
+        {
+            DateTime Válasz = new DateTime(1900, 1, 1, 0, 0, 0);
+            try
+            {
+                string[] dátumDarabol = Fejléc.Split('\n');
+                string[] darabol = dátumDarabol[0].Split('-');
+                Válasz = new DateTime(Dátum.Value.Year, darabol[0].ToÉrt_Int(), darabol[1].ToÉrt_Int(), 0, 0, 0);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return Válasz;
+        }
 
         private void BtnKuka_Click(object sender, EventArgs e)
         {
