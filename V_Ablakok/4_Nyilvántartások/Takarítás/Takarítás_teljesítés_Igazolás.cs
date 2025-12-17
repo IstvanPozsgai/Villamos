@@ -851,6 +851,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
 
                 MyX.Sormagasság(munkalap, $"{sor}:{sor}", 70);
                 MyX.Igazít_vízszintes(munkalap, $"A{sor}", "bal");
+                MyX.Sortörésseltöbbsorba (munkalap, $"A{sor}", true );
 
                 sor += 2;
                 sor = TáblázatTIGhez(munkalap, sor, out double Nettó);
