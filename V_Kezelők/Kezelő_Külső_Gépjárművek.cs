@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
+using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
@@ -59,11 +61,114 @@ namespace Villamos.Kezelők
         }
 
 
+        public void Rögzítés(List<Adat_Külső_Gépjárművek> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Külső_Gépjárművek Adat in Adatok)
+                {
+                    List<Adat_Külső_Gépjárművek> ListaAdatok = Lista_Adatok();
+                    double id = ListaAdatok.Any() ? ListaAdatok.Max(a => a.Id) + 1 : 1;
+
+                    string szöveg = "INSERT INTO Gépjárművek (id, frsz, cégid, státus) VALUES (";
+                    szöveg += $"{id}, "; // id
+                    szöveg += $"'{Adat.Frsz}', "; // frsz
+                    szöveg += $"'{Adat.Cégid}', "; // cégid
+                    szöveg += $" {Adat.Státus}) ";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Rögzítés(Adat_Külső_Gépjárművek Adat)
         {
             try
             {
+                string szöveg = "INSERT INTO Gépjárművek (id, frsz, cégid, státus) VALUES (";
+                szöveg += $"{Adat.Id}, "; // id
+                szöveg += $"'{Adat.Frsz}', "; // frsz
+                szöveg += $"'{Adat.Cégid}', "; // cégid
+                szöveg += $" {Adat.Státus}) ";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
+        public void Módosítás(List<Adat_Külső_Gépjárművek> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Külső_Gépjárművek Adat in Adatok)
+                {
+                    string szöveg = $"UPDATE {táblanév} SET ";
+                    szöveg += $" státus={Adat.Státus} ";
+                    szöveg += $" WHERE Cégid={Adat.Cégid} AND frsz='{Adat.Frsz}'";
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Módosítás(Adat_Külső_Gépjárművek Adat)
+        {
+            try
+            {
+                string szöveg = $"UPDATE {táblanév} SET ";
+                szöveg += $" státus={Adat.Státus} ";
+                szöveg += $" WHERE Cégid={Adat.Cégid} AND frsz='{Adat.Frsz}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Törlés(List<Adat_Külső_Gépjárművek> Adatok)
+        {
+            try
+            {
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Külső_Gépjárművek Adat in Adatok)
+                {
+                    string szöveg = $"UPDATE {táblanév} SET ";
+                    szöveg += $" státus={Adat.Státus} ";
+                    szöveg += $" WHERE Cégid={Adat.Id}";
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
 
             }
             catch (HibásBevittAdat ex)
@@ -77,13 +182,24 @@ namespace Villamos.Kezelők
             }
         }
 
-
-        public void Módosítás(Adat_Külső_Gépjárművek Adat)
+        public void Döntés(List<Adat_Külső_Gépjárművek> Adatok)
         {
             try
             {
+                List<Adat_Külső_Gépjárművek> ListaAdatok = Lista_Adatok();
+                List<Adat_Külső_Gépjárművek> AdatokR = new List<Adat_Külső_Gépjárművek>();
+                List<Adat_Külső_Gépjárművek> AdatokM = new List<Adat_Külső_Gépjárművek>();
+                foreach (Adat_Külső_Gépjárművek ADAT in Adatok)
+                {
+                    bool vane = Adatok.Any(a => a.Cégid == ADAT.Cégid && a.Frsz.Trim() == ADAT.Frsz.Trim());
+                    if (vane)
+                        AdatokM.Add(ADAT);
+                    else
+                        AdatokR.Add(ADAT);
 
-
+                    if (AdatokM.Count > 0) Módosítás(AdatokM);
+                    if (AdatokR.Count > 0) Rögzítés(AdatokR);
+                }
             }
             catch (HibásBevittAdat ex)
             {

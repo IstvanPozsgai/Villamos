@@ -61,6 +61,12 @@ namespace Villamos.Villamos_Adatszerkezet
             Cégid = cégid;
             Státus = státus;
         }
+
+        public Adat_Külső_Gépjárművek(double id, bool státus)
+        {
+            Id = id;
+            Státus = státus;
+        }
     }
 
     public class Adat_Külső_Dolgozók
@@ -83,6 +89,29 @@ namespace Villamos.Villamos_Adatszerkezet
             Születésihely = születésihely;
             Születésiidő = születésiidő;
             Cégid = cégid;
+            Státus = státus;
+        }
+
+        public Adat_Külső_Dolgozók(double id, string név, string okmányszám, double cégid, bool státus)
+        {
+            Id = id;
+            Név = név;
+            Okmányszám = okmányszám;
+            Cégid = cégid;
+            Státus = státus;
+        }
+
+        public Adat_Külső_Dolgozók(string név, string okmányszám, double cégid, bool státus)
+        {
+            Név = név;
+            Okmányszám = okmányszám;
+            Cégid = cégid;
+            Státus = státus;
+        }
+
+        public Adat_Külső_Dolgozók(double id, bool státus)
+        {
+            Id = id;
             Státus = státus;
         }
     }

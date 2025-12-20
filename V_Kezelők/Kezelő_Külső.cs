@@ -168,79 +168,9 @@ namespace Villamos.Kezelők
     }
 
 
-    public class Kezelő_Külső_Dolgozók
-    {
-        public List<Adat_Külső_Dolgozók> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Külső_Dolgozók> Adatok = new List<Adat_Külső_Dolgozók>();
-            Adat_Külső_Dolgozók Adat;
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Külső_Dolgozók(
-                                        rekord["Id"].ToÉrt_Double(),
-                                        rekord["Név"].ToStrTrim(),
-                                        rekord["Okmányszám"].ToStrTrim(),
-                                        rekord["Anyjaneve"].ToStrTrim(),
-                                        rekord["Születésihely"].ToStrTrim(),
-                                        rekord["Születésiidő"].ToÉrt_DaTeTime(),
-                                        rekord["Cégid"].ToÉrt_Double(),
-                                        rekord["Státus"].ToÉrt_Bool()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
 
-    public class Kezelő_Külső_Telephelyek
-    {
-        public List<Adat_Külső_Telephelyek> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Külső_Telephelyek> Adatok = new List<Adat_Külső_Telephelyek>();
-            Adat_Külső_Telephelyek Adat;
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Külső_Telephelyek(
-                                        rekord["Id"].ToÉrt_Double(),
-                                        rekord["Telephely"].ToStrTrim(),
-                                        rekord["Cégid"].ToÉrt_Double(),
-                                        rekord["Státus"].ToÉrt_Bool()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
 
     public class Kezelő_Külső_Email
     {

@@ -544,7 +544,9 @@
       <DependentUpon>Ablak_Nosztalgia.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Adatszerkezet\Adat_Nosztalgia_Tevékenység.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Külső_Dolgozók.cs" />
     <Compile Include="V_Kezelők\Kezelő_Külső_Gépjárművek.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Külső_Telephelyek.cs" />
     <Compile Include="V_Kezelők\Kezelő_Nosztagia_Futás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Nosztalgia_Tevékenység.cs" />
     <Compile Include="V_Ablakok\5_Karbantartás\T5C5\Ablak_T5C5_fűtés.cs">
