@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Villamos.Villamos_Adatszerkezet
 {
@@ -43,6 +39,12 @@ namespace Villamos.Villamos_Adatszerkezet
             Státus = státus;
             Terület = terület;
         }
+
+        public Adat_Külső_Cégek(double cégid, int engedély)
+        {
+            Cégid = cégid;
+            Engedély = engedély;
+        }
     }
 
     public class Adat_Külső_Gépjárművek
@@ -68,7 +70,7 @@ namespace Villamos.Villamos_Adatszerkezet
         public string Okmányszám { get; private set; }
         public string Anyjaneve { get; private set; }
         public string Születésihely { get; private set; }
-        public DateTime  Születésiidő { get; private set; }
+        public DateTime Születésiidő { get; private set; }
         public double Cégid { get; private set; }
         public bool Státus { get; private set; }
 
@@ -88,7 +90,7 @@ namespace Villamos.Villamos_Adatszerkezet
     public class Adat_Külső_Telephelyek
     {
         public double Id { get; private set; }
-        public string  Telephely { get; private set; }
+        public string Telephely { get; private set; }
         public double Cégid { get; private set; }
         public bool Státus { get; private set; }
 
@@ -115,7 +117,7 @@ namespace Villamos.Villamos_Adatszerkezet
         }
     }
 
-    public class Adat_Külső_Lekérdezés_Autó 
+    public class Adat_Külső_Lekérdezés_Autó
     {
         public string Frsz { get; private set; }
         public string Cég { get; private set; }
