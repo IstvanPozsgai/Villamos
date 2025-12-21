@@ -11,6 +11,7 @@ using Villamos.V_Ablakok._4_Nyilvántartások.Takarítás;
 using Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
+using static Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -2160,12 +2161,15 @@ namespace Villamos
                             {
                                 // ferde vonal
                                 //   MyX.FerdeVonal($"B{sor}:N{sor}");
-                                // JAVÍTANDÓ:
+
                                 for (int k = 2; k <= 14; k++)
                                 {
-                                    MyX.Kiir("---", $"{MyF.Oszlopnév(k)}{sor}");
-                                    MyX.Betű(munkalap, $"{MyF.Oszlopnév(k)}{sor}", BeBetűV);
-                                    MyX.Igazít_vízszintes(munkalap, $"{MyF.Oszlopnév(k)}{sor}", "közép");
+                                    Beállítás_Ferde Ferde1 = new Beállítás_Ferde
+                                    {
+                                        Munkalap = munkalap,
+                                        Terület = $"{MyF.Oszlopnév(k)}{sor}"
+                                    };
+                                    MyX.FerdeVonal(Ferde1);
                                 }
                             }
                             sor += 1;
@@ -2185,10 +2189,14 @@ namespace Villamos
                     sor += 1;
                     MyX.Vékonykeret(munkalap, "a" + sor.ToString());
 
-                    // JAVÍTANDÓ:   // MyX.FerdeVonal($"A{sor}");
-                    MyX.Kiir("---", $"A{sor}");
-                    MyX.Betű(munkalap, $"A{sor}", BeBetűV);
-                    MyX.Igazít_vízszintes(munkalap, $"A{sor}", "közép");
+
+                    Beállítás_Ferde Ferde = new Beállítás_Ferde
+                    {
+                        Munkalap = munkalap,
+                        Terület = $"A{sor}",
+                    };
+                    MyX.FerdeVonal(Ferde);
+
                     MyX.Háttérszín(munkalap, "a" + sor.ToString(), Color.Silver);
                     MyX.Kiir("Munkaszüneti nap", "b" + sor.ToString());
 
@@ -2239,7 +2247,9 @@ namespace Villamos
         private void Excellekérdezés_Click(object sender, EventArgs e)
         {
             try
-            {// kimeneti fájl helye és neve
+            {
+
+                // kimeneti fájl helye és neve
                 string fájlexc;
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
                 {

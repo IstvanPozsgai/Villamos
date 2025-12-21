@@ -1,4 +1,6 @@
-﻿namespace Villamos.Adatszerkezet
+﻿using static Villamos.V_MindenEgyéb.Enumok;
+
+namespace Villamos.Adatszerkezet
 {
     public class Beállítás_Ferde
     {
@@ -15,5 +17,10 @@
         /// Ferde vonal iránya
         /// </summary>
         public bool Jobb { get; set; } = true;
+
+        public KeretVastagsag Felső { get; set; } = KeretVastagsag.Nincs;
+        public KeretVastagsag Alsó { get; set; } = KeretVastagsag.Nincs;
+        public KeretVastagsag BalOldal { get; set; } = KeretVastagsag.Nincs;
+        public KeretVastagsag JobbOldal { get; set; } = KeretVastagsag.Nincs;
     }
 }

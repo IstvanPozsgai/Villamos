@@ -81,7 +81,7 @@ namespace Villamos
                 // Utólaf OpenXml segítségével behúzzuk a ferde vonalat.
                 if (FerdeVonalak.Count > 0)
                 {
-                    FerdeVonalAlkalmaz(fájlnév, FerdeVonalak);
+                    AlkalmazFerdeVonalak(fájlnév, FerdeVonalak);
                     FerdeVonalak.Clear();
                 }
 

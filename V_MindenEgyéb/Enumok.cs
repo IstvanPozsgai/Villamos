@@ -130,5 +130,14 @@
             Felhasználható = 7,
             Beépítve_vagy_Selejt = 9
         }
+
+        public enum KeretVastagsag
+        {
+            Nincs,
+            Vékony,
+            Közepes,
+            Vastag
+        }
+
     }
 }
