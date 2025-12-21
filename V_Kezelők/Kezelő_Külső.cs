@@ -165,113 +165,34 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-    }
 
-
-
-
-
-
-    public class Kezelő_Külső_Email
-    {
-        public List<Adat_Külső_Email> Lista_Adatok(string hely, string jelszó, string szöveg)
+        public void Engedélyezés(List<Adat_Külső_Cégek> Adatok)
         {
-            List<Adat_Külső_Email> Adatok = new List<Adat_Külső_Email>();
-            Adat_Külső_Email Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Külső_Cégek Adat in Adatok)
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Külső_Email(
-                                        rekord["Id"].ToÉrt_Double(),
-                                        rekord["Másolat"].ToStrTrim(),
-                                        rekord["Aláírás"].ToStrTrim()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
+                    string szöveg = $"UPDATE {táblanév}  SET ";
+                    szöveg += $" engedély={Adat.Engedély}, "; // engedély
+                    szöveg += $" Engedélyezés_dátuma='{Adat.Engedélyezés_dátuma:yyyy.MM.dd HH:mm}', ";
+                    szöveg += $" Engedélyező='{Adat.Engedélyező}'";
+                    szöveg += $" WHERE [Cégid]={Adat.Cégid}";
+                    SzövegGy.Add(szöveg);
                 }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
-            return Adatok;
-        }
-    }
-    public class Kezelő_Külső_Lekérdezés_Autó
-    {
-        public List<Adat_Külső_Lekérdezés_Autó> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Külső_Lekérdezés_Autó> Adatok = new List<Adat_Külső_Lekérdezés_Autó>();
-            Adat_Külső_Lekérdezés_Autó Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            catch (HibásBevittAdat ex)
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Külső_Lekérdezés_Autó(
-                                           rekord["Frsz"].ToStrTrim(),
-                                           rekord["Cég"].ToStrTrim(),
-                                           rekord["Telephely"].ToStrTrim(),
-                                           rekord["Munkaleírás"].ToStrTrim()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            return Adatok;
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 
-    public class Kezelő_Külső_Lekérdezés_Személy
-    {
-        public List<Adat_Külső_Lekérdezés_Személy> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Külső_Lekérdezés_Személy> Adatok = new List<Adat_Külső_Lekérdezés_Személy>();
-            Adat_Külső_Lekérdezés_Személy Adat;
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Külső_Lekérdezés_Személy(
-                                           rekord["Név"].ToStrTrim(),
-                                           rekord["Okmányszám"].ToStrTrim(),
-                                           rekord["Cég"].ToStrTrim(),
-                                           rekord["Munkaleírás"].ToStrTrim()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-    }
 }

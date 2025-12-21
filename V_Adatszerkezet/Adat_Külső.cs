@@ -45,6 +45,14 @@ namespace Villamos.Villamos_Adatszerkezet
             Cégid = cégid;
             Engedély = engedély;
         }
+
+        public Adat_Külső_Cégek(double cégid, DateTime engedélyezés_dátuma, string engedélyező, int engedély)
+        {
+            Cégid = cégid;
+            Engedélyezés_dátuma = engedélyezés_dátuma;
+            Engedélyező = engedélyező;
+            Engedély = engedély;
+        }
     }
 
     public class Adat_Külső_Gépjárművek

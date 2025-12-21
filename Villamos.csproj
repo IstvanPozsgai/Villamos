@@ -545,6 +545,7 @@
     </Compile>
     <Compile Include="V_Adatszerkezet\Adat_Nosztalgia_Tevékenység.cs" />
     <Compile Include="V_Kezelők\Kezelő_Külső_Dolgozók.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Külső_Email.cs" />
     <Compile Include="V_Kezelők\Kezelő_Külső_Gépjárművek.cs" />
     <Compile Include="V_Kezelők\Kezelő_Külső_Telephelyek.cs" />
     <Compile Include="V_Kezelők\Kezelő_Nosztagia_Futás.cs" />
