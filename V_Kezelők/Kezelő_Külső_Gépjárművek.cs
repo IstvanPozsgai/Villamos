@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Külső_Gépjárművek
     {
 
-        readonly string táblanév = "gépjárművek";
+        readonly string táblanév = "Gépjárművek";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\Külső_adatok.mdb";
         readonly string jelszó = "Janda";
 
@@ -66,12 +66,12 @@ namespace Villamos.Kezelők
             try
             {
                 List<string> SzövegGy = new List<string>();
+                List<Adat_Külső_Gépjárművek> ListaAdatok = Lista_Adatok();
+                double id = ListaAdatok.Any() ? ListaAdatok.Max(a => a.Id) : 0;
                 foreach (Adat_Külső_Gépjárművek Adat in Adatok)
                 {
-                    List<Adat_Külső_Gépjárművek> ListaAdatok = Lista_Adatok();
-                    double id = ListaAdatok.Any() ? ListaAdatok.Max(a => a.Id) + 1 : 1;
-
-                    string szöveg = "INSERT INTO Gépjárművek (id, frsz, cégid, státus) VALUES (";
+                    id++;
+                    string szöveg = $"INSERT INTO {táblanév} (id, frsz, cégid, státus) VALUES (";
                     szöveg += $"{id}, "; // id
                     szöveg += $"'{Adat.Frsz}', "; // frsz
                     szöveg += $"'{Adat.Cégid}', "; // cégid
@@ -95,7 +95,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO Gépjárművek (id, frsz, cégid, státus) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (id, frsz, cégid, státus) VALUES (";
                 szöveg += $"{Adat.Id}, "; // id
                 szöveg += $"'{Adat.Frsz}', "; // frsz
                 szöveg += $"'{Adat.Cégid}', "; // cégid
@@ -123,6 +123,7 @@ namespace Villamos.Kezelők
                     string szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $" státus={Adat.Státus} ";
                     szöveg += $" WHERE Cégid={Adat.Cégid} AND frsz='{Adat.Frsz}'";
+                    SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
@@ -166,10 +167,10 @@ namespace Villamos.Kezelők
                 {
                     string szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $" státus={Adat.Státus} ";
-                    szöveg += $" WHERE Cégid={Adat.Id}";
+                    szöveg += $" WHERE id={Adat.Id}";
+                    SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -191,15 +192,17 @@ namespace Villamos.Kezelők
                 List<Adat_Külső_Gépjárművek> AdatokM = new List<Adat_Külső_Gépjárművek>();
                 foreach (Adat_Külső_Gépjárművek ADAT in Adatok)
                 {
-                    bool vane = Adatok.Any(a => a.Cégid == ADAT.Cégid && a.Frsz.Trim() == ADAT.Frsz.Trim());
-                    if (vane)
+                    Adat_Külső_Gépjárművek Elem = (from a in ListaAdatok
+                                                   where a.Cégid == ADAT.Cégid && a.Frsz.Trim() == ADAT.Frsz.Trim()
+                                                   select a).FirstOrDefault();
+
+                    if (Elem != null)
                         AdatokM.Add(ADAT);
                     else
                         AdatokR.Add(ADAT);
-
-                    if (AdatokM.Count > 0) Módosítás(AdatokM);
-                    if (AdatokR.Count > 0) Rögzítés(AdatokR);
                 }
+                if (AdatokM.Count > 0) Módosítás(AdatokM);
+                if (AdatokR.Count > 0) Rögzítés(AdatokR);
             }
             catch (HibásBevittAdat ex)
             {

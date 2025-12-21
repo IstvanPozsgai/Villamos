@@ -74,14 +74,6 @@ namespace Villamos
                 helyi = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\Külső_PDF";
                 if (!Directory.Exists(helyi)) Directory.CreateDirectory(helyi);
 
-
-
-
-                Telephelyekfeltöltése();
-
-                GombLathatosagKezelo.Beallit(this);
-                Jogosultságkiosztás();
-
                 LapFülek.SelectedIndex = 0;
                 Fülekkitöltése();
 
@@ -807,17 +799,6 @@ namespace Villamos
 
                     string helyi = Application.StartupPath + @"\Főmérnökség\Adatok\Behajtási\Külső_PDF\";
                     helyi += PDF_cégid.Text.Trim() + "_" + Cég_Érv_kezdet.Value.ToString("yyyyMMdd") + "_" + Cég_Érv_vég.Value.ToString("yyyyMMdd") + ".pdf";
-                    // JAVÍTANDÓ: Ez biztosítja, hogy mindenki csak a sajátját tudja módosítani
-                    if (System.IO.File.Exists(hely) == false)
-                    {
-                        Dolg_Rögzít.Visible = false;
-                        Dolgozó_töröl.Visible = false;
-                    }
-                    else if (Program.PostásTelephely.Trim() == "Főmérnökség")
-                    {
-                        Dolg_Rögzít.Visible = true;
-                        Dolgozó_töröl.Visible = true;
-                    }
                 }
             }
             catch (HibásBevittAdat ex)
@@ -835,7 +816,6 @@ namespace Villamos
         {
             try
             {
-
                 int volt = 0;
                 int hiba = 0;
                 //a kijelöléseken végig megyünk és csak a 0 státust hagyjuk bejelölve
@@ -851,7 +831,7 @@ namespace Villamos
                 List<Adat_Külső_Cégek> ADATOK = new List<Adat_Külső_Cégek>();
                 for (int iii = 0; iii < Cég_tábla.Rows.Count; iii++)
                 {
-                    if (Cég_tábla.Rows[iii].Selected == true)
+                    if (Cég_tábla.Rows[iii].Selected )
                     {
                         // ha ki volt jelölve, akkor megvizsgáljuk, hogy minden rendben van 
                         Cégtábal_katt(iii);
@@ -903,7 +883,6 @@ namespace Villamos
                             MessageBox.Show("Nincs kijelölve egy telephely sem és nincs egy dolgózója sem a " + Cég_tábla.Rows[iii].Cells[0].Value.ToString().Trim() + " sorszámú cégnek.", "Engedélyezésre nem lett elküldve", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
                         hiba = 0;
-
                     }
                 }
                 Kéz_Külső_Cégek.Engedélyezésre(ADATOK);
@@ -985,8 +964,7 @@ namespace Villamos
             try
             {
                 Engedély_Tábla_író(1);
-                if (Engedély_tábla.Rows.Count < 1)
-                    return;
+                if (Engedély_tábla.Rows.Count < 1)                    return;
 
                 int ii = 0;
                 Microsoft.Office.Interop.Outlook.Application _app = new Microsoft.Office.Interop.Outlook.Application();
@@ -1222,7 +1200,7 @@ namespace Villamos
                         Autó_FRSZ.Text.Trim(),
                         CegId,
                         Autó_státus.Text.Trim() != "Érvényes");
-                    Kéz_Járművek.Rögzítés(ADAT);
+                    Kéz_Járművek.Módosítás(ADAT);
                 }
                 else
                 {
@@ -1230,8 +1208,8 @@ namespace Villamos
                                 id, //nincs szükség rá
                                 Autó_FRSZ.Text.Trim(),
                                 CegId,
-                                Autó_státus.Text.Trim() != "Érvényes");
-                    Kéz_Járművek.Módosítás(ADAT);
+                                false );
+                    Kéz_Járművek.Rögzítés(ADAT);
                 }
                 Autó_tábla_lista();
                 Autó_Ürítés();
@@ -1392,7 +1370,7 @@ namespace Villamos
                             0,
                             rendszám,
                             Autó_Cégid.Text.Trim().ToÉrt_Double(),
-                            true);
+                            false );
                         ADATOK.Add(ADAT);
                         Holtart.Lép();
                     }
@@ -1502,7 +1480,7 @@ namespace Villamos
                 Adatok_Dolg = Kéz_Dolgozó.Lista_Adatok();
                 Adatok_Dolg = (from a in Adatok_Dolg
                                where a.Státus == false &&
-                          a.Cégid == Dolg_cégid.Text.Trim().ToÉrt_Double()
+                               a.Cégid == Dolg_cégid.Text.Trim().ToÉrt_Double()
                                orderby a.Id
                                select a).ToList();
 
@@ -1970,8 +1948,7 @@ namespace Villamos
             try
             {
                 List<Adat_Külső_Cégek> AdatokIdeig = Kéz_Külső_Cégek.Lista_Adatok();
-                List<Adat_Külső_Cégek> AdatokI = Kéz_Külső_Cégek.Lista_Adatok();
-                List<Adat_Külső_Cégek> Adatok = Kéz_Külső_Cégek.Lista_Adatok();
+                List<Adat_Külső_Cégek> Adatok = new List<Adat_Külső_Cégek>();
                 if (sor == 1)
                 {
                     if (Rádió_főmérnök)
@@ -1987,11 +1964,11 @@ namespace Villamos
                         // telephelyek meghatározása
                         for (int k = 0; k < Cmbtelephely.Items.Count; k++)
                         {
-                            AdatokI = (from a in AdatokIdeig
-                                       where a.Engedély == 1 &&
-                                       a.Terület == Cmbtelephely.Items[k].ToStrTrim()
-                                       orderby a.Cégid
-                                       select a).ToList();
+                            List<Adat_Külső_Cégek> AdatokI = (from a in AdatokIdeig
+                                                              where a.Engedély == 1 &&
+                                                              a.Terület.Trim () == Cmbtelephely.Items[k].ToStrTrim()
+                                                              orderby a.Cégid
+                                                              select a).ToList();
                             Adatok.AddRange(AdatokI);
                         }
                         Adatok = Adatok.OrderBy(y => y.Cégid).ToList();

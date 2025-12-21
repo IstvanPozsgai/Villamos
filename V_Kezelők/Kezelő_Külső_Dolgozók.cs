@@ -95,10 +95,11 @@ namespace Villamos.Kezelők
             try
             {
                 List<string> szövegGy = new List<string>();
+                List<Adat_Külső_Dolgozók> ListAdatok = Lista_Adatok();
+                double id = ListAdatok.Any() ? ListAdatok.Max(a => a.Id) : 0;
                 foreach (Adat_Külső_Dolgozók Adat in Adatok)
                 {
-                    List<Adat_Külső_Dolgozók> ListAdatok = Lista_Adatok();
-                    double id = ListAdatok.Any() ? ListAdatok.Max(a => a.Id) + 1 : 1;
+                    id++;
 
                     string szöveg = $"INSERT INTO {táblanév} (id, név, okmányszám, anyjaneve, születésihely, születésiidő, cégid, státus) VALUES (";
                     szöveg += $"{id}, "; // id X
@@ -109,6 +110,7 @@ namespace Villamos.Kezelők
                     szöveg += $"'{new DateTime(1900, 1, 1):yyyy.MM.dd}', "; //születésiidő
                     szöveg += $"{Adat.Cégid}, "; // cégid X
                     szöveg += $" {Adat.Státus}) ";
+                    szövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, szövegGy);
             }
@@ -217,7 +219,7 @@ namespace Villamos.Kezelők
                         Adat.Név,
                         Adat.Okmányszám,
                         Adat.Cégid,
-                        true);
+                        false);
                     Rögzítés(ADAT);
                 }
 

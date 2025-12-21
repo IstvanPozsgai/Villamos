@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.V_Kezelők
@@ -12,8 +11,8 @@ namespace Villamos.V_Kezelők
     {
         readonly string jelszó = "Mocó";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
-        string táblanév = "hibanaplo_email";
-        
+        readonly string táblanév = "hibanaplo_email";
+
         // Statikusan tárolom, hogy csak egyszer kelljen betölteni a címeket.
         public static string ÖsszesEmailCím { get; set; } = string.Empty;
 

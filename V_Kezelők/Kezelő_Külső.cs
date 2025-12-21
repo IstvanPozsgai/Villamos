@@ -81,8 +81,8 @@ namespace Villamos.Kezelők
                 string szöveg = "INSERT INTO Cégek (cégid, cég, címe, cég_email, felelős_személy, Felelős_telefonszám, munkaleírás,";
                 szöveg += " mikor, érv_kezdet, érv_vég, Engedélyezés_dátuma, engedélyező, engedély, státus, terület)  VALUES (";
                 szöveg += $"{Adat.Cégid}, "; // cégid
-                szöveg += $"'{Adat.Cég}',;"; // cég
-                szöveg += $"'{Adat.Címe}',"; // címe
+                szöveg += $"'{Adat.Cég}', "; // cég
+                szöveg += $"'{Adat.Címe}', "; // címe
                 szöveg += $"'{Adat.Cég_email}', "; // cég_email
                 szöveg += $"'{Adat.Felelős_személy}', "; // felelős_személy
                 szöveg += $"'{Adat.Felelős_telefonszám}', "; // Felelős_telefonszám
@@ -115,15 +115,15 @@ namespace Villamos.Kezelők
             {
 
                 string szöveg = $"UPDATE {táblanév}  Set ";
-                szöveg += $" cég='{Adat.Cég}'";  // cég
-                szöveg += $" címe='{Adat.Címe}'"; // címe
-                szöveg += $" cég_email='{Adat.Cég_email}'";// cég_email
-                szöveg += $" felelős_személy='{Adat.Felelős_személy}'";// felelős_személy
-                szöveg += $" Felelős_telefonszám='{Adat.Felelős_telefonszám}'";  // Felelős_telefonszám
-                szöveg += $" munkaleírás='{Adat.Munkaleírás}'";  // munkaleírás
-                szöveg += $" Mikor='{Adat.Mikor}'";
-                szöveg += $" érv_kezdet='{Adat.Érv_kezdet:yyyy.MM.dd}'"; // érv_kezdet
-                szöveg += $" érv_vég='{Adat.Érv_vég:yyyy.MM.dd}'"; // érv_vég
+                szöveg += $" cég='{Adat.Cég}', ";  // cég
+                szöveg += $" címe='{Adat.Címe}', "; // címe
+                szöveg += $" cég_email='{Adat.Cég_email}', ";// cég_email
+                szöveg += $" felelős_személy='{Adat.Felelős_személy}', ";// felelős_személy
+                szöveg += $" Felelős_telefonszám='{Adat.Felelős_telefonszám}', ";  // Felelős_telefonszám
+                szöveg += $" munkaleírás='{Adat.Munkaleírás}', ";  // munkaleírás
+                szöveg += $" Mikor='{Adat.Mikor}', "; 
+                szöveg += $" érv_kezdet='{Adat.Érv_kezdet:yyyy.MM.dd}', "; // érv_kezdet
+                szöveg += $" érv_vég='{Adat.Érv_vég:yyyy.MM.dd}', "; // érv_vég
                 szöveg += $" engedély={Adat.Engedély}, ";  // engedély
                 szöveg += $" státus={Adat.Státus} ";
                 szöveg += $" WHERE [Cégid]={Adat.Cégid}";
@@ -149,7 +149,7 @@ namespace Villamos.Kezelők
                 foreach (Adat_Külső_Cégek Adat in Adatok)
                 {
                     string szöveg = $"UPDATE {táblanév}  Set ";
-                    szöveg += $" engedély={Adat.Engedély}, ";  // engedély
+                    szöveg += $" engedély={Adat.Engedély} ";  // engedély
                     szöveg += $" WHERE [Cégid]={Adat.Cégid}";
                     SzövegGy.Add(szöveg);
                 }

@@ -99,15 +99,9 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Külső_Telephelyek Adat in Adatok)
                 {
-
-
-                    string szöveg = "UPDATE telephelyek  SET ";
-                    if (!bool.Parse(Telephely_Tábla.Rows[i].Cells[0].Value.ToString()))
-                        szöveg += "státus=false ";
-                    else
-                        szöveg += "státus=true ";
-
-                    szöveg += " WHERE  cégid=" + Telephely_Cégid.Text.Trim() + " AND telephely='" + Telephely_Tábla.Rows[i].Cells[1].Value.ToString().Trim() + "'";
+                    string szöveg = $"UPDATE {táblanév}  SET ";
+                    szöveg += $"státus={Adat.Státus} ";
+                    szöveg += $" WHERE  cégid={Adat.Cégid} AND telephely='{Adat.Telephely}'";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
