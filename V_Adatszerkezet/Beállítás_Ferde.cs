@@ -18,9 +18,9 @@ namespace Villamos.Adatszerkezet
         /// </summary>
         public bool Jobb { get; set; } = true;
 
-        public KeretVastagsag Felső { get; set; } = KeretVastagsag.Nincs;
-        public KeretVastagsag Alsó { get; set; } = KeretVastagsag.Nincs;
-        public KeretVastagsag BalOldal { get; set; } = KeretVastagsag.Nincs;
-        public KeretVastagsag JobbOldal { get; set; } = KeretVastagsag.Nincs;
+        public KeretVastagsag Felső { get; set; } = KeretVastagsag.Alap;
+        public KeretVastagsag Alsó { get; set; } = KeretVastagsag.Alap;
+        public KeretVastagsag BalOldal { get; set; } = KeretVastagsag.Alap;
+        public KeretVastagsag JobbOldal { get; set; } = KeretVastagsag.Alap;
     }
 }

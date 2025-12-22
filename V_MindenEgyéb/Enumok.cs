@@ -133,6 +133,7 @@
 
         public enum KeretVastagsag
         {
+            Alap,
             Nincs,
             Vékony,
             Közepes,

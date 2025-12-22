@@ -2160,16 +2160,18 @@ namespace Villamos
                             if (MyF.Szöveg_Tisztítás(Naptár.Napok, i, 1) == "0")
                             {
                                 // ferde vonal
-                                //   MyX.FerdeVonal($"B{sor}:N{sor}");
-
-                                for (int k = 2; k <= 14; k++)
+                                for (int k = 3; k <= 14; k++)
                                 {
-                                    Beállítás_Ferde Ferde1 = new Beállítás_Ferde
+                                    Beállítás_Ferde Ferde2 = new Beállítás_Ferde
                                     {
                                         Munkalap = munkalap,
-                                        Terület = $"{MyF.Oszlopnév(k)}{sor}"
+                                        Terület = $"{MyF.Oszlopnév(k)}{sor}",
+                                        Alsó = KeretVastagsag.Vékony,
+                                        Felső = KeretVastagsag.Vékony,
+                                        JobbOldal = KeretVastagsag.Vékony,
+                                        BalOldal = KeretVastagsag.Vékony
                                     };
-                                    MyX.FerdeVonal(Ferde1);
+                                    MyX.FerdeVonal(Ferde2);
                                 }
                             }
                             sor += 1;
@@ -2187,13 +2189,15 @@ namespace Villamos
                     MyX.Háttérszín(munkalap, "a" + sor.ToString(), Color.Silver);
                     MyX.Kiir("Nincs megrendelve a takarítás", "b" + sor.ToString());
                     sor += 1;
-                    MyX.Vékonykeret(munkalap, "a" + sor.ToString());
-
 
                     Beállítás_Ferde Ferde = new Beállítás_Ferde
                     {
                         Munkalap = munkalap,
                         Terület = $"A{sor}",
+                        Alsó = KeretVastagsag.Közepes,
+                        Felső = KeretVastagsag.Közepes,
+                        JobbOldal = KeretVastagsag.Közepes,
+                        BalOldal = KeretVastagsag.Közepes
                     };
                     MyX.FerdeVonal(Ferde);
 

@@ -4,14 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Villamos.Adatszerkezet;
+using static Villamos.V_MindenEgyéb.Enumok;
 
 
 namespace Villamos
 {
     public static partial class MyClosedXML_Excel
     {
-
-
 
         public static void AlkalmazFerdeVonalak(string path, List<Beállítás_Ferde> beállítások)
         {
@@ -39,9 +38,9 @@ namespace Villamos
                 if (stylesheet.CellFormats == null)
                     stylesheet.CellFormats = new CellFormats(new CellFormat());
 
-                foreach (var beállítás in beállítások)
+                foreach (Beállítás_Ferde beállítás in beállítások)
                 {
-                    var sheet = workbookPart.Workbook.Descendants<Sheet>()
+                    Sheet sheet = workbookPart.Workbook.Descendants<Sheet>()
                         .FirstOrDefault(s => s.Name == beállítás.Munkalap);
 
                     if (sheet == null)
@@ -54,7 +53,7 @@ namespace Villamos
 
                     foreach (var cellRef in cellRefs)
                     {
-                        ApplyDiagonalToCell(sheetData, cellRef, stylesheet, beállítás.Jobb);
+                        ApplyDiagonalToCell(sheetData, cellRef, stylesheet, beállítás);
                     }
 
                     worksheetPart.Worksheet.Save();
@@ -64,11 +63,7 @@ namespace Villamos
             }
         }
 
-        private static void ApplyDiagonalToCell(
-            SheetData sheetData,
-            string cellRef,
-            Stylesheet stylesheet,
-            bool jobb)
+        private static void ApplyDiagonalToCell(SheetData sheetData, string cellRef, Stylesheet stylesheet, Beállítás_Ferde beállítás)
         {
             GetCellCoordinates(cellRef, out int col, out int rowIndex);
 
@@ -89,10 +84,10 @@ namespace Villamos
             uint originalStyleIndex = cell.StyleIndex ?? 0;
             CellFormat originalFormat = (CellFormat)stylesheet.CellFormats.ElementAt((int)originalStyleIndex);
 
-            Border newBorder = CloneBorder(originalFormat, stylesheet);
+            Border newBorder = CloneBorder(originalFormat, stylesheet, beállítás);
 
-            newBorder.DiagonalUp = jobb;
-            newBorder.DiagonalDown = !jobb;
+            newBorder.DiagonalUp = beállítás.Jobb;
+            newBorder.DiagonalDown = !beállítás.Jobb;
 
             // ✅ FONTOS: diagonális vonal stílusa
             if (newBorder.DiagonalBorder == null)
@@ -105,30 +100,57 @@ namespace Villamos
 
             uint newFormatId = (uint)stylesheet.CellFormats.Count;
 
-            CellFormat newFormat = new CellFormat(originalFormat.OuterXml)
+            //CellFormat newFormat = new CellFormat(originalFormat.OuterXml)
+            //{
+            //    BorderId = newBorderId,
+            //    ApplyBorder = true
+            //};
+
+            CellFormat newFormat = new CellFormat
             {
                 BorderId = newBorderId,
                 ApplyBorder = true
             };
+
+            // Másold át MINDEN releváns tulajdonságot az eredeti formából
+            if (originalFormat != null)
+            {
+                if (originalFormat.NumberFormatId != null) newFormat.NumberFormatId = originalFormat.NumberFormatId;
+                if (originalFormat.FontId != null) newFormat.FontId = originalFormat.FontId;
+                if (originalFormat.FillId != null) newFormat.FillId = originalFormat.FillId;
+                if (originalFormat.ApplyNumberFormat != null) newFormat.ApplyNumberFormat = originalFormat.ApplyNumberFormat;
+                if (originalFormat.ApplyFont != null) newFormat.ApplyFont = originalFormat.ApplyFont;
+                if (originalFormat.ApplyFill != null) newFormat.ApplyFill = originalFormat.ApplyFill;
+                if (originalFormat.ApplyAlignment != null) newFormat.ApplyAlignment = originalFormat.ApplyAlignment;
+                if (originalFormat.Alignment != null) newFormat.Alignment = (Alignment)originalFormat.Alignment.CloneNode(true);
+                // ... ha van egyéb formázás
+            }
 
             stylesheet.CellFormats.Append(newFormat);
 
             cell.StyleIndex = newFormatId;
         }
 
-        private static Border CloneBorder(CellFormat format, Stylesheet stylesheet)
+
+        private static Border CloneBorder(CellFormat format, Stylesheet stylesheet, Beállítás_Ferde beállítás)
         {
             uint borderId = format.BorderId ?? 0;
             Border original = (Border)stylesheet.Borders.ElementAt((int)borderId);
 
             // Klónozás
-            var left = (LeftBorder)(original.LeftBorder?.CloneNode(true) ?? new LeftBorder());
-            var right = (RightBorder)(original.RightBorder?.CloneNode(true) ?? new RightBorder());
-            var top = (TopBorder)(original.TopBorder?.CloneNode(true) ?? new TopBorder());
-            var bottom = (BottomBorder)(original.BottomBorder?.CloneNode(true) ?? new BottomBorder());
-            var diagonal = (DiagonalBorder)(original.DiagonalBorder?.CloneNode(true) ?? new DiagonalBorder());
+            LeftBorder left = (LeftBorder)(original.LeftBorder?.CloneNode(true) ?? new LeftBorder());
+            RightBorder right = (RightBorder)(original.RightBorder?.CloneNode(true) ?? new RightBorder());
+            TopBorder top = (TopBorder)(original.TopBorder?.CloneNode(true) ?? new TopBorder());
+            BottomBorder bottom = (BottomBorder)(original.BottomBorder?.CloneNode(true) ?? new BottomBorder());
+            DiagonalBorder diagonal = (DiagonalBorder)(original.DiagonalBorder?.CloneNode(true) ?? new DiagonalBorder());
 
             //// ✅ Itt tudod felülírni az értékeket
+            if (beállítás.BalOldal != KeretVastagsag.Alap) left.Style = MilyenVastag(beállítás.BalOldal);
+            if (beállítás.JobbOldal != KeretVastagsag.Alap) right.Style = MilyenVastag(beállítás.JobbOldal);
+            if (beállítás.Felső != KeretVastagsag.Alap) top.Style = MilyenVastag(beállítás.Felső);
+            if (beállítás.Alsó != KeretVastagsag.Alap) bottom.Style = MilyenVastag(beállítás.Alsó);
+
+
             //left.Style = BorderStyleValues.Thin;
             //left.Color = new Color() { Rgb = "000000" };
             //// piros
@@ -137,6 +159,19 @@ namespace Villamos
             //top.Color = new Color() { Rgb = "000000" };
 
             return new Border(left, right, top, bottom, diagonal);
+        }
+
+
+        private static BorderStyleValues MilyenVastag(KeretVastagsag Oldal)
+        {
+            if (Oldal == KeretVastagsag.Vékony)
+                return BorderStyleValues.Thin;
+            else if (Oldal == KeretVastagsag.Közepes)
+                return BorderStyleValues.Medium;
+            else if (Oldal == KeretVastagsag.Vastag)
+                return BorderStyleValues.Thick;
+            else
+                return BorderStyleValues.None;
         }
 
         private static List<string> GetCellReferences(string range)
