@@ -4,10 +4,10 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -30,6 +30,9 @@ namespace Villamos
         List<Adat_Dolgozó_Telephely> AdatokDolgozók = new List<Adat_Dolgozó_Telephely>();
         List<Adat_Kulcs> AdatokPénz = new List<Adat_Kulcs>();
         readonly List<Adat_Kiegészítő_Csoportbeosztás> AdatokSegéd = new List<Adat_Kiegészítő_Csoportbeosztás>();
+
+        readonly Beállítás_Betű BeBetű = new Beállítás_Betű();
+        readonly Beállítás_Betű BeBetűV = new Beállítás_Betű { Vastag = true };
         #endregion
 
         int öoszlop = 2;
@@ -212,7 +215,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Dolgozógazdálkodás.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -995,22 +998,22 @@ namespace Villamos
 
 
                 // megnyitjuk az excel táblát
-                MyE.ExcelMegnyitás(fájlexc);
-
+                MyX.ExcelMegnyitás(fájlexc);
+                string munkalap = "Munka1";
                 //Új
 
                 List<Adat_Kulcs> AdatokKulcs = KézKulcsPénz.Lista_Adatok();
                 List<Adat_Kulcs> AdatokKulcsMód = new List<Adat_Kulcs>();
                 List<Adat_Kulcs> AdatokKulcsRögz = new List<Adat_Kulcs>();
-                while (MyE.Beolvas(hroszlop + hrsor.ToString()).Trim() != "_")
+                while (MyX.Beolvas(munkalap, hroszlop + hrsor.ToString()).Trim() != "_")
                 {
-                    string rekord = $"{MyF.Rövidkód(MyE.Beolvas(hroszlop + hrsor.ToString()))}";
+                    string rekord = $"{MyF.Rövidkód(MyX.Beolvas(munkalap, hroszlop + hrsor.ToString()))}";
 
                     bool vane = (from a in AdatokKulcs
                                  where a.Adat1.Contains(rekord)
                                  select a).Any();
 
-                    Adat_Kulcs ADAT = new Adat_Kulcs(MyF.Kódol(MyE.Beolvas($"{hroszlop}{hrsor}")), MyF.Kódol(MyE.Beolvas($"{béroszlop}{hrsor}")));
+                    Adat_Kulcs ADAT = new Adat_Kulcs(MyF.Kódol(MyX.Beolvas(munkalap, $"{hroszlop}{hrsor}")), MyF.Kódol(MyX.Beolvas(munkalap, $"{béroszlop}{hrsor}")));
                     if (vane)
                         AdatokKulcsMód.Add(ADAT);
                     else
@@ -1022,7 +1025,7 @@ namespace Villamos
                 KézKulcsPénz.Módosít(AdatokKulcsMód);
 
                 // az excel tábla bezárása
-                MyE.ExcelBezárás();
+                MyX.ExcelBezárás();
                 File.Delete(fájlexc);
                 MessageBox.Show("Az adatok rögzítésre kerültek.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1060,11 +1063,10 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = MyF.Szöveg_Tisztítás(fájlexc, 0, -1);
-
                 // létrehozzuk az excel táblát
-                MyX.DataGridViewToXML(fájlexc, Tábla, "Státus", true);
-                MyE.ExcelMegnyitás(fájlexc);
+                string munkalap = "Státus";
+                MyX.DataGridViewToXML(fájlexc, Tábla, munkalap, true);
+                MyX.ExcelMegnyitás(fájlexc);
                 StátusMunkaLap();
 
                 // ****************************************************
@@ -1073,10 +1075,10 @@ namespace Villamos
 
 
                 for (int i = 0; i < Cmbtelephely.Items.Count; i++)
-                    MyE.Új_munkalap(Cmbtelephely.Items[i].ToString());
+                    MyX.Munkalap_Új(Cmbtelephely.Items[i].ToString());
 
-                MyE.Új_munkalap("Összesítő");
-                MyE.Új_munkalap("Adatok");
+                MyX.Munkalap_Új("Összesítő");
+                MyX.Munkalap_Új("Adatok");
 
                 Adatok_Személyes = Kezelő_Személyes.Lista_Adatok();
                 AdatokPénz = KézKulcsPénz.Lista_Adatok();
@@ -1118,10 +1120,12 @@ namespace Villamos
 
                 int Összeg = 0;
                 int oszlop = 2;
-                while (MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11") != "Összesen:")
+                munkalap = "Összesítő";
+                MyX.Munkalap_aktív(munkalap);
+                while (MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop) + "11") != "Összesen:")
                 {
-                    List<Adat_Dolgozó_Státus> Eredmény = (from a in AdatokStátus
-                                                          where a.Telephelyki == MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11").Trim()
+                              List<Adat_Dolgozó_Státus> Eredmény = (from a in AdatokStátus
+                                                          where a.Telephelyki == MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop) + "11").Trim()
                                                           && a.Hrazonosítóbe == "_"
                                                           && a.Névbe == "_"
                                                           && a.Honnanjött == "_"
@@ -1132,15 +1136,16 @@ namespace Villamos
 
                     Eredmény.Clear();
                     Eredmény = (from a in AdatokStátus
-                                where a.Telephelybe == MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11").Trim()
+                                where a.Telephelybe == MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop) + "11").Trim()
                                 && a.Hrazonosítóbe == "_"
                                 && a.Honnanjött == "_"
                                 && a.Státusváltozások == "Státus létrehozása"
                                 select a).ToList();
                     if (Eredmény != null)
                         Összeg += Eredmény.Count;
+                  
 
-                    MyE.Kiir(Összeg.ToString(), MyE.Oszlopnév(oszlop) + "16");
+                    MyX.Kiir($"#SZÁME#{Összeg}", MyF.Oszlopnév(oszlop) + "16");
                     oszlop += 1;
                 }
 
@@ -1149,10 +1154,10 @@ namespace Villamos
                 // '++++++++++++++++++++++++++++++
                 oszlop = 2;
                 Összeg = 0;
-                while (MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11") != "Összesen:")
+                while (MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop) + "11") != "Összesen:")
                 {
                     List<Adat_Dolgozó_Státus> Eredmény = (from a in AdatokStátus
-                                                          where a.Telephelybe == MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11").Trim()
+                                                          where a.Telephelybe == MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop) + "11").Trim()
                                                           && a.Hrazonosítóbe == "_"
                                                           && a.Névbe != "_"
                                                           && a.Honnanjött != "_"
@@ -1163,13 +1168,13 @@ namespace Villamos
                     Eredmény.Clear();
                     Eredmény = (from a in AdatokStátus
                                 where a.Belépésidátum > DateTime.Today
-                                && a.Telephelybe == MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11").Trim()
+                                && a.Telephelybe == MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop) + "11").Trim()
                                 select a).ToList();
 
                     if (Eredmény != null)
                         Összeg += Eredmény.Count;
 
-                    MyE.Kiir(Összeg.ToString(), MyE.Oszlopnév(oszlop) + "17");
+                    MyX.Kiir($"#SZÁME#{Összeg}", MyF.Oszlopnév(oszlop) + "17");
                     oszlop += 1;
                 }
 
@@ -1178,19 +1183,17 @@ namespace Villamos
                 // '++++++++++++++++++++++++++++++
                 oszlop = 2;
                 Összeg = 0;
-                while (MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11") != "Összesen:")
+                while (MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop) + "11") != "Összesen:")
                 {
                     List<Adat_Dolgozó_Státus> Eredmény = (from a in AdatokStátus
-                                                          where a.Telephelyki == MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11").Trim()
+                                                          where a.Telephelyki == MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop) + "11").Trim()
                                                           && a.Kilépésdátum > DateTime.Today
                                                           select a).ToList();
                     if (Eredmény != null)
                         Összeg = Eredmény.Count;
-                    MyE.Kiir(Összeg.ToString(), MyE.Oszlopnév(oszlop) + "15");
+                    MyX.Kiir($"#SZÁME#{Összeg}", MyF.Oszlopnév(oszlop) + "15");
                     oszlop += 1;
                 }
-                string munkalap = "Státus";
-                MyE.Aktív_Cella(munkalap, "A1");
 
                 // ***************************
                 // Státus tábla
@@ -1198,11 +1201,12 @@ namespace Villamos
 
 
                 Holtart.Ki();
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
-                MyE.Megnyitás(fájlexc);
+                MyX.Aktív_Cella(munkalap, "A1");
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
+                MyF.Megnyitás(fájlexc);
                 Cmbtelephely.Text = Program.PostásTelephely;
+                öoszlop = 2;
             }
             catch (HibásBevittAdat ex)
             {
@@ -1220,49 +1224,48 @@ namespace Villamos
             try
             {
                 string munkalap = "Összesítő";
-                MyE.Munkalap_aktív(munkalap);
-                MyE.Rácsoz("a1:a8");
-                MyE.Vastagkeret("a1:a8");
-                MyE.Rácsoz("a11:a18");
-                MyE.Vastagkeret("a11:a18");
-                MyE.Kiir("Szellemi", "a2");
-                MyE.Kiir("Szellemi", "a12");
-                MyE.Kiir("Fizikai", "a3");
-                MyE.Kiir("Fizikai", "a13");
-                MyE.Kiir("Összesen", "a4");
-                MyE.Kiir("Összesen", "a18");
-                MyE.Betű("a4", false, false, true);
-                MyE.Betű("a18", false, false, true);
-                MyE.Kiir("Vezényelve", "a5");
-                MyE.Kiir("Vezényelt", "a6");
-                MyE.Kiir("részmunkaidős", "a7");
-                MyE.Kiir("Passzív", "a8");
-                MyE.Kiir("Passzív", "a14");
-                MyE.Kiir("Előzetesen kilépetett", "a15");
-                MyE.Kiir("Üres Státus", "a16");
-                MyE.Kiir("Felvétel Folyamatban", "a17");
-                MyE.Oszlopszélesség(munkalap, "A:A");
+                MyX.Munkalap_aktív(munkalap);
+                MyX.Munkalap_betű(munkalap, BeBetű);
+                MyX.Rácsoz(munkalap, "a1:a8");
+        
+                MyX.Rácsoz(munkalap, "a11:a18");
+           
+                MyX.Kiir("Szellemi", "a2");
+                MyX.Kiir("Szellemi", "a12");
+                MyX.Kiir("Fizikai", "a3");
+                MyX.Kiir("Fizikai", "a13");
+                MyX.Kiir("Összesen", "a4");
+                MyX.Kiir("Összesen", "a18");
+                MyX.Betű(munkalap, "a4", BeBetűV);
+                MyX.Betű(munkalap, "a18", BeBetűV);
+                MyX.Kiir("Vezényelve", "a5");
+                MyX.Kiir("Vezényelt", "a6");
+                MyX.Kiir("részmunkaidős", "a7");
+                MyX.Kiir("Passzív", "a8");
+                MyX.Kiir("Passzív", "a14");
+                MyX.Kiir("Előzetesen kilépetett", "a15");
+                MyX.Kiir("Üres Státus", "a16");
+                MyX.Kiir("Felvétel Folyamatban", "a17");
+                MyX.Oszlopszélesség(munkalap, "A:A",20);
 
                 // összesítő oszlop
-                MyE.Kiir("Összesen:", MyE.Oszlopnév(öoszlop) + "1");
-                MyE.Kiir("Összesen:", MyE.Oszlopnév(öoszlop) + "11");
+                MyX.Kiir("Összesen:", MyF.Oszlopnév(öoszlop) + "1");
+                MyX.Kiir("Összesen:", MyF.Oszlopnév(öoszlop) + "11");
                 for (int isor = 2; isor <= 8; isor++)
-                    MyE.Kiir("=SUM(RC[-" + (öoszlop - 2).ToString() + "]:RC[-1])", MyE.Oszlopnév(öoszlop) + isor.ToString());
+                    MyX.Kiir("#KÉPLET#=SUM(RC[-" + (öoszlop - 2).ToString() + "]:RC[-1])", MyF.Oszlopnév(öoszlop) + isor.ToString());
                 for (int isor = 12; isor <= 18; isor++)
-                    MyE.Kiir("=SUM(RC[-" + (öoszlop - 2).ToString() + "]:RC[-1])", MyE.Oszlopnév(öoszlop) + isor.ToString());
+                    MyX.Kiir("#KÉPLET#=SUM(RC[-" + (öoszlop - 2).ToString() + "]:RC[-1])", MyF.Oszlopnév(öoszlop) + isor.ToString());
                 int oszlop = 2;
-                while (MyE.Beolvas(MyE.Oszlopnév(oszlop) + "11") != "Összesen:")
+                while (MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop) + "11") != "Összesen:")
                 {
-                    MyE.Kiir("=SUM(R[-6]C:R[-1]C)", MyE.Oszlopnév(oszlop) + "18");
+                    MyX.Kiir("#KÉPLET#=SUM(R[-6]C:R[-1]C)", MyF.Oszlopnév(oszlop) + "18");
                     oszlop += 1;
                 }
-                MyE.Betű(MyE.Oszlopnév(öoszlop) + "4", false, false, true);
-                MyE.Betű(MyE.Oszlopnév(öoszlop) + "18", false, false, true);
-                MyE.Rácsoz(MyE.Oszlopnév(öoszlop) + "1:" + MyE.Oszlopnév(öoszlop) + "8");
-                MyE.Vastagkeret(MyE.Oszlopnév(öoszlop) + "1:" + MyE.Oszlopnév(öoszlop) + "8");
-                MyE.Rácsoz(MyE.Oszlopnév(öoszlop) + "11:" + MyE.Oszlopnév(öoszlop) + "18");
-                MyE.Vastagkeret(MyE.Oszlopnév(öoszlop) + "11:" + MyE.Oszlopnév(öoszlop) + "18");
-                MyE.Oszlopszélesség(munkalap, MyE.Oszlopnév(öoszlop) + ":" + MyE.Oszlopnév(öoszlop));
+                MyX.Betű(munkalap, MyF.Oszlopnév(öoszlop) + "4", BeBetűV);
+                MyX.Betű(munkalap, MyF.Oszlopnév(öoszlop) + "18", BeBetűV);
+                MyX.Rácsoz(munkalap, MyF.Oszlopnév(öoszlop) + "1:" + MyF.Oszlopnév(öoszlop) + "8");
+                MyX.Rácsoz(munkalap, MyF.Oszlopnév(öoszlop) + "11:" + MyF.Oszlopnév(öoszlop) + "18");
+                MyX.Oszlopszélesség(munkalap, MyF.Oszlopnév(öoszlop) + ":" + MyF.Oszlopnév(öoszlop));
 
             }
             catch (HibásBevittAdat ex)
@@ -1281,37 +1284,38 @@ namespace Villamos
             try
             {
                 string munkalap = "Státus";
-                MyE.Munkalap_aktív(munkalap);
+                MyX.Munkalap_aktív(munkalap);
+                int UtolsóSor = MyX.Utolsósor(munkalap);
 
                 // oszlopszélességek
-                MyE.Oszlopszélesség(munkalap, "a:a", 5);
-                MyE.Oszlopszélesség(munkalap, "b:b", 17);
-                MyE.Oszlopszélesség(munkalap, "c:c", 8);
-                MyE.Oszlopszélesség(munkalap, "d:d", 8);
-                MyE.Oszlopszélesség(munkalap, "e:e", 14);
-                MyE.Oszlopszélesség(munkalap, "f:f", 59);
-                MyE.Oszlopszélesség(munkalap, "g:g", 13);
-                MyE.Oszlopszélesség(munkalap, "h:h", 17);
-                MyE.Oszlopszélesség(munkalap, "i:i", 8);
-                MyE.Oszlopszélesség(munkalap, "j:j", 8);
-                MyE.Oszlopszélesség(munkalap, "k:k", 18);
-                MyE.Oszlopszélesség(munkalap, "l:l", 14);
-                MyE.Oszlopszélesség(munkalap, "m:m", 13);
-                MyE.Oszlopszélesség(munkalap, "n:n", 22);
-                MyE.Oszlopszélesség(munkalap, "o:o", 36);
-                MyE.Oszlopszélesség(munkalap, "p:p", 36);
+                MyX.Oszlopszélesség(munkalap, "a:a", 5);
+                MyX.Oszlopszélesség(munkalap, "b:b", 17);
+                MyX.Oszlopszélesség(munkalap, "c:c", 8);
+                MyX.Oszlopszélesség(munkalap, "d:d", 8);
+                MyX.Oszlopszélesség(munkalap, "e:e", 14);
+                MyX.Oszlopszélesség(munkalap, "f:f", 59);
+                MyX.Oszlopszélesség(munkalap, "g:g", 13);
+                MyX.Oszlopszélesség(munkalap, "h:h", 17);
+                MyX.Oszlopszélesség(munkalap, "i:i", 8);
+                MyX.Oszlopszélesség(munkalap, "j:j", 8);
+                MyX.Oszlopszélesség(munkalap, "k:k", 18);
+                MyX.Oszlopszélesség(munkalap, "l:l", 14);
+                MyX.Oszlopszélesség(munkalap, "m:m", 13);
+                MyX.Oszlopszélesség(munkalap, "n:n", 22);
+                MyX.Oszlopszélesség(munkalap, "o:o", 36);
+                MyX.Oszlopszélesség(munkalap, "p:p", 36);
 
 
-                MyE.Háttérszín("a:a", 11851260);
-                MyE.Háttérszín("b:g", 13421823);
-                MyE.Háttérszín("h:m", 10092441);
-                MyE.Háttérszín("n:r", 13434879);
+                MyX.Háttérszín(munkalap, $"a1:a{UtolsóSor}", Color.Violet);
+                MyX.Háttérszín(munkalap, $"b1:g{UtolsóSor}", Color.Violet);
+                MyX.Háttérszín(munkalap, $"h1:m{UtolsóSor}", Color.SpringGreen);
+                MyX.Háttérszín(munkalap, $"n1:r{UtolsóSor}", Color.SkyBlue);
 
                 // megszűnő státus szürkítése
                 for (int sor = 0; sor < Tábla.Rows.Count; sor++)
                 {
-                    if (MyE.Beolvas($"N{sor + 1}").Trim() == "Státus megszüntetése")
-                        MyE.Háttérszín($"H{sor + 1}:N{sor + 1}", 9868950);
+                    if (MyX.Beolvas(munkalap, $"N{sor + 1}").Trim() == "Státus megszüntetése")
+                        MyX.Háttérszín(munkalap, $"H{sor + 1}:N{sor + 1}", Color.Silver);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1352,23 +1356,23 @@ namespace Villamos
                     béreng = KézKulcs.ABKULCSvan(adat1, adat2, adat3);
                 }
 
-                MyE.Munkalap_aktív(munkalap);
+                MyX.Munkalap_aktív(munkalap);
 
                 // elkészítjük a fejlécet
-                MyE.Kiir("Sorszám", "a1");
-                MyE.Kiir("Név", "b1");
-                MyE.Kiir("Munkakör", "c1");
-                MyE.Kiir("HR törzsszám", "d1");
-                MyE.Kiir("Születési idő", "e1");
-                MyE.Kiir("Belépési idő", "f1");
-                MyE.Kiir("Bér", "g1");
-                MyE.Kiir("Csoport", "h1");
-                MyE.Kiir("Passzív", "i1");
-                MyE.Kiir("Alkalmazott/fizikai", "j1");
-                MyE.Kiir("Ide vezényelt", "k1");
-                MyE.Kiir("Elvezényelve", "l1");
-                MyE.Kiir("Részmunkaidős", "m1");
-                MyE.Kiir("Szervezetiegység", "n1");
+                MyX.Kiir("Sorszám", "a1");
+                MyX.Kiir("Név", "b1");
+                MyX.Kiir("Munkakör", "c1");
+                MyX.Kiir("HR törzsszám", "d1");
+                MyX.Kiir("Születési idő", "e1");
+                MyX.Kiir("Belépési idő", "f1");
+                MyX.Kiir("Bér", "g1");
+                MyX.Kiir("Csoport", "h1");
+                MyX.Kiir("Passzív", "i1");
+                MyX.Kiir("Alkalmazott/fizikai", "j1");
+                MyX.Kiir("Ide vezényelt", "k1");
+                MyX.Kiir("Elvezényelve", "l1");
+                MyX.Kiir("Részmunkaidős", "m1");
+                MyX.Kiir("Szervezetiegység", "n1");
                 // lenullázzuk
                 fizikai = 0;
                 alkalmazott = 0;
@@ -1399,23 +1403,23 @@ namespace Villamos
 
                         if (kilépésidátum < new DateTime(2000, 1, 1))
                         {
-                            MyE.Kiir((i - 1d).ToString(), $"a{i}");
-                            MyE.Kiir(rekord.Dolgozó.DolgozóNév.Trim(), $"b{i}");
+                            MyX.Kiir($"#SZÁME#{i - 1}", $"a{i}");
+                            MyX.Kiir(rekord.Dolgozó.DolgozóNév.Trim(), $"b{i}");
                             if (rekord.Dolgozó.Munkakör.Trim() != null)
-                                MyE.Kiir(rekord.Dolgozó.Munkakör.Trim(), $"c{i}");
-                            MyE.Kiir(rekord.Dolgozó.Dolgozószám.Trim(), $"d{i}");
+                                MyX.Kiir(rekord.Dolgozó.Munkakör.Trim(), $"c{i}");
+                            MyX.Kiir(rekord.Dolgozó.Dolgozószám.Trim(), $"d{i}");
 
                             if (személyeseng)
                             {
                                 DateTime ideigdátum = (from a in Adatok_Személyes
                                                        where a.Dolgozószám == rekord.Dolgozó.Dolgozószám
                                                        select a.Születésiidő).FirstOrDefault();
-                                if (ideigdátum != null) MyE.Kiir(ideigdátum.ToString("yyyy.MM.dd"), "e" + i);
+                                if (ideigdátum != null) MyX.Kiir(ideigdátum.ToString("yyyy.MM.dd"), "e" + i);
                             }
 
 
                             if (rekord.Dolgozó.Belépésiidő != null)
-                                MyE.Kiir(rekord.Dolgozó.Belépésiidő.ToString(), $"F{i}");
+                                MyX.Kiir(rekord.Dolgozó.Belépésiidő.ToString(), $"F{i}");
 
                             if (béreng)
                             {
@@ -1424,107 +1428,103 @@ namespace Villamos
                                          where adat.Adat1.Contains(ideig)
                                          select adat.Adat2).FirstOrDefault();
                                 if (ideig != null && ideig != "_")
-                                    MyE.Kiir(MyF.Dekódolja(ideig), $"G{i}");
+                                    MyX.Kiir("#SZÁME#" + MyF.Dekódolja(ideig), $"G{i}");
                             }
 
                             if (rekord.Dolgozó.Csoport.Trim() != null)
-                                MyE.Kiir(rekord.Dolgozó.Csoport.Trim(), $"H{i}");
+                                MyX.Kiir(rekord.Dolgozó.Csoport.Trim(), $"H{i}");
                             if (rekord.Dolgozó.Passzív)
                             {
-                                MyE.Kiir("passzív", $"I{i}");
+                                MyX.Kiir("passzív", $"I{i}");
                                 passzív += 1;
                             }
 
                             if (rekord.Dolgozó.Alkalmazott)
                             {
-                                MyE.Kiir("Alkalmazott", $"J{i}");
+                                MyX.Kiir("Alkalmazott", $"J{i}");
                                 alkalmazott += 1;
                             }
                             else
                             {
-                                MyE.Kiir("Fizikai", $"J{i}");
+                                MyX.Kiir("Fizikai", $"J{i}");
                                 fizikai += 1;
                             }
 
                             if (rekord.Dolgozó.Vezényelt)
                             {
-                                MyE.Kiir("vezényelt", $"K{i}");
+                                MyX.Kiir("vezényelt", $"K{i}");
                                 Vezényelt += 1;
                             }
                             if (rekord.Dolgozó.Vezényelve)
                             {
-                                MyE.Kiir("vezényelve", $"L{i}");
+                                MyX.Kiir("vezényelve", $"L{i}");
                                 Vezényelve += 1;
                             }
                             if (rekord.Dolgozó.Részmunkaidős)
                             {
-                                MyE.Kiir("részmunkaidős", $"M{i}");
+                                MyX.Kiir("részmunkaidős", $"M{i}");
                                 Részmunkaidős += 1;
                             }
-                            MyE.Kiir(rekord.Telephely, $"n{i}");
+                            MyX.Kiir(rekord.Telephely, $"n{i}");
                             i += 1;
                         }
                     }
                 }
 
-                MyE.Szűrés(munkalap, "A", "N", i);
-                MyE.Oszlopszélesség(munkalap, "A:N");
-
-                MyE.Rácsoz($"A1:N{i}");
-                MyE.Vastagkeret($"A1:N{i}");
+                MyX.Szűrés(munkalap, "A", "N", i);
+                MyX.Oszlopszélesség(munkalap, "A:N");
+                MyX.Rácsoz(munkalap, $"A1:N{i}");
 
                 i += 1;
-                MyE.Kiir("Szellemi", $"b{i}");
-                MyE.Kiir(alkalmazott.ToString(), $"c{i}");
+                MyX.Kiir("Szellemi", $"b{i}");
+                MyX.Kiir($"#SZÁME#{alkalmazott}", $"c{i}");
 
-                MyE.Kiir("Fizikai", $"b{(i + 1)}");
-                MyE.Kiir(fizikai.ToString(), $"c{i + 1}");
+                MyX.Kiir("Fizikai", $"b{(i + 1)}");
+                MyX.Kiir($"#SZÁME#{fizikai}", $"c{i + 1}");
 
-                MyE.Kiir("Összesen", $"b{i + 2}");
-                MyE.Kiir((fizikai + alkalmazott).ToString(), $"c{i + 2}");
+                MyX.Kiir("Összesen", $"b{i + 2}");
+                MyX.Kiir($"#SZÁME#{(fizikai + alkalmazott)}", $"c{i + 2}");
 
-                MyE.Kiir("Vezényelve", $"b{i + 3} ");
-                MyE.Kiir(Vezényelve.ToString(), $"c{i + 3}");
+                MyX.Kiir("Vezényelve", $"b{i + 3}");
+                MyX.Kiir($"#SZÁME#{Vezényelve}", $"c{i + 3}");
 
-                MyE.Kiir("vezényelt", $"b{i + 4}");
-                MyE.Kiir(Vezényelt.ToString(), $"c{i + 4}");
+                MyX.Kiir("vezényelt", $"b{i + 4}");
+                MyX.Kiir($"#SZÁME#{Vezényelt}", $"c{i + 4}");
 
-                MyE.Kiir("részmunkaidős", $"b{i + 5}");
-                MyE.Kiir(Részmunkaidős.ToString(), $"c{i + 5}");
+                MyX.Kiir("részmunkaidős", $"b{i + 5}");
+                MyX.Kiir($"#SZÁME#{Részmunkaidős}", $"c{i + 5}");
 
-                MyE.Kiir("Passzív", $"b{i + 6}");
-                MyE.Kiir(passzív.ToString(), $"c{i + 6}");
+                MyX.Kiir("Passzív", $"b{i + 6}");
+                MyX.Kiir($"#SZÁME#{passzív}", $"c{i + 6}");
 
-                MyE.Rácsoz($"b{i}:c{i + 6}");
-                MyE.Vastagkeret($"b{i}:c{i + 6}");
+                MyX.Rácsoz(munkalap, $"b{i}:c{i + 6}");
+
 
                 // ------------------------------------------
                 // összesítő lapra kiírjuk telephelyenként
                 // ------------------------------------------
                 if (munkalap != "Adatok")
                 {
-                    MyE.Munkalap_aktív("Összesítő");
+                  string  újmunkalap = "Összesítő";
+                    MyX.Munkalap_aktív(újmunkalap);
 
-                    MyE.Kiir(munkalap, MyE.Oszlopnév(öoszlop) + "1");
-                    MyE.Kiir(munkalap, MyE.Oszlopnév(öoszlop) + "11");
-                    MyE.Kiir(alkalmazott.ToString(), MyE.Oszlopnév(öoszlop) + "2");
-                    MyE.Kiir(alkalmazott.ToString(), MyE.Oszlopnév(öoszlop) + "12");
-                    MyE.Kiir(fizikai.ToString(), MyE.Oszlopnév(öoszlop) + "3");
-                    MyE.Kiir(fizikai.ToString(), MyE.Oszlopnév(öoszlop) + "13");
-                    MyE.Kiir((fizikai + alkalmazott).ToString(), MyE.Oszlopnév(öoszlop) + "4");
-                    MyE.Betű(MyE.Oszlopnév(öoszlop) + "4", false, false, true);
-                    MyE.Kiir(Vezényelve.ToString(), MyE.Oszlopnév(öoszlop) + "5");
-                    MyE.Kiir(Vezényelt.ToString(), MyE.Oszlopnév(öoszlop) + "6");
-                    MyE.Kiir(Részmunkaidős.ToString(), MyE.Oszlopnév(öoszlop) + "7");
-                    MyE.Kiir(passzív.ToString(), MyE.Oszlopnév(öoszlop) + "8");
-                    MyE.Kiir(passzív.ToString(), MyE.Oszlopnév(öoszlop) + "14");
-                    MyE.Rácsoz(MyE.Oszlopnév(öoszlop) + "1:" + MyE.Oszlopnév(öoszlop) + "8");
-                    MyE.Vastagkeret(MyE.Oszlopnév(öoszlop) + "1:" + MyE.Oszlopnév(öoszlop) + "8");
-                    MyE.Rácsoz(MyE.Oszlopnév(öoszlop) + "11:" + MyE.Oszlopnév(öoszlop) + "18");
-                    MyE.Vastagkeret(MyE.Oszlopnév(öoszlop) + "11:" + MyE.Oszlopnév(öoszlop) + "18");
-                    MyE.Oszlopszélesség("Összesítő", MyE.Oszlopnév(öoszlop) + ":" + MyE.Oszlopnév(öoszlop));
+                    MyX.Kiir(munkalap, MyF.Oszlopnév(öoszlop) + "1");
+                    MyX.Kiir(munkalap, MyF.Oszlopnév(öoszlop) + "11");
+                    MyX.Kiir($"#SZÁME#{alkalmazott}", MyF.Oszlopnév(öoszlop) + "2");
+                    MyX.Kiir($"#SZÁME#{alkalmazott}", MyF.Oszlopnév(öoszlop) + "12");
+                    MyX.Kiir($"#SZÁME#{fizikai}", MyF.Oszlopnév(öoszlop) + "3");
+                    MyX.Kiir($"#SZÁME#{fizikai}", MyF.Oszlopnév(öoszlop) + "13");
+                    MyX.Kiir($"#SZÁME#{(fizikai + alkalmazott)}                    ", MyF.Oszlopnév(öoszlop) + "4");
+                    MyX.Betű(újmunkalap, MyF.Oszlopnév(öoszlop) + "4", BeBetűV);
+                    MyX.Kiir($"#SZÁME#{Vezényelve}", MyF.Oszlopnév(öoszlop) + "5");
+                    MyX.Kiir($"#SZÁME#{Vezényelt}", MyF.Oszlopnév(öoszlop) + "6");
+                    MyX.Kiir($"#SZÁME#{Részmunkaidős}", MyF.Oszlopnév(öoszlop) + "7");
+                    MyX.Kiir($"#SZÁME#{passzív}", MyF.Oszlopnév(öoszlop) + "8");
+                    MyX.Kiir($"#SZÁME#{passzív}", MyF.Oszlopnév(öoszlop) + "14");
+                    MyX.Rácsoz(újmunkalap, MyF.Oszlopnév(öoszlop) + "1:" + MyF.Oszlopnév(öoszlop) + "8");
+                    MyX.Rácsoz(újmunkalap, MyF.Oszlopnév(öoszlop) + "11:" + MyF.Oszlopnév(öoszlop) + "18");
+                    MyX.Oszlopszélesség(újmunkalap, MyF.Oszlopnév(öoszlop) + ":" + MyF.Oszlopnév(öoszlop),20);
                     öoszlop += 1;
-                    MyE.Aktív_Cella("Összesítő", "A1");
                 }
             }
             catch (HibásBevittAdat ex)
