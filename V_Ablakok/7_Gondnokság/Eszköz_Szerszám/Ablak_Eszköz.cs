@@ -11,7 +11,6 @@ using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -932,7 +931,7 @@ namespace Villamos.Villamos_Ablakok
                     return;
 
                 MyX.DataGridViewToXML(fájlexc, Tábla);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
@@ -984,7 +983,7 @@ namespace Villamos.Villamos_Ablakok
                     GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 else
                 {
-                   
+
                 }
 
             }
