@@ -281,7 +281,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\V2Vizsgálat.html";
-                Module_Excel.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {

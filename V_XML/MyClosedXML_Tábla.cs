@@ -5,7 +5,6 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
-using Villamos.V_Adatszerkezet;
 using DataTable = System.Data.DataTable;
 using MyF = Függvénygyűjtemény;
 
@@ -146,7 +145,7 @@ namespace Villamos
                         // Csak akkor alkalmazzuk a színt, ha nem fehér
                         if (háttér != Color.White)
                         {
-                            string mit = $"{Module_Excel.Oszlopnév(oszlop + j)}{sor + i}";
+                            string mit = $"{MyF.Oszlopnév(oszlop + j)}{sor + i}";
                             Háttérszín(munkalapnév, mit, háttér);
                         }
                     }

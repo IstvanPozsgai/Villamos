@@ -171,7 +171,7 @@ namespace Villamos
             {
 
                 string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\utasítások.html";
-                Module_Excel.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -635,7 +635,7 @@ namespace Villamos
                 Holtart.Ki();
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

@@ -87,7 +87,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Vételezés_segéd.html";
-                Module_Excel.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {

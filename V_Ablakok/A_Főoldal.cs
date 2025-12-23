@@ -367,7 +367,7 @@ namespace Villamos
                 jogosultságKiosztásToolStripMenuItem.Enabled = false;
                 SzoftverkulcsKészítésMenü.Enabled = false;
                 //az új esetén az új beállítással megyünk be.
-                if (panels2.Text.Substring(0,1) == "R") Menü_Beállítása_Új();
+                if (panels2.Text.Substring(0, 1) == "R") Menü_Beállítása_Új();
             }
             catch (HibásBevittAdat ex)
             {
@@ -670,7 +670,7 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\Főoldal.html";
-                Module_Excel.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1085,7 +1085,7 @@ namespace Villamos
 
         private void Üzenetektext_DoubleClick(object sender, EventArgs e)
         {
-            if(!ÜzenetekToolStripMenuItem.Enabled ) return;
+            if (!ÜzenetekToolStripMenuItem.Enabled) return;
             if (Új_Ablak_üzenet == null)
             {
                 Új_Ablak_üzenet = new Ablak_üzenet();
@@ -2779,7 +2779,7 @@ namespace Villamos
 
         private void Ablak_Hibanaplo_FormClosed(object sender, FormClosedEventArgs e)
         {
-           Új_Ablak_Hibanaplo = null;
+            Új_Ablak_Hibanaplo = null;
         }
     }
 }

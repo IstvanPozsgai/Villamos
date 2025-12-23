@@ -256,7 +256,7 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\Technológia.html";
-                Module_Excel.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {

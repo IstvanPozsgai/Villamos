@@ -137,7 +137,7 @@ namespace Villamos.Villamos_Ablakok
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
             string hely = Application.StartupPath + @"\Súgó\VillamosLapok\eszköz.html";
-            Module_Excel.Megnyitás(hely);
+            MyF.Megnyitás(hely);
 
             try
             {

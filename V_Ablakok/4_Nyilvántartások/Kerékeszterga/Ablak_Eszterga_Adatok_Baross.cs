@@ -52,7 +52,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\MérésBarossKerék.html";
-                Module_Excel.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -648,7 +648,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                Module_Excel.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

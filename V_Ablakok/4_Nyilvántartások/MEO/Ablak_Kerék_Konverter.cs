@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -330,7 +329,7 @@ namespace Villamos.Villamos_Ablakok.MEO
                 }
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -548,7 +547,7 @@ namespace Villamos.Villamos_Ablakok.MEO
                 }
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
