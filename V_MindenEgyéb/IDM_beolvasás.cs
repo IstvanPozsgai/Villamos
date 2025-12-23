@@ -7,8 +7,8 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.MindenEgyéb
 {
@@ -35,7 +35,7 @@ namespace Villamos.MindenEgyéb
 
                 Kezelő_Behajtás_Dolgozótábla KézDolgozó = new Kezelő_Behajtás_Dolgozótábla();
                 List<Adat_Behajtás_Dolgozótábla> Adatok_behajt = KézDolgozó.Lista_Adatok();
-                MyE.ExcelMegnyitás(Excel_hely);
+                MyX.ExcelMegnyitás(Excel_hely);
 
                 foreach (DataRow sor in Tábla.Rows)
                 {
@@ -69,7 +69,7 @@ namespace Villamos.MindenEgyéb
                 }
 
                 // az excel tábla bezárása
-                MyE.ExcelBezárás();
+                MyX.ExcelBezárás();
 
                 // kitöröljük a betöltött fájlt
                 File.Delete(Excel_hely);

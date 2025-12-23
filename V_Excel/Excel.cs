@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Drawing;
-using Microsoft.Office.Interop.Excel;
+﻿using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -679,7 +678,7 @@ namespace Villamos
         }
 
 
-        public static void ExcelMegnyitás(string hely, bool látszik = false)
+        public static void ExcelMegnyitá(string hely, bool látszik = false)
         {
             try
             {
