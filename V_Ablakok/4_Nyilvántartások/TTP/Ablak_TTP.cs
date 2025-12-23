@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -99,7 +98,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             try
             {
                 string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\TTP_súgó.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -275,7 +274,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 MyX.DataGridViewToXML(fájlexc, Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

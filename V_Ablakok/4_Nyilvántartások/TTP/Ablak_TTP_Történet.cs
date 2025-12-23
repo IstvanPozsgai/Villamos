@@ -6,9 +6,9 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés;
-using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
 {
@@ -498,10 +498,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
 
                 DataTable ValamiTábla;
                 ValamiTábla = AdatTábla_TTP_TáblaFeltölt(AdatokTeljes);
-                MyE.DataTableToExcel(fájlexc, ValamiTábla);
+                MyX.DataTableToXML(fájlexc, ValamiTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
                 BtnExcel.Visible = true;
             }
             catch (HibásBevittAdat ex)

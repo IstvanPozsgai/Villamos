@@ -9,10 +9,9 @@ using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.Kerékeszterga;
 using Villamos.Villamos_Adatszerkezet;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
-using MyX = Villamos.MyClosedXML_Excel;
 using MyO = Microsoft.Office.Interop.Outlook;
+using MyX = Villamos.MyClosedXML_Excel;
 
 
 namespace Villamos.Villamos_Ablakok
@@ -95,7 +94,7 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Baross_Eszterga.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1595,7 +1594,7 @@ namespace Villamos.Villamos_Ablakok
 
                 MyX.DataGridViewToXML(fájlexc, Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

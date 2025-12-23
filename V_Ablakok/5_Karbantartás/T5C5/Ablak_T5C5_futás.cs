@@ -10,7 +10,6 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos
@@ -181,7 +180,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\T5C5_futás.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {

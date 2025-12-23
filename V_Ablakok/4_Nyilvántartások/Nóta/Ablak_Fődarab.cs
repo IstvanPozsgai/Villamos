@@ -9,7 +9,6 @@ using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
 using static Villamos.V_MindenEgyéb.Enumok;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -88,7 +87,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
             try
             {
                 string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\Nóta.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -320,7 +319,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
 
                 MyX.DataGridViewToXML(fájlexc, Táblalista);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

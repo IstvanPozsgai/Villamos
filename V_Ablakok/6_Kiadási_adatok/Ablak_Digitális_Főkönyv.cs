@@ -6,9 +6,8 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
+using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
-
 namespace Villamos
 {
 
@@ -51,7 +50,7 @@ namespace Villamos
             if (Program.PostásJogkör.Substring(0, 1) == "R")
                 GombLathatosagKezelo.Beallit(this);
             else
-            { }    
+            { }
         }
 
         private void BtnSúgó_Click(object sender, EventArgs e)
@@ -59,7 +58,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Digitális_Főkönyv.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1756,7 +1755,7 @@ namespace Villamos
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
