@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok.Beosztás;
 using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -272,7 +271,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, Tábla2);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -453,7 +452,7 @@ namespace Villamos
                 this.Cursor = Cursors.WaitCursor;
                 MyX.DataGridViewToXML(fájlexc, Tábla3, "Munka1", true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1032,7 +1031,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1183,7 +1182,7 @@ namespace Villamos
             Cursor = Cursors.WaitCursor; // homok óra kezdete
             Visszacsukcsoport();
             Csoport_listáz();
-            Panel2.Visible = true ;
+            Panel2.Visible = true;
             Cursor = Cursors.Default; // homokóra vége
         }
 
