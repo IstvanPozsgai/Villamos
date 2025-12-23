@@ -9,7 +9,6 @@ using Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés;
 using Villamos.Villamos_Ablakok.CAF_Ütemezés;
 using Villamos.Villamos_Adatszerkezet;
 using MyCaf = Villamos.Villamos_Ablakok.CAF_Ütemezés.CAF_Közös_Eljárások;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -173,7 +172,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\CAF.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -754,7 +753,7 @@ namespace Villamos
             MyX.DataGridViewToXML(fájlexc, Tábla_elő);
             MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            MyE.Megnyitás(fájlexc);
+            MyF.Megnyitás(fájlexc);
         }
         #endregion
 
@@ -1102,7 +1101,7 @@ namespace Villamos
 
 
                 Holtart.Ki();
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
                 {
                     Tábla_elő.Rows.Clear();
                     Tábla_elő.Columns.Clear();
