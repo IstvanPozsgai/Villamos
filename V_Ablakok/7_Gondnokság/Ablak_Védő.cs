@@ -2294,7 +2294,7 @@ namespace Villamos
                     if (Lekérd_Tábla.Rows.Count > 0)
                     {
                         // a fájlnév előkészítése
-                        fájlexc = $@"{könyvtár}\Védőkönyv_{darabol[0].Trim()}_{Program.PostásTelephely.Trim()}.xlsx";
+                        fájlexc = $@"{könyvtár}\Védőkönyv_{darabol[0].Trim()}_{Program.PostásNév.Trim()}.xlsx";
                         if (File.Exists(fájlexc)) File.Delete(fájlexc);
 
                         // megnyitjuk az excelt

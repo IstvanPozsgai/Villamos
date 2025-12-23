@@ -1684,13 +1684,10 @@ namespace Villamos
                         if (Lekérd_Tábla.Rows.Count > 0)
                         {
                             // a fájlnév előkészítése
-                            SaveFileDialog SaveFileDialog1 = new SaveFileDialog
-                            {
-                                InitialDirectory = "MyDocuments",
-                                FileName = "Szerszámköny_Leltár-" + Program.PostásNév + "-" + szerszámkönyszám.Trim() + "-" + DateTime.Now.ToString("yyyyMMddHHmmss")
-                            };
+                            string könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                            fájlexc = $@"{könyvtár}\Szerszámköny_Leltár_{szerszámkönyszám}_{Program.PostásNév.Trim()}.xlsx";
+                            if (File.Exists(fájlexc)) File.Delete(fájlexc);
 
-                            fájlexc = SaveFileDialog1.FileName;
                             Holtart.Lép();
                             // megnyitjuk az excelt
                             string munkalap = "Munka1";
@@ -1749,8 +1746,8 @@ namespace Villamos
 
                             // keretezünk
                             MyX.Rácsoz(munkalap, $"a15:f{sor}");
-                            MyX.Vastagkeret(munkalap, "a15:f15");
-                            MyX.Vastagkeret(munkalap, $"a15:f{sor}");
+                            MyX.Rácsoz(munkalap, "a15:f15");
+
                             sor += 2;
                             MyX.Kiir("Kelt:" + DateTime.Today.ToString("yyyy.MM.dd"), $"A{sor}");
                             sor += 2;
@@ -1768,7 +1765,17 @@ namespace Villamos
                             MyX.Pontvonal(munkalap, $"C{sor}:F{sor}");
 
                             // nyomtatási beállítások
-                            // JAVÍTANDÓ:    MyX.NyomtatásiTerület_részletes(munkalap, $"a1:f{sor}", "", "", true);
+                            Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                            {
+                                Munkalap = munkalap,
+                                NyomtatásiTerület = $"a1:f{sor}",
+                                LapSzéles = 1,
+                                FejlécJobb = DateTime.Now.ToString("yyyy.MM.dd HH:mm"),
+                                LáblécKözép = "&P/&N"
+
+                            };
+                            MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
+
                             // bezárjuk az Excel-t
                             Holtart.Lép();
                             MyX.ExcelMentés(fájlexc);
@@ -2711,8 +2718,8 @@ namespace Villamos
 
                 // keretezünk
                 MyX.Rácsoz(munkalap, $"a15:e{sor}");
-                MyX.Vastagkeret(munkalap, "a15:e15");
-                MyX.Vastagkeret(munkalap, $"a15:e{sor}");
+                MyX.Rácsoz(munkalap, "a15:e15");
+
                 sor += 2;
                 MyX.Kiir($"Kelt:{DateTime.Now:yyyy.MM.dd}", $"A{sor}");
                 sor += 2;
@@ -2781,17 +2788,28 @@ namespace Villamos
                     MyX.Pontvonal(munkalap, $"C{sor}:E{sor}");
                 }
                 // nyomtatási beállítások
-                // JAVÍTANDÓ:      MyX.NyomtatásiTerület_részletes(munkalap, $"A1:E{sor}", "", "", true);
-
-                if (Napló_Nyomtat.Checked)
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
                 {
-                    // JAVÍTANDÓ:    MyX.Nyomtatás(munkalap, 1, 1);
-                    MessageBox.Show("A bizonylatok nyomtatása elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"a1:f{sor}",
+                    LapSzéles = 1,
+                    FejlécJobb = DateTime.Now.ToString("yyyy.MM.dd HH:mm"),
+                    LáblécKözép = "&P/&N"
+
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
                 // bezárjuk az Excel-t
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
+                Holtart.Ki();
+                List<string> Fájlok = new List<string> { fájlexc };
+
+                if (Napló_Nyomtat.Checked)
+                {
+                    MyF.ExcelNyomtatás(Fájlok);
+                    MessageBox.Show("A bizonylatok nyomtatása elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
 
                 if (Napló_Fájltöröl.Checked)
                     File.Delete(fájlexc);
@@ -2800,8 +2818,6 @@ namespace Villamos
                     MyF.Megnyitás(fájlexc);
                     MessageBox.Show("A bizonylat elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-
-                Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
             {
@@ -4041,29 +4057,42 @@ namespace Villamos
 
                 List<Adat_Szerszám_FejLáb> Adatok = KézSzerszámFejLáb.Lista_Adatok();
                 Adat_Szerszám_FejLáb Adat = Adatok.Where(a => a.Típus == "9A").FirstOrDefault();
+
                 if (Adat != null)
-                    // JAVÍTANDÓ:
-                    //MyX.NyomtatásiTerület_részletes(munkalap, $"A1:L{sor}", "", "",
-                    //    Adat.Fejléc_Bal,
-                    //    Adat.Fejléc_Közép,
-                    //    Adat.Fejléc_Jobb,
-                    //    Adat.Lábléc_Bal,
-                    //    Adat.Lábléc_Közép,
-                    //    Adat.Lábléc_Jobb,
-                    //    "", 18, 18, 0, 17, 11, 4, false, false, "Fekvő");
-
-                    if (Napló_Nyomtat.Checked == true)
+                {
+                    Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
                     {
-                        // JAVÍTANDÓ:      MyX.Nyomtatás(munkalap, 1, 1);
-                        MessageBox.Show("A bizonylatok nyomtatása elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-
+                        Munkalap = munkalap,
+                        NyomtatásiTerület = $"A1:L{sor}",
+                        Álló = false,
+                        FejlécBal = Adat.Fejléc_Bal,
+                        FejlécKözép = Adat.Fejléc_Közép,
+                        FejlécJobb = Adat.Fejléc_Jobb,
+                        LáblécBal = Adat.Lábléc_Bal,
+                        LáblécKözép = Adat.Lábléc_Közép,
+                        LáblécJobb = Adat.Lábléc_Jobb,
+                        BalMargó = 18,
+                        JobbMargó = 18,
+                        AlsóMargó = 0,
+                        FelsőMargó = 17,
+                        FejlécMéret = 11,
+                        LáblécMéret = 4
+                    };
+                    MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
+                }
                 // bezárjuk az Excel-t
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
 
+                List<string> Fájlok = new List<string> { fájlexc };
+                if (Napló_Nyomtat.Checked)
+                {
+                    MyF.ExcelNyomtatás(Fájlok);
+                    MessageBox.Show("A bizonylatok nyomtatása elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
                 if (Napló_Fájltöröl.Checked)
-                    File.Delete(fájlexc + ".xlsx");
+                    File.Delete(fájlexc);
                 else
                 {
                     MyF.Megnyitás(fájlexc);
@@ -4117,7 +4146,7 @@ namespace Villamos
                 }
                 else
                 {
-                    HonnanDarabol = IdeigHonnan.Felelős1.Split('-');
+                    HonnanDarabol = IdeigHonnan.Felelős1.Split('=');
                     if (IdeigHova.Felelős1.Contains("="))
                     {
                         HovaDarabol = IdeigHova.Felelős1.Split('=');
@@ -4239,8 +4268,8 @@ namespace Villamos
                 sor++; //hatodik sor
                 MyX.Egyesít(munkalap, $"a{sor}:c{sor}");
                 MyX.Kiir("felelős költséghely: ", $"a{sor}:c{sor}");
-                MyX.Igazít_függőleges(munkalap, $"a{sor} :c{sor}", "alsó");
-                MyX.Igazít_vízszintes(munkalap, $"a{sor} :c{sor}", "bal");
+                MyX.Igazít_függőleges(munkalap, $"a{sor}:c{sor}", "alsó");
+                MyX.Igazít_vízszintes(munkalap, $"a{sor}:c{sor}", "bal");
 
                 MyX.Egyesít(munkalap, $"d{sor}:e{sor}");
                 MyX.Kiir(EgyElem.Költséghely.Trim(), $"d{sor}:e{sor}"); //Költséghely
@@ -4434,26 +4463,36 @@ namespace Villamos
                 Adat_Szerszám_FejLáb Adat = Adatok.Where(a => a.Típus == "9B").FirstOrDefault();
                 if (Adat != null)
                 {
-                    // JAVÍTANDÓ:
-                    //MyX.NyomtatásiTerület_részletes(munkalap, $"A1:J{sor}", "", "",
-                    //    Adat.Fejléc_Bal,
-                    //    Adat.Fejléc_Közép,
-                    //    Adat.Fejléc_Jobb,
-                    //    Adat.Lábléc_Bal,
-                    //    Adat.Lábléc_Közép,
-                    //    Adat.Lábléc_Jobb, "", 10, 10, 19, 19, 8, 8, true, false, "Álló");
+                    Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                    {
+                        Munkalap = munkalap,
+                        NyomtatásiTerület = $"A1:J{sor}",
+                        FejlécBal = Adat.Fejléc_Bal,
+                        FejlécKözép = Adat.Fejléc_Közép,
+                        FejlécJobb = Adat.Fejléc_Jobb,
+                        LáblécBal = Adat.Lábléc_Bal,
+                        LáblécKözép = Adat.Lábléc_Közép,
+                        LáblécJobb = Adat.Lábléc_Jobb,
+                        BalMargó = 10,
+                        JobbMargó = 10,
+                        AlsóMargó = 19,
+                        FelsőMargó = 19,
+                        FejlécMéret = 8,
+                        LáblécMéret = 8,
+                        VízKözép = true
+                    };
+                    MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
                 }
-                if (Napló_Nyomtat.Checked)
-                {
-                    // JAVÍTANDÓ:    MyX.Nyomtatás(munkalap, 1, 1);
-                    MessageBox.Show("A bizonylatok nyomtatása elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                //Nyomtatvány vége
-
                 // bezárjuk az Excel-t
-                MyX.Aktív_Cella(munkalap, "A1");
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
+
+                List<string> Fájlok = new List<string> { fájlexc };
+                if (Napló_Nyomtat.Checked)
+                {
+                    MyF.ExcelNyomtatás(Fájlok);
+                    MessageBox.Show("A bizonylatok nyomtatása elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
 
                 if (Napló_Fájltöröl.Checked)
                     File.Delete(fájlexc + ".xlsx");
