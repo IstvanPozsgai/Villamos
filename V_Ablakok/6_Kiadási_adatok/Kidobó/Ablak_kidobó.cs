@@ -10,7 +10,6 @@ using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -239,15 +238,16 @@ namespace Villamos
                     return;
 
                 // megnyitjuk a beolvasandó táblát
-                MyE.ExcelMegnyitás(fájlexc);
+                string munkalap = "Munka1";
+                MyX.ExcelMegnyitás(fájlexc);
 
                 // leellenőrizzük, hogy az adat nap egyezik-e
-                szöveg = MyE.Beolvas("a2").Trim().Replace(".", "");
-                if (MyE.Beolvas("a2").Trim().Replace(".", "") != Dátum.Value.ToString("yyyyMMdd"))
+                szöveg = MyX.Beolvas(munkalap, "a2").Trim().Replace(".", "");
+                if (MyX.Beolvas(munkalap, "a2").Trim().Replace(".", "") != Dátum.Value.ToString("yyyyMMdd"))
                 {
                     // ha nem egyezik akkor       
                     // az excel tábla bezárása
-                    MyE.ExcelBezárás();
+                    MyX.ExcelBezárás();
                     Holtart.Ki();
                     throw new HibásBevittAdat("A betölteni kívánt adatok nem egyeznek meg a beállított nappal !");
                 }
@@ -257,7 +257,7 @@ namespace Villamos
                     if (MessageBox.Show("Már van az adott napra feltöltve adat ! Módosítjuk az adatokat ?", "Figyelmeztetés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
                     {
                         // Nemet választottuk
-                        MyE.ExcelBezárás();
+                        MyX.ExcelBezárás();
                         Holtart.Ki();
                         return;
                     }
@@ -272,11 +272,11 @@ namespace Villamos
                 int ii = 4;
                 int utolsó = 0;
 
-                while (MyE.Beolvas($"a{ii}").Trim() != "_")
+                while (MyX.Beolvas(munkalap, $"a{ii}").Trim() != "_")
                 {
                     utolsó = ii;
                     ii += 1;
-                    szöveg = MyE.Beolvas($"a{ii}").Trim();
+                    szöveg = MyX.Beolvas(munkalap, $"a{ii}").Trim();
                 }
 
                 Holtart.Be(utolsó + 1);
@@ -286,24 +286,24 @@ namespace Villamos
                     List<Adat_Kidobó> Adatok = new List<Adat_Kidobó>();
                     for (int i = 5; i <= utolsó; i++)
                     {
-                        string ideig = MyE.Beolvas($"a{i}");
+                        string ideig = MyX.Beolvas(munkalap, $"a{i}");
                         string[] darabol = ideig.Split('/');
                         string viszonylat = darabol[0].Trim();
                         Adat_Kidobó Adat = new Adat_Kidobó(
                             MyF.Szöveg_Tisztítás(viszonylat, 0, 6),
-                            MyF.Szöveg_Tisztítás(MyE.Beolvas($"b{i}").Trim(), 0, 6),
+                            MyF.Szöveg_Tisztítás(MyX.Beolvas(munkalap, $"b{i}").Trim(), 0, 6),
                             MyF.Szöveg_Tisztítás(ideig.Trim(), 0, 20),
-                            MyF.Szöveg_Tisztítás(MyE.Beolvas($"d{i}").Trim(), 0, 100),
-                            MyE.Beolvasidő($"f{i}"),
-                            MyE.Beolvasidő($"h{i}"),
-                            MyF.Szöveg_Tisztítás(MyE.Beolvas($"g{i}").Trim(), 0, 50),
-                            MyF.Szöveg_Tisztítás(MyE.Beolvas($"i{i}").Trim(), 0, 50),
-                            MyF.Szöveg_Tisztítás(MyE.Beolvas($"e{i}").Trim(), 0, 3),
+                            MyF.Szöveg_Tisztítás(MyX.Beolvas(munkalap, $"d{i}").Trim(), 0, 100),
+                            MyX.Beolvasidő(munkalap, $"f{i}"),
+                            MyX.Beolvasidő(munkalap, $"h{i}"),
+                            MyF.Szöveg_Tisztítás(MyX.Beolvas(munkalap, $"g{i}").Trim(), 0, 50),
+                            MyF.Szöveg_Tisztítás(MyX.Beolvas(munkalap, $"i{i}").Trim(), 0, 50),
+                            MyF.Szöveg_Tisztítás(MyX.Beolvas(munkalap, $"e{i}").Trim(), 0, 3),
                             "_",
                             "_",
                             "_",
-                            MyF.Szöveg_Tisztítás(MyE.Beolvas($"k{i}").Trim(), 0, 30),
-                            MyF.Szöveg_Tisztítás(MyE.Beolvas($"c{i}").Trim(), 0, 10));
+                            MyF.Szöveg_Tisztítás(MyX.Beolvas(munkalap, $"k{i}").Trim(), 0, 30),
+                            MyF.Szöveg_Tisztítás(MyX.Beolvas(munkalap, $"c{i}").Trim(), 0, 10));
 
                         Adatok.Add(Adat);
                         Holtart.Lép();
@@ -313,7 +313,7 @@ namespace Villamos
                 }
                 Gombok();
 
-                MyE.ExcelBezárás();
+                MyX.ExcelBezárás();
                 // kitöröljük a betöltött fájlt
                 File.Delete(fájlexc);
 
@@ -358,18 +358,19 @@ namespace Villamos
 
 
                 // megnyitjuk a beolvasandó táblát
-                MyE.ExcelMegnyitás(fájlexc);
+                string munkalap = "Munka1";
+                MyX.ExcelMegnyitás(fájlexc);
 
                 string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Főkönyv\Kidobó\{Dátum.Value.Year}\{Dátum.Value:yyyyMMdd}Forte.mdb";
 
                 // leellenőrizzük, hogy az adat nap egyezik-e
-                string szöveg = MyE.Beolvas("a2").Trim().Replace(".", "");
-                if (MyE.Beolvas("a2").Trim().Replace(".", "") != Dátum.Value.ToString("yyyyMMdd"))
+                string szöveg = MyX.Beolvas(munkalap, "a2").Trim().Replace(".", "");
+                if (MyX.Beolvas(munkalap, "a2").Trim().Replace(".", "") != Dátum.Value.ToString("yyyyMMdd"))
                 {
                     // ha nem egyezik akkor
                     MessageBox.Show("A betölteni kívánt adatok nem egyeznek meg a beállított nappal !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     // az excel tábla bezárása
-                    MyE.ExcelBezárás();
+                    MyX.ExcelBezárás();
                     Holtart.Ki();
                     return;
                 }
@@ -377,7 +378,7 @@ namespace Villamos
                 if (!File.Exists(hely))
                 {
                     MessageBox.Show("A választott napra még nincs feltöltve adat ! ", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    MyE.ExcelBezárás();
+                    MyX.ExcelBezárás();
                     Holtart.Ki();
                     return;
                 }
@@ -387,11 +388,11 @@ namespace Villamos
                 int ii = 4;
                 int utolsó = 0;
 
-                while (MyE.Beolvas($"a{ii}").Trim() != "_")
+                while (MyX.Beolvas(munkalap, $"a{ii}").Trim() != "_")
                 {
                     utolsó = ii;
                     ii += 1;
-                    szöveg = MyE.Beolvas($"a{ii}");
+                    szöveg = MyX.Beolvas(munkalap, $"a{ii}");
                 }
 
                 Holtart.Be(utolsó + 1);
@@ -401,24 +402,24 @@ namespace Villamos
                     List<Adat_Kidobó> Adatok = new List<Adat_Kidobó>();
                     for (int i = 5; i <= utolsó; i++)
                     {
-                        string ideig = MyE.Beolvas($"a{i}");
+                        string ideig = MyX.Beolvas(munkalap, $"a{i}");
                         string[] darabol = ideig.Split('/');
                         string viszonylat = darabol[0].Trim();
                         Adat_Kidobó Adat = new Adat_Kidobó(
                             MyF.Szöveg_Tisztítás(viszonylat, 0, 6),
-                            MyF.Szöveg_Tisztítás(MyE.Beolvas($"b{i}").Trim(), 0, 6),
+                            MyF.Szöveg_Tisztítás(MyX.Beolvas(munkalap, $"b{i}").Trim(), 0, 6),
                             MyF.Szöveg_Tisztítás(ideig.Trim(), 0, 20),
-                            MyF.Szöveg_Tisztítás(MyE.Beolvas($"d{i}").Trim(), 0, 100),
-                            MyE.Beolvasidő($"f{i}"),
-                            MyE.Beolvasidő($"h{i}"),
-                            MyF.Szöveg_Tisztítás(MyE.Beolvas($"g{i}").Trim(), 0, 50),
-                            MyF.Szöveg_Tisztítás(MyE.Beolvas($"i{i}").Trim(), 0, 50),
-                            MyF.Szöveg_Tisztítás(MyE.Beolvas($"e{i}").Trim(), 0, 3),
+                            MyF.Szöveg_Tisztítás(MyX.Beolvas(munkalap, $"d{i}").Trim(), 0, 100),
+                            MyX.Beolvasidő(munkalap, $"f{i}"),
+                            MyX.Beolvasidő(munkalap, $"h{i}"),
+                            MyF.Szöveg_Tisztítás(MyX.Beolvas(munkalap, $"g{i}").Trim(), 0, 50),
+                            MyF.Szöveg_Tisztítás(MyX.Beolvas(munkalap, $"i{i}").Trim(), 0, 50),
+                            MyF.Szöveg_Tisztítás(MyX.Beolvas(munkalap, $"e{i}").Trim(), 0, 3),
                             "_",
                             "_",
                             "_",
-                            MyF.Szöveg_Tisztítás(MyE.Beolvas($"k{i}").Trim(), 0, 30),
-                            MyF.Szöveg_Tisztítás(MyE.Beolvas($"c{i}").Trim(), 0, 10));
+                            MyF.Szöveg_Tisztítás(MyX.Beolvas(munkalap, $"k{i}").Trim(), 0, 30),
+                            MyF.Szöveg_Tisztítás(MyX.Beolvas(munkalap, $"c{i}").Trim(), 0, 10));
 
                         Adatok.Add(Adat);
                         Holtart.Lép();
@@ -428,7 +429,7 @@ namespace Villamos
 
                 Gombok();
 
-                MyE.ExcelBezárás();
+                MyX.ExcelBezárás();
                 // kitöröljük a betöltött fájlt
                 File.Delete(fájlexc);
                 Holtart.Ki();
@@ -1424,7 +1425,7 @@ namespace Villamos
 
                         MyX.Kiir(ideig + "_", $"a{sor}");
                         if (MyF.Szöveg_Tisztítás(rekord.Szerelvénytípus, 0, 3) == "CAF" && rekord.Kezdés.Hour < 12)
-                            MyX.Betű (munkalap, $"a{sor}", BeBetű10V);
+                            MyX.Betű(munkalap, $"a{sor}", BeBetű10V);
 
                         MyX.Kiir(rekord.Forgalmiszám.Trim(), $"b{sor}");
                         DateTime ideigdátum = rekord.Kezdés.AddMinutes(20);
@@ -1436,7 +1437,7 @@ namespace Villamos
                         MyX.Betű(munkalap, $"g{sor}", BeBetű12);
 
                         MyX.Kiir(rekord.Jvez.Trim(), $"f{sor}");
-                      
+
                         if (ideigdátum.Hour > 12)
                         {
                             MyX.Betű(munkalap, $"a{sor}:g{sor}", BeBetű10V);
@@ -1467,7 +1468,7 @@ namespace Villamos
                         MyX.Betű(munkalap, $"j{sor}", BeBetű12);
                         MyX.Betű(munkalap, $"o{sor}", BeBetű12);
                         MyX.Kiir(rekord.Jvez.Trim(), $"m{sor}");
-             
+
 
                         if (ideigdátum.Hour > 12)
                         {

@@ -678,7 +678,7 @@ namespace Villamos
         }
 
 
-        public static void ExcelMegnyitá(string hely, bool látszik = false)
+        public static void ExcelMegnyitás(string hely, bool látszik = false)
         {
             try
             {

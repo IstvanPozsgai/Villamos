@@ -14,7 +14,7 @@ namespace Villamos
             {
                 IXLWorksheet lap = xlWorkBook.Worksheet(munkalapnév);
                 válasz = lap.Cell(honnan).Value.ToStrTrim();
-                if(válasz.Trim ()=="") válasz = "_";
+                if (válasz.Trim() == "") válasz = "_";
             }
             catch (Exception ex)
             {
@@ -63,5 +63,68 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public static DateTime Beolvasidő(string munkalapnév, string honnan)
+        {
+            DateTime válasz = new DateTime(1900, 1, 1, 0, 0, 0);
+            try
+            {
+                IXLWorksheet lap = xlWorkBook.Worksheet(munkalapnév);
+                string Cella = lap.Cell(honnan).Value.ToStrTrim();
+
+
+                if (Cella == "")
+                {
+                    válasz = new DateTime(1900, 1, 1, 0, 0, 0);
+                }
+                else if (decimal.TryParse(Cella, out decimal ideig))
+                {
+                    int óra, perc, másodperc;
+                    decimal órad, percd, másodpercd;
+
+                    órad = ideig * 24;
+                    óra = ((int)órad);
+                    órad = órad - Convert.ToDecimal(óra);
+
+                    percd = órad * 60;
+                    perc = (int)percd;
+                    percd = percd - Convert.ToDecimal(perc);
+
+                    másodpercd = percd * 60;
+                    másodperc = (int)másodpercd;
+
+                    válasz = new DateTime(1900, 1, 1, óra, perc, másodperc);
+                }
+                else if (Cella.Contains(":"))
+                {
+                    string[] darab = Cella.Split(':');
+                    int óra = int.Parse(darab[0]);
+                    int perc = int.Parse(darab[1]);
+                    int másodperc;
+                    if (darab.Length > 2)
+                        másodperc = int.Parse(darab[2]);
+                    else
+                        másodperc = 0;
+
+                    válasz = new DateTime(1900, 1, 1, óra, perc, másodperc);
+                }
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Beolvasidő(honnan {honnan}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                if (ex.HResult == -2146777998)
+                {
+                    MessageBox.Show(ex.Message, "A program figyelmet igényel", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else
+                {
+                    MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            return válasz;
+        }
+
     }
 }
