@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -323,7 +322,7 @@ namespace Villamos
                 MyX.DataGridViewToXML(fájlexc, Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -383,12 +382,13 @@ namespace Villamos
                 }
 
                 // megnyitjuk a beolvasandó táblát
-                MyE.ExcelMegnyitás(fájlexc);
+                string munkalap = "Munka1";
+                MyX.ExcelMegnyitás(fájlexc);
 
 
                 // leellenőrizzük, hogy az adat nap egyezik-e
 
-                if (DateTime.Parse(MyE.Beolvas("A4")).ToString("yyyyMMdd") != Dátum.Value.ToString("yyyyMMdd"))
+                if (DateTime.Parse(MyX.Beolvas(munkalap, "A4")).ToString("yyyyMMdd") != Dátum.Value.ToString("yyyyMMdd"))
                 {
                     // ha nem egyezik akkor
                     throw new HibásBevittAdat("A betölteni kívánt adatok nem egyeznek meg a beállított nappal ");
@@ -398,9 +398,9 @@ namespace Villamos
                 int i = 1;
                 int utolsó = 0;
                 int első = 0;
-                while (MyE.Beolvas($"a{i}").Trim() != "Mindösszesen:")
+                while (MyX.Beolvas(munkalap, $"a{i}").Trim() != "Mindösszesen:")
                 {
-                    if (MyE.Beolvas($"a{i}").Trim() == "Összesen:")
+                    if (MyX.Beolvas(munkalap, $"a{i}").Trim() == "Összesen:")
                         első = i;
                     utolsó = i;
                     i += 1;
@@ -419,11 +419,11 @@ namespace Villamos
                         // délelőtti adatok beolvasása
                         DateTime dátum_ = Dátum.Value;
                         string napszak_ = "de";
-                        string telephelyforte_ = MyE.Beolvas($"d{i}").Trim();
-                        string típusforte_ = MyE.Beolvas($"e{i}").Trim();
+                        string telephelyforte_ = MyX.Beolvas(munkalap, $"d{i}").Trim();
+                        string típusforte_ = MyX.Beolvas(munkalap, $"e{i}").Trim();
                         string telephely_ = "_";
                         string típus_ = "_";
-                        if (!int.TryParse(MyE.Beolvas($"H{i}"), out int kiadás_)) kiadás_ = 0;
+                        if (!int.TryParse(MyX.Beolvas(munkalap, $"H{i}"), out int kiadás_)) kiadás_ = 0;
                         int munkanap_ = Munkanap.Checked ? 0 : 1;
 
                         Adat_Forte_Kiadási_Adatok Adat = new Adat_Forte_Kiadási_Adatok(dátum_, napszak_, telephelyforte_, típusforte_, telephely_, típus_, kiadás_, munkanap_);
@@ -431,7 +431,7 @@ namespace Villamos
 
                         // délutáni adatok beolvasása
                         napszak_ = "du";
-                        kiadás_ = int.Parse(MyE.Beolvas($"j{i}").Trim());
+                        kiadás_ = int.Parse(MyX.Beolvas(munkalap, $"j{i}").Trim());
 
                         Adat = new Adat_Forte_Kiadási_Adatok(dátum_, napszak_, telephelyforte_, típusforte_, telephely_, típus_, kiadás_, munkanap_);
                         AdatokGY.Add(Adat);
@@ -440,7 +440,7 @@ namespace Villamos
                         i++;
                     }
                 }
-                MyE.ExcelBezárás();
+                MyX.ExcelBezárás();
                 if (AdatokGY != null && AdatokGY.Count > 0) Kéz_Forte.Rögzítés(Dátum.Value.Year, AdatokGY);
                 Figyel = false;
                 Holtart.Ki();
@@ -643,7 +643,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\forte_beolvas.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
