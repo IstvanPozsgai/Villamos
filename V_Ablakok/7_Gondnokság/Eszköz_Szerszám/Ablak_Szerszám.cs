@@ -58,13 +58,13 @@ namespace Villamos
         //... ad át ha épületnyilvántartás
         private string Könyvtár_adat;
 
-
+        #region Alap
         //Itt kapjuk meg a főoldaltól, hogy melyik funkciót akarom használni
         public void SetData(string Könyvtár_adat)
         {
             if (this.Könyvtár_adat == null)
             {
-                this.Könyvtár_adat = $@"Adatok\{Könyvtár_adat}";
+                this.Könyvtár_adat = Könyvtár_adat;
             }
         }
 
@@ -73,12 +73,12 @@ namespace Villamos
             Start();
         }
 
-        #region Alap
+        // JAVÍTANDÓ:
         private void Start()
         {
             try
             {
-                if (Könyvtár_adat.Trim() == "Adatok\\Szerszám")
+                if (Könyvtár_adat.Trim() == "Szerszám")
                     this.Text = "Szerszám Nyilvántartás";
                 else
                     this.Text = "Helység tartozék nyilvántartás";
@@ -183,6 +183,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void TelephelyekFeltöltéseÚj()
         {
             try
@@ -206,7 +207,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Jogosultságkiosztás()
         {
@@ -421,7 +421,35 @@ namespace Villamos
             Képek_Azonosítók_feltöltése();
             PDF_Azonosítók_feltöltése();
         }
+
+        private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            try
+            {
+                Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
+                if (Cmbtelephely.Text.Trim() == "") return;
+                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+                //ha nem akkor a régit használjuk
+                if (Program.PostásJogkör.Substring(0, 1) == "R")
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                else
+                {
+
+                }
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         #endregion
+
 
         #region CikkTörzslap 
         private void Alap_Azonosítók()
@@ -478,11 +506,6 @@ namespace Villamos
             Alap_tábla_író();
         }
 
-        private void Azonosító_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Alap_azonísító_választó();
-        }
-
         private void Alap_Azonosító_TextChanged(object sender, EventArgs e)
         {
             Alap_azonísító_választó();
@@ -522,11 +545,7 @@ namespace Villamos
                 Alap_tárolás.Text = Adat.Hely;
                 Alap_Beszerzési_dátum.Value = Adat.Beszerzésidátum;
                 Alap_Gyáriszám.Text = Adat.Gyáriszám;
-                if (Adat.Státus == 1)
-                    Alap_Aktív.Checked = true;
-                else
-                    Alap_Aktív.Checked = false;
-
+                Alap_Aktív.Checked = Adat.Státus == 1;
             }
             catch (HibásBevittAdat ex)
             {
@@ -562,8 +581,6 @@ namespace Villamos
                 if (Alap_Költséghely.Text.Length > 6) throw new HibásBevittAdat("Költséghely maximum 6 karakter hosszú lehet!");
 
                 CikktörzsListaFeltöltés();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Adatok\Szerszám.mdb";
-                string jelszó = "csavarhúzó";
 
                 string azonosító = Alap_Azonosító.Text.Replace("\"", "");
                 string megnevezés = Alap_Megnevezés.Text.Replace("\"", "");
@@ -583,12 +600,12 @@ namespace Villamos
 
                 if (Elem != null)
                 {
-                    KézSzerszámCikk.Módosítás(hely, jelszó, Adat);
+                    KézSzerszámCikk.Módosítás(Cmbtelephely.Text.Trim(), Könyvtár_adat, Adat);
                     MessageBox.Show("Az adatok módosítás megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    KézSzerszámCikk.Rögzítés(hely, jelszó, Adat);
+                    KézSzerszámCikk.Rögzítés(Cmbtelephely.Text.Trim(), Könyvtár_adat, Adat);
                     Azonosítók();
                     Ürít();
                     MessageBox.Show("Az adatok rögzítése megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -850,7 +867,6 @@ namespace Villamos
                     válasz = 0;
                 else
                     válasz = fileInfo.Length;
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -864,6 +880,7 @@ namespace Villamos
             return válasz;
         }
         #endregion
+
 
         #region Könyv lap
         private void Szeszámkönyvfeltöltés()
@@ -1020,7 +1037,6 @@ namespace Villamos
 
                 Könyv_tábla.Visible = true;
                 Könyv_tábla.Refresh();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -1072,8 +1088,6 @@ namespace Villamos
                 if (Könyv_megnevezés.Text == "") throw new HibásBevittAdat("Nincs kijelölve egy könyv sem.");
 
                 KönyvListaFeltöltés();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Adatok\Szerszám.mdb";
-                string jelszó = "csavarhúzó";
 
                 Adat_Szerszám_Könyvtörzs Adat = new Adat_Szerszám_Könyvtörzs(Könyv_szám.Text.Trim(),
                                                                              Könyv_megnevezés.Text.Trim(),
@@ -1085,9 +1099,9 @@ namespace Villamos
                                                  select a).FirstOrDefault();
 
                 if (Elem == null)
-                    KézKönyv.Rögzítés(hely, jelszó, Adat);
+                    KézKönyv.Rögzítés(Cmbtelephely.Text.Trim(), Könyvtár_adat, Adat);
                 else
-                    KézKönyv.Módosítás(hely, jelszó, Adat);
+                    KézKönyv.Módosítás(Cmbtelephely.Text.Trim(), Könyvtár_adat, Adat);
 
                 Könyv_szám.Text = "";
                 Könyv_ürít();
@@ -1113,7 +1127,6 @@ namespace Villamos
             {
                 if (Könyv_tábla.Rows.Count <= 0) return;
                 string fájlexc;
-
 
                 // kimeneti fájl helye és neve
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
@@ -1144,6 +1157,7 @@ namespace Villamos
             }
         }
         #endregion
+
 
         #region Lekérdezés
         private void Lekérd_Szeszámkönyvfeltöltés()
@@ -1176,6 +1190,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void Lekérd_Azonosítók()
         {
             try
@@ -1363,7 +1378,6 @@ namespace Villamos
                     AdatTáblaLekérd.Rows.Add(Soradat);
                     Holtart.Lép();
                 }
-
             }
         }
 
@@ -1797,6 +1811,7 @@ namespace Villamos
         }
         #endregion
 
+
         #region KÉP
         private void Képek_Azonosítók_feltöltése()
         {
@@ -2072,6 +2087,7 @@ namespace Villamos
         }
         #endregion
 
+
         #region PDF lapofül
         private void PDF_Azonosítók_feltöltése()
         {
@@ -2304,6 +2320,7 @@ namespace Villamos
         }
         #endregion
 
+
         #region Napló lapfül
         private void Napló_könyv_feltöltés()
         {
@@ -2471,8 +2488,7 @@ namespace Villamos
         {
             try
             {
-                if (Napló_Tábla.Rows.Count <= 0)
-                    return;
+                if (Napló_Tábla.Rows.Count <= 0) return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -2828,6 +2844,7 @@ namespace Villamos
             }
         }
         #endregion
+
 
         #region Könyvelés lapfül   
         private void Honnan_feltöltések()
@@ -3246,6 +3263,7 @@ namespace Villamos
 
             }
         }
+
         private void Hova_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             Hova_kiíró_név();
@@ -3336,19 +3354,6 @@ namespace Villamos
             }
         }
 
-        private void SzAzonosító_kiíró_szám()
-        {
-            Mennyiség.Text = "";
-            Mennyiség.Enabled = true;
-            if (Megnevezés.Text.Trim() == "") return;
-
-            Adat_Szerszám_Cikktörzs Elem = (from a in AdatokCikk
-                                            where a.Státus == 0 &&
-                                            a.Megnevezés == Megnevezés.Text.Trim()
-                                            select a).FirstOrDefault();
-            if (Elem != null) SzerszámAzonosító.Text = Elem.Azonosító;
-        }
-
         private void Darabszámok_kiírása()
         {
             try
@@ -3373,12 +3378,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void Megnevezés_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-            SzAzonosító_kiíró_szám();
-            Darabszámok_kiírása();
         }
 
         private void Üríti_mezőket()
@@ -3556,16 +3555,12 @@ namespace Villamos
                 if (!int.TryParse(Mennyiség.Text, out int mennyiség)) throw new HibásBevittAdat("Mennyiségnek számnak kell lennie.");
                 if (mennyiség <= 0) throw new HibásBevittAdat("Könyvelendő mennyiség nem lehet nulla és negatív!");
 
-                string helyn = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Adatok\szerszámnapló{DateTime.Today.Year}.mdb";
-                string jelszó = "csavarhúzó";
-                if (!File.Exists(helyn)) Adatbázis_Létrehozás.Szerszámlistanapló(helyn);
-
                 string azonostító = SzerszámAzonosító.Text.Trim();
                 string honann = Honnan.Text.Trim();
                 string hova = Hova.Text.Trim();
 
                 Adat_Szerszám_Napló NaplóAdat = new Adat_Szerszám_Napló(azonostító, honann, hova, mennyiség);
-                KézNapló.Rögzítés(helyn, jelszó, NaplóAdat);
+                KézNapló.Rögzítés(Könyvtár_adat, Cmbtelephely.Text.Trim(), DateTime.Today.Year, NaplóAdat);
             }
             catch (HibásBevittAdat ex)
             {
@@ -3650,12 +3645,12 @@ namespace Villamos
         }
         #endregion
 
+
         #region Nyomtatványok
         private void Nyomtatvány9A_Click(object sender, EventArgs e)
         {
             try
             {
-
                 //Azon elemeket amelyik nem E-vel kezdődik visszaállítjuk
                 for (int i = 0; i < Napló_Tábla.Rows.Count; i++)
                 {
@@ -4503,6 +4498,7 @@ namespace Villamos
         }
         #endregion
 
+
         #region ListákFeltöltése
         private void CikktörzsListaFeltöltés()
         {
@@ -4582,10 +4578,7 @@ namespace Villamos
             try
             {
                 AdatokJelenléti.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
-                string jelszó = "Mocó";
-                string szöveg = "SELECT * FROM jelenlétiív ";
-                AdatokJelenléti = KézJelenléti.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokJelenléti = KézJelenléti.Lista_Adatok(Cmbtelephely.Text.Trim());
             }
             catch (HibásBevittAdat ex)
             {
@@ -4596,7 +4589,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void EszközListaFeltöltés()
@@ -4604,11 +4596,7 @@ namespace Villamos
             try
             {
                 AdatokEszköz.Clear();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
-                string jelszó = "TóthKatalin";
-                string szöveg = $"SELECT * FROM adatok ";
-
-                AdatokEszköz = KézEszköz.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokEszköz = KézEszköz.Lista_Adatok(Cmbtelephely.Text.Trim());
             }
             catch (HibásBevittAdat ex)
             {
@@ -4619,7 +4607,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void NaplóListaFeltöltés(DateTime Dátum)
@@ -4627,12 +4614,7 @@ namespace Villamos
             try
             {
                 AdatokNapló.Clear();
-                string jelszó = "csavarhúzó";
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Adatok\szerszámnapló{Dátum.Year}.mdb";
-                if (!File.Exists(hely)) return;
-                string szöveg = "SELECT * FROM napló ";
-
-                AdatokNapló = KézNapló.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokNapló = KézNapló.Lista_Adatok(Cmbtelephely.Text.Trim(), Könyvtár_adat, Dátum.Year);
             }
             catch (HibásBevittAdat ex)
             {
@@ -4644,34 +4626,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion
-
-        private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            try
-            {
-                Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
-                if (Cmbtelephely.Text.Trim() == "") return;
-                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
-                //ha nem akkor a régit használjuk
-                if (Program.PostásJogkör.Substring(0, 1) == "R")
-                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
-                else
-                {
-
-                }
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+        #endregion     
     }
 }
 

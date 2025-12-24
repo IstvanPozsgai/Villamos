@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
@@ -12,7 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "csavarhúzó";
         string hely;
-        readonly string táblanév = "Könyvelés";
+        readonly string táblanév = "cikktörzs";
 
         private void FájlBeállítás(string Melyik, string Telephely)
         {
@@ -22,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Szerszám_Cikktörzs> Lista_Adatok(string Melyik, string Telephely)
         {
-            string szöveg = "SELECT * FROM cikktörzs ORDER BY azonosító";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY azonosító";
             FájlBeállítás(Melyik, Telephely);
             Adat_Szerszám_Cikktörzs Adat;
             List<Adat_Szerszám_Cikktörzs> Adatok = new List<Adat_Szerszám_Cikktörzs>();
@@ -58,34 +59,60 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Módosítás(string hely, string jelszó, Adat_Szerszám_Cikktörzs Adat)
+        public void Módosítás(string Melyik, string Telephely, Adat_Szerszám_Cikktörzs Adat)
         {
-            string szöveg = "UPDATE cikktörzs  SET ";
-            szöveg += $"megnevezés='{Adat.Megnevezés}', ";
-            szöveg += $"méret='{Adat.Méret}', ";
-            szöveg += $"leltáriszám='{Adat.Leltáriszám}', ";
-            szöveg += $"költséghely='{Adat.Költséghely}', ";
-            szöveg += $"hely='{Adat.Hely}', ";
-            szöveg += $"státus='{Adat.Státus}', ";
-            szöveg += $"gyáriszám='{Adat.Gyáriszám}', ";
-            szöveg += $" Beszerzésidátum='{Adat.Beszerzésidátum:yyyy.MM.dd}' ";
-            szöveg += $" WHERE azonosító='{Adat.Azonosító}'";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+            try
+            {
+                FájlBeállítás(Melyik, Telephely);
+                string szöveg = $"UPDATE {táblanév}  SET ";
+                szöveg += $"megnevezés='{Adat.Megnevezés}', ";
+                szöveg += $"méret='{Adat.Méret}', ";
+                szöveg += $"leltáriszám='{Adat.Leltáriszám}', ";
+                szöveg += $"költséghely='{Adat.Költséghely}', ";
+                szöveg += $"hely='{Adat.Hely}', ";
+                szöveg += $"státus='{Adat.Státus}', ";
+                szöveg += $"gyáriszám='{Adat.Gyáriszám}', ";
+                szöveg += $" Beszerzésidátum='{Adat.Beszerzésidátum:yyyy.MM.dd}' ";
+                szöveg += $" WHERE azonosító='{Adat.Azonosító}'";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        public void Rögzítés(string hely, string jelszó, Adat_Szerszám_Cikktörzs Adat)
+        public void Rögzítés(string Melyik, string Telephely, Adat_Szerszám_Cikktörzs Adat)
         {
-            string szöveg = "INSERT INTO cikktörzs  (azonosító, megnevezés, méret, leltáriszám, Beszerzésidátum, státus, hely, költséghely, gyáriszám) VALUES (";
-            szöveg += $"'{Adat.Azonosító}', ";
-            szöveg += $"'{Adat.Megnevezés}', ";
-            szöveg += $"'{Adat.Méret}', ";
-            szöveg += $"'{Adat.Leltáriszám}', ";
-            szöveg += $"'{Adat.Beszerzésidátum:yyyy.MM.dd}', ";
-            szöveg += $"{Adat.Státus}, ";
-            szöveg += $"'{Adat.Hely}', ";
-            szöveg += $"'{Adat.Költséghely}', ";
-            szöveg += $"'{Adat.Gyáriszám}') ";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
+            try
+            {
+                FájlBeállítás(Melyik, Telephely);
+                string szöveg = $"INSERT INTO {táblanév}  (azonosító, megnevezés, méret, leltáriszám, Beszerzésidátum, státus, hely, költséghely, gyáriszám) VALUES (";
+                szöveg += $"'{Adat.Azonosító}', ";
+                szöveg += $"'{Adat.Megnevezés}', ";
+                szöveg += $"'{Adat.Méret}', ";
+                szöveg += $"'{Adat.Leltáriszám}', ";
+                szöveg += $"'{Adat.Beszerzésidátum:yyyy.MM.dd}', ";
+                szöveg += $"{Adat.Státus}, ";
+                szöveg += $"'{Adat.Hely}', ";
+                szöveg += $"'{Adat.Költséghely}', ";
+                szöveg += $"'{Adat.Gyáriszám}') ";
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

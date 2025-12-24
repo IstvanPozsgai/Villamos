@@ -16,7 +16,6 @@ using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP;
 using Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás;
 using Villamos.Villamos_Ablakok.Kerékeszterga;
-using Villamos.Adatszerkezet;
 using static System.IO.File;
 using MyF = Függvénygyűjtemény;
 

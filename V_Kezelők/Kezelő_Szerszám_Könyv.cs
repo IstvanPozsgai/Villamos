@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "csavarhúzó";
         string hely;
-        readonly string táblanév = "Könyvelés";
+        readonly string táblanév = "könyvtörzs";
 
         private void FájlBeállítás(string Melyik, string Telephely)
         {
@@ -23,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Szerszám_Könyvtörzs> Lista_Adatok(string Melyik, string Telephely)
         {
-            string szöveg = "SELECT * FROM könyvtörzs";
+            string szöveg = $"SELECT * FROM {táblanév}";
             FájlBeállítás(Melyik, Telephely);
             Adat_Szerszám_Könyvtörzs Adat;
             List<Adat_Szerszám_Könyvtörzs> Adatok = new List<Adat_Szerszám_Könyvtörzs>();
@@ -54,11 +54,12 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(string hely, string jelszó, Adat_Szerszám_Könyvtörzs Adat)
+        public void Rögzítés(string Melyik, string Telephely, Adat_Szerszám_Könyvtörzs Adat)
         {
             try
             {
-                string szöveg = "INSERT INTO könyvtörzs  (Szerszámkönyvszám, Szerszámkönyvnév, felelős1, felelős2, státus ) VALUES (";
+                FájlBeállítás(Melyik, Telephely);
+                string szöveg = $"INSERT INTO {táblanév}  (Szerszámkönyvszám, Szerszámkönyvnév, felelős1, felelős2, státus ) VALUES (";
                 szöveg += $"'{Adat.Szerszámkönyvszám}', ";
                 szöveg += $"'{Adat.Szerszámkönyvnév}', ";
                 szöveg += $"'{Adat.Felelős1}', ";
@@ -77,11 +78,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(string hely, string jelszó, Adat_Szerszám_Könyvtörzs Adat)
+        public void Módosítás(string Melyik, string Telephely, Adat_Szerszám_Könyvtörzs Adat)
         {
             try
             {
-                string szöveg = "UPDATE könyvtörzs  SET ";
+                FájlBeállítás(Melyik, Telephely);
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"Szerszámkönyvnév='{Adat.Szerszámkönyvnév.Trim()}', ";
                 szöveg += $"felelős1='{Adat.Felelős1.Trim()}', ";
                 szöveg += $"felelős2='{Adat.Felelős2.Trim()}', ";
@@ -99,7 +101,5 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
-
 }
