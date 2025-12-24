@@ -8,7 +8,7 @@ using Villamos.Kezelők;
 using Villamos.V_Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös

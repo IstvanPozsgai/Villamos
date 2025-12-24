@@ -10,7 +10,7 @@ using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using static System.IO.File;
 using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
