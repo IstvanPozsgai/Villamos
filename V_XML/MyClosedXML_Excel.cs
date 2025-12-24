@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 

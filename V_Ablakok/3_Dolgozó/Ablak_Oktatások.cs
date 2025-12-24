@@ -7,7 +7,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Adatszerkezet;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
@@ -1346,7 +1345,7 @@ namespace Villamos
                 MyX.Rácsoz(munkalap, $"a13:g{sor}");
 
                 string fénykép = $@"{Application.StartupPath}\Főmérnökség\adatok\Ábrák\BKV.png";
-         
+
                 // '**********************************************
                 // '**Nyomtatási beállítások                    **
                 // '**********************************************
@@ -1367,7 +1366,7 @@ namespace Villamos
                     VízKözép = true,
                     Álló = true,
                     LapSzéles = 1,
-                    Képútvonal= fénykép
+                    Képútvonal = fénykép
                 };
                 MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 

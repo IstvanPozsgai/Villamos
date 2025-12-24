@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -101,7 +100,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                 }
                 MyX.Rácsoz(munkalap, "A1:G" + sor);
                 MyX.Betű(munkalap, "A1:G1", BeBetuVastag);
-         
+
                 MyX.Háttérszín(munkalap, "A1:G1", Color.Yellow);
                 MyX.Szűrés(munkalap, "A", "G", 1);
                 MyX.Oszlopszélesség(munkalap, "A:G");
@@ -432,7 +431,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                     MyX.Betű(munkalap, "C" + i, BeBetuSzazalek);
                 }
 
-                MyX.Diagram_Beallit(munkalap, 10, 150, "A1",  $"B{sor}" , "Gépidő");
+                MyX.Diagram_Beallit(munkalap, 10, 150, "A1", $"B{sor}", "Gépidő");
                 MyX.Rácsoz(munkalap, "A1:C" + sor);
                 MyX.Oszlopszélesség(munkalap, "A:C");
                 MyX.Háttérszín(munkalap, "A1:C1", System.Drawing.Color.Yellow);

@@ -7,7 +7,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Adatszerkezet;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -3664,15 +3663,9 @@ namespace Villamos
                     if (Napló_Tábla.Rows[i].Cells[0].Value.ToString().Substring(0, 1) != "E")
                         Napló_Tábla.Rows[i].Selected = false;
                 }
-                if (Napló_Tábla.SelectedRows.Count < 1)
-                    throw new HibásBevittAdat("Nincs kiválasztva a táblázatban nyomtatandó elem.");
+                if (Napló_Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kiválasztva a táblázatban nyomtatandó elem.");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Adatok\Szerszám.mdb";
-                string jelszó = "csavarhúzó";
-                string szöveg = "SELECT * FROM könyvtörzs ";
-
-
-                List<Adat_Szerszám_Könyvtörzs> Könyv_Törzs = KézKönyv.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Szerszám_Könyvtörzs> Könyv_Törzs = KézKönyv.Lista_Adatok(Cmbtelephely.Text.Trim(), Könyvtár_adat);
 
                 string szervezet = "";
                 Adat_Kiegészítő_Jelenlétiív Szerv = (from a in AdatokJelenléti
@@ -4517,10 +4510,7 @@ namespace Villamos
             try
             {
                 AdatokCikk.Clear();
-                string szöveg = "SELECT * FROM cikktörzs ORDER BY azonosító";
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Adatok\Szerszám.mdb";
-                string jelszó = "csavarhúzó";
-                AdatokCikk = KézSzerszámCikk.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokCikk = KézSzerszámCikk.Lista_Adatok(Cmbtelephely.Text.Trim(), Könyvtár_adat);
             }
             catch (HibásBevittAdat ex)
             {
@@ -4555,11 +4545,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Adatok\Szerszám.mdb";
-                string jelszó = "csavarhúzó";
-                string szöveg = "SELECT * FROM könyvtörzs ORDER BY Szerszámkönyvszám";
                 AdatokKönyv.Clear();
-                AdatokKönyv = KézKönyv.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokKönyv = KézKönyv.Lista_Adatok(Cmbtelephely.Text.Trim(), Könyvtár_adat);
             }
             catch (HibásBevittAdat ex)
             {

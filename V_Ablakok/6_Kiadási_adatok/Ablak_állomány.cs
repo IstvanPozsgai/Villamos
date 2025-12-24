@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Adatszerkezet;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatszerkezet;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
@@ -309,7 +308,7 @@ namespace Villamos
                 // megformázzuk
                 MyX.Rácsoz(munkalap, $"A1:C{sor}");
                 MyX.Rácsoz(munkalap, "A1:C1");
-               // MyX.Vastagkeret(munkalap, $"A1:C{sor}");
+                // MyX.Vastagkeret(munkalap, $"A1:C{sor}");
 
                 //Első sor sárga
                 MyX.Háttérszín(munkalap, "A1:C1", Color.Yellow);

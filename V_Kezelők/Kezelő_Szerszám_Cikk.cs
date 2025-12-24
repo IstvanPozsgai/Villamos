@@ -1,14 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
+using System.Windows.Forms;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_Szerszám_Cikk
     {
-        public List<Adat_Szerszám_Cikktörzs> Lista_Adatok(string hely, string jelszó, string szöveg)
+        readonly string jelszó = "csavarhúzó";
+        string hely;
+        readonly string táblanév = "Könyvelés";
+
+        private void FájlBeállítás(string Melyik, string Telephely)
         {
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\{Melyik}\Szerszám.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Szerszám_nyilvántartás(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Szerszám_Cikktörzs> Lista_Adatok(string Melyik, string Telephely)
+        {
+            string szöveg = "SELECT * FROM cikktörzs ORDER BY azonosító";
+            FájlBeállítás(Melyik, Telephely);
             Adat_Szerszám_Cikktörzs Adat;
             List<Adat_Szerszám_Cikktörzs> Adatok = new List<Adat_Szerszám_Cikktörzs>();
 

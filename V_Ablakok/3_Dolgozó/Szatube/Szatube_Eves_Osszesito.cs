@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Adatszerkezet;
+
 using Villamos.Villamos_Adatszerkezet;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -13,8 +13,8 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
     {
 
         readonly Beállítás_Betű BeBetuDoltVastag = new Beállítás_Betű() { Dőlt = true, Vastag = true, Méret = 12, Név = "Arial" };
-        readonly Beállítás_Betű BeBetu = new Beállítás_Betű() ;
-        
+        readonly Beállítás_Betű BeBetu = new Beállítás_Betű();
+
         public void Eves_Osszesito(string fájlexc, string[] darabol, Kezelő_Szatube_Szabadság KézSzabadság, string CmbTelephely, int Adat_Évek)
         {
             string munkalap = "Munka1";
@@ -29,7 +29,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
 
             MyX.Egyesít(munkalap, "b1:d1");
             MyX.Kiir($"Szabadság Összesítő a {Adat_Évek} évre", "b1");
-            MyX.Betű(munkalap,"b1",BeBetuDoltVastag);
+            MyX.Betű(munkalap, "b1", BeBetuDoltVastag);
 
             MyX.Kiir("Név:", "a3");
             MyX.Egyesít(munkalap, "b3:e3");
@@ -82,14 +82,14 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             int eleje = sor;
             MyX.Egyesít(munkalap, "a" + sor + ":e" + sor);
             MyX.Kiir("Szabadság felhasználás", "a" + sor);
-            MyX.Betű(  munkalap, $"a{sor}" , BeBetuDoltVastag );
+            MyX.Betű(munkalap, $"a{sor}", BeBetuDoltVastag);
             sor += 1;
             MyX.Kiir("Sorszám", "a" + sor);
             MyX.Kiir("Kezdete", "b" + sor);
             MyX.Kiir("Vége", "c" + sor);
             MyX.Kiir("Kivett nap", "d" + sor);
             MyX.Kiir("Kivétel oka", "e" + sor);
-            MyX.Betű(munkalap,"a" + sor + ":e" + sor,BeBetuDoltVastag );
+            MyX.Betű(munkalap, "a" + sor + ":e" + sor, BeBetuDoltVastag);
             sor += 1;
 
             int kivett = 0;
@@ -111,7 +111,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
                 MyX.Kiir(rekord.Szabiok.Trim(), "e" + sor);
                 kivett += rekord.Kivettnap;
                 sor += 1;
-                   }
+            }
 
             MyX.Kiir("Összesen:", "a" + sor);
             MyX.Betű(munkalap, "A" + sor, BeBetuDoltVastag);
