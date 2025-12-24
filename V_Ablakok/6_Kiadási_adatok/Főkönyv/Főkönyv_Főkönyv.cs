@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -474,7 +473,7 @@ namespace Villamos.Villamos_Nyomtatványok
             // tartalékok kiírása
             Adatok = KFN_kép.Lista_Adatok(Cmbtelephely.Trim(), Dátum, napszak.Trim());
             Adatok = (from a in Adatok
-                      where a.Napszak.Trim () == "_"
+                      where a.Napszak.Trim() == "_"
                       orderby a.Típus, a.Kocsikszáma descending, a.Szerelvény, a.Azonosító
                       select a).ToList();
 
@@ -761,7 +760,7 @@ namespace Villamos.Villamos_Nyomtatványok
             int sorvége;
             Adatok = KFN_kép.Lista_Adatok(Cmbtelephely.Trim(), Dátum, napszak.Trim());
             Adatok = (from a in Adatok
-                      where a.Státus == 4 && (a.Napszak.Trim () == "-" || a.Napszak.Trim() == "_")
+                      where a.Státus == 4 && (a.Napszak.Trim() == "-" || a.Napszak.Trim() == "_")
                       orderby a.Azonosító
                       select a).ToList();
 

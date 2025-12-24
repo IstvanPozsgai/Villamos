@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -652,7 +651,7 @@ namespace Villamos.Villamos_Nyomtatványok
                     {
                         if (Cmbtelephely.Trim() != VendégAdat.KiadóTelephely)
                         {
-                           MyX.Kiir("", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
+                            MyX.Kiir("", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
                             MyX.Egyesít(munkalap, MyF.Oszlopnév(oszlop + 2) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop + 6) + $"{sor}");
                             MyX.Kiir(VendégAdat.KiadóTelephely, MyF.Oszlopnév(oszlop + 2) + $"{sor}");
                         }
