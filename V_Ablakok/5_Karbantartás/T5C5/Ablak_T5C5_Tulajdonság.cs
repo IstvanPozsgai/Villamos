@@ -10,7 +10,6 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös;
 using Villamos.V_MindenEgyéb;
-using Villamos.Adatszerkezet;
 using DataTable = System.Data.DataTable;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -1917,7 +1916,7 @@ namespace Villamos
                 MyX.Betű(munkalap, $"A3:AG3", BeBetűF);
 
                 MyX.Link_beillesztés(munkalap, "A1", "Tartalom");
-       
+
                 //// fejlécet kiírjuk
                 MyX.Kiir("ID", "a3");
                 MyX.Kiir("Pályaszám", "b3");
@@ -2267,7 +2266,7 @@ namespace Villamos
                 Kimutatás3();
 
                 MyX.Munkalap_aktív("Adatok");
-    
+
                 MyX.ExcelMentés(_fájlexc);
                 MyX.ExcelBezárás();
 
