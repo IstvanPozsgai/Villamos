@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 namespace Villamos.V_Ablakok._5_Karbantartás.Fogaskereku
@@ -240,7 +236,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Fogaskereku
 
                 MyX.Kimutatás_Fő(Bekimutat);
                 MyX.Aktív_Cella(munkalap, "A1");
-                MyX.Oszlopszélesség(munkalap, "A:A",16.14);
+                MyX.Oszlopszélesség(munkalap, "A:A", 16.14);
             }
             catch (HibásBevittAdat ex)
             {
