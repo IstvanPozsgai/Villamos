@@ -10,7 +10,7 @@ using Villamos.Kezelők;
 using Villamos.V_Ablakok._4_Nyilvántartások.Takarítás;
 using Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;

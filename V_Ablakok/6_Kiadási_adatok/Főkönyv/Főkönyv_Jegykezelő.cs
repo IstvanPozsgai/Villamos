@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Villamos.Adatszerkezet;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 

@@ -10,7 +10,7 @@ using Villamos.V_Ablakok._5_Karbantartás.TW6000;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.TW6000;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;

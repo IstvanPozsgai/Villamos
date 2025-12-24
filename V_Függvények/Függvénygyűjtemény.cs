@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 
 
 public static partial class Függvénygyűjtemény

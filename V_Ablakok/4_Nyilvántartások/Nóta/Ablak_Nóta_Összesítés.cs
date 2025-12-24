@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Adatszerkezet;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Nóta
 {

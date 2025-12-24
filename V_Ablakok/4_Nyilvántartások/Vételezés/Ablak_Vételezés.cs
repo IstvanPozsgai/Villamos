@@ -10,7 +10,7 @@ using Villamos.Adatszerkezet;
 using Villamos.V_Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.Közös;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 

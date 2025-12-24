@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.V_Ablakok._3_Dolgozó.Szatube

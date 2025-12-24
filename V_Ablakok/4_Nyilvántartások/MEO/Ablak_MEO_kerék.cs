@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok.MEO;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using static System.Windows.Forms.CheckedListBox;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;

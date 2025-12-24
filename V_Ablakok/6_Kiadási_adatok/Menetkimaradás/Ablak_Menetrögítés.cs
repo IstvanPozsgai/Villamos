@@ -1,7 +1,7 @@
 ﻿
 using System;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 
 namespace Villamos
 {

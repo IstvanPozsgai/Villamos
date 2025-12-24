@@ -4,7 +4,7 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 
 namespace Villamos.Kezelők
 {

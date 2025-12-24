@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Properties;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 
 namespace Villamos
 {

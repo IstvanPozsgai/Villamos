@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using static System.IO.File;
 using MyA = Adatbázis;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;

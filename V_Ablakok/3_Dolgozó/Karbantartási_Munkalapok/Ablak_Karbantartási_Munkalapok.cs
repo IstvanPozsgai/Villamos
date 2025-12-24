@@ -11,7 +11,7 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.MindenEgyéb;
 using Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
 using MyF = Függvénygyűjtemény;
 using MyLista = Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok.Karbantartási_ListaFeltöltés;

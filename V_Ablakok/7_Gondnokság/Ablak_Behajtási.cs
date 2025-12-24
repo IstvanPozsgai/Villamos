@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.MindenEgyéb;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 

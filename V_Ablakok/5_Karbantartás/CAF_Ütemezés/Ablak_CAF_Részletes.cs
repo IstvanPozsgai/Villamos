@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyCaf = Villamos.Villamos_Ablakok.CAF_Ütemezés.CAF_Közös_Eljárások;
 using MyF = Függvénygyűjtemény;
 

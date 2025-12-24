@@ -7,7 +7,7 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.Kerékeszterga;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
 using MyF = Függvénygyűjtemény;
 using MyO = Microsoft.Office.Interop.Outlook;

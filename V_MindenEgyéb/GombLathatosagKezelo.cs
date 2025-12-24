@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos;
 using Villamos.Adatszerkezet;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 
 
 public static class GombLathatosagKezelo
