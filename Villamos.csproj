@@ -1433,6 +1433,7 @@
     <Compile Include="V_XML\MyClosedXML_Nyomtatás.cs" />
     <Compile Include="V_XML\MyClosedXML_Sor_Oszlop.cs" />
     <Compile Include="V_XML\MyClosedXML_Tábla.cs" />
+    <Compile Include="V_XML\MyClosedXML_XML.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
