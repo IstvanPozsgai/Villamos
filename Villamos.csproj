@@ -377,10 +377,6 @@
     <Compile Include="V_Adatszerkezet\Beállítás_Betű.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Kimutatás.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Nyomtatás.cs" />
-    <Compile Include="V_Excel\Excel_Betű.cs" />
-    <Compile Include="V_Excel\Excel_Keretez.cs" />
-    <Compile Include="V_Excel\Excel_Mentés.cs" />
-    <Compile Include="V_Excel\Excel_ÚJ.cs" />
     <Compile Include="V_Függvények\Oszlopneve.cs" />
     <Compile Include="V_Input_Forms\InputCheckbox.cs" />
     <Compile Include="V_Input_Forms\InputDate.cs" />
@@ -516,8 +512,6 @@
       <DependentUpon>Ablak_TTP_Év.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Adatbázis\TTP_Adatbázis.cs" />
-    <Compile Include="V_Excel\Excel_Munkalap.cs" />
-    <Compile Include="V_Excel\Excel_Sor_Oszlop.cs" />
     <Compile Include="V_Függvények\TTP_PDF.cs" />
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\Ablak_Tulajdonságok_CAF.cs">
       <SubType>Form</SubType>
@@ -878,8 +872,6 @@
     <Compile Include="V_Adatszerkezet\Adat_Tábla_Vezénylés.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Users.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Üzenet.cs" />
-    <Compile Include="V_Excel\Excel_Nyomtatási.cs" />
-    <Compile Include="V_Excel\Excel_Táblák.cs" />
     <Compile Include="V_Függvények\Fv_Szöveg.cs" />
     <Compile Include="V_Függvények\ListToDataTable.cs" />
     <Compile Include="V_Függvények\Számkonverter.cs" />
@@ -1388,7 +1380,6 @@
     <Compile Include="V_Kezelők\Kezelő_Utasítás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Vezénylés.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Összevont.cs" />
-    <Compile Include="V_Excel\Excel.cs" />
     <Compile Include="V_Kezelők\Kezelő_Üzenet.cs" />
     <Compile Include="V_Kezelők\Kezelő_Üzenet_Olvas.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF_Szinezés.cs" />
