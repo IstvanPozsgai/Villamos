@@ -16,7 +16,7 @@ namespace Villamos.Kezelők
         readonly string táblanév = "napló";
         private void FájlBeállítás(string Melyik, string Telephely, int Év)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\{Melyik}\Adatok\szerszámnapló{Év}.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\{Melyik}\Adatok\szerszámnapló{Év}.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Szerszámlistanapló(hely.KönyvSzerk());
         }
 

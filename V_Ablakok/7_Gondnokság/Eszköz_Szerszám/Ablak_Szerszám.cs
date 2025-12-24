@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatbázis_Funkció;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -94,43 +93,20 @@ namespace Villamos
                     Telephelyekfeltöltése();
                     Jogosultságkiosztás();
                 }
+                // hozzáadjuk az előírt értékeket
+                Adat_Szerszám_Könyvtörzs Adat;
+                Adat = new Adat_Szerszám_Könyvtörzs("Érkezett", "Új eszközök beérkeztetése", "_", "_", false);
+                KézKönyv.Döntés(Cmbtelephely.Text.Trim(), Könyvtár_adat, Adat);
 
+                Adat = new Adat_Szerszám_Könyvtörzs("Raktár", "Szerszámraktárban lévő anyagok és eszközök", "_", "_", false);
+                KézKönyv.Döntés(Cmbtelephely.Text.Trim(), Könyvtár_adat, Adat);
 
-                string hova;
+                Adat = new Adat_Szerszám_Könyvtörzs("Selejt", "Leselejtezett", "_", "_", false);
+                KézKönyv.Döntés(Cmbtelephely.Text.Trim(), Könyvtár_adat, Adat);
 
-                // létrehozzuk a  könyvtárat
-                hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\" + Könyvtár_adat;
-                if (!Directory.Exists(hova)) Directory.CreateDirectory(hova);
+                Adat = new Adat_Szerszám_Könyvtörzs("Selejtre", "Selejtezésre előkészítés", "_", "_", false);
+                KézKönyv.Döntés(Cmbtelephely.Text.Trim(), Könyvtár_adat, Adat);
 
-                hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Adatok";
-                if (!Directory.Exists(hova)) Directory.CreateDirectory(hova);
-
-                hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_képek";
-                if (!Directory.Exists(hova)) Directory.CreateDirectory(hova);
-
-                hova = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_PDF";
-                if (!Directory.Exists(hova)) Directory.CreateDirectory(hova);
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Adatok\Szerszám.mdb";
-                string jelszó = "csavarhúzó";
-
-                if (!File.Exists(hely))
-                {
-                    Adatbázis_Létrehozás.Szerszám_nyilvántartás(hely);
-                    // hozzáadjuk az előírt értékeket
-                    Adat_Szerszám_Könyvtörzs Adat;
-                    Adat = new Adat_Szerszám_Könyvtörzs("Érkezett", "Új eszközök beérkeztetése", "_", "_", false);
-                    KézKönyv.Rögzítés(hely, jelszó, Adat);
-
-                    Adat = new Adat_Szerszám_Könyvtörzs("Raktár", "Szerszámraktárban lévő anyagok és eszközök", "_", "_", false);
-                    KézKönyv.Rögzítés(hely, jelszó, Adat);
-
-                    Adat = new Adat_Szerszám_Könyvtörzs("Selejt", "Leselejtezett", "_", "_", false);
-                    KézKönyv.Rögzítés(hely, jelszó, Adat);
-
-                    Adat = new Adat_Szerszám_Könyvtörzs("Selejtre", "Selejtezésre előkészítés", "_", "_", false);
-                    KézKönyv.Rögzítés(hely, jelszó, Adat);
-                }
 
                 CikktörzsListaFeltöltés();
                 KönyvListaFeltöltés();
@@ -4614,7 +4590,7 @@ namespace Villamos
             try
             {
                 AdatokNapló.Clear();
-                AdatokNapló = KézNapló.Lista_Adatok(Cmbtelephely.Text.Trim(), Könyvtár_adat, Dátum.Year);
+                AdatokNapló = KézNapló.Lista_Adatok(Könyvtár_adat, Cmbtelephely.Text.Trim(), Dátum.Year);
             }
             catch (HibásBevittAdat ex)
             {

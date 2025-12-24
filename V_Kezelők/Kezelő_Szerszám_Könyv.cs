@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
@@ -15,9 +16,9 @@ namespace Villamos.Kezelők
         string hely;
         readonly string táblanév = "könyvtörzs";
 
-        private void FájlBeállítás(string Melyik, string Telephely)
+        private void FájlBeállítás(string Telephely, string Melyik)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\{Melyik}\Szerszám.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\{Melyik}\Adatok\Szerszám.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Szerszám_nyilvántartás(hely.KönyvSzerk());
         }
 
@@ -66,6 +67,28 @@ namespace Villamos.Kezelők
                 szöveg += $"'{Adat.Felelős2}', ";
                 szöveg += $"{Adat.Státus}) ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Könyv rögzítés", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        public void Döntés(string Melyik, string Telephely, Adat_Szerszám_Könyvtörzs Adat)
+        {
+            try
+            {
+                List<Adat_Szerszám_Könyvtörzs> Adatok = Lista_Adatok(Melyik, Telephely);
+                Adat_Szerszám_Könyvtörzs ADAT = (from a in Adatok
+                                                 where a.Szerszámkönyvszám == Adat.Szerszámkönyvszám
+                                                 select a).FirstOrDefault();
+                if (Adat == null) Rögzítés(Melyik, Telephely, Adat);
             }
             catch (HibásBevittAdat ex)
             {

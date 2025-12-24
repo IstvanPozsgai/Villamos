@@ -15,9 +15,9 @@ namespace Villamos.Kezelők
         string hely;
         readonly string táblanév = "Könyvelés";
 
-        private void FájlBeállítás(string Melyik, string Telephely)
+        private void FájlBeállítás(string Telephely, string Melyik)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\{Melyik}\Szerszám.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\{Melyik}\Adatok\Szerszám.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Szerszám_nyilvántartás(hely.KönyvSzerk());
         }
 
