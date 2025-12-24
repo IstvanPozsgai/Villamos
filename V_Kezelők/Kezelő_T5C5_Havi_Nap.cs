@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
-namespace Villamos.Villamos_Adatszerkezet
+namespace Villamos.Adatszerkezet
 {
     public class Kezelő_T5C5_Havi_Nap
     {

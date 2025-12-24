@@ -9,7 +9,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Kerékeszterga;
 using Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Kezelők;
 using Application = System.Windows.Forms.Application;
 using MyF = Függvénygyűjtemény;

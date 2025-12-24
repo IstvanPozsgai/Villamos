@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.OleDb;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 
 
 namespace Villamos.Kezelők

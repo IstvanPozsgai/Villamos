@@ -10,7 +10,7 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using DataTable = System.Data.DataTable;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
