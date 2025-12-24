@@ -13,7 +13,8 @@ using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
 using MyA = Adatbázis;
-using MyE = Villamos.Module_Excel;
+using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.Villamos_Ablakok
 {
@@ -420,7 +421,7 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Nosztalgia.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (Exception ex)
             {
@@ -982,12 +983,13 @@ namespace Villamos.Villamos_Ablakok
                     return;
 
                 // megnyitjuk a beolvasandó táblát
-                MyE.ExcelMegnyitás(fájlexc);
+                string munkalap = "Munka1";
+                MyX.ExcelMegnyitás(fájlexc);
 
                 // megnézzük, hogy hány sorból áll a tábla
                 int i = 1;
                 int utolsó = 0;
-                while (MyE.Beolvas("a" + i.ToString()) != "_") { utolsó = i; i += 1; }
+                while (MyX.Beolvas(munkalap, "a" + i.ToString()) != "_") { utolsó = i; i += 1; }
                 Holtart.Maximum = utolsó;
                 Holtart.Visible = true;
                 Holtart.Value = 1;
@@ -999,29 +1001,29 @@ namespace Villamos.Villamos_Ablakok
                     List<string> lista = new List<string>();
                     while (utolsó + 1 != i)
                     {
-                        int KocsiSz = MyE.Beolvas("o" + i).ToÉrt_Int();
+                        int KocsiSz = MyX.Beolvas(munkalap, "o" + i).ToÉrt_Int();
                         string[] kocsicell = { "u", "w", "y", "aa", "ac" };
                         szöveg = "INSERT INTO Futás (azonosító, dátum, státusz,mikor, ki, telephely )  VALUES (";
 
-                        if (KocsiSz == 1) szöveg += $"'{MyE.Beolvas("s" + i.ToString()).Substring(1).Trim()} ', "; //kocsi          
+                        if (KocsiSz == 1) szöveg += $"'{MyX.Beolvas(munkalap, "s" + i.ToString()).Substring(1).Trim()} ', "; //kocsi          
                         else
                         {
                             //ezzel lehet a hiba
                             int cellid = 0;
                             while (KocsiSz > 1)
                             {
-                                szöveg += "'" + MyE.Beolvas(kocsicell[cellid] + i.ToString()).Substring(1).Trim() + "', ";
+                                szöveg += "'" + MyX.Beolvas(munkalap, kocsicell[cellid] + i.ToString()).Substring(1).Trim() + "', ";
                                 KocsiSz--;
                                 cellid++;
                             }
                         }
 
-                        szöveg += "'" + MyE.BeolvasDátum("d" + i.ToString()).ToString("yyyy.MM.dd").Trim() + "', "; //indulás
-                        if (MyE.Beolvas("n" + i.ToString()).Trim() == string.Empty) szöveg += "'0', "; //nem törölt
+                        szöveg += "'" + MyX.BeolvasDátum(munkalap, "d" + i.ToString()).ToString("yyyy.MM.dd").Trim() + "', "; //indulás
+                        if (MyX.Beolvas(munkalap, "n" + i.ToString()).Trim() == string.Empty) szöveg += "'0', "; //nem törölt
                         else szöveg += "'-1', "; // törölt
                         szöveg += "'" + DateTime.Now.ToString().Trim() + "',"; //mikor
                         szöveg += "'" + Program.PostásNév.Trim() + "' ,"; //ki
-                        switch (MyE.Beolvas("a" + i))
+                        switch (MyX.Beolvas(munkalap, "a" + i))
                         {
                             case "VZA": szöveg += "'Angyalföld' )"; break;
                             case "VZB": szöveg += "'Baross' )"; break;
@@ -1043,7 +1045,7 @@ namespace Villamos.Villamos_Ablakok
                     MyA.ABMódosítás(hely, jelszó, lista);
                 }
                 // az excel tábla bezárása
-                MyE.ExcelBezárás();
+                MyX.ExcelBezárás();
                 Holtart.Visible = false;
                 // kitöröljük a betöltött fájlt
                 //if (File.Exists(fájlexc) == true)
@@ -1629,12 +1631,13 @@ namespace Villamos.Villamos_Ablakok
                     return;
 
                 // megnyitjuk a beolvasandó táblát
-                MyE.ExcelMegnyitás(fájlexc);
+                string munkalap = "Munka1";
+                MyX.ExcelMegnyitás(fájlexc);
 
                 // megnézzük, hogy hány sorból áll a tábla
                 int i = 1;
                 int utolsó = 0;
-                while (MyE.Beolvas("a" + i.ToString()) != "_") { utolsó = i; i += 1; }
+                while (MyX.Beolvas(munkalap, "a" + i.ToString()) != "_") { utolsó = i; i += 1; }
                 Holtart.Maximum = utolsó;
                 Holtart.Visible = true;
                 Holtart.Value = 1;
@@ -1648,10 +1651,10 @@ namespace Villamos.Villamos_Ablakok
                     {
                         //UPDATE Állomány SET Év = '1990' where Azonosító = "1305" (UPDATE szintaktika)
                         szöveg = "UPDATE Állomány SET km_u='";
-                        szöveg += MyE.Beolvas("D" + i) + "',";
+                        szöveg += MyX.Beolvas(munkalap, "D" + i) + "',";
                         szöveg += $" utolsórögzítés='{DateTime.Today.ToString("yyyy.MM.dd").Trim()}'";
                         szöveg += " WHERE Azonosító='";
-                        szöveg += MyE.Beolvas("A" + i).Substring(1).Trim() + "'";
+                        szöveg += MyX.Beolvas(munkalap, "A" + i).Substring(1).Trim() + "'";
 
                         lista.Add(szöveg);
                         Holtart.Value++;
@@ -1663,7 +1666,7 @@ namespace Villamos.Villamos_Ablakok
                 }
 
                 // az excel tábla bezárása
-                MyE.ExcelBezárás();
+                MyX.ExcelBezárás();
                 Holtart.Visible = false;
 
             }

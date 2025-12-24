@@ -8,9 +8,8 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatszerkezet;
 using static Villamos.Főkönyv_Funkciók;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
-
+using MyX = Villamos.MyClosedXML_Excel;
 namespace Villamos
 {
     public partial class Ablak_Napiadatok
@@ -211,37 +210,37 @@ namespace Villamos
                 switch (TáblaNév)
                 {
                     case "Havikiadás":
-                        MyE.DataTableToExcel(fájlexc, AdatTábla);
+                        MyX.DataTableToXML(fájlexc, AdatTábla);
                         break;
                     case "ÁllóKocsik":
-                        MyE.DataTableToExcel(fájlexc, AdatTábla);
+                        MyX.DataTableToXML(fájlexc, AdatTábla);
                         break;
                     case "Napikiadás":
-                        MyE.DataTableToExcel(fájlexc, AdatTábla);
+                        MyX.DataTableToXML(fájlexc, AdatTábla);
                         break;
                     case "napiálló":
-                        MyE.DataTableToExcel(fájlexc, AdatTábla);
+                        MyX.DataTableToXML(fájlexc, AdatTábla);
                         break;
                     case "Típuscsere":
-                        MyE.DataTableToExcel(fájlexc, AdatTábla2);
+                        MyX.DataTableToXML(fájlexc, AdatTábla2);
                         break;
                     case "Személyzet":
-                        MyE.DataTableToExcel(fájlexc, AdatTábla1);
+                        MyX.DataTableToXML(fájlexc, AdatTábla1);
                         break;
                     case "elkészült":
-                        MyE.DataTableToExcel(fájlexc, AdatTábla);
+                        MyX.DataTableToXML(fájlexc, AdatTábla);
                         break;
                     case "havikészült":
-                        MyE.DataTableToExcel(fájlexc, AdatTábla);
+                        MyX.DataTableToXML(fájlexc, AdatTábla);
                         break;
                     case "NapiKarban":
-                        MyE.DataTableToExcel(fájlexc, AdatTábla);
+                        MyX.DataTableToXML(fájlexc, AdatTábla);
                         break;
                     case "HaviSzem":
-                        MyE.DataTableToExcel(fájlexc, AdatTábla);
+                        MyX.DataTableToXML(fájlexc, AdatTábla);
                         break;
                     case "HaviTípus":
-                        MyE.DataTableToExcel(fájlexc, AdatTábla);
+                        MyX.DataTableToXML(fájlexc, AdatTábla);
                         break;
                 }
 
