@@ -7,7 +7,6 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Ablakok.Beosztás;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -167,7 +166,7 @@ namespace Villamos
             Csoportfeltöltés();
             Névfeltöltés();
             Dátum.Value = DateTime.Today;
-            Dátum.MaxDate =MyF.Év_utolsónapja (DateTime.Today.AddYears (1));
+            Dátum.MaxDate = MyF.Év_utolsónapja(DateTime.Today.AddYears(1));
 
             Visszacsukcsoport();
             Visszacsukjadolgozó();

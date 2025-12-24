@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -13,8 +12,8 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
     public class Szatube_EgyeniNyomtatas
     {
         readonly Beállítás_Betű BeBetuCalibri10 = new Beállítás_Betű() { Név = "Calibri", Méret = 10 };
-      readonly  List<string> NyomtatásiFájlok = new List<string>();
-        public void EgyeniNyomtatas( string CmbTelephely, int Adat_Évek, Kezelő_Kiegészítő_Jelenlétiív KézJelenléti, Kezelő_Kiegészítő_főkönyvtábla KézFő, Kezelő_Dolgozó_Alap KézDolgAlap, Kezelő_Szatube_Túlóra KézTúlóra, DataGridView Tábla)
+        readonly List<string> NyomtatásiFájlok = new List<string>();
+        public void EgyeniNyomtatas(string CmbTelephely, int Adat_Évek, Kezelő_Kiegészítő_Jelenlétiív KézJelenléti, Kezelő_Kiegészítő_főkönyvtábla KézFő, Kezelő_Dolgozó_Alap KézDolgAlap, Kezelő_Szatube_Túlóra KézTúlóra, DataGridView Tábla)
         {
             string válasz;
             string munkalap = "Munka1";

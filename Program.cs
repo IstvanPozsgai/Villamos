@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
-using Villamos.Adatszerkezet;
 using Zuby.ADGV;
 
 namespace Villamos

@@ -10,7 +10,6 @@ using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Adatszerkezet;
 using static System.IO.File;
 using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
@@ -4079,13 +4078,13 @@ namespace Villamos
                 {
                     Munkalap = munkalap,
                     NyomtatásiTerület = "a1:g53",
-                    LapMagas =1,
+                    LapMagas = 1,
                     LapSzéles = 1,
                     FejlécKözép = Program.PostásNév,
                     FejlécJobb = DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss"),
                     LáblécKözép = "&P/&N"
                 };
-                MyX.NyomtatásiTerület_részletes(munkalap,BeNyom);
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
                 Holtart.Ki();
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();

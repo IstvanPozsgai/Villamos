@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -540,13 +539,13 @@ namespace Villamos
                     fájlexc = OpenFileDialog1.FileName;
                 else
                     return;
-                
+
                 MyX.ExcelMegnyitás(fájlexc);
                 MyX.Munkalap_aktív(munkalap);
                 int sor = 2;
                 List<Adat_Épület_Takarítás_Osztály> AdatokGyM = new List<Adat_Épület_Takarítás_Osztály>();
                 List<Adat_Épület_Takarítás_Osztály> AdatokGyR = new List<Adat_Épület_Takarítás_Osztály>();
-                while (MyX.Beolvas(munkalap,$"A{sor}").Trim() != "_")
+                while (MyX.Beolvas(munkalap, $"A{sor}").Trim() != "_")
                 {
                     string osztály = MyX.Beolvas(munkalap, "A" + sor.ToString()).Trim();
                     double E3 = double.TryParse(MyX.Beolvas(munkalap, $"D{sor}").Trim(), out double E3P) ? E3P : 0;
@@ -638,9 +637,9 @@ namespace Villamos
                 Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
                 {
                     NyomtatásiTerület = "A1:D" + sor,
-                    IsmétlődőSorok = "",       
+                    IsmétlődőSorok = "",
                     IsmétlődőOszlopok = "",
-                    Álló = true,              
+                    Álló = true,
 
                     LapSzéles = 1,
                     LapMagas = 1,
@@ -665,7 +664,7 @@ namespace Villamos
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyF.Megnyitás(fájlexc );
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

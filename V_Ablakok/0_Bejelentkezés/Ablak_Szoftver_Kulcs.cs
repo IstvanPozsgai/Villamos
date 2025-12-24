@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok._0_Bejelentkezés

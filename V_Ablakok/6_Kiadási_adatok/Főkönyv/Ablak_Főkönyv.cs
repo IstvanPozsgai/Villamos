@@ -11,7 +11,6 @@ using Villamos.Kezelők;
 using Villamos.V_Ablakok._6_Kiadási_adatok.Főkönyv;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv;
-using Villamos.Adatszerkezet;
 using Villamos.Villamos_Nyomtatványok;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;

@@ -8,7 +8,6 @@ using Villamos.Kezelők;
 using Villamos.V_Ablakok._5_Karbantartás.T5C5;
 using Villamos.V_Ablakok.Közös;
 using Villamos.Villamos_Ablakok;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 

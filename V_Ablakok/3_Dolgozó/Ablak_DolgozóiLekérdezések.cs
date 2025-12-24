@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Adatszerkezet;
 using static System.IO.File;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -1871,7 +1870,7 @@ namespace Villamos
         {
             try
             {
-                if (Munkakörtábla.SelectedRows.Count >0)
+                if (Munkakörtábla.SelectedRows.Count > 0)
                 {
                     string hely = $@"{Application.StartupPath}\Főmérnökség\Munkakör\{Cmbtelephely.Text.Trim()}\" + Munkakörtábla.Rows[Munkakörtábla.SelectedRows[0].Index].Cells[5].Value.ToString();
                     if (!Exists(hely)) return;

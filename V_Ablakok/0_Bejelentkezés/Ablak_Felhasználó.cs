@@ -7,7 +7,6 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.MindenEgyéb;
 using Villamos.V_MindenEgyéb;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 

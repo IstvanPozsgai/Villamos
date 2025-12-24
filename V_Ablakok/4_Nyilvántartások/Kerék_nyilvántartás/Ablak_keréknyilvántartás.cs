@@ -11,7 +11,6 @@ using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Ablakok.Kerék_nyilvántartás;
-using Villamos.Adatszerkezet;
 using static System.IO.File;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;

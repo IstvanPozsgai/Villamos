@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -79,7 +78,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             MyX.Kiir("Munkavállaló " + '\n' + "aláírása", "K9");
             //MyX.Betű("a9:k9");
             MyX.Rácsoz(munkalap, "a9:k9");
-         
+
             int sor = 10;
 
             DateTime eleje;
@@ -162,7 +161,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
                 }
             }
             MyX.Rácsoz(munkalap, $"a10:k{sor}");
-  
+
             // dátum
             sor += 1;
             MyX.Kiir("Dátum: " + DateTime.Now.ToString("yyyy.MM.dd"), "a" + sor);

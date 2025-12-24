@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok.Közös

@@ -10,7 +10,6 @@ using Villamos.V_Ablakok._5_Karbantartás.TW6000;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.TW6000;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Adatszerkezet;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -75,14 +74,14 @@ namespace Villamos
                 CiklusListaFeltöltés();
                 AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
 
-                Ütemkezdete.Value =MyF.Hónap_elsőnapja ( DateTime.Today);
-                Ütemvége.Value =   MyF.Hónap_utolsónapja ( DateTime.Today);
+                Ütemkezdete.Value = MyF.Hónap_elsőnapja(DateTime.Today);
+                Ütemvége.Value = MyF.Hónap_utolsónapja(DateTime.Today);
                 Vizsgdátum.Value = DateTime.Today;
                 ÜtemNaplóKezdet.Value = MyF.Hónap_elsőnapja(DateTime.Today.AddDays(-30));
                 ÜtemNaplóVége.Value = MyF.Hónap_utolsónapja(DateTime.Today);
                 NaplóKezdete.Value = MyF.Hónap_elsőnapja(DateTime.Today.AddDays(-30));
                 NaplóVége.Value = MyF.Hónap_utolsónapja(DateTime.Today);
-                Előkezdődátum.Value =    MyF.Hónap_elsőnapja ( DateTime.Today);
+                Előkezdődátum.Value = MyF.Hónap_elsőnapja(DateTime.Today);
                 ElőbefejezőDátum.Value = MyF.Hónap_utolsónapja(DateTime.Today);
 
                 LapFülek.DrawMode = TabDrawMode.OwnerDrawFixed;

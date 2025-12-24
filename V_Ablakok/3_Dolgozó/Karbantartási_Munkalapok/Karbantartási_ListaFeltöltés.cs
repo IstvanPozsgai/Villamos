@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Adatszerkezet;
+
 
 namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
 {

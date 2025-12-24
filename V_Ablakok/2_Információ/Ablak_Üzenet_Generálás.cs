@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok.Közös
@@ -66,7 +65,7 @@ namespace Villamos.V_Ablakok.Közös
                 // ide kell az összes gombot tenni amit szabályozni akarunk false
                 int melyikelem = 200;
                 // módosítás 1
-                GombokLátszanak(false );
+                GombokLátszanak(false);
 
                 if (MyF.Vanjoga(melyikelem, 1))
                 {
@@ -77,7 +76,7 @@ namespace Villamos.V_Ablakok.Közös
                 if (MyF.Vanjoga(melyikelem, 2))
                 {
                     //Minden üzemhez tud írni, így nem kell gomb
-               //     GombokLátszanak(true);
+                    //     GombokLátszanak(true);
 
                 }
             }

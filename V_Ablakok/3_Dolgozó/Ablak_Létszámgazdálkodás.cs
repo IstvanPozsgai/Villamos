@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Adatszerkezet;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -1124,7 +1123,7 @@ namespace Villamos
                 MyX.Munkalap_aktív(munkalap);
                 while (MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop) + "11") != "Összesen:")
                 {
-                              List<Adat_Dolgozó_Státus> Eredmény = (from a in AdatokStátus
+                    List<Adat_Dolgozó_Státus> Eredmény = (from a in AdatokStátus
                                                           where a.Telephelyki == MyX.Beolvas(munkalap, MyF.Oszlopnév(oszlop) + "11").Trim()
                                                           && a.Hrazonosítóbe == "_"
                                                           && a.Névbe == "_"
@@ -1143,7 +1142,7 @@ namespace Villamos
                                 select a).ToList();
                     if (Eredmény != null)
                         Összeg += Eredmény.Count;
-                  
+
 
                     MyX.Kiir($"#SZÁME#{Összeg}", MyF.Oszlopnév(oszlop) + "16");
                     oszlop += 1;
@@ -1227,9 +1226,9 @@ namespace Villamos
                 MyX.Munkalap_aktív(munkalap);
                 MyX.Munkalap_betű(munkalap, BeBetű);
                 MyX.Rácsoz(munkalap, "a1:a8");
-        
+
                 MyX.Rácsoz(munkalap, "a11:a18");
-           
+
                 MyX.Kiir("Szellemi", "a2");
                 MyX.Kiir("Szellemi", "a12");
                 MyX.Kiir("Fizikai", "a3");
@@ -1246,7 +1245,7 @@ namespace Villamos
                 MyX.Kiir("Előzetesen kilépetett", "a15");
                 MyX.Kiir("Üres Státus", "a16");
                 MyX.Kiir("Felvétel Folyamatban", "a17");
-                MyX.Oszlopszélesség(munkalap, "A:A",20);
+                MyX.Oszlopszélesség(munkalap, "A:A", 20);
 
                 // összesítő oszlop
                 MyX.Kiir("Összesen:", MyF.Oszlopnév(öoszlop) + "1");
@@ -1505,7 +1504,7 @@ namespace Villamos
                 // ------------------------------------------
                 if (munkalap != "Adatok")
                 {
-                  string  újmunkalap = "Összesítő";
+                    string újmunkalap = "Összesítő";
                     MyX.Munkalap_aktív(újmunkalap);
 
                     MyX.Kiir(munkalap, MyF.Oszlopnév(öoszlop) + "1");
@@ -1523,7 +1522,7 @@ namespace Villamos
                     MyX.Kiir($"#SZÁME#{passzív}", MyF.Oszlopnév(öoszlop) + "14");
                     MyX.Rácsoz(újmunkalap, MyF.Oszlopnév(öoszlop) + "1:" + MyF.Oszlopnév(öoszlop) + "8");
                     MyX.Rácsoz(újmunkalap, MyF.Oszlopnév(öoszlop) + "11:" + MyF.Oszlopnév(öoszlop) + "18");
-                    MyX.Oszlopszélesség(újmunkalap, MyF.Oszlopnév(öoszlop) + ":" + MyF.Oszlopnév(öoszlop),20);
+                    MyX.Oszlopszélesség(újmunkalap, MyF.Oszlopnév(öoszlop) + ":" + MyF.Oszlopnév(öoszlop), 20);
                     öoszlop += 1;
                 }
             }

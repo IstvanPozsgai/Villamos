@@ -5,12 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Villamos.Kezelők;
 using Villamos.Adatszerkezet;
+using Villamos.Kezelők;
 using Villamos.V_Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.Közös;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 

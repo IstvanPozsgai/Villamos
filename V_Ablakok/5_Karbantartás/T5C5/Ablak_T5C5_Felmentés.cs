@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Adatszerkezet;
 using MyO = Microsoft.Office.Interop.Outlook;
 
 namespace Villamos.V_Ablakok._5_Karbantartás.T5C5

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.V_MindenEgyéb;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Kezelők

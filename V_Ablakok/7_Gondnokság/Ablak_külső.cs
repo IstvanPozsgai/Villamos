@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -831,7 +830,7 @@ namespace Villamos
                 List<Adat_Külső_Cégek> ADATOK = new List<Adat_Külső_Cégek>();
                 for (int iii = 0; iii < Cég_tábla.Rows.Count; iii++)
                 {
-                    if (Cég_tábla.Rows[iii].Selected )
+                    if (Cég_tábla.Rows[iii].Selected)
                     {
                         // ha ki volt jelölve, akkor megvizsgáljuk, hogy minden rendben van 
                         Cégtábal_katt(iii);
@@ -964,7 +963,7 @@ namespace Villamos
             try
             {
                 Engedély_Tábla_író(1);
-                if (Engedély_tábla.Rows.Count < 1)                    return;
+                if (Engedély_tábla.Rows.Count < 1) return;
 
                 int ii = 0;
                 Microsoft.Office.Interop.Outlook.Application _app = new Microsoft.Office.Interop.Outlook.Application();
@@ -1208,7 +1207,7 @@ namespace Villamos
                                 id, //nincs szükség rá
                                 Autó_FRSZ.Text.Trim(),
                                 CegId,
-                                false );
+                                false);
                     Kéz_Járművek.Rögzítés(ADAT);
                 }
                 Autó_tábla_lista();
@@ -1370,7 +1369,7 @@ namespace Villamos
                             0,
                             rendszám,
                             Autó_Cégid.Text.Trim().ToÉrt_Double(),
-                            false );
+                            false);
                         ADATOK.Add(ADAT);
                         Holtart.Lép();
                     }
@@ -1966,7 +1965,7 @@ namespace Villamos
                         {
                             List<Adat_Külső_Cégek> AdatokI = (from a in AdatokIdeig
                                                               where a.Engedély == 1 &&
-                                                              a.Terület.Trim () == Cmbtelephely.Items[k].ToStrTrim()
+                                                              a.Terület.Trim() == Cmbtelephely.Items[k].ToStrTrim()
                                                               orderby a.Cégid
                                                               select a).ToList();
                             Adatok.AddRange(AdatokI);

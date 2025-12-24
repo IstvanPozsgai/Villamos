@@ -7,7 +7,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -44,7 +43,7 @@ namespace Villamos.Kezelők
 
             // Lekéri a Ciklusrend adatbázisból a vizsgálatok közötti megtehető km értékét.
             // Elég az elsőt lekérnünk, mivel minden vizsgálatra egységesen van meghatározva.
-            Vizsgalatok_Kozott_Megteheto_Km = Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Névleges;            
+            Vizsgalatok_Kozott_Megteheto_Km = Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Névleges;
         }
 
         // JAVÍTANDÓ: kerüljön át  Adatbázis_Létrehozás osztályba a CAF alá
@@ -308,7 +307,7 @@ namespace Villamos.Kezelők
             Adat_CAF_Adatok Adott_Villamos = osszes_adat
                                                        .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.Megjegyzés != "Ütemezési Segéd")
                                                        .OrderByDescending(a => a.Dátum)
-                                                       .FirstOrDefault();            
+                                                       .FirstOrDefault();
             // Visszaadja a következő P vizsgálat KM várt értékét.
             return ((Adott_Villamos.KM_Sorszám + 1) * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
         }
@@ -404,7 +403,7 @@ namespace Villamos.Kezelők
                             && a.Megjegyzés != "Ütemezési Segéd")
                 .OrderByDescending(a => a.Dátum)
                 .Take(2)
-                .ToList();     
+                .ToList();
 
             if (p1Vizsgalatok.Count < 2 || p1Vizsgalatok[0].KM_Sorszám == p1Vizsgalatok[1].KM_Sorszám)
                 return null;
@@ -569,14 +568,14 @@ namespace Villamos.Kezelők
             List<int> azonositoLista = OsszesPalyaszam();
             List<int> TortentPvizsgalat = NemTortentPvizsgalat();
 
-            for (int i = 0; i <= azonositoLista.Count()-1; i++)
+            for (int i = 0; i <= azonositoLista.Count() - 1; i++)
             {
                 string Palyaszam = $"{azonositoLista[i]}";
                 if (!TortentPvizsgalat.Contains(Palyaszam.ToÉrt_Int()))
                 {
                     Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(Palyaszam, Utolso_Vizsgalat_Valos_Allasa(Palyaszam), Kovetkezo_P0_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P1_Vizsgalat_KM_Erteke(Palyaszam), Kovetkezo_P2_Vizsgalat_KM_Erteke(Palyaszam), P0_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), P1_vizsgalatok_kozott_megtett_KM_Erteke(Palyaszam), Utolso_P3_es_P2_kozotti_futas(Palyaszam), Elso_P2_rendben_van_e(Palyaszam), Elso_P3_rendben_van_e(Palyaszam), Utolso_P0_Sorszam(Palyaszam), Utolso_P1_Sorszam(Palyaszam), Utolso_P2_Sorszam(Palyaszam), Utolso_P3_Sorszam(Palyaszam));
                     Rögzítés_Elso(teszt);
-                }                           
+                }
             }
         }
 
@@ -603,7 +602,7 @@ namespace Villamos.Kezelők
             {
                 Adat_CAF_KM_Attekintes teszt = new Adat_CAF_KM_Attekintes(palya, Utolso_Vizsgalat_Valos_Allasa(palya), Kovetkezo_P0_Vizsgalat_KM_Erteke(palya), Kovetkezo_P1_Vizsgalat_KM_Erteke(palya), Kovetkezo_P2_Vizsgalat_KM_Erteke(palya), P0_vizsgalatok_kozott_megtett_KM_Erteke(palya), P1_vizsgalatok_kozott_megtett_KM_Erteke(palya), Utolso_P3_es_P2_kozotti_futas(palya), Elso_P2_rendben_van_e(palya), Elso_P3_rendben_van_e(palya), Utolso_P0_Sorszam(palya), Utolso_P1_Sorszam(palya), Utolso_P2_Sorszam(palya), Utolso_P3_Sorszam(palya));
                 Erteket_Frissit(teszt);
-            }          
+            }
         }
     }
 }

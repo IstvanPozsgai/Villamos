@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Kezelők;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -108,7 +107,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
 
             ÁrMunkalap();
             RészletesMunkalap();
-       
+
             AdatokSzolgáltató = KézSzolg.Lista_Adatok();
             Adat_Szolgáltató TakarítóCég = AdatokSzolgáltató.Where(a => a.ID == 1).FirstOrDefault();
 
@@ -851,7 +850,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
 
                 MyX.Sormagasság(munkalap, $"{sor}:{sor}", 70);
                 MyX.Igazít_vízszintes(munkalap, $"A{sor}", "bal");
-                MyX.Sortörésseltöbbsorba (munkalap, $"A{sor}", true );
+                MyX.Sortörésseltöbbsorba(munkalap, $"A{sor}", true);
 
                 sor += 2;
                 sor = TáblázatTIGhez(munkalap, sor, out double Nettó);
@@ -915,7 +914,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
                 MyX.Igazít_vízszintes(munkalap, $"A{sor}", "bal");
 
 
-                sor = Aláírások(munkalap, sor,Szolgáltató);
+                sor = Aláírások(munkalap, sor, Szolgáltató);
                 MyX.Oszlopszélesség(munkalap, "A:A");
                 Beállítás_Nyomtatás benyom = new Beállítás_Nyomtatás
                 {
@@ -975,7 +974,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             MyX.Egyesít(munkalap, $"A{sor}:B{sor}");
             MyX.Egyesít(munkalap, $"F{sor}:H{sor}");
             MyX.Kiir($"BKV ZRT.", $"A{sor}");
-            MyX.Kiir(Szolgáltató.CégCím , $"F{sor}");
+            MyX.Kiir(Szolgáltató.CégCím, $"F{sor}");
 
             sor++;
             MyX.Egyesít(munkalap, $"A{sor}:B{sor}");
@@ -1097,7 +1096,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             return sor;
         }
 
-        private int Vállalkozó(string munkalap, int sor, Adat_Szolgáltató  Szolgáltató)
+        private int Vállalkozó(string munkalap, int sor, Adat_Szolgáltató Szolgáltató)
         {
             sor += 2;
             MyX.Kiir("Valamint", $"A{sor}");
@@ -1129,7 +1128,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             MyX.Egyesít(munkalap, $"B{sor}:C{sor}");
             MyX.Egyesít(munkalap, $"D{sor}:H{sor}");
             MyX.Kiir("Adószám:", $"B{sor}");
-            MyX.Kiir(Szolgáltató.CégAdó , $"D{sor}");
+            MyX.Kiir(Szolgáltató.CégAdó, $"D{sor}");
             MyX.Igazít_vízszintes(munkalap, $"B{sor}", "bal");
             MyX.Igazít_vízszintes(munkalap, $"D{sor}", "bal");
 

@@ -11,7 +11,6 @@ using Villamos.Kezelők;
 using Villamos.V_Ablakok._5_Karbantartás.Fogaskereku;
 using Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös;
 using Villamos.V_MindenEgyéb;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -20,7 +19,7 @@ namespace Villamos
 
     public partial class Ablak_Fogaskerekű_Tulajdonságok
     {
-    
+
         long JelöltSor = -1;
         long TáblaUtolsóSor = -1;
         string _fájlexc;
@@ -1473,7 +1472,7 @@ namespace Villamos
         {
             try
             {
-               
+
 
                 string fájlexc;
 
@@ -1510,7 +1509,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-       
+
 
         #endregion
 
@@ -1591,7 +1590,7 @@ namespace Villamos
                     GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 else
                 {
-                    
+
                 }
 
             }

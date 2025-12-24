@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Kezelők;
-using Villamos.Adatszerkezet;
+
 
 namespace Villamos.V_Ablakok._1_Beállítások
 {

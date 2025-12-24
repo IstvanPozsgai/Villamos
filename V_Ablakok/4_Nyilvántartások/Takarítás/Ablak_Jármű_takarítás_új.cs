@@ -10,8 +10,6 @@ using Villamos.Kezelők;
 using Villamos.V_Ablakok._4_Nyilvántartások.Takarítás;
 using Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás;
-using Villamos.Adatszerkezet;
-
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -5114,8 +5112,8 @@ namespace Villamos
                 {
                     Munkalap = "Munka1",
                     NyomtatásiTerület = $"A1:C{sor}",
-                    LapMagas=1,
-                    LapSzéles=1
+                    LapMagas = 1,
+                    LapSzéles = 1
                 };
                 MyX.NyomtatásiTerület_részletes("Munka1", benyom);
 
