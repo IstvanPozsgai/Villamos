@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
@@ -235,6 +236,29 @@ namespace Villamos
                     fájlexc = OpenFileDialog1.FileName;
                 else
                     return;
+
+                //Kísérlet
+
+                XDocument doc = XDocument.Load(fájlexc);
+
+                var allNames = doc.Descendants()
+                                  .Select(a => a.Name.LocalName)
+                                  .Distinct()
+                                  .OrderBy(n => n)
+                                  .ToList();
+
+
+                foreach (var name in allNames)
+                    szöveg += $"- {name}";
+
+
+
+
+
+
+
+                //Kísérlet
+
 
                 // megnyitjuk a beolvasandó táblát
                 string munkalap = "Munka1";
