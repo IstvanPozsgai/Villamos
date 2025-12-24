@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Villamos.V_Adatszerkezet;
+using Villamos.Adatszerkezet;
 
 namespace Villamos.Adatszerkezet
 {

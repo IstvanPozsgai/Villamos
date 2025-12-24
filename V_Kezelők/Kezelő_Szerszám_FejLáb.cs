@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.V_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 

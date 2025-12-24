@@ -7,7 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Villamos_Adatszerkezet;
@@ -3585,9 +3585,6 @@ namespace Villamos
             try
             {
                 KönyvelésListaFeltöltés();
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Adatok\Szerszám.mdb";
-                string jelszó = "csavarhúzó";
-
                 Adat_Szerszám_Könyvelés ElemKönyvelés = (from a in AdatokKönyvelés
                                                          where a.AzonosítóMás == SzerszámAzonosító.Text.Trim() &&
                                                          a.SzerszámkönyvszámMás == cím
@@ -3613,13 +3610,13 @@ namespace Villamos
 
                     if (mennyiség > 0)
                     {
-                        KézKönyvelés.Módosítás(hely, jelszó, Adat);
+                        KézKönyvelés.Módosítás(Cmbtelephely.Text.Trim(), Könyvtár_adat, Adat);
                         MessageBox.Show("Módosítás megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
 
                     else
                     {
-                        KézKönyvelés.Törlés(hely, jelszó, Adat);
+                        KézKönyvelés.Törlés(Cmbtelephely.Text.Trim(), Könyvtár_adat, Adat);
                         MessageBox.Show("Törlés megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
 
@@ -3630,7 +3627,7 @@ namespace Villamos
                     Szerszámkönyvszám = Hova.Text.Trim();
                     Adat_Szerszám_Könyvelés Adat = new Adat_Szerszám_Könyvelés(mennyiség, DateTime.Now, SzerszámAzonosító.Text.Trim(), Szerszámkönyvszám);
 
-                    KézKönyvelés.Rögzítés(hely, jelszó, Adat);
+                    KézKönyvelés.Rögzítés(Cmbtelephely.Text.Trim(), Könyvtár_adat, Adat);
                     MessageBox.Show("Rögzítés megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
@@ -4541,10 +4538,7 @@ namespace Villamos
             try
             {
                 AdatokKönyvelés.Clear();
-                string szöveg = "SELECT * FROM Könyvelés ORDER BY azonosító";
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Adatok\Szerszám.mdb";
-                string jelszó = "csavarhúzó";
-                AdatokKönyvelés = KézKönyvelés.Lista_Adatok(hely, jelszó, szöveg);
+                AdatokKönyvelés = KézKönyvelés.Lista_Adatok(Cmbtelephely.Text.Trim(), Könyvtár_adat);
             }
             catch (HibásBevittAdat ex)
             {

@@ -896,6 +896,9 @@
     <Compile Include="V_Kezelők\Kezelő_Szatube_Beteg.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szatube_Csúsztatás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szatube_Szabadság.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szerszám_Cikk.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szerszám_Könyv.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szerszám_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szolgáltató.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_Telep_Opció.cs" />
     <Compile Include="V_Kezelők\Kezelő_Users.cs" />
@@ -1376,7 +1379,7 @@
     </Compile>
     <Compile Include="V_Kezelők\Kezelő_jármű.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szerelvény.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Szerszám.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Szerszám_Könyvelés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Utasítás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Vezénylés.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Összevont.cs" />

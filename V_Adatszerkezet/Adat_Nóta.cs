@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Villamos.V_Adatszerkezet
+namespace Villamos.Adatszerkezet
 {
     public class Adat_Nóta
     {

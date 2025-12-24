@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
-using Villamos.V_Adatszerkezet;
+using Villamos.Adatszerkezet;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 {

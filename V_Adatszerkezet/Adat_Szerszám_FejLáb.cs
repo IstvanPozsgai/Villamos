@@ -1,4 +1,4 @@
-﻿namespace Villamos.V_Adatszerkezet
+﻿namespace Villamos.Adatszerkezet
 {
     public class Adat_Szerszám_FejLáb
     {
