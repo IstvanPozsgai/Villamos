@@ -1973,17 +1973,17 @@ namespace Villamos
         Ablak_Nosztalgia Új_Ablak_Nosztalgia;
         private void NosztalgiaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Új_Ablak_Nosztalgia == null)
-            {
-                Új_Ablak_Nosztalgia = new Ablak_Nosztalgia();
-                Új_Ablak_Nosztalgia.FormClosed += Ablak_Nosztalgia_FormClosed;
-                Új_Ablak_Nosztalgia.Show();
-            }
-            else
-            {
-                Új_Ablak_Nosztalgia.Activate();
-                Új_Ablak_Nosztalgia.WindowState = FormWindowState.Maximized;
-            }
+            //if (Új_Ablak_Nosztalgia == null)
+            //{
+            //    Új_Ablak_Nosztalgia = new Ablak_Nosztalgia();
+            //    Új_Ablak_Nosztalgia.FormClosed += Ablak_Nosztalgia_FormClosed;
+            //    Új_Ablak_Nosztalgia.Show();
+            //}
+            //else
+            //{
+            //    Új_Ablak_Nosztalgia.Activate();
+            //    Új_Ablak_Nosztalgia.WindowState = FormWindowState.Maximized;
+            //}
         }
 
         private void Ablak_Nosztalgia_FormClosed(object sender, FormClosedEventArgs e)
