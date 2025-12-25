@@ -5,8 +5,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Villamos.Kezelők;
 using Villamos.Adatszerkezet;
+using Villamos.Kezelők;
 using static System.IO.File;
 using MyF = Függvénygyűjtemény;
 
@@ -405,23 +405,12 @@ namespace Villamos
         }
         #endregion
 
-        //Conttoll mellett az új bejelentekezési ablakot nyitja meg
-        bool CTRL_le = false;
+
         private void LblVerzió_DoubleClick(object sender, EventArgs e)
         {
             AblakBejelentkezés_Új Újablak = new AblakBejelentkezés_Új();
             Újablak.Show();
             this.Hide();
-        }
-
-        private void AblakBejelentkezés_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control) CTRL_le = true;
-        }
-
-        private void AblakBejelentkezés_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Control) CTRL_le = false;
         }
     }
 }

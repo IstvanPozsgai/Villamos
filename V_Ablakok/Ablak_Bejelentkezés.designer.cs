@@ -274,8 +274,6 @@ namespace Villamos
             this.Text = "Bejelentkezés";
             this.Load += new System.EventHandler(this.AblakBejelentkezés_Load);
             this.Shown += new System.EventHandler(this.AblakBejelentkezés_Shown);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AblakBejelentkezés_KeyDown);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.AblakBejelentkezés_KeyUp);
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();
             this.GroupBox2.ResumeLayout(false);
