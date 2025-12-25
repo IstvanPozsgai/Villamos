@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using MyA = Adatbázis;
 
-namespace Villamos.V_Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Kiegészítő_Email
     {

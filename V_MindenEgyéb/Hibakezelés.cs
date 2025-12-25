@@ -4,7 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using Villamos.V_Kezelők;
+using Villamos.Kezelők;
 using MyF = Függvénygyűjtemény;
 using MyO = Microsoft.Office.Interop.Outlook;
 

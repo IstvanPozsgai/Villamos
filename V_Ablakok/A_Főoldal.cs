@@ -10,7 +10,7 @@ using Villamos.Ablakok;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Ablakok._0_Bejelentkezés;
-using Villamos.V_Kezelők;
+using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP;

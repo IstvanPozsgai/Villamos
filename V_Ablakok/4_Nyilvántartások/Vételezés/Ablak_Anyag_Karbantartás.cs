@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
-using Villamos.V_Kezelők;
+using Villamos.Kezelők;
 using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 

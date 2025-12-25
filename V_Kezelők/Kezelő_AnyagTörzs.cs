@@ -8,7 +8,7 @@ using Villamos.V_Adatbázis;
 using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
-namespace Villamos.V_Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_AnyagTörzs
     {
