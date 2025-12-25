@@ -7,7 +7,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using static System.IO.File;
 using MyF = Függvénygyűjtemény;
@@ -1981,7 +1980,7 @@ namespace Villamos
         }
 
         // Új cím vagy módosítás kezelése
-        private void email_tabla_RowValidated(object sender, DataGridViewCellEventArgs e)
+        private void Email_tabla_RowValidated(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
 
@@ -2036,7 +2035,7 @@ namespace Villamos
             email_tabla.Refresh();
         }
 
-        private void email_tabla_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        private void Email_tabla_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
             var row = e.Row;
             string cim = row.Cells["E-mail cím"].Value?.ToString();
@@ -2059,7 +2058,7 @@ namespace Villamos
         }
 
         // Eredeti érték mentése szerkesztés előtt
-        private void email_tabla_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        private void Email_tabla_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
             var sor = email_tabla.Rows[e.RowIndex];
             sor.Tag = sor.Cells["E-mail cím"].Value?.ToString();
