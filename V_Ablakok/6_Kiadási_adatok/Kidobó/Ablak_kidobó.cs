@@ -264,14 +264,7 @@ namespace Villamos
                     }
                 }
 
-                List<string> hibak;
-                List<Adat_Kidobó> adatok = MyX.BeolvasKidobo(fájlexc, out hibak);
-                if (hibak.Count > 0)
-                {
-                    foreach (var h in hibak)
-                        szöveg += $"Hiba: {h}/n";
-                    throw new Exception(szöveg);
-                }
+                List<Adat_Kidobó> adatok = MyX.BeolvasKidobó(fájlexc);
 
                 KézKidobó.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value, adatok);
 
@@ -301,7 +294,7 @@ namespace Villamos
 
         private void Forte_Beolvasás_Click(object sender, EventArgs e)
         {
-            string szöveg = "";
+
             string fájlexc = "";
             try
             {
@@ -336,14 +329,7 @@ namespace Villamos
                     return;
                 }
 
-                List<string> hibak;
-                List<Adat_Kidobó> adatok = MyX.BeolvasKidobo(fájlexc, out hibak);
-                if (hibak.Count > 0)
-                {
-                    foreach (var h in hibak)
-                        szöveg += $"Hiba: {h}/n";
-                    throw new Exception(szöveg);
-                }
+                List<Adat_Kidobó> adatok = MyX.BeolvasKidobó(fájlexc);
 
                 KézKidobó.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value, adatok);
 

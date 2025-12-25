@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 
@@ -83,7 +83,7 @@ namespace Villamos.Kezelők
                 string szöveg = $"UPDATE  {táblanév} SET ";
                 szöveg += $" fejléc='{Adat.Fejléc}', ";
                 szöveg += $" Változónév='{Adat.Változónév}'";
-                szöveg += $" WHERE [csoport]= '{Adat.Csoport}' and [oszlop]={Adat.Oszlop}";
+                szöveg += $" WHERE [csoport]='{Adat.Csoport}' and [oszlop]={Adat.Oszlop}";
                 szöveg += $" and [Státusz]={Adat.Státusz}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -105,8 +105,8 @@ namespace Villamos.Kezelők
             {
                 string szöveg = $"UPDATE  {táblanév} SET ";
                 szöveg += $" Státusz=true";
-                szöveg += $" WHERE [csoport]= '{Adat.Csoport}'  and [oszlop]={Adat.Oszlop}";
-                szöveg += $" and [Státusz]='{Adat.Státusz}'";
+                szöveg += $" WHERE [csoport]='{Adat.Csoport}'  and [oszlop]={Adat.Oszlop}";
+                szöveg += $" and [Státusz]={Adat.Státusz}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
