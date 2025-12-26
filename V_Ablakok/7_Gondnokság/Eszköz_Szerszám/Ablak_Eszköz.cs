@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -21,6 +20,7 @@ namespace Villamos.Villamos_Ablakok
         readonly Kezelő_Szerszám_Könyv KézKönyv = new Kezelő_Szerszám_Könyv();
         readonly Kezelő_Szerszám_Cikk KézSzerszámCikk = new Kezelő_Szerszám_Cikk();
         readonly Kezelő_Eszköz KézEszk = new Kezelő_Eszköz();
+        readonly Kezelő_Szerszám_könvyvelés KézKönyvelés = new Kezelő_Szerszám_könvyvelés();
 
         List<Adat_Szerszám_Cikktörzs> AdatokCikk = new List<Adat_Szerszám_Cikktörzs>();
 
@@ -104,7 +104,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-
         private void Jogosultságkiosztás()
         {
             int melyikelem;
@@ -133,12 +132,10 @@ namespace Villamos.Villamos_Ablakok
 
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
-            string hely = Application.StartupPath + @"\Súgó\VillamosLapok\eszköz.html";
-            MyF.Megnyitás(hely);
-
             try
             {
-
+                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\eszköz.html";
+                MyF.Megnyitás(hely);
 
             }
             catch (HibásBevittAdat ex)
@@ -175,7 +172,7 @@ namespace Villamos.Villamos_Ablakok
 
             }
         }
-        // JAVÍTANDÓ:
+
         private void OsztályozCombo_Feltöltés()
         {
             Szűr_Osztás.Items.Clear();
@@ -183,13 +180,10 @@ namespace Villamos.Villamos_Ablakok
             Szűr_Osztás.Items.Add("Nincs beállítva");
             Szűr_Osztás.Items.Add("Épület");
             Szűr_Osztás.Items.Add("Szerszám");
-
-
         }
-        // JAVÍTANDÓ:
+
         private void EllenCombo_Feltöltés()
         {
-
             Ellen_Besorolás.Items.Clear();
             Ellen_Besorolás.Items.Add("");
             Ellen_Besorolás.Items.Add("Nincs beállítva");
@@ -307,52 +301,42 @@ namespace Villamos.Villamos_Ablakok
             TáblaÍró();
         }
 
-        // JAVÍTANDÓ:
         private void TáblaÍró()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
-                string jelszó = "TóthKatalin";
+                List<Adat_Eszköz> Adatok = KézEszk.Lista_Adatok(Cmbtelephely.Text.Trim());
+                if (Adatok == null) return;
 
-                if (System.IO.File.Exists(hely) == false)
-                    return;
-                string szöveg = "SELECT * FROM Adatok ";
-                if (Szűr_Hely.Text.Trim() != "" || Szűr_Megnevezés.Text.Trim() != "" || Szűr_Név.Text.Trim() != "" || Szűr_Osztás.Text.Trim() != "")
+                if (Szűr_Hely.Text.Trim() != "")
                 {
-                    szöveg += " WHERE ";
-                    bool volt = false;
-                    if (Szűr_Hely.Text.Trim() != "")
-                    {
-                        szöveg += $" Helyiség_megnevezés LIKE '%{Szűr_Hely.Text.Trim()}%'";
-                        volt = true;
-                    }
-                    if (Szűr_Megnevezés.Text.Trim() != "")
-                    {
-                        if (volt) szöveg += " AND ";
-                        szöveg += $" Megnevezés LIKE '%{Szűr_Megnevezés.Text.Trim()}%'";
-                        volt = true;
-
-                    }
-                    if (Szűr_Név.Text.Trim() != "")
-                    {
-                        if (volt) szöveg += " AND ";
-                        szöveg += $" Dolgozó_neve  LIKE '%{Szűr_Név.Text.Trim()}%'";
-                        volt = true;
-                    }
-                    if (Szűr_Osztás.Text.Trim() != "")
-                    {
-                        if (volt) szöveg += " AND ";
-                        szöveg += $" Épület_Szerszám  LIKE '%{Szűr_Osztás.Text.Trim()}%'";
-                        volt = true;
-                    }
-
+                    Adatok = (from a in Adatok
+                              where a.Helyiség_megnevezés.Contains(Szűr_Hely.Text.Trim())
+                              orderby a.Eszköz
+                              select a).ToList();
+                }
+                if (Szűr_Megnevezés.Text.Trim() != "")
+                {
+                    Adatok = (from a in Adatok
+                              where a.Megnevezés.Contains(Szűr_Megnevezés.Text.Trim())
+                              orderby a.Eszköz
+                              select a).ToList();
+                }
+                if (Szűr_Név.Text.Trim() != "")
+                {
+                    Adatok = (from a in Adatok
+                              where a.Dolgozó_neve.Contains(Szűr_Név.Text.Trim())
+                              orderby a.Eszköz
+                              select a).ToList();
+                }
+                if (Szűr_Osztás.Text.Trim() != "")
+                {
+                    Adatok = (from a in Adatok
+                              where a.Épület_Szerszám.Contains(Szűr_Osztás.Text.Trim())
+                              orderby a.Eszköz
+                              select a).ToList();
                 }
 
-                szöveg += " ORDER BY eszköz";
-
-
-                List<Adat_Eszköz> Adatok = KézEszk.Lista_Adatok(hely, jelszó, szöveg);
 
                 DataTable AdatTábla = new DataTable();
 
@@ -442,11 +426,9 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        // JAVÍTANDÓ:   
         private void Cikklétrehozás(string Telephely, string Melyik, Adat_Eszköz EszkAdat)
         {
             // cikk adatok
-            Kezelő_Szerszám_Cikk KézSzerszámCikk = new Kezelő_Szerszám_Cikk();
             List<Adat_Szerszám_Cikktörzs> AAdat = KézSzerszámCikk.Lista_Adatok(Telephely, Melyik);
             string azon = $"E{EszkAdat.Eszköz.Trim()}";
 
@@ -471,7 +453,6 @@ namespace Villamos.Villamos_Ablakok
                 KézSzerszámCikk.Rögzítés(Telephely, Melyik, Adat);
         }
 
-        // JAVÍTANDÓ:
         private void Könyvlétrehozás(string Telephely, string Melyik, Adat_Eszköz EszkAdat)
         {
             VanKönyv = false;
@@ -534,14 +515,10 @@ namespace Villamos.Villamos_Ablakok
             if (AdatHely != null) KézKönyv.Rögzítés(Telephely, Melyik, AdatHely);
         }
 
-        // JAVÍTANDÓ:
         private void KönyvelésLétrehozása(string Telephely, string Melyik, Adat_Eszköz eszkAdat)
         {
-            Kezelő_Szerszám_könvyvelés KézKönyvelés = new Kezelő_Szerszám_könvyvelés();
-
             if (VanKönyv)
             {
-                string szöveg = $"SELECT * FROM könyvelés";
                 string eszkoz = $"E{eszkAdat.Eszköz.Trim()}";
 
                 List<Adat_Szerszám_Könyvelés> Adatok = KézKönyvelés.Lista_Adatok(Telephely, Melyik);
@@ -585,58 +562,50 @@ namespace Villamos.Villamos_Ablakok
             Ellen_TáblaÍró();
         }
 
-        // JAVÍTANDÓ:
         private void Ellen_TáblaÍró()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
-                string jelszó = "TóthKatalin";
+                List<Adat_Eszköz> Adatok = KézEszk.Lista_Adatok(Cmbtelephely.Text.Trim());
 
-                if (!System.IO.File.Exists(hely)) return;
+                if (Adatok == null) return;
 
-                string szöveg = "SELECT * FROM Adatok ";
-                if (Ellen_Besorolás.Text.Trim() != "" || Ellen_Szűrő.Text.Trim() != "Nem vizsgál")
+                if (Ellen_Besorolás.Text.Trim() != "")
                 {
-                    szöveg += " WHERE ";
-                    bool volt = false;
-                    if (Ellen_Besorolás.Text.Trim() != "")
-                    {
-                        if (volt) szöveg += " AND ";
-                        szöveg += $" Épület_Szerszám  LIKE '%{Ellen_Besorolás.Text.Trim()}%'";
-                        volt = true;
-                    }
-                    if (Ellen_Szűrő.Text.Trim() != "")
-                    {
-
-                        switch (Ellen_Szűrő.Text.Trim())
-                        {
-                            case "Nem vizsgál":
-                                break;
-                            case "Csak épület":
-                                if (volt) szöveg += " AND ";
-                                szöveg += " Épület_van=true AND Szerszám_van=false ";
-                                break;
-                            case "Csak szerszám":
-                                if (volt) szöveg += " AND ";
-                                szöveg += " Épület_van=false AND Szerszám_van=true ";
-                                break;
-                            case "Mind kettő":
-                                if (volt) szöveg += " AND ";
-                                szöveg += " Épület_van=true AND Szerszám_van=true ";
-                                break;
-                            case "Egyik sem":
-                                if (volt) szöveg += " AND ";
-                                szöveg += " Épület_van=false AND Szerszám_van=false ";
-                                break;
-                        }
-                    }
+                    Adatok = (from a in Adatok
+                              where a.Épület_Szerszám.Contains(Ellen_Besorolás.Text.Trim())
+                              orderby a.Eszköz
+                              select a).ToList();
                 }
 
-                szöveg += " ORDER BY eszköz";
-
-
-                List<Adat_Eszköz> Adatok = KézEszk.Lista_Adatok(hely, jelszó, szöveg);
+                if (Ellen_Szűrő.Text.Trim() == "Csak épület")
+                {
+                    Adatok = (from a in Adatok
+                              where a.Épület_van == true && a.Szerszám_van == false
+                              orderby a.Eszköz
+                              select a).ToList();
+                }
+                else if (Ellen_Szűrő.Text.Trim() == "Csak szerszám")
+                {
+                    Adatok = (from a in Adatok
+                              where a.Épület_van == false && a.Szerszám_van == true
+                              orderby a.Eszköz
+                              select a).ToList();
+                }
+                else if (Ellen_Szűrő.Text.Trim() == "Mind kettő")
+                {
+                    Adatok = (from a in Adatok
+                              where a.Épület_van == true && a.Szerszám_van == true
+                              orderby a.Eszköz
+                              select a).ToList();
+                }
+                else if (Ellen_Szűrő.Text.Trim() == "Egyik sem")
+                {
+                    Adatok = (from a in Adatok
+                              where a.Épület_van == false && a.Szerszám_van == false
+                              orderby a.Eszköz
+                              select a).ToList();
+                }
 
                 DataTable AdatTábla = new DataTable();
 
@@ -686,27 +655,15 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        // JAVÍTANDÓ:
         private void Ellenőriz()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
-                string jelszó = "TóthKatalin";
-
                 if (Ellen_Tábla.Rows.Count < 1) throw new HibásBevittAdat("A táblázat nem tartalmaz ellenőrindő elemeket");
-                string helySzersz = "";
-                switch (Ellen_Besorolás.Text.Trim())
-                {
-                    case "Épület":
-                        helySzersz = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Helység\Adatok\Szerszám.mdb";
-                        break;
-                    case "Szerszám":
-                        helySzersz = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Szerszám\Adatok\Szerszám.mdb";
-                        break;
-                    default:
-                        throw new HibásBevittAdat("Nincs kiválasztva adatbázis!");
-                }
+
+                if (!(Ellen_Besorolás.Text.Trim() == "Épület" || Ellen_Besorolás.Text.Trim() == "Szerszám"))
+                    throw new HibásBevittAdat("Nincs kiválasztva adatbázis!");
+
 
                 CikktörzsListaFeltöltés(Cmbtelephely.Text.Trim(), Ellen_Besorolás.Text.Trim());
                 List<string> Adatok = (from a in AdatokCikk
@@ -716,28 +673,32 @@ namespace Villamos.Villamos_Ablakok
                 Holtart.Be(100);
 
                 //végigmegyünk a táblázaton és a kijelölt elemeket megvizsgáljuk
-
-                List<string> SzövegGy = new List<string>();
+                List<Adat_Eszköz> AdatokGy = new List<Adat_Eszköz>();
                 for (int j = 0; j < Ellen_Tábla.Rows.Count; j++)
                 {
-                    string szöveg;
+
                     string Eszköz = Ellen_Tábla.Rows[j].Cells[0].Value.ToString().Trim();
                     string EEszköz = "E" + Eszköz;
                     bool Volt = Adatok.Contains(EEszköz);
-                    switch (Ellen_Besorolás.Text.Trim())
+                    if (Ellen_Besorolás.Text.Trim() == "Épület")
                     {
-                        case "Épület":
-                            szöveg = $"UPDATE Adatok SET Épület_van={Volt} WHERE eszköz='{Eszköz}' ";
-                            SzövegGy.Add(szöveg);
-                            break;
-                        case "Szerszám":
-                            szöveg = $"UPDATE Adatok SET Szerszám_van={Volt} WHERE eszköz='{Eszköz}' ";
-                            SzövegGy.Add(szöveg);
-                            break;
+                        Adat_Eszköz ADAT = new Adat_Eszköz(
+                        Eszköz,
+                        Volt,
+                        false);
+                        AdatokGy.Add(ADAT);
+                    }
+                    else
+                    {
+                        Adat_Eszköz ADAT = new Adat_Eszköz(
+                          Eszköz,
+                          false,
+                          Volt);
+                        AdatokGy.Add(ADAT);
                     }
                     Holtart.Lép();
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                if (AdatokGy.Count > 0) KézEszk.MódosításDönt(Cmbtelephely.Text.Trim(), AdatokGy);
                 Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
@@ -769,7 +730,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        // JAVÍTANDÓ:
         private void Besorol_Click(object sender, EventArgs e)
         {
             try
@@ -778,14 +738,9 @@ namespace Villamos.Villamos_Ablakok
                 if (Ellen_Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy eszköz sem.");
                 if (Besorolás_Combo.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve egy besorolási hely sem.");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
-                string jelszó = "TóthKatalin";
-                string szöveg = $"SELECT * FROM Adatok";
+                List<Adat_Eszköz> Adatok = KézEszk.Lista_Adatok(Cmbtelephely.Text.Trim());
 
-                List<Adat_Eszköz> Adatok = KézEszk.Lista_Adatok(hely, jelszó, szöveg);
-
-
-                List<string> SzövegGy = new List<string>();
+                List<Adat_Eszköz> AdatokGy = new List<Adat_Eszköz>();
                 for (int j = 0; j < Ellen_Tábla.Rows.Count; j++)
                 {
                     if (Ellen_Tábla.Rows[j].Selected == true)
@@ -797,16 +752,14 @@ namespace Villamos.Villamos_Ablakok
                                             select a).FirstOrDefault();
 
                         if (vane != null)
-
-
                         {
-                            szöveg = $"UPDATE Adatok SET Épület_Szerszám='{Besorolás_Combo.Text.Trim()}' WHERE eszköz='{Eszköz}' ";
-                            SzövegGy.Add(szöveg);
+                            Adat_Eszköz ADAT = new Adat_Eszköz(Eszköz, Besorolás_Combo.Text.Trim());
+                            AdatokGy.Add(ADAT);
                         }
                     }
                     Holtart.Lép();
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                if (AdatokGy.Count > 0) KézEszk.MódosításBesorol(Cmbtelephely.Text.Trim(), AdatokGy);
                 Holtart.Ki();
                 Ellen_TáblaÍró();
                 MessageBox.Show("A besorolások beállítása megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -821,21 +774,13 @@ namespace Villamos.Villamos_Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // JAVÍTANDÓ:
+
         private void Át_Tölt_Click(object sender, EventArgs e)
         {
             try
             {
                 Holtart.Be(100);
-                //ha nincs kijelölve elem akkor kilép
-                //if (Ellen_Tábla.SelectedRows.Count < 1)
-                //    throw new HibásBevittAdat("Nincs kijelölve egy eszköz sem.");
-
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Eszköz\Eszköz.mdb";
-                string jelszó = "TóthKatalin";
-                string szöveg;
-
+                List<Adat_Eszköz> EszkAdatok = KézEszk.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 //végigmegyünk a táblázaton és a kijelölt elemeket megvizsgáljuk
                 for (int j = 0; j < Ellen_Tábla.Rows.Count; j++)
@@ -844,9 +789,8 @@ namespace Villamos.Villamos_Ablakok
                     if (Ellen_Tábla.Rows[j].Selected == true)
                     {
                         string Eszköz = Ellen_Tábla.Rows[j].Cells[0].Value.ToString().Trim();
-                        szöveg = $"SELECT * FROM Adatok WHERE eszköz='{Eszköz.Trim()}'";
                         //Betöltjük az egy eszközt és az adatai felhasználásával feltöltjük a épületbe, vagy a szerszámban
-                        Adat_Eszköz EszkAdat = KézEszk.Egy_Adat(hely, jelszó, szöveg);
+                        Adat_Eszköz EszkAdat = EszkAdatok.Where(a => a.Eszköz == Eszköz.Trim()).FirstOrDefault();
                         if (EszkAdat != null)
                         {
                             string Melyik_nyilvántartás = Ellen_Tábla.Rows[j].Cells[2].Value.ToString().Trim();
@@ -862,7 +806,6 @@ namespace Villamos.Villamos_Ablakok
                             Könyvlétrehozás(Cmbtelephely.Text.Trim(), Melyik, EszkAdat);
                             //Könyvelés elkészítése
                             KönyvelésLétrehozása(Cmbtelephely.Text.Trim(), Melyik, EszkAdat);
-
                         }
                     }
                     Holtart.Lép();
