@@ -2738,7 +2738,6 @@ namespace Villamos
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ablak_sérülés_FormClosed);
             this.Load += new System.EventHandler(this.Ablak_sérülés_Load);
-            this.Shown += new System.EventHandler(this.Ablak_sérülés_Shown);
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
             this.Lapfülek.ResumeLayout(false);

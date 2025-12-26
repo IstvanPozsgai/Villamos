@@ -76,7 +76,7 @@ namespace Villamos
         #endregion
 
 
-        #region Ablak Töltése
+        #region alap
         public Ablak_sérülés()
         {
             InitializeComponent();
@@ -88,22 +88,11 @@ namespace Villamos
 
         }
 
-
         private void Ablak_sérülés_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_Sérülés_PDF?.Close();
             Új_Ablak_Sérülés_Kép?.Close();
         }
-
-
-        private void Ablak_sérülés_Shown(object sender, EventArgs e)
-        {
-
-        }
-        #endregion
-
-
-        #region alap
 
         private void Start()
         {
@@ -128,7 +117,7 @@ namespace Villamos
                 // létrehozzuk az adott évi táblázatot illetve könyvtárat
                 string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today:yyyy}";
                 if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
+                // JAVÍTANDÓ:
                 hely += $@"\sérülés{DateTime.Today:yyyy}.mdb";
                 if (!Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely);
 
@@ -159,7 +148,6 @@ namespace Villamos
                 Refresh();
                 Cursor = Cursors.Default;
                 Kitöltendő_mezők();
-
             }
             catch (HibásBevittAdat ex)
             {
@@ -448,46 +436,11 @@ namespace Villamos
 
 
         #region CAF lapfül
-        private void CaFListaFeltöltés()
-        {
-            try
-            {
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd";
-                if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\sérüléscaf.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.CAFtáblakészít(hely);
-                AdatokSérülésCaf.Clear();
-                string jelszó = "kismalac";
-                string szöveg = "SELECT * FROM tábla ORDER BY id";
-                AdatokSérülésCaf = KézSérülésCaf.Lista_Adatok(hely, jelszó, szöveg);
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void Cafkiiró()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd";
-                if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\sérüléscaf.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.CAFtáblakészít(hely);
-
-                string jelszó = "kismalac";
-                string szöveg = "SELECT * FROM tábla ORDER BY id";
-
+                AdatokSérülésCaf = KézSérülésCaf.Lista_Adatok(Cmbtelephely.Text.Trim());
                 DataTable AdatTábla = new DataTable();
 
                 AdatTábla.Columns.Clear();
@@ -495,8 +448,6 @@ namespace Villamos
                 AdatTábla.Columns.Add("Cég");
                 AdatTábla.Columns.Add("Név");
                 AdatTábla.Columns.Add("Beosztás");
-
-                AdatokSérülésCaf = KézSérülésCaf.Lista_Adatok(hely, jelszó, szöveg);
 
                 AdatTábla.Clear();
                 foreach (Adat_Telep_Kiegészítő_SérülésCaf rekord in AdatokSérülésCaf)
@@ -555,22 +506,18 @@ namespace Villamos
                 if (Névtext.Text.Trim() == "") throw new HibásBevittAdat("Töltse ki a Név mezőt!");
                 if (BeosztásText.Text.Trim() == "") throw new HibásBevittAdat("Töltse ki a Beosztás mezőt!");
 
-                CaFListaFeltöltés();
+                AdatokSérülésCaf = KézSérülésCaf.Lista_Adatok(Cmbtelephely.Text.Trim());
                 int Rekordszám = 1;
                 if (AdatokSérülésCaf.Count > 0) Rekordszám = AdatokSérülésCaf.Max(a => a.Id) + 1;
 
-                string szöveg = "";
                 if (Cafsorszám == -1)
                 {
-
-                    szöveg = "INSERT INTO tábla (id, cég, név, beosztás) VALUES (";
-                    szöveg += $"{Rekordszám}, ";
-                    szöveg += $"'{Cégtext.Text.Trim()}', ";
-                    szöveg += $"'{Névtext.Text.Trim()}', ";
-                    szöveg += $"'{BeosztásText.Text.Trim()}')";
-                    string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\sérüléscaf.mdb";
-                    string jelszó = "kismalac";
-                    MyA.ABMódosítás(hely, jelszó, szöveg);
+                    Adat_Telep_Kiegészítő_SérülésCaf ADAT = new Adat_Telep_Kiegészítő_SérülésCaf(
+                         Rekordszám,
+                         Cégtext.Text.Trim(),
+                         Névtext.Text.Trim(),
+                         BeosztásText.Text.Trim());
+                    KézSérülésCaf.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
                     MessageBox.Show("A rögzítés megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
@@ -580,14 +527,12 @@ namespace Villamos
                                                                 select a).FirstOrDefault();
                     if (EgyElem != null)
                     {
-                        szöveg = "UPDATE tábla SET ";
-                        szöveg += $"cég='{Cégtext.Text.Trim()}', ";
-                        szöveg += $"név='{Névtext.Text.Trim()}', ";
-                        szöveg += $"beosztás='{BeosztásText.Text.Trim()}' ";
-                        szöveg += $" WHERE [id] ={Cafsorszám}";
-                        string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\sérüléscaf.mdb";
-                        string jelszó = "kismalac";
-                        MyA.ABMódosítás(hely, jelszó, szöveg);
+                        Adat_Telep_Kiegészítő_SérülésCaf ADAT = new Adat_Telep_Kiegészítő_SérülésCaf(
+                            Cafsorszám,
+                            Cégtext.Text.Trim(),
+                            Névtext.Text.Trim(),
+                            BeosztásText.Text.Trim());
+                        KézSérülésCaf.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                         MessageBox.Show("A módosítás megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
@@ -610,7 +555,7 @@ namespace Villamos
             try
             {
                 if (Cafsorszám == -1) throw new HibásBevittAdat("Nincs kiválasztva sorszám!");
-                CaFListaFeltöltés();
+                AdatokSérülésCaf = KézSérülésCaf.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Telep_Kiegészítő_SérülésCaf Elem = (from a in AdatokSérülésCaf
                                                          where a.Id == Cafsorszám
@@ -618,44 +563,13 @@ namespace Villamos
 
                 if (Elem != null)
                 {
-                    string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\sérüléscaf.mdb";
-                    string jelszó = "kismalac";
-                    string szöveg = $"DELETE FROM tábla WHERE id={Cafsorszám}";
-                    MyA.ABtörlés(hely, jelszó, szöveg);
-                    Újraszámolás(hely, jelszó);
+                    KézSérülésCaf.Törlés(Cmbtelephely.Text.Trim(), Cafsorszám);
+                    KézSérülésCaf.Újraszámolás(Cmbtelephely.Text.Trim());
 
                     MessageBox.Show("A törlés megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 Cafkiiró();
                 CAF_ürítő();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToStrTrim(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        void Újraszámolás(string hely, string jelszó)
-        {
-            try
-            {
-                string szöveg = "SELECT * FROM tábla ORDER BY id";
-                AdatokSérülésCaf = KézSérülésCaf.Lista_Adatok(hely, jelszó, szöveg);
-
-                List<string> szövegGy = new List<string>();
-                for (int index = 0; index < AdatokSérülésCaf.Count; index++)
-                {
-                    int újId = index + 1;
-                    szöveg = $"UPDATE tábla SET id={újId} WHERE id={AdatokSérülésCaf[index].Id}";
-                    szövegGy.Add(szöveg);
-                    AdatokSérülésCaf[index].Id = újId;
-                }
-                MyA.ABMódosítás(hely, jelszó, szövegGy);
             }
             catch (HibásBevittAdat ex)
             {
@@ -691,20 +605,13 @@ namespace Villamos
         #endregion
 
 
-
         #region Állanó értékek
         private void Tarifa_kiírása()
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Segéd\sérülés{Dátum_tarifa.Value:yyyy}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely);
-
-                // kitölti az állandó értékeket
-
-                string szöveg = "SELECT * FROM tarifa WHERE id=1";
-                Kezelő_Sérülés_Tarifa Kéz = new Kezelő_Sérülés_Tarifa();
-                Adat_Sérülés_Tarifa Adat = Kéz.Egy_Adat(hely, Sérülésjelszó, szöveg);
+                List<Adat_Sérülés_Tarifa> Adatok = KézTarifa.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum_tarifa.Value.Year);
+                Adat_Sérülés_Tarifa Adat = Adatok.Where(a => a.Id == 1).FirstOrDefault();
                 ÉvestarifaD60.Text = "0";
                 ÉvestarifaD03.Text = "0";
                 if (Adat != null)
@@ -724,37 +631,11 @@ namespace Villamos
             }
         }
 
-        private void ÁllandóListaFeltöltés()
-        {
-            try
-            {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd";
-                if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\sérülés.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Sérüléstábla(hely);
-
-                string jelszó = "kismalac";
-                string szöveg = "SELECT * FROM tábla";
-
-                AdatokSérülésSzöveg = KézSérülésSzöveg.Lista_Adatok(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void Állandókiiró()
         {
             try
             {
-                ÁllandóListaFeltöltés();
+                AdatokSérülésSzöveg = KézSérülésSzöveg.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Kiegészítő_SérülésSzöveg Rekord = (from a in AdatokSérülésSzöveg
                                                         where a.Id == 1
                                                         select a).FirstOrDefault();
@@ -794,11 +675,7 @@ namespace Villamos
                 if (ÉvestarifaD03.Text.Trim() == "") throw new HibásBevittAdat("Töltse ki a ÉvestarifaD03 mezőt!");
                 if (!int.TryParse(ÉvestarifaD03.Text, out int ÉvesD03)) throw new HibásBevittAdat("Az Éves D03 tarifa egész számnak kell lennie!");
 
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Segéd\sérülés{Dátum_tarifa.Value.Year}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely);
-
-                string szöveg = "SELECT * FROM tarifa";
-                List<Adat_Sérülés_Tarifa> Adatok = KézTarifa.Lista_Adatok(hely, Sérülésjelszó, szöveg);
+                List<Adat_Sérülés_Tarifa> Adatok = KézTarifa.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum_tarifa.Value.Year);
                 Adat_Sérülés_Tarifa Elem = (from a in Adatok
                                             where a.Id == 1
                                             select a).FirstOrDefault();
@@ -806,24 +683,22 @@ namespace Villamos
 
                 if (Elem != null)
                 {
+                    Adat_Sérülés_Tarifa ADAT = new Adat_Sérülés_Tarifa(
+                        1,
+                        ÉvesD60,
+                        ÉvesD03);
+                    KézTarifa.Módosítás(Cmbtelephely.Text.Trim(), Dátum_tarifa.Value.Year, ADAT);
                     // módosítás
-                    szöveg = "UPDATE tarifa SET ";
-                    szöveg += $"d60tarifa={ÉvesD60}, ";
-                    szöveg += $"d03tarifa={ÉvesD03}";
-                    szöveg += " WHERE [id] =1";
-                    MyA.ABMódosítás(hely, Sérülésjelszó, szöveg);
-
                     MessageBox.Show("A módosítás megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
                     // új adat
-                    szöveg = "INSERT INTO tarifa  (id, d60tarifa, d03tarifa ) VALUES (";
-                    szöveg += "1, ";
-                    szöveg += $"{ÉvesD60}, ";
-                    szöveg += $"{ÉvesD03}) ";
-                    MyA.ABMódosítás(hely, Sérülésjelszó, szöveg);
-
+                    Adat_Sérülés_Tarifa ADAT = new Adat_Sérülés_Tarifa(
+                            1,
+                            ÉvesD60,
+                            ÉvesD03);
+                    KézTarifa.Rögzítés(Cmbtelephely.Text.Trim(), Dátum_tarifa.Value.Year, ADAT);
                     MessageBox.Show("A rögzítés megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -859,54 +734,35 @@ namespace Villamos
                 if (Text6.Text.Trim() == "") Text6.Text = "_";
                 if (Text7.Text.Trim() == "") Text7.Text = "_";
 
-                ÁllandóListaFeltöltés();
-
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\segéd\sérülés.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Sérüléstábla(hely);
-
-                string jelszó = "kismalac";
-                string szöveg = "SELECT * FROM tábla ";
-
+                AdatokSérülésSzöveg = KézSérülésSzöveg.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adat_Kiegészítő_SérülésSzöveg Elem = (from a in AdatokSérülésSzöveg
                                                       where a.Id == 1
                                                       select a).FirstOrDefault();
 
+                Adat_Kiegészítő_SérülésSzöveg ADAT = new Adat_Kiegészítő_SérülésSzöveg(
+                     1,
+                     Iktatószám.Text.Trim(),
+                     Kiállította.Text.Trim(),
+                     Telefonszám.Text.Trim(),
+                     Eszköz.Text.Trim(),
+                     Text1.Text.Trim(),
+                     Text2.Text.Trim(),
+                     Text3.Text.Trim(),
+                     Text4.Text.Trim(),
+                     Text5.Text.Trim(),
+                     Text6.Text.Trim(),
+                     Text7.Text.Trim());
+
                 if (Elem != null)
                 {
                     // módosítás
-                    szöveg = "UPDATE tábla SET ";
-                    szöveg += $"szöveg1='{Iktatószám.Text.Trim()}', ";
-                    szöveg += $"szöveg2='{Kiállította.Text.Trim()}', ";
-                    szöveg += $"szöveg3='{Telefonszám.Text.Trim()}', ";
-                    szöveg += $"szöveg4='{Eszköz.Text.Trim()}', ";
-                    szöveg += $"szöveg5='{Text1.Text.Trim()}', ";
-                    szöveg += $"szöveg6='{Text2.Text.Trim()}', ";
-                    szöveg += $"szöveg7='{Text3.Text.Trim()}', ";
-                    szöveg += $"szöveg8='{Text4.Text.Trim()}', ";
-                    szöveg += $"szöveg9='{Text5.Text.Trim()}', ";
-                    szöveg += $"szöveg10='{Text6.Text.Trim()}', ";
-                    szöveg += $"szöveg11='{Text7.Text.Trim()}' ";
-                    szöveg += " WHERE [id] =1";
+                    KézSérülésSzöveg.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
                 }
                 else
                 {
                     // új
-                    szöveg = "INSERT INTO tábla (id, szöveg1, szöveg2, szöveg3, szöveg4, szöveg5, szöveg6, szöveg7, szöveg8, szöveg9, szöveg10, szöveg11) VALUES (";
-                    szöveg += "1, ";
-                    szöveg += $"'{Iktatószám.Text.Trim()}', ";
-                    szöveg += $"'{Kiállította.Text.Trim()}', ";
-                    szöveg += $"'{Telefonszám.Text.Trim()}', ";
-                    szöveg += $"'{Eszköz.Text.Trim()}', ";
-                    szöveg += $"'{Text1.Text.Trim()}', ";
-                    szöveg += $"'{Text2.Text.Trim()}', ";
-                    szöveg += $"'{Text3.Text.Trim()}', ";
-                    szöveg += $"'{Text4.Text.Trim()}', ";
-                    szöveg += $"'{Text5.Text.Trim()}', ";
-                    szöveg += $"'{Text6.Text.Trim()}', ";
-                    szöveg += $"'{Text7.Text.Trim()}')";
+                    KézSérülésSzöveg.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
                 }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-
                 Állandókiiró();
 
                 MessageBox.Show("Az adatok rögzítése/ módosítása megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -926,7 +782,7 @@ namespace Villamos
         {
             try
             {
-                ÁllandóListaFeltöltés();
+                AdatokSérülésSzöveg = KézSérülésSzöveg.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adat_Kiegészítő_SérülésSzöveg Elem = (from a in AdatokSérülésSzöveg
                                                       where a.Id == 2
@@ -959,42 +815,36 @@ namespace Villamos
             if (TxtBxBeosztas1.Text.Trim() == "") throw new HibásBevittAdat("Töltse ki az 1. Beosztás mezőt.");
             if (TxtBxBeosztas2.Text.Trim() == "") throw new HibásBevittAdat("Töltse ki a 2. Beosztás mezőt.");
 
-            ÁllandóListaFeltöltés();
+            AdatokSérülésSzöveg = KézSérülésSzöveg.Lista_Adatok(Cmbtelephely.Text.Trim());
 
             Adat_Kiegészítő_SérülésSzöveg Elem = (from a in AdatokSérülésSzöveg
                                                   where a.Id == 2
                                                   select a).FirstOrDefault();
-            string szöveg;
+
+            Adat_Kiegészítő_SérülésSzöveg ADAT = new Adat_Kiegészítő_SérülésSzöveg(
+                2,
+                TxtBxDigitalisAlairo1.Text.Trim(),
+                TxtBxDigitalisAlairo2.Text.Trim(),
+                TxtBxBeosztas1.Text.Trim(),
+                TxtBxBeosztas2.Text.Trim(),
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_",
+                "_");
+
             if (Elem != null)
             {
                 // módosítás
-                szöveg = "UPDATE tábla SET ";
-                szöveg += $"szöveg1='{TxtBxDigitalisAlairo1.Text.Trim()}', ";
-                szöveg += $"szöveg2='{TxtBxDigitalisAlairo2.Text.Trim()}', ";
-                szöveg += $"szöveg3='{TxtBxBeosztas1.Text.Trim()}', ";
-                szöveg += $"szöveg4='{TxtBxBeosztas2.Text.Trim()}'";
-                szöveg += " WHERE [id] = 2";
+                KézSérülésSzöveg.Módosítás(Cmbtelephely.Text.Trim(), ADAT);
             }
             else
             {
                 // új adat
-                szöveg = "INSERT INTO tábla (id, szöveg1, szöveg2, szöveg3, szöveg4, szöveg5, szöveg6, szöveg7, szöveg8, szöveg9, szöveg10, szöveg11) VALUES (";
-                szöveg += $"2, ";
-                szöveg += $"'{TxtBxDigitalisAlairo1.Text.Trim()}', ";
-                szöveg += $"'{TxtBxDigitalisAlairo2.Text.Trim()}', ";
-                szöveg += $"'{TxtBxBeosztas1.Text.Trim()}', ";
-                szöveg += $"'{TxtBxBeosztas2.Text.Trim()}', ";
-                szöveg += $"'-', ";
-                szöveg += $"'-', ";
-                szöveg += $"'-', ";
-                szöveg += $"'-', ";
-                szöveg += $"'-', ";
-                szöveg += $"'-', ";
-                szöveg += $"'-')";
+                KézSérülésSzöveg.Rögzítés(Cmbtelephely.Text.Trim(), ADAT);
             }
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Segéd\sérülés.mdb";
-            string jelszó = "kismalac";
-            MyA.ABMódosítás(hely, jelszó, szöveg);
             MessageBox.Show("A rögzítés/módosítás megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             DigitálisKiíró();
         }
@@ -1096,8 +946,6 @@ namespace Villamos
                     Soradat["Psz"] = rekord.Rendszám;
                     Soradat["Járművezető"] = rekord.Járművezető;
                     Soradat["Rendelésszám"] = rekord.Rendelésszám;
-
-
 
                     switch (rekord.Státus)
                     {

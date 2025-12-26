@@ -539,6 +539,7 @@
       <DependentUpon>Ablak_Nosztalgia.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Adatszerkezet\Adat_Nosztalgia_Tevékenység.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_SérülésSzöveg.cs" />
     <Compile Include="V_Kezelők\Kezelő_Külső_Dolgozók.cs" />
     <Compile Include="V_Kezelők\Kezelő_Külső_Email.cs" />
     <Compile Include="V_Kezelők\Kezelő_Külső_Gépjárművek.cs" />
@@ -901,7 +902,10 @@
     <Compile Include="V_Kezelők\Kezelő_Szerszám_Könyv.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szerszám_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szolgáltató.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Sérülés_Költség.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Sérülés_Tarifa.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_Telep_Opció.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_SérülésCaf.cs" />
     <Compile Include="V_Kezelők\Kezelő_Users.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Mérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Napló.cs" />
