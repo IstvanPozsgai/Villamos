@@ -246,7 +246,6 @@ namespace Villamos.Villamos_Ablakok
 
 
         #region Adatbeolvasás lapfül
-        // JAVÍTANDÓ:
         private void SAP_adatok_Click(object sender, EventArgs e)
         {
             try
@@ -256,7 +255,7 @@ namespace Villamos.Villamos_Ablakok
                     InitialDirectory = "MyDocuments",
                     Title = "SAP-s Adatok betöltése",
                     FileName = "",
-                    Filter = "Excel 97-2003 (*.xls)|*.xls|Excel (*.xlsx)|*.xlsx"
+                    Filter = "(*.html)|*.html"
                 };
                 string fájlexc;
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép

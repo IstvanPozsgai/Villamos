@@ -377,6 +377,7 @@
     <Compile Include="V_Adatszerkezet\Beállítás_Betű.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Kimutatás.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Nyomtatás.cs" />
+    <Compile Include="V_Függvények\HtmlToDataTable.cs" />
     <Compile Include="V_Függvények\Oszlopneve.cs" />
     <Compile Include="V_Input_Forms\InputCheckbox.cs" />
     <Compile Include="V_Input_Forms\InputDate.cs" />
@@ -1394,7 +1395,7 @@
     </Compile>
     <Compile Include="V_MindenEgyéb\AccessDatabaseHelper.cs" />
     <Compile Include="V_MindenEgyéb\Enumok.cs" />
-    <Compile Include="V_MindenEgyéb\Excel_Kezelés.cs" />
+    <Compile Include="V_Függvények\Excel_Kezelés.cs" />
     <Compile Include="V_Függvények\Fv_Dátum.cs" />
     <Compile Include="V_Függvények\Függvénygyűjtemény.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Funkciók.cs" />
@@ -2111,6 +2112,9 @@
     </PackageReference>
     <PackageReference Include="ExcelDataReader.DataSet">
       <Version>3.8.0-develop00488</Version>
+    </PackageReference>
+    <PackageReference Include="HtmlAgilityPack">
+      <Version>1.12.4</Version>
     </PackageReference>
     <PackageReference Include="iTextSharp">
       <Version>5.5.13.4</Version>

@@ -322,7 +322,7 @@ namespace Villamos.V_MindenEgyéb
         {
             try
             {
-                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexcel);
+                DataTable Tábla = MyF.Html_Tábla_Beolvas(fájlexcel);
                 //Ellenőrzés
                 if (!MyF.Betöltéshelyes("Eszköz", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
 

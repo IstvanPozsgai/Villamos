@@ -42,7 +42,8 @@ public static partial class Függvénygyűjtemény
                 int i = 0;
                 while (volt == false && i < Tábla.Columns.Count)
                 {
-                    if (rekord.Fejléc.Trim() == Tábla.Columns[i].ColumnName.Trim()) volt = true;
+                    if (rekord.Fejléc.Trim() == Tábla.Columns[i].ColumnName.Trim())
+                        volt = true;
                     i++;
                 }
                 if (!volt)

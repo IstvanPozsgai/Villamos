@@ -37,7 +37,6 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                string érték = rekord["Változónév"].ToStrTrim();
                                 Adat_Excel_Beolvasás Adat = new Adat_Excel_Beolvasás(
                                         rekord["csoport"].ToStrTrim(),
                                         rekord["oszlop"].ToÉrt_Int(),
