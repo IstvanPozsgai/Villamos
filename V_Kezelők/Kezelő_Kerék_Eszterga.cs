@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -79,7 +79,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        //Elkopó
+        // JAVÍTANDÓ:Elkopó
         public List<Adat_Kerék_Eszterga> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Kerék_Eszterga> Adatok = new List<Adat_Kerék_Eszterga>();

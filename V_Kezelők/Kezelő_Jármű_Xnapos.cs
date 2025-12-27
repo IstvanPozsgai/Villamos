@@ -143,7 +143,7 @@ namespace Villamos.Kezelők
         }
 
 
-
+        // JAVÍTANDÓ:Elkopó
         public List<Adat_Jármű_Xnapos> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Jármű_Xnapos> Adatok = new List<Adat_Jármű_Xnapos>();

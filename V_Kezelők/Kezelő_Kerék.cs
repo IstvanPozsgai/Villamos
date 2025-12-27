@@ -4,8 +4,8 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -157,6 +157,7 @@ namespace Villamos.Kezelők
 
     public class Kezelő_Kerék_Eszterga_Beállítás
     {
+        // JAVÍTANDÓ:Elkopó
         public List<Adat_Kerék_Eszterga_Beállítás> Lista_Adatok(string hely, string jelszó, string szöveg)
         {
             List<Adat_Kerék_Eszterga_Beállítás> Adatok = new List<Adat_Kerék_Eszterga_Beállítás>();

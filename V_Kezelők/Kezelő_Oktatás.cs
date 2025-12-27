@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -22,39 +22,6 @@ namespace Villamos.Kezelők
         public List<Adat_Oktatásrajelöltek> Lista_Adatok()
         {
             string szöveg = "SELECT * FROM oktatásrajelöltek";
-            List<Adat_Oktatásrajelöltek> Adatok = new List<Adat_Oktatásrajelöltek>();
-            Adat_Oktatásrajelöltek Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Oktatásrajelöltek(
-                                        rekord["HRazonosító"].ToStrTrim(),
-                                        rekord["IDoktatás"].ToÉrt_Long(),
-                                        rekord["mikortól"].ToÉrt_DaTeTime(),
-                                        rekord["Státus"].ToÉrt_Long(),
-                                        rekord["telephely"].ToStrTrim()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public List<Adat_Oktatásrajelöltek> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
             List<Adat_Oktatásrajelöltek> Adatok = new List<Adat_Oktatásrajelöltek>();
             Adat_Oktatásrajelöltek Adat;
 

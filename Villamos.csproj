@@ -972,7 +972,6 @@
     <Compile Include="V_Kezelők\Kezelő_Jármű_Vendég.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Állomány_Típus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék.cs" />
-    <Compile Include="V_Kezelők\Kezelő_KerékMérő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga_Automata.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Tábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiadás_Összesítő.cs" />
@@ -990,7 +989,6 @@
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Forte_Vonal.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Főkategóriatábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_főkönyvtábla.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Főmérnökség.cs" />
     <Compile Include="V_Kezelők\Kezelő_kiegészítő_Hibaterv.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Idő_Kor.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Idő_Tábla.cs" />
@@ -1024,7 +1022,6 @@
     <Compile Include="V_Kezelők\Kezelő_MEO_Tábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munkakör.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munkalap.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Munkalapösszesítő.cs" />
     <Compile Include="V_Kezelők\Kezelő_MunkaRend.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munka_Adatok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Munka_Idő.cs" />
