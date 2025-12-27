@@ -30,6 +30,7 @@ namespace Villamos
         readonly Kezelő_Sérülés_Anyag KézSérülésAnyag = new Kezelő_Sérülés_Anyag();
         readonly Kezelő_Sérülés_Művelet KézSérülésMűvelet = new Kezelő_Sérülés_Művelet();
         readonly Kezelő_Sérülés_Visszajelentés KézSérülésVisszajelentés = new Kezelő_Sérülés_Visszajelentés();
+        readonly Kezelő_Sérülés_Ideig KézKieg = new Kezelő_Sérülés_Ideig();
         readonly Kezelő_Alap_Beolvasás KézBeolvas = new Kezelő_Alap_Beolvasás();
 
         List<Adat_Kiegészítő_SérülésSzöveg> AdatokSérülésSzöveg = new List<Adat_Kiegészítő_SérülésSzöveg>();
@@ -1199,7 +1200,6 @@ namespace Villamos
             }
         }
 
-
         private void KépLementés_Click(object sender, EventArgs e)
         {
             try
@@ -1228,7 +1228,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void KépTörlés_Click(object sender, EventArgs e)
         {
@@ -1295,7 +1294,6 @@ namespace Villamos
             }
         }
 
-
         private void Új_Ablak_Sérülés_Kép_Closed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_Sérülés_Kép = null;
@@ -1336,7 +1334,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Új_Ablak_Sérülés_PDF_Closed(object sender, FormClosedEventArgs e)
         {
@@ -1495,12 +1492,6 @@ namespace Villamos
 
                 if (SapRendelés.Text.Trim() == "" || SapRendelés.Text.Trim() == "0") throw new HibásBevittAdat("A Rendelés mező üres!");
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{KöltDátumtól.Value:yyyy}\sérülés{KöltDátumtól.Value:yyyy}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely);
-
-                string szöveg = "SELECT * FROM művelet WHERE ";
-                if (SapRendelés.Text.ToStrTrim() != "") szöveg += $" rendelés={SapRendelés.Text.ToStrTrim()}";
-
                 DataTable AdatTábla = new DataTable();
 
                 AdatTábla.Columns.Clear();
@@ -1510,12 +1501,10 @@ namespace Villamos
                 AdatTábla.Columns.Add("Visszaszám");
                 AdatTábla.Columns.Add("Költség");
 
+                List<Adat_Sérülés_Művelet> AdatokMűvelet = KézSérülésMűvelet.Lista_Adatok(KöltDátumtól.Value.Year);
+                Adat_Sérülés_Művelet Adat = AdatokMűvelet.Where(a => a.Rendelés == SapRendelés.Text.ToÉrt_Int()).FirstOrDefault();
 
-                Adat_Sérülés_Művelet Adat = KézSérülésMűvelet.Egy_Adat(hely, Sérülésjelszó, szöveg);
-
-                szöveg = "SELECT * FROM visszajelentés";
-                Kezelő_Sérülés_Visszajelentés KézVissza = new Kezelő_Sérülés_Visszajelentés();
-                List<Adat_Sérülés_Visszajelentés> AdatokVissza = KézVissza.Lista_Adatok(hely, Sérülésjelszó, szöveg);
+                List<Adat_Sérülés_Visszajelentés> AdatokVissza = KézSérülésVisszajelentés.Lista_Adatok(KöltDátumtól.Value.Year);
                 if (!double.TryParse(ÉvestarifaD60.Text, out double TarifaD60)) TarifaD60 = 0;
                 if (!double.TryParse(ÉvestarifaD03.Text, out double TarifaD03)) TarifaD03 = 0;
 
@@ -1665,29 +1654,25 @@ namespace Villamos
                 string munkalap = "Munka1";
                 MyX.ExcelMegnyitás(fájlexc);
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{SapDátum.Value:yyyy}\sérülés{SapDátum.Value:yyyy}.mdb";
-
-                // ellenőrizzük, hogy léteznek a táblák
-                if (!Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely);
-
-                string szöveg = $"SELECT * FROM Anyag ";
-                List<Adat_Sérülés_Anyag> AnyagAdatok = KézSérülésAnyag.Lista_Adatok(hely, Sérülésjelszó, szöveg);
-
+                List<Adat_Sérülés_Anyag> AnyagAdatok = KézSérülésAnyag.Lista_Adatok(SapDátum.Value.Year);
                 List<Adat_Sérülés_Költség> KölstégAdatok = KézSérülésKöltség.Lista_Adatok(SapDátum.Value.Year);
-                szöveg = $"SELECT * FROM Művelet";
-                List<Adat_Sérülés_Művelet> MűveletAdatok = KézSérülésMűvelet.Lista_Adatok(hely, Sérülésjelszó, szöveg);
-                szöveg = $"SELECT * FROM Visszajelentés";
-                List<Adat_Sérülés_Visszajelentés> VisszajelentésAdatok = KézSérülésVisszajelentés.Lista_Adatok(hely, Sérülésjelszó, szöveg);
+                List<Adat_Sérülés_Művelet> MűveletAdatok = KézSérülésMűvelet.Lista_Adatok(SapDátum.Value.Year);
+                List<Adat_Sérülés_Visszajelentés> VisszajelentésAdatok = KézSérülésVisszajelentés.Lista_Adatok(SapDátum.Value.Year);
                 // rendelés szám adatokat átnézzük ha van már ilyen adat az adtok között először töröljük
                 int i = 1;
                 int hossz, eleje, vége;
-                string szó, rendelés, ideig;
+                string szó, ideig;
+                int rendelés;
                 int szószám, utolsóeleje, rendelésstátus;
-                double anyagköltség, munkaköltség, gépköltség, szolgáltatás;
-
+                int anyagköltség, munkaköltség, gépköltség, szolgáltatás;
+                string szöveg;
 
                 Holtart.Be();
                 int utolsó_sor = MyX.Utolsósor(munkalap);
+                List<double> Költrend = new List<double>();
+                List<double> Művrend = new List<double>();
+                List<double> Visszrend = new List<double>();
+                List<double> Anyagrend = new List<double>();
                 while (MyX.Beolvas(munkalap, $"A{i}").Trim() != "_")
                 {
                     Holtart.Lép();
@@ -1718,53 +1703,40 @@ namespace Villamos
                                 vége = 0;
                             }
 
-                            if (double.TryParse(szó.ToStrTrim(), out double RendeléS))
+                            if (int.TryParse(szó.ToStrTrim(), out rendelés))
                             {
                                 // itt kell nyitogatni a táblákat és törölni az előző adatokat
-                                List<string> GySzöveg = new List<string>();
-
                                 Adat_Sérülés_Költség KöltségElem = (from a in KölstégAdatok
-                                                                    where a.Rendelés == RendeléS
+                                                                    where a.Rendelés == rendelés
                                                                     select a).FirstOrDefault();
-                                if (KöltségElem != null)
-                                {
-                                    szöveg = $"DELETE FROM költség WHERE rendelés={RendeléS}";
-                                    GySzöveg.Add(szöveg);
-                                }
+                                if (KöltségElem != null) Költrend.Add(rendelés);
 
                                 Adat_Sérülés_Művelet MűveletElem = (from a in MűveletAdatok
-                                                                    where a.Rendelés == RendeléS
+                                                                    where a.Rendelés == rendelés
                                                                     select a).FirstOrDefault();
-                                if (MűveletElem != null)
-                                {
-                                    szöveg = $"DELETE FROM Művelet WHERE rendelés={RendeléS}";
-                                    GySzöveg.Add(szöveg);
-                                }
+                                if (MűveletElem != null) Művrend.Add(rendelés);
 
                                 Adat_Sérülés_Visszajelentés VisszajelentésElem = (from a in VisszajelentésAdatok
-                                                                                  where a.Rendelés == RendeléS
+                                                                                  where a.Rendelés == rendelés
                                                                                   select a).FirstOrDefault();
-                                if (VisszajelentésElem != null)
-                                {
-                                    szöveg = $"DELETE FROM Visszajelentés WHERE rendelés={RendeléS}";
-                                    GySzöveg.Add(szöveg);
-                                }
+                                if (VisszajelentésElem != null) Visszrend.Add(rendelés);
+
 
                                 Adat_Sérülés_Anyag AnyagElem = (from a in AnyagAdatok
-                                                                where a.Rendelés == RendeléS
+                                                                where a.Rendelés == rendelés
                                                                 select a).FirstOrDefault();
-                                if (AnyagElem != null)
-                                {
-                                    szöveg = $"DELETE FROM Anyag WHERE rendelés={RendeléS}";
-                                    GySzöveg.Add(szöveg);
-                                }
+
                                 szószám += 1;
-                                if (GySzöveg.Count > 0) MyA.ABtörlés(hely, Sérülésjelszó, GySzöveg);
                             }
                         }
                     }
                     i += 1;
                 }
+
+                if (Költrend.Count > 0) KézSérülésKöltség.Törlés(SapDátum.Value.Year, Költrend);
+                if (Művrend.Count > 0) KézSérülésMűvelet.Törlés(SapDátum.Value.Year, Művrend);
+                if (Visszrend.Count > 0) KézSérülésVisszajelentés.Törlés(SapDátum.Value.Year, Visszrend);
+                if (Anyagrend.Count > 0) KézSérülésAnyag.Törlés(SapDátum.Value.Year, Anyagrend);
 
 
                 #region  Költség sorok
@@ -1775,7 +1747,7 @@ namespace Villamos
                 szolgáltatás = 0;
                 rendelésstátus = 0;
 
-                List<string> szövegGy = new List<string>();
+                List<Adat_Sérülés_Ideig> AdatokIdeig = new List<Adat_Sérülés_Ideig>();
                 while (MyX.Beolvas(munkalap, $"A{i}").Trim() != "_")
                 {
 
@@ -1790,49 +1762,50 @@ namespace Villamos
                     }
                     if (szöveg.Substring(0, 2) == "HU")
                     {
-                        rendelés = Adat_módosítás(2, 10, szöveg).ToStrTrim().Replace(".", "");
+                        rendelés = Adat_módosítás(2, 10, szöveg).ToStrTrim().Replace(".", "").ToÉrt_Int();
                         ideig = Adat_módosítás(11, 22, szöveg).Replace(".", "").Replace(" ", "");
                         switch (szöveg.Substring(szöveg.Length - 4, 4))
                         {
                             case "513)":
                                 {
-                                    if (!double.TryParse(ideig, out anyagköltség)) anyagköltség = 0;
+                                    if (!int.TryParse(ideig, out anyagköltség)) anyagköltség = 0;
                                     break;
                                 }
                             case "571)":
                                 {
-                                    if (!double.TryParse(ideig, out munkaköltség)) munkaköltség = 0;
+                                    if (!int.TryParse(ideig, out munkaköltség)) munkaköltség = 0;
                                     break;
                                 }
                             case "566)":
                                 {
-                                    if (!double.TryParse(ideig, out gépköltség)) gépköltség = 0;
+                                    if (!int.TryParse(ideig, out gépköltség)) gépköltség = 0;
                                     break;
                                 }
                             case "515)":
                                 {
-                                    if (!double.TryParse(ideig, out szolgáltatás)) szolgáltatás = 0;
+                                    if (!int.TryParse(ideig, out szolgáltatás)) szolgáltatás = 0;
                                     break;
                                 }
                         }
-                        szöveg = "INSERT INTO ideig (rendelés, anyagköltség, munkaköltség, gépköltség, szolgáltatás, státus ) VALUES (";
-                        szöveg += $"{rendelés}, ";
-                        szöveg += $"{anyagköltség}, ";
-                        szöveg += $"{munkaköltség}, ";
-                        szöveg += $"{gépköltség}, ";
-                        szöveg += $"{szolgáltatás}, ";
-                        szöveg += $"{rendelésstátus}) ";
-                        szövegGy.Add(szöveg);
+                        Adat_Sérülés_Ideig ADATI = new Adat_Sérülés_Ideig(
+                            rendelés,
+                            anyagköltség,
+                            munkaköltség,
+                            gépköltség,
+                            szolgáltatás,
+                            rendelésstátus);
+                        AdatokIdeig.Add(ADATI);
 
                         anyagköltség = 0;
                         munkaköltség = 0;
                         gépköltség = 0;
                         szolgáltatás = 0;
                         rendelésstátus = 0;
+                        rendelés = 0;
                     }
                     i += 1;
                 }
-                MyA.ABMódosítás(hely, Sérülésjelszó, szövegGy);
+                if (AdatokIdeig.Count > 0) KézKieg.Rögzítés(SapDátum.Value.Year, AdatokIdeig);
 
                 // költség adatokat rendezzük
 
@@ -1841,60 +1814,53 @@ namespace Villamos
                 gépköltség = 0;
                 munkaköltség = 0;
                 rendelésstátus = 0;
-                double rendelés_szám = 0;
+                rendelés = 0;
 
-                szöveg = "SELECT * FROM ideig ORDER BY rendelés";
-
-                Kezelő_Sérülés_Ideig Kéz = new Kezelő_Sérülés_Ideig();
-                List<Adat_Sérülés_Ideig> Adatok = Kéz.Lista_Adatok(hely, Sérülésjelszó, szöveg);
-                szövegGy.Clear();
+                List<Adat_Sérülés_Ideig> Adatok = KézKieg.Lista_Adatok(SapDátum.Value.Year);
+                List<Adat_Sérülés_Költség> AdatokKöltség = new List<Adat_Sérülés_Költség>();
                 foreach (Adat_Sérülés_Ideig rekord in Adatok)
                 {
                     ideig = rekord.Rendelés.ToStrTrim();
-                    if (rendelés_szám != 0 & rendelés_szám.ToStrTrim() != ideig)
+                    if (rendelés != 0 & rendelés.ToStrTrim() != ideig)
                     {
-                        szöveg = "INSERT INTO költség (rendelés, anyagköltség, munkaköltség, gépköltség, szolgáltatás, státus ) VALUES (";
-                        szöveg += $"{rendelés_szám}, ";
-                        szöveg += $"{anyagköltség}, ";
-                        szöveg += $"{munkaköltség}, ";
-                        szöveg += $"{gépköltség}, ";
-                        szöveg += $"{szolgáltatás}, ";
-                        szöveg += $"{rendelésstátus}) ";
-                        szövegGy.Add(szöveg);
-
-
+                        Adat_Sérülés_Költség ADATK = new Adat_Sérülés_Költség(
+                            rendelés,
+                            anyagköltség,
+                            munkaköltség,
+                            gépköltség,
+                            szolgáltatás,
+                            rendelésstátus);
+                        AdatokKöltség.Add(ADATK);
                         anyagköltség = 0;
                         szolgáltatás = 0;
                         gépköltség = 0;
                         munkaköltség = 0;
-                        rendelés_szám = 0;
                         rendelésstátus = 0;
+                        rendelés = 0;
                     }
 
                     rendelésstátus = int.Parse(rekord.Státus.ToStrTrim());
-                    rendelés_szám = rekord.Rendelés;
+                    rendelés = rekord.Rendelés;
                     if (anyagköltség == 0) anyagköltség = rekord.Anyagköltség;
                     if (szolgáltatás == 0) szolgáltatás = rekord.Szolgáltatás;
                     if (gépköltség == 0) gépköltség = rekord.Gépköltség;
                     if (munkaköltség == 0) munkaköltség = rekord.Munkaköltség;
 
                 }
+                Adat_Sérülés_Költség ADAT = new Adat_Sérülés_Költség(
+                      rendelés,
+                      anyagköltség,
+                      munkaköltség,
+                      gépköltség,
+                      szolgáltatás,
+                      rendelésstátus);
+                AdatokKöltség.Add(ADAT);
+                if (AdatokKöltség.Count > 0) KézSérülésKöltség.Rögzítés(SapDátum.Value.Year, AdatokKöltség);
 
-                szöveg = "INSERT INTO költség (rendelés, anyagköltség, munkaköltség, gépköltség, szolgáltatás, státus ) VALUES (";
-                szöveg += $"{rendelés_szám}, ";
-                szöveg += $"{anyagköltség}, ";
-                szöveg += $"{munkaköltség}, ";
-                szöveg += $"{gépköltség}, ";
-                szöveg += $"{szolgáltatás}, ";
-                szöveg += $"{rendelésstátus}) ";
-                szövegGy.Add(szöveg);
-                MyA.ABMódosítás(hely, Sérülésjelszó, szövegGy);
 
                 // ki kell törölni az ideig tartalmát
                 // *************************************
-                // 
-                szöveg = "DELETE FROM ideig";
-                MyA.ABtörlés(hely, Sérülésjelszó, szöveg);
+                KézKieg.Törlés(SapDátum.Value.Year);
                 #endregion
 
 
@@ -1905,7 +1871,7 @@ namespace Villamos
                 string Műveletszöveg;
 
                 i = 1;
-                szövegGy.Clear();
+                List<Adat_Sérülés_Művelet> AdatokMűv = new List<Adat_Sérülés_Művelet>();
                 while (MyX.Beolvas(munkalap, $"A{i}").Trim() != "_")
                 {
                     Holtart.Lép();
@@ -1920,7 +1886,7 @@ namespace Villamos
                         Teljesítményfajta = "A";
                         Visszaszám = "A";
                         Műveletszöveg = "A";
-                        rendelés_szám = 0;
+                        rendelés = 0;
                         utolsóeleje = 0;
 
                         for (int betűs = 5; betűs < hossz; betűs++)
@@ -1956,7 +1922,7 @@ namespace Villamos
                                         }
                                     case 2:
                                         {
-                                            if (!double.TryParse(szó, out rendelés_szám)) rendelés_szám = 0;
+                                            if (!int.TryParse(szó, out rendelés)) rendelés = 0;
                                             break;
                                         }
                                     case 3:
@@ -1976,27 +1942,27 @@ namespace Villamos
                                 szószám++;
                             }
                         }
-                        szöveg = "INSERT INTO művelet (rendelés, Teljesítményfajta, Visszaszám, Műveletszöveg ) VALUES (";
-                        szöveg += $"{rendelés_szám}, ";
-                        szöveg += $"'{Teljesítményfajta.Trim()} ', ";
-                        szöveg += $"'{Visszaszám.Trim()}', ";
-                        szöveg += $"'{Műveletszöveg.Trim()} ') ";
-                        szövegGy.Add(szöveg);
-
+                        Adat_Sérülés_Művelet ADATM = new Adat_Sérülés_Művelet(
+                             Teljesítményfajta.Trim(),
+                             rendelés,
+                             Visszaszám.Trim(),
+                             Műveletszöveg.Trim()
+                            );
+                        AdatokMűv.Add(ADATM);
                     }
                     i += 1;
                 }
-                MyA.ABMódosítás(hely, Sérülésjelszó, szövegGy);
+                if (AdatokMűv.Count > 0) KézSérülésMűvelet.Rögzítés(SapDátum.Value.Year, AdatokMűv);
                 #endregion
 
 
                 #region visszajelentés sorok
                 i = 1;
-                double munkaidő = 0;
+                int munkaidő = 0;
                 string storno = "";
-                rendelés = "";
+                rendelés = 0;
 
-                szövegGy.Clear();
+                List<Adat_Sérülés_Visszajelentés> AdatokVissz = new List<Adat_Sérülés_Visszajelentés>();
                 while (MyX.Beolvas(munkalap, $"A{i}").Trim() != "_")
                 {
                     Holtart.Lép();
@@ -2005,28 +1971,26 @@ namespace Villamos
                     {
                         Visszaszám = Adat_módosítás(3, 12, szöveg);
 
-                        if (!double.TryParse(Adat_módosítás(25, 18, szöveg).Replace(".", ""), out munkaidő)) munkaidő = 0;
+                        if (!int.TryParse(Adat_módosítás(25, 18, szöveg).Replace(".", ""), out munkaidő)) munkaidő = 0;
 
-                        rendelés = Adat_módosítás(42, 9, szöveg);
+                        rendelés = Adat_módosítás(42, 9, szöveg).ToÉrt_Int();
                         if (szöveg.Substring(szöveg.Length - 1, 1).Trim() == "X")
                             storno = "I";
                         else
                             storno = "N";
                         Teljesítményfajta = szöveg.Substring(0, 3);
 
-
-                        szöveg = "INSERT INTO visszajelentés (Visszaszám, munkaidő, storno, rendelés,  Teljesítményfajta ) VALUES (";
-                        szöveg += $"'{Visszaszám.Trim()}', ";
-                        szöveg += $"{munkaidő}, ";
-                        szöveg += $"'{storno.Trim()}', ";
-                        szöveg += $"{rendelés}, ";
-                        szöveg += $"'{Teljesítményfajta.Trim()}') ";
-                        szövegGy.Add(szöveg);
-
+                        Adat_Sérülés_Visszajelentés ADATVissz = new Adat_Sérülés_Visszajelentés(
+                            Visszaszám.Trim(),
+                            munkaidő,
+                            storno.Trim(),
+                            rendelés,
+                            Teljesítményfajta.Trim());
+                        AdatokVissz.Add(ADATVissz);
                     }
                     i++;
                 }
-                MyA.ABMódosítás(hely, Sérülésjelszó, szövegGy);
+                if (AdatokVissz.Count > 0) KézSérülésVisszajelentés.Rögzítés(SapDátum.Value.Year, AdatokVissz);
                 #endregion
 
 
@@ -2040,10 +2004,10 @@ namespace Villamos
                 string Mennyiségegység = "";
                 string mozgásnem = "";
                 string anyagnév = "";
-                rendelés_szám = 0;
+                rendelés = 0;
                 utolsóeleje = 0;
 
-                szövegGy.Clear();
+                List<Adat_Sérülés_Anyag> AdatokAnyag = new List<Adat_Sérülés_Anyag>();
                 while (MyX.Beolvas(munkalap, $"A{i}") != "_")
                 {
                     Holtart.Lép();
@@ -2094,7 +2058,7 @@ namespace Villamos
                                     // ezt sem használjuk
                                     case 7:
                                         {
-                                            if (!double.TryParse(szó, out rendelés_szám)) rendelés_szám = 0;
+                                            if (!int.TryParse(szó, out rendelés)) rendelés = 0;
                                             break;
                                         }
                                     case 8:
@@ -2118,22 +2082,21 @@ namespace Villamos
 
                             }
                         }
-
-                        szöveg = "INSERT INTO Anyag (cikkszám, anyagnév, mennyiség, me, ár, állapot, rendelés, mozgásnem ) VALUES (";
-                        szöveg += $"'{cikkszám.Trim()}', ";
-                        szöveg += $"'{anyagnév.Trim()} ', ";
-                        szöveg += $"{mennyiség.ToStrTrim().Replace(",", ".")}, ";  // a tizedes vessző miatt ponttal rögzítem
-                        szöveg += $"'{Mennyiségegység.Trim()} ', ";
-                        szöveg += $"{ár}, ";
-                        szöveg += $"'{állapot.Trim()}', ";
-                        szöveg += $"{rendelés_szám}, ";
-                        szöveg += $"'{mozgásnem.Trim()}') ";
-                        szövegGy.Add(szöveg);
+                        Adat_Sérülés_Anyag ADATanyag = new Adat_Sérülés_Anyag(
+                             cikkszám.Trim(),
+                             anyagnév.Trim(),
+                             mennyiség,
+                             Mennyiségegység.Trim(),
+                             ár,
+                             állapot.Trim(),
+                             rendelés,
+                             mozgásnem.Trim()
+                            );
+                        AdatokAnyag.Add(ADATanyag);
                     }
-
                     i += 1;
                 }
-                MyA.ABMódosítás(hely, Sérülésjelszó, szövegGy);
+                if (AdatokAnyag.Count > 0) KézSérülésAnyag.Rögzítés(SapDátum.Value.Year, AdatokAnyag);
                 #endregion
 
                 MyX.ExcelMentés(fájlexc);
