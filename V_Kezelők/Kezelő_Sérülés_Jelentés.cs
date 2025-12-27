@@ -1,24 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 
 namespace Villamos.Kezelők
 {
-
-    string hely;
-    readonly string jelszó = "tükör";
-    readonly string táblanév = "költség";
-
-    private void FájlBeállítás(int Év)
-    {
-        hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\sérülés{Év}.mdb";
-        if (!File.Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely.KönyvSzerk());
-    }
     public class Kezelő_Sérülés_Jelentés
     {
-        public List<Adat_Sérülés_Jelentés> Lista_Adatok(string hely, string jelszó, string szöveg)
+        string hely;
+        readonly string jelszó = "tükör";
+        readonly string táblanév = "költség";
+
+        private void FájlBeállítás(int Év)
         {
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\sérülés{Év}.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Sérülés_Jelentés> Lista_Adatok(int Év)
+        {
+            FájlBeállítás(Év);
             List<Adat_Sérülés_Jelentés> Adatok = new List<Adat_Sérülés_Jelentés>();
             Adat_Sérülés_Jelentés Adat;
 
@@ -74,5 +77,4 @@ namespace Villamos.Kezelők
         }
 
     }
-
 }

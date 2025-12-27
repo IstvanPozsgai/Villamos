@@ -911,10 +911,7 @@ namespace Villamos
             {
                 if (LekDátumig.Value < LekDátumtól.Value) throw new HibásBevittAdat("A kezdő dátumnak nagyobbnak kell lennie a befejező dátumnál.");
                 Holtart.Be();
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{LekDátumtól.Value:yyyy}\sérülés{LekDátumtól.Value:yyyy}.mdb";
-                string szöveg = "SELECT * FROM költség ORDER BY Rendelés";
-                AdatokSérülésKöltség = KézSérülésKöltség.Lista_Adatok(hely, Sérülésjelszó, szöveg);
+                AdatokSérülésKöltség = KézSérülésKöltség.Lista_Adatok(LekDátumtól.Value.Year);
 
                 AdatokSérülés_Feltöltés();
                 DataTable AdatTábla = new DataTable();
@@ -1025,11 +1022,7 @@ namespace Villamos
             try
             {
                 AdatokSérülésJelentés.Clear();
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{LekDátumtól.Value.Year}\sérülés{LekDátumtól.Value.Year}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely);
-
-                List<Adat_Sérülés_Jelentés> Adatok = KézSérülésJelentés.Lista_Adatok(hely, Sérülésjelszó, Jelentésszöveg);
+                List<Adat_Sérülés_Jelentés> Adatok = KézSérülésJelentés.Lista_Adatok(LekDátumtól.Value.Year);
                 List<Adat_Sérülés_Jelentés> Ideig = DátumSzűr(Adatok, LekDátumtól.Value, LekDátumig.Value);
                 Ideig = RendszámSzűr(Ideig, Lekrendszám.Text.Trim());
                 Ideig = TelephelySzűr(Ideig, Telephely_Jel, LekTelephely.Text.Trim());
@@ -1054,12 +1047,8 @@ namespace Villamos
             try
             {
                 AdatokSérülésJelentés.Clear();
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{KöltDátumtól.Value.Year}\sérülés{KöltDátumtól.Value.Year}.mdb";
-
-                if (!Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely);
                 // Teljes lista
-                List<Adat_Sérülés_Jelentés> Adatok = KézSérülésJelentés.Lista_Adatok(hely, Sérülésjelszó, Jelentésszöveg);
+                List<Adat_Sérülés_Jelentés> Adatok = KézSérülésJelentés.Lista_Adatok(KöltDátumtól.Value.Year);
                 List<Adat_Sérülés_Jelentés> Ideig = DátumSzűr(Adatok, KöltDátumtól.Value, KöltDátumig.Value);
                 Ideig = RendszámSzűr(Ideig, KöltRendszám.Text.Trim());
                 Ideig = TelephelySzűr(Ideig, Telephely_Költ, KöltTelephely.Text.Trim());
@@ -1083,14 +1072,7 @@ namespace Villamos
             try
             {
                 AdatokSérülésKöltség.Clear();
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{KöltDátumtól.Value.Year}\sérülés{KöltDátumtól.Value.Year}.mdb";
-
-                if (!Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely);
-
-                AdatokSérülésKöltség = KézSérülésKöltség.Lista_Adatok(hely, Sérülésjelszó, Költségszöveg);
-
-
+                AdatokSérülésKöltség = KézSérülésKöltség.Lista_Adatok(KöltDátumtól.Value.Year);
             }
             catch (HibásBevittAdat ex)
             {
