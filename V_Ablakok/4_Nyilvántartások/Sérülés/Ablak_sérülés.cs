@@ -29,7 +29,9 @@ namespace Villamos
         readonly Kezelő_Sérülés_Művelet KézSérülésMűvelet = new Kezelő_Sérülés_Művelet();
         readonly Kezelő_Sérülés_Visszajelentés KézSérülésVisszajelentés = new Kezelő_Sérülés_Visszajelentés();
         readonly Kezelő_Sérülés_Ideig KézKieg = new Kezelő_Sérülés_Ideig();
-        readonly Kezelő_Alap_Beolvasás KézBeolvas = new Kezelő_Alap_Beolvasás();
+        readonly Kezelő_Excel_Beolvasás KézBeolvas = new Kezelő_Excel_Beolvasás();
+        readonly Kezelő_Dolgozó_Alap KézDolgAlap = new Kezelő_Dolgozó_Alap();
+        readonly Kezelő_Szerelvény KézSzerelvény = new Kezelő_Szerelvény();
 
         List<Adat_Kiegészítő_SérülésSzöveg> AdatokSérülésSzöveg = new List<Adat_Kiegészítő_SérülésSzöveg>();
         List<Adat_Telep_Kiegészítő_SérülésCaf> AdatokSérülésCaf = new List<Adat_Telep_Kiegészítő_SérülésCaf>();
@@ -2139,17 +2141,17 @@ namespace Villamos
                 string munkalap = "Munka1";
                 MyX.ExcelLétrehozás(munkalap);
 
-                List<Adat_Alap_Beolvasás> Adatok = KézBeolvas.Lista_Adatok();
+                List<Adat_Excel_Beolvasás> Adatok = KézBeolvas.Lista_Adatok();
                 Adatok = (from a in Adatok
                           where a.Csoport == "SérülésAny"
-                          && a.Törölt == "0"
+                          && a.Státusz == false
                           orderby a.Oszlop
                           select a).ToList();
 
                 int i = 1;
 
 
-                foreach (Adat_Alap_Beolvasás rekord in Adatok)
+                foreach (Adat_Excel_Beolvasás rekord in Adatok)
                 {
                     MyX.Kiir(rekord.Fejléc.ToStrTrim(), MyF.Oszlopnév(i) + "1");
                     i += 1;
@@ -3774,11 +3776,8 @@ namespace Villamos
                 MyX.Aláírásvonal(munkalap, "e51:g51");
                 Holtart.Lép();
                 // kiirjuk a készítő nevét és beosztását/
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Dolgozók.mdb";
-                string jelszó = "forgalmiutasítás";
-                string szöveg = $"SELECT * FROM dolgozóadatok WHERE [Bejelentkezésinév]='{Program.PostásNév.Trim()}'";
-                Kezelő_Dolgozó_Alap Kéz = new Kezelő_Dolgozó_Alap();
-                Adat_Dolgozó_Alap Adat = Kéz.Egy_Adat(hely, jelszó, szöveg);
+                List<Adat_Dolgozó_Alap> AdatokDolg = KézDolgAlap.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Adat_Dolgozó_Alap Adat = AdatokDolg.Where(a => a.Bejelentkezésinév == Program.PostásNév.Trim()).FirstOrDefault();
 
                 if (Adat != null)
                 {
@@ -4320,10 +4319,8 @@ namespace Villamos
                 // ha már egyszer beállítottuk az alapadatokat, akkor nem módosítjuk
                 if (Telephely.Text.Trim() != "") return;
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                string szöveg = $"SELECT * FROM állománytábla WHERE [azonosító]='{Pályaszám.Text.Trim()}'";
-                AdatJármű = KézJármű.Egy_Adat_fő(hely, jelszó, szöveg);
+                List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
+                AdatJármű = AdatokJármű.Where(a => a.Azonosító == Pályaszám.Text.Trim()).FirstOrDefault();
 
 
                 if (AdatJármű == null)
@@ -4354,20 +4351,16 @@ namespace Villamos
                 }
 
                 // megnézzük, hogy szerelvényben fut-e
-                hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
-
-                AdatJármű = KézJármű.Egy_Adat(hely, jelszó, szöveg);
+                AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                AdatJármű = AdatokJármű.Where(a => a.Azonosító == Pályaszám.Text.Trim()).FirstOrDefault();
 
                 if (AdatJármű != null)
                 {
                     double szerelvénykocsik = AdatJármű.Szerelvénykocsik;
                     if (szerelvénykocsik != 0d)
                     {
-                        hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\szerelvény.mdb";
-                        szöveg = $"SELECT * FROM szerelvénytábla WHERE [id]={szerelvénykocsik}";
-
-                        Kezelő_Szerelvény Kéz2 = new Kezelő_Szerelvény();
-                        Adat_Szerelvény Adat2 = Kéz2.Egy_Adat(hely, jelszó, szöveg);
+                        List<Adat_Szerelvény> AdatokSzerelvény = KézSzerelvény.Lista_Adatok(Cmbtelephely.Text.Trim());
+                        Adat_Szerelvény Adat2 = AdatokSzerelvény.Where(a => a.Szerelvény_ID == szerelvénykocsik).FirstOrDefault();
                         Szerelvény.Text = "";
                         if (Adat2 != null)
                         {

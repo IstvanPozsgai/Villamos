@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -335,52 +335,5 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-        //Elkopó
-        public List<Adat_Főkönyv_Nap> Lista_adatok(string hely, string jelszó, string szöveg)
-        {
-
-            List<Adat_Főkönyv_Nap> Adatok = new List<Adat_Főkönyv_Nap>();
-            Adat_Főkönyv_Nap Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Főkönyv_Nap(
-                                    rekord["státus"].ToÉrt_Long(),
-                                    rekord["hibaleírása"].ToStrTrim(),
-                                    rekord["típus"].ToStrTrim(),
-                                    rekord["azonosító"].ToStrTrim(),
-                                    rekord["szerelvény"].ToÉrt_Long(),
-                                    rekord["viszonylat"].ToStrTrim(),
-                                    rekord["forgalmiszám"].ToStrTrim(),
-                                    rekord["kocsikszáma"].ToÉrt_Long(),
-                                    rekord["tervindulás"].ToÉrt_DaTeTime(),
-                                    rekord["tényindulás"].ToÉrt_DaTeTime(),
-                                    rekord["tervérkezés"].ToÉrt_DaTeTime(),
-                                    rekord["tényérkezés"].ToÉrt_DaTeTime(),
-                                    rekord["miótaáll"].ToÉrt_DaTeTime(),
-                                    rekord["napszak"].ToString(),
-                                    rekord["megjegyzés"].ToStrTrim()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
     }
 }

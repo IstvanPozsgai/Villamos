@@ -4,8 +4,8 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -577,85 +577,5 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-
-        //Elkopó
-        public Adat_Dolgozó_Alap Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_Dolgozó_Alap Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-
-
-                            Adat = new Adat_Dolgozó_Alap(
-                                      rekord["Sorszám"].ToÉrt_Long(),
-                                      rekord["DolgozóNév"].ToStrTrim(),
-                                      rekord["Dolgozószám"].ToStrTrim(),
-                                      rekord["Leánykori"].ToStrTrim(),
-                                      rekord["Anyja"].ToStrTrim(),
-                                      rekord["Születésiidő"].ToÉrt_DaTeTime(),
-                                      rekord["Születésihely"].ToStrTrim(),
-                                      rekord["TAj"].ToStrTrim(),
-                                      rekord["ADÓ"].ToStrTrim(),
-                                      rekord["Belépésiidő"].ToÉrt_DaTeTime(),
-                                      rekord["Lakcím"].ToStrTrim(),
-                                      rekord["Ideiglenescím"].ToStrTrim(),
-                                      rekord["Telefonszám1"].ToStrTrim(),
-                                      rekord["telefonszám2"].ToStrTrim(),
-                                      rekord["telefonszám3"].ToStrTrim(),
-                                      rekord["Munkakör"].ToStrTrim(),
-                                      rekord["Csopvez"].ToÉrt_Bool(),
-                                      rekord["Csoport"].ToStrTrim(),
-                                      rekord["Munkarend"].ToÉrt_Bool(),
-                                      rekord["Orvosiérvényesség"].ToÉrt_DaTeTime(),
-                                      rekord["Orvosivizsgálat"].ToÉrt_DaTeTime(),
-                                      rekord["Targoncaérvényesség"].ToÉrt_DaTeTime(),
-                                      rekord["Emelőérvényesség"].ToÉrt_DaTeTime(),
-                                      rekord["Kilépésiidő"].ToÉrt_DaTeTime(),
-                                      rekord["emelőgépigazolvány"].ToStrTrim(),
-                                      rekord["nehézgépkezelőigazolvány"].ToStrTrim(),
-                                      rekord["targoncaigazolvány"].ToStrTrim(),
-                                      rekord["képernyősidő"].ToÉrt_DaTeTime(),
-                                      rekord["nehézgépidő"].ToÉrt_DaTeTime(),
-                                      rekord["feorsz"].ToStrTrim(),
-                                      rekord["jogosítványszám"].ToStrTrim(),
-                                      rekord["Jogosítványérvényesség"].ToÉrt_DaTeTime(),
-                                      rekord["jogtanúsítvány"].ToStrTrim(),
-                                      rekord["jogorvosi"].ToÉrt_DaTeTime(),
-                                      rekord["tűzvizsgaideje"].ToÉrt_DaTeTime(),
-                                      rekord["tűzvizsgaérv"].ToÉrt_DaTeTime(),
-                                      rekord["passzív"].ToÉrt_Bool(),
-                                      rekord["jogosítványkategória"].ToStrTrim(),
-                                      rekord["Bejelentkezésinév"].ToStrTrim(),
-                                      rekord["főkönyvtitulus"].ToStrTrim(),
-                                      rekord["vezényelt"].ToÉrt_Bool(),
-                                      rekord["vezényelve"].ToÉrt_Bool(),
-                                      rekord["részmunkaidős"].ToÉrt_Bool(),
-                                      rekord["alkalmazott"].ToÉrt_Bool(),
-                                      rekord["csoportkód"].ToStrTrim(),
-                                      rekord["túlóraeng"].ToÉrt_Bool(),
-                                      rekord["részmunkaidőperc"].ToÉrt_Int()
-                                      );
-
-
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
     }
-
-
 }

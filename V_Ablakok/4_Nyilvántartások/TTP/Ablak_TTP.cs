@@ -602,17 +602,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             List<Adat_Jármű> Adatok = new List<Adat_Jármű>(); ;
             try
             {
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM állománytábla ORDER BY Azonosító ";
                 Kezelő_Jármű KézJármű = new Kezelő_Jármű();
                 foreach (Adat_Kiegészítő_Sérülés rekord in AdatokTelep)
                 {
-                    string hely = $@"{Application.StartupPath}\{rekord.Név}\Adatok\villamos\Villamos.mdb";
-                    if (File.Exists(hely))
-                    {
-                        List<Adat_Jármű> Ideig = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
-                        Adatok.AddRange(Ideig);
-                    }
+                    List<Adat_Jármű> Ideig = KézJármű.Lista_Adatok(rekord.Név);
+                    Adatok.AddRange(Ideig);
                 }
                 Adatok = (from a in Adatok
                           orderby a.Azonosító
