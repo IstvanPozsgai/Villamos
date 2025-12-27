@@ -237,7 +237,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                //TODO
+
                 List<Adat_Jármű_hiba> HibaLista = (from a in AdatokHiba
                                                    where a.Azonosító == Pályaszám.Text.Trim()
                                                    && a.Típus == "Nosztalgia"
@@ -337,7 +337,6 @@ namespace Villamos.Villamos_Ablakok
         /// </summary>
         private void Jogosultságkiosztás()
         {
-            //TODO
 
             //int melyikelem;
 
@@ -429,111 +428,6 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        //TODO: Ezeket a metódusokat implementálni kell?
-        //private string SzerelvényÖÁ(string Azonosító)
-        //{
-        //    string válasz = "";
-        //    Adat_Szerelvény rekordszer = (from a in AdatokSzer
-        //                                  where a.Kocsi1 == Azonosító || a.Kocsi2 == Azonosító || a.Kocsi3 == Azonosító ||
-        //                                        a.Kocsi4 == Azonosító || a.Kocsi5 == Azonosító || a.Kocsi6 == Azonosító
-        //                                  select a).FirstOrDefault();
-        //    if (rekordszer != null)
-        //    {
-        //        válasz = rekordszer.Kocsi1;
-        //        if (rekordszer.Kocsi2 != "0") válasz += "-" + rekordszer.Kocsi2;
-        //        if (rekordszer.Kocsi3 != "0") válasz += "-" + rekordszer.Kocsi3;
-        //        if (rekordszer.Kocsi4 != "0") válasz += "-" + rekordszer.Kocsi4;
-        //        if (rekordszer.Kocsi5 != "0") válasz += "-" + rekordszer.Kocsi5;
-        //        if (rekordszer.Kocsi6 != "0") válasz += "-" + rekordszer.Kocsi6;
-        //    }
-        //    return válasz;
-        //}
-
-        //private void AdatokListábaRakása(string Azonosító, string Típus, string álló, string beálló, string szabad)
-        //{
-        //    DateTime miótaáll = new DateTime(2000, 1, 1);
-        //    Adat_Jármű Elem = (from a in AdatokJármű
-        //                       where a.Azonosító == Azonosító
-        //                       select a).FirstOrDefault();
-        //    if (Elem != null)
-        //        if (Elem.Miótaáll > new DateTime(2000, 1, 1))
-        //            miótaáll = Elem.Miótaáll;
-
-        //    string szerelvény = SzerelvényÖÁ(Azonosító);
-
-        //    Adat_Karbantartási Adat = new Adat_Karbantartási(
-        //                        Azonosító,
-        //                        álló,
-        //                        beálló,
-        //                        szabad,
-        //                        Típus,
-        //                        miótaáll,
-        //                        szerelvény);
-        //    AdatokKarbantartási.Add(Adat);
-        //}
-
-        //private void AdatokRendezése()
-        //{
-        //    try
-        //    {
-
-        //        string Pályaszám = "";
-        //        string Típus = "";
-        //        string álló = "";
-        //        string beálló = "";
-        //        string szabad = "";
-        //        foreach (Adat_Jármű_hiba rekord in AdatokHiba)
-        //        {
-        //            if (Pályaszám.Trim() == "") Pályaszám = rekord.Azonosító;
-        //            if (Pályaszám.Trim() != "" && rekord.Azonosító != Pályaszám.Trim())
-        //            {
-        //                AdatokListábaRakása(Pályaszám, Típus, álló, beálló, szabad);
-        //                álló = "";
-        //                beálló = "";
-        //                szabad = "";
-        //                Pályaszám = rekord.Azonosító;
-        //            }
-
-        //            switch (rekord.Korlát)
-        //            {
-        //                case 4:
-        //                    {
-        //                        álló += rekord.Hibaleírása.Trim() + "-";
-        //                        break;
-        //                    }
-        //                case 3:
-        //                    {
-        //                        beálló += rekord.Hibaleírása.Trim() + "-";
-        //                        break;
-        //                    }
-        //                case 1:
-        //                    {
-        //                        szabad += rekord.Hibaleírása.Trim() + "-";
-        //                        break;
-        //                    }
-        //            }
-        //            Adat_Jármű Elem = (from a in AdatokJármű
-        //                               where a.Azonosító == Pályaszám
-        //                               select a).FirstOrDefault();
-        //            if (Elem != null) Típus = Elem.Valóstípus; else Típus = "nincs";
-        //        }
-        //        if (szabad.Trim() != "" || álló.Trim() != "" || beálló.Trim() != "") AdatokListábaRakása(Pályaszám, Típus, álló, beálló, szabad);
-
-        //        // Sorba rendezés
-        //        AdatokKarbantartási = (from a in AdatokKarbantartási
-        //                               orderby a.Típus, a.Azonosító
-        //                               select a).ToList();
-        //    }
-        //    catch (HibásBevittAdat ex)
-        //    {
-        //        MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-        //        MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    }
-        //}
 
         /// <summary>
         /// Fülek újratöltése, amikor a felhasználó kiválaszt egy fület.
@@ -1064,14 +958,13 @@ namespace Villamos.Villamos_Ablakok
         }
         private void SAP_Beolv_Click(object sender, EventArgs e)
         {
-            //TODO Valamiért hibát dob
+
             ZSER_Beolvasás();
             Pályaszám_feltöltés();
 
             //új metódus 
         }
 
-        //TODO: Summary kitalálása
         private void RögzítőbeAdatok()
         {
             Nap_azonosító.Text = Tábla_lekérdezés.CurrentRow.Cells[0].Value.ToString();
@@ -1093,7 +986,7 @@ namespace Villamos.Villamos_Ablakok
         private void Futásnaptábla_Rögzítés_Click(object sender, EventArgs e)
         {
 
-            //TODO ADATBÁZIS ROGZÍTÉSI HIBA
+
             try
             {
                 string hely = Application.StartupPath + $@"\Főmérnökség\Adatok\Nosztalgia\FutásnapNoszt.mdb";

@@ -72,7 +72,6 @@ namespace Villamos
             Start();
         }
 
-        // JAVÍTANDÓ:
         private void Start()
         {
             try

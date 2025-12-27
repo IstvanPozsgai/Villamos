@@ -79,39 +79,35 @@ namespace Villamos.Kezelők
             }
         }
 
-        // JAVÍTANDÓ:Elkopó
-        public List<Adat_Kerék_Eszterga> Lista_Adatok(string hely, string jelszó, string szöveg)
+        public void Rögzítés(int Év, List<Adat_Kerék_Eszterga> Adatok)
         {
-            List<Adat_Kerék_Eszterga> Adatok = new List<Adat_Kerék_Eszterga>();
-            Adat_Kerék_Eszterga Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                FájlBeállítás(Év);
+                List<string> szövegGy = new List<string>();
+                foreach (Adat_Kerék_Eszterga Adat in Adatok)
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kerék_Eszterga(
-                                        rekord["Azonosító"].ToStrTrim(),
-                                        rekord["Eszterga"].ToÉrt_DaTeTime(),
-                                        rekord["Módosító"].ToStrTrim(),
-                                        rekord["Mikor"].ToÉrt_DaTeTime(),
-                                        rekord["kmu"].ToÉrt_Long()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
+                    string szöveg = $"INSERT INTO {táblanév} (eszterga, mikor, módosító, azonosító, kmu)  VALUES (";
+                    szöveg += $"'{Adat.Eszterga:yyyy.MM.dd}', ";
+                    szöveg += $"'{Adat.Mikor}', ";
+                    szöveg += $"'{Adat.Módosító}', ";
+                    szöveg += $"'{Adat.Azonosító}', ";
+                    szöveg += $"{Adat.KMU} )";
+                    szövegGy.Add(szöveg);
                 }
+                MyA.ABMódosítás(hely, jelszó, szövegGy);
             }
-            return Adatok;
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
     }
 }

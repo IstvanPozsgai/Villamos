@@ -556,13 +556,6 @@ namespace Villamos.Kezelők
                    .ToList();
         }
 
-
-        // JAVÍTANDÓ: A pályaszám, helyett a típust használd
-        // KÉSZ
-        //Amúgy miben különbözik a rövis és a hosszú CAF?
-        // Itt azért oldottam meg így, mivel 2117 az utolsó rövid CAF és ugye 2201 az első rövid.
-        // Ha 1 db for ciklust használnék a feltöltésre, akkor a 2118 és 2199 között lenne egy "lyuk".
-        // De teljesen jogos, most jutott eszembe, hogy 1 LINQ lekérdezés elég lett volna és a StartsWith szerepelhetett volna 2x &&-el, ha nem típust használnánk.
         public void Tabla_Feltoltese()
         {
             List<int> azonositoLista = OsszesPalyaszam();

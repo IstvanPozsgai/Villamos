@@ -1462,9 +1462,6 @@ namespace Villamos
                 }
                 MyX.Rácsoz(munkalap, "a44:o60");
 
-                // JAVÍTANDÓ:       MyX.FerdeVonal("A44:A60");
-
-                // nyomtatási beállítás
                 // nyomtatási beállítások
                 Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
                 {

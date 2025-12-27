@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
@@ -1760,44 +1759,29 @@ namespace Villamos.Villamos_Nyomtatványok
             int készdb = 0;
             int darab;
 
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\hibanapló\Elkészült{Dátum.Year}.mdb";
-            string jelszó = "plédke";
-            string szöveg = "SELECT * FROM xnapostábla ";
-            szöveg += $" where kezdődátum= #{Dátum:MM-dd-yyyy}#";
-            szöveg += " order by azonosító";
-            //ELKÉSZÜLT  darabszám meghatározása
-            if (File.Exists(hely))
-            {
-                Kezelő_Jármű_Xnapos Kéz = new Kezelő_Jármű_Xnapos();
-                List<Adat_Jármű_Xnapos> AdatokX = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-                if (AdatokX != null) álldb = AdatokX.Count;
-            }
+            List<Adat_Jármű_Xnapos> AdatokX = KJX_kéz.Lista_Adatok(Cmbtelephely.Trim(), Dátum.Year);
+            AdatokX = (from a in AdatokX
+                       where a.Kezdődátum.ToShortDateString() == Dátum.ToShortDateString()
+                       orderby a.Azonosító
+                       select a).ToList();
+            if (AdatokX != null) álldb = AdatokX.Count;
 
+            AdatokX = KJX_kéz.Lista_Adatok(Cmbtelephely.Trim());
+            AdatokX = (from a in AdatokX
+                       where a.Kezdődátum >= MyF.Nap0000(Dátum) &&
+                       a.Kezdődátum <= MyF.Nap2359(Dátum)
+                       orderby a.Azonosító
+                       select a).ToList();
+            if (AdatokX != null) álldb = AdatokX.Count;
 
+            AdatokX = KJX_kéz.Lista_Adatok(Cmbtelephely.Trim(), Dátum.Year);
+            AdatokX = (from a in AdatokX
+                       where a.Kezdődátum >= MyF.Nap0000(Dátum) &&
+                       a.Kezdődátum <= MyF.Nap2359(Dátum)
+                       orderby a.Azonosító
+                       select a).ToList();
+            if (AdatokX != null) készdb = AdatokX.Count;
 
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\hibanapló\napi.mdb";
-            if (System.IO.File.Exists(hely))
-            {
-                szöveg = "SELECT * FROM xnapostábla ";
-                szöveg += " where kezdődátum >= #" + Dátum.ToString("MM-dd-yyyy") + " 00:00:0" + "#";
-                szöveg += " AND kezdődátum <= #" + Dátum.ToString("MM-dd-yyyy") + " 23:59:59" + "#";
-                szöveg += " order by azonosító";
-                Kezelő_Jármű_Xnapos Kéz = new Kezelő_Jármű_Xnapos();
-                List<Adat_Jármű_Xnapos> AdatokX = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-                if (AdatokX != null) álldb = AdatokX.Count;
-            }
-
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\hibanapló\Elkészült{Dátum.Year}.mdb";
-            if (File.Exists(hely))
-            {
-                szöveg = "SELECT * FROM xnapostábla ";
-                szöveg += " where végdátum >= #" + Dátum.ToString("MM-dd-yyyy") + " 00:00:0" + "#";
-                szöveg += " AND végdátum <= #" + Dátum.ToString("MM-dd-yyyy") + " 23:59:59" + "#";
-                szöveg += " order by azonosító";
-                Kezelő_Jármű_Xnapos Kéz = new Kezelő_Jármű_Xnapos();
-                List<Adat_Jármű_Xnapos> AdatokX = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-                if (AdatokX != null) készdb = AdatokX.Count;
-            }
 
             if (készdb > álldb)
                 darab = készdb;
@@ -1812,16 +1796,12 @@ namespace Villamos.Villamos_Nyomtatványok
                 MyX.Egyesít(munkalap, MyF.Oszlopnév(utolsó + 10) + (újsor + i).ToString() + ":" + MyF.Oszlopnév(utolsó + 14) + (újsor + i).ToString());
             }
 
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\hibanapló\Elkészült{Dátum.Year}.mdb";
-            szöveg = "SELECT * FROM xnapostábla ";
-            szöveg += " where végdátum >= #" + Dátum.ToString("MM-dd-yyyy") + " 00:00:0" + "#";
-            szöveg += " AND végdátum <= #" + Dátum.ToString("MM-dd-yyyy") + " 23:59:59" + "#";
-            szöveg += " order by azonosító";
-
-
-
-            List<Adat_Jármű_Xnapos> Adatok = KJX_kéz.Lista_Adatok(hely, jelszó, szöveg);
-
+            List<Adat_Jármű_Xnapos> Adatok = KJX_kéz.Lista_Adatok(Cmbtelephely.Trim(), Dátum.Year);
+            Adatok = (from a in Adatok
+                      where a.Végdátum >= MyF.Nap0000(Dátum) &&
+                      a.Végdátum <= MyF.Nap2359(Dátum)
+                      orderby a.Azonosító
+                      select a).ToList();
 
             int ji = 1;
             foreach (Adat_Jármű_Xnapos rekord in Adatok)
@@ -1833,11 +1813,11 @@ namespace Villamos.Villamos_Nyomtatványok
                 ji += 1;
             }
 
-            szöveg = "SELECT * FROM xnapostábla ";
-            szöveg += " where kezdődátum = #" + Dátum.ToString("MM-dd-yyyy") + "#";
-            szöveg += " order by azonosító";
-
-            Adatok = KJX_kéz.Lista_Adatok(hely, jelszó, szöveg);
+            Adatok = KJX_kéz.Lista_Adatok(Cmbtelephely.Trim(), Dátum.Year);
+            Adatok = (from a in Adatok
+                      where a.Kezdődátum.ToShortDateString() == Dátum.ToShortDateString()
+                      orderby a.Azonosító
+                      select a).ToList();
 
             ji = 1;
 
@@ -1848,26 +1828,19 @@ namespace Villamos.Villamos_Nyomtatványok
                 ji += 1;
             }
 
-            hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\hibanapló\napi.mdb";
-            jelszó = "plédke";
+            Adatok = KJX_kéz.Lista_Adatok(Cmbtelephely.Trim());
+            Adatok = (from a in Adatok
+                      where a.Kezdődátum.ToShortDateString() == Dátum.ToShortDateString()
+                      orderby a.Azonosító
+                      select a).ToList();
 
-            if (System.IO.File.Exists(hely))
+            foreach (Adat_Jármű_Xnapos rekord in Adatok)
             {
-
-                szöveg = "SELECT * FROM xnapostábla ";
-                szöveg += " where kezdődátum= #" + Dátum.ToString("MM-dd-yyyy") + "#";
-                szöveg += " order by azonosító";
-
-                Adatok = KJX_kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-
-                foreach (Adat_Jármű_Xnapos rekord in Adatok)
-                {
-                    MyX.Kiir(rekord.Azonosító.Trim(), MyF.Oszlopnév(utolsó) + (újsor + ji).ToString());
-                    MyX.Kiir(rekord.Hibaleírása.Trim(), MyF.Oszlopnév(utolsó + 1) + (újsor + ji).ToString());
-                    ji += 1;
-                }
+                MyX.Kiir(rekord.Azonosító.Trim(), MyF.Oszlopnév(utolsó) + (újsor + ji).ToString());
+                MyX.Kiir(rekord.Hibaleírása.Trim(), MyF.Oszlopnév(utolsó + 1) + (újsor + ji).ToString());
+                ji += 1;
             }
+
             újsor += darab;
         }
 

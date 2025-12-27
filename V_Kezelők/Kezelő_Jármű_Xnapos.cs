@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Jármű_Xnapos
     {
         readonly string jelszó = "plédke";
-        string hely, helyelkészült;
+        string hely;
 
         private void FájlBeállítás(string Telephely)
         {
@@ -22,8 +22,41 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely, int Év)
         {
-            helyelkészült = $@"{Application.StartupPath}\{Telephely}\adatok\hibanapló\Elkészült{Év}.mdb";
-            if (!File.Exists(helyelkészült)) Adatbázis_Létrehozás.Javításiátfutástábla(helyelkészült.KönyvSzerk());
+            hely = $@"{Application.StartupPath}\{Telephely}\adatok\hibanapló\Elkészült{Év}.mdb";
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Javításiátfutástábla(hely.KönyvSzerk());
+        }
+
+        public List<Adat_Jármű_Xnapos> Lista_Adatok(string Telephely, int Év)
+        {
+            FájlBeállítás(Telephely, Év);
+            string szöveg = $"SELECT * FROM xnapostábla";
+            List<Adat_Jármű_Xnapos> Adatok = new List<Adat_Jármű_Xnapos>();
+            Adat_Jármű_Xnapos Adat;
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                {
+                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    {
+                        if (rekord.HasRows)
+                        {
+                            while (rekord.Read())
+                            {
+                                Adat = new Adat_Jármű_Xnapos(
+                                            rekord["kezdődátum"].ToÉrt_DaTeTime(),
+                                            rekord["végdátum"].ToÉrt_DaTeTime(),
+                                            rekord["azonosító"].ToStrTrim(),
+                                            rekord["hibaleírása"].ToStrTrim()
+                                            );
+                                Adatok.Add(Adat);
+                            }
+                        }
+                    }
+                }
+            }
+            return Adatok;
         }
 
         public List<Adat_Jármű_Xnapos> Lista_Adatok(string Telephely)
@@ -90,7 +123,7 @@ namespace Villamos.Kezelők
                 szöveg += $"'{Adat.Kezdődátum}', '{Adat.Végdátum}', ";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Hibaleírása}')";
-                MyA.ABMódosítás(helyelkészült, jelszó, szöveg);
+                MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -140,39 +173,6 @@ namespace Villamos.Kezelők
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-
-        // JAVÍTANDÓ:Elkopó
-        public List<Adat_Jármű_Xnapos> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Jármű_Xnapos> Adatok = new List<Adat_Jármű_Xnapos>();
-            Adat_Jármű_Xnapos Adat;
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Jármű_Xnapos(
-                                            rekord["kezdődátum"].ToÉrt_DaTeTime(),
-                                            rekord["végdátum"].ToÉrt_DaTeTime(),
-                                            rekord["azonosító"].ToStrTrim(),
-                                            rekord["hibaleírása"].ToStrTrim()
-                                            );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
         }
     }
 }

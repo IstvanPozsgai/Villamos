@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
@@ -155,95 +154,4 @@ namespace Villamos.Kezelők
         }
     }
 
-    public class Kezelő_Kerék_Eszterga_Beállítás
-    {
-        // JAVÍTANDÓ:Elkopó
-        public List<Adat_Kerék_Eszterga_Beállítás> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kerék_Eszterga_Beállítás> Adatok = new List<Adat_Kerék_Eszterga_Beállítás>();
-            Adat_Kerék_Eszterga_Beállítás Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kerék_Eszterga_Beállítás(
-                                        rekord["Azonosító"].ToStrTrim(),
-                                        rekord["KM_lépés"].ToÉrt_Int(),
-                                        rekord["Idő_lépés"].ToÉrt_Int(),
-                                        rekord["KM_IDŐ"].ToÉrt_Bool(),
-                                        rekord["Ütemezve"].ToÉrt_DaTeTime()
-                                          );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-        public Adat_Kerék_Eszterga_Beállítás Egy_Adat(string hely, string jelszó, string szöveg)
-        {
-            Adat_Kerék_Eszterga_Beállítás Adat = null;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            rekord.Read();
-                            Adat = new Adat_Kerék_Eszterga_Beállítás(
-                                    rekord["Azonosító"].ToStrTrim(),
-                                    rekord["KM_lépés"].ToÉrt_Int(),
-                                    rekord["Idő_lépés"].ToÉrt_Int(),
-                                    rekord["KM_IDŐ"].ToÉrt_Bool(),
-                                    rekord["Ütemezve"].ToÉrt_DaTeTime()
-                                      );
-                        }
-                    }
-                }
-            }
-            return Adat;
-        }
-
-        public void Rögzít(string hely, string jelszó, Adat_Kerék_Eszterga_Beállítás Adat)
-        {
-            string szöveg = $"SELECT * FROM Eszterga_Beállítás";
-            Kezelő_Kerék_Eszterga_Beállítás Kezelő = new Kezelő_Kerék_Eszterga_Beállítás();
-            List<Adat_Kerék_Eszterga_Beállítás> Adatok = Kezelő.Lista_Adatok(hely, jelszó, szöveg);
-            Adat_Kerék_Eszterga_Beállítás Elem = (from a in Adatok
-                                                  where a.Azonosító == Adat.Azonosító
-                                                  select a).FirstOrDefault();
-
-            if (Elem == null)
-            {
-                szöveg = "INSERT INTO eszterga_beállítás (Azonosító, KM_lépés, Idő_lépés, KM_IDŐ, Ütemezve) VALUES ";
-                szöveg += $"('{Adat.Azonosító.Trim()}', {Adat.KM_lépés}, {Adat.Idő_lépés}, {Adat.KM_IDŐ}, '{Adat.Ütemezve:yyyy.MM.dd}'  )";
-            }
-            else
-            {
-                szöveg = "UPDATE eszterga_beállítás SET ";
-                szöveg += $" KM_lépés={Adat.KM_lépés},";
-                szöveg += $" Idő_lépés={Adat.Idő_lépés}, ";
-                szöveg += $" KM_IDŐ={Adat.KM_IDŐ}, ";
-                szöveg += $" Ütemezve='{Adat.Ütemezve:yyyy.MM.dd}' ";
-                szöveg += $" WHERE azonosító='{Adat.Azonosító.Trim()}'";
-            }
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-        }
-    }
 }
