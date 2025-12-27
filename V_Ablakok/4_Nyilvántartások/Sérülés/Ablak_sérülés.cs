@@ -40,9 +40,6 @@ namespace Villamos
         Adat_Kiegészítő_Sérülés AdatKiegSérülés;
         List<Adat_Kiegészítő_Sérülés> AdatokKiegSérülés = new List<Adat_Kiegészítő_Sérülés>();
 
-        readonly string Sérülésjelszó = "tükör";
-        readonly string Jelentésszöveg = "SELECT * FROM jelentés";
-        readonly string Költségszöveg = "SELECT * FROM költség";
         int KivalasztottSorszam = -1;
         int Doksikdb, Képdb;
         int Cafsorszám;
@@ -1408,17 +1405,13 @@ namespace Villamos
             try
             {
                 if (SapRendelés.Text.Trim() == "" || SapRendelés.Text.Trim() == "0") throw new HibásBevittAdat("A Rendelés mező üres!");
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{KöltDátumtól.Value:yyyy}\sérülés{KöltDátumtól.Value:yyyy}.mdb";
-
-                if (!Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely);
-
-                string szöveg = "SELECT * FROM Anyag WHERE ";
-                if (SapRendelés.Text.ToStrTrim() != "") szöveg += $" rendelés LIKE '%{SapRendelés.Text.ToStrTrim()}%' ORDER BY cikkszám";
+                List<Adat_Sérülés_Anyag> AdatokSérülésAnyag = KézSérülésAnyag.Lista_Adatok(KöltDátumtól.Value.Year);
+                AdatokSérülésAnyag = (from a in AdatokSérülésAnyag
+                                      where a.Rendelés == SapRendelés.Text.ToÉrt_Int()
+                                      orderby a.Cikkszám
+                                      select a).ToList();
 
                 double összesen = default;
-
-
                 DataTable AdatTábla = new DataTable();
 
                 AdatTábla.Columns.Clear();
@@ -1432,7 +1425,6 @@ namespace Villamos
 
                 AdatTábla.Clear();
 
-                List<Adat_Sérülés_Anyag> AdatokSérülésAnyag = KézSérülésAnyag.Lista_Adatok(hely, Sérülésjelszó, szöveg);
                 DataRow Soradat;
                 foreach (Adat_Sérülés_Anyag rekord in AdatokSérülésAnyag)
                 {
@@ -1518,8 +1510,8 @@ namespace Villamos
                 AdatTábla.Columns.Add("Visszaszám");
                 AdatTábla.Columns.Add("Költség");
 
-                Kezelő_Sérülés_Művelet Kéz = new Kezelő_Sérülés_Művelet();
-                Adat_Sérülés_Művelet Adat = Kéz.Egy_Adat(hely, Sérülésjelszó, szöveg);
+
+                Adat_Sérülés_Művelet Adat = KézSérülésMűvelet.Egy_Adat(hely, Sérülésjelszó, szöveg);
 
                 szöveg = "SELECT * FROM visszajelentés";
                 Kezelő_Sérülés_Visszajelentés KézVissza = new Kezelő_Sérülés_Visszajelentés();

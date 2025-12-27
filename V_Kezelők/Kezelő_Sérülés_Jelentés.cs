@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
     {
         string hely;
         readonly string jelszó = "tükör";
-        readonly string táblanév = "költség";
+        readonly string táblanév = "jelentés";
 
         private void FájlBeállítás(int Év)
         {
@@ -87,7 +87,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGY = new List<string>();
                 foreach (Adat_Sérülés_Jelentés Adat in Adatok)
                 {
-                    string szöveg = "UPDATE jelentés  SET ";
+                    string szöveg = $"UPDATE {táblanév}  SET ";
                     szöveg += $" státus1={Adat.Státus1} ";
                     szöveg += $" WHERE [sorszám]={Adat.Sorszám}";
                     SzövegGY.Add(szöveg);
@@ -110,7 +110,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = "UPDATE jelentés  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $" státus=1 ";
                 szöveg += $" státus1=1 ";
                 szöveg += $" WHERE [sorszám]={Sorszám}";
@@ -132,7 +132,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = "UPDATE jelentés  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"Telephely='{Adat.Telephely}', ";
                 szöveg += $"Dátum='{Adat.Dátum}', ";
                 szöveg += $"Balesethelyszín='{Adat.Balesethelyszín}', ";
@@ -180,7 +180,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = "INSERT INTO jelentés  (sorszám, Telephely, Dátum, Balesethelyszín, ";
+                string szöveg = $"INSERT INTO {táblanév} (sorszám, Telephely, Dátum, Balesethelyszín, ";
                 szöveg += "Viszonylat, Rendszám, járművezető,  Rendelésszám, ";
                 szöveg += "státus, kimenetel, Státus1, iktatószám, ";
                 szöveg += "Típus, Szerelvény, forgalmiakadály, műszaki, ";
