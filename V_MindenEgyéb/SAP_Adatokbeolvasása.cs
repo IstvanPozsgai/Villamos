@@ -1071,7 +1071,6 @@ namespace Villamos.V_MindenEgyéb
             return Adatok;
         }
 
-        // JAVÍTANDÓ:a sérülés javítások anyagigényének beolvasása nem készült el, mert mókezelője nincs de beolvassa az adatokat, nincs próbálva
         public static List<Adat_Sérülés_Anyag> Sérülés_beolvasó(string fájlexcel)
         {
             List<Adat_Sérülés_Anyag> Adatok = new List<Adat_Sérülés_Anyag>();

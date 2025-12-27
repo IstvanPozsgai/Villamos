@@ -9,9 +9,7 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés;
-using Villamos.Villamos_Adatbázis_Funkció;
 using static System.IO.File;
-using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -1725,7 +1723,7 @@ namespace Villamos
                                 Adat_Sérülés_Anyag AnyagElem = (from a in AnyagAdatok
                                                                 where a.Rendelés == rendelés
                                                                 select a).FirstOrDefault();
-
+                                if (AnyagElem != null) Anyagrend.Add(rendelés);
                                 szószám += 1;
                             }
                         }
@@ -2196,26 +2194,20 @@ namespace Villamos
                     fájlexc = OpenFileDialog1.FileName;
                 else
                     return;
-                // JAVÍTANDÓ:Előkészítve az OOP ra
-                //SAP_Adatokbeolvasása.Sérülés_beolvasó(fájlexc );
+
+                SAP_Adatokbeolvasása.Sérülés_beolvasó(fájlexc);
 
                 // megnyitjuk a beolvasandó táblát
                 MyX.ExcelMegnyitás(fájlexc);
                 string munkalap = "Munka1";
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{SapDátum.Value:yyyy}\sérülés{SapDátum.Value:yyyy}.mdb";
-                // ellenőrizzük, hogy léteznek a táblák
-                if (!Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely);
-
                 // megnézzük, hogy hány sorból áll a tábla
                 int utolsó = MyX.Utolsósor(munkalap);
 
                 Holtart.Lép();
-                // kitöröljük azokat az anyagokat amiket a rendelésekre amelyek korábban rögzítettünk
-                string szöveg = "SELECT * FROM Anyag ";
-                List<Adat_Sérülés_Anyag> AnyagAdatok = KézSérülésAnyag.Lista_Adatok(hely, Sérülésjelszó, szöveg);
+                List<Adat_Sérülés_Anyag> AnyagAdatok = KézSérülésAnyag.Lista_Adatok(SapDátum.Value.Year);
 
-                List<string> szövegGy = new List<string>();
+                List<double> Anyagrend = new List<double>();
                 for (int i = 2; i < utolsó; i++)
                 {
                     if (double.TryParse(MyX.Beolvas(munkalap, $"g{i}").Trim(), out double rendelés))
@@ -2224,16 +2216,11 @@ namespace Villamos
                                                        where a.Rendelés == rendelés
                                                        select a).FirstOrDefault();
 
-                        if (EgyAnyag != null)
-                        {
-                            szöveg = $"DELETE * FROM Anyag WHERE rendelés={rendelés}";
-                            szövegGy.Add(szöveg);
-                        }
+                        if (EgyAnyag != null) Anyagrend.Add(rendelés);
                     }
                 }
-                if (szövegGy.Count != 0) MyA.ABtörlés(hely, Sérülésjelszó, szövegGy);
-                // beolvassuk az adatokat
-                szöveg = "SELECT * FROM anyag ";
+                if (Anyagrend.Count > 0) KézSérülésAnyag.Törlés(SapDátum.Value.Year, Anyagrend);
+
                 string cikkszám = "";
                 string mennyiségstr = "";
                 string árstr = "";
@@ -2243,7 +2230,7 @@ namespace Villamos
                 string anyagnév = "";
                 string rendelésstr;
 
-                szövegGy.Clear();
+                List<Adat_Sérülés_Anyag> AdatokAnyag = new List<Adat_Sérülés_Anyag>();
                 for (int i = 2; i < utolsó; i++)
                 {
                     Holtart.Lép();
@@ -2269,19 +2256,18 @@ namespace Villamos
                     else
                         rendelésstr = "0";
                     mozgásnem = Adat_módosítás(munkalap, $"h{i}", 5);
-
-                    szöveg = "INSERT INTO Anyag (cikkszám, anyagnév, mennyiség, me, ár, állapot, rendelés, mozgásnem ) VALUES (";
-                    szöveg += $"'{cikkszám}', "; //cikkszám
-                    szöveg += $"'{anyagnév}', "; //anyagnév
-                    szöveg += $"{mennyiségstr.Replace(',', '.')}, ";  // a tizedes vessző miatt ponttal rögzítem  mennyiség
-                    szöveg += $"'{Mennyiségegység}', "; //me
-                    szöveg += $"{árstr.Replace(',', '.')}, "; //ár
-                    szöveg += $"'{állapot}', ";  //állapot
-                    szöveg += $"{rendelésstr.Replace(',', '.')}, ";  //rendelés
-                    szöveg += $"'{mozgásnem}') ";// mozgásnem
-                    szövegGy.Add(szöveg);
+                    Adat_Sérülés_Anyag ADATanyag = new Adat_Sérülés_Anyag(
+                          cikkszám.Trim(),
+                          anyagnév.Trim(),
+                          mennyiségstr.ToÉrt_Double(),
+                          Mennyiségegység.Trim(),
+                          árstr.ToÉrt_Double(),
+                          állapot.Trim(),
+                          rendelésstr.ToÉrt_Double(),
+                          mozgásnem.Trim());
+                    AdatokAnyag.Add(ADATanyag);
                 }
-                MyA.ABMódosítás(hely, Sérülésjelszó, szöveg);
+                if (AdatokAnyag.Count > 0) KézSérülésAnyag.Rögzítés(SapDátum.Value.Year, AdatokAnyag);
 
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
