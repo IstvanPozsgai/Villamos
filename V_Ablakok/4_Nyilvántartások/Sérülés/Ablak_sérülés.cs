@@ -114,13 +114,6 @@ namespace Villamos
                 Cursor = Cursors.WaitCursor;
                 Dátum.Value = DateTime.Today;
 
-                // létrehozzuk az adott évi táblázatot illetve könyvtárat
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today:yyyy}";
-                if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-                // JAVÍTANDÓ:
-                hely += $@"\sérülés{DateTime.Today:yyyy}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely);
-
                 Telephely1.Text = Cmbtelephely.Text.Trim();
                 LekDátumig.Value = DateTime.Today;
                 LekDátumtól.Value = new DateTime(DateTime.Today.Year, 1, 1);
@@ -140,7 +133,7 @@ namespace Villamos
                 Üresrögzítő();
 
                 AdatokSérülés_Feltöltés();
-                AdatokKöltség_Feltöltés();
+                AdatokSérülésKöltség = KézSérülésKöltség.Lista_Adatok(KöltDátumtól.Value.Year);
                 AdatokKöltségNullás_Feltöltés();
                 Lapfülek.DrawMode = TabDrawMode.OwnerDrawFixed;
                 Lapfülek.SelectedIndex = 1;
@@ -1067,24 +1060,6 @@ namespace Villamos
             }
         }
 
-        private void AdatokKöltség_Feltöltés()
-        {
-            try
-            {
-                AdatokSérülésKöltség.Clear();
-                AdatokSérülésKöltség = KézSérülésKöltség.Lista_Adatok(KöltDátumtól.Value.Year);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToStrTrim(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void LekExcel_Click(object sender, EventArgs e)
         {
             try
@@ -1627,14 +1602,8 @@ namespace Villamos
             {
 
                 if (SapRendelés.Text.Trim() == "" || SapRendelés.Text.Trim() == "0") throw new HibásBevittAdat("A Rendelés mező üres!");
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{KöltDátumtól.Value:yyyy}\sérülés{KöltDátumtól.Value:yyyy}.mdb";
-
-                if (!Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely);
-
-                string szöveg = $"SELECT * FROM Költség WHERE rendelés={SapRendelés.Text.ToStrTrim()}";
-
-
-                AdatokSérülésKöltség = KézSérülésKöltség.Lista_Adatok(hely, Sérülésjelszó, szöveg);
+                AdatokSérülésKöltség = KézSérülésKöltség.Lista_Adatok(KöltDátumtól.Value.Year);
+                AdatokSérülésKöltség = AdatokSérülésKöltség.Where(a => a.Rendelés == SapRendelés.Text.ToÉrt_Int()).ToList();
 
                 DataTable AdatTábla = new DataTable();
 
@@ -1711,8 +1680,8 @@ namespace Villamos
 
                 string szöveg = $"SELECT * FROM Anyag ";
                 List<Adat_Sérülés_Anyag> AnyagAdatok = KézSérülésAnyag.Lista_Adatok(hely, Sérülésjelszó, szöveg);
-                szöveg = $"SELECT * FROM Költség";
-                List<Adat_Sérülés_Költség> KölstégAdatok = KézSérülésKöltség.Lista_Adatok(hely, Sérülésjelszó, szöveg);
+
+                List<Adat_Sérülés_Költség> KölstégAdatok = KézSérülésKöltség.Lista_Adatok(SapDátum.Value.Year);
                 szöveg = $"SELECT * FROM Művelet";
                 List<Adat_Sérülés_Művelet> MűveletAdatok = KézSérülésMűvelet.Lista_Adatok(hely, Sérülésjelszó, szöveg);
                 szöveg = $"SELECT * FROM Visszajelentés";
@@ -2440,12 +2409,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{KöltDátumtól.Value:yyyy}\sérülés{KöltDátumtól.Value:yyyy}.mdb";
-                string szöveg = "SELECT * FROM jelentés";
-
-                Kezelő_Sérülés_Jelentés Kéz = new Kezelő_Sérülés_Jelentés();
-                List<Adat_Sérülés_Jelentés> Adatok = Kéz.Lista_Adatok(hely, Sérülésjelszó, szöveg);
-                List<string> SzövegGY = new List<string>();
+                List<Adat_Sérülés_Jelentés> Adatok = KézSérülésJelentés.Lista_Adatok(KöltDátumtól.Value.Year);
+                List<Adat_Sérülés_Jelentés> AdatokGY = new List<Adat_Sérülés_Jelentés>();
 
                 for (int i = 0; i < Tábla2.Rows.Count; i++)
                 {
@@ -2457,14 +2422,14 @@ namespace Villamos
 
                         if (Elem != null)
                         {
-                            szöveg = "UPDATE jelentés  SET ";
-                            szöveg += " státus1=2 ";
-                            szöveg += $" WHERE [sorszám]={Tábla2.Rows[i].Cells[0].Value.ToStrTrim()}";
-                            SzövegGY.Add(szöveg);
+                            Adat_Sérülés_Jelentés ADAT = new Adat_Sérülés_Jelentés(
+                                Tábla2.Rows[i].Cells[0].Value.ToStrTrim().ToÉrt_Int(),
+                                2);
+                            AdatokGY.Add(ADAT);
                         }
                     }
                 }
-                if (SzövegGY.Count > 0) MyA.ABMódosítás(hely, Sérülésjelszó, SzövegGY);
+                if (AdatokGY.Count > 0) KézSérülésJelentés.Státus1Elk(KöltDátumtól.Value.Year, AdatokGY);
                 Elkészült.Visible = false;
                 Költlekérdezés_Kiiró();
                 KivalasztottSorszam = -1;
@@ -2520,7 +2485,7 @@ namespace Villamos
                 AdatTábla.Columns.Add("R.Státus");
                 AdatTábla.Columns.Add("Külső ár");
 
-                AdatokKöltség_Feltöltés();
+                AdatokSérülésKöltség = KézSérülésKöltség.Lista_Adatok(KöltDátumtól.Value.Year);
                 AdatokJelentés_Feltöltés();
                 AdatTábla.Clear();
                 foreach (Adat_Sérülés_Jelentés rekord in AdatokSérülésJelentés)
@@ -2652,9 +2617,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{KöltDátumtól.Value.Year}\sérülés{KöltDátumtól.Value.Year}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely);
-                List<Adat_Sérülés_Jelentés> Adatok = KézSérülésJelentés.Lista_Adatok(hely, Sérülésjelszó, Jelentésszöveg);
+                List<Adat_Sérülés_Jelentés> Adatok = KézSérülésJelentés.Lista_Adatok(KöltDátumtól.Value.Year);
                 List<Adat_Sérülés_Jelentés> Ideig = DátumSzűr(Adatok, KöltDátumtól.Value, KöltDátumig.Value);
                 Ideig = RendszámSzűr(Ideig, KöltRendszám.Text.Trim());
                 Ideig = TelephelySzűr(Ideig, Telephely_Költ, KöltTelephely.Text.Trim());
@@ -3536,13 +3499,8 @@ namespace Villamos
 
                 Alap_mezők();
                 Üresrögzítő();
-
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Melyikév:yyyy}\sérülés{Melyikév:yyyy}.mdb";
-                if (!Exists(hely)) throw new HibásBevittAdat("A beállított dátumra nincs adatbázis létrehozva!");
-
-                string szöveg = $"SELECT * FROM jelentés WHERE [sorszám]={KivalasztottSorszam}";
-
-                Adat_Sérülés_Jelentés rekord = KézSérülésJelentés.Egy_Adat(hely, Sérülésjelszó, szöveg);
+                List<Adat_Sérülés_Jelentés> Adatok = KézSérülésJelentés.Lista_Adatok(Melyikév.Year) ?? throw new HibásBevittAdat("A beállított dátumra nincs adatbázis létrehozva!");
+                Adat_Sérülés_Jelentés rekord = Adatok.Where(a => a.Sorszám == KivalasztottSorszam).FirstOrDefault();
 
                 Sorszám.Text = rekord.Sorszám.ToStrTrim();
                 Telephely.Text = rekord.Telephely.ToStrTrim();
@@ -3608,11 +3566,8 @@ namespace Villamos
                 if (AdatKiegSérülés != null) Költséghely.Text = AdatKiegSérülés.Költséghely;
 
                 // üzembehelyezés
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
-                string jelszó = "pozsgaii";
-                szöveg = $"SELECT * FROM állománytábla WHERE [azonosító]='{Pályaszám.Text.Trim()}'";
-
-                AdatJármű = KézJármű.Egy_Adat_fő(hely, jelszó, szöveg);
+                List<Adat_Jármű> JárműAdatok = KézJármű.Lista_Adatok("Főmérnökség");
+                AdatJármű = JárműAdatok.Where(a => a.Azonosító == Pályaszám.Text.Trim()).FirstOrDefault();
                 if (AdatJármű != null)
                     Üzembehelyezés.Text = AdatJármű.Üzembehelyezés.ToString("yyyy.MM.dd");
 
@@ -4267,33 +4222,16 @@ namespace Villamos
             try
             {
                 if (Sorszám.Text.ToStrTrim() == "") throw new HibásBevittAdat("Nincs kiválasztva sorszám!");
-
-                // létrehozzuk az adott évi táblázatot illetve könyvtárat
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{DateTime.Today:yyyy}";
-                if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-                hely += $@"\sérülés{DateTime.Today:yyyy}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely);
-
-                // aktuális beállított dátum mezőbe mentjük
-                hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value:yyyy}\sérülés{Dátum.Value:yyyy}.mdb";
-                if (!Exists(hely)) throw new HibásBevittAdat("A beállított dátumra nincs adatbázis létrehozva!");
                 if (!int.TryParse(Sorszám.Text, out int sorszám)) throw new HibásBevittAdat("Nincs ilyen sorszám");
 
-                string szöveg = $"SELECT * FROM jelentés";
-                List<Adat_Sérülés_Jelentés> Adatok = KézSérülésJelentés.Lista_Adatok(hely, Sérülésjelszó, Jelentésszöveg);
-
+                List<Adat_Sérülés_Jelentés> Adatok = KézSérülésJelentés.Lista_Adatok(Dátum.Value.Year) ?? throw new HibásBevittAdat("A beállított dátumra nincs adatbázis létrehozva!");
                 Adat_Sérülés_Jelentés Elem = (from a in Adatok
                                               where a.Sorszám == sorszám
                                               select a).FirstOrDefault();
 
-
                 if (Elem != null)
                 {
-                    szöveg = "UPDATE jelentés  SET ";
-                    szöveg += "státus=1, státus1=1 ";
-                    szöveg += $" WHERE [sorszám]={Sorszám.Text.Trim()}";
-                    MyA.ABMódosítás(hely, Sérülésjelszó, szöveg);
+                    KézSérülésJelentés.VisszaÁllít(Dátum.Value.Year, sorszám);
                     MessageBox.Show("Az adatok rögzítése/ módosítása megtörtént!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 Kiír(Dátum.Value);
@@ -4348,17 +4286,7 @@ namespace Villamos
                 Helyszín.Text = MyF.Szöveg_Tisztítás(Helyszín.Text, 0, Helyszín.Text.Length, true);
                 Ütközött.Text = MyF.Szöveg_Tisztítás(Ütközött.Text, 0, Ütközött.Text.Length, true);
 
-                // létrehozzuk az adot évi táblázatot illetve könyvtárat
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}";
-                if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
-
-                hely += $@"\sérülés{Dátum.Value:yyyy}.mdb";
-                if (!Exists(hely)) Adatbázis_Létrehozás.Tükörtáblák(hely);
-
-                if (!Exists(hely)) throw new HibásBevittAdat("A beállított dátumra nincs adatbázis létrehozva!");
-
-                string szöveg = "SELECT * FROM jelentés ";
-                AdatokSérülésJelentés = KézSérülésJelentés.Lista_Adatok(hely, Sérülésjelszó, szöveg);
+                AdatokSérülésJelentés = KézSérülésJelentés.Lista_Adatok(Dátum.Value.Year);
 
                 int Rekordszám = 1;
                 if (AdatokSérülésJelentés.Count > 0) Rekordszám = AdatokSérülésJelentés.Max(a => a.Sorszám) + 1;
@@ -4374,136 +4302,56 @@ namespace Villamos
                 }
                 else
                     új = 0;
+                DateTime DátumIdő = new DateTime(Dátum.Value.Year, Dátum.Value.Month, Dátum.Value.Day, Idő.Value.Hour, Idő.Value.Minute, Idő.Value.Second);
+                int kimenetel = 1;
+                if (Idegenhiba.Checked) kimenetel = 2;
+                if (Személyhiba.Checked) kimenetel = 3;
+                if (Egyébhiba.Checked) kimenetel = 4;
+                int státus = 1;
+                if (Opt_Elkészült.Checked) státus = 2;
+                if (Opt_Törölt.Checked) státus = 9;
+
+                Adat_Sérülés_Jelentés ADAT = new Adat_Sérülés_Jelentés(
+                    Sorszám.Text.ToÉrt_Int(),
+                    Telephely.Text.Trim(),
+                    DátumIdő,
+                    Helyszín.Text.Trim(),
+                    Viszonylat.Text.Trim(),
+                    Pályaszám.Text.Trim(),
+                    Járművezető.Text.Trim(),
+                    Rendelésszám.Text.ToÉrt_Int(),
+                    kimenetel,
+                    státus,
+                    "_",
+                    Típus.Text.Trim(),
+                    Szerelvény.Text.Trim(),
+                    Forgalmiakadály.Text.ToÉrt_Int(),
+                    Műszakihiba.Checked,
+                    Anyagikár.Checked,
+                    Biztosító.Text.Trim(),
+                    Személyi.Checked,
+                    false,
+                    Gyors.Checked ? 1 : 2,
+                    Ütközött.Text.Trim(),
+                    anyagikára,
+                    Leírás.Text.Trim(),
+                    Leírás1.Text.Trim(),
+                    "_",
+                    Esemény.Text.Trim(),
+                    0,
+                    1,
+                    KmóraÁllás.Text.Trim());
 
                 if (új == 0)
                 {
                     // Módosítás
-                    szöveg = "UPDATE jelentés  SET ";
-                    szöveg += $"Telephely='{Telephely.Text.Trim()}', ";
-                    szöveg += $"Dátum='{Dátum.Value:yyyy.MM.dd} {Idő.Value:HH:mm:ss}', ";
-                    szöveg += $"Balesethelyszín='{Helyszín.Text.Trim()}', ";
-                    szöveg += $"Viszonylat='{Viszonylat.Text.Trim()}', ";
-                    szöveg += $"Rendszám='{Pályaszám.Text.Trim()}', ";
-                    szöveg += $"járművezető='{Járművezető.Text.Trim()}', ";
-                    szöveg += $"Rendelésszám={Rendelésszám.Text.Trim()}, ";
-
-                    if (Opt_Nyitott.Checked) szöveg += "státus=1, ";
-                    if (Opt_Elkészült.Checked) szöveg += "státus=2, ";
-                    if (Opt_Törölt.Checked) szöveg += "státus=9, ";
-                    if (Sajáthiba.Checked) szöveg += "kimenetel=1, ";
-                    if (Idegenhiba.Checked) szöveg += "kimenetel=2, ";
-                    if (Személyhiba.Checked) szöveg += "kimenetel=3, ";
-                    if (Egyébhiba.Checked) szöveg += "kimenetel=4, ";
-
-                    szöveg += "Státus1=1, ";
-                    szöveg += "iktatószám='_', ";
-                    szöveg += $"Típus='{Típus.Text.Trim()}', ";
-                    szöveg += $"Szerelvény='{Szerelvény.Text.Trim()}',";
-                    szöveg += $"forgalmiakadály={Forgalmiakadály.Text.Trim()}, ";
-
-                    if (Műszakihiba.Checked)
-                        szöveg += "műszaki=true, ";
-                    else
-                        szöveg += "műszaki=false, ";
-
-                    if (Anyagikár.Checked)
-                        szöveg += "anyagikár=true, ";
-                    else
-                        szöveg += "anyagikár=false, ";
-
-                    szöveg += $"biztosító='{Biztosító.Text.Trim()}', ";
-
-                    if (Személyi.Checked)
-                        szöveg += "személyisérülés=true, ";
-                    else
-                        szöveg += "személyisérülés=false, ";
-
-                    szöveg += "személyisérülés1=false, ";
-
-                    if (Gyors.Checked)
-                        szöveg += "biztosítóidő=1, ";
-                    else
-                        szöveg += "biztosítóidő=2, ";
-
-                    szöveg += $"mivelütközött='{Ütközött.Text.Trim()}', ";
-                    szöveg += $"anyagikárft={anyagikára}, ";
-                    szöveg += $"Leírás='{Leírás.Text.Trim()}', ";
-                    szöveg += $"Leírás1='{Leírás1.Text.Trim()}', ";
-                    szöveg += "Balesethelyszín1='_', ";
-                    szöveg += $"esemény='{Esemény.Text.Trim()}', ";
-                    szöveg += $"anyagikárft1=0, ";
-                    szöveg += $"kmóraállás='{KmóraÁllás.Text.Trim()}' ";
-                    szöveg += $" WHERE [sorszám]={Sorszám.Text}";
+                    KézSérülésJelentés.Módosítás(Dátum.Value.Year, ADAT);
                 }
                 else
                 {
                     // rögzítés
-                    szöveg = "INSERT INTO jelentés  (sorszám, Telephely, Dátum, Balesethelyszín, ";
-                    szöveg += "Viszonylat, Rendszám, járművezető,  Rendelésszám, ";
-                    szöveg += "státus, kimenetel, Státus1, iktatószám, ";
-                    szöveg += "Típus, Szerelvény, forgalmiakadály, műszaki, ";
-                    szöveg += "anyagikár, biztosító, személyisérülés, személyisérülés1, ";
-                    szöveg += "biztosítóidő, mivelütközött, anyagikárft, Leírás,";
-                    szöveg += "Leírás1, Balesethelyszín1, esemény, anyagikárft1, ";
-                    szöveg += "kmóraállás ) VALUES (";
-                    szöveg += $"{Sorszám.Text}, ";
-                    szöveg += $"'{Telephely.Text.Trim()}', ";
-                    szöveg += $"'{Dátum.Value:yyyy.MM.dd} {Idő.Value:HH:mm:ss}', ";
-                    szöveg += $"'{Helyszín.Text.Trim()}', ";
-                    szöveg += $"'{Viszonylat.Text.Trim()}', ";
-                    szöveg += $"'{Pályaszám.Text.Trim()}', ";
-                    szöveg += $"'{Járművezető.Text.Trim()}', ";
-                    szöveg += $"{Rendelésszám.Text.Trim()}, ";
-
-                    if (Opt_Nyitott.Checked) szöveg += "1, ";
-                    if (Opt_Elkészült.Checked) szöveg += "2, ";
-                    if (Opt_Törölt.Checked) szöveg += "9, ";
-                    if (Sajáthiba.Checked) szöveg += "1, ";
-                    if (Idegenhiba.Checked) szöveg += "2, ";
-                    if (Személyhiba.Checked) szöveg += "3, ";
-                    if (Egyébhiba.Checked) szöveg += "4, ";
-
-                    szöveg += "1, ";
-                    szöveg += "'_', ";
-                    szöveg += $"'{Típus.Text.Trim()}', ";
-                    szöveg += $"'{Szerelvény.Text.Trim()} ',";
-                    szöveg += $"{Forgalmiakadály.Text.Trim()}, ";
-
-                    if (Műszakihiba.Checked)
-                        szöveg += " true, ";
-                    else
-                        szöveg += " false, ";
-
-                    if (Anyagikár.Checked)
-                        szöveg += " true, ";
-                    else
-                        szöveg += " false, ";
-
-                    szöveg += $"'{Biztosító.Text.Trim()}', ";
-
-                    if (Személyi.Checked)
-                        szöveg += " true, ";
-                    else
-                        szöveg += " false, ";
-
-                    szöveg += " false, ";
-
-                    if (Gyors.Checked)
-                        szöveg += "1, ";
-                    if (Hosszú.Checked)
-                        szöveg += "2, ";
-
-                    szöveg += $"'{Ütközött.Text.Trim()}', ";
-                    szöveg += $"{anyagikára}, ";
-                    szöveg += $"'{Leírás.Text.Trim()}', ";
-                    szöveg += $"'{Leírás1.Text.Trim()}', ";
-                    szöveg += "'_', ";
-                    szöveg += $"'{Esemény.Text.Trim()}', ";
-                    szöveg += "0, ";
-                    szöveg += $"'{KmóraÁllás.Text.Trim()}') ";
+                    KézSérülésJelentés.Rögzítés(Dátum.Value.Year, ADAT);
                 }
-                MyA.ABMódosítás(hely, Sérülésjelszó, szöveg);
-
                 MessageBox.Show("Az adatok rögzítése/ módosítása megtörtént!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 KivalasztottSorszam = -1;
                 Kiír(Dátum.Value);

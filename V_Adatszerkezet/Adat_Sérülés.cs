@@ -171,17 +171,17 @@ namespace Villamos.Adatszerkezet
         public int Biztosítóidő { get; set; }
         public string Mivelütközött { get; set; }
         public int Anyagikárft { get; set; }
-        public string  Leírás { get; set; }
-        public string  Leírás1 { get; set; }
+        public string Leírás { get; set; }
+        public string Leírás1 { get; set; }
         public string Balesethelyszín1 { get; set; }
         public string Esemény { get; set; }
         public int Anyagikárft1 { get; set; }
         public int Státus1 { get; set; }
         public string Kmóraállás { get; set; }
 
-        public Adat_Sérülés_Jelentés(int sorszám, string telephely, DateTime dátum, string balesethelyszín, string viszonylat, string rendszám, string járművezető, int rendelésszám, int kimenetel, 
+        public Adat_Sérülés_Jelentés(int sorszám, string telephely, DateTime dátum, string balesethelyszín, string viszonylat, string rendszám, string járművezető, int rendelésszám, int kimenetel,
                 int státus, string iktatószám, string típus, string szerelvény, int forgalmiakadály, bool műszaki, bool anyagikár, string biztosító, bool személyisérülés, bool személyisérülés1, int biztosítóidő,
-                string mivelütközött, int anyagikárft, string  leírás, string  leírás1, string balesethelyszín1, string esemény, int anyagikárft1, int státus1, string kmóraállás)
+                string mivelütközött, int anyagikárft, string leírás, string leírás1, string balesethelyszín1, string esemény, int anyagikárft1, int státus1, string kmóraállás)
         {
             Sorszám = sorszám;
             Telephely = telephely;
@@ -213,6 +213,12 @@ namespace Villamos.Adatszerkezet
             Státus1 = státus1;
             Kmóraállás = kmóraállás;
         }
+
+        public Adat_Sérülés_Jelentés(int sorszám, int státus1)
+        {
+            Sorszám = sorszám;
+            Státus1 = státus1;
+        }
     }
 
     public class Adat_Sérülés_Anyag
@@ -226,7 +232,7 @@ namespace Villamos.Adatszerkezet
         public double Rendelés { get; private set; }
         public string Mozgásnem { get; private set; }
 
-        public Adat_Sérülés_Anyag( string cikkszám, string anyagnév, double mennyiség, string me, double ár, string állapot, double rendelés, string mozgásnem)
+        public Adat_Sérülés_Anyag(string cikkszám, string anyagnév, double mennyiség, string me, double ár, string állapot, double rendelés, string mozgásnem)
         {
             Cikkszám = cikkszám;
             Anyagnév = anyagnév;
