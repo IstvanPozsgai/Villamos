@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Sérülés_Tarifa
     {
         string hely;
-        readonly string jelszó = "kismalac";
+        readonly string jelszó = "tükör";
         readonly string táblanév = "tarifa";
 
         private void FájlBeállítás(string Telephely, int Év)
