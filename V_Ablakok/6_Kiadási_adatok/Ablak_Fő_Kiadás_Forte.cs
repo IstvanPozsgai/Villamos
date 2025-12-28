@@ -382,7 +382,7 @@ namespace Villamos
                 }
 
                 // megnyitjuk a beolvasandó táblát
-                string munkalap = "Munka1";
+                string munkalap = "Járműszám";
                 MyX.ExcelMegnyitás(fájlexc);
 
 
