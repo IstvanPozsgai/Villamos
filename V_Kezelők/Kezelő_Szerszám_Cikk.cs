@@ -21,10 +21,10 @@ namespace Villamos.Kezelők
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Szerszám_nyilvántartás(hely.KönyvSzerk());
         }
 
-        public List<Adat_Szerszám_Cikktörzs> Lista_Adatok(string Melyik, string Telephely)
+        public List<Adat_Szerszám_Cikktörzs> Lista_Adatok(string Telephely, string Melyik)
         {
             string szöveg = $"SELECT * FROM {táblanév} ORDER BY azonosító";
-            FájlBeállítás(Melyik, Telephely);
+            FájlBeállítás(Telephely, Melyik);
             Adat_Szerszám_Cikktörzs Adat;
             List<Adat_Szerszám_Cikktörzs> Adatok = new List<Adat_Szerszám_Cikktörzs>();
 
@@ -59,11 +59,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Módosítás(string Melyik, string Telephely, Adat_Szerszám_Cikktörzs Adat)
+        public void Módosítás(string Telephely, string Melyik, Adat_Szerszám_Cikktörzs Adat)
         {
             try
             {
-                FájlBeállítás(Melyik, Telephely);
+                FájlBeállítás(Telephely, Melyik);
                 string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"megnevezés='{Adat.Megnevezés}', ";
                 szöveg += $"méret='{Adat.Méret}', ";
@@ -87,11 +87,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Rögzítés(string Melyik, string Telephely, Adat_Szerszám_Cikktörzs Adat)
+        public void Rögzítés(string Telephely, string Melyik, Adat_Szerszám_Cikktörzs Adat)
         {
             try
             {
-                FájlBeállítás(Melyik, Telephely);
+                FájlBeállítás(Telephely, Melyik);
                 string szöveg = $"INSERT INTO {táblanév}  (azonosító, megnevezés, méret, leltáriszám, Beszerzésidátum, státus, hely, költséghely, gyáriszám) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Megnevezés}', ";

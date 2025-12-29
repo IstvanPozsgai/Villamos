@@ -432,7 +432,7 @@ namespace Villamos.Villamos_Ablakok
             string azon = $"E{EszkAdat.Eszköz.Trim()}";
 
             Adat_Szerszám_Cikktörzs Adat = new Adat_Szerszám_Cikktörzs(
-                "E" + EszkAdat.Eszköz,
+                azon,
                 EszkAdat.Megnevezés.Trim(),
                 EszkAdat.Mennyiség.ToString(),
                 EszkAdat.Helyiség.Trim(),
@@ -524,13 +524,13 @@ namespace Villamos.Villamos_Ablakok
                 Adat_Szerszám_Könyvelés vane = (from a in Adatok
                                                 where a.AzonosítóMás == eszkoz
                                                 select a).FirstOrDefault();
-
                 //Ha nincs a könyvelésben csak akkor rögzítjük
                 if (vane == null)
                 {
-                    Adat_Szerszám_Cikktörzs Azonosító = new Adat_Szerszám_Cikktörzs(eszkoz, "");
-                    Adat_Szerszám_Könyvtörzs Szerszámkönyvszám = new Adat_Szerszám_Könyvtörzs(KönyvSzám.Trim(), "");
-                    Adat_Szerszám_Könyvelés Adat = new Adat_Szerszám_Könyvelés(Azonosító, Szerszámkönyvszám, eszkAdat.Mennyiség.ToÉrt_Int());
+                    Adat_Szerszám_Cikktörzs Azonosító = new Adat_Szerszám_Cikktörzs(eszkoz, eszkAdat.Megnevezés.Trim());
+                    Adat_Szerszám_Könyvtörzs Szerszámkönyvszám = new Adat_Szerszám_Könyvtörzs(eszkoz, "_");
+                    Adat_Szerszám_Könyvelés Adat = new Adat_Szerszám_Könyvelés(eszkAdat.Mennyiség.ToÉrt_Int(), DateTime.Now, eszkoz, eszkAdat.Helyiség);
+                    //   Azonosító, Szerszámkönyvszám, );
                     KézKönyvelés.Rögzítés(Telephely, Melyik, Adat);
                 }
             }
@@ -663,8 +663,11 @@ namespace Villamos.Villamos_Ablakok
                 if (!(Ellen_Besorolás.Text.Trim() == "Épület" || Ellen_Besorolás.Text.Trim() == "Szerszám"))
                     throw new HibásBevittAdat("Nincs kiválasztva adatbázis!");
 
+                //Meghatározzuk, hogy hova kell menteni
+                string Melyik = "Szerszám";
+                if (Ellen_Besorolás.Text.Trim() == "Épület") Melyik = "Helység";
 
-                CikktörzsListaFeltöltés(Cmbtelephely.Text.Trim(), Ellen_Besorolás.Text.Trim());
+                AdatokCikk = KézSzerszámCikk.Lista_Adatok(Cmbtelephely.Text.Trim(), Melyik);
                 List<string> Adatok = (from a in AdatokCikk
                                        where a.Azonosító.Substring(0, 1) == "E"
                                        select a.Azonosító).ToList();
@@ -679,6 +682,8 @@ namespace Villamos.Villamos_Ablakok
                     string Eszköz = Ellen_Tábla.Rows[j].Cells[0].Value.ToString().Trim();
                     string EEszköz = "E" + Eszköz;
                     bool Volt = Adatok.Contains(EEszköz);
+
+
                     if (Ellen_Besorolás.Text.Trim() == "Épület")
                     {
                         Adat_Eszköz ADAT = new Adat_Eszköz(
@@ -785,7 +790,7 @@ namespace Villamos.Villamos_Ablakok
                 for (int j = 0; j < Ellen_Tábla.Rows.Count; j++)
                 {
                     // ha ki van jelölve
-                    if (Ellen_Tábla.Rows[j].Selected == true)
+                    if (Ellen_Tábla.Rows[j].Selected)
                     {
                         string Eszköz = Ellen_Tábla.Rows[j].Cells[0].Value.ToString().Trim();
                         //Betöltjük az egy eszközt és az adatai felhasználásával feltöltjük a épületbe, vagy a szerszámban
@@ -866,26 +871,6 @@ namespace Villamos.Villamos_Ablakok
         }
         #endregion
 
-
-        #region ListákFeltöltése
-        private void CikktörzsListaFeltöltés(string Melyik, string Telephely)
-        {
-            try
-            {
-                AdatokCikk.Clear();
-                AdatokCikk = KézSzerszámCikk.Lista_Adatok(Melyik, Telephely);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        #endregion
 
         private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
         {
