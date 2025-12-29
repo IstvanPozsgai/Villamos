@@ -31,6 +31,7 @@ namespace Villamos
         private int Utolsó_Gomb = 0;
         string GombNév = "";
         string Gombfelirat = "";
+        bool Rögzíthet = false;
 
         List<string> Pályaszám = new List<string>();
         List<Adat_T5C5_Göngyöl_DátumTábla> AdatokGöngyöl = new List<Adat_T5C5_Göngyöl_DátumTábla>();
@@ -53,6 +54,7 @@ namespace Villamos
                 {
                     TelephelyekFeltöltéseÚj();
                     GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                    Rögzíthet = GombLathatosagKezelo.EgyGomb(this, "Rögzít", "Rögzítés");
                 }
                 else
                 {
@@ -765,6 +767,7 @@ namespace Villamos
 
                     Bevitelilap.Refresh();
                     Bevitelilap.Visible = true;
+                    Rögzít.Visible = Rögzíthet;
                 }
             }
             catch (HibásBevittAdat ex)

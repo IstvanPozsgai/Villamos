@@ -106,6 +106,56 @@ public static class GombLathatosagKezelo
         }
     }
 
+
+    public static bool EgyGomb(Form form, string GombNév, string GombFelirat, string Telephely = "")
+    {
+        bool válasz = false;
+        try
+        {
+            int TelephelyID = 0;
+            Adat_Kiegészítõ_Könyvtár TelephelyAdat = (from a in Program.PostásKönyvtár
+                                                      where a.Név == Telephely
+                                                      select a).FirstOrDefault();
+            if (TelephelyAdat != null) TelephelyID = TelephelyAdat.ID;
+
+            // Lekérjük az aktuális oldal ID-ját
+            Adat_Oldalak AdatOldal = Program.PostásOldalak.Where(o => o.FromName == form.Name).FirstOrDefault();
+            if (AdatOldal == null) return válasz;
+
+            // Lekérjük az adott ablakhoz tartozó gombokat az adatbázisból
+            List<Adat_Gombok> gombok = Program.PostásGombok.Where(g => g.FromName == form.Name && !g.Törölt).ToList();
+
+            // ha a jogosultáság táblában van akkor van hozzá joga így láthatóvá tesszük a gombokat
+            Adat_Gombok Egygomb = (from a in gombok
+                                   where a.GombFelirat == GombFelirat
+                                   && a.GombName == GombNév
+                                   select a).FirstOrDefault();
+
+            if (Egygomb != null)
+            {
+
+                // Lekérjük az adott felhasználóhoz tartozó gombokat az adatbázisból
+                List<Adat_Jogosultságok> jogosultságok = Program.PostásJogosultságok;
+                jogosultságok = (from j in jogosultságok
+                                 where j.UserId == Program.PostásNévId
+                                 && j.GombokId == Egygomb.GombokId
+                                 select j).ToList();
+
+                if (jogosultságok.Count > 0) válasz = true;
+            }
+        }
+        catch (HibásBevittAdat ex)
+        {
+            MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, "EgyGomb", ex.StackTrace, ex.Source, ex.HResult);
+            MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        return válasz;
+    }
+
     public static List<string> Telephelyek(string AblakNév)
     {
         List<string> Válasz = new List<string>();
