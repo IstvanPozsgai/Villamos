@@ -195,7 +195,7 @@ namespace Villamos.Ablakok
             AdatTáblaALap.Clear();
             Adatok = Kéz.Lista_Adatok();
             Adatok = (from a in Adatok
-                      orderby a.FromName, a.GombName
+                      orderby a.GombokId
                       select a).ToList();
             if (Ablaknév.Text.Trim() != "") Adatok = Adatok.Where(a => a.FromName.Trim() == Ablaknév.Text.Trim()).ToList();
             foreach (Adat_Gombok rekord in Adatok)
@@ -221,7 +221,7 @@ namespace Villamos.Ablakok
             try
             {
                 AdatTáblaALap.Columns.Clear();
-                AdatTáblaALap.Columns.Add("Gomb Id");
+                AdatTáblaALap.Columns.Add("Gomb Id", typeof(int));
                 AdatTáblaALap.Columns.Add("Gomb Leírás");
                 AdatTáblaALap.Columns.Add("Gomb Név");
                 AdatTáblaALap.Columns.Add("Form Név");
