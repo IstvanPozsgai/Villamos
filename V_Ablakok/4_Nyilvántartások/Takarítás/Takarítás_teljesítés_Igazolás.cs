@@ -1134,8 +1134,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Takarítás
             sor++;
             MyX.Egyesít(munkalap, $"B{sor}:C{sor}");
             MyX.Egyesít(munkalap, $"D{sor}:H{sor}");
-            MyX.Kiir("Csoport azonosító:", $"B{sor}");
-            MyX.Kiir(Szolgáltató.CsoportAzonosító, $"D{sor}");
+            //MyX.Kiir("Csoport azonosító:", $"B{sor}");
+            //MyX.Kiir(Szolgáltató.CsoportAzonosító, $"D{sor}");
             MyX.Igazít_vízszintes(munkalap, $"B{sor}", "bal");
             MyX.Igazít_vízszintes(munkalap, $"D{sor}", "bal");
 

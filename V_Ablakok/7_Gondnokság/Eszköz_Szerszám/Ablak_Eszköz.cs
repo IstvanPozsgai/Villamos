@@ -255,7 +255,7 @@ namespace Villamos.Villamos_Ablakok
                     InitialDirectory = "MyDocuments",
                     Title = "SAP-s Adatok betöltése",
                     FileName = "",
-                    Filter = "(*.html)|*.html"
+                    Filter = "(*.htm)|*.htm"
                 };
                 string fájlexc;
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
