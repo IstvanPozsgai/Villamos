@@ -994,6 +994,7 @@ namespace Villamos
             try
             {
                 if (Dolgozónév.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
+                Szabadságkiírása(0);
 
                 string[] darabol = Dolgozónév.Text.Trim().Split('=');
                 string fájlexc;

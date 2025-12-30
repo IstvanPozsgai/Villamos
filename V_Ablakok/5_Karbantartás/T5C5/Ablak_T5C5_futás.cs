@@ -767,7 +767,7 @@ namespace Villamos
 
                     Bevitelilap.Refresh();
                     Bevitelilap.Visible = true;
-                    Rögzít.Visible = Rögzíthet;
+                    // JAVÍTANDÓ:    Rögzít.Visible = Rögzíthet;
                 }
             }
             catch (HibásBevittAdat ex)

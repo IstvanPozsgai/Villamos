@@ -127,6 +127,8 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             {
                 Munkalap = munkalap,
                 NyomtatásiTerület = $"A1:E{sor}",
+                LapMagas = 1,
+                LapSzéles = 1,
                 Álló = true
             };
             MyX.NyomtatásiTerület_részletes(munkalap, beallitas_szabadsag);
