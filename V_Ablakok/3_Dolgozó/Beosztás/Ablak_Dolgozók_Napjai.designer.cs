@@ -39,19 +39,22 @@
             // 
             this.CsoportTábla.AllowUserToAddRows = false;
             this.CsoportTábla.AllowUserToDeleteRows = false;
+            this.CsoportTábla.AllowUserToResizeColumns = false;
+            this.CsoportTábla.AllowUserToResizeRows = false;
+            this.CsoportTábla.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
             this.CsoportTábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.CsoportTábla.Location = new System.Drawing.Point(6, 43);
+            this.CsoportTábla.Location = new System.Drawing.Point(6, 12);
             this.CsoportTábla.Name = "CsoportTábla";
             this.CsoportTábla.RowHeadersVisible = false;
             this.CsoportTábla.RowHeadersWidth = 51;
-            this.CsoportTábla.Size = new System.Drawing.Size(401, 322);
+            this.CsoportTábla.Size = new System.Drawing.Size(599, 353);
             this.CsoportTábla.TabIndex = 71;
             // 
             // Command21
             // 
             this.Command21.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Command21.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Command21.Location = new System.Drawing.Point(414, 45);
+            this.Command21.Location = new System.Drawing.Point(611, 43);
             this.Command21.Name = "Command21";
             this.Command21.Size = new System.Drawing.Size(45, 45);
             this.Command21.TabIndex = 70;
@@ -62,9 +65,9 @@
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(5, 7);
+            this.Holtart.Location = new System.Drawing.Point(12, 137);
             this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(455, 30);
+            this.Holtart.Size = new System.Drawing.Size(644, 30);
             this.Holtart.TabIndex = 72;
             this.Holtart.Visible = false;
             // 
@@ -72,8 +75,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Orange;
-            this.ClientSize = new System.Drawing.Size(464, 372);
+            this.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.ClientSize = new System.Drawing.Size(660, 372);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.CsoportTábla);
             this.Controls.Add(this.Command21);
@@ -86,7 +89,7 @@
             this.Name = "Ablak_Dolgozók_Napjai";
             this.Text = "Kiválasztott dolgozó munkával eltöltött napjai";
             this.Load += new System.EventHandler(this.Ablak_munkalap_dekádoló_csoport_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Ablak_munkalap_dekádoló_csoport_KeyDown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Ablak_Dolgozók_Napjai_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.CsoportTábla)).EndInit();
             this.ResumeLayout(false);
 

@@ -67,6 +67,7 @@ namespace Villamos
             this.Csoportkijelölmind = new System.Windows.Forms.Button();
             this.CsoportFrissít = new System.Windows.Forms.Button();
             this.Excel_gomb = new System.Windows.Forms.Button();
+            this.Napszámok = new System.Windows.Forms.Button();
             this.CsukDolgozó = new System.Windows.Forms.Button();
             this.CsukCsoport = new System.Windows.Forms.Button();
             this.NyitDolgozó = new System.Windows.Forms.Button();
@@ -77,7 +78,6 @@ namespace Villamos
             this.Jelen = new System.Windows.Forms.Button();
             this.Múlt = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.Napszámok = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.Idő.SuspendLayout();
@@ -462,6 +462,19 @@ namespace Villamos
             this.Excel_gomb.UseVisualStyleBackColor = true;
             this.Excel_gomb.Click += new System.EventHandler(this.Excel_gomb_Click);
             // 
+            // Napszámok
+            // 
+            this.Napszámok.BackgroundImage = global::Villamos.Properties.Resources._19;
+            this.Napszámok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Napszámok.Location = new System.Drawing.Point(892, 41);
+            this.Napszámok.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Napszámok.Name = "Napszámok";
+            this.Napszámok.Size = new System.Drawing.Size(40, 40);
+            this.Napszámok.TabIndex = 170;
+            this.ToolTip1.SetToolTip(this.Napszámok, "Kiválasztott dolgozók munkanapjai");
+            this.Napszámok.UseVisualStyleBackColor = true;
+            this.Napszámok.Click += new System.EventHandler(this.Napszámok_Click);
+            // 
             // CsukDolgozó
             // 
             this.CsukDolgozó.BackgroundImage = global::Villamos.Properties.Resources.fel;
@@ -568,19 +581,6 @@ namespace Villamos
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(69, 124);
             this.panel2.TabIndex = 169;
-            // 
-            // Napszámok
-            // 
-            this.Napszámok.BackgroundImage = global::Villamos.Properties.Resources._19;
-            this.Napszámok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Napszámok.Location = new System.Drawing.Point(892, 41);
-            this.Napszámok.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Napszámok.Name = "Napszámok";
-            this.Napszámok.Size = new System.Drawing.Size(40, 40);
-            this.Napszámok.TabIndex = 170;
-            this.ToolTip1.SetToolTip(this.Napszámok, "Törli a beosztást és a háttér adatokat");
-            this.Napszámok.UseVisualStyleBackColor = true;
-            this.Napszámok.Click += new System.EventHandler(this.Napszámok_Click);
             // 
             // Ablak_Beosztás
             // 

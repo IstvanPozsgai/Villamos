@@ -17,12 +17,22 @@ namespace Villamos.Villamos_Ablakok
         readonly Kezelő_Dolgozó_Alap KézDolgozóAlap = new Kezelő_Dolgozó_Alap();
         readonly Kezelő_Dolgozó_Beosztás_Új KézBeoLista = new Kezelő_Dolgozó_Beosztás_Új();
 
+        List<Adat_Kiegészítő_Beosztáskódok> AdatokKód = new List<Adat_Kiegészítő_Beosztáskódok>();
+        List<Adat_Dolgozó_Beosztás_Új> BeoListaÖ = new List<Adat_Dolgozó_Beosztás_Új>();
+
         public Ablak_Dolgozók_Napjai(string cmbtelephely, DateTime dátum, Dictionary<string, string> dolgozók)
         {
             InitializeComponent();
             Dátum = dátum;
             Cmbtelephely = cmbtelephely;
             Dolgozók = dolgozók;
+            Start();
+        }
+
+        private void Start()
+        {
+            AdatokKód = KézKód.Lista_Adatok(Cmbtelephely.Trim());
+            BeoListaÖ = KézBeoLista.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
         }
 
         public Ablak_Dolgozók_Napjai()
@@ -53,23 +63,23 @@ namespace Villamos.Villamos_Ablakok
                 CsoportTábla.ColumnCount = 4;
 
                 // fejléc elkészítése
-                CsoportTábla.Columns[0].HeaderText = "Dolgozó név";
-                CsoportTábla.Columns[0].Width = 150;
-                CsoportTábla.Columns[1].HeaderText = "Hr azonosító";
-                CsoportTábla.Columns[1].Width = 200;
+                CsoportTábla.Columns[0].HeaderText = "Hr azonosító";
+                CsoportTábla.Columns[0].Width = 140;
+                CsoportTábla.Columns[1].HeaderText = "Dolgozó név";
+                CsoportTábla.Columns[1].Width = 250;
                 CsoportTábla.Columns[2].HeaderText = "8 nap:";
-                CsoportTábla.Columns[2].Width = 80;
+                CsoportTábla.Columns[2].Width = 90;
                 CsoportTábla.Columns[3].HeaderText = "12 nap:";
-                CsoportTábla.Columns[3].Width = 80;
+                CsoportTábla.Columns[3].Width = 90;
                 foreach (var Dolgozó in Dolgozók)
                 {
                     CsoportTábla.RowCount++;
                     int i = CsoportTábla.RowCount - 1;
-
+                    Létszám(Dolgozó.Key, out int lét8, out int lét12);
                     CsoportTábla.Rows[i].Cells[0].Value = Dolgozó.Key;
                     CsoportTábla.Rows[i].Cells[1].Value = Dolgozó.Value;
-                    //CsoportTábla.Rows[i].Cells[1].Value = lét8;
-                    //CsoportTábla.Rows[i].Cells[2].Value = lét12;
+                    CsoportTábla.Rows[i].Cells[2].Value = lét8;
+                    CsoportTábla.Rows[i].Cells[3].Value = lét12;
                     Holtart.Lép();
                 }
                 CsoportTábla.Visible = true;
@@ -88,12 +98,11 @@ namespace Villamos.Villamos_Ablakok
             }
         }
 
-        private void Létszám(string Csoportbeosztás, out int Fő8, out int Fő12)
+        private void Létszám(string DolgozóSzám, out int Fő8, out int Fő12)
         {
             Fő8 = 0;
             Fő12 = 0;
 
-            List<Adat_Kiegészítő_Beosztáskódok> AdatokKód = KézKód.Lista_Adatok(Cmbtelephely.Trim());
             List<string> Kód8 = (from a in AdatokKód
                                  where a.Számoló == true
                                  && a.Munkarend == 8
@@ -106,35 +115,19 @@ namespace Villamos.Villamos_Ablakok
                                   orderby a.Beosztáskód
                                   select a.Beosztáskód).ToList();
 
-            //Csoport dolgozói
-            List<Adat_Dolgozó_Alap> AdatokDolgÖ = KézDolgozóAlap.Lista_Adatok(Cmbtelephely.Trim());
-            List<Adat_Dolgozó_Alap> AdatokDolg = (from a in AdatokDolgÖ
-                                                  where a.Kilépésiidő < new DateTime(1900, 1, 31)
-                                                  && a.Csoport == Csoportbeosztás
-                                                  select a).ToList();
 
-            List<Adat_Dolgozó_Beosztás_Új> BeoListaÖ = KézBeoLista.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
             List<Adat_Dolgozó_Beosztás_Új> BeoLista = (from a in BeoListaÖ
-                                                       where a.Nap.ToShortDateString() == Dátum.ToShortDateString()
-                                                       orderby a.Dolgozószám
+                                                       where a.Dolgozószám.Trim() == DolgozóSzám.Trim()
                                                        select a).ToList();
 
-            foreach (Adat_Dolgozó_Alap rekord in AdatokDolg)
+            foreach (Adat_Dolgozó_Beosztás_Új Nap in BeoLista)
             {
-                // ha van adattáblában olyan dolgozó akkor megnézzük, hogy dolgozott-e
-                string BeosztásKód = (from a in BeoLista
-                                      where a.Dolgozószám.Trim() == rekord.Dolgozószám.Trim()
-                                      select a.Beosztáskód.Trim()).FirstOrDefault();
-
-                if (BeosztásKód != null)
-                {
-                    if (Kód8.Contains(BeosztásKód.Trim())) Fő8++;
-                    if (Kód12.Contains(BeosztásKód.Trim())) Fő12++;
-                }
+                if (Kód8.Contains(Nap.Beosztáskód.Trim())) Fő8++;
+                if (Kód12.Contains(Nap.Beosztáskód.Trim())) Fő12++;
             }
         }
 
-        private void Ablak_munkalap_dekádoló_csoport_KeyDown(object sender, KeyEventArgs e)
+        private void Ablak_Dolgozók_Napjai_KeyDown(object sender, KeyEventArgs e)
         {
             // ESC
             if ((int)e.KeyCode == 27)
