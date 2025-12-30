@@ -77,6 +77,7 @@ namespace Villamos
             this.Jelen = new System.Windows.Forms.Button();
             this.Múlt = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.Napszámok = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.Idő.SuspendLayout();
@@ -529,7 +530,7 @@ namespace Villamos
             this.Idő.Controls.Add(this.Jövő);
             this.Idő.Controls.Add(this.Jelen);
             this.Idő.Controls.Add(this.Múlt);
-            this.Idő.Location = new System.Drawing.Point(925, 11);
+            this.Idő.Location = new System.Drawing.Point(1074, 8);
             this.Idő.Name = "Idő";
             this.Idő.Size = new System.Drawing.Size(71, 124);
             this.Idő.TabIndex = 168;
@@ -563,10 +564,23 @@ namespace Villamos
             // 
             // panel2
             // 
-            this.panel2.Location = new System.Drawing.Point(926, 10);
+            this.panel2.Location = new System.Drawing.Point(1073, 8);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(69, 124);
             this.panel2.TabIndex = 169;
+            // 
+            // Napszámok
+            // 
+            this.Napszámok.BackgroundImage = global::Villamos.Properties.Resources._19;
+            this.Napszámok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Napszámok.Location = new System.Drawing.Point(892, 41);
+            this.Napszámok.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Napszámok.Name = "Napszámok";
+            this.Napszámok.Size = new System.Drawing.Size(40, 40);
+            this.Napszámok.TabIndex = 170;
+            this.ToolTip1.SetToolTip(this.Napszámok, "Törli a beosztást és a háttér adatokat");
+            this.Napszámok.UseVisualStyleBackColor = true;
+            this.Napszámok.Click += new System.EventHandler(this.Napszámok_Click);
             // 
             // Ablak_Beosztás
             // 
@@ -574,21 +588,21 @@ namespace Villamos
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSeaGreen;
             this.ClientSize = new System.Drawing.Size(1200, 484);
+            this.Controls.Add(this.Napszámok);
+            this.Controls.Add(this.Ledolgozottidő);
+            this.Controls.Add(this.Hrazonosító);
+            this.Controls.Add(this.NapKiválaszt);
+            this.Controls.Add(this.Dolgozóneve);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.Idő);
             this.Controls.Add(this.Gomb_nappalos);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.Előzmény);
-            this.Controls.Add(this.Ledolgozottidő);
             this.Controls.Add(this.Adatok_egyeztetése);
             this.Controls.Add(this.Kiegészítő_Doboz);
             this.Controls.Add(this.Minden);
             this.Controls.Add(this.Tizenkétórás);
             this.Controls.Add(this.Nyolcórás);
             this.Controls.Add(this.Dolgozónév);
-            this.Controls.Add(this.Hrazonosító);
-            this.Controls.Add(this.NapKiválaszt);
-            this.Controls.Add(this.Dolgozóneve);
             this.Controls.Add(this.Váltós);
             this.Controls.Add(this.Váltósbeosztás);
             this.Controls.Add(this.DolgozóFrissít);
@@ -608,6 +622,7 @@ namespace Villamos
             this.Controls.Add(this.Panel1);
             this.Controls.Add(this.Csoport);
             this.Controls.Add(this.Tábla);
+            this.Controls.Add(this.Idő);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
@@ -668,5 +683,6 @@ namespace Villamos
         private Button Jelen;
         private Button Múlt;
         private Panel panel2;
+        internal Button Napszámok;
     }
 }

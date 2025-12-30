@@ -2395,8 +2395,50 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         #endregion
 
+
+        #region Munkanapokszáma
+        Ablak_Dolgozók_Napjai Új_Ablak_Dolgozók_Napjai;
+        private void Napszámok_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Új_Ablak_Dolgozók_Napjai?.Close();
+                if (Dolgozónév.CheckedItems.Count < 1) throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
+
+                // ******************************
+                // kijelölt nevek beírása a listába
+                // ******************************
+                Holtart.Be();
+                Dictionary<string, string> Dolgozók = new Dictionary<string, string>();
+                for (int i = 0; i < Dolgozónév.CheckedItems.Count; i++)
+                {
+                    Holtart.Lép();
+
+                    string[] darabol = Dolgozónév.CheckedItems[i].ToString().Split('=');
+                    Dolgozók.Add(darabol[1].Trim(), darabol[0].Trim());
+                }
+                Holtart.Ki();
+
+                Új_Ablak_Dolgozók_Napjai = new Ablak_Dolgozók_Napjai(Cmbtelephely.Text.Trim(), Dátum.Value, Dolgozók);
+                Új_Ablak_Dolgozók_Napjai.FormClosed += Új_Ablak_Beosztás_kieg_FormClosed;
+                Új_Ablak_Dolgozók_Napjai.Show();
+
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
 
     }
 }
