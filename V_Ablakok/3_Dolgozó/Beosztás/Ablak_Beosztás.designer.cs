@@ -487,6 +487,7 @@ namespace Villamos
             this.CsukDolgozó.UseVisualStyleBackColor = true;
             this.CsukDolgozó.Visible = false;
             this.CsukDolgozó.Click += new System.EventHandler(this.Csukdolgozó_Click);
+            this.CsukDolgozó.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CsukDolgozó_KeyDown);
             // 
             // CsukCsoport
             // 
@@ -512,6 +513,7 @@ namespace Villamos
             this.NyitDolgozó.TabIndex = 116;
             this.NyitDolgozó.UseVisualStyleBackColor = true;
             this.NyitDolgozó.Click += new System.EventHandler(this.Nyitdolgozó_Click);
+            this.NyitDolgozó.KeyDown += new System.Windows.Forms.KeyEventHandler(this.NyitDolgozó_KeyDown);
             // 
             // NyitCsoport
             // 

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
@@ -475,6 +477,169 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void CsukDolgozó_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+
+                if (e.Control && e.KeyCode == Keys.V)
+                {
+                    var names = PasteFromClipboard();
+                    if (names.Count > 0)
+                    {
+                        ApplySelectionFromNames(names);
+                        e.Handled = true; // jelezzük, hogy kezeltük
+                    }
+                }
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void NyitDolgozó_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+
+                if (e.Control && e.KeyCode == Keys.V)
+                {
+                    var names = PasteFromClipboard();
+                    if (names.Count > 0)
+                    {
+                        ApplySelectionFromNames(names);
+                        e.Handled = true; // jelezzük, hogy kezeltük
+                    }
+                }
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        private List<string> PasteFromClipboard()
+        {
+            List<string> result = new List<string>();
+
+            try
+            {
+                if (Clipboard.ContainsText())
+                {
+                    var text = Clipboard.GetText(); // Unicode támogatott
+                    var names = text
+                        .Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(s => s.Trim())
+                        .Where(s => !string.IsNullOrWhiteSpace(s))
+                        .ToList();
+
+                    result.AddRange(names);
+                }
+                else if (Clipboard.ContainsFileDropList())
+                {
+                    var files = Clipboard.GetFileDropList();
+                    foreach (string file in files)
+                    {
+                        if (System.IO.File.Exists(file)
+                            && string.Equals(System.IO.Path.GetExtension(file), ".txt", StringComparison.OrdinalIgnoreCase))
+                        {
+                            foreach (var line in System.IO.File.ReadAllLines(file, Encoding.UTF8))
+                            {
+                                var name = line.Trim();
+                                if (!string.IsNullOrWhiteSpace(name))
+                                    result.Add(name);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch
+            {
+                MessageBox.Show("Vágólap olvasása sikertelen.");
+            }
+
+            return result;
+        }
+
+        private void ApplySelectionFromNames(List<string> inputNames)
+        {
+            if (inputNames == null || inputNames.Count == 0) return;
+
+            var droppedSet = new HashSet<string>(
+                inputNames.Select(NormalizeName),
+                StringComparer.OrdinalIgnoreCase);
+
+            for (int i = 0; i < Dolgozónév.Items.Count; i++)
+            {
+                var item = Dolgozónév.Items[i];
+                string[] darabol = item.ToString().Split('=');
+                // STRING eset:
+                string displayText = darabol[0].Trim()?.ToString() ?? string.Empty;
+                string namePart = ExtractNameFromDisplay(displayText);
+
+                // OBJEKTUM eset (ajánlott):
+                // var d = (Dolgozo)item;
+                // string namePart = d.Nev;
+
+                if (droppedSet.Contains(NormalizeName(namePart)))
+                {
+                    Dolgozónév.SetItemChecked(i, true);
+                }
+            }
+        }
+
+        private static string NormalizeName(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input)) return string.Empty;
+            input = input.Trim();
+
+            string formD = input.Normalize(NormalizationForm.FormD);
+            var sb = new StringBuilder();
+            foreach (var ch in formD)
+            {
+                var uc = CharUnicodeInfo.GetUnicodeCategory(ch);
+                if (uc != UnicodeCategory.NonSpacingMark)
+                    sb.Append(ch);
+            }
+            var noAccents = sb.ToString().Normalize(NormalizationForm.FormC);
+            var singleSpaced = string.Join(" ", noAccents.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+            return singleSpaced;
+        }
+
+        private static string ExtractNameFromDisplay(string display)
+        {
+            if (string.IsNullOrWhiteSpace(display)) return string.Empty;
+
+            int bracket = display.IndexOf('[');
+            if (bracket > 0)
+                return display.Substring(0, bracket).Trim();
+
+            int dash = display.LastIndexOf('-');
+            if (dash > 0)
+                return display.Substring(0, dash).Trim();
+
+            return display.Trim();
+        }
+
         #endregion
 
 
@@ -2438,7 +2603,10 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
         #endregion
+
 
     }
 }

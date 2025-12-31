@@ -33,6 +33,7 @@ namespace Villamos.Villamos_Ablakok
         {
             AdatokKód = KézKód.Lista_Adatok(Cmbtelephely.Trim());
             BeoListaÖ = KézBeoLista.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+            Csoportlétszám();
         }
 
         public Ablak_Dolgozók_Napjai()
