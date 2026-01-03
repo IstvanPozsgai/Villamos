@@ -759,7 +759,7 @@ namespace Villamos
                 foreach (Adat_Kidobó rekord in Adatok)
                 {
                     sor += 1;
-                    MyX.Kiir(rekord.Szolgálatiszám.Trim().Replace("/", "|"), $"b{sor}");
+                    MyX.Kiir($"{rekord.Viszonylat.Trim()}|{rekord.Szolgálatiszám.Trim().Replace("/", "|")}", $"b{sor}");
                     MyX.Kiir(rekord.Forgalmiszám.Trim(), $"c{sor}");
                     MyX.Kiir(rekord.Kezdés.ToString("HH:mm"), $"a{sor}");
                     MyX.Kiir(rekord.Végzés.ToString("HH:mm"), $"d{sor}");
