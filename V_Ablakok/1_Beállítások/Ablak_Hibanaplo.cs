@@ -158,6 +158,5 @@ namespace Villamos
 
             return File.Exists(fajlUtvonal);
         }
-
     }
 }
