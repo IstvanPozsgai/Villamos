@@ -944,7 +944,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Takarítási teljesítési igazolás Terv-Tény-Eltérés",
-                    FileName = "Takarítási_teljesítési_igazolás_TTE_" + Dátum1.Value.ToString("yyyyMM"),
+                    FileName = $"Takarítási_teljesítési_igazolás_TTE_{Dátum1.Value:yyyyMM}_{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -955,7 +955,7 @@ namespace Villamos
 
 
                 // megnyitjuk az excelt
-                string munkalap = "Munka1";
+                string munkalap = "Összesítő";
                 MyX.ExcelLétrehozás(munkalap);
 
 
@@ -990,9 +990,9 @@ namespace Villamos
                     foreach (Adat_Épület_Takarítás_Osztály rekord in AdatokTakOsztály)
                     {
                         MyX.Kiir(rekord.Osztály.Trim(), "a" + sor.ToString());
-                        MyX.Kiir(rekord.E1Ft.ToString().Replace(",", "."), "c" + sor.ToString());
-                        MyX.Kiir(rekord.E2Ft.ToString().Replace(",", "."), "d" + sor.ToString());
-                        MyX.Kiir(rekord.E3Ft.ToString().Replace(",", "."), "e" + sor.ToString());
+                        MyX.Kiir($"#SZÁMD#{rekord.E1Ft}", "c" + sor.ToString());
+                        MyX.Kiir($"#SZÁMD#{rekord.E2Ft}", "d" + sor.ToString());
+                        MyX.Kiir($"#SZÁMD#{rekord.E3Ft}", "e" + sor.ToString());
                         Holtart.Lép();
                         sor += 1;
                     }
@@ -1003,9 +1003,10 @@ namespace Villamos
                 MyX.Oszlopszélesség(munkalap, "C:E");
                 MyX.OszlopRejtés(munkalap, "B:B");
                 MyX.Rácsoz(munkalap, "a1:e" + (sor - 1).ToString());
-                MyX.Munkalap_átnevezés(munkalap, "Összesítő");
+
                 munkalap = Cmbtelephely.Text.Trim();
                 MyX.Munkalap_Új(Cmbtelephely.Text.Trim());
+                MyX.Munkalap_aktív(munkalap);
                 MyX.Munkalap_betű(munkalap, BeBetűCal);
 
                 // ************************************************
@@ -1102,12 +1103,13 @@ namespace Villamos
 
                 MyX.Sormagasság(munkalap, "1:1", 47);
                 MyX.Sormagasság(munkalap, "2:2", 39);
-                MyX.Oszlopszélesség(munkalap, "B:B", 46);
-                MyX.Oszlopszélesség(munkalap, "c:o", 11);
 
                 MyX.Sortörésseltöbbsorba(munkalap, "c1");
                 MyX.Sortörésseltöbbsorba(munkalap, "d2:o2");
+
                 MyX.Oszlopszélesség(munkalap, "A:A");
+                MyX.Oszlopszélesség(munkalap, "B:B", 46);
+                MyX.Oszlopszélesség(munkalap, "C:AF", 11);
 
                 // a táblázat érdemi része
                 sor = 2;
@@ -1140,7 +1142,7 @@ namespace Villamos
                                 sor += 1;
                                 MyX.Kiir(rekord1.Osztály.Trim(), "A" + sor.ToString());
                                 MyX.Kiir(rekord1.Megnevezés.Trim(), "b" + sor.ToString());
-                                MyX.Kiir(rekord1.Méret.ToString().Replace(",", "."), "c" + sor.ToString());
+                                MyX.Kiir($"#SZÁMD#{rekord1.Méret}", "c" + sor.ToString());
                                 MyX.Kiir("E1", "d" + sor.ToString());
                                 MyX.Kiir("E2", "h" + sor.ToString());
                                 MyX.Kiir("E3", "l" + sor.ToString());
@@ -1172,30 +1174,30 @@ namespace Villamos
                                     idE2dbv = EgyA.E2elvégzettdb;
                                     idE3dbv = EgyA.E3elvégzettdb;
                                 }
-                                MyX.Kiir(idE1db.ToString(), "e" + sor.ToString());
-                                MyX.Kiir(idE2db.ToString(), "i" + sor.ToString());
-                                MyX.Kiir(idE3db.ToString(), "m" + sor.ToString());
-                                MyX.Kiir(idE1dbv.ToString(), "f" + sor.ToString());
-                                MyX.Kiir(idE2dbv.ToString(), "j" + sor.ToString());
-                                MyX.Kiir(idE3dbv.ToString(), "n" + sor.ToString());
-                                MyX.Kiir(rekord.E1Ft.ToString().Replace(",", "."), "p" + sor.ToString());
-                                MyX.Kiir((rekord.E2Ft * rekord1.Méret).ToString().Replace(",", "."), "q" + sor.ToString());
-                                MyX.Kiir((rekord.E3Ft * rekord1.Méret).ToString().Replace(",", "."), "r" + sor.ToString());
-                                MyX.Kiir("=RC[-3]*RC[-14]", "s" + sor.ToString());
-                                MyX.Kiir("=RC[-4]*RC[-14]", "t" + sor.ToString());
-                                MyX.Kiir("=RC[-5]*RC[-14]", "u" + sor.ToString());
-                                MyX.Kiir("=RC[-5]*RC[-13]", "v" + sor.ToString());
-                                MyX.Kiir("=RC[-6]*RC[-13]", "w" + sor.ToString());
-                                MyX.Kiir("=RC[-7]*RC[-13]", "x" + sor.ToString());
-                                MyX.Kiir("=RC[-7]*RC[-12]", "y" + sor.ToString());
-                                MyX.Kiir("=RC[-8]*RC[-12]", "z" + sor.ToString());
-                                MyX.Kiir("=RC[-9]*RC[-12]", "aa" + sor.ToString());
-                                MyX.Kiir("=RC[-9]+RC[-6]+RC[-3]", "ab" + sor.ToString());
-                                MyX.Kiir("=RC[-9]+RC[-6]+RC[-3]", "ac" + sor.ToString());
-                                MyX.Kiir("=RC[-9]+RC[-6]+RC[-3]", "ad" + sor.ToString());
-                                MyX.Kiir("=RC[-2]-RC[-1]", "g" + sor.ToString());
-                                MyX.Kiir("=RC[-2]-RC[-1]", "k" + sor.ToString());
-                                MyX.Kiir("=RC[-2]-RC[-1]", "o" + sor.ToString());
+                                MyX.Kiir($"#SZÁME#{idE1db}", "e" + sor.ToString());
+                                MyX.Kiir($"#SZÁME#{idE2db}", "i" + sor.ToString());
+                                MyX.Kiir($"#SZÁME#{idE3db}", "m" + sor.ToString());
+                                MyX.Kiir($"#SZÁME#{idE1dbv}", "f" + sor.ToString());
+                                MyX.Kiir($"#SZÁME#{idE2dbv}", "j" + sor.ToString());
+                                MyX.Kiir($"#SZÁME#{idE3dbv}", "n" + sor.ToString());
+                                MyX.Kiir($"#SZÁMD#{rekord.E1Ft}", "p" + sor.ToString());
+                                MyX.Kiir(($"#SZÁMD#{rekord.E2Ft * rekord1.Méret}"), "q" + sor.ToString());
+                                MyX.Kiir(($"#SZÁMD#{rekord.E3Ft * rekord1.Méret}"), "r" + sor.ToString());
+                                MyX.Kiir("#KÉPLET#=RC[-3]*RC[-14]", "s" + sor.ToString());
+                                MyX.Kiir("#KÉPLET#=RC[-4]*RC[-14]", "t" + sor.ToString());
+                                MyX.Kiir("#KÉPLET#=RC[-5]*RC[-14]", "u" + sor.ToString());
+                                MyX.Kiir("#KÉPLET#=RC[-5]*RC[-13]", "v" + sor.ToString());
+                                MyX.Kiir("#KÉPLET#=RC[-6]*RC[-13]", "w" + sor.ToString());
+                                MyX.Kiir("#KÉPLET#=RC[-7]*RC[-13]", "x" + sor.ToString());
+                                MyX.Kiir("#KÉPLET#=RC[-7]*RC[-12]", "y" + sor.ToString());
+                                MyX.Kiir("#KÉPLET#=RC[-8]*RC[-12]", "z" + sor.ToString());
+                                MyX.Kiir("#KÉPLET#=RC[-9]*RC[-12]", "aa" + sor.ToString());
+                                MyX.Kiir("#KÉPLET#=RC[-9]+RC[-6]+RC[-3]", "ab" + sor.ToString());
+                                MyX.Kiir("#KÉPLET#=RC[-9]+RC[-6]+RC[-3]", "ac" + sor.ToString());
+                                MyX.Kiir("#KÉPLET#=RC[-9]+RC[-6]+RC[-3]", "ad" + sor.ToString());
+                                MyX.Kiir("#KÉPLET#=RC[-2]-RC[-1]", "g" + sor.ToString());
+                                MyX.Kiir("#KÉPLET#=RC[-2]-RC[-1]", "k" + sor.ToString());
+                                MyX.Kiir("#KÉPLET#=RC[-2]-RC[-1]", "o" + sor.ToString());
                             }
                         }
                         Holtart.Lép();
@@ -1209,18 +1211,18 @@ namespace Villamos
                 MyX.Egyesít(munkalap, "b" + sor.ToString() + ":r" + sor.ToString());
                 MyX.Kiir(Cmbtelephely.Text.Trim() + " Összesen/hó", "b" + sor.ToString() + ":r" + sor.ToString());
                 MyX.Betű(munkalap, "b" + sor.ToString() + ":o" + sor.ToString(), BeBetűCalV);
-                MyX.Kiir("=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "s" + sor.ToString());
-                MyX.Kiir("=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "t" + sor.ToString());
-                MyX.Kiir("=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "u" + sor.ToString());
-                MyX.Kiir("=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "v" + sor.ToString());
-                MyX.Kiir("=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "w" + sor.ToString());
-                MyX.Kiir("=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "x" + sor.ToString());
-                MyX.Kiir("=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "y" + sor.ToString());
-                MyX.Kiir("=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "z" + sor.ToString());
-                MyX.Kiir("=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "aa" + sor.ToString());
-                MyX.Kiir("=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "ab" + sor.ToString());
-                MyX.Kiir("=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "ac" + sor.ToString());
-                MyX.Kiir("=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "ad" + sor.ToString());
+                MyX.Kiir("#KÉPLET#=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "s" + sor.ToString());
+                MyX.Kiir("#KÉPLET#=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "t" + sor.ToString());
+                MyX.Kiir("#KÉPLET#=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "u" + sor.ToString());
+                MyX.Kiir("#KÉPLET#=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "v" + sor.ToString());
+                MyX.Kiir("#KÉPLET#=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "w" + sor.ToString());
+                MyX.Kiir("#KÉPLET#=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "x" + sor.ToString());
+                MyX.Kiir("#KÉPLET#=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "y" + sor.ToString());
+                MyX.Kiir("#KÉPLET#=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "z" + sor.ToString());
+                MyX.Kiir("#KÉPLET#=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "aa" + sor.ToString());
+                MyX.Kiir("#KÉPLET#=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "ab" + sor.ToString());
+                MyX.Kiir("#KÉPLET#=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "ac" + sor.ToString());
+                MyX.Kiir("#KÉPLET#=SUM(R[-" + (sor - 3).ToString() + "]C:R[-1]C)", "ad" + sor.ToString());
                 MyX.Rácsoz(munkalap, "b1:af" + sor.ToString());
                 MyX.Sormagasság(munkalap, sor.ToString() + ":" + sor.ToString(), 25);
                 MyX.OszlopRejtés(munkalap, "A:A");
