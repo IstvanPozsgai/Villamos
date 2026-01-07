@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Villamos.Adatszerkezet;
 
 namespace Villamos
 {
@@ -20,7 +16,7 @@ namespace Villamos
 
         public Ablak_Hibanaplo()
         {
-            InitializeComponent();            
+            InitializeComponent();
             Start();
         }
 
@@ -74,7 +70,7 @@ namespace Villamos
 
             if (FileLetezik(ideiEv))
             {
-                osszesSor.AddRange(evesLogFajltBetolt(ideiEv).Skip(1));
+                osszesSor.AddRange(ÉvesLogFajltBetolt(ideiEv).Skip(1));
             }
             else
             {
@@ -89,7 +85,7 @@ namespace Villamos
 
             if (FileLetezik(tavalyiEv))
             {
-                osszesSor.AddRange(evesLogFajltBetolt(tavalyiEv).Skip(1));
+                osszesSor.AddRange(ÉvesLogFajltBetolt(tavalyiEv).Skip(1));
             }
             else
             {
@@ -107,7 +103,7 @@ namespace Villamos
                 // Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum
                 DataRow Soradat = AdatTábla.NewRow();
                 string[] mezok = sor.Split(';');
-                
+
                 Soradat["Dátum"] = mezok[0].Split(' ')[0];
                 Soradat["Idő"] = mezok[0].Split(' ')[1];
                 Soradat["Telephely"] = mezok[1];
@@ -138,7 +134,7 @@ namespace Villamos
             Hibanaplo_Tablazat.Columns["TeljesIdő"].Visible = false;
         }
 
-        private string[] evesLogFajltBetolt(int ev)
+        private string[] ÉvesLogFajltBetolt(int ev)
         {
             string fajlUtvonal;
             if (ev == DateTime.Now.Year)

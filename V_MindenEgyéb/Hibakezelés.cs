@@ -56,11 +56,11 @@ namespace Villamos
             // E-mail küldés
             Email(Képernyőfájl, szöveg, HibaKód);
 
-            string hely = $@"{Application.StartupPath}\főmérnökség\adatok\hibanapló\hiba{DateTime.Today:yyyyMMdd}.log";
+            string hely = $@"{Application.StartupPath}\főmérnökség\adatok\hibanapló\{DateTime.Today:yyyy}\hiba{DateTime.Today:yyyyMMdd}.log".KönyvSzerk();
             File.AppendAllText(hely, szöveg);
 
             // beírjuk a csv fájlba
-            hely = $@"{Application.StartupPath}\főmérnökség\adatok\hibanapló\hiba{DateTime.Today:yyyy}.csv";
+            hely = $@"{Application.StartupPath}\főmérnökség\adatok\hibanapló\{DateTime.Today:yyyy}\hiba{DateTime.Today:yyyy}.csv";
             if (!File.Exists(hely))
             {
                 //fejléc 
@@ -104,9 +104,9 @@ namespace Villamos
 
         private static void Email(string hely, string hiba, int hibakod)
         {
-            if (!hiba.Contains ("0x800AC472"))
+            if (!hiba.Contains("0x800AC472"))
             {
-          
+
                 MyO._Application _app = new MyO.Application();
                 MyO.MailItem mail = (MyO.MailItem)_app.CreateItem(MyO.OlItemType.olMailItem);
                 // címzett
