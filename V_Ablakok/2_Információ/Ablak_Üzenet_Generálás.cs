@@ -115,6 +115,7 @@ namespace Villamos.V_Ablakok.Közös
 
                 MessageBox.Show($"Az üzenet rögzítése megtörtént!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Változás?.Invoke();
+                this.Close();
             }
             catch (HibásBevittAdat ex)
             {

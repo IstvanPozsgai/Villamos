@@ -33,7 +33,7 @@ namespace Villamos
         private void Listák_Feltöltése()
         {
             Adatok_Üzenet = KézÜzenet.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year);
-            Olvasás_listázás();
+            Adatok_Olvas = KézOlvas.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year);
         }
 
         private void CMBtelephely_SelectedIndexChanged(object sender, EventArgs e)
@@ -59,8 +59,8 @@ namespace Villamos
                     Jogosultságkiosztás();
                 }
 
-                Dátumig.MaxDate = DateTime.Today;
-                Dátumtól.MaxDate = DateTime.Today;
+                Dátumig.MaxDate =MyF.Év_utolsónapja ( DateTime.Today);
+                Dátumtól.MaxDate = MyF.Év_utolsónapja(DateTime.Today);
 
                 Radioolvastan.Checked = true;
                 Táblalistázás();
@@ -610,10 +610,10 @@ namespace Villamos
                                                                sorszám,
                                                                DateTime.Now,
                                                                false);
-                KézOlvas.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Today.Year, ADAT);
+                KézOlvas.Rögzítés(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year, ADAT);
 
                 BtnOlvasva.Visible = false;
-                Olvasás_listázás();
+                Adatok_Olvas = KézOlvas.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year);
             }
             catch (HibásBevittAdat ex)
             {
@@ -643,10 +643,10 @@ namespace Villamos
                 }
 
 
-                KézOlvas.Rögzítés(Cmbtelephely.Text.Trim(), DateTime.Today.Year, ADATOK);
+                KézOlvas.Rögzítés(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year, ADATOK);
 
                 BtnOlvasva.Visible = false;
-                Olvasás_listázás();
+                Adatok_Olvas = KézOlvas.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year);
             }
             catch (HibásBevittAdat ex)
             {
@@ -807,23 +807,6 @@ namespace Villamos
             }
         }
 
-        private void Olvasás_listázás()
-        {
-            try
-            {
-                Adatok_Olvas.Clear();
-                Adatok_Olvas = KézOlvas.Lista_Adatok(Cmbtelephely.Text.Trim(), DateTime.Today.Year);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
         {
@@ -849,6 +832,28 @@ namespace Villamos
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Dátumtól_ValueChanged(object sender, EventArgs e)
+        {
+            //ha az évek különböznek akkor a végét az Dátumtól évébe állítjuk
+            if (Dátumtól.Value.Year != Dátumig.Value.Year)
+            {
+                Dátumig.Value = MyF.Év_utolsónapja(Dátumtól.Value);
+                Táblalistázás();
+                Txtírásimező.Text = "";
+            }
+        }
+
+        private void Dátumig_ValueChanged(object sender, EventArgs e)
+        {
+            //
+            if (Dátumtól.Value.Year != Dátumig.Value.Year)
+            {
+                Dátumtól.Value = MyF.Év_elsőnapja(Dátumig.Value);
+                Táblalistázás();
+                Txtírásimező.Text = "";
             }
         }
     }
