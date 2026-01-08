@@ -80,18 +80,7 @@ namespace Villamos
                     this.Text = "Szerszám Nyilvántartás";
                 else
                     this.Text = "Helység tartozék nyilvántartás";
-                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
-                //ha nem akkor a régit használjuk
-                if (Program.PostásJogkör.Substring(0, 1) == "R")
-                {
-                    TelephelyekFeltöltéseÚj();
-                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
-                }
-                else
-                {
-                    Telephelyekfeltöltése();
-                    Jogosultságkiosztás();
-                }
+
                 // hozzáadjuk az előírt értékeket
                 Adat_Szerszám_Könyvtörzs Adat;
                 Adat = new Adat_Szerszám_Könyvtörzs("Érkezett", "Új eszközök beérkeztetése", "_", "_", false);
@@ -106,6 +95,18 @@ namespace Villamos
                 Adat = new Adat_Szerszám_Könyvtörzs("Selejtre", "Selejtezésre előkészítés", "_", "_", false);
                 KézKönyv.Döntés(Cmbtelephely.Text.Trim(), Könyvtár_adat, Adat);
 
+                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+                //ha nem akkor a régit használjuk
+                if (Program.PostásJogkör.Substring(0, 1) == "R")
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                }
+                else
+                {
+                    Telephelyekfeltöltése();
+                    Jogosultságkiosztás();
+                }
 
                 CikktörzsListaFeltöltés();
                 KönyvListaFeltöltés();
@@ -203,7 +204,7 @@ namespace Villamos
                 else
                 { }
 
-                if (Könyvtár_adat.Trim() == "Adatok\\Szerszám")
+                if (Könyvtár_adat.Trim() == "Szerszám")
                 { melyikelem = 230; }
                 else
                 { melyikelem = 229; }
