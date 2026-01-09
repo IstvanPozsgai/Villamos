@@ -60,7 +60,7 @@ namespace Villamos
             File.AppendAllText(hely, szöveg);
 
             // beírjuk a csv fájlba
-            hely = $@"{Application.StartupPath}\főmérnökség\adatok\hibanapló\{DateTime.Today:yyyy}\hiba{DateTime.Today:yyyy}.csv";
+            hely = $@"{Application.StartupPath}\főmérnökség\adatok\hibanapló\{DateTime.Today:yyyy}\hiba{DateTime.Today:yyyy}.csv".KönyvSzerk();
             if (!File.Exists(hely))
             {
                 //fejléc 
