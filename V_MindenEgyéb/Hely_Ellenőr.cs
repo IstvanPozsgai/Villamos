@@ -11,7 +11,22 @@ namespace Villamos
             string Válasz = fájl;
             try
             {
+                //Ha létezik a fájl akkor nem foglalkozunk tovább vele
                 if (File.Exists(fájl)) return Válasz;
+                //Ha nincs telephely a fájlba akkor hibával leállítjuk a programot
+                bool NemHibás = false;
+                foreach (string Elem in Program.Postás_Telephelyek)
+                {
+                    if (fájl.Contains(Elem)) NemHibás = true;
+                }
+                if (NemHibás)
+                {
+                    // kilépünk
+                    throw new HibásBevittAdat("Valamiért hiányzik a telephelyi regisztráció, ezért a program leáll.");
+
+                }
+
+                //Ha van telephely, akkor létrehozzuk a nem létező könyvtárszerkezetet.
                 string[] Könyvtár = fájl.Split('\\');
                 string alap = Könyvtár[0];
                 for (int i = 1; i < Könyvtár.Length; i++)
@@ -26,6 +41,7 @@ namespace Villamos
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Application.Exit();
             }
             catch (Exception ex)
             {
