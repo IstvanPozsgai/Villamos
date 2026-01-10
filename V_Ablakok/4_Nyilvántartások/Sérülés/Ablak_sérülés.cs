@@ -3706,7 +3706,11 @@ namespace Villamos
                 MyX.Kiir("Forgalmi akadály ideje:", "a13");
                 MyX.Kiir("perc", "d13");
                 MyX.Kiir("Járművezető neve:", "a15");
-                MyX.Kiir("Járművezető nem hivatkozott műszaki hibára.", "a17");
+                if (Műszakihiba.Checked)
+                    MyX.Kiir("Járművezető műszaki hibára hivatkozott.", "a17");
+                else
+                    MyX.Kiir("Járművezető nem hivatkozott műszaki hibára.", "a17");
+
                 MyX.Kiir("Ha a járművezető nem hivatkozott műszaki hibára, akkor a jármű fékszerkezetét és működését az üzem területén átvizsgáltam és megállapítottam, hogy ", "a19");
                 MyX.Sortörésseltöbbsorba(munkalap, "A19:G20", true);
                 Holtart.Lép();
