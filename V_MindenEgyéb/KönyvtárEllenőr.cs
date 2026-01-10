@@ -3,11 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using Villamos.Kezelők;
 
 namespace Villamos
 {
@@ -24,7 +22,6 @@ namespace Villamos
         {
             try
             {
-                TelephelyekFelöltése();
                 if (NincsMeghajtó(hely))
                 {
                     BetűJel = SzabadMeghajtóBetű();
@@ -44,28 +41,6 @@ namespace Villamos
             }
         }
 
-        /// <summary>
-        /// Feltölti a Postás_Telephelyek listát, mely majd a könyvtár ellenőrzéshez kell
-        /// </summary>
-        /// <param name="hely"></param>
-        /// <returns></returns>
-        private void TelephelyekFelöltése()
-        {
-            try
-            {
-                Kezelő_Kiegészítő_Könyvtár Kéz = new Kezelő_Kiegészítő_Könyvtár();
-                Program.Postás_Telephelyek = Kéz.Lista_Adatok().OrderBy(a => a.Név).Select(a => a.Név).ToList();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         public bool NincsMeghajtó(string hely)
         {

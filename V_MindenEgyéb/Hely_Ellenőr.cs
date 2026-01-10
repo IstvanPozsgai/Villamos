@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
+using Villamos.Kezelők;
 
 namespace Villamos
 {
@@ -14,15 +16,19 @@ namespace Villamos
                 //Ha létezik a fájl akkor nem foglalkozunk tovább vele
                 if (File.Exists(fájl)) return Válasz;
                 //Ha nincs telephely a fájlba akkor hibával leállítjuk a programot
-                bool NemHibás = false;
+
+                if (Program.Postás_Telephelyek.Count < 1) TelephelyekFelöltése();
+                bool NemHibás = true ;
                 foreach (string Elem in Program.Postás_Telephelyek)
                 {
-                    if (fájl.Contains(Elem)) NemHibás = true;
+                    if (fájl.Contains(Elem)) NemHibás = false ;
                 }
                 if (NemHibás)
                 {
                     // kilépünk
-                    throw new HibásBevittAdat("Valamiért hiányzik a telephelyi regisztráció, ezért a program leáll.");
+                    throw new HibásBevittAdat("Valamiért hiányzik a telephelyi regisztráció, ezért a program leáll.\n" +
+                        "Ennek több oka lehet elveszítette a program a hálózati kapcsolatot, ilyenkor elég egy újraindítás.\n" +
+                        "A programra mutató parancsikon elavult, le kell cserélni a parancsikont.");
 
                 }
 
@@ -51,6 +57,30 @@ namespace Villamos
             return Válasz;
         }
 
+
+        /// <summary>
+        /// Feltölti a Postás_Telephelyek listát, mely majd a könyvtár ellenőrzéshez kell
+        /// </summary>
+        /// <param name="hely"></param>
+        /// <returns></returns>
+        private static void TelephelyekFelöltése()
+        {
+            try
+            {
+                Kezelő_Kiegészítő_Könyvtár Kéz = new Kezelő_Kiegészítő_Könyvtár();
+                Program.Postás_Telephelyek = Kéz.Lista_Adatok().OrderBy(a => a.Név).Select(a => a.Név).ToList();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "TelephelyekFelöltése", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public static void Könyvtárszerkezet(string Telephely)
         {
             try
@@ -59,7 +89,7 @@ namespace Villamos
                 if (Telephely == "Főmérnökség")
                 {
                     //Minden könyvtár
-                    hely = $@"{Application.StartupPath}\{Telephely}\adatok\Főkönyv".KönyvSzerk();
+                    hely = $@"{Application.StartupPath}\\adatok\Főkönyv".KönyvSzerk();
                     hely = $@"{Application.StartupPath}\{Telephely}\adatok\Üzenetek".KönyvSzerk();
                     hely = $@"{Application.StartupPath}\{Telephely}\Képek".KönyvSzerk();
                     hely = $@"{Application.StartupPath}\{Telephely}\Napló".KönyvSzerk();
