@@ -18,10 +18,10 @@ namespace Villamos
                 //Ha nincs telephely a fájlba akkor hibával leállítjuk a programot
 
                 if (Program.Postás_Telephelyek.Count < 1) TelephelyekFelöltése();
-                bool NemHibás = true ;
+                bool NemHibás = true;
                 foreach (string Elem in Program.Postás_Telephelyek)
                 {
-                    if (fájl.Contains(Elem)) NemHibás = false ;
+                    if (fájl.Contains(Elem)) NemHibás = false;
                 }
                 if (NemHibás)
                 {
@@ -69,6 +69,7 @@ namespace Villamos
             {
                 Kezelő_Kiegészítő_Könyvtár Kéz = new Kezelő_Kiegészítő_Könyvtár();
                 Program.Postás_Telephelyek = Kéz.Lista_Adatok().OrderBy(a => a.Név).Select(a => a.Név).ToList();
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -89,14 +90,14 @@ namespace Villamos
                 if (Telephely == "Főmérnökség")
                 {
                     //Minden könyvtár
-                    hely = $@"{Application.StartupPath}\\adatok\Főkönyv".KönyvSzerk();
+                    hely = $@"{Application.StartupPath}\{Telephely}\adatok\Főkönyv".KönyvSzerk();
                     hely = $@"{Application.StartupPath}\{Telephely}\adatok\Üzenetek".KönyvSzerk();
                     hely = $@"{Application.StartupPath}\{Telephely}\Képek".KönyvSzerk();
                     hely = $@"{Application.StartupPath}\{Telephely}\Napló".KönyvSzerk();
                     //Főmérnökség
                     hely = $@"{Application.StartupPath}\{Telephely}\adatok\Hibanapló".KönyvSzerk();
                 }
-                if (Telephely != "")
+                if (!(Telephely == "" || Telephely == "Főmérnökség"))
                 {
                     //Minden könyvtár
                     hely = $@"{Application.StartupPath}\{Telephely}\adatok\Főkönyv".KönyvSzerk();
