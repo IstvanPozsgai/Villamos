@@ -56,12 +56,12 @@ namespace Villamos
             // E-mail küldés
             Email(Képernyőfájl, szöveg, HibaKód);
 
-            string hely = $@"{Application.StartupPath}\főmérnökség\adatok\hibanapló\{DateTime.Today:yyyy}".KönyvSzerk();
+            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\hibanapló\{DateTime.Today:yyyy}".KönyvSzerk();
             hely += $@"\hiba{DateTime.Today:yyyyMMdd}.log";
             File.AppendAllText(hely, szöveg);
 
             // beírjuk a csv fájlba
-            hely = $@"{Application.StartupPath}\főmérnökség\adatok\hibanapló\{DateTime.Today:yyyy}\hiba{DateTime.Today:yyyy}.csv";
+            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\hibanapló\{DateTime.Today:yyyy}\hiba{DateTime.Today:yyyy}.csv";
             if (!File.Exists(hely))
             {
                 //fejléc 
