@@ -104,38 +104,40 @@ namespace Villamos.Kezelők
         {
             try
             {
-                //Megkeressük, hogy melyik az utolsó Mezőnév
-                List<Adat_Osztály_Név> Adatok = Lista_Adat().OrderBy(a => a.Osztálymező).ToList();
-                int sorszám = 0;
-                foreach (Adat_Osztály_Név elem in Adatok)
-                    if (elem.Osztálymező.Substring(4).ToÉrt_Int() > sorszám) sorszám = elem.Osztálymező.Substring(4).ToÉrt_Int();
+                List<Adat_Osztály_Név> adatok =
+                    Lista_Adat().OrderBy(a => a.Osztálymező).ToList();
 
-                sorszám++;
+                int max = 0;
+                foreach (var e in adatok)
+                {
+                    if (int.TryParse(e.Osztálymező.Replace("Adat", ""), out int n))
+                        if (n > max) max = n;
+                }
+                max++;
 
-                //Létrehozzuk az új mezőt
-                string Mezőnév = $"Adat{sorszám}";
+                string mezőnév = $"Adat{max}";
+
                 AdatBázis_kezelés ADAT = new AdatBázis_kezelés();
-                ADAT.AB_Új_Oszlop(hely, jelszó, "osztályadatok", Mezőnév, "TEXT(50)");
 
-                //Rögzítjük a mezőnevet az Osztálytáblában
-                Adat_Osztály_Név Adat = new Adat_Osztály_Név(
-                                    Sorszám(),
-                                    "_",
-                                    Mezőnév,
-                                    false);
-                Rögzítés(Adat);
+                ADAT.AB_Új_Oszlop(
+                    hely, jelszó, "osztályadatok", mezőnév, "MEMO");
 
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MyA.ABMódosítás(
+                    hely, jelszó,
+                    $"UPDATE osztályadatok SET [{mezőnév}] = NULL");
+
+                Adat_Osztály_Név adat = new Adat_Osztály_Név(
+                    Sorszám(), "_", mezőnév, false);
+
+                Rögzítés(adat);
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                HibaNapló.Log(ex.Message, ToString(),
+                    ex.StackTrace, ex.Source, ex.HResult);
             }
         }
+
 
         private int Sorszám()
         {
