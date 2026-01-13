@@ -115,7 +115,7 @@ namespace Villamos.Kezelők
                 //Létrehozzuk az új mezőt
                 string Mezőnév = $"Adat{sorszám}";
                 AdatBázis_kezelés ADAT = new AdatBázis_kezelés();
-                ADAT.AB_Új_Oszlop(hely, jelszó, "osztályadatok", Mezőnév, "TEXT(50)");
+                ADAT.AB_Új_Oszlop(hely, jelszó, "osztályadatok", Mezőnév, "MEMO");
 
                 //Rögzítjük a mezőnevet az Osztálytáblában
                 Adat_Osztály_Név Adat = new Adat_Osztály_Név(
