@@ -21,11 +21,10 @@ namespace InputForms
         /// <param name="LabelSzöveg">Label felirat</param>
         /// <param name="parent"></param>
         /// <param name="MaxLength"></param>
-        public InputTextbox(string LabelSzöveg, string tartalom, int maxLength = 15, int widthMax = 800, Control parent = null) : base(parent)
+        public InputTextbox(string LabelSzöveg, string tartalom, int maxLength = 15, Control parent = null) : base(parent)
         {
             MaxLength = maxLength;
             Tartalom = tartalom;
-            WidthMax = widthMax;
             Többsor = false;
             label = new Label
             {
@@ -54,7 +53,7 @@ namespace InputForms
             input.Top = y;
             label.Left = x;
             input.Left = label.Left + label.Width + 10;
-        
+
             return this;
         }
 
@@ -117,6 +116,16 @@ namespace InputForms
             set => ((TextBox)input).Text = value?.ToString() ?? "";
         }
 
+        public InputTextbox SetHeight(int magas)
+        {
+            input.Height = magas;
+            return this;
+        }
 
+        public InputTextbox SetWidth(int széles)
+        {
+            input.Width = széles;
+            return this;
+        }
     }
 }

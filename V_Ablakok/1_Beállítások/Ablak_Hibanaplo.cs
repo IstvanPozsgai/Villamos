@@ -13,6 +13,7 @@ namespace Villamos
     {
 
         readonly DataTable AdatTábla = new DataTable();
+        List<string> SorAdat = new List<string>();
 
         public Ablak_Hibanaplo()
         {
@@ -45,7 +46,7 @@ namespace Villamos
 
         private void Fejlec()
         {
-            // Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum
+            // Dátum;Idő;Telephely;Felhasználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; TeljesIdő
             AdatTábla.Columns.Clear();
             AdatTábla.Columns.Add("Dátum");
             AdatTábla.Columns.Add("Idő");
@@ -77,7 +78,7 @@ namespace Villamos
                     string[] mezok = sor.Split(';');
 
                     Soradat["Dátum"] = mezok[0].Split(' ')[0];
-                    Soradat["Idő"] = mezok[0].Split(' ')[1];
+                    Soradat["Idő"] = mezok[0].Split(' ')[1].ToÉrt_DaTeTime().ToString("HH:mm");
                     Soradat["Telephely"] = mezok[1];
                     Soradat["Felhasználó"] = mezok[2];
                     Soradat["Hiba üzenet"] = mezok[3];
@@ -141,6 +142,48 @@ namespace Villamos
             string fajlUtvonal = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{ev}\hiba{ev}.csv";
 
             return File.Exists(fajlUtvonal);
+        }
+
+        private void Részletek_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (SorAdat.Count < 1) throw new HibásBevittAdat("Nincs kiválasztva érvényes sor.");
+                Hibanapló_Részletes Ablak = new Hibanapló_Részletes();
+                Ablak.RészletesAdatok(SorAdat);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Hibanaplo_Tablazat_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (e.RowIndex < 0) return;
+                Hibanaplo_Tablazat.Rows[e.RowIndex].Selected = true;
+                SorAdat.Clear();
+                for (int oszlop = 0; oszlop < Hibanaplo_Tablazat.Columns.Count; oszlop++)
+                {
+                    SorAdat.Add(Hibanaplo_Tablazat.Rows[e.RowIndex].Cells[oszlop].Value.ToStrTrim());
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
