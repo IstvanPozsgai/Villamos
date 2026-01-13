@@ -4576,7 +4576,7 @@ namespace Villamos
                                 MyX.Munkalap_aktív("Összesítő_minden");
                                 // kiírjuk a hivatkozást
                                 MyX.Kiir($"#SZÁME#{megfelelő}", MyF.Oszlopnév(oszlop) + sorb);
-                                MyX.Kiir("#SZÁME#{kötbér}", MyF.Oszlopnév(oszlop + 3) + sorb);
+                                MyX.Kiir($"#SZÁME#{kötbér}", MyF.Oszlopnév(oszlop + 3) + sorb);
                                 // szorzások
                                 MyX.Kiir("#KÉPLET#=RC[-2]*RC[-1]", MyF.Oszlopnév(oszlop + 2) + sorb);
                                 MyX.Betű(munkalap, MyF.Oszlopnév(oszlop + 2) + sorb, beBetű);
