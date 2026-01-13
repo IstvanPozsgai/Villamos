@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Munkakör
     {
         readonly string jelszó = "ladányis";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Főmérnökség_munkakör.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Főmérnökség_munkakör.mdb";
 
         public Kezelő_Munkakör()
         {

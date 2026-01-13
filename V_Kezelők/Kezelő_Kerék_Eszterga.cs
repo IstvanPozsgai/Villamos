@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(int Év)
         {
-            hely = $@"{Application.StartupPath}\főmérnökség\adatok\{Év}\telepikerék.mdb";
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Év}\telepikerék.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Méréstáblakerék(hely.KönyvSzerk());
         }
 

@@ -1343,7 +1343,7 @@ namespace Villamos
                 MyX.Rácsoz(munkalap, "a12:g12");
                 MyX.Rácsoz(munkalap, $"a13:g{sor}");
 
-                string fénykép = $@"{Application.StartupPath}\Főmérnökség\adatok\Ábrák\BKV.png";
+                string fénykép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\BKV.png";
 
                 // '**********************************************
                 // '**Nyomtatási beállítások                    **

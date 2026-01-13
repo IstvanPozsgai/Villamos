@@ -17,7 +17,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
         {
             string válasz;
             string munkalap = "Munka1";
-            string Logo = Application.StartupPath + @"\Főmérnökség\adatok\BKV.png";
+            string Logo = Application.StartupPath + @"\Főmérnökség\Adatok\BKV.png";
             NyomtatásiFájlok.Clear();
 
             for (int i = 0; i < Tábla.SelectedRows.Count; i++)

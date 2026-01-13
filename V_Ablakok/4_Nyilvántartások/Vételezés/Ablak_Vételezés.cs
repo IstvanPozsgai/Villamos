@@ -687,7 +687,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             try
             {
                 if (CikkSzám.Trim() == "") return;
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Rezsiképek".KönyvSzerk();
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Rezsiképek".KönyvSzerk();
 
                 DirectoryInfo dir = new DirectoryInfo(hely);
                 System.IO.FileInfo[] aryFi = dir.GetFiles($"*{CikkSzám.Trim()}*.jpg");

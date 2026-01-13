@@ -20,7 +20,7 @@ namespace Villamos
     public partial class Ablak_TW6000_Tulajdonság
     {
 
-        readonly string TW6000_Villamos = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos4TW.mdb";
+        readonly string TW6000_Villamos = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos4TW.mdb";
         readonly string TW6000_Napló = $@"{Application.StartupPath}\Főmérnökség\napló\naplóTW6000_{DateTime.Today:yyyy}.mdb";
         readonly string TW6000_Napló_Ütem = $@"{Application.StartupPath}\Főmérnökség\napló\naplóTW6000Ütem_{DateTime.Today:yyyy}.mdb";
 

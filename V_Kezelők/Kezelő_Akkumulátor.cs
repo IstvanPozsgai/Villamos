@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         public Kezelő_Akkumulátor()
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\akku.mdb".KönyvSzerk();
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Akkumulátor\akku.mdb".KönyvSzerk();
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Akku_adatok(hely);
         }
 

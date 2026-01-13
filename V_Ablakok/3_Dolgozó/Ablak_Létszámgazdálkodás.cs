@@ -1085,7 +1085,7 @@ namespace Villamos
                 for (int ii = 0; ii < Cmbtelephely.Items.Count; ii++)
                 {
                     string helytelep = $@"{Application.StartupPath}\{Cmbtelephely.Items[ii]}\Adatok\Dolgozók.mdb";
-                    string helyvált = $@"{Application.StartupPath}\{Cmbtelephely.Items[ii]}\adatok\segéd\kiegészítő.mdb";
+                    string helyvált = $@"{Application.StartupPath}\{Cmbtelephely.Items[ii]}\Adatok\segéd\kiegészítő.mdb";
                     List<Adat_Kiegészítő_Csoportbeosztás> Segéd = KézSegéd.Lista_Adatok(Cmbtelephely.Items[ii].ToStrTrim());
                     if (File.Exists(helyvált) && File.Exists(helytelep))
                     {

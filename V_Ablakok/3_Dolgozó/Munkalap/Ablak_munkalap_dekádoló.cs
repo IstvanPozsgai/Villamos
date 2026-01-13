@@ -1133,7 +1133,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\Munkalap\munkalapösszesítő.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Munkalap\munkalapösszesítő.mdb";
                 if (!System.IO.File.Exists(hely)) return;
 
                 Tábla2.Rows.Clear();

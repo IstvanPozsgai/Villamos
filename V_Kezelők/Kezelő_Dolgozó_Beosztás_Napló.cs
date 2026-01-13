@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\naplózás\{Dátum:yyyyMM}napló.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\naplózás\{Dátum:yyyyMM}napló.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Beosztás_Naplózása(hely.KönyvSzerk());
         }
 

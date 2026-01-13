@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\sérüléscaf.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\sérüléscaf.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.CAFtáblakészít(hely.KönyvSzerk());
         }
 

@@ -18,7 +18,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Új_napihiba.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\villamos\Új_napihiba.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Napihibatábla(hely.KönyvSzerk());
         }
 

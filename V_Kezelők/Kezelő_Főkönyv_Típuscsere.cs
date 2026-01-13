@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely, int Év)
         {
-            hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\főkönyv\típuscsere{Év}.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\főkönyv\típuscsere{Év}.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Tipuscsereösszesítőtábla(hely.KönyvSzerk());
         }
 

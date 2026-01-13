@@ -26,7 +26,6 @@ namespace Villamos
 
     public static class HibaNapló
     {
-
         /// <summary>
         /// Hiba 
         /// </summary>
@@ -56,12 +55,12 @@ namespace Villamos
             // E-mail küldés
             Email(Képernyőfájl, szöveg, HibaKód);
 
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\hibanapló\{DateTime.Today:yyyy}".KönyvSzerk();
-            hely += $@"\hiba{DateTime.Today:yyyyMMdd}.log";
+            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{DateTime.Today:yyyy}".KönyvSzerk();
+            hely += $@"\Hiba{DateTime.Today:yyyyMMdd}.log";
             File.AppendAllText(hely, szöveg);
 
             // beírjuk a csv fájlba
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\hibanapló\{DateTime.Today:yyyy}\hiba{DateTime.Today:yyyy}.csv";
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{DateTime.Today:yyyy}\hiba{DateTime.Today:yyyy}.csv";
             if (!File.Exists(hely))
             {
                 //fejléc 
@@ -105,7 +104,7 @@ namespace Villamos
 
         private static void Email(string hely, string hiba, int hibakod)
         {
-            if (!hiba.Contains("0x800AC472"))
+            //   if (!hiba.Contains("0x800AC472"))
             {
 
                 MyO._Application _app = new MyO.Application();

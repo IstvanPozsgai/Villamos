@@ -51,7 +51,7 @@ namespace Villamos
                 Dátum.Value = DateTime.Today;
 
                 // virtuálisan megnyitjuk a képet
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\Fűtés_beállítás.jpg";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Fűtés_beállítás.jpg";
                 Kezelő_Kép.KépMegnyitás(PictureBox2, hely, ToolTip1);
                 PictureBox2.Top = 10;
                 PictureBox2.Left = 10;

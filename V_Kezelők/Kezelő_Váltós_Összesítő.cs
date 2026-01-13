@@ -16,7 +16,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(int Év)
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Nappalosmunkarendlétrehozás(hely.KönyvSzerk());
         }
 
@@ -58,7 +58,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
                 string szöveg = $"INSERT INTO összesítő{Tábla} (perc, dátum) VALUES (";
                 szöveg += $"{Adat.Perc}, ";
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}' )";
@@ -80,7 +80,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
                 string szöveg = $"UPDATE összesítő{Tábla} SET ";
                 szöveg += $" perc={Adat.Perc} ";
                 szöveg += $" WHERE dátum='{Adat.Dátum:M-d-yy}'";

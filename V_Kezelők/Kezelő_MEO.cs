@@ -11,7 +11,7 @@ namespace Villamos.Kezelők
     public class Kezelő_MEO_Naptábla
     {
         readonly string jelszó = "rudolfg";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\kerékmérés.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\kerékmérés.mdb";
         readonly string táblanév = "naptábla";
 
         public Kezelő_MEO_Naptábla()

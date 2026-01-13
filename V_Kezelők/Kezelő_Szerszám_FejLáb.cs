@@ -11,7 +11,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Szerszám_FejLáb
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb".KönyvSzerk();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő.mdb".KönyvSzerk();
         readonly string jelszó = "Mocó";
 
         public Kezelő_Szerszám_FejLáb()

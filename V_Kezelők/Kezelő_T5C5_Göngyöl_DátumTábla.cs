@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
             if (Telephely == "Főmérnökség")
                 hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Villamos3.mdb";
             else
-                hely = $@"{Application.StartupPath}\{Telephely}\adatok\főkönyv\futás\{Dátum.Year}\Villamos3-{Dátum.AddDays(-1):yyyyMMdd}.mdb";
+                hely = $@"{Application.StartupPath}\{Telephely}\Adatok\főkönyv\futás\{Dátum.Year}\Villamos3-{Dátum.AddDays(-1):yyyyMMdd}.mdb";
         }
 
         public List<Adat_T5C5_Göngyöl_DátumTábla> Lista_Adatok(string Telephely, DateTime Dátum)

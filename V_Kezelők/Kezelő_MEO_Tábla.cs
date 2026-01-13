@@ -9,7 +9,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_MEO_Tábla
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\kerékmérés.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\kerékmérés.mdb";
         readonly string jelszó = "rudolfg";
         readonly string táblanév = "tábla";
 

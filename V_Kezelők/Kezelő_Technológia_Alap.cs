@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Technológia_Alap
     {
         readonly string jelszó = "Bezzegh";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\technológia\technológia.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\technológia\technológia.mdb";
 
         public Kezelő_Technológia_Alap()
         {

@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(int Év)
         {
-            hely = $@"{Application.StartupPath}\főmérnökség\adatok\{Év}\{Év}_típuscsere_adatok.mdb".KönyvSzerk();
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Év}\{Év}_típuscsere_adatok.mdb".KönyvSzerk();
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadásitípuscserefőmérnöktábla(hely);
         }
 

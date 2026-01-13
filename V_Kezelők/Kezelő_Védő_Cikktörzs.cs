@@ -16,7 +16,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\Védő\Védőtörzs.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Védő\Védőtörzs.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Védőtörzs_készítés(hely.KönyvSzerk());
         }
 

@@ -18,7 +18,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Típus)
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Típus}.mdb";
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Technológia\{Típus}.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Technológia_Adat(hely.KönyvSzerk());
         }
 

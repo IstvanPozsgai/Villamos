@@ -2882,7 +2882,7 @@ namespace Villamos
 
                 // nyomtatási terület kijelölése
 
-                string helyicsop = Application.StartupPath + @"\Főmérnökség\adatok\BKV.jpg";
+                string helyicsop = Application.StartupPath + @"\Főmérnökség\Adatok\BKV.jpg";
 
                 string telephely = (from a in Adatok_Kieg_Jelenlétiív
                                     where a.Id == 4
@@ -3200,7 +3200,7 @@ namespace Villamos
 
                 // nyomtatási terület kijelölése
 
-                string helyicsop = $@"{Application.StartupPath}\Főmérnökség\adatok\BKV.jpg";
+                string helyicsop = $@"{Application.StartupPath}\Főmérnökség\Adatok\BKV.jpg";
 
                 string telephely = (from a in Adatok_Kieg_Jelenlétiív
                                     where a.Id == 4

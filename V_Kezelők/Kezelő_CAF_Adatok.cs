@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_CAF_Adatok
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\CAF\CAF.mdb";
         readonly string jelszó = "CzabalayL";
 
         public Kezelő_CAF_Adatok()
@@ -71,7 +71,7 @@ namespace Villamos.Kezelők
             {
                 for (int i = Év; i < DateTime.Today.Year; i++)
                 {
-                    string helyNapló = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF_{i}.mdb";
+                    string helyNapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\CAF\CAF_{i}.mdb";
                     if (File.Exists(helyNapló))
                         Válasz.AddRange(Lista_Adatok(helyNapló));
                 }
@@ -534,7 +534,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string helyNapló = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF_{Dátum.Year}.mdb";
+                string helyNapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\CAF\CAF_{Dátum.Year}.mdb";
                 if (File.Exists(helyNapló)) throw new HibásBevittAdat("Már az archiválás bevefejőzött.");
                 //Adattábla létrehozása
                 Adatbázis_Létrehozás.CAFAdatokArchív(helyNapló.KönyvSzerk());

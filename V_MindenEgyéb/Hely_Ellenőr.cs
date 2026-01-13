@@ -90,28 +90,28 @@ namespace Villamos
                 if (Telephely == "Főmérnökség")
                 {
                     //Minden könyvtár
-                    hely = $@"{Application.StartupPath}\{Telephely}\adatok\Főkönyv".KönyvSzerk();
-                    hely = $@"{Application.StartupPath}\{Telephely}\adatok\Üzenetek".KönyvSzerk();
+                    hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv".KönyvSzerk();
+                    hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Üzenetek".KönyvSzerk();
                     hely = $@"{Application.StartupPath}\{Telephely}\Képek".KönyvSzerk();
                     hely = $@"{Application.StartupPath}\{Telephely}\Napló".KönyvSzerk();
                     //Főmérnökség
-                    hely = $@"{Application.StartupPath}\{Telephely}\adatok\Hibanapló".KönyvSzerk();
+                    hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Hibanapló".KönyvSzerk();
                 }
                 if (!(Telephely == "" || Telephely == "Főmérnökség"))
                 {
                     //Minden könyvtár
-                    hely = $@"{Application.StartupPath}\{Telephely}\adatok\Főkönyv".KönyvSzerk();
-                    hely = $@"{Application.StartupPath}\{Telephely}\adatok\Üzenetek".KönyvSzerk();
+                    hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv".KönyvSzerk();
+                    hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Üzenetek".KönyvSzerk();
                     hely = $@"{Application.StartupPath}\{Telephely}\Képek".KönyvSzerk();
                     hely = $@"{Application.StartupPath}\{Telephely}\Napló".KönyvSzerk();
                     //telephelyi
-                    hely = $@"{Application.StartupPath}\{Telephely}\adatok\Főkönyv\Futás".KönyvSzerk();
-                    hely = $@"{Application.StartupPath}\{Telephely}\adatok\Főkönyv\{DateTime.Today.Year}\Nap".KönyvSzerk();
-                    hely = $@"{Application.StartupPath}\{Telephely}\adatok\Főkönyv\{DateTime.Today.Year}\Zser".KönyvSzerk();
-                    hely = $@"{Application.StartupPath}\{Telephely}\adatok\Beosztás".KönyvSzerk();
-                    hely = $@"{Application.StartupPath}\{Telephely}\adatok\Naplózás".KönyvSzerk();
-                    hely = $@"{Application.StartupPath}\{Telephely}\adatok\Villamos".KönyvSzerk();
-                    hely = $@"{Application.StartupPath}\{Telephely}\adatok\Segéd".KönyvSzerk();
+                    hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\Futás".KönyvSzerk();
+                    hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\{DateTime.Today.Year}\Nap".KönyvSzerk();
+                    hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Főkönyv\{DateTime.Today.Year}\Zser".KönyvSzerk();
+                    hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Beosztás".KönyvSzerk();
+                    hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Naplózás".KönyvSzerk();
+                    hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Villamos".KönyvSzerk();
+                    hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Segéd".KönyvSzerk();
                     hely = $@"{Application.StartupPath}\{Telephely}\Szerszám".KönyvSzerk();
                 }
             }

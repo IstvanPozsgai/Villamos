@@ -1125,7 +1125,7 @@ namespace Villamos
             {
                 if (FilePDF.SelectedIndex == -1 || FilePDF.SelectedItem == null) return;
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value:yyyy}\PDF\{FilePDF.SelectedItems[0]}";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum.Value:yyyy}\PDF\{FilePDF.SelectedItems[0]}";
                 if (!Exists(hely)) throw new HibásBevittAdat("Nem létezik a pdf fájl!");
 
                 Kezelő_Pdf.PdfMegnyitás(PDF_néző, hely);
@@ -1147,7 +1147,7 @@ namespace Villamos
         {
             try
             {
-                string honnan = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value:yyyy}\PDF\";
+                string honnan = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum.Value:yyyy}\PDF\";
 
                 if (FilePDF.SelectedItems.Count == 0) throw new HibásBevittAdat("Nincs kijelölt dokumentum!");
                 if (MessageBox.Show("A kijelölt Dokumentunok biztos törölni akarja ?!", "Figyelmeztetés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
@@ -1177,7 +1177,7 @@ namespace Villamos
             try
             {
                 if (FileBox.SelectedIndex == -1) return;
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value:yyyy}\képek\{FileBox.SelectedItems[0]}";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum.Value:yyyy}\képek\{FileBox.SelectedItems[0]}";
                 if (!Exists(hely)) throw new HibásBevittAdat("Nem létezik a fénykép!");
                 KépKeret.Image?.Dispose();
 
@@ -1204,7 +1204,7 @@ namespace Villamos
         {
             try
             {
-                string honnan = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value:yyyy}\képek\";
+                string honnan = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum.Value:yyyy}\képek\";
                 string hova = "";
                 FolderBrowserDialog FolderBrowserDialog1 = new FolderBrowserDialog();
                 if (FolderBrowserDialog1.ShowDialog() == DialogResult.OK)
@@ -1233,7 +1233,7 @@ namespace Villamos
         {
             try
             {
-                string honnan = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value:yyyy}\képek\";
+                string honnan = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum.Value:yyyy}\képek\";
                 KépKeret.Visible = false;
                 if (FileBox.SelectedItems.Count == 0)
                     throw new HibásBevittAdat("Nincs kiválasztva kép!");
@@ -1314,7 +1314,7 @@ namespace Villamos
                 foreach (string item in FilePDF.Items)
                     PDFek.Add(item.ToStrTrim());
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value.Year}\PDF\";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum.Value.Year}\PDF\";
 
                 Új_Ablak_Sérülés_PDF = new Ablak_PDF_Feltöltés(hely, Dátum.Value, Doksikdb, FénySorszám2, FényPályaszám2, PDFek, "Sérülés", false)
                 {
@@ -3366,7 +3366,7 @@ namespace Villamos
                 MyX.Egyesít(munkalap, $"b{sor}:f{sor}");
 
                 // nyomtatási beállítások
-                string helycsop = $@"{Application.StartupPath}\Főmérnökség\adatok\BKV.jpg";
+                string helycsop = $@"{Application.StartupPath}\Főmérnökség\Adatok\BKV.jpg";
                 string jobbfejléc = "&\"Arial,Félkövér\"&20&EBudapesti Közlekedési Zártkörűen Működő Részvénytársaság&12" + '\n' + "&\"Arial,Normál\"&16&E 1980 Budapest Akácfa u. 15.  Telefon: 461-6500";
                 Beállítás_Nyomtatás BeNYom = new Beállítás_Nyomtatás
                 {
@@ -3538,7 +3538,7 @@ namespace Villamos
                 FileBox.Items.Clear();
                 Képdb = 0;
                 // létrehozzuk a fénykép könyvtárat, ha még nincs
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value:yyyy}";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum.Value:yyyy}";
                 if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
                 hely += @"\Képek";
                 if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
@@ -3588,7 +3588,7 @@ namespace Villamos
             {
                 FilePDF.Items.Clear();
                 Doksikdb = 0;
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Value:yyyy}";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum.Value:yyyy}";
                 if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);
                 hely += @"\PDF";
                 if (!Directory.Exists(hely)) Directory.CreateDirectory(hely);

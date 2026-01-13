@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_TW6000_Ütemezés
     {
-        readonly string hely = $@"{Application.StartupPath}\főmérnökség\adatok\villamos4TW.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos4TW.mdb";
         readonly string jelszó = "czapmiklós";
         readonly Kezelő_TW600_ÜtemNapló KézNapló = new Kezelő_TW600_ÜtemNapló();
 

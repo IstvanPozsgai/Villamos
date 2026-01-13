@@ -991,7 +991,7 @@ namespace Villamos
             try
             {
                 if (Kategórilista.SelectedItems.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy kategória sem.");
-                string hely = $@"{Application.StartupPath}\főmérnökség\adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum.Value.Year}\{Dátum.Value.Year}_fortekiadási_adatok.mdb";
                 if (!File.Exists(hely)) throw new HibásBevittAdat($"Nincs {Dátum.Value:yyyy.MM.dd} dátumnak megfelelő adat.");
 
                 // létrehozzuk az excel táblát

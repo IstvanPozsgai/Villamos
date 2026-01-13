@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Rezsi_Törzs
     {
         readonly string jelszó = "csavarhúzó";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Rezsi\rezsitörzs.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Rezsi\rezsitörzs.mdb";
         readonly string Táblanév = "törzs";
 
         public Kezelő_Rezsi_Törzs()

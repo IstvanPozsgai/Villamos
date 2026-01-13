@@ -921,7 +921,7 @@ namespace Villamos
                 if (Fényazonosító.Text.Trim() == "") return;
 
                 // létrehozzuk a fénykép könyvtárat, ha még nincs
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Rezsiképek".KönyvSzerk();
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Rezsiképek".KönyvSzerk();
 
                 DirectoryInfo di = new System.IO.DirectoryInfo(hely);
                 System.IO.FileInfo[] aryFi = di.GetFiles("*.jpg");
@@ -948,7 +948,7 @@ namespace Villamos
             try
             {
                 if (FényképLista.SelectedItems.Count == 0) return;
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Rezsiképek\{FényképLista.SelectedItems[0]}";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Rezsiképek\{FényképLista.SelectedItems[0]}";
                 if (!Exists(hely)) throw new HibásBevittAdat("A kiválaszott kép nem létezik.");
 
                 Kezelő_Kép.KépMegnyitás(KépKeret, hely, toolTip1);
@@ -970,7 +970,7 @@ namespace Villamos
             try
             {
                 if (Fényazonosító.Text.Trim() == "") return;
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Rezsiképek".KönyvSzerk();
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Rezsiképek".KönyvSzerk();
 
                 Új_Ablak_Fénykép_Betöltés?.Close();
 
@@ -1010,7 +1010,7 @@ namespace Villamos
         {
             try
             {
-                string honnan = $@"{Application.StartupPath}\Főmérnökség\adatok\Rezsiképek\";
+                string honnan = $@"{Application.StartupPath}\Főmérnökség\Adatok\Rezsiképek\";
                 KépKeret.Visible = false;
                 if (FényképLista.SelectedItems.Count == 0) return;
                 if (MessageBox.Show("A kijelölt képeket biztos törölni akarja ?!", "Figyelmeztetés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
@@ -1074,7 +1074,7 @@ namespace Villamos
             int válasz = 0;
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Rezsiképek".KönyvSzerk();
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Rezsiképek".KönyvSzerk();
                 DirectoryInfo di = new System.IO.DirectoryInfo(hely);
                 System.IO.FileInfo[] aryFi = di.GetFiles($"*{azonosító}*");
                 válasz = aryFi.Length;

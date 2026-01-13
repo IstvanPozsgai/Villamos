@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\sérülés.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\sérülés.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Sérüléstábla(hely);
         }
 

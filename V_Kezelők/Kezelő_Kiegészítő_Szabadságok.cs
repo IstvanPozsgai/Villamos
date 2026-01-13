@@ -14,7 +14,7 @@ namespace Villamos.Kezelők
 
         private bool FájlBeállítás(string Telephely)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\segéd\Kiegészítő.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\segéd\Kiegészítő.mdb";
             return File.Exists(hely);
             //nincs elkészítve
             // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());

@@ -19,7 +19,7 @@ namespace Villamos.Kezelők
             if (Telephely == "Főmérnökség")
                 hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Villamos3.mdb";
             else
-                hely = $@"{Application.StartupPath}\{Telephely}\adatok\főkönyv\futás\{Dátum.Year}\Villamos3-{Dátum:yyyyMMdd}.mdb";
+                hely = $@"{Application.StartupPath}\{Telephely}\Adatok\főkönyv\futás\{Dátum.Year}\Villamos3-{Dátum:yyyyMMdd}.mdb";
 
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Futásnaptábla_Létrehozás(hely.KönyvSzerk());
 

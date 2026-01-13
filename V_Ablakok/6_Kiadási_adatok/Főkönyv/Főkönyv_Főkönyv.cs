@@ -1542,10 +1542,10 @@ namespace Villamos.Villamos_Nyomtatványok
         private void Jobb_Tervezet(string Cmbtelephely, DateTime Dátum)
         {
 
-            string helykieg = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\segéd\Kiegészítő.mdb";
+            string helykieg = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\segéd\Kiegészítő.mdb";
 
 
-            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\adatok\hibanapló" + @"\" + Dátum.ToString("yyyyMM") + "hibanapló.mdb";
+            string hely = $@"{Application.StartupPath}\{Cmbtelephely.Trim()}\Adatok\hibanapló" + @"\" + Dátum.ToString("yyyyMM") + "hibanapló.mdb";
 
             int mennyi;
             if (System.IO.File.Exists(hely))

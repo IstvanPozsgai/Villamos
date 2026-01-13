@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\Munkalap\munkalapösszesítő.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalapösszesítő.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Munkalapkedvencek(hely.KönyvSzerk());
         }
 

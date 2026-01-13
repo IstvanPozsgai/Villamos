@@ -16,7 +16,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(int Év)
         {
-            hely = $@"{Application.StartupPath}\főmérnökség\napló\naplóTW6000Ütem_{Év}.mdb";
+            hely = $@"{Application.StartupPath}\Főmérnökség\napló\naplóTW6000Ütem_{Év}.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.TW6000ütemnapló(hely.KönyvSzerk());
         }
 

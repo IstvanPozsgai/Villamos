@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(int Év)
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\Napi_km_Zser_{Év}.mdb";
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Év}\Napi_km_Zser_{Év}.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.ZSER_km(hely.KönyvSzerk());
         }
 

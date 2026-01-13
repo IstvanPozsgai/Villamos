@@ -11,7 +11,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_DigitálisMunkalap_Kocsik
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\DigitálisMunkalap\MunkalapAdatok.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\DigitálisMunkalap\MunkalapAdatok.mdb";
         readonly string jelszó = "";
         public Kezelő_DigitálisMunkalap_Kocsik()
         {

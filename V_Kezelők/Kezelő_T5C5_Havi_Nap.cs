@@ -15,7 +15,7 @@ namespace Villamos.Adatszerkezet
 
         private void FájlBeállítás(DateTime Dátum)
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\{Dátum.Year}\havi{Dátum:yyyyMM}.mdb";
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\{Dátum.Year}\havi{Dátum:yyyyMM}.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Havifutástábla_Létrehozás(hely.KönyvSzerk());
         }
 

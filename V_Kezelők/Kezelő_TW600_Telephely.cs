@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
     public class Kezelő_TW600_Telephely
     {
 
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos4TW.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos4TW.mdb";
         readonly string jelszó = "czapmiklós";
 
         public Kezelő_TW600_Telephely()

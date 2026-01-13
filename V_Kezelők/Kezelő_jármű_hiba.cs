@@ -24,7 +24,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
-            helynapló = $@"{Application.StartupPath}\{Telephely}\adatok\hibanapló\{Dátum:yyyyMM}hibanapló.mdb";
+            helynapló = $@"{Application.StartupPath}\{Telephely}\Adatok\hibanapló\{Dátum:yyyyMM}hibanapló.mdb";
             if (!File.Exists(helynapló)) Adatbázis_Létrehozás.Hibatáblalap(helynapló.KönyvSzerk());
         }
 

@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely, int Év)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\szatubecs\{Év}szatubecs.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\szatubecs\{Év}szatubecs.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.SzaTuBe_tábla(hely.KönyvSzerk());
         }
 

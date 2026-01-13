@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(int Év)
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Év}.mdb".KönyvSzerk();
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Akkumulátor\Akkunapló{Év}.mdb".KönyvSzerk();
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Akku_Mérés(hely);
         }
 

@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         public Kezelő_Raktár()
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\rezsi\RaktárKészlet.mdb".KönyvSzerk();
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\rezsi\RaktárKészlet.mdb".KönyvSzerk();
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Raktárkészlet(hely);
         }
 

@@ -271,7 +271,7 @@ namespace Villamos
             try
             {
                 Adat_Évek.Items.Clear();
-                string hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\adatok\Szatubecs";
+                string hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\Adatok\Szatubecs";
 
                 foreach (string file in System.IO.Directory.GetFiles(hely))
                 {

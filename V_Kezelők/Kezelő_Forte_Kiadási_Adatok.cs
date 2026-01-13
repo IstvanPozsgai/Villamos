@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(int Év)
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Év}\{Év}_fortekiadási_adatok.mdb";
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Év}\{Év}_fortekiadási_adatok.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Fortekiadásifőmtábla(hely.KönyvSzerk());
         }
 

@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Kulcs_Kettő
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Villamos10.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Villamos10.mdb";
         readonly string jelszó = "fütyülősbarack";
 
         public Kezelő_Kulcs_Kettő()

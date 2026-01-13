@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Reklám
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos5.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos5.mdb";
         readonly string jelszó = "morecs";
         readonly string táblanév = "reklámtábla";
 

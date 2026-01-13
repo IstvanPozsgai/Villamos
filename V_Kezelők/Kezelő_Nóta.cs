@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Nóta
     {
         readonly string jelszó = "TörökKasos";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Nóta\NótaT5C5.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Nóta\NótaT5C5.mdb";
 
         readonly Kezelő_Kiegészítő_Szolgálattelepei KézSzolgálattelepei = new Kezelő_Kiegészítő_Szolgálattelepei();
         readonly Kezelő_Kerék_Tábla KézBerendezés = new Kezelő_Kerék_Tábla();

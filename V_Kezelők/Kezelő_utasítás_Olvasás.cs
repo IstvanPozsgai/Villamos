@@ -18,7 +18,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely, int Év)
         {
-            hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\üzenetek\{Év}utasítás.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\üzenetek\{Év}utasítás.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.UtasításadatokTábla(hely.KönyvSzerk());
         }
 

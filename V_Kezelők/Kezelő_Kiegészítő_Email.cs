@@ -10,7 +10,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Kiegészítő_Email
     {
         readonly string jelszó = "Mocó";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő2.mdb";
         readonly string táblanév = "hibanaplo_email";
 
         // Statikusan tárolom, hogy csak egyszer kelljen betölteni a címeket.

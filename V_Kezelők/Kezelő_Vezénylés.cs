@@ -16,7 +16,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\főkönyv\futás\{Dátum.Year}\vezénylés{Dátum.Year}.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\főkönyv\futás\{Dátum.Year}\vezénylés{Dátum.Year}.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Vezényléstábla(hely.KönyvSzerk());
         }
 

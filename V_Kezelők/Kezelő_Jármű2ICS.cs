@@ -16,7 +16,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\villamos2ICS.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\villamos\villamos2ICS.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.VillamostáblaICS(hely.KönyvSzerk());
         }
 

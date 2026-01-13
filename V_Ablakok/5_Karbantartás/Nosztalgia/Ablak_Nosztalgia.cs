@@ -1584,7 +1584,7 @@ namespace Villamos.Villamos_Ablakok
 
                 string jelszó = "pozsgaii";
                 // Módosítjuk a jármű státuszát
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\villamos.mdb";
                 // megnyitjuk a hibákat
                 string helyhiba = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\hiba.mdb";
                 // naplózás

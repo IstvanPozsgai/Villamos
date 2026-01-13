@@ -11,7 +11,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_OktatásiSegéd
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Főmérnökség_oktatás.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Főmérnökség_oktatás.mdb";
         readonly string jelszó = "pázmányt";
 
         public Kezelő_OktatásiSegéd()

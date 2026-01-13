@@ -253,7 +253,7 @@ namespace Villamos
             try
             {
                 List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\villamos.mdb";
                 if (AdatokJármű != null && AdatokJármű.Count < 1) return;
                 AdatokJármű = (from a in AdatokJármű
                                orderby a.Típus, a.Azonosító

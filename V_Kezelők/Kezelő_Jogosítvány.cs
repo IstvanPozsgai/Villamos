@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
     public class Kezelő_JogosítványTípus
     {
         readonly string jelszó = "egycsészekávé";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Főmérnökség1.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Főmérnökség1.mdb";
 
         public Kezelő_JogosítványTípus()
         {

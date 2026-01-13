@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Behajtás_Engedélyezés
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\behajtási\Behajtási_alap.mdb";
         readonly string jelszó = "egérpad";
 
         public Kezelő_Behajtás_Engedélyezés()

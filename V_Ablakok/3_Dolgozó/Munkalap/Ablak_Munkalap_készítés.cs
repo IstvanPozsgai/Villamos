@@ -1124,7 +1124,7 @@ namespace Villamos
             }
             if (E2pályaszám.Checked && maximum >= 1 && mennyi > 0)
             {
-                string hely3 = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos2.mdb";
+                string hely3 = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\villamos2.mdb";
 
                 for (int i = 0; i < Típusoklistája.Items.Count; i++)
                 {

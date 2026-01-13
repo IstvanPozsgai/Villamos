@@ -16,7 +16,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely, DateTime Dátum, string Napszak)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\főkönyv\{Dátum.Year}\zser\zser{Dátum:yyyyMMdd}{Napszak}.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\főkönyv\{Dátum.Year}\zser\zser{Dátum:yyyyMMdd}{Napszak}.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Zseltáblaalap(hely.KönyvSzerk());
         }
 

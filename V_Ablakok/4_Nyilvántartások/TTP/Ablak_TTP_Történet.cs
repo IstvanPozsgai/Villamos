@@ -419,7 +419,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             {
                 Új_Ablak_PDF_Feltöltés?.Close();
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\TTP\PDF\";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\TTP\PDF\";
                 Új_Ablak_PDF_Feltöltés = new Ablak_PDF_Feltöltés(hely, DtTTPDátum.Value, 0, 0, CmbAzonosító.Text.Trim(), null, "TTP", false)
                 {
                     StartPosition = FormStartPosition.CenterScreen
@@ -452,7 +452,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             {
                 Új_Ablak_PDF_Feltöltés?.Close();
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\TTP\PDF\";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\TTP\PDF\";
                 Új_Ablak_PDF_Feltöltés = new Ablak_PDF_Feltöltés(hely, DtTTPDátum.Value, 0, 0, CmbAzonosító.Text.Trim(), null, "TTP", true)
                 {
                     StartPosition = FormStartPosition.CenterScreen

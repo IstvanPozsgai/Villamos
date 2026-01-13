@@ -9,7 +9,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_CAF_Szinezés
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\CAF\CAF.mdb";
         readonly string jelszó = "CzabalayL";
 
         public Kezelő_CAF_Szinezés()

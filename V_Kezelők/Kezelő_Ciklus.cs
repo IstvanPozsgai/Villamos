@@ -11,7 +11,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Ciklus
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\ciklus.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ciklus.mdb";
         readonly string jelszó = "pocsaierzsi";
         readonly string táblanév = "ciklusrendtábla";
 

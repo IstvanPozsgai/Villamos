@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Osztály_Adat
     {
         Kezelő_Osztály_Név KézNév = new Kezelő_Osztály_Név();
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\osztály.mdb";
         readonly string jelszó = "kéménybe";
         readonly string táblanév = "osztályadatok";
 

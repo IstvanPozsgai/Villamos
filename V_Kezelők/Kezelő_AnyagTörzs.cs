@@ -18,7 +18,7 @@ namespace Villamos.Kezelők
 
         public Kezelő_AnyagTörzs()
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\rezsi\AnyagTörzs.mdb".KönyvSzerk();
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\rezsi\AnyagTörzs.mdb".KönyvSzerk();
             if (!File.Exists(hely)) Adatbázis_Létrehozás.AnyagTörzs(hely);
         }
 
