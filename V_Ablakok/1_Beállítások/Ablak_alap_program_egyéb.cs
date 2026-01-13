@@ -46,6 +46,7 @@ namespace Villamos
 
         private void AblakProgramegyéb_Load(object sender, EventArgs e)
         {
+            new Kezelő_Osztály_Adat();
         }
 
         #region Alap
