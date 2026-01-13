@@ -161,7 +161,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 Btn_TTP_Rögz.Visible = false;
                 BtnPDFFel.Visible = false;
 
-                // csak főmérnökségi belépéssel törölhető
+                // csak Főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
 

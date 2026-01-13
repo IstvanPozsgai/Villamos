@@ -82,7 +82,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Kalkulál.Enabled = false;
 
 
-                // csak főmérnökségi belépéssel módosítható
+                // csak Főmérnökségi belépéssel módosítható
 
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                     Alap_rögzít.Visible = true;

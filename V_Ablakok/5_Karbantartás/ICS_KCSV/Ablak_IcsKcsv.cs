@@ -178,7 +178,7 @@ namespace Villamos
 
                 Btn_Vezénylésbeírás.Enabled = false;
 
-                // csak főmérnökségi belépéssel törölhető
+                // csak Főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
                     Töröl.Visible = true;
@@ -267,7 +267,7 @@ namespace Villamos
 
                 if (Program.Postás_Vezér)
                 {
-                    // ha főmérnökség vagy vezér akkor minden telephelyről
+                    // ha Főmérnökség vagy vezér akkor minden telephelyről
                     // feltöltjük az összes pályaszámot a Comboba
                     Adatok = (from a in AdatokJármű
                               where a.Törölt == false && (a.Valóstípus == "ICS" || a.Valóstípus == "KCSV-7")
@@ -277,7 +277,7 @@ namespace Villamos
                 }
                 else
                 {
-                    // ha nem főmérnökség akkor csak a kiválasztott telephelyről
+                    // ha nem Főmérnökség akkor csak a kiválasztott telephelyről
                     // feltöltjük az összes pályaszámot a Comboba
                     Adatok = (from a in AdatokJármű
                               where a.Törölt == false && a.Üzem == Cmbtelephely.Text.Trim()
@@ -2639,7 +2639,7 @@ namespace Villamos
 
         #region előtervező
         /// <summary>
-        /// Comboba feltölti a főmérnökség járművei közül az ICS és KCSV kocsikat
+        /// Comboba feltölti a Főmérnökség járművei közül az ICS és KCSV kocsikat
         /// </summary>
         private void Pszlista()
         {
@@ -2668,7 +2668,7 @@ namespace Villamos
         }
 
         /// <summary>
-        /// Telephely comboba feltölti azon üzemeket ahoil van főmérnökség járművei közül az ICS és KCSV kocsikat
+        /// Telephely comboba feltölti azon üzemeket ahoil van Főmérnökség járművei közül az ICS és KCSV kocsikat
         /// </summary>
         private void Telephelylista()
         {

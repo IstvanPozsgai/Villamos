@@ -672,7 +672,7 @@ namespace Villamos
                 {
                     BtnOlvasva.Visible = true;
                 }
-                // módosítás 2 főmérnökségi belépés és mindenhova tud írni
+                // módosítás 2 Főmérnökségi belépés és mindenhova tud írni
                 if (MyF.Vanjoga(melyikelem, 2))
                 {
                 }

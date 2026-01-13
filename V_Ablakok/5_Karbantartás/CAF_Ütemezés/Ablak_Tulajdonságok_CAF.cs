@@ -102,7 +102,7 @@ namespace Villamos
                 km_modosit_btn.Enabled = false;
                 Elő_Lehívás.Enabled = false;
 
-                // csak főmérnökségi belépéssel módosítható
+                // csak Főmérnökségi belépéssel módosítható
 
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {

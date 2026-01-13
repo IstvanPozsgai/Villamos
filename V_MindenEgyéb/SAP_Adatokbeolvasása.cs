@@ -169,7 +169,7 @@ namespace Villamos.V_MindenEgyéb
         /// <param name="Év"></param>
         /// <param name="fájlexcel"></param>
         /// <param name="felelősmunkahely"></param>
-        /// <param name="üzem">alapértelmezés szerint üzemek és false esetén főmérnökség</param>
+        /// <param name="üzem">alapértelmezés szerint üzemek és false esetén Főmérnökség</param>
         public static void Menet_beolvasó(string Telephely, int Év, string fájlexcel, string felelősmunkahely, bool üzem = true)
         {
             try

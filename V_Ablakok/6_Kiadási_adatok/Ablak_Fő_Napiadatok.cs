@@ -80,7 +80,7 @@ namespace Villamos
                 // ide kell az összes gombot tenni amit szabályozni akarunk false
                 Command1.Enabled = false;
                 Command4.Enabled = false;
-                // csak főmérnökségi belépéssel van módosítás
+                // csak Főmérnökségi belépéssel van módosítás
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
                     Command1.Visible = true;

@@ -91,7 +91,7 @@ namespace Villamos
 
                 // ide kell az összes gombot tenni amit szabályozni akarunk false
 
-                // csak főmérnökségi belépéssel van módosítás
+                // csak Főmérnökségi belépéssel van módosítás
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
                 }

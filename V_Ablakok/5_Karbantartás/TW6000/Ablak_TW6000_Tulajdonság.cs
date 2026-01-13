@@ -229,7 +229,7 @@ namespace Villamos
                 {
                 }
 
-                // ha nem főmérnökségbe lépett be akkor csak néz
+                // ha nem Főmérnökségbe lépett be akkor csak néz
                 if (Program.PostásTelephely != "Főmérnökség")
                 {
                     Járműadatok_rögzít.Enabled = false;
@@ -1581,7 +1581,7 @@ namespace Villamos
         private void NaplóPályaszám_feltöltés()
         {
             NaplóPályaszám.Items.Clear();
-            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("főmérnökség");
+            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség");
             Adatok = (from a in Adatok
                       where a.Valóstípus.Contains("TW6000")
                       orderby a.Azonosító
@@ -1643,7 +1643,7 @@ namespace Villamos
         private void ÜtemPályaszám_feltöltés()
         {
             ÜtemPályaszám.Items.Clear();
-            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("főmérnökség");
+            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség");
             Adatok = (from a in Adatok
                       where a.Valóstípus.Contains("TW6000")
                       orderby a.Azonosító

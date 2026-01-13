@@ -151,7 +151,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Segéd_Töröl.Enabled = false;
                 Segéd_Pót_Rögzít.Enabled = false;
 
-                // csak főmérnökségi belépéssel módosítható
+                // csak Főmérnökségi belépéssel módosítható
 
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {

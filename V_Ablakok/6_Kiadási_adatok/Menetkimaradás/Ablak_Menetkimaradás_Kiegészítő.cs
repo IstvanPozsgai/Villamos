@@ -50,7 +50,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                // törli az időszak főmérnökségi adatait
+                // törli az időszak Főmérnökségi adatait
                 KézFőmérnök.Törlés(dátumtól.Value.Year, dátumtól.Value, dátumig.Value);
                 MessageBox.Show("Az adatok törlése befejeződött!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -121,7 +121,7 @@ namespace Villamos.Villamos_Ablakok
             try
             {  // telephelyek adatait összemásoljuk
 
-                // a telepek adataival frisíti a főmérnökségi adatbázis adatait.
+                // a telepek adataival frisíti a Főmérnökségi adatbázis adatait.
                 főholtart.Be(Lstüzemek.Count + 1);
                 alholtart.Be(100);
                 List<Adat_Menetkimaradás_Főmérnökség> AdatokGy = new List<Adat_Menetkimaradás_Főmérnökség>();

@@ -87,7 +87,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 // ide kell az összes gombot tenni amit szabályozni akarunk false
                 Ütem_Rögzít.Enabled = false;
 
-                // csak főmérnökségi belépéssel módosítható
+                // csak Főmérnökségi belépéssel módosítható
 
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {

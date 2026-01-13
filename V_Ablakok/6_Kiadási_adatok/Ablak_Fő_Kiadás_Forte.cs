@@ -57,7 +57,7 @@ namespace Villamos
                 Fortebeolvasás.Enabled = false;
                 AdatMásol.Enabled = false;
                 MunkaHétvége.Enabled = false;
-                // csak főmérnökségi belépéssel van módosítás
+                // csak Főmérnökségi belépéssel van módosítás
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
                     Töröl.Visible = true;

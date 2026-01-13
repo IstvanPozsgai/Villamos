@@ -51,7 +51,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Karb_rögzít.Enabled = false;
                 Karb_töröl.Enabled = false;
 
-                // csak főmérnökségi belépéssel módosítható
+                // csak Főmérnökségi belépéssel módosítható
 
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {

@@ -142,7 +142,7 @@ namespace Villamos
             int melyikelem;
 
             // ide kell az összes gombot tenni amit szabályozni akarunk false
-            // csak főmérnökségi belépéssel törölhető
+            // csak Főmérnökségi belépéssel törölhető
             if ((Program.PostásTelephely) == "Főmérnökség")
             {
             }

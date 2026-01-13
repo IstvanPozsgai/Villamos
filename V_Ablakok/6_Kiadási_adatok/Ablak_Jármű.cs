@@ -203,7 +203,7 @@ namespace Villamos
 
                 PDF_rögzít.Visible = false;
 
-                // csak főmérnökségi belépéssel van módosítás
+                // csak Főmérnökségi belépéssel van módosítás
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
                     LÉT_hozzáad.Enabled = true;
@@ -396,8 +396,8 @@ namespace Villamos
 
             LÉT_járműtípus.Items.Clear();
             MÓD_járműtípus.Items.Clear();
-            LÉT_főmérnökségitípus.Items.Clear();
-            MÓD_főmérnökségitípus.Items.Clear();
+            LÉT_Főmérnökségitípus.Items.Clear();
+            MÓD_Főmérnökségitípus.Items.Clear();
 
             foreach (string Elem in Valóstípus2)
             {
@@ -407,14 +407,14 @@ namespace Villamos
 
             foreach (string Elem in Valóstípus)
             {
-                LÉT_főmérnökségitípus.Items.Add(Elem);
-                MÓD_főmérnökségitípus.Items.Add(Elem);
+                LÉT_Főmérnökségitípus.Items.Add(Elem);
+                MÓD_Főmérnökségitípus.Items.Add(Elem);
             }
 
             LÉT_járműtípus.Refresh();
             MÓD_járműtípus.Refresh();
-            LÉT_főmérnökségitípus.Refresh();
-            MÓD_főmérnökségitípus.Refresh();
+            LÉT_Főmérnökségitípus.Refresh();
+            MÓD_Főmérnökségitípus.Refresh();
         }
 
         private void LÉT_hozzáad_Click(object sender, EventArgs e)
@@ -422,7 +422,7 @@ namespace Villamos
             try
             {
                 if (LÉT_Pályaszám.Text.Trim() == "") throw new HibásBevittAdat("A pályaszámot meg kell adni!");
-                if (LÉT_főmérnökségitípus.Text.Trim() == "") throw new HibásBevittAdat("A Főmérnökségi típus meg kell adni!");
+                if (LÉT_Főmérnökségitípus.Text.Trim() == "") throw new HibásBevittAdat("A Főmérnökségi típus meg kell adni!");
                 if (LÉT_járműtípus.Text.Trim() == "") throw new HibásBevittAdat("A jármű típus meg kell adni!");
 
                 Adat_Jármű Egy = (from a in Adatok_Állomány
@@ -433,7 +433,7 @@ namespace Villamos
                     // ha nincs, akkor rögzítjük
                     Adat_Jármű Adat = new Adat_Jármű(
                                    LÉT_Pályaszám.Text.Trim(), 0, 0, "Nincs", "Közös", false, 0, false, 0, new DateTime(1900, 1, 1),
-                                   LÉT_főmérnökségitípus.Text.Trim(),
+                                   LÉT_Főmérnökségitípus.Text.Trim(),
                                    LÉT_járműtípus.Text.Trim(),
                                    new DateTime(1900, 1, 1));
                     KézJármű.Rögzítés("Főmérnökség", Adat);
@@ -455,7 +455,7 @@ namespace Villamos
                 Adatok_Állomány = KézJármű.Lista_Adatok("Főmérnökség");
 
                 LÉT_Pályaszám.Text = "";
-                LÉT_főmérnökségitípus.Text = "";
+                LÉT_Főmérnökségitípus.Text = "";
                 LÉT_járműtípus.Text = "";
                 LÉT_listáz();
                 Listáz_psz_();
@@ -566,7 +566,7 @@ namespace Villamos
             Mód_telephely.Text = "";
             MÓD_típustext.Text = "";
             Mód_üzembehelyezésdátuma.Value = new DateTime(1900, 1, 1);
-            MÓD_főmérnökségitípus.Text = "";
+            MÓD_Főmérnökségitípus.Text = "";
             MÓD_járműtípus.Text = "";
         }
 
@@ -586,7 +586,7 @@ namespace Villamos
                     Mód_telephely.Text = adat.Üzem.Trim();
                     MÓD_típustext.Text = adat.Típus.Trim();
                     Mód_üzembehelyezésdátuma.Value = adat.Üzembehelyezés < new DateTime(1901, 1, 1) ? new DateTime(1900, 1, 1) : adat.Üzembehelyezés;
-                    MÓD_főmérnökségitípus.Text = adat.Valóstípus.Trim();
+                    MÓD_Főmérnökségitípus.Text = adat.Valóstípus.Trim();
                     MÓD_járműtípus.Text = adat.Valóstípus2.Trim();
                 }
             }
@@ -617,7 +617,7 @@ namespace Villamos
             try
             {
                 if (MÓD_járműtípus.Text.Trim() == "") throw new HibásBevittAdat("Nincs megadva a járműtípus");
-                if (MÓD_főmérnökségitípus.Text.Trim() == "") throw new HibásBevittAdat("Nincs megadva a főmérnökségi típus.");
+                if (MÓD_Főmérnökségitípus.Text.Trim() == "") throw new HibásBevittAdat("Nincs megadva a Főmérnökségi típus.");
                 if (Mód_pályaszám.Text.Trim() == "") throw new HibásBevittAdat("A pályaszám mezőben nincs érték.");
 
                 Adat_Jármű Elem = (from a in Adatok_Állomány
@@ -628,7 +628,7 @@ namespace Villamos
                 {
                     Adat_Jármű ADAT = new Adat_Jármű(
                             Mód_pályaszám.Text.Trim(),
-                            MÓD_főmérnökségitípus.Text.Trim(),
+                            MÓD_Főmérnökségitípus.Text.Trim(),
                             MÓD_járműtípus.Text.Trim(),
                             Mód_üzembehelyezésdátuma.Value);
                     KézJármű.Módosítás_Típus("Főmérnökség", ADAT);
@@ -654,7 +654,7 @@ namespace Villamos
                     {
                         Adat_Jármű ADAT = new Adat_Jármű(
                                  Mód_pályaszám.Text.Trim(),
-                                 MÓD_főmérnökségitípus.Text.Trim(),
+                                 MÓD_Főmérnökségitípus.Text.Trim(),
                                  MÓD_járműtípus.Text.Trim(),
                                  Mód_üzembehelyezésdátuma.Value);
                         KézJármű.Módosítás_Típus(Mód_telephely.Text.Trim(), ADAT);

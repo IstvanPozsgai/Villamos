@@ -172,7 +172,7 @@ namespace Villamos.Villamos_Ablakok.ICS_KCSV
                 Töröl_1.Enabled = false;
 
 
-                // csak főmérnökségi belépéssel törölhető
+                // csak Főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
 

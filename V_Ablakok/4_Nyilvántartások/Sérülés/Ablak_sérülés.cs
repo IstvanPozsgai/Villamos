@@ -250,7 +250,7 @@ namespace Villamos
                 CAFRögzít.Enabled = false;
                 CafTöröl.Enabled = false;
 
-                // csak főmérnökségi belépéssel törölhető
+                // csak Főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
                     KépTörlés.Visible = true;

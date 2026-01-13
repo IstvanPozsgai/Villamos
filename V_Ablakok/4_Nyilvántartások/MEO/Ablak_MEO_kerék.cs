@@ -85,7 +85,7 @@ namespace Villamos
                 Btn_Jog_Tipus_Rogzit.Enabled = false;
                 Btn_Jog_Hatarnap_Rogzit.Enabled = false;
 
-                // csak főmérnökségi belépéssel törölhető
+                // csak Főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely == "Főmérnökség")
                 {
                     Btn_Jog_Torles.Visible = true;

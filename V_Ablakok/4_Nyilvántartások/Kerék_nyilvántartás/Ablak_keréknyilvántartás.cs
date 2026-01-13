@@ -190,7 +190,7 @@ namespace Villamos
 
 
 
-                // csak főmérnökségi belépéssel törölhető
+                // csak Főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
                     Panel5.Visible = true;

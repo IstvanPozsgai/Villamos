@@ -90,7 +90,7 @@ namespace Villamos
 
                 if (Program.PostásTelephely == "Főmérnökség")
                 {
-                    // főmérnökségi funciók bekapcsolása
+                    // Főmérnökségi funciók bekapcsolása
                     BtnOktatásÚj.Visible = true;
                     BtnkérelemRögzítés.Visible = true;
                     BtnKérelemPDF.Visible = true;
@@ -208,7 +208,7 @@ namespace Villamos
                           where a.Név != "Főmérnökség"
                           orderby a.Név
                           select a).ToList();
-                // Ha főmérnökség akkor minden telephelyet feltölt
+                // Ha Főmérnökség akkor minden telephelyet feltölt
                 Cmbtelephely.Enabled = true;
             }
             else

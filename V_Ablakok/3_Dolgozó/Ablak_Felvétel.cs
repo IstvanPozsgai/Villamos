@@ -116,7 +116,7 @@ namespace Villamos
                     }
                     else
                     {
-                        // kiírjuk, hogy honnan lépett be nem főmérnökség és nem szakszolgálat
+                        // kiírjuk, hogy honnan lépett be nem Főmérnökség és nem szakszolgálat
                         Cmbtelephely.Items.Add(Program.PostásTelephely.Trim());
                         Cmbtelephely.Text = Program.PostásTelephely.Trim();
                     }
@@ -340,7 +340,7 @@ namespace Villamos
                 }
                 else
                 {
-                    // kiírjuk, hogy honnan lépett be nem főmérnökség és nem szakszolgálat
+                    // kiírjuk, hogy honnan lépett be nem Főmérnökség és nem szakszolgálat
                     KilépTelephely.Text = Program.PostásTelephely.Trim();
                 }
             }

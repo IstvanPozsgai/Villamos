@@ -461,7 +461,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 JJavítás.Enabled = false;
                 Vezényel.Enabled = false;
 
-                // csak főmérnökségi belépéssel törölhető
+                // csak Főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
                     MezőEngedélyezés(true);
