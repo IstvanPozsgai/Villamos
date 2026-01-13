@@ -61,63 +61,44 @@ namespace Villamos
 
         private void ABFeltöltése()
         {
-            AdatTábla.Clear();
-
-            int ideiEv = DateTime.Now.Year;
-            int tavalyiEv = ideiEv - 1;
-
-            List<string> osszesSor = new List<string>();
-
-            if (FileLetezik(ideiEv))
+            try
             {
+                AdatTábla.Clear();
+
+                int ideiEv = DateTime.Now.Year;
+                List<string> osszesSor = new List<string>();
                 osszesSor.AddRange(ÉvesLogFajltBetolt(ideiEv).Skip(1));
-            }
-            else
-            {
-                MessageBox.Show(
-                    $"A {ideiEv}. évi hibanapló fájl nem található.\n\n" +
-                    $@"Elvárt hely: {Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba{ideiEv}.csv",
-                    "Hiányzó fájl",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-            }
+                osszesSor.AddRange(ÉvesLogFajltBetolt(ideiEv - 1).Skip(1));
 
-            if (FileLetezik(tavalyiEv))
-            {
-                osszesSor.AddRange(ÉvesLogFajltBetolt(tavalyiEv).Skip(1));
-            }
-            else
-            {
-                MessageBox.Show(
-                    $"A {tavalyiEv}. évi hibanapló fájl nem található.\n\n" +
-                    $@"Elvárt hely: {Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{tavalyiEv}\hiba{tavalyiEv}.csv",
-                    "Hiányzó fájl",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-            }
+                foreach (string sor in osszesSor)
+                {
+                    // Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum
+                    DataRow Soradat = AdatTábla.NewRow();
+                    string[] mezok = sor.Split(';');
 
-            foreach (string sor in osszesSor)
+                    Soradat["Dátum"] = mezok[0].Split(' ')[0];
+                    Soradat["Idő"] = mezok[0].Split(' ')[1];
+                    Soradat["Telephely"] = mezok[1];
+                    Soradat["Felhasználó"] = mezok[2];
+                    Soradat["Hiba üzenet"] = mezok[3];
+                    Soradat["Hiba osztály"] = mezok[4];
+                    Soradat["Hiba metódus"] = mezok[5];
+                    Soradat["Névtér"] = mezok[6];
+                    Soradat["Egyéb"] = mezok[7];
+                    Soradat["TeljesIdő"] = mezok[0];
+                    AdatTábla.Rows.Add(Soradat);
+                }
+            }
+            catch (HibásBevittAdat ex)
             {
-                // Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum
-                DataRow Soradat = AdatTábla.NewRow();
-                string[] mezok = sor.Split(';');
-
-                Soradat["Dátum"] = mezok[0].Split(' ')[0];
-                Soradat["Idő"] = mezok[0].Split(' ')[1];
-                Soradat["Telephely"] = mezok[1];
-                Soradat["Felhasználó"] = mezok[2];
-                Soradat["Hiba üzenet"] = mezok[3];
-                Soradat["Hiba osztály"] = mezok[4];
-                Soradat["Hiba metódus"] = mezok[5];
-                Soradat["Névtér"] = mezok[6];
-                Soradat["Egyéb"] = mezok[7];
-                Soradat["TeljesIdő"] = mezok[0];
-                AdatTábla.Rows.Add(Soradat);
+                MessageBox.Show(ex.Message, "Hiányzó fájl", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void OszlopSzélesség()
         {
@@ -128,33 +109,36 @@ namespace Villamos
             Hibanaplo_Tablazat.Columns["Hiba üzenet"].Width = 450;
             Hibanaplo_Tablazat.Columns["Hiba osztály"].Width = 300;
             Hibanaplo_Tablazat.Columns["Hiba metódus"].Width = 300;
-            Hibanaplo_Tablazat.Columns["Névtér"].Width = 70;
-            Hibanaplo_Tablazat.Columns["Egyéb"].Width = 40;
+            Hibanaplo_Tablazat.Columns["Névtér"].Width = 100;
+            Hibanaplo_Tablazat.Columns["Egyéb"].Width = 100;
 
             Hibanaplo_Tablazat.Columns["TeljesIdő"].Visible = false;
         }
 
         private string[] ÉvesLogFajltBetolt(int ev)
         {
-            string fajlUtvonal;
-            if (ev == DateTime.Now.Year)
+            string[] Válasz = new string[] { };
+            try
             {
-                fajlUtvonal = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba{ev}.csv";
+                string fajlUtvonal = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{ev}\hiba{ev}.csv";
+                if (!FileLetezik(ev)) throw new HibásBevittAdat($"A {ev}. évi hibanapló fájl nem található.\n\n{fajlUtvonal}");
+                Válasz = File.ReadAllLines(fajlUtvonal, Encoding.GetEncoding(1250));
             }
-            else
+            catch (HibásBevittAdat ex)
             {
-                fajlUtvonal = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{ev}\hiba{ev}.csv";
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            return File.ReadAllLines(fajlUtvonal, Encoding.GetEncoding(1250));
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
         }
 
         private bool FileLetezik(int ev)
         {
-            string fajlUtvonal;
-            if (ev == DateTime.Now.Year)
-                fajlUtvonal = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\hiba{ev}.csv";
-            else
-                fajlUtvonal = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{ev}\hiba{ev}.csv";
+            string fajlUtvonal = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{ev}\hiba{ev}.csv";
 
             return File.Exists(fajlUtvonal);
         }
