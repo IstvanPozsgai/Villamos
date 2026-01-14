@@ -4,7 +4,10 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+<<<<<<< HEAD
 using Villamos.Villamos_Adatszerkezet;
+=======
+>>>>>>> master
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -30,8 +33,12 @@ namespace Villamos.V_Ablakok._5_Karbantartás.TW6000
             // elkészítjük a lapokat
             // ****************************************************
             string munkalap = "Tartalom";
+<<<<<<< HEAD
             MyX.ExcelLétrehozás();
             MyX.Munkalap_átnevezés("Munka1", munkalap);
+=======
+            MyX.ExcelLétrehozás(munkalap);
+>>>>>>> master
 
             for (int i = 1; i < 4; i++)
                 MyX.Munkalap_Új(cím[i]);

@@ -7,9 +7,7 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés;
 using Villamos.Villamos_Ablakok.CAF_Ütemezés;
-using Villamos.Villamos_Adatszerkezet;
 using MyCaf = Villamos.Villamos_Ablakok.CAF_Ütemezés.CAF_Közös_Eljárások;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -104,7 +102,7 @@ namespace Villamos
                 km_modosit_btn.Enabled = false;
                 Elő_Lehívás.Enabled = false;
 
-                // csak főmérnökségi belépéssel módosítható
+                // csak Főmérnökségi belépéssel módosítható
 
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
@@ -173,7 +171,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\CAF.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -754,7 +752,7 @@ namespace Villamos
             MyX.DataGridViewToXML(fájlexc, Tábla_elő);
             MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            MyE.Megnyitás(fájlexc);
+            MyF.Megnyitás(fájlexc);
         }
         #endregion
 
@@ -1080,7 +1078,11 @@ namespace Villamos
                 Elő_pályaszám.Height = 25;
                 Előterv_listázás_excelhez();
 
+<<<<<<< HEAD
                 
+=======
+
+>>>>>>> master
 
                 // kimeneti fájl helye és neve
                 string fájlexc;
@@ -1098,11 +1100,16 @@ namespace Villamos
                     return;
 
                 CAF_Elo_Havi_Excel elo_Havi_Excel = new CAF_Elo_Havi_Excel();
+<<<<<<< HEAD
                 elo_Havi_Excel.elo_havi_excel_keszit(fájlexc, KézSzín, Tábla_elő, Előterv_listázás_excelhez_negát);
                 
+=======
+                elo_Havi_Excel.Elo_havi_excel_keszit(fájlexc, KézSzín, Tábla_elő, Előterv_listázás_excelhez_negát);
+
+>>>>>>> master
 
                 Holtart.Ki();
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
                 {
                     Tábla_elő.Rows.Clear();
                     Tábla_elő.Columns.Clear();

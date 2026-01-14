@@ -47,8 +47,6 @@ namespace Villamos
                     WorksheetPart worksheetPart = (WorksheetPart)workbookPart.GetPartById(sheet.Id);
                     Worksheet worksheet = worksheetPart.Worksheet;
 
-                    // JAVÍTANDÓ: if (beállítás.Képútvonal.Trim() != "") worksheetPart.KépBeállítás(beállítás);
-
                     // 1. PageSetup létrehozása/frissítése
                     PageSetup pageSetup = worksheet.GetFirstChild<PageSetup>();
                     if (pageSetup == null)
@@ -87,6 +85,10 @@ namespace Villamos
                     {
                         worksheetPart.KépBeállítás(beállítás);
                     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 
                     //       4.PrintOptions
                     PrintOptions printOptions = worksheet.GetFirstChild<PrintOptions>();
@@ -386,6 +388,7 @@ namespace Villamos
             }
         }
 
+<<<<<<< HEAD
         // JAVÍTANDÓ:
 
         //private static void KépBeállítás(this WorksheetPart worksheetPart, Beállítás_Nyomtatás beállítás)
@@ -446,6 +449,8 @@ namespace Villamos
         //    }
         //}
         // Ezt a metódust cseréld le teljesen a MyClosedXML_Excel osztályban
+=======
+>>>>>>> master
         private static void KépBeállítás(this WorksheetPart worksheetPart, Beállítás_Nyomtatás beállítás)
         {
             try
@@ -523,6 +528,18 @@ namespace Villamos
 
                 legacyDrawingHF.Id = vmlPartId;
                 worksheet.Save(); // Biztosítjuk, hogy a változások mentésre kerüljenek
+<<<<<<< HEAD
+=======
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "KépBeállítás_Javított", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+>>>>>>> master
             }
             catch (Exception ex)
             {
@@ -574,5 +591,50 @@ namespace Villamos
               "</v:shape>" +
             "</xml>";
         }
+
+        private static string GetVmlXmlContent(string imageRelId, string shapeId)
+        {
+            // shapeId: "LH" = Bal fejléc, "CH" = Közép, "RH" = Jobb
+            // A méretek (width, height) pontban (pt) vannak megadva. Állítsd be a logódnak megfelelően!
+            string width = "125pt";  // Kb 4.4 cm
+            string height = "55pt";  // Kb 2 cm
+
+            return
+            "<xml xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\">" +
+              "<o:shapelayout v:ext=\"edit\">" +
+                "<o:idmap v:ext=\"edit\" data=\"1\"/>" +
+              "</o:shapelayout>" +
+              "<v:shapetype id=\"_x0000_t75\" coordsize=\"21600,21600\" o:spt=\"75\" o:preferrelative=\"t\" path=\"m@4@5l@4@11@9@11@9@5xe\" filled=\"f\" stroked=\"f\">" +
+                "<v:stroke joinstyle=\"miter\"/>" +
+                "<v:formulas>" +
+                  "<v:f eqn=\"if lineDrawn pixelLineWidth 0\"/>" +
+                  "<v:f eqn=\"sum @0 1 0\"/>" +
+                  "<v:f eqn=\"sum 0 0 @1\"/>" +
+                  "<v:f eqn=\"prod @2 1 2\"/>" +
+                  "<v:f eqn=\"prod @3 21600 pixelWidth\"/>" +
+                  "<v:f eqn=\"prod @3 21600 pixelHeight\"/>" +
+                  "<v:f eqn=\"sum @0 0 1\"/>" +
+                  "<v:f eqn=\"prod @6 1 2\"/>" +
+                  "<v:f eqn=\"prod @7 21600 pixelWidth\"/>" +
+                  "<v:f eqn=\"sum @8 21600 0\"/>" +
+                  "<v:f eqn=\"prod @7 21600 pixelHeight\"/>" +
+                  "<v:f eqn=\"sum @10 21600 0\"/>" +
+                "</v:formulas>" +
+                "<v:path o:extrusionok=\"f\" gradientshapeok=\"t\" o:connecttype=\"rect\"/>" +
+                "<o:lock v:ext=\"edit\" aspectratio=\"t\"/>" +
+              "</v:shapetype>" +
+              // Az adott kép definíciója
+              $"<v:shape id=\"{shapeId}\" o:spid=\"_x0000_s1025\" type=\"#_x0000_t75\" " +
+              $"style=\"position:absolute;margin-left:0;margin-top:0;width:{width};height:{height};z-index:1\">" +
+                $"<v:imagedata o:relid=\"{imageRelId}\" o:title=\"Logo\"/>" +
+                // ClientData fontos lehet az Excelnek, hogy tudja, ez egy kép
+                "<x:ClientData ObjectType=\"Pict\">" +
+                    "<x:SizeWithCells/>" +
+                // "<x:CF>Bitmap</x:CF>" + // Opcionális
+                "</x:ClientData>" +
+              "</v:shape>" +
+            "</xml>";
+        }
+
     }
 }

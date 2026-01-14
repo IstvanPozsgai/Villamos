@@ -11,7 +11,11 @@ using Villamos.Kezelők;
 using Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös;
 using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
+<<<<<<< HEAD
 using Villamos.Villamos_Adatszerkezet;
+=======
+using DataTable = System.Data.DataTable;
+>>>>>>> master
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -205,7 +209,11 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Tulajdonság_T5C5.html";
+<<<<<<< HEAD
                 Module_Excel.Megnyitás(hely);
+=======
+                MyF.Megnyitás(hely);
+>>>>>>> master
             }
             catch (HibásBevittAdat ex)
             {
@@ -873,7 +881,11 @@ namespace Villamos
                 DateTime Kezdet = DateTime.Now;
                 MyX.DataGridViewToXML(fájlexc, Tábla_lekérdezés);
                 MessageBox.Show($"Elkészült az Excel tábla: {fájlexc}\n idő alatt:{DateTime.Now - Kezdet}", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+<<<<<<< HEAD
                 MyX.ExcelMegnyitás(fájlexc);
+=======
+                MyF.Megnyitás(fájlexc);
+>>>>>>> master
             }
             catch (HibásBevittAdat ex)
             {
@@ -914,7 +926,11 @@ namespace Villamos
             timer1.Enabled = false;
             Holtart.Ki();
             MessageBox.Show($"Az Excel tábla elkészült !\n Futási idő{DateTime.Now - Kezdet}", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
+<<<<<<< HEAD
             MyX.ExcelMegnyitás(_fájlexc);
+=======
+            MyF.Megnyitás(_fájlexc);
+>>>>>>> master
 
         }
 
@@ -1145,7 +1161,11 @@ namespace Villamos
                 MyX.DataTableToXML(fájlexc, TáblaAdat);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+<<<<<<< HEAD
                 MyX.ExcelMegnyitás(fájlexc);
+=======
+                MyF.Megnyitás(fájlexc);
+>>>>>>> master
             }
             catch (HibásBevittAdat ex)
             {
@@ -1286,11 +1306,11 @@ namespace Villamos
 
             double típusátlag = 0d;
             i = 0;
-            FőHoltart.Be(PszJelölő.Items.Count + 1);
+            Holtart.Be(PszJelölő.Items.Count + 1);
 
             for (int j = 0; j < PszJelölő.Items.Count; j++)
             {
-                FőHoltart.Lép();
+                Holtart.Lép();
                 if (PszJelölő.GetItemChecked(j))
                 {
                     Adat_T5C5_Kmadatok Elem = (from a in AdatokKmAdatok
@@ -1304,7 +1324,7 @@ namespace Villamos
                     }
                 }
             }
-            FőHoltart.Ki();
+            Holtart.Ki();
             if (i != 0) típusátlag /= i;
             Havikm = ((long)Math.Round(típusátlag));
             Text1.Text = Havikm.ToString();
@@ -1318,11 +1338,11 @@ namespace Villamos
 
             double típusátlag = 0;
             int i = 0;
-            FőHoltart.Be(PszJelölő.Items.Count + 1);
+            Holtart.Be(PszJelölő.Items.Count + 1);
 
             for (int j = 0; j < PszJelölő.Items.Count; j++)
             {
-                FőHoltart.Lép();
+                Holtart.Lép();
                 Adat_T5C5_Kmadatok Elem = (from a in AdatokKmAdatok
                                            where a.Azonosító == PszJelölő.Items[j].ToStrTrim()
                                            orderby a.Vizsgdátumk descending
@@ -1333,7 +1353,7 @@ namespace Villamos
                     i += 1;
                 }
             }
-            FőHoltart.Ki();
+            Holtart.Ki();
             if (i != 0) típusátlag /= i;
             Havikm = (long)Math.Round(típusátlag);
             Text1.Text = Havikm.ToString();
@@ -1345,11 +1365,11 @@ namespace Villamos
             AdatokKmAdatok = KézKmAdatok.Lista_Adatok().Where(a => a.Törölt == false).ToList();
             double típusátlag = 0d;
             int i = 0;
-            FőHoltart.Be(PszJelölő.Items.Count + 1);
+            Holtart.Be(PszJelölő.Items.Count + 1);
 
             for (int j = 0; j < PszJelölő.Items.Count; j++)
             {
-                FőHoltart.Lép();
+                Holtart.Lép();
                 if (PszJelölő.GetItemChecked(j))
                 {
                     Adat_T5C5_Kmadatok Elem = (from a in AdatokKmAdatok
@@ -1363,7 +1383,7 @@ namespace Villamos
                     }
                 }
             }
-            FőHoltart.Ki();
+            Holtart.Ki();
             if (i != 0)
                 típusátlag /= i;
             Havikm = (long)Math.Round(típusátlag);
@@ -1451,7 +1471,7 @@ namespace Villamos
         private void Text1_Leave(object sender, EventArgs e)
         {
 
-            if (!int.TryParse(Text1.Text, out int result))
+            if (!int.TryParse(Text1.Text, result: out int result))
                 Text1.Text = "";
             Option8.Checked = true;
         }
@@ -1463,15 +1483,15 @@ namespace Villamos
                 if (!int.TryParse(Text2.Text, out int result)) throw new HibásBevittAdat("Hónapok száma nem lehet üres és egész számnak kell lennie.");
                 if (PszJelölő.CheckedItems.Count < 1) return;
 
-                AlHoltart.Be();
-                FőHoltart.Be(10);
+                Holtart.Be();
+                Holtart.Be(10);
 
                 Alaptábla();
-                FőHoltart.Lép();
+                Holtart.Lép();
                 Egyhónaprögzítése();
                 Excel_előtervező();
-                AlHoltart.Ki();
-                FőHoltart.Ki();
+                Holtart.Ki();
+                Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
             {
@@ -1503,8 +1523,8 @@ namespace Villamos
                 KerékadatokListaFeltöltés();
 
                 // kilistázzuk a adatbázis adatait
-                AlHoltart.Be(PszJelölő.Items.Count + 1);
-                AlHoltart.BackColor = Color.Yellow;
+                Holtart.Be(PszJelölő.Items.Count + 1);
+                Holtart.BackColor = Color.Yellow;
                 int i = 1;
                 List<Adat_T5C5_Előterv> AdatokGy = new List<Adat_T5C5_Előterv>();
                 for (int j = 0; j < PszJelölő.Items.Count; j++)
@@ -1596,7 +1616,7 @@ namespace Villamos
                             i += 1;
                         }
                     }
-                    AlHoltart.Lép();
+                    Holtart.Lép();
                 }
                 KézElőterv.Rögzítés(hova, AdatokGy);
             }
@@ -1618,9 +1638,9 @@ namespace Villamos
                 string hova = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Kmadatok.mdb";
                 if (!File.Exists(hova)) return;
 
-                FőHoltart.Be(PszJelölő.CheckedItems.Count + 2);
-                AlHoltart.Be(Hónapok + 3);
-                AlHoltart.BackColor = Color.Green;
+                Holtart.Be(PszJelölő.CheckedItems.Count + 2);
+                Holtart.Be(Hónapok + 3);
+                Holtart.BackColor = Color.Green;
 
                 // beolvassuk a ID sorszámot, majd növeljük minden rögzítésnél
                 List<Adat_T5C5_Előterv> TervAdatok = KézElőterv.Lista_Adatok(hova).OrderByDescending(a => a.ID).ToList();
@@ -1784,10 +1804,10 @@ namespace Villamos
                                 ideigKMUkm += Havikm;
                                 ideigTeljeskm += Havikm;
                             }
-                            AlHoltart.Lép();
+                            Holtart.Lép();
                         }
                     }
-                    FőHoltart.Lép();
+                    Holtart.Lép();
                 }
                 KézElőterv.Rögzítés(hova, AdatokGy);
             }
@@ -1846,6 +1866,7 @@ namespace Villamos
                 for (int i = 1; i < cím.Length; i++)
                     MyX.Munkalap_Új(cím[i].Trim());
 
+<<<<<<< HEAD
                 FőHoltart.Be(5);
 
                 // megnyitjuk az adatbázist   
@@ -1864,6 +1885,26 @@ namespace Villamos
                 // ****************************************************
                 MyX.Munkalap_aktív(munkalap);
 
+=======
+                Holtart.Be(5);
+
+                // megnyitjuk az adatbázist   
+                //Részletes adatokat a Adatok lapon készítjük el 
+                string hely = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Kmadatok.mdb";
+                DataTable dataTable = MyF.ToDataTable(KézElőterv.Lista_Adatok(hely));
+                utolsósor = dataTable.Rows.Count;
+
+                munkalap = "Adatok";
+                MyX.Munkalap_betű(munkalap, BeBetű);
+                MyX.Munkalap_Adattábla(munkalap, dataTable);
+
+                munkalap = "Tartalom";
+                // ****************************************************
+                // Elkészítjük a tartalom jegyzéket
+                // ****************************************************
+                MyX.Munkalap_aktív(munkalap);
+
+>>>>>>> master
                 MyX.Kiir("Munkalapfül", "a1");
                 MyX.Kiir("Leírás", "b1");
                 for (int i = 1; i <= 4; i++)
@@ -1878,6 +1919,7 @@ namespace Villamos
                 // ****************************************************
                 // Elkészítjük a munkalapokat
                 // ****************************************************
+<<<<<<< HEAD
                 FőHoltart.Lép();
                 AdatokFormázása(utolsósor);
                 FőHoltart.Lép();
@@ -1885,6 +1927,15 @@ namespace Villamos
                 FőHoltart.Lép();
                 Kimutatás1();
                 FőHoltart.Lép();
+=======
+                Holtart.Lép();
+                AdatokFormázása(utolsósor);
+                Holtart.Lép();
+                Kimutatás();
+                Holtart.Lép();
+                Kimutatás1();
+                Holtart.Lép();
+>>>>>>> master
                 Kimutatás2();
                 munkalap = "Tartalom";
                 MyX.Munkalap_aktív(munkalap);
@@ -1915,9 +1966,15 @@ namespace Villamos
                 MyX.SorBeszúrás(munkalap, 1, 2);  //beszúrunk két sort előre
                 MyX.Háttérszín(munkalap, $"A3:AG3", Color.White); //Visszaállítjuk a háttér színt
                 MyX.Betű(munkalap, $"A3:AG3", BeBetűF);
+<<<<<<< HEAD
 
                 MyX.Link_beillesztés(munkalap, "A1", "Tartalom");
                 MyX.Munkalap_aktív(munkalap);
+=======
+
+                MyX.Link_beillesztés(munkalap, "A1", "Tartalom");
+
+>>>>>>> master
                 //// fejlécet kiírjuk
                 MyX.Kiir("ID", "a3");
                 MyX.Kiir("Pályaszám", "b3");
@@ -2235,7 +2292,10 @@ namespace Villamos
                 MyX.Szűrés("Adatok", "A", "X", 1);
 
                 //Nyomtatási terület kijelülése
+<<<<<<< HEAD
                 // MyX.NyomtatásiTerület_részletes("Adatok", "A1:X" + utolsósor, "$1:$1", "", true);
+=======
+>>>>>>> master
                 Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
                 {
                     NyomtatásiTerület = "A1:X" + utolsósor,
@@ -2271,10 +2331,14 @@ namespace Villamos
 
                 MyX.ExcelMentés(_fájlexc);
                 MyX.ExcelBezárás();
+<<<<<<< HEAD
 
                 MyF.Megnyitás(_fájlexc);
                 FőHoltart.Ki();
+=======
+>>>>>>> master
 
+                MyF.Megnyitás(_fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2374,7 +2438,11 @@ namespace Villamos
                 MyX.DataGridViewToXML(fájlexc, Tábla1);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+<<<<<<< HEAD
                 MyX.ExcelMegnyitás(fájlexc);
+=======
+                MyF.Megnyitás(fájlexc);
+>>>>>>> master
             }
             catch (HibásBevittAdat ex)
             {

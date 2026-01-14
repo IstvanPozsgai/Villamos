@@ -5,9 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatszerkezet;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -255,7 +253,7 @@ namespace Villamos
             try
             {
                 List<Adat_Jármű> AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
-                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\villamos\villamos.mdb";
+                string hely = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\villamos\villamos.mdb";
                 if (AdatokJármű != null && AdatokJármű.Count < 1) return;
                 AdatokJármű = (from a in AdatokJármű
                                orderby a.Típus, a.Azonosító
@@ -309,7 +307,11 @@ namespace Villamos
                 // megformázzuk
                 MyX.Rácsoz(munkalap, $"A1:C{sor}");
                 MyX.Rácsoz(munkalap, "A1:C1");
+<<<<<<< HEAD
                // MyX.Vastagkeret(munkalap, $"A1:C{sor}");
+=======
+                // MyX.Vastagkeret(munkalap, $"A1:C{sor}");
+>>>>>>> master
 
                 //Első sor sárga
                 MyX.Háttérszín(munkalap, "A1:C1", Color.Yellow);
@@ -363,13 +365,13 @@ namespace Villamos
                             MyX.Egyesít(munkalap, $"a{elsősor}:a{j}");
                             MyX.Egyesít(munkalap, $"v{elsősor}:v{j}");
                             MyX.Kiir(előzőtípus, $"a{elsősor}");
-                            MyX.Kiir(darab.ToString(), $"v{elsősor}");
+                            MyX.Kiir($"#SZÁME#{darab}", $"v{elsősor}");
                             darab = 0;
                         }
                         else
                         {
                             MyX.Kiir(előzőtípus, $"a{elsősor}");
-                            MyX.Kiir(darab.ToString(), $"v{elsősor}");
+                            MyX.Kiir($"#SZÁME#{darab}", $"v{elsősor}");
                             darab = 0;
                         }
                         k = 2;
@@ -412,13 +414,13 @@ namespace Villamos
                     MyX.Egyesít(munkalap, $"a{elsősor}:a{j}");
                     MyX.Egyesít(munkalap, $"v{elsősor}:v{j}");
                     MyX.Kiir(utolsótípus, $"a{elsősor}");
-                    MyX.Kiir(darab.ToString(), $"v{elsősor}");
+                    MyX.Kiir($"#SZÁME#{darab}", $"v{elsősor}");
                     darab = 0;
                 }
                 else
                 {
                     MyX.Kiir(utolsótípus, $"a{elsősor}");
-                    MyX.Kiir(darab.ToString(), $"v{elsősor}");
+                    MyX.Kiir($"#SZÁME#{darab}", $"v{elsősor}");
                     darab = 0;
                 }
 

@@ -10,8 +10,6 @@ using Villamos.V_Ablakok._5_Karbantartás.TW6000;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.TW6000;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -22,7 +20,7 @@ namespace Villamos
     public partial class Ablak_TW6000_Tulajdonság
     {
 
-        readonly string TW6000_Villamos = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos4TW.mdb";
+        readonly string TW6000_Villamos = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos4TW.mdb";
         readonly string TW6000_Napló = $@"{Application.StartupPath}\Főmérnökség\napló\naplóTW6000_{DateTime.Today:yyyy}.mdb";
         readonly string TW6000_Napló_Ütem = $@"{Application.StartupPath}\Főmérnökség\napló\naplóTW6000Ütem_{DateTime.Today:yyyy}.mdb";
 
@@ -76,15 +74,15 @@ namespace Villamos
                 CiklusListaFeltöltés();
                 AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
 
-                Ütemkezdete.Value = DateTime.Today;
-                Ütemvége.Value = DateTime.Today.AddDays(30);
+                Ütemkezdete.Value = MyF.Hónap_elsőnapja(DateTime.Today);
+                Ütemvége.Value = MyF.Hónap_utolsónapja(DateTime.Today);
                 Vizsgdátum.Value = DateTime.Today;
-                ÜtemNaplóKezdet.Value = DateTime.Today.AddDays(-30);
-                ÜtemNaplóVége.Value = DateTime.Today;
-                NaplóKezdete.Value = DateTime.Today.AddDays(-30);
-                NaplóVége.Value = DateTime.Today;
-                Előkezdődátum.Value = DateTime.Today;
-                ElőbefejezőDátum.Value = DateTime.Today.AddDays(30);
+                ÜtemNaplóKezdet.Value = MyF.Hónap_elsőnapja(DateTime.Today.AddDays(-30));
+                ÜtemNaplóVége.Value = MyF.Hónap_utolsónapja(DateTime.Today);
+                NaplóKezdete.Value = MyF.Hónap_elsőnapja(DateTime.Today.AddDays(-30));
+                NaplóVége.Value = MyF.Hónap_utolsónapja(DateTime.Today);
+                Előkezdődátum.Value = MyF.Hónap_elsőnapja(DateTime.Today);
+                ElőbefejezőDátum.Value = MyF.Hónap_utolsónapja(DateTime.Today);
 
                 LapFülek.DrawMode = TabDrawMode.OwnerDrawFixed;
 
@@ -231,7 +229,7 @@ namespace Villamos
                 {
                 }
 
-                // ha nem főmérnökségbe lépett be akkor csak néz
+                // ha nem Főmérnökségbe lépett be akkor csak néz
                 if (Program.PostásTelephely != "Főmérnökség")
                 {
                     Járműadatok_rögzít.Enabled = false;
@@ -267,7 +265,7 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\TW6000_ütem.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -725,8 +723,7 @@ namespace Villamos
         {
             try
             {
-                string fájlexc;
-
+                if (Táblaütemezés.Rows.Count < 1) throw new HibásBevittAdat("A táblázat nem tartalmaz adatot.");
                 // kimeneti fájl helye és neve
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
                 {
@@ -735,6 +732,7 @@ namespace Villamos
                     FileName = $"TW6000_Ütemterv_{Program.PostásNév}_{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
+                string fájlexc;
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
                 if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
                     fájlexc = SaveFileDialog1.FileName;
@@ -1583,7 +1581,7 @@ namespace Villamos
         private void NaplóPályaszám_feltöltés()
         {
             NaplóPályaszám.Items.Clear();
-            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("főmérnökség");
+            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség");
             Adatok = (from a in Adatok
                       where a.Valóstípus.Contains("TW6000")
                       orderby a.Azonosító
@@ -1623,7 +1621,7 @@ namespace Villamos
                 MyX.DataGridViewToXML(fájlexc, Napló_Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1645,7 +1643,7 @@ namespace Villamos
         private void ÜtemPályaszám_feltöltés()
         {
             ÜtemPályaszám.Items.Clear();
-            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("főmérnökség");
+            List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség");
             Adatok = (from a in Adatok
                       where a.Valóstípus.Contains("TW6000")
                       orderby a.Azonosító
@@ -1767,7 +1765,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, ÜtemNapló);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2290,7 +2288,11 @@ namespace Villamos
                     return;
                 TW6000_Excel_Kimutatas excel_Kimutatas = new TW6000_Excel_Kimutatas();
                 string[] VizsgalatLista_Kivalasztott = VizsgálatLista.CheckedItems.OfType<string>().ToArray();
+<<<<<<< HEAD
                 excel_Kimutatas.Kimutatast_Keszit(fájlexc,VizsgalatLista_Kivalasztott, KézElőterv);
+=======
+                excel_Kimutatas.Kimutatast_Keszit(fájlexc, VizsgalatLista_Kivalasztott, KézElőterv);
+>>>>>>> master
 
             }
             catch (HibásBevittAdat ex)
@@ -2307,7 +2309,11 @@ namespace Villamos
         /// <summary>
         /// Kiírja a vizsgálati adatokat
         /// </summary>
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> master
         #endregion
 
 

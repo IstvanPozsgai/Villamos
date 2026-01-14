@@ -6,6 +6,10 @@ using System.IO;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
+<<<<<<< HEAD
+=======
+using Villamos.Adatszerkezet;
+>>>>>>> master
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -13,7 +17,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Osztály_Adat
     {
         Kezelő_Osztály_Név KézNév = new Kezelő_Osztály_Név();
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\osztály.mdb";
         readonly string jelszó = "kéménybe";
         readonly string táblanév = "osztályadatok";
 

@@ -8,10 +8,6 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
-using MyA = Adatbázis;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -20,23 +16,20 @@ namespace Villamos
 
     public partial class Ablak_külső
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\Külső_adatok.mdb";
-        readonly string jelszó = "Janda";
         int Email_id = 0;
         bool Rádió_főmérnök = false;
         string Telephely_választott = "";
 
-        readonly Kezelő_Külső_Lekérdezés_Autó Kéz_autó = new Kezelő_Külső_Lekérdezés_Autó();
-        readonly Kezelő_Külső_Lekérdezés_Személy Kéz_Dolg = new Kezelő_Külső_Lekérdezés_Személy();
         readonly Kezelő_Külső_Cégek Kéz_Külső_Cégek = new Kezelő_Külső_Cégek();
         readonly Kezelő_Behajtás_Engedélyezés Kéz_Behajtás_Engedély = new Kezelő_Behajtás_Engedélyezés();
         readonly Kezelő_Külső_Telephelyek Kéz_Külső_Telephelyek = new Kezelő_Külső_Telephelyek();
         readonly Kezelő_Kiegészítő_Jelenlétiív Kéz_Kieg_Jelenlétiív = new Kezelő_Kiegészítő_Jelenlétiív();
         readonly Kezelő_Külső_Email Kéz_Külső_Email = new Kezelő_Külső_Email();
+        readonly Kezelő_Külső_Gépjárművek Kéz_Járművek = new Kezelő_Külső_Gépjárművek();
+        readonly Kezelő_Külső_Dolgozók Kéz_Dolgozó = new Kezelő_Külső_Dolgozók();
 
-
-        List<Adat_Külső_Lekérdezés_Autó> Adatok_autó = new List<Adat_Külső_Lekérdezés_Autó>();
-        List<Adat_Külső_Lekérdezés_Személy> Adatok_Dolg = new List<Adat_Külső_Lekérdezés_Személy>();
+        List<Adat_Külső_Gépjárművek> Adatok_autó = new List<Adat_Külső_Gépjárművek>();
+        List<Adat_Külső_Dolgozók> Adatok_Dolg = new List<Adat_Külső_Dolgozók>();
         List<Adat_Külső_Cégek> Adatok_Külső_Cégek = new List<Adat_Külső_Cégek>();
         List<Adat_Behajtás_Engedélyezés> Adatok_Behajtás_Engedély = new List<Adat_Behajtás_Engedélyezés>();
         List<Adat_Külső_Telephelyek> Adatok_Külső_Telephelyek = new List<Adat_Külső_Telephelyek>();
@@ -44,8 +37,13 @@ namespace Villamos
         List<Adat_Külső_Email> Adatok_Külső_Email = new List<Adat_Külső_Email>();
 
 
+<<<<<<< HEAD
         readonly Beállítás_Betű BeBetű = new Beállítás_Betű ();
         readonly Beállítás_Betű BeBetűV = new Beállítás_Betű { Vastag = true};
+=======
+        readonly Beállítás_Betű BeBetű = new Beállítás_Betű();
+        readonly Beállítás_Betű BeBetűV = new Beállítás_Betű { Vastag = true };
+>>>>>>> master
 
         #region alap
         public Ablak_külső()
@@ -80,14 +78,6 @@ namespace Villamos
 
                 helyi = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\Külső_PDF";
                 if (!Directory.Exists(helyi)) Directory.CreateDirectory(helyi);
-
-                if (!File.Exists(hely)) Adatbázis_Létrehozás.Külsős_Táblák(hely);
-
-
-                Telephelyekfeltöltése();
-
-                GombLathatosagKezelo.Beallit(this);
-                Jogosultságkiosztás();
 
                 LapFülek.SelectedIndex = 0;
                 Fülekkitöltése();
@@ -325,7 +315,7 @@ namespace Villamos
         private void Btn_Súgó_Click(object sender, EventArgs e)
         {
             string helyi = Application.StartupPath + @"\Súgó\VillamosLapok\Külső_dolgozók.html";
-            MyE.Megnyitás(helyi);
+            MyF.Megnyitás(helyi);
         }
 
         private void LapFülek_DrawItem(object sender, DrawItemEventArgs e)
@@ -412,8 +402,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         #endregion
 
 
@@ -477,62 +465,52 @@ namespace Villamos
                 if (Cég_email.Text.Contains(',')) Cég_email.Text = Cég_email.Text.Replace(',', ';');
                 if (Cég_email.Text.Contains(' ')) Cég_email.Text = Cég_email.Text.Replace(' ', ';');
 
-                string szöveg = "SELECT * FROM Cégek";
-                Adatok_Külső_Cégek = Kéz_Külső_Cégek.Lista_Adatok(hely, jelszó, szöveg);
+
+                Adatok_Külső_Cégek = Kéz_Külső_Cégek.Lista_Adatok();
 
                 // Megkeressük a soron következőt
                 if (Cég_sorszám.Text.Trim() == "")
                 {
                     double rekord = Adatok_Külső_Cégek.Any() ? Adatok_Külső_Cégek.Max(a => a.Cégid) + 1 : 1;
                     Cég_sorszám.Text = rekord.ToString();
-
-                    szöveg = "INSERT INTO Cégek (cégid, cég, címe, cég_email, felelős_személy, Felelős_telefonszám, munkaleírás,";
-                    szöveg += " mikor, érv_kezdet, érv_vég, Engedélyezés_dátuma, engedélyező, engedély, státus, terület)  VALUES (";
-                    szöveg += Cég_sorszám.Text.Trim() + ", "; // cégid
-                    szöveg += "'" + Cég_cég.Text.Trim() + "', "; // cég
-                    szöveg += "'" + Cég_címe.Text.Trim().Replace(",", ";") + "', "; // címe
-                    szöveg += "'" + Cég_email.Text.Trim() + "', "; // cég_email
-                    szöveg += "'" + Cég_felelős_személy.Text.Trim() + "', "; // felelős_személy
-                    szöveg += "'" + Cég_felelős_telefon.Text.Trim() + "', "; // Felelős_telefonszám
-                    szöveg += "'" + Cég_Munkaleírás.Text.Trim() + "', "; // munkaleírás
-                    szöveg += "'" + Cég_mikor.Text.Trim() + "', "; // Mikor
-                    szöveg += "'" + Cég_Érv_kezdet.Value.ToString("yyyy.MM.dd").Trim() + "', "; // érv_kezdet
-                    szöveg += "'" + Cég_Érv_vég.Value.ToString("yyyy.MM.dd").Trim() + "', "; // érv_vég
-                    szöveg += "'" + new DateTime(1900, 1, 1).ToString("yyyy.MM.dd").Trim() + "', ";  // endegélyezés_dátuma
-                    szöveg += "'_', "; // engedélyező
-                    szöveg += " 0, "; // engedély új rögzítés
-                    szöveg += " false, ";  // státus
-                    if (Rádió_főmérnök)
-                        szöveg += "'Főmérnökség')";
-                    else
-                        szöveg += $"'{Cmbtelephely.Text.Trim()}')";
+                    Adat_Külső_Cégek ADAT = new Adat_Külső_Cégek(
+                        rekord,
+                        Cég_cég.Text.Trim(),
+                        Cég_címe.Text.Trim().Replace(",", ";"),
+                        Cég_email.Text.Trim(),
+                        Cég_felelős_személy.Text.Trim(),
+                        Cég_felelős_telefon.Text.Trim(),
+                        Cég_Munkaleírás.Text.Trim(),
+                        Cég_mikor.Text.Trim(),
+                        Cég_Érv_kezdet.Value,
+                        Cég_Érv_vég.Value,
+                        new DateTime(1900, 1, 1),
+                        "_",
+                        0,
+                        false,
+                        Rádió_főmérnök ? "Főmérnökség" : Cmbtelephely.Text.Trim());
+                    Kéz_Külső_Cégek.Rögzítés(ADAT);
                 }
                 else
                 {
-                    szöveg = "UPDATE Cégek  Set ";
-                    szöveg += " cég='" + Cég_cég.Text.Trim() + "', "; // cég
-                    szöveg += " címe='" + Cég_címe.Text.Trim() + "', "; // címe
-                    szöveg += " cég_email='" + Cég_email.Text.Trim() + "', "; // cég_email
-                    szöveg += " felelős_személy='" + Cég_felelős_személy.Text.Trim() + "', "; // felelős_személy
-                    szöveg += " Felelős_telefonszám='" + Cég_felelős_telefon.Text.Trim() + "', "; // Felelős_telefonszám
-                    szöveg += " munkaleírás='" + Cég_Munkaleírás.Text.Trim() + "', "; // munkaleírás
-                    szöveg += " Mikor='" + Cég_mikor.Text.Trim() + "', "; // Mikor
-                    szöveg += " érv_kezdet='" + Cég_Érv_kezdet.Value.ToString("yyyy.MM.dd").Trim() + "', "; // érv_kezdet
-                    szöveg += " érv_vég='" + Cég_Érv_vég.Value.ToString("yyyy.MM.dd").Trim() + "', "; // érv_vég
-                                                                                                      // státus
-                    if (Cég_Aktív.Checked)
-                    {
-                        szöveg += " engedély=9, ";  // engedély
-                        szöveg += " státus=True ";
-                    }
-                    else
-                    {
-                        szöveg += " engedély=0, ";  // engedély
-                        szöveg += " státus=false ";
-                    }
-                    szöveg += " WHERE [Cégid]=" + Cég_sorszám.Text.Trim();
+                    Adat_Külső_Cégek ADAT = new Adat_Külső_Cégek(
+                        Cég_sorszám.Text.Trim().ToÉrt_Double(),
+                        Cég_cég.Text.Trim(),
+                        Cég_címe.Text.Trim().Replace(",", ";"),
+                        Cég_email.Text.Trim(),
+                        Cég_felelős_személy.Text.Trim(),
+                        Cég_felelős_telefon.Text.Trim(),
+                        Cég_Munkaleírás.Text.Trim(),
+                        Cég_mikor.Text.Trim(),
+                        Cég_Érv_kezdet.Value,
+                        Cég_Érv_vég.Value,
+                        new DateTime(1900, 1, 1),
+                        "_",
+                        Cég_Aktív.Checked ? 9 : 0,
+                        Cég_Aktív.Checked,
+                        Rádió_főmérnök ? "Főmérnökség" : Cmbtelephely.Text.Trim());
+                    Kéz_Külső_Cégek.Módosítás(ADAT);
                 }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
 
                 // frissítjük a táblázatban
                 Cég_Tábla_író();
@@ -564,8 +542,7 @@ namespace Villamos
         {
             try
             {
-                if (Cég_tábla.Rows.Count <= 0)
-                    return;
+                if (Cég_tábla.Rows.Count <= 0) return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -584,7 +561,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, Cég_tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -620,11 +597,7 @@ namespace Villamos
         {
             try
             {
-                string szöveg = "SELECT * FROM Cégek Order By cégid ";
-                Kezelő_Külső_Cégek Kéz = new Kezelő_Külső_Cégek();
-                List<Adat_Külső_Cégek> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-
+                List<Adat_Külső_Cégek> Adatok = Kéz_Külső_Cégek.Lista_Adatok().OrderBy(y => y.Cégid).ToList();
 
                 Cég_tábla.Rows.Clear();
                 Cég_tábla.Columns.Clear();
@@ -746,8 +719,7 @@ namespace Villamos
 
         private void Cég_tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0)
-                return;
+            if (e.RowIndex < 0) return;
             Cégtábal_katt(e.RowIndex);
             Gombok_váltása();
         }
@@ -832,16 +804,6 @@ namespace Villamos
 
                     string helyi = Application.StartupPath + @"\Főmérnökség\Adatok\Behajtási\Külső_PDF\";
                     helyi += PDF_cégid.Text.Trim() + "_" + Cég_Érv_kezdet.Value.ToString("yyyyMMdd") + "_" + Cég_Érv_vég.Value.ToString("yyyyMMdd") + ".pdf";
-                    if (System.IO.File.Exists(hely) == false)
-                    {
-                        Dolg_Rögzít.Visible = false;
-                        Dolgozó_töröl.Visible = false;
-                    }
-                    else if (Program.PostásTelephely.Trim() == "Főmérnökség")
-                    {
-                        Dolg_Rögzít.Visible = true;
-                        Dolgozó_töröl.Visible = true;
-                    }
                 }
             }
             catch (HibásBevittAdat ex)
@@ -859,12 +821,11 @@ namespace Villamos
         {
             try
             {
-
                 int volt = 0;
                 int hiba = 0;
                 //a kijelöléseken végig megyünk és csak a 0 státust hagyjuk bejelölve
-                string szöveg = "SELECT * FROM Cégek";
-                Adatok_Külső_Cégek = Kéz_Külső_Cégek.Lista_Adatok(hely, jelszó, szöveg);
+
+                Adatok_Külső_Cégek = Kéz_Külső_Cégek.Lista_Adatok();
 
                 for (int i = 0; i < Cég_tábla.Rows.Count; i++)
                 {
@@ -872,10 +833,10 @@ namespace Villamos
                         Cég_tábla.Rows[i].Selected = false;
                 }
 
-                List<string> SzövegGy = new List<string>();
+                List<Adat_Külső_Cégek> ADATOK = new List<Adat_Külső_Cégek>();
                 for (int iii = 0; iii < Cég_tábla.Rows.Count; iii++)
                 {
-                    if (Cég_tábla.Rows[iii].Selected == true)
+                    if (Cég_tábla.Rows[iii].Selected)
                     {
                         // ha ki volt jelölve, akkor megvizsgáljuk, hogy minden rendben van 
                         Cégtábal_katt(iii);
@@ -908,10 +869,8 @@ namespace Villamos
                                 bool vane = Adatok_Külső_Cégek.Any(a => a.Cégid == CegId && a.Engedély == 0);
                                 if (vane)
                                 {
-                                    szöveg = "UPDATE Cégek  SET ";
-                                    szöveg += " engedély=1"; // engedély
-                                    szöveg += " WHERE [Cégid]=" + Cég_tábla.Rows[iii].Cells[0].Value;
-                                    SzövegGy.Add(szöveg);
+                                    Adat_Külső_Cégek ADAT = new Adat_Külső_Cégek(Cég_tábla.Rows[iii].Cells[0].Value.ToString().ToÉrt_Double(), 1);
+                                    ADATOK.Add(ADAT);
                                     volt = 1;
                                 }
                             }
@@ -929,10 +888,9 @@ namespace Villamos
                             MessageBox.Show("Nincs kijelölve egy telephely sem és nincs egy dolgózója sem a " + Cég_tábla.Rows[iii].Cells[0].Value.ToString().Trim() + " sorszámú cégnek.", "Engedélyezésre nem lett elküldve", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
                         hiba = 0;
-
                     }
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                Kéz_Külső_Cégek.Engedélyezésre(ADATOK);
 
                 if (volt == 1)
                 {
@@ -1005,13 +963,13 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void Szakszolg_engedély_email()
         {
             try
             {
                 Engedély_Tábla_író(1);
-                if (Engedély_tábla.Rows.Count < 1)
-                    return;
+                if (Engedély_tábla.Rows.Count < 1) return;
 
                 int ii = 0;
                 Microsoft.Office.Interop.Outlook.Application _app = new Microsoft.Office.Interop.Outlook.Application();
@@ -1117,7 +1075,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
 
 
@@ -1140,17 +1097,18 @@ namespace Villamos
         {
             try
             {
-                if (Autó_Cégid.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva cég.");
+                if (Autó_Cégid.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva cég.");
 
-                string szöveg = $"SELECT * FROM gépjárművek WHERE státus=false AND  cégid={Autó_Cégid.Text.Trim()} order by id";
-                Kezelő_Külső_Gépjárművek Kéz = new Kezelő_Külső_Gépjárművek();
-                List<Adat_Külső_Gépjárművek> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
+                Adatok_autó = Kéz_Járművek.Lista_Adatok();
+                Adatok_autó = (from a in Adatok_autó
+                               where a.Státus == false
+                          && a.Cégid == Autó_Cégid.Text.Trim().ToÉrt_Double()
+                               orderby a.Id
+                               select a).ToList();
                 Autó_fejléc();
 
                 string válasz = "Érvényes";
-                foreach (Adat_Külső_Gépjárművek rekord in Adatok)
+                foreach (Adat_Külső_Gépjárművek rekord in Adatok_autó)
                 {
                     Tábla_autó.RowCount++;
                     int i = Tábla_autó.RowCount - 1;
@@ -1227,16 +1185,37 @@ namespace Villamos
         {
             try
             {
-                if (Autó_Cégid.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva érvényes cég.");
-                if (Autó_FRSZ.Text.Trim() == "")
-                    throw new HibásBevittAdat("Az autó rendszáma mező nem lehet üres.");
+                if (Autó_Cégid.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva érvényes cég.");
+                if (Autó_FRSZ.Text.Trim() == "") throw new HibásBevittAdat("Az autó rendszáma mező nem lehet üres.");
                 if (Autó_státus.Text.Trim() == "") Autó_státus.Text = "Érvényes";
 
                 // ha szóközzel van elválasztva akkor javítja és nagybetűsít
                 Autó_FRSZ.Text = Autó_FRSZ.Text.ToUpper().Replace(" ", "").Replace("-", "");
 
-                Autó_Rögzítés(Autó_Cégid.Text.Trim(), Autó_FRSZ.Text.Trim(), Autó_státus.Text.Trim());
+                List<Adat_Külső_Gépjárművek> Adatok = Kéz_Járművek.Lista_Adatok();
+                double id = Adatok.Any() ? Adatok.Max(a => a.Id) + 1 : 1;
+
+                if (!double.TryParse(Telephely_Cégid.Text, out double CegId)) CegId = 0;
+                bool vane = Adatok.Any(a => a.Cégid == CegId && a.Frsz.Trim() == Autó_FRSZ.Text.Trim());
+
+                if (vane)
+                {
+                    Adat_Külső_Gépjárművek ADAT = new Adat_Külső_Gépjárművek(
+                        0, //nincs szükség rá
+                        Autó_FRSZ.Text.Trim(),
+                        CegId,
+                        Autó_státus.Text.Trim() != "Érvényes");
+                    Kéz_Járművek.Módosítás(ADAT);
+                }
+                else
+                {
+                    Adat_Külső_Gépjárművek ADAT = new Adat_Külső_Gépjárművek(
+                                id, //nincs szükség rá
+                                Autó_FRSZ.Text.Trim(),
+                                CegId,
+                                false);
+                    Kéz_Járművek.Rögzítés(ADAT);
+                }
                 Autó_tábla_lista();
                 Autó_Ürítés();
 
@@ -1252,39 +1231,6 @@ namespace Villamos
             }
         }
 
-        private void Autó_Rögzítés(string CégID, string RendSzám, string StátusA)
-        {
-            string szöveg = "SELECT * FROM Gépjárművek";
-            Kezelő_Külső_Gépjárművek Kéz = new Kezelő_Külső_Gépjárművek();
-            List<Adat_Külső_Gépjárművek> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-            double id = Adatok.Any() ? Adatok.Max(a => a.Id) + 1 : 1;
-
-            if (!double.TryParse(Telephely_Cégid.Text, out double CegId)) CegId = 0;
-            bool vane = Adatok.Any(a => a.Cégid == CegId && a.Frsz.Trim() == RendSzám.Trim());
-
-            if (vane)
-            {
-                szöveg = "UPDATE Gépjárművek SET ";
-                if (StátusA.Trim() == "Érvényes")
-                    szöveg += " státus=false ";
-                else
-                    szöveg += " státus=true ";
-
-                szöveg += $" WHERE Cégid={CégID} AND frsz='{RendSzám}'";
-            }
-            else
-            {
-                szöveg = "INSERT INTO Gépjárművek (id, frsz, cégid, státus) VALUES (";
-                szöveg += $"{id}, "; // id
-                szöveg += $"'{RendSzám}', "; // frsz
-                szöveg += $"'{CégID}', "; // cégid
-                if (StátusA.Trim() == "Érvényes")
-                    szöveg += " false) ";
-                else
-                    szöveg += " true) ";
-            }
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-        }
 
         private void Autó_Új_Click(object sender, EventArgs e)
         {
@@ -1294,14 +1240,11 @@ namespace Villamos
 
         private void Tábla_autó_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (Tábla_autó.Rows.Count < 1)
-                return;
-            if (e.RowIndex < 0)
-                return;
+            if (Tábla_autó.Rows.Count < 1) return;
+            if (e.RowIndex < 0) return;
 
             Autó_FRSZ.Text = Tábla_autó.Rows[e.RowIndex].Cells[1].Value.ToString();
             Autó_státus.Text = Tábla_autó.Rows[e.RowIndex].Cells[3].Value.ToString();
-
         }
 
 
@@ -1309,8 +1252,7 @@ namespace Villamos
         {
             try
             {
-                if (Autó_Cégid.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kijelölve cég.");
+                if (Autó_Cégid.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve cég.");
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -1326,18 +1268,22 @@ namespace Villamos
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
 
                 Autó_fejléc();
                 Tábla_autó.Visible = true;
                 string munkalap = "Munka1";
                 MyX.ExcelLétrehozás(munkalap);
                 MyX.Munkalap_betű(munkalap, BeBetű);
+<<<<<<< HEAD
                 
+=======
+
+>>>>>>> master
 
                 // fejléc kiírása
                 for (int oszlop = 0; oszlop < Tábla_autó.ColumnCount; oszlop++)
                 {
+<<<<<<< HEAD
                     MyX.Kiir(Tábla_autó.Columns[oszlop].HeaderText.Trim(), MyE.Oszlopnév(oszlop + 1) + "1");
                     MyX.Oszlopszélesség(munkalap, $"{MyE.Oszlopnév(oszlop + 1)}:{MyE.Oszlopnév(oszlop + 1)}", 30);
                 }
@@ -1351,6 +1297,21 @@ namespace Villamos
                 {
                     Munkalap = munkalap,
                     NyomtatásiTerület = $"A1:{MyE.Oszlopnév(Tábla_autó.ColumnCount)}2",
+=======
+                    MyX.Kiir(Tábla_autó.Columns[oszlop].HeaderText.Trim(), MyF.Oszlopnév(oszlop + 1) + "1");
+                    MyX.Oszlopszélesség(munkalap, $"{MyF.Oszlopnév(oszlop + 1)}:{MyF.Oszlopnév(oszlop + 1)}", 30);
+                }
+
+                // megformázzuk
+                MyX.Rácsoz(munkalap, $"A1:{MyF.Oszlopnév(Tábla_autó.ColumnCount)}2");
+
+                MyX.Betű(munkalap, $"A1:{MyF.Oszlopnév(Tábla_autó.ColumnCount)}1", BeBetűV);
+                MyX.Háttérszín(munkalap, $"A1:{MyF.Oszlopnév(Tábla_autó.ColumnCount)}1", Color.Yellow);
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:{MyF.Oszlopnév(Tábla_autó.ColumnCount)}2",
+>>>>>>> master
 
                     BalMargó = 5,
                     JobbMargó = 5,
@@ -1358,6 +1319,7 @@ namespace Villamos
                     AlsóMargó = 5,
                     FejlécMéret = 8,
                     LáblécMéret = 8,
+<<<<<<< HEAD
 
                     LapMagas = 1,
                     LapSzéles = 1,
@@ -1375,6 +1337,24 @@ namespace Villamos
                 MessageBox.Show($"Elkészült az Excel tábla: {fájlexc}.xlsx", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 MyF.Megnyitás(fájlexc + ".xlsx");
+=======
+
+                    LapMagas = 1,
+                    LapSzéles = 1,
+
+                    Papírméret = "A4",
+                    Álló = false,
+                    VízKözép = true,
+                    FüggKözép = true
+                };
+
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
+                MessageBox.Show($"Elkészült az Excel tábla: {fájlexc}", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                MyF.Megnyitás(fájlexc);
+>>>>>>> master
             }
             catch (HibásBevittAdat ex)
             {
@@ -1411,12 +1391,13 @@ namespace Villamos
                     return;
 
                 // megnyitjuk a beolvasandó táblát
-                MyE.ExcelMegnyitás(fájlexc);
+                string munkalap = "Munka1";
+                MyX.ExcelMegnyitás(fájlexc);
 
                 // megnézzük, hogy hány sorból áll a tábla
                 int ii = 1;
                 int utolsó = 0;
-                while (MyE.Beolvas($"b{ii}").Trim() != "_")
+                while (MyX.Beolvas(munkalap, $"b{ii}").Trim() != "_")
                 {
                     utolsó = ii;
                     ii += 1;
@@ -1425,19 +1406,25 @@ namespace Villamos
 
                 if (utolsó > 1)
                 {
-
+                    List<Adat_Külső_Gépjárművek> ADATOK = new List<Adat_Külső_Gépjárművek>();
                     for (int i = 2; i <= utolsó; i++)
                     {
                         // ha szóközzel van elválasztva akkor javítja és nagybetűsít
-                        string rendszám = MyE.Beolvas($"b{i}").Trim().ToUpper().Replace(" ", "").Replace("-", "");
-
-                        Autó_Rögzítés(Autó_Cégid.Text.Trim(), rendszám.Trim(), "Érvényes");
+                        string rendszám = MyX.Beolvas(munkalap, $"b{i}").Trim().ToUpper().Replace(" ", "").Replace("-", "");
+                        Adat_Külső_Gépjárművek ADAT = new Adat_Külső_Gépjárművek(
+                            0,
+                            rendszám,
+                            Autó_Cégid.Text.Trim().ToÉrt_Double(),
+                            false);
+                        ADATOK.Add(ADAT);
                         Holtart.Lép();
                     }
+                    Kéz_Járművek.Döntés(ADATOK);
                 }
-                // bezárjuk az excel táblát
-                MyE.ExcelBezárás();
 
+
+                // bezárjuk az excel táblát
+                MyX.ExcelBezárás();
 
                 Holtart.Ki();
                 // kitöröljük a betöltött fájlt
@@ -1462,20 +1449,18 @@ namespace Villamos
         {
             try
             {
-                if (Tábla_autó.Rows.Count == 0)
-                    throw new HibásBevittAdat("Nincs elem a táblázatban.");
-                if (Tábla_autó.SelectedRows.Count == 0)
-                    throw new HibásBevittAdat("Nincs kijelölve elem a táblázatban.");
+                if (Tábla_autó.Rows.Count == 0) throw new HibásBevittAdat("Nincs elem a táblázatban.");
+                if (Tábla_autó.SelectedRows.Count == 0) throw new HibásBevittAdat("Nincs kijelölve elem a táblázatban.");
 
-                List<string> SzövegGy = new List<string>();
+                List<Adat_Külső_Gépjárművek> Adatok = new List<Adat_Külső_Gépjárművek>();
                 for (int i = 0; i < Tábla_autó.SelectedRows.Count; i++)
                 {
-                    string szöveg = "UPDATE Gépjárművek  SET ";
-                    szöveg += "státus= true ";
-                    szöveg += " WHERE id=" + Tábla_autó.SelectedRows[i].Cells[0].Value.ToString().Trim();
-                    SzövegGy.Add(szöveg);
+                    Adat_Külső_Gépjárművek ADAT = new Adat_Külső_Gépjárművek(
+                        Tábla_autó.SelectedRows[i].Cells[0].Value.ToString().ToÉrt_Double(),
+                        true);
+                    Adatok.Add(ADAT);
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                if (Adatok.Count > 0) Kéz_Járművek.Törlés(Adatok);
                 Autó_tábla_lista();
             }
             catch (HibásBevittAdat ex)
@@ -1496,7 +1481,6 @@ namespace Villamos
         {
             Dolg_új_tiszta();
         }
-
 
         private void Dolg_új_tiszta()
         {
@@ -1525,28 +1509,28 @@ namespace Villamos
             }
         }
 
-
         private void Dolg_frissít_Click(object sender, EventArgs e)
         {
             Dolg_tábla_író();
         }
 
-
         private void Dolg_tábla_író()
         {
             try
             {
-                if (Dolg_cégid.Text.Trim() == "")
-                    throw new HibásBevittAdat("Cég nincs kiválasztva.");
+                if (Dolg_cégid.Text.Trim() == "") throw new HibásBevittAdat("Cég nincs kiválasztva.");
 
                 Dolgozó_Tábla_fejléc();
 
-                string szöveg = "SELECT * FROM Dolgozók WHERE státus=false AND cégid=" + Dolg_cégid.Text.Trim() + " ORDER BY id ";
-                Kezelő_Külső_Dolgozók Kéz = new Kezelő_Külső_Dolgozók();
-                List<Adat_Külső_Dolgozók> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
+                Adatok_Dolg = Kéz_Dolgozó.Lista_Adatok();
+                Adatok_Dolg = (from a in Adatok_Dolg
+                               where a.Státus == false &&
+                               a.Cégid == Dolg_cégid.Text.Trim().ToÉrt_Double()
+                               orderby a.Id
+                               select a).ToList();
 
                 string válasz = "Érvényes";
-                foreach (Adat_Külső_Dolgozók rekord in Adatok)
+                foreach (Adat_Külső_Dolgozók rekord in Adatok_Dolg)
                 {
                     Dolg_tábla.RowCount++;
                     int i = Dolg_tábla.RowCount - 1;
@@ -1576,7 +1560,6 @@ namespace Villamos
             }
         }
 
-
         private void Dolgozó_Tábla_fejléc()
         {
             Dolg_tábla.Rows.Clear();
@@ -1598,19 +1581,20 @@ namespace Villamos
             Dolg_tábla.Columns[4].Width = 100;
         }
 
-
         private void Dolg_Rögzít_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Dolg_cégid.Text.Trim() == "")
-                    throw new HibásBevittAdat("Nincs kiválasztva cég.");
-                if (Dolg_Dolgozónév.Text.Trim() == "")
-                    throw new HibásBevittAdat("A dolgozó név mezőt ki kell tölteni.");
-                if (Dolg_Személyi.Text.Trim() == "")
-                    throw new HibásBevittAdat("A személyi igazolványszám mezőt ki kell tölteni.");
+                if (Dolg_cégid.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva cég.");
+                if (Dolg_Dolgozónév.Text.Trim() == "") throw new HibásBevittAdat("A dolgozó név mezőt ki kell tölteni.");
+                if (Dolg_Személyi.Text.Trim() == "") throw new HibásBevittAdat("A személyi igazolványszám mezőt ki kell tölteni.");
 
-                Dolgozó_Rögzítés(Dolg_cégid.Text.Trim(), Dolg_Dolgozónév.Text.Trim(), Dolg_Személyi.Text.Trim(), Dolg_Státus.Text.Trim());
+                Adat_Külső_Dolgozók ADAT = new Adat_Külső_Dolgozók(
+                     Dolg_Dolgozónév.Text.Trim(),
+                     Dolg_Személyi.Text.Trim(),
+                     Dolg_cégid.Text.Trim().ToÉrt_Double(),
+                     Dolg_Státus.Text.Trim() != "Érvényes");
+                Kéz_Dolgozó.Döntés(ADAT);
 
                 Dolg_tábla_író();
                 Dolg_új_tiszta();
@@ -1626,51 +1610,6 @@ namespace Villamos
             }
         }
 
-
-        private void Dolgozó_Rögzítés(string Cég_ID, string Dolg_Név, string OKmány, string Státus)
-        {
-            DateTime Idő = new DateTime(1900, 1, 1);
-
-            string szöveg = "SELECT * FROM Dolgozók";
-            Kezelő_Külső_Dolgozók Kéz = new Kezelő_Külső_Dolgozók();
-            List<Adat_Külső_Dolgozók> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-            double id = Adatok.Any() ? Adatok.Max(a => a.Id) + 1 : 1;
-
-            if (!double.TryParse(Telephely_Cégid.Text, out double CegId)) CegId = 0;
-
-            bool vane = Adatok.Any(a => a.Cégid == CegId && a.Név.Trim() == Dolg_Név.Trim() && a.Okmányszám.Trim() == OKmány.Trim());
-            if (vane)
-            {
-                szöveg = "UPDATE Dolgozók  SET ";
-                szöveg += $"okmányszám='{OKmány}', "; // okmányszám
-                if (Státus.Trim() == "Érvényes")
-                    szöveg += "státus=false ";
-                else
-                    szöveg += "státus= true ";
-
-                szöveg += $" WHERE Cégid={Cég_ID} AND név='{Dolg_Név}'";
-                szöveg += $" AND okmányszám='{OKmány}'";
-            }
-            else
-            {
-                szöveg = "INSERT INTO Dolgozók (id, név, okmányszám, anyjaneve, születésihely, születésiidő, cégid, státus) VALUES (";
-                szöveg += $"{id}, "; // id X
-                szöveg += $"'{Dolg_Név}', "; // név X
-                szöveg += $"'{OKmány}', "; // okmányszám
-                szöveg += "'_', "; // anyjaneve X
-                szöveg += "'_', "; // születésihely
-                szöveg += $"'{Idő:yyyy.MM.dd}', ";
-                szöveg += $"{Cég_ID}, "; // cégid X
-                if (Státus.Trim() == "Érvényes")
-                    szöveg += " false) ";
-                else
-                    szöveg += " true) ";
-            }
-            MyA.ABMódosítás(hely, jelszó, szöveg);
-
-        }
-
-
         private void Dolg_tábla_Formázás()
         {
             // egész sor színezése ha törölt
@@ -1685,25 +1624,20 @@ namespace Villamos
             }
         }
 
-
         private void Dolg_tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (Dolg_tábla.Rows.Count < 1)
-                return;
-            if (e.RowIndex < 0)
-                return;
+            if (Dolg_tábla.Rows.Count < 1) return;
+            if (e.RowIndex < 0) return;
 
             Dolg_Dolgozónév.Text = Dolg_tábla.Rows[e.RowIndex].Cells[1].Value.ToString().Trim();
             Dolg_Személyi.Text = Dolg_tábla.Rows[e.RowIndex].Cells[2].Value.ToString().Trim();
         }
 
-
         private void Dolgozó_kivitel_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Dolg_cégid.Text.Trim() == "")
-                    return;
+                if (Dolg_cégid.Text.Trim() == "") return;
                 string fájlexc;
 
                 // kimeneti fájl helye és neve
@@ -1721,7 +1655,6 @@ namespace Villamos
                 else
                     return;
 
-                fájlexc = fájlexc.Substring(0, fájlexc.Length - 5);
                 // Csak a fejlécet írjuk ki
                 Dolgozó_Tábla_fejléc();
                 Dolg_tábla.Visible = true;
@@ -1734,9 +1667,15 @@ namespace Villamos
                     MyX.Kiir(Dolg_tábla.Columns[oszlop].HeaderText, MyF.Oszlopnév(oszlop + 1) + "1");
                     MyX.Oszlopszélesség(munkalap, $"{MyF.Oszlopnév(oszlop + 1)}:{MyF.Oszlopnév(oszlop + 1)}", 30);
                 }
+<<<<<<< HEAD
                 MyX.Rácsoz(munkalap,$"A1:{MyF.Oszlopnév(Dolg_tábla.ColumnCount)}2");
                 MyX.Háttérszín(munkalap,$"A1:{MyF.Oszlopnév(Dolg_tábla.ColumnCount)}1", Color.Yellow);
                 MyX.Betű(munkalap,$"A1:{MyF.Oszlopnév(Dolg_tábla.ColumnCount)}1", BeBetűV);
+=======
+                MyX.Rácsoz(munkalap, $"A1:{MyF.Oszlopnév(Dolg_tábla.ColumnCount)}2");
+                MyX.Háttérszín(munkalap, $"A1:{MyF.Oszlopnév(Dolg_tábla.ColumnCount)}1", Color.Yellow);
+                MyX.Betű(munkalap, $"A1:{MyF.Oszlopnév(Dolg_tábla.ColumnCount)}1", BeBetűV);
+>>>>>>> master
 
                 Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
                 {
@@ -1753,18 +1692,30 @@ namespace Villamos
                     LapMagas = 1,
                     LapSzéles = 1,
                     Papírméret = "A4",
+<<<<<<< HEAD
                     Álló = false,  
+=======
+                    Álló = false,
+>>>>>>> master
                     VízKözép = true,
                     FüggKözép = true
                 };
 
                 MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
+<<<<<<< HEAD
                 MyX.Aktív_Cella(munkalap, "A1");
+=======
+
+>>>>>>> master
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+<<<<<<< HEAD
                 MyF.Megnyitás(fájlexc + ".xlsx");
+=======
+                MyF.Megnyitás(fájlexc);
+>>>>>>> master
             }
             catch (HibásBevittAdat ex)
             {
@@ -1777,13 +1728,11 @@ namespace Villamos
             }
         }
 
-
         private void Dolgozó_beolvas_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Dolg_cégid.Text.Trim() == "")
-                    throw new HibásBevittAdat("Cég nincs kiválasztva.");
+                if (Dolg_cégid.Text.Trim() == "") throw new HibásBevittAdat("Cég nincs kiválasztva.");
 
                 var Idő = new DateTime(1900, 1, 1);
 
@@ -1804,13 +1753,13 @@ namespace Villamos
 
 
                 // megnyitjuk a beolvasandó táblát
-
-                MyE.ExcelMegnyitás(fájlexc);
+                string munkalap = "Munka1";
+                MyX.ExcelMegnyitás(fájlexc);
 
                 // megnézzük, hogy hány sorból áll a tábla
                 int ii = 1;
                 int utolsó = 0;
-                while (MyE.Beolvas($"b{ii}").Trim() != "_")
+                while (MyX.Beolvas(munkalap, $"b{ii}").Trim() != "_")
                 {
                     utolsó = ii;
                     ii += 1;
@@ -1819,17 +1768,23 @@ namespace Villamos
 
                 if (utolsó > 1)
                 {
+                    List<Adat_Külső_Dolgozók> ADATOK = new List<Adat_Külső_Dolgozók>();
                     for (int i = 2; i <= utolsó; i++)
                     {
-                        string Név = MyE.Beolvas($"b{i}").Trim().Replace(",", "");
-                        string Személyi = MyE.Beolvas($"c{i}").Trim().Replace(",", "");
-                        Dolgozó_Rögzítés(Dolg_cégid.Text.Trim(), Név, Személyi, "Érvényes");
-
+                        string Név = MyX.Beolvas(munkalap, $"b{i}").Trim().Replace(",", "");
+                        string Személyi = MyX.Beolvas(munkalap, $"c{i}").Trim().Replace(",", "");
+                        Adat_Külső_Dolgozók ADAT = new Adat_Külső_Dolgozók(
+                            Név,
+                            Személyi,
+                            Dolg_cégid.Text.Trim().ToÉrt_Double(),
+                            false);
+                        ADATOK.Add(ADAT);
                         Holtart.Lép();
                     }
+                    if (ADATOK.Count > 0) Kéz_Dolgozó.Döntés(ADATOK);
                 }
                 // bezárjuk az excel táblát
-                MyE.ExcelBezárás();
+                MyX.ExcelBezárás();
 
                 Holtart.Ki();
                 // kitöröljük a betöltött fájlt
@@ -1849,29 +1804,23 @@ namespace Villamos
             }
         }
 
-
         private void Dolgozó_töröl_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Dolg_tábla.Rows.Count == 0)
-                    return;
-                if (Dolg_tábla.SelectedRows.Count == 0)
-                    throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
+                if (Dolg_tábla.Rows.Count == 0) return;
+                if (Dolg_tábla.SelectedRows.Count == 0) throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
 
-                string szöveg;
+                List<Adat_Külső_Dolgozók> Adatok = new List<Adat_Külső_Dolgozók>();
+                for (int i = 0; i <= Dolg_tábla.SelectedRows.Count - 1; i++)
                 {
-
-                    List<string> SzövegGy = new List<string>();
-                    for (int i = 0; i <= Dolg_tábla.SelectedRows.Count - 1; i++)
-                    {
-                        szöveg = "UPDATE Dolgozók  SET ";
-                        szöveg += "státus= true ";
-                        szöveg += " WHERE id=" + Dolg_tábla.SelectedRows[i].Cells[0].Value.ToString().Trim();
-                        SzövegGy.Add(szöveg);
-                    }
-                    MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                    Adat_Külső_Dolgozók ADAT = new Adat_Külső_Dolgozók(
+                        Dolg_tábla.SelectedRows[i].Cells[0].Value.ToString().ToÉrt_Double(),
+                        true);
+                    Adatok.Add(ADAT);
                 }
+                if (Adatok.Count > 0) Kéz_Dolgozó.Törlés(Adatok);
+
                 Dolg_tábla_író();
                 MessageBox.Show("Az adatok törlése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -1886,21 +1835,16 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         #endregion
 
 
         #region Telephely
-
-
         private void Btn1szak_Click(object sender, EventArgs e)
         {
             Telephely_Tábla.Rows[0].Cells[0].Value = true;
             Telephely_Tábla.Rows[1].Cells[0].Value = true;
             Telephely_Tábla.Rows[2].Cells[0].Value = true;
         }
-
 
         private void Btn2szak_Click(object sender, EventArgs e)
         {
@@ -1910,7 +1854,6 @@ namespace Villamos
             Telephely_Tábla.Rows[6].Cells[0].Value = true;
         }
 
-
         private void Btn3szak_Click(object sender, EventArgs e)
         {
             Telephely_Tábla.Rows[7].Cells[0].Value = true;
@@ -1918,13 +1861,11 @@ namespace Villamos
             Telephely_Tábla.Rows[9].Cells[0].Value = true;
         }
 
-
         private void BtnKijelölcsop_Click(object sender, EventArgs e)
         {
             for (int i = 0; i <= 9; i++)
                 Telephely_Tábla.Rows[i].Cells[0].Value = true;
         }
-
 
         private void Btnkilelöltörlés_Click(object sender, EventArgs e)
         {
@@ -1932,13 +1873,11 @@ namespace Villamos
                 Telephely_Tábla.Rows[i].Cells[0].Value = false;
         }
 
-
         private void Button2_Click(object sender, EventArgs e)
         {
             Telephely_tábla_alap_kiírás();
             Telephely_tábla_jog_kiírás();
         }
-
 
         private void Telephely_tábla_alap_kiírás()
         {
@@ -1978,7 +1917,6 @@ namespace Villamos
             }
         }
 
-
         private void Telephely_tábla_jog_kiírás()
         {
             try
@@ -1986,8 +1924,8 @@ namespace Villamos
                 if (Telephely_Tábla.Rows.Count < 1) return;
                 if (Telephely_Cégid.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva Cég.");
 
-                string szöveg = "SELECT * FROM telephelyek";
-                Adatok_Külső_Telephelyek = Kéz_Külső_Telephelyek.Lista_Adatok(hely, jelszó, szöveg);
+
+                Adatok_Külső_Telephelyek = Kéz_Külső_Telephelyek.Lista_Adatok();
 
                 for (int i = 0; i <= Telephely_Tábla.Rows.Count - 1; i++)
                 {
@@ -2011,7 +1949,6 @@ namespace Villamos
             }
         }
 
-
         private void Telephely_rögzít_Click(object sender, EventArgs e)
         {
             try
@@ -2019,42 +1956,34 @@ namespace Villamos
                 if (Telephely_Tábla.Rows.Count < 1) return;
                 if (Telephely_Cégid.Text.Trim() == "" || Telephely_Cégid.Text.Trim() == "Cégid") throw new HibásBevittAdat("Nincs kiválasztva Cég.");
 
-                string szöveg = "SELECT * FROM telephelyek";
-                Adatok_Külső_Telephelyek = Kéz_Külső_Telephelyek.Lista_Adatok(hely, jelszó, szöveg);
-
-                List<string> SzövegGy = new List<string>();
+                List<Adat_Külső_Telephelyek> AdatokM = new List<Adat_Külső_Telephelyek>();
+                List<Adat_Külső_Telephelyek> AdatokR = new List<Adat_Külső_Telephelyek>();
                 for (int i = 0; i < Telephely_Tábla.Rows.Count; i++)
                 {
                     if (!double.TryParse(Telephely_Cégid.Text, out double CegId)) CegId = 0;
                     bool vane = Adatok_Külső_Telephelyek.Any(a => a.Cégid == CegId && a.Telephely.Trim() == Telephely_Tábla.Rows[i].Cells[1].Value.ToStrTrim());
                     if (vane)
                     {
-                        // ha van ilyen akkor módosítjuk
-                        szöveg = "UPDATE telephelyek  SET ";
-                        if (!bool.Parse(Telephely_Tábla.Rows[i].Cells[0].Value.ToString()))
-                            szöveg += "státus=false ";
-                        else
-                            szöveg += "státus=true ";
-
-                        szöveg += " WHERE  cégid=" + Telephely_Cégid.Text.Trim() + " AND telephely='" + Telephely_Tábla.Rows[i].Cells[1].Value.ToString().Trim() + "'";
+                        Adat_Külső_Telephelyek ADAT = new Adat_Külső_Telephelyek(
+                            0,
+                            Telephely_Tábla.Rows[i].Cells[1].Value.ToStrTrim(),
+                           Telephely_Cégid.Text.ToÉrt_Double(),
+                           bool.Parse(Telephely_Tábla.Rows[i].Cells[0].Value.ToString()));
+                        AdatokM.Add(ADAT);
                     }
                     else
                     {
                         // ha nincs akkor újként rögzítjük
-                        double id = Adatok_Külső_Telephelyek.Any() ? Adatok_Külső_Telephelyek.Max(a => a.Id) + 1 : 1;
-
-                        szöveg = "INSERT INTO telephelyek (id, telephely, cégid, státus ) VALUES (";
-                        szöveg += id.ToString() + ", ";
-                        szöveg += $"'{Telephely_Tábla.Rows[i].Cells[1].Value.ToString().Trim()}', ";
-                        szöveg += Telephely_Cégid.Text.Trim() + ", ";
-                        if (!bool.Parse(Telephely_Tábla.Rows[i].Cells[0].Value.ToString()))
-                            szöveg += " false )";
-                        else
-                            szöveg += " true )";
+                        Adat_Külső_Telephelyek ADAT = new Adat_Külső_Telephelyek(
+                             0,
+                             Telephely_Tábla.Rows[i].Cells[1].Value.ToStrTrim(),
+                            Telephely_Cégid.Text.ToÉrt_Double(),
+                            bool.Parse(Telephely_Tábla.Rows[i].Cells[0].Value.ToString()));
+                        AdatokR.Add(ADAT);
                     }
-                    SzövegGy.Add(szöveg);
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                if (AdatokM.Count > 0) Kéz_Külső_Telephelyek.Módosítás(AdatokM);
+                if (AdatokR.Count > 0) Kéz_Külső_Telephelyek.Rögzítés(AdatokR);
 
                 MessageBox.Show("Az adat rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -2068,50 +1997,52 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         #endregion
 
 
         #region Engedélyezés
-
-
         private void Engedély_frissít_Click(object sender, EventArgs e)
         {
             Engedély_Tábla_író(1);
         }
 
-
         private void Engedély_Tábla_író(int sor)
         {
             try
             {
-                string szöveg;
+                List<Adat_Külső_Cégek> AdatokIdeig = Kéz_Külső_Cégek.Lista_Adatok();
+                List<Adat_Külső_Cégek> Adatok = new List<Adat_Külső_Cégek>();
                 if (sor == 1)
                 {
                     if (Rádió_főmérnök)
                     {
-                        szöveg = "SELECT * FROM Cégek WHERE engedély=1 AND terület='Főmérnökség' Order By cégid ";
+                        Adatok = (from a in AdatokIdeig
+                                  where a.Engedély == 1 &&
+                                  a.Terület == "Főmérnökség"
+                                  orderby a.Cégid
+                                  select a).ToList();
                     }
                     else
                     {
                         // telephelyek meghatározása
-
-                        szöveg = "SELECT * FROM Cégek WHERE engedély=1 AND ( ";
                         for (int k = 0; k < Cmbtelephely.Items.Count; k++)
-                            szöveg += $" terület='{Cmbtelephely.Items[k].ToString().Trim()}' OR";
-                        szöveg = szöveg.Substring(0, szöveg.Length - 2);
-                        szöveg += ") Order By cégid ";
+                        {
+                            List<Adat_Külső_Cégek> AdatokI = (from a in AdatokIdeig
+                                                              where a.Engedély == 1 &&
+                                                              a.Terület.Trim() == Cmbtelephely.Items[k].ToStrTrim()
+                                                              orderby a.Cégid
+                                                              select a).ToList();
+                            Adatok.AddRange(AdatokI);
+                        }
+                        Adatok = Adatok.OrderBy(y => y.Cégid).ToList();
                     }
                 }
                 else
                 {
-                    szöveg = "SELECT * FROM Cégek Order By cégid ";
+                    Adatok = (from a in AdatokIdeig
+                              orderby a.Cégid
+                              select a).ToList();
                 }
-
-                Kezelő_Külső_Cégek Kéz = new Kezelő_Külső_Cégek();
-                List<Adat_Külső_Cégek> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
 
                 Engedély_tábla.Rows.Clear();
                 Engedély_tábla.Columns.Clear();
@@ -2221,7 +2152,6 @@ namespace Villamos
             }
         }
 
-
         private void Engedély_tábla_Formázás()
         {
             try
@@ -2290,12 +2220,11 @@ namespace Villamos
                 Engedély_sorszámok.Text = "";
                 int volt = 0;
 
-                string szöveg = "SELECT * FROM Cégek";
-                Adatok_Külső_Cégek = Kéz_Külső_Cégek.Lista_Adatok(hely, jelszó, szöveg);
+                Adatok_Külső_Cégek = Kéz_Külső_Cégek.Lista_Adatok();
 
                 Holtart.Be(Engedély_tábla.Rows.Count + 1);
 
-                List<string> SzövegGy = new List<string>();
+                List<Adat_Külső_Cégek> Adatok = new List<Adat_Külső_Cégek>();
                 for (int ii = 0; ii < Engedély_tábla.SelectedRows.Count; ii++)
                 {
                     if (!double.TryParse(Engedély_tábla.SelectedRows[ii].Cells[0].Value.ToStrTrim(), out double CegId)) CegId = 0;
@@ -2303,12 +2232,12 @@ namespace Villamos
                     bool vane = Adatok_Külső_Cégek.Any(a => a.Cégid == CegId && a.Engedély == 1);
                     if (vane)
                     {
-                        szöveg = "UPDATE Cégek  SET ";
-                        szöveg += " engedély=5, "; // engedély
-                        szöveg += " Engedélyezés_dátuma='" + DateTime.Now.ToString("yyyy.MM.dd HH:mm") + "', ";
-                        szöveg += " Engedélyező='" + Program.PostásTelephely + "'";
-                        szöveg += " WHERE [Cégid]=" + Engedély_tábla.SelectedRows[ii].Cells[0].Value.ToString();
-                        SzövegGy.Add(szöveg);
+                        Adat_Külső_Cégek Adat = new Adat_Külső_Cégek(
+                            Engedély_tábla.SelectedRows[ii].Cells[0].Value.ToString().ToÉrt_Double(),
+                            DateTime.Now,
+                            Program.PostásNév,
+                            5);
+                        Adatok.Add(Adat);
                         Engedély_sorszámok.Text += Engedély_tábla.SelectedRows[ii].Cells[0].Value.ToString() + ", ";
                         volt = 1;
                         E_levél(ii);
@@ -2316,7 +2245,7 @@ namespace Villamos
 
                     Holtart.Lép();
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                Kéz_Külső_Cégek.Engedélyezés(Adatok);
 
                 Engedély_Tábla_író(1);
                 if (volt == 1)
@@ -2517,8 +2446,7 @@ namespace Villamos
         {
             try
             {
-                if (e.RowIndex < 0)
-                    return;
+                if (e.RowIndex < 0) return;
 
                 // autó lap
                 Autó_cégnév.Text = Engedély_tábla.Rows[e.RowIndex].Cells[1].Value.ToString().Trim();
@@ -2559,10 +2487,10 @@ namespace Villamos
             {
                 if (Engedély_tábla.Rows.Count < 1) return;
 
-                string szöveg = "SELECT * FROM Cégek";
-                Adatok_Külső_Cégek = Kéz_Külső_Cégek.Lista_Adatok(hely, jelszó, szöveg);
 
-                List<string> SzövegGy = new List<string>();
+                Adatok_Külső_Cégek = Kéz_Külső_Cégek.Lista_Adatok();
+
+                List<Adat_Külső_Cégek> Adatok = new List<Adat_Külső_Cégek>();
                 for (int i = 0; i < Engedély_tábla.Rows.Count; i++)
                 {
                     if (Engedély_tábla.Rows[i].Selected == true)
@@ -2571,14 +2499,16 @@ namespace Villamos
                         bool vane = Adatok_Külső_Cégek.Any(a => a.Cégid == CegId && a.Engedély == 1);
                         if (vane)
                         {
-                            szöveg = "UPDATE Cégek  SET ";
-                            szöveg += " engedély=7"; // Elutasított
-                            szöveg += " WHERE [Cégid]=" + Engedély_tábla.Rows[i].Cells[0].Value;
-                            SzövegGy.Add(szöveg);
+                            Adat_Külső_Cégek Adat = new Adat_Külső_Cégek(
+                                Engedély_tábla.SelectedRows[i].Cells[0].Value.ToString().ToÉrt_Double(),
+                                DateTime.Now,
+                                Program.PostásNév,
+                                7);
+                            Adatok.Add(Adat);
                         }
                     }
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                Kéz_Külső_Cégek.Engedélyezés(Adatok);
 
                 Engedély_Tábla_író(1);
             }
@@ -2601,27 +2531,28 @@ namespace Villamos
                 if (Engedély_tábla.Rows.Count < 1) return;
                 int volt = 0;
 
-                string szöveg = "SELECT * FROM Cégek";
-                Adatok_Külső_Cégek = Kéz_Külső_Cégek.Lista_Adatok(hely, jelszó, szöveg);
+                Adatok_Külső_Cégek = Kéz_Külső_Cégek.Lista_Adatok();
 
                 Engedély_sorszámok.Text = "";
 
-                List<string> SzövegGy = new List<string>();
+                List<Adat_Külső_Cégek> Adatok = new List<Adat_Külső_Cégek>();
                 for (int i = 0; i < Engedély_tábla.SelectedRows.Count; i++)
                 {
                     if (!double.TryParse(Engedély_tábla.SelectedRows[i].Cells[0].Value.ToStrTrim(), out double CegId)) CegId = 0;
                     bool vane = Adatok_Külső_Cégek.Any(a => a.Cégid == CegId && a.Engedély == 5);
                     if (vane)
                     {
-                        szöveg = "UPDATE Cégek  SET ";
-                        szöveg += " engedély=7"; // visszavont
-                        szöveg += " WHERE [Cégid]=" + Engedély_tábla.SelectedRows[i].Cells[0].Value;
-                        SzövegGy.Add(szöveg);
+                        Adat_Külső_Cégek Adat = new Adat_Külső_Cégek(
+                               Engedély_tábla.SelectedRows[i].Cells[0].Value.ToString().ToÉrt_Double(),
+                               DateTime.Now,
+                               Program.PostásNév,
+                               7);
+                        Adatok.Add(Adat);
                         Engedély_sorszámok.Text += Engedély_tábla.SelectedRows[i].Cells[0].Value + ", ";
                         volt = 1;
                     }
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                Kéz_Külső_Cégek.Engedélyezés(Adatok);
 
                 Engedély_Tábla_író(0);
                 if (volt == 1)
@@ -2740,22 +2671,23 @@ namespace Villamos
                 int volt = 0;
                 Engedély_sorszámok.Text = "";
 
-                string szöveg = "SELECT * FROM cégek WHERE engedély=5 AND érv_vég<#" + DateTime.Today.ToString("MM-dd-yyyy") + " 00:00:0#";
+                List<Adat_Külső_Cégek> Adatok = Kéz_Külső_Cégek.Lista_Adatok();
+                Adatok = (from a in Adatok
+                          where a.Engedély == 5
+                          && a.Érv_vég <= DateTime.Today
+                          select a).ToList();
 
-                Kezelő_Külső_Cégek Kéz = new Kezelő_Külső_Cégek();
-                List<Adat_Külső_Cégek> Adatok = Kéz.Lista_Adatok(hely, jelszó, szöveg);
-
-                List<string> SzövegGy = new List<string>();
+                List<Adat_Külső_Cégek> ADATOK = new List<Adat_Külső_Cégek>();
                 foreach (Adat_Külső_Cégek rekord in Adatok)
                 {
+                    Adat_Külső_Cégek ADAT = new Adat_Külső_Cégek(rekord.Cégid, 8);
+                    ADATOK.Add(ADAT);
 
                     // Módosítjuk az adatot
-                    szöveg = $"UPDATE Cégek SET  engedély=8 WHERE [Cégid]={rekord.Cégid}";
-                    SzövegGy.Add(szöveg);
                     volt = 1;
                     Engedély_sorszámok.Text += rekord.Cégid + ", ";
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+                Kéz_Külső_Cégek.Engedélyezésre(ADATOK);
 
                 if (volt == 1)
                     Gondnoki_email_Lejárat();
@@ -2832,7 +2764,7 @@ namespace Villamos
                 MyX.DataGridViewToXML(fájlexc, Lekérdezés_tábla);
                 MessageBox.Show($"Elkészült az Excel tábla: {fájlexc}.xlsx", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2877,8 +2809,13 @@ namespace Villamos
                 // megnyitjuk az excelt
                 string munkalap = "Munka1";
                 MyX.ExcelLétrehozás(munkalap);
+<<<<<<< HEAD
                 MyX.Munkalap_betű(munkalap,BeBetű);
                 
+=======
+                MyX.Munkalap_betű(munkalap, BeBetű);
+
+>>>>>>> master
 
                 // oszlopszélességek
                 MyX.Oszlopszélesség(munkalap, "a:a", 30);
@@ -2897,12 +2834,32 @@ namespace Villamos
                 int blokkeleje = 0;
                 int három = 1;
 
-                string helyi = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
-                string jelszói = "Mocó";
-                string szöveg = "SELECT * FROM jelenlétiív";
-                Adatok_Kieg_Jelenlétiív = Kéz_Kieg_Jelenlétiív.Lista_Adatok(helyi, jelszói, szöveg);
+                Adatok_Kieg_Jelenlétiív = Kéz_Kieg_Jelenlétiív.Lista_Adatok(Cmbtelephely.Text.Trim());
 
-                foreach (Adat_Külső_Lekérdezés_Személy rekord in Adatok_Dolg)
+                List<Adat_Külső_Dolgozók> Dolgozók = Kéz_Dolgozó.Lista_Adatok();
+                List<Adat_Külső_Telephelyek> Telephelyek = Kéz_Külső_Telephelyek.Lista_Adatok();
+                List<Adat_Külső_Cégek> Cégek = Kéz_Külső_Cégek.Lista_Adatok();
+                var Adatok =
+                    from c in Cégek
+                    join t in Telephelyek on c.Cégid equals t.Cégid
+                    join d in Dolgozók on c.Cégid equals d.Cégid
+                    where t.Telephely == Cmbtelephely.Text.Trim()
+                          && t.Státus == true
+                          && c.Engedély == 5
+                          && d.Státus == false
+                    orderby c.Cég, c.Munkaleírás, d.Név
+                    select new
+                    {
+                        t.Telephely,
+                        c.Engedély,
+                        c.Cég,
+                        c.Munkaleírás,
+                        d.Név,
+                        d.Okmányszám,
+                        d.Státus
+                    };
+
+                foreach (var rekord in Adatok)
                 {
 
                     if (cégneve.Trim() != rekord.Cég.Trim() || munkaleírása.Trim() != rekord.Munkaleírás.Trim())
@@ -2920,9 +2877,15 @@ namespace Villamos
                         MyX.Egyesít(munkalap, $"c{sor}:f{sor}");
                         MyX.Kiir("Cég neve", $"a{sor}");
                         MyX.Kiir("Munkaleírása", $"c{sor}");
+<<<<<<< HEAD
                         MyX.Háttérszín(munkalap,$"a{sor}:f{sor}", Color.Yellow);
                         MyX.Rácsoz(munkalap, $"a{sor}:f{sor}");
                        // MyX.Vastagkeret($"a{sor}:f{sor}");
+=======
+                        MyX.Háttérszín(munkalap, $"a{sor}:f{sor}", Color.Yellow);
+                        MyX.Rácsoz(munkalap, $"a{sor}:f{sor}");
+                        // MyX.Vastagkeret($"a{sor}:f{sor}");
+>>>>>>> master
                         // Cégadatok
                         sor++;
                         cégneve = rekord.Cég.Trim();
@@ -2931,7 +2894,11 @@ namespace Villamos
                         MyX.Egyesít(munkalap, $"c{sor}:f{sor}");
                         MyX.Kiir(cégneve, $"a{sor}");
                         MyX.Kiir(munkaleírása, $"c{sor}");
+<<<<<<< HEAD
                         MyX.Sormagasság(munkalap,$"{sor}:{sor}", 30);
+=======
+                        MyX.Sormagasság(munkalap, $"{sor}:{sor}", 30);
+>>>>>>> master
                         MyX.Igazít_vízszintes(munkalap, $"{sor}:{sor}", "közép");
                         MyX.Igazít_függőleges(munkalap, $"{sor}:{sor}", "közép");
 
@@ -2949,8 +2916,12 @@ namespace Villamos
                         MyX.Kiir("Szem.ig.", $"f{sor}");
 
                         MyX.Rácsoz(munkalap, $"a{sor}:f{sor}");
+<<<<<<< HEAD
                       //  MyX.Vastagkeret($"a{sor}:f{sor}");
                         MyX.Háttérszín(munkalap,$"a{sor}:f{sor}", Color.Yellow);
+=======
+                        MyX.Háttérszín(munkalap, $"a{sor}:f{sor}", Color.Yellow);
+>>>>>>> master
                         blokkeleje = sor + 1;
                         sor += 1;
                         három = 1;
@@ -2986,8 +2957,12 @@ namespace Villamos
                     három += 1;
                     Holtart.Lép();
                 }
+<<<<<<< HEAD
                 MyX.Rácsoz(munkalap,$"a{blokkeleje}:f{sor}");
              //   MyX.Vastagkeret($"a{blokkeleje}:f{sor}");
+=======
+                MyX.Rácsoz(munkalap, $"a{blokkeleje}:f{sor}");
+>>>>>>> master
 
                 sor += 5;
 
@@ -2996,7 +2971,7 @@ namespace Villamos
 
                 // nyomtatási terület kijelölése
 
-                string helyicsop = Application.StartupPath + @"\Főmérnökség\adatok\BKV.jpg";
+                string helyicsop = Application.StartupPath + @"\Főmérnökség\Adatok\BKV.jpg";
 
                 string telephely = (from a in Adatok_Kieg_Jelenlétiív
                                     where a.Id == 4
@@ -3005,6 +2980,7 @@ namespace Villamos
                 Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
                 {
                     Munkalap = munkalap,
+<<<<<<< HEAD
                     NyomtatásiTerület = $"A1:F{sor}",
 
                     FejlécBal = $"&G\n{telephely}",
@@ -3026,13 +3002,39 @@ namespace Villamos
                     LapSzéles = 1,
                     Álló = true,
                     Papírméret = "A4"
+=======
+                    NyomtatásiTerület = $"A1:C{sor}",
+
+                    IsmétlődőSorok = "$1:$1",
+
+                    Képútvonal = helyicsop,
+                    FejlécKözép = "Gépjármű Behajtási Engedély Külső cég",
+                    FejlécJobb = DateTime.Today.ToString("yyyy.MM.dd"),
+
+                    LáblécJobb = "&P/&N",
+
+                    BalMargó = 10,
+                    JobbMargó = 10,
+                    FelsőMargó = 30,
+                    AlsóMargó = 15,
+                    FejlécMéret = 13,
+                    LáblécMéret = 13,
+
+                    VízKözép = false,
+                    FüggKözép = false,
+
+                    LapSzéles = 1,
+>>>>>>> master
                 };
 
                 MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
                 Holtart.Ki();
                 // bezárjuk az Excel-t
+<<<<<<< HEAD
                 MyX.Aktív_Cella(munkalap, "A1");
+=======
+>>>>>>> master
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
                 MyF.Megnyitás(fájlexc);
@@ -3059,13 +3061,33 @@ namespace Villamos
         {
             try
             {
-                string szöveg = "Select Telephelyek.Telephely, Telephelyek.Státus, Cégek.Engedély, Cégek.Cég, Cégek.Munkaleírás, Dolgozók.Név, Dolgozók.Okmányszám, Dolgozók.Anyjaneve,";
-                szöveg += " Dolgozók.Születésihely, Dolgozók.Születésiidő, Dolgozók.Státus ";
-                szöveg += " FROM(Cégek INNER JOIN Telephelyek On Cégek.Cégid = Telephelyek.Cégid) INNER JOIN Dolgozók On Cégek.Cégid = Dolgozók.Cégid ";
-                szöveg += $" WHERE Telephelyek.Telephely ='{Cmbtelephely.Text.Trim()}' AND Telephelyek.Státus=True And Cégek.Engedély= 5 And ";
-                szöveg += " Dolgozók.Státus= False ORDER BY Cégek.Cég,Cégek.Munkaleírás,Dolgozók.Név";
-
-                Adatok_Dolg = Kéz_Dolg.Lista_Adatok(hely, jelszó, szöveg);
+                //string szöveg = "Select Telephelyek.Telephely, Telephelyek.Státus, Cégek.Engedély, Cégek.Cég, Cégek.Munkaleírás, Dolgozók.Név, Dolgozók.Okmányszám, Dolgozók.Anyjaneve,";
+                //szöveg += " Dolgozók.Születésihely, Dolgozók.Születésiidő, Dolgozók.Státus ";
+                //szöveg += " FROM(Cégek INNER JOIN Telephelyek On Cégek.Cégid = Telephelyek.Cégid) INNER JOIN Dolgozók On Cégek.Cégid = Dolgozók.Cégid ";
+                //szöveg += $" WHERE Telephelyek.Telephely ='{Cmbtelephely.Text.Trim()}' AND Telephelyek.Státus=True And Cégek.Engedély= 5 And ";
+                //szöveg += " Dolgozók.Státus= False ORDER BY Cégek.Cég,Cégek.Munkaleírás,Dolgozók.Név";
+                List<Adat_Külső_Dolgozók> Dolgozók = Kéz_Dolgozó.Lista_Adatok();
+                List<Adat_Külső_Telephelyek> Telephelyek = Kéz_Külső_Telephelyek.Lista_Adatok();
+                List<Adat_Külső_Cégek> Cégek = Kéz_Külső_Cégek.Lista_Adatok();
+                var Adatok =
+                    from c in Cégek
+                    join t in Telephelyek on c.Cégid equals t.Cégid
+                    join d in Dolgozók on c.Cégid equals d.Cégid
+                    where t.Telephely == Cmbtelephely.Text.Trim()
+                          && t.Státus == true
+                          && c.Engedély == 5
+                          && d.Státus == false
+                    orderby c.Cég, c.Munkaleírás, d.Név
+                    select new
+                    {
+                        t.Telephely,
+                        c.Engedély,
+                        c.Cég,
+                        c.Munkaleírás,
+                        d.Név,
+                        d.Okmányszám,
+                        d.Státus
+                    };
 
                 Lekérdezés_tábla.Rows.Clear();
                 Lekérdezés_tábla.Columns.Clear();
@@ -3082,7 +3104,7 @@ namespace Villamos
                 Lekérdezés_tábla.Columns[2].Width = 400;
                 Lekérdezés_tábla.Columns[3].HeaderText = "Munkaleírása";
                 Lekérdezés_tábla.Columns[3].Width = 400;
-                foreach (Adat_Külső_Lekérdezés_Személy rekord in Adatok_Dolg)
+                foreach (var rekord in Adatok)
                 {
 
                     Lekérdezés_tábla.RowCount++;
@@ -3121,12 +3143,31 @@ namespace Villamos
         {
             try
             {
-                string szöveg = "Select  Gépjárművek.Frsz, Cégek.Cég, Telephelyek.Telephely,  Cégek.Munkaleírás ";
-                szöveg += " FROM(Cégek INNER JOIN Telephelyek On Cégek.Cégid = Telephelyek.Cégid) INNER JOIN Gépjárművek On Cégek.Cégid = Gépjárművek.Cégid ";
-                szöveg += $" WHERE Telephelyek.Telephely ='{Cmbtelephely.Text.Trim()}' And Cégek.Engedély=5 ";
-                szöveg += " And Gépjárművek.Státus=false And Telephelyek.Státus= True ORDER BY Cégek.Cég, Cégek.Munkaleírás, Gépjárművek.Frsz";
+                //string szöveg = "Select  Gépjárművek.Frsz, Cégek.Cég, Telephelyek.Telephely,  Cégek.Munkaleírás ";
+                //szöveg += " FROM(Cégek INNER JOIN Telephelyek On Cégek.Cégid = Telephelyek.Cégid) INNER JOIN Gépjárművek On Cégek.Cégid = Gépjárművek.Cégid ";
+                //szöveg += $" WHERE Telephelyek.Telephely ='{Cmbtelephely.Text.Trim()}' And Cégek.Engedély=5 ";
+                //szöveg += " And Gépjárművek.Státus=false And Telephelyek.Státus= True ORDER BY Cégek.Cég, Cégek.Munkaleírás, Gépjárművek.Frsz";
+                List<Adat_Külső_Gépjárművek> Gépjárművek = Kéz_Járművek.Lista_Adatok();
+                List<Adat_Külső_Telephelyek> Telephelyek = Kéz_Külső_Telephelyek.Lista_Adatok();
+                List<Adat_Külső_Cégek> Cégek = Kéz_Külső_Cégek.Lista_Adatok();
 
-                Adatok_autó = Kéz_autó.Lista_Adatok(hely, jelszó, szöveg);
+                var Adatok =
+                    from c in Cégek
+                    join t in Telephelyek on c.Cégid equals t.Cégid
+                    join g in Gépjárművek on c.Cégid equals g.Cégid
+                    where t.Telephely == Cmbtelephely.Text.Trim()
+                          && c.Engedély == 5
+                          && g.Státus == false
+                          && t.Státus == true
+                    orderby c.Cég, c.Munkaleírás, g.Frsz
+                    select new
+                    {
+                        g.Frsz,
+                        c.Cég,
+                        t.Telephely,
+                        c.Munkaleírás
+                    };
+
 
                 Lekérdezés_tábla.Rows.Clear();
                 Lekérdezés_tábla.Columns.Clear();
@@ -3144,7 +3185,7 @@ namespace Villamos
                 Lekérdezés_tábla.Columns[3].HeaderText = "Telephely";
                 Lekérdezés_tábla.Columns[3].Width = 150;
 
-                foreach (Adat_Külső_Lekérdezés_Autó rekord in Adatok_autó)
+                foreach (var rekord in Adatok)
                 {
                     Lekérdezés_tábla.RowCount++;
                     int i = Lekérdezés_tábla.RowCount - 1;
@@ -3202,7 +3243,11 @@ namespace Villamos
                 string munkalap = "Munka1";
                 MyX.ExcelLétrehozás(munkalap);
                 MyX.Munkalap_betű(munkalap, BeBetű);
+<<<<<<< HEAD
                
+=======
+
+>>>>>>> master
                 MyX.Háttérszín(munkalap, "A1:c1", Color.Yellow);
                 MyX.Kiir("Rendszám", "a1");
                 MyX.Kiir("Cég neve", "b1");
@@ -3210,7 +3255,11 @@ namespace Villamos
                 MyX.Oszlopszélesség(munkalap, "a:a", 15);
                 MyX.Oszlopszélesség(munkalap, "b:b", 45);
                 MyX.Oszlopszélesség(munkalap, "c:c", 75);
+<<<<<<< HEAD
                 MyX.Rácsoz(munkalap,"a1:c1");
+=======
+                MyX.Rácsoz(munkalap, "a1:c1");
+>>>>>>> master
                 //MyX.Vastagkeret("a1:c1");
 
                 int sor;
@@ -3223,12 +3272,29 @@ namespace Villamos
                 sor = 2;
                 blokkeleje = 2;
 
-                string helyi = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\Segéd\kiegészítő.mdb";
-                string jelszói = "Mocó";
-                string szöveg = "SELECT * FROM jelenlétiív";
-                Adatok_Kieg_Jelenlétiív = Kéz_Kieg_Jelenlétiív.Lista_Adatok(helyi, jelszói, szöveg);
+                Adatok_Kieg_Jelenlétiív = Kéz_Kieg_Jelenlétiív.Lista_Adatok(Cmbtelephely.Text.Trim());
+                List<Adat_Külső_Gépjárművek> Gépjárművek = Kéz_Járművek.Lista_Adatok();
+                List<Adat_Külső_Telephelyek> Telephelyek = Kéz_Külső_Telephelyek.Lista_Adatok();
+                List<Adat_Külső_Cégek> Cégek = Kéz_Külső_Cégek.Lista_Adatok();
 
-                foreach (Adat_Külső_Lekérdezés_Autó Rekord in Adatok_autó)
+                var Adatok =
+                    from c in Cégek
+                    join t in Telephelyek on c.Cégid equals t.Cégid
+                    join g in Gépjárművek on c.Cégid equals g.Cégid
+                    where t.Telephely == Cmbtelephely.Text.Trim()
+                          && c.Engedély == 5
+                          && g.Státus == false
+                          && t.Státus == true
+                    orderby c.Cég, c.Munkaleírás, g.Frsz
+                    select new
+                    {
+                        g.Frsz,
+                        c.Cég,
+                        t.Telephely,
+                        c.Munkaleírás
+                    };
+
+                foreach (var Rekord in Adatok)
                 {
 
                     if (cégneve.Trim() == "")
@@ -3259,12 +3325,13 @@ namespace Villamos
 
                 // nyomtatási terület kijelölése
 
-                string helyicsop = $@"{Application.StartupPath}\Főmérnökség\adatok\BKV.jpg";
+                string helyicsop = $@"{Application.StartupPath}\Főmérnökség\Adatok\BKV.jpg";
 
                 string telephely = (from a in Adatok_Kieg_Jelenlétiív
                                     where a.Id == 4
                                     select a.Szervezet).FirstOrDefault() ?? "";
 
+<<<<<<< HEAD
                 //MyX.NyomtatásiTerület_részletes(munkalap, $"A1:C{sor}", "$1:$1", "",
                 //    $"&G\n{telephely}", "Gépjármű Behajtási Engedély Külső cég", "&D",
                 //    "", "", "&P/&N",
@@ -3274,6 +3341,8 @@ namespace Villamos
                 //    13, 13,
                 //    false, false, "1", "",
                 //    true, "A4");
+=======
+>>>>>>> master
                 Beállítás_Nyomtatás BeNyom_Engedély = new Beállítás_Nyomtatás
                 {
                     Munkalap = munkalap,
@@ -3281,18 +3350,30 @@ namespace Villamos
 
                     IsmétlődőSorok = "$1:$1",
 
+<<<<<<< HEAD
                     FejlécBal = $"&G\n{telephely}",
                     FejlécKözép = "Gépjármű Behajtási Engedély Külső cég",
                     FejlécJobb = "&D",
 
                     LáblécBal = "",
                     LáblécKözép = helyicsop,
+=======
+                    Képútvonal = helyicsop,
+                    FejlécKözép = "Gépjármű Behajtási Engedély Külső cég",
+                    FejlécJobb = DateTime.Today.ToString("yyyy.MM.dd"),
+
+>>>>>>> master
                     LáblécJobb = "&P/&N",
 
                     BalMargó = 10,
                     JobbMargó = 10,
+<<<<<<< HEAD
                     FelsőMargó = 15,
                     AlsóMargó = 30,
+=======
+                    FelsőMargó = 30,
+                    AlsóMargó = 15,
+>>>>>>> master
                     FejlécMéret = 13,
                     LáblécMéret = 13,
 
@@ -3300,15 +3381,21 @@ namespace Villamos
                     FüggKözép = false,
 
                     LapSzéles = 1,
+<<<<<<< HEAD
 
                     Álló = true,
                     Papírméret = "A4"
+=======
+>>>>>>> master
                 };
 
                 // 2. Hívás
                 MyX.NyomtatásiTerület_részletes(munkalap, BeNyom_Engedély);
                 Holtart.Ki();
+<<<<<<< HEAD
                 MyX.Aktív_Cella(munkalap, "A1");
+=======
+>>>>>>> master
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
 
@@ -3330,17 +3417,16 @@ namespace Villamos
         private void Autó_Cégnév(string munkalap, int blokkeleje, int sor, string cégneve, string munkaleírása)
         {
 
-            MyE.Egyesít(munkalap, $"B{blokkeleje}:B{sor - 1}");
-            MyE.Egyesít(munkalap, $"C{blokkeleje}:C{sor - 1}");
+            MyX.Egyesít(munkalap, $"B{blokkeleje}:B{sor - 1}");
+            MyX.Egyesít(munkalap, $"C{blokkeleje}:C{sor - 1}");
 
-            MyE.Sortörésseltöbbsorba($"B{blokkeleje}", true);
-            MyE.Sortörésseltöbbsorba($"C{blokkeleje}", true);
+            MyX.Sortörésseltöbbsorba(munkalap, $"B{blokkeleje}", true);
+            MyX.Sortörésseltöbbsorba(munkalap, $"C{blokkeleje}", true);
 
-            MyE.Rácsoz($"A{blokkeleje}:C{sor - 1}");
-            MyE.Vastagkeret($"A{blokkeleje}:C{sor - 1}");
+            MyX.Rácsoz(munkalap, $"A{blokkeleje}:C{sor - 1}");
 
-            MyE.Kiir(cégneve, $"B{blokkeleje}");
-            MyE.Kiir(munkaleírása, $"C{blokkeleje}");
+            MyX.Kiir(cégneve, $"B{blokkeleje}");
+            MyX.Kiir(munkaleírása, $"C{blokkeleje}");
 
         }
         #endregion
@@ -3352,24 +3438,23 @@ namespace Villamos
 
             try
             {
-                string szöveg = "SELECT * FROM Email";
-                Adatok_Külső_Email = Kéz_Külső_Email.Lista_Adatok(hely, jelszó, szöveg);
+                Adatok_Külső_Email = Kéz_Külső_Email.Lista_Adatok();
                 bool vane = Adatok_Külső_Email.Any(a => a.Id == Email_id);
+
+                Adat_Külső_Email ADAT = new Adat_Külső_Email(
+                    Convert.ToDouble(Email_id),
+                    Email_másolat.Text.Trim(),
+                    Email_Aláírás.Text.Trim());
+
                 if (vane)
                 {
-                    szöveg = "UPDATE Email  SET ";
-                    szöveg += " Másolat='" + Email_másolat.Text.Trim().Replace(",", "").Replace("'", "°") + "', ";
-                    szöveg += " Aláírás='" + Email_Aláírás.Text.Trim().Replace(",", "").Replace("'", "°") + "' ";
-                    szöveg += " WHERE id=" + Email_id;
+                    Kéz_Külső_Email.Módosítás(ADAT);
                 }
                 else
                 {
-                    szöveg = "INSERT INTO Email  (id, Másolat, Aláírás  ) VALUES (";
-                    szöveg += Email_id;
-                    szöveg += ", '" + Email_másolat.Text.Trim().Replace(",", "").Replace("'", "°") + "', ";
-                    szöveg += "'" + Email_Aláírás.Text.Trim().Replace(",", "").Replace("'", "°") + "') ";
+                    Kéz_Külső_Email.Rögzítés(ADAT);
                 }
-                MyA.ABMódosítás(hely, jelszó, szöveg);
+
                 Email_kiírás();
                 MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -3391,8 +3476,7 @@ namespace Villamos
             {
                 if (Email_id == 0) return;
 
-                string szöveg = "SELECT * FROM Email";
-                Adatok_Külső_Email = Kéz_Külső_Email.Lista_Adatok(hely, jelszó, szöveg);
+                Adatok_Külső_Email = Kéz_Külső_Email.Lista_Adatok();
                 Adat_Külső_Email emailRecord = Adatok_Külső_Email.Where(a => a.Id == Email_id).FirstOrDefault();
 
                 Email_másolat.Text = "";

@@ -10,9 +10,11 @@ using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.ICS_KCSV;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
+<<<<<<< HEAD
 using MyX = Villamos.Module_Excel;
+=======
+>>>>>>> master
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos
@@ -49,7 +51,9 @@ namespace Villamos
 #pragma warning disable IDE0044
         List<Adat_Főkönyv_Zser_Km> AdatokZserKm = new List<Adat_Főkönyv_Zser_Km>();
 #pragma warning restore IDE0044
-
+        readonly Beállítás_Betű Bebetű = new Beállítás_Betű();
+        readonly Beállítás_Betű BebetűD = new Beállítás_Betű { Formátum = "yyyy.MM.dd" };
+        readonly Beállítás_Betű BebetűCal = new Beállítás_Betű { Név = "Calibri", Méret = 20 };
 
         #region Alap
         public Ablak_IcsKcsv()
@@ -177,7 +181,7 @@ namespace Villamos
 
                 Btn_Vezénylésbeírás.Enabled = false;
 
-                // csak főmérnökségi belépéssel törölhető
+                // csak Főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
                     Töröl.Visible = true;
@@ -266,7 +270,7 @@ namespace Villamos
 
                 if (Program.Postás_Vezér)
                 {
-                    // ha főmérnökség vagy vezér akkor minden telephelyről
+                    // ha Főmérnökség vagy vezér akkor minden telephelyről
                     // feltöltjük az összes pályaszámot a Comboba
                     Adatok = (from a in AdatokJármű
                               where a.Törölt == false && (a.Valóstípus == "ICS" || a.Valóstípus == "KCSV-7")
@@ -276,7 +280,7 @@ namespace Villamos
                 }
                 else
                 {
-                    // ha nem főmérnökség akkor csak a kiválasztott telephelyről
+                    // ha nem Főmérnökség akkor csak a kiválasztott telephelyről
                     // feltöltjük az összes pályaszámot a Comboba
                     Adatok = (from a in AdatokJármű
                               where a.Törölt == false && a.Üzem == Cmbtelephely.Text.Trim()
@@ -759,10 +763,17 @@ namespace Villamos
 
                 int sor;
                 // megnyitjuk az excelt
+<<<<<<< HEAD
                 MyX.ExcelLétrehozás();
                 string munkalap = "7 napos";
                 MyX.Munkalap_átnevezés("Munka1", munkalap);
                 MyX.Új_munkalap("3 napos");
+=======
+                string munkalap = "7 napos";
+                MyX.ExcelLétrehozás(munkalap);
+
+                MyX.Munkalap_Új("3 napos");
+>>>>>>> master
                 MyX.Munkalap_aktív(munkalap);
 
 
@@ -774,12 +785,21 @@ namespace Villamos
                         munkalap = "3 napos";
 
                     MyX.Munkalap_aktív(munkalap);
+<<<<<<< HEAD
                     MyX.Munkalap_betű("Calibri", 20);
 
                     MyX.Oszlopszélesség(munkalap, "a:g", 18);
                     MyX.Sormagasság("1:11", 40);
                     MyX.Rácsoz("a1:g11");
                     MyX.Vastagkeret("a1:g1");
+=======
+                    MyX.Munkalap_betű(munkalap, BebetűCal);
+
+                    MyX.Oszlopszélesség(munkalap, "a:g", 18);
+                    MyX.Sormagasság(munkalap, "1:11", 40);
+                    MyX.Rácsoz(munkalap, "a1:g11");
+                    MyX.Rácsoz(munkalap, "a1:g1");
+>>>>>>> master
                     MyX.Kiir("Hétfő", "a1");
                     MyX.Kiir("Kedd", "b1");
                     MyX.Kiir("Szerda", "c1");
@@ -800,13 +820,36 @@ namespace Villamos
                         foreach (Adat_Jármű_2ICS rekord in Szűrt)
                         {
                             sor += 1;
+<<<<<<< HEAD
                             MyX.Kiir(rekord.Azonosító.Trim(), MyX.Oszlopnév(j) + sor.ToString());
+=======
+                            MyX.Kiir(rekord.Azonosító.Trim(), MyF.Oszlopnév(j) + sor.ToString());
+>>>>>>> master
                         }
 
                     }
                 }
+                //Nyomtatási terület kijelülése
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = "a1:g11",
+                    LapSzéles = 1,
+                    LapMagas = 1,
+                    IsmétlődőSorok = "$1:$1",
+                    FejlécKözép = Program.PostásNév,
+                    FejlécJobb = DateTime.Now.ToString("yyyy.MM.dd HH:mm"),
+                    LáblécKözép = "&P/&N"
+                };
+                munkalap = "7 napos";
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
+                munkalap = "3 napos";
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
+<<<<<<< HEAD
                 MyX.Aktív_Cella(munkalap, "A1");
+=======
+>>>>>>> master
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
                 MyF.Megnyitás(fájlexc);
@@ -1073,7 +1116,11 @@ namespace Villamos
             Holtart.Be();
             timer1.Enabled = true;
 
+<<<<<<< HEAD
             await Task.Run(() => MyX.DataTableToExcel(_fájlexc, _Tábla));
+=======
+            await Task.Run(() => MyX.DataTableToXML(_fájlexc, _Tábla));
+>>>>>>> master
             //leállítjuk a számlálót és kikapcsoljuk a holtartot.
             timer1.Enabled = false;
             Holtart.Ki();
@@ -2623,7 +2670,7 @@ namespace Villamos
 
         #region előtervező
         /// <summary>
-        /// Comboba feltölti a főmérnökség járművei közül az ICS és KCSV kocsikat
+        /// Comboba feltölti a Főmérnökség járművei közül az ICS és KCSV kocsikat
         /// </summary>
         private void Pszlista()
         {
@@ -2652,7 +2699,7 @@ namespace Villamos
         }
 
         /// <summary>
-        /// Telephely comboba feltölti azon üzemeket ahoil van főmérnökség járművei közül az ICS és KCSV kocsikat
+        /// Telephely comboba feltölti azon üzemeket ahoil van Főmérnökség járművei közül az ICS és KCSV kocsikat
         /// </summary>
         private void Telephelylista()
         {
@@ -3372,15 +3419,24 @@ namespace Villamos
                 else
                     return;
 
+<<<<<<< HEAD
                 MyX.ExcelLétrehozás();
                 string munkalap = "Munka1";
                 MyX.Munkalap_átnevezés(munkalap, "Tartalom");
+=======
+                string munkalap = "Tartalom";
+                MyX.ExcelLétrehozás(munkalap);
+>>>>>>> master
                 // ****************************************************
                 // elkészítjük a lapokat
                 // ****************************************************
 
                 for (int i = 1; i < 5; i++)
+<<<<<<< HEAD
                     MyX.Új_munkalap(cím[i]);
+=======
+                    MyX.Munkalap_Új(cím[i]);
+>>>>>>> master
 
                 // ****************************************************
                 // Elkészítjük a tartalom jegyzéket
@@ -3409,7 +3465,10 @@ namespace Villamos
                 Kimutatás2();
 
                 MyX.Munkalap_aktív(munkalap);
+<<<<<<< HEAD
                 MyX.Aktív_Cella(munkalap, "A1");
+=======
+>>>>>>> master
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
                 MyF.Megnyitás(fájlexc);
@@ -3481,24 +3540,41 @@ namespace Villamos
                 MyX.Kiir("fokozat", "aj3");
                 MyX.Kiir("Hónap", "ak3");
 
+<<<<<<< HEAD
                 MyX.Kiir("=YEAR(RC[-27])", "Ai4");
                 MyX.Kiir("=LEFT(RC[-30],2)", "Aj4");
                 MyX.Kiir("=MONTH(RC[-29])", "Ak4");
+=======
+                MyX.Kiir("#KÉPLET#=YEAR(RC[-27])", "Ai4");
+                MyX.Kiir("#KÉPLET#=LEFT(RC[-30],2)", "Aj4");
+                MyX.Kiir("#KÉPLET#=MONTH(RC[-29])", "Ak4");
+>>>>>>> master
 
                 MyX.Képlet_másol(munkalap, "AI4:AK4", "AI5:AK" + (utolsósor + 3));
 
                 // megformázzuk
                 MyX.Oszlopszélesség(munkalap, "A:Ak");
+<<<<<<< HEAD
                 MyX.Vastagkeret("a3:Ak3");
                 MyX.Rácsoz("a3:AK" + (utolsósor + 3).ToString());
                 MyX.Vastagkeret("a3:Ak" + (utolsósor + 3).ToString());
                 MyX.Vastagkeret("a3:Ak3");
                 // szűrő
+=======
+
+                MyX.Rácsoz(munkalap, "a3:AK" + (utolsósor + 3).ToString());
+                MyX.Rácsoz(munkalap, "a3:Ak3");
+                // Rácsoz
+>>>>>>> master
                 MyX.Szűrés(munkalap, "A", "AK", (int)(utolsósor + 3), 3);
 
                 // ablaktábla rögzítése
 
+<<<<<<< HEAD
                 MyX.Tábla_Rögzítés(3);
+=======
+                MyX.Tábla_Rögzítés(munkalap, 3);
+>>>>>>> master
 
                 // kiírjuk a tábla méretét
                 MyX.Munkalap_aktív("Vizsgálatok");
@@ -3556,10 +3632,28 @@ namespace Villamos
                 SzűrőNév.Add("tervsorszám");
 
                 oszlopNév.Add("vizsgfok");
+                Beállítás_Kimutatás BeKi = new Beállítás_Kimutatás
+                {
+                    Munkalapnév = munkalap_adat,
+                    Balfelső = balfelső,
+                    Jobbalsó = jobbalsó,
+                    Kimutatás_Munkalapnév = kimutatás_Munkalap,
+                    Kimutatás_cella = Kimutatás_cella,
+                    Kimutatás_név = Kimutatás_név,
+                    ÖsszesítNév = összesítNév,
+                    Összesítés_módja = Összesít_módja,
+                    SorNév = sorNév,
+                    OszlopNév = oszlopNév,
+                    SzűrőNév = SzűrőNév
+                };
+                MyX.Kimutatás_Fő(BeKi);
 
+<<<<<<< HEAD
                 MyX.Kimutatás_Fő(munkalap_adat, balfelső, jobbalsó, kimutatás_Munkalap, Kimutatás_cella, Kimutatás_név
                                 , összesítNév, Összesít_módja, sorNév, oszlopNév, SzűrőNév);
                 MyX.Aktív_Cella(munkalap, "A1");
+=======
+>>>>>>> master
             }
             catch (HibásBevittAdat ex)
             {
@@ -3608,9 +3702,27 @@ namespace Villamos
 
                 oszlopNév.Add("Fokozat");
 
+<<<<<<< HEAD
                 MyX.Kimutatás_Fő(munkalap_adat, balfelső, jobbalsó, kimutatás_Munkalap, Kimutatás_cella, Kimutatás_név
                                 , összesítNév, Összesít_módja, sorNév, oszlopNév, SzűrőNév);
                 MyX.Aktív_Cella(munkalap, "A1");
+=======
+                Beállítás_Kimutatás BeKi = new Beállítás_Kimutatás
+                {
+                    Munkalapnév = munkalap_adat,
+                    Balfelső = balfelső,
+                    Jobbalsó = jobbalsó,
+                    Kimutatás_Munkalapnév = kimutatás_Munkalap,
+                    Kimutatás_cella = Kimutatás_cella,
+                    Kimutatás_név = Kimutatás_név,
+                    ÖsszesítNév = összesítNév,
+                    Összesítés_módja = Összesít_módja,
+                    SorNév = sorNév,
+                    OszlopNév = oszlopNév,
+                    SzűrőNév = SzűrőNév
+                };
+                MyX.Kimutatás_Fő(BeKi);
+>>>>>>> master
             }
             catch (HibásBevittAdat ex)
             {
@@ -3660,9 +3772,27 @@ namespace Villamos
                 SzűrőNév.Add("Év");
                 SzűrőNév.Add("Fokozat");
 
+<<<<<<< HEAD
                 MyX.Kimutatás_Fő(munkalap_adat, balfelső, jobbalsó, kimutatás_Munkalap, Kimutatás_cella, Kimutatás_név
                                 , összesítNév, Összesít_módja, sorNév, oszlopNév, SzűrőNév);
                 MyX.Aktív_Cella(munkalap, "A1");
+=======
+                Beállítás_Kimutatás BeKi = new Beállítás_Kimutatás
+                {
+                    Munkalapnév = munkalap_adat,
+                    Balfelső = balfelső,
+                    Jobbalsó = jobbalsó,
+                    Kimutatás_Munkalapnév = kimutatás_Munkalap,
+                    Kimutatás_cella = Kimutatás_cella,
+                    Kimutatás_név = Kimutatás_név,
+                    ÖsszesítNév = összesítNév,
+                    Összesítés_módja = Összesít_módja,
+                    SorNév = sorNév,
+                    OszlopNév = oszlopNév,
+                    SzűrőNév = SzűrőNév
+                };
+                MyX.Kimutatás_Fő(BeKi);
+>>>>>>> master
             }
             catch (HibásBevittAdat ex)
             {
@@ -3705,6 +3835,7 @@ namespace Villamos
 
                 List<Adat_T5C5_Kmadatok> Adatok = KézICSKmadatok.Lista_Adatok().OrderBy(a => a.Azonosító).ToList();
                 DataTable dataTable = MyF.ToDataTable(Adatok);
+<<<<<<< HEAD
                 MyX.ExcelLétrehozás();
                 string munkalap = "Adatok";
                 MyX.Munkalap_betű("Arial", 12);
@@ -3716,12 +3847,28 @@ namespace Villamos
                 MyX.Kiir("=YEAR(RC[-15])", "v2");
                 MyX.Kiir("=MONTH(RC[-16])", "w2");
                 MyX.Kiir("=LEFT(RC[-18],2)", "x2");
+=======
+
+                string munkalap = "Adatok";
+                MyX.ExcelLétrehozás(munkalap);
+
+                MyX.Munkalap_betű(munkalap, Bebetű);
+
+                utolsósor = MyX.Munkalap(dataTable, 1, munkalap) + 1;
+                MyX.Munkalap_Új("Kimutatás");
+                Holtart.Lép();
+                MyX.Munkalap_aktív(munkalap);
+                MyX.Kiir("#KÉPLET#=YEAR(RC[-15])", "v2");
+                MyX.Kiir("#KÉPLET#=MONTH(RC[-16])", "w2");
+                MyX.Kiir("#KÉPLET#=LEFT(RC[-18],2)", "x2");
+>>>>>>> master
                 MyX.Képlet_másol(munkalap, "V2:X2", "V3:X" + utolsósor);
                 MyX.Kiir("Év", "v1");
                 MyX.Kiir("hó", "w1");
                 MyX.Kiir("Vizsgálat rövid", "x1");
                 MyX.Oszlopszélesség(munkalap, "A:X");
                 Holtart.Lép();
+<<<<<<< HEAD
                 MyX.Betű("D:D", "", "M/d/yyyy");
                 MyX.Betű("F:F", "", "M/d/yyyy");
                 MyX.Betű("G:G", "", "M/d/yyyy");
@@ -3729,12 +3876,36 @@ namespace Villamos
 
                 // rácsozás
                 MyX.Rácsoz("A1:X" + utolsósor);
+=======
+                MyX.Betű(munkalap, $"E1:E{utolsósor}", BebetűD);
+                MyX.Betű(munkalap, $"H1:H{utolsósor}", BebetűD);
+                MyX.Betű(munkalap, $"G1:G{utolsósor}", BebetűD);
+                MyX.Betű(munkalap, $"L1:L{utolsósor}", BebetűD);
+
+                // rácsozás
+                MyX.Rácsoz(munkalap, $"A1:X{utolsósor}");
+>>>>>>> master
                 Holtart.Lép();
                 //szűrést felteszük
                 MyX.Szűrés("Adatok", "A", "X", 1);
 
                 //Nyomtatási terület kijelülése
+<<<<<<< HEAD
                 MyX.NyomtatásiTerület_részletes("Adatok", "A1:X" + utolsósor, "$1:$1", "", true);
+=======
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:X{utolsósor}",
+                    LapSzéles = 1,
+                    IsmétlődőSorok = "$1:$1",
+                    FejlécKözép = Program.PostásNév,
+                    FejlécJobb = DateTime.Now.ToString("yyyy.MM.dd HH:mm"),
+                    LáblécKözép = "&P/&N"
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
+
+>>>>>>> master
                 Holtart.Lép();
                 munkalap = "Kimutatás";
                 MyX.Munkalap_aktív(munkalap);
@@ -3762,6 +3933,7 @@ namespace Villamos
                 SzűrőNév.Add("Év");
                 SzűrőNév.Add("hó");
                 Holtart.Lép();
+<<<<<<< HEAD
                 MyX.Kimutatás_Fő(munkalap_adat, balfelső, jobbalsó, kimutatás_Munkalap, Kimutatás_cella, Kimutatás_név
                                 , összesítNév, Összesít_módja, sorNév, oszlopNév, SzűrőNév);
 
@@ -3771,6 +3943,27 @@ namespace Villamos
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
 
+=======
+                Beállítás_Kimutatás BeKi = new Beállítás_Kimutatás
+                {
+                    Munkalapnév = munkalap_adat,
+                    Balfelső = balfelső,
+                    Jobbalsó = jobbalsó,
+                    Kimutatás_Munkalapnév = kimutatás_Munkalap,
+                    Kimutatás_cella = Kimutatás_cella,
+                    Kimutatás_név = Kimutatás_név,
+                    ÖsszesítNév = összesítNév,
+                    Összesítés_módja = Összesít_módja,
+                    SorNév = sorNév,
+                    OszlopNév = oszlopNév,
+                    SzűrőNév = SzűrőNév
+                };
+                MyX.Kimutatás_Fő(BeKi);
+
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
+
+>>>>>>> master
                 MyF.Megnyitás(fájlexc);
                 Holtart.Ki();
 
@@ -3853,7 +4046,7 @@ namespace Villamos
                     GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 else
                 {
-                    
+
                 }
 
             }

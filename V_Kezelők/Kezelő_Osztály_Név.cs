@@ -14,7 +14,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Osztály_Név
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\osztály.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\osztály.mdb";
         readonly string jelszó = "kéménybe";
 
 
@@ -118,6 +118,10 @@ namespace Villamos.Kezelők
                 string mezőnév = $"Adat{max}";
 
                 AdatBázis_kezelés ADAT = new AdatBázis_kezelés();
+<<<<<<< HEAD
+=======
+                ADAT.AB_Új_Oszlop(hely, jelszó, "osztályadatok", Mezőnév, "MEMO");
+>>>>>>> master
 
                 ADAT.AB_Új_Oszlop(
                     hely, jelszó, "osztályadatok", mezőnév, "MEMO");

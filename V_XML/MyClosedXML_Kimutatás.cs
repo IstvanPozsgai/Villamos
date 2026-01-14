@@ -1,6 +1,9 @@
 ﻿using ClosedXML.Excel;
 using System;
+<<<<<<< HEAD
 using System.Collections.Generic;
+=======
+>>>>>>> master
 using System.Diagnostics;
 using System.Text;
 using System.Windows.Forms;
@@ -42,7 +45,14 @@ namespace Villamos
                 //  Sorok
                 if (beállítás.SorNév != null && beállítás.SorNév.Count > 0)
                     foreach (string nev in beállítás.SorNév)
+<<<<<<< HEAD
                         pivotTable.RowLabels.Add(nev);
+=======
+                    {
+                        IXLPivotField field = pivotTable.RowLabels.Add(nev);
+                        field.AddSubtotal(XLSubtotalFunction.Automatic);
+                    }
+>>>>>>> master
 
                 // Oszlopok
                 if (beállítás.OszlopNév != null && beállítás.OszlopNév.Count > 0)
@@ -79,6 +89,11 @@ namespace Villamos
                         }
                     }
                 }
+<<<<<<< HEAD
+=======
+           
+    
+>>>>>>> master
             }
             catch (Exception ex)
             {
@@ -89,6 +104,7 @@ namespace Villamos
             }
         }
 
+<<<<<<< HEAD
         /// <summary>
         /// KOMPATIBILITÁSI TÚLTERHELÉS (Overload)
         /// Ez teszi lehetővé, hogy a régi kódod (ami 11 paramétert használ és nincs benne az összesítés módja)
@@ -130,6 +146,8 @@ namespace Villamos
         }
 
 
+=======
+>>>>>>> master
 
         /// <summary>
         /// Eltávolítja az összes érvénytelen XML karaktert (0x00–0x1F, kivéve \t, \n, \r) 
