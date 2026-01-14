@@ -1081,6 +1081,7 @@ namespace Villamos
 
                 Adatok_Személyes = Kezelő_Személyes.Lista_Adatok();
                 AdatokPénz = KézKulcsPénz.Lista_Adatok();
+                AdatokDolgozók.Clear();
 
                 for (int ii = 0; ii < Cmbtelephely.Items.Count; ii++)
                 {
@@ -1091,7 +1092,7 @@ namespace Villamos
                     {
                         // leellenőrizzük, hogy minden munkahely ki van-e töltve.
                         Munkahelyellenőrzés(Cmbtelephely.Items[ii].ToStrTrim());
-                        List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Items[ii].ToStrTrim());
+                        List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Items[ii].ToStrTrim(), true);
                         List<Adat_Dolgozó_Telephely> AdatokTelep = new List<Adat_Dolgozó_Telephely>();
                         Cmbtelephely.Text = Cmbtelephely.Items[ii].ToString();
                         foreach (Adat_Dolgozó_Alap Elem in Adatok)
@@ -1382,93 +1383,83 @@ namespace Villamos
 
                 int i = 2;
                 Holtart.Lép();
-                foreach (Adat_Kiegészítő_Csoportbeosztás csoportnév in Segéd)
+                foreach (Adat_Dolgozó_Telephely rekord in AdatokKapott)
                 {
-                    Holtart.Lép();
 
+                    if (rekord.Dolgozó.Kilépésiidő != null)
+                        kilépésidátum = rekord.Dolgozó.Kilépésiidő;
+                    else
+                        kilépésidátum = new DateTime(1900, 1, 1);
 
-                    List<Adat_Dolgozó_Telephely> Dolgozók = (from a in AdatokKapott
-                                                             where a.Dolgozó.Csoport == csoportnév.Csoportbeosztás
-                                                             orderby a.Dolgozó.DolgozóNév
-                                                             select a).ToList();
-
-                    foreach (Adat_Dolgozó_Telephely rekord in Dolgozók)
+                    if (kilépésidátum < new DateTime(2000, 1, 1))
                     {
+                        MyX.Kiir($"#SZÁME#{i - 1}", $"a{i}");
+                        MyX.Kiir(rekord.Dolgozó.DolgozóNév.Trim(), $"b{i}");
+                        if (rekord.Dolgozó.Munkakör.Trim() != null)
+                            MyX.Kiir(rekord.Dolgozó.Munkakör.Trim(), $"c{i}");
+                        MyX.Kiir(rekord.Dolgozó.Dolgozószám.Trim(), $"d{i}");
 
-                        if (rekord.Dolgozó.Kilépésiidő != null)
-                            kilépésidátum = rekord.Dolgozó.Kilépésiidő;
-                        else
-                            kilépésidátum = new DateTime(1900, 1, 1);
-
-                        if (kilépésidátum < new DateTime(2000, 1, 1))
+                        if (személyeseng)
                         {
-                            MyX.Kiir($"#SZÁME#{i - 1}", $"a{i}");
-                            MyX.Kiir(rekord.Dolgozó.DolgozóNév.Trim(), $"b{i}");
-                            if (rekord.Dolgozó.Munkakör.Trim() != null)
-                                MyX.Kiir(rekord.Dolgozó.Munkakör.Trim(), $"c{i}");
-                            MyX.Kiir(rekord.Dolgozó.Dolgozószám.Trim(), $"d{i}");
-
-                            if (személyeseng)
-                            {
-                                DateTime ideigdátum = (from a in Adatok_Személyes
-                                                       where a.Dolgozószám == rekord.Dolgozó.Dolgozószám
-                                                       select a.Születésiidő).FirstOrDefault();
-                                if (ideigdátum != null) MyX.Kiir(ideigdátum.ToString("yyyy.MM.dd"), "e" + i);
-                            }
-
-
-                            if (rekord.Dolgozó.Belépésiidő != null)
-                                MyX.Kiir(rekord.Dolgozó.Belépésiidő.ToString(), $"F{i}");
-
-                            if (béreng)
-                            {
-                                string ideig = MyF.Rövidkód(rekord.Dolgozó.Dolgozószám.Trim());
-                                ideig = (from adat in AdatokPénz
-                                         where adat.Adat1.Contains(ideig)
-                                         select adat.Adat2).FirstOrDefault();
-                                if (ideig != null && ideig != "_")
-                                    MyX.Kiir("#SZÁME#" + MyF.Dekódolja(ideig), $"G{i}");
-                            }
-
-                            if (rekord.Dolgozó.Csoport.Trim() != null)
-                                MyX.Kiir(rekord.Dolgozó.Csoport.Trim(), $"H{i}");
-                            if (rekord.Dolgozó.Passzív)
-                            {
-                                MyX.Kiir("passzív", $"I{i}");
-                                passzív += 1;
-                            }
-
-                            if (rekord.Dolgozó.Alkalmazott)
-                            {
-                                MyX.Kiir("Alkalmazott", $"J{i}");
-                                alkalmazott += 1;
-                            }
-                            else
-                            {
-                                MyX.Kiir("Fizikai", $"J{i}");
-                                fizikai += 1;
-                            }
-
-                            if (rekord.Dolgozó.Vezényelt)
-                            {
-                                MyX.Kiir("vezényelt", $"K{i}");
-                                Vezényelt += 1;
-                            }
-                            if (rekord.Dolgozó.Vezényelve)
-                            {
-                                MyX.Kiir("vezényelve", $"L{i}");
-                                Vezényelve += 1;
-                            }
-                            if (rekord.Dolgozó.Részmunkaidős)
-                            {
-                                MyX.Kiir("részmunkaidős", $"M{i}");
-                                Részmunkaidős += 1;
-                            }
-                            MyX.Kiir(rekord.Telephely, $"n{i}");
-                            i += 1;
+                            DateTime ideigdátum = (from a in Adatok_Személyes
+                                                   where a.Dolgozószám == rekord.Dolgozó.Dolgozószám
+                                                   select a.Születésiidő).FirstOrDefault();
+                            if (ideigdátum != null) MyX.Kiir(ideigdátum.ToString("yyyy.MM.dd"), "e" + i);
                         }
+
+
+                        if (rekord.Dolgozó.Belépésiidő != null)
+                            MyX.Kiir(rekord.Dolgozó.Belépésiidő.ToString(), $"F{i}");
+
+                        if (béreng)
+                        {
+                            string ideig = MyF.Rövidkód(rekord.Dolgozó.Dolgozószám.Trim());
+                            ideig = (from adat in AdatokPénz
+                                     where adat.Adat1.Contains(ideig)
+                                     select adat.Adat2).FirstOrDefault();
+                            if (ideig != null && ideig != "_")
+                                MyX.Kiir("#SZÁME#" + MyF.Dekódolja(ideig), $"G{i}");
+                        }
+
+                        if (rekord.Dolgozó.Csoport.Trim() != null)
+                            MyX.Kiir(rekord.Dolgozó.Csoport.Trim(), $"H{i}");
+                        if (rekord.Dolgozó.Passzív)
+                        {
+                            MyX.Kiir("passzív", $"I{i}");
+                            passzív += 1;
+                        }
+
+                        if (rekord.Dolgozó.Alkalmazott)
+                        {
+                            MyX.Kiir("Alkalmazott", $"J{i}");
+                            alkalmazott += 1;
+                        }
+                        else
+                        {
+                            MyX.Kiir("Fizikai", $"J{i}");
+                            fizikai += 1;
+                        }
+
+                        if (rekord.Dolgozó.Vezényelt)
+                        {
+                            MyX.Kiir("vezényelt", $"K{i}");
+                            Vezényelt += 1;
+                        }
+                        if (rekord.Dolgozó.Vezényelve)
+                        {
+                            MyX.Kiir("vezényelve", $"L{i}");
+                            Vezényelve += 1;
+                        }
+                        if (rekord.Dolgozó.Részmunkaidős)
+                        {
+                            MyX.Kiir("részmunkaidős", $"M{i}");
+                            Részmunkaidős += 1;
+                        }
+                        MyX.Kiir(rekord.Telephely, $"n{i}");
+                        i += 1;
                     }
                 }
+
 
                 MyX.Szűrés(munkalap, "A", "N", i);
                 MyX.Oszlopszélesség(munkalap, "A:N");
