@@ -223,10 +223,10 @@
     <Compile Include="V_Ablakok\2_Információ\Ablak_Üzenet_Generálás.Designer.cs">
       <DependentUpon>Ablak_Üzenet_Generálás.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\3_Dolgozó\DolgozoiLekerdezesek\Ablak_DolgozóiLekérdezések.cs">
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_DolgozóiLekérdezések.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\3_Dolgozó\DolgozoiLekerdezesek\Ablak_DolgozóiLekérdezések.designer.cs">
+    <Compile Include="V_Ablakok\3_Dolgozó\Ablak_DolgozóiLekérdezések.designer.cs">
       <DependentUpon>Ablak_DolgozóiLekérdezések.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Oktatások.cs">
@@ -241,9 +241,6 @@
     <Compile Include="V_Ablakok\3_Dolgozó\Beosztás\Ablak_Beosztás.designer.cs">
       <DependentUpon>Ablak_Beosztás.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\3_Dolgozó\DolgozoiLekerdezesek\DolgozoiLekerdezesek_Alaplista.cs" />
-    <Compile Include="V_Ablakok\3_Dolgozó\DolgozoiLekerdezesek\DolgozoiLekerdezesek_Felepites_Aktualis.cs" />
-    <Compile Include="V_Ablakok\3_Dolgozó\DolgozoiLekerdezesek\DolgozoiLekerdezesek_Felepites_Uzemenkent_Excel.cs" />
     <Compile Include="V_Ablakok\3_Dolgozó\Karbantartási_Munkalapok\Ablak_Karbantartási_Munkalapok.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -263,15 +260,12 @@
       <DependentUpon>Ablak_Karbantartás_Csoport.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\3_Dolgozó\Karbantartási_Munkalapok\Karbantartási_ListaFeltöltés.cs" />
-<<<<<<< HEAD
-=======
     <Compile Include="V_Ablakok\3_Dolgozó\Beosztás\Ablak_Dolgozók_Napjai.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="V_Ablakok\3_Dolgozó\Beosztás\Ablak_Dolgozók_Napjai.designer.cs">
       <DependentUpon>Ablak_Dolgozók_Napjai.cs</DependentUpon>
     </Compile>
->>>>>>> master
     <Compile Include="V_Ablakok\3_Dolgozó\Szatube\Szatube_EgyeniNyomtatas.cs" />
     <Compile Include="V_Ablakok\3_Dolgozó\Szatube\Szatube_Eves_Osszesito.cs" />
     <Compile Include="V_Ablakok\3_Dolgozó\Szatube\Szatube_NyomtatasSzabi.cs" />
@@ -331,13 +325,8 @@
       <DependentUpon>Ablak_Vételezés.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\5_Karbantartás\CAF_Ütemezés\CAF_Elo_Havi_Excel.cs" />
-<<<<<<< HEAD
-    <Compile Include="V_Ablakok\5_Karbantartás\Fogaskereku\Fogaskereku_Javitasok_Elotervezese_Excel.cs" />
-    <Compile Include="V_Ablakok\5_Karbantartás\Fogaskereku\Fogaskereku_KimutatasExcel.cs" />
-=======
     <Compile Include="V_Ablakok\5_Karbantartás\Fogaskerekű\Fogaskereku_Javitasok_Elotervezese_Excel.cs" />
     <Compile Include="V_Ablakok\5_Karbantartás\Fogaskerekű\Fogaskereku_KimutatasExcel.cs" />
->>>>>>> master
     <Compile Include="V_Ablakok\5_Karbantartás\Karbantartás_Közös\Karbantartás_Rögzítés.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -376,8 +365,6 @@
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Meghagyás.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Takarítás.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\list.cs" />
-    <Compile Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Epulettakaritas_Takaritasi_Megrendelo_Excel.cs" />
-    <Compile Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Epulettakaritas_Takaritasi_Naplo_Excel.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Anyagtörzs.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Anyagok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Beallitas_Diagram.cs" />
@@ -1146,17 +1133,10 @@
     <Compile Include="V_Ablakok\3_Dolgozó\Ablak_Felvétel.designer.cs">
       <DependentUpon>Ablak_Felvétel.cs</DependentUpon>
     </Compile>
-<<<<<<< HEAD
-    <Compile Include="V_Ablakok\5_Karbantartás\Fogaskereku\Ablak_Fogaskerekű_Tulajdonságok.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="V_Ablakok\5_Karbantartás\Fogaskereku\Ablak_Fogaskerekű_Tulajdonságok.designer.cs">
-=======
     <Compile Include="V_Ablakok\5_Karbantartás\Fogaskerekű\Ablak_Fogaskerekű_Tulajdonságok.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="V_Ablakok\5_Karbantartás\Fogaskerekű\Ablak_Fogaskerekű_Tulajdonságok.designer.cs">
->>>>>>> master
       <DependentUpon>Ablak_Fogaskerekű_Tulajdonságok.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\Közös\Ablak_Kereső.cs">
@@ -1506,7 +1486,7 @@
     <EmbeddedResource Include="V_Ablakok\2_Információ\Ablak_Üzenet_Generálás.resx">
       <DependentUpon>Ablak_Üzenet_Generálás.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\DolgozoiLekerdezesek\Ablak_DolgozóiLekérdezések.resx">
+    <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_DolgozóiLekérdezések.resx">
       <DependentUpon>Ablak_DolgozóiLekérdezések.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_Oktatások.resx">
@@ -1761,11 +1741,7 @@
     <EmbeddedResource Include="V_Ablakok\3_Dolgozó\Ablak_Felvétel.resx">
       <DependentUpon>Ablak_Felvétel.cs</DependentUpon>
     </EmbeddedResource>
-<<<<<<< HEAD
-    <EmbeddedResource Include="V_Ablakok\5_Karbantartás\Fogaskereku\Ablak_Fogaskerekű_Tulajdonságok.resx">
-=======
     <EmbeddedResource Include="V_Ablakok\5_Karbantartás\Fogaskerekű\Ablak_Fogaskerekű_Tulajdonságok.resx">
->>>>>>> master
       <DependentUpon>Ablak_Fogaskerekű_Tulajdonságok.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\7_Gondnokság\Épület_takarítás\Ablak_BMR.resx">
