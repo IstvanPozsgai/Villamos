@@ -11,9 +11,13 @@ namespace Villamos
 {
     public partial class Ablak_Hibanaplo : Form
     {
-
+        Hibanapló_Részletes Ablak;
         readonly DataTable AdatTábla = new DataTable();
+
+#pragma warning disable IDE0044
         List<string> SorAdat = new List<string>();
+#pragma warning restore IDE0044
+
 
         public Ablak_Hibanaplo()
         {
@@ -76,9 +80,12 @@ namespace Villamos
                     // Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum
                     DataRow Soradat = AdatTábla.NewRow();
                     string[] mezok = sor.Split(';');
+                    string[] darabol = mezok[0].Split(' ');
+                    string Dátum = darabol[0].ToÉrt_DaTeTime().ToString("yyyy.MM.dd");
+                    string Idő = darabol[1].Replace(".", ":").ToÉrt_DaTeTime().ToString("HH:mm:ss");
 
-                    Soradat["Dátum"] = mezok[0].Split(' ')[0];
-                    Soradat["Idő"] = mezok[0].Split(' ')[1].ToÉrt_DaTeTime().ToString("HH:mm");
+                    Soradat["Dátum"] = Dátum;
+                    Soradat["Idő"] = Idő;
                     Soradat["Telephely"] = mezok[1];
                     Soradat["Felhasználó"] = mezok[2];
                     Soradat["Hiba üzenet"] = mezok[3];
@@ -149,7 +156,8 @@ namespace Villamos
             try
             {
                 if (SorAdat.Count < 1) throw new HibásBevittAdat("Nincs kiválasztva érvényes sor.");
-                Hibanapló_Részletes Ablak = new Hibanapló_Részletes();
+                Ablak?.Close();
+                Ablak = new Hibanapló_Részletes();
                 Ablak.RészletesAdatok(SorAdat);
             }
             catch (HibásBevittAdat ex)

@@ -25,6 +25,4 @@ namespace InputForms
         public abstract object Value { get; set; }
 
     }
-
-
 }

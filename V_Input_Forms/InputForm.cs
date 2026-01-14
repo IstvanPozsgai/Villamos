@@ -9,7 +9,7 @@ namespace InputForms
     class InputForm : Panel
     {
         readonly Dictionary<string, InputField> fields;
-        readonly Button button;
+      readonly   Button button;
         Action clickAction;
         int LeftMax = 0;
         int Ymax = 0;
@@ -23,7 +23,6 @@ namespace InputForms
             parent.Controls.Add(this);
 
             fields = new Dictionary<string, InputField>();
-
             button = new Button
             {
                 Text = "Send",
@@ -38,6 +37,7 @@ namespace InputForms
             button.Top = 25;
 
             button.Click += OnClick;
+
         }
 
         public string this[string name]
@@ -51,7 +51,6 @@ namespace InputForms
         }
 
 
-
         public InputForm Add(string name, InputTextbox field)
         {
             int y = 10 + Ymax;
@@ -60,9 +59,11 @@ namespace InputForms
             field.Add(this);
             field.MoveTo(5, y);
             Ymax = Ymax + field.Height + 10;
+
             //Gomb új pozíció
             y += 80;
             button.Top = y;
+
 
             //Panel új magasság
             y += 50;
@@ -77,10 +78,12 @@ namespace InputForms
             fields.Add(name, field);
             field.Add(this);
             field.MoveTo(5, y);
-
-            //Gomb új pozíció
-            y += 80;
-            button.Top = y;
+            if (button != null)
+            {
+                //Gomb új pozíció
+                y += 80;
+                button.Top = y;
+            }
 
             //Panel új magasság
             y += 50;
@@ -101,6 +104,7 @@ namespace InputForms
             y += 80;
             button.Top = y;
 
+
             //Panel új magasság
             y += 50;
             Height = y;
@@ -119,6 +123,7 @@ namespace InputForms
             //Gomb új pozíció
             y += 80;
             button.Top = y;
+
 
             //Panel új magasság
             y += 50;

@@ -12,8 +12,12 @@ namespace InputForms
         readonly string Tartalom;
         readonly int MaxLength;
         bool Többsor;
-        readonly int WidthMax;
+
         public int Height => ((TextBox)input).Height;
+
+
+        ScrollBars Görgetés = ScrollBars.None;   // görgetés beállítások
+        bool WordWrap = true;                   // görgetés beállítások
 
         /// <summary>
         /// 
@@ -36,6 +40,52 @@ namespace InputForms
             input = CreateField();
 
             if (parent != null) Add(parent);
+        }
+
+        public InputTextbox TöbbSoros(bool ertek = true)
+        {
+            Többsor = ertek;
+            var tb = (TextBox)input;
+            tb.Multiline = Többsor;
+            // ha több sorosra váltunk, legyen értelmes magasság
+            if (Többsor && tb.Height < 78) tb.Height = 78;
+            ApplyScrollBarSettings(tb);
+            return this;
+        }
+
+        public InputTextbox FüggőlegesGörgetés()
+        {
+            Görgetés = ScrollBars.Vertical;
+            ApplyScrollBarSettings((TextBox)input);
+            return this;
+        }
+
+        public InputTextbox VízszintesGörgetés()
+        {
+            Görgetés = ScrollBars.Horizontal;
+            WordWrap = false; // vízszintes scroll csak WordWrap = false mellett
+            ApplyScrollBarSettings((TextBox)input);
+            return this;
+        }
+
+        private void ApplyScrollBarSettings(TextBox tb)
+        {
+            tb.ScrollBars = Görgetés;
+            tb.WordWrap = WordWrap;
+            // Görgetősáv CSAK Multiline mellett él:
+            if (!tb.Multiline && Görgetés != ScrollBars.None)
+            {
+                tb.Multiline = true;
+                if (tb.Height < 78) tb.Height = 78;
+            }
+        }
+
+        public InputTextbox MindkétGörgetés()
+        {
+            Görgetés = ScrollBars.Both;
+            WordWrap = false;
+            ApplyScrollBarSettings((TextBox)input);
+            return this;
         }
 
 
@@ -80,7 +130,9 @@ namespace InputForms
                 MaxLength = MaxLength,
                 Text = Tartalom,
                 Multiline = Többsor,
-                Height = Többsor ? 78 : 26
+                Height = Többsor ? 78 : 26,
+                ScrollBars = Görgetés,
+                WordWrap = WordWrap
             };
             return textBox;
         }
@@ -101,12 +153,7 @@ namespace InputForms
                 // Margó hozzáadása (a kurzor, belső padding miatt)
                 válasz = textSize.Width + 8;
             }
-            //Ha hosszabb, akkor nem engedjük szélesebbre, de bekapcsoljuk a több soros módot.
-            if (WidthMax < válasz)
-            {
-                válasz = WidthMax;
-                Többsor = true;
-            }
+            Többsor = true;
             return válasz;
         }
 
@@ -127,5 +174,7 @@ namespace InputForms
             input.Width = széles;
             return this;
         }
+
+
     }
 }
