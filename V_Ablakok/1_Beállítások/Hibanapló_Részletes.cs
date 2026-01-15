@@ -1,7 +1,6 @@
 ﻿using InputForms;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Villamos.Kezelők;
 
 namespace Villamos
 {

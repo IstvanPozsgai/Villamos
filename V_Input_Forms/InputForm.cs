@@ -114,7 +114,8 @@ namespace InputForms
 
         public InputForm Add(string name, InputDate field)
         {
-            int y = 10 + (fields.Count * 40);
+            //   int y = 10 + (fields.Count * 40);
+            int y = 10 + Ymax;
 
             fields.Add(name, field);
             field.Add(this);

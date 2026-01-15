@@ -57,5 +57,18 @@ namespace InputForms
             input.Left = label.Left + label.Width + 10;
             return this;
         }
+
+        public InputDate SetHeight(int magas)
+        {
+            input.Height = magas;
+            return this;
+        }
+
+        public InputDate SetWidth(int széles)
+        {
+            input.Width = széles;
+            return this;
+        }
+
     }
 }
