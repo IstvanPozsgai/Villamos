@@ -1529,8 +1529,8 @@ namespace Villamos
                 // megnyitjuk az excel táblát
                 MyX.ExcelMegnyitás(helyexcel);
                 List<string> Fájlok = new List<string>();
-                string könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
+                string könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + $@"\BehajtásiNyomtatás\";
+                if (!Directory.Exists(könyvtár)) Directory.CreateDirectory(könyvtár);
                 int k = 0;
                 int l = 0;
                 string eredmény;
@@ -1615,7 +1615,7 @@ namespace Villamos
                             MyX.Munkalap_aktív(munkalapnév);
                             string fájl = $@"{könyvtár}\Behajtási_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
                             Fájlok.Add(fájl);
-
+                            MyX.ExcelMentésMásként(fájl);
 
                             j = 1;
                             MyX.Munkalap_aktív("Adatok");
@@ -1627,12 +1627,13 @@ namespace Villamos
                     MyX.Munkalap_aktív(munkalapnév);
                     string fájl = $@"{könyvtár}\Behajtási_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
                     Fájlok.Add(fájl);
+                    MyX.ExcelMentésMásként(fájl);
 
                     MyX.Munkalap_aktív("Adatok");
                 }
                 // az excel tábla bezárása
                 MyX.ExcelBezárás();
-                if (Fájlok.Count > 0) MyF.ExcelNyomtatás(Fájlok);
+                if (Fájlok.Count > 0) MyF.ExcelNyomtatás(Fájlok, munkalapnév, FájlTöröl.Checked);
                 LISTAlista();
                 MessageBox.Show("Az engedélyek nyomtatása megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1861,7 +1862,8 @@ namespace Villamos
                 string eredmény;
                 Adatok_Behajtás = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
                 List<string> Fájlok = new List<string>();
-                string könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                string könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + $@"\BehajtásiNyomtatás\";
+                if (!Directory.Exists(könyvtár)) Directory.CreateDirectory(könyvtár);
 
                 for (int i = 0; i < TáblaLista.SelectedRows.Count; i++)
                 {
@@ -1933,9 +1935,10 @@ namespace Villamos
                         MyX.Munkalap_aktív(munkalapnév);
                         string fájl = $@"{könyvtár}\Átvétel_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
                         Fájlok.Add(fájl);
-
-                        j = 1;
                         MyX.Munkalap_aktív("Adatok");
+                        MyX.ExcelMentésMásként(fájl);
+                        j = 1;
+
                     }
                 }
                 if (j != 1)
@@ -1943,12 +1946,13 @@ namespace Villamos
                     MyX.Munkalap_aktív(munkalapnév);
                     string fájl = $@"{könyvtár}\Behajtási_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
                     Fájlok.Add(fájl);
-
                     MyX.Munkalap_aktív("Adatok");
+                    MyX.ExcelMentésMásként(fájl);
+
                 }
                 // az excel tábla bezárása
                 MyX.ExcelBezárás();
-                if (Fájlok.Count > 0) MyF.ExcelNyomtatás(Fájlok);
+                if (Fájlok.Count > 0) MyF.ExcelNyomtatás(Fájlok, munkalapnév, FájlTöröl.Checked);
                 LISTAlista();
                 MessageBox.Show("Az átvételi lapok nyomtatása megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

@@ -59,6 +59,7 @@ namespace Villamos
             this.BtnEngedélyListaFrissít = new System.Windows.Forms.Button();
             this.TáblaLista = new System.Windows.Forms.DataGridView();
             this.Kérelem = new System.Windows.Forms.TabPage();
+            this.AutóLista = new System.Windows.Forms.Label();
             this.KérelemTábla = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -157,7 +158,7 @@ namespace Villamos
             this.LblTelephelyBeállítás = new System.Windows.Forms.Label();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
-            this.AutóLista = new System.Windows.Forms.Label();
+            this.FájlTöröl = new System.Windows.Forms.CheckBox();
             this.Fülek.SuspendLayout();
             this.Engedélyek.SuspendLayout();
             this.PanelEngedély.SuspendLayout();
@@ -203,6 +204,7 @@ namespace Villamos
             // Engedélyek
             // 
             this.Engedélyek.BackColor = System.Drawing.Color.LightSalmon;
+            this.Engedélyek.Controls.Add(this.FájlTöröl);
             this.Engedélyek.Controls.Add(this.Nézet_Egyszerű);
             this.Engedélyek.Controls.Add(this.TxtRendszámszűrő);
             this.Engedélyek.Controls.Add(this.LblEngedélyRendszám);
@@ -478,6 +480,15 @@ namespace Villamos
             this.Kérelem.Size = new System.Drawing.Size(1263, 557);
             this.Kérelem.TabIndex = 1;
             this.Kérelem.Text = "Kérelem";
+            // 
+            // AutóLista
+            // 
+            this.AutóLista.AutoSize = true;
+            this.AutóLista.Location = new System.Drawing.Point(605, 180);
+            this.AutóLista.Name = "AutóLista";
+            this.AutóLista.Size = new System.Drawing.Size(138, 20);
+            this.AutóLista.TabIndex = 212;
+            this.AutóLista.Text = "Autók rendszáma:";
             // 
             // KérelemTábla
             // 
@@ -874,6 +885,7 @@ namespace Villamos
             this.PDF_néző.Location = new System.Drawing.Point(6, 8);
             this.PDF_néző.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.PDF_néző.Name = "PDF_néző";
+            this.PDF_néző.ShowToolbar = false;
             this.PDF_néző.Size = new System.Drawing.Size(1251, 541);
             this.PDF_néző.TabIndex = 68;
             this.PDF_néző.ZoomMode = PdfiumViewer.PdfViewerZoomMode.FitWidth;
@@ -1492,14 +1504,17 @@ namespace Villamos
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
-            // AutóLista
+            // FájlTöröl
             // 
-            this.AutóLista.AutoSize = true;
-            this.AutóLista.Location = new System.Drawing.Point(605, 180);
-            this.AutóLista.Name = "AutóLista";
-            this.AutóLista.Size = new System.Drawing.Size(138, 20);
-            this.AutóLista.TabIndex = 212;
-            this.AutóLista.Text = "Autók rendszáma:";
+            this.FájlTöröl.AutoSize = true;
+            this.FájlTöröl.Checked = true;
+            this.FájlTöröl.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.FájlTöröl.Location = new System.Drawing.Point(639, 37);
+            this.FájlTöröl.Name = "FájlTöröl";
+            this.FájlTöröl.Size = new System.Drawing.Size(96, 24);
+            this.FájlTöröl.TabIndex = 118;
+            this.FájlTöröl.Text = "Fájl törlés";
+            this.FájlTöröl.UseVisualStyleBackColor = true;
             // 
             // Ablak_Behajtási
             // 
@@ -1669,5 +1684,6 @@ namespace Villamos
         internal Button Elutasít_gomb;
         private CheckBox Aktuálissor;
         internal Label AutóLista;
+        internal CheckBox FájlTöröl;
     }
 }
