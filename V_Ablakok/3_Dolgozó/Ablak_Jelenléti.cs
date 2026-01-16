@@ -520,7 +520,7 @@ namespace Villamos
                 MyX.ExcelMentés(fájlexc);
 
                 List<string> Fájlok = new List<string> { fájlexc };
-                if (RdBtnNyomtat.Checked) MyF.ExcelNyomtatás(Fájlok);
+                if (RdBtnNyomtat.Checked) MyF.ExcelNyomtatás(Fájlok, munkalap);
 
                 MyX.ExcelBezárás();
                 if (RdBtnFájlTöröl.Checked) File.Delete(fájlexc);
@@ -753,7 +753,7 @@ namespace Villamos
                 MyX.ExcelBezárás();
 
                 List<string> Fájlok = new List<string> { fájlexc };
-                if (RdBtnNyomtat.Checked) MyF.ExcelNyomtatás(Fájlok);
+                if (RdBtnNyomtat.Checked) MyF.ExcelNyomtatás(Fájlok, munkalap);
 
                 if (RdBtnFájlTöröl.Checked) File.Delete(fájlexc);
 
@@ -1037,7 +1037,7 @@ namespace Villamos
                 MyX.ExcelBezárás();
 
                 List<string> Fájlok = new List<string> { fájlexc };
-                if (RdBtnNyomtat.Checked) MyF.ExcelNyomtatás(Fájlok);
+                if (RdBtnNyomtat.Checked) MyF.ExcelNyomtatás(Fájlok, munkalap);
 
                 if (RdBtnFájlTöröl.Checked) File.Delete(fájlexc);
 
@@ -1240,7 +1240,7 @@ namespace Villamos
                 MyX.ExcelBezárás();
 
                 List<string> Fájlok = new List<string> { fájlexc };
-                if (RdBtnNyomtat.Checked) MyF.ExcelNyomtatás(Fájlok);
+                if (RdBtnNyomtat.Checked) MyF.ExcelNyomtatás(Fájlok, munkalap);
                 if (RdBtnFájlTöröl.Checked) File.Delete(fájlexc);
 
                 MessageBox.Show("A nyomtatvány elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1398,7 +1398,7 @@ namespace Villamos
 
                 MyX.ExcelMentés(fájlexc);
                 List<string> Fájlok = new List<string> { fájlexc };
-                if (RdBtnNyomtat.Checked) MyF.ExcelNyomtatás(Fájlok);
+                if (RdBtnNyomtat.Checked) MyF.ExcelNyomtatás(Fájlok, munkalap);
                 MyX.ExcelBezárás();
 
                 if (RdBtnFájlTöröl.Checked) File.Delete(fájlexc);

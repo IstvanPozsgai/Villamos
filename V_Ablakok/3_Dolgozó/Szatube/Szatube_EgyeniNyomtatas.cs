@@ -339,7 +339,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             // ****************************
             // excel tábla érdemi rész vége
             // ****************************
-            MyF.ExcelNyomtatás(NyomtatásiFájlok);
+            MyF.ExcelNyomtatás(NyomtatásiFájlok,munkalap );
         }
     }
 }

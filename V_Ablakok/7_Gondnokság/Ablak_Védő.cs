@@ -1592,7 +1592,7 @@ namespace Villamos
                 if (Napló_Nyomtat.Checked)
                 {
                     List<string> Fájlok = new List<string> { fájlexc };
-                    MyF.ExcelNyomtatás(Fájlok, Napló_Fájltöröl.Checked);
+                    MyF.ExcelNyomtatás(Fájlok, munkalap, Napló_Fájltöröl.Checked);
                     MessageBox.Show("A Védőeszköz bizonylatok nyomtatása elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (!Napló_Fájltöröl.Checked)

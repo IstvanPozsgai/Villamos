@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Kezelők;
 using Villamos.Adatszerkezet;
-using static System.IO.File;
-using MyX = Villamos.MyClosedXML_Excel;
-using MyF = Függvénygyűjtemény;
+using Villamos.Kezelők;
 using Villamos.V_Ablakok._3_Dolgozó.Szatube;
+using static System.IO.File;
+using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 
 namespace Villamos
@@ -31,8 +31,10 @@ namespace Villamos
         readonly Kezelő_Kiegészítő_főkönyvtábla KézFő = new Kezelő_Kiegészítő_főkönyvtábla();
 
         List<Adat_Szatube_Szabadság> Adatok_Szabadság = new List<Adat_Szatube_Szabadság>();
-        List<string > NyomtatásiFájlok= new List<string>();
 
+#pragma warning disable IDE0044
+        List<string> NyomtatásiFájlok = new List<string>();
+#pragma warning restore IDE0044
         public Ablak_Szatube()
         {
             InitializeComponent();
@@ -656,7 +658,7 @@ namespace Villamos
                 string fájlexcel = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\nyomtatvány\Szabadságlap.xlsx";
                 if (!Exists(fájlexcel)) throw new HibásBevittAdat("Hiányzik az kitöltendő táblázat!");
 
-                             // 0 sorszámút ki kell jelölni.
+                // 0 sorszámút ki kell jelölni.
                 for (int i = 0; i < Tábla.Rows.Count; i++)
                     if (long.Parse(Tábla.Rows[i].Cells[0].Value.ToString()) == 0)
                         Tábla.Rows[i].Selected = false;
@@ -1039,7 +1041,7 @@ namespace Villamos
             {
                 if (Dolgozónév.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
 
-                string fájlexcel = $@"{Application.StartupPath}\{CmbTelephely.Text.ToString()}\nyomtatvány\Szabadságkivétel_egylapos.xlsx";
+                string fájlexcel = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\nyomtatvány\Szabadságkivétel_egylapos.xlsx";
                 if (!Exists(fájlexcel)) throw new HibásBevittAdat("Hiányzik az kitöltendő táblázat!");
 
                 Holtart.Be();
@@ -1059,7 +1061,7 @@ namespace Villamos
                 NyomtatásiFájlok.Clear();
 
                 string munkalap = "Munka1";
-                MyX.Munkalap_aktív(munkalap );
+                MyX.Munkalap_aktív(munkalap);
 
                 if (Rekord != null)
                 {
@@ -1081,7 +1083,7 @@ namespace Villamos
                 MyX.ExcelBezárás();
                 Holtart.Ki();
                 MessageBox.Show("Elkészült az Excel tábla.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyF.ExcelNyomtatás(NyomtatásiFájlok, true);
+                MyF.ExcelNyomtatás(NyomtatásiFájlok, munkalap, true);
             }
             catch (HibásBevittAdat ex)
             {

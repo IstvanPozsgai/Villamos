@@ -939,7 +939,7 @@ namespace Villamos.Villamos_Ablakok
                     string fájlnév = $"Technológia_{Program.PostásNév}_{Járműtípus.Text.Trim()}_{Combo_KarbCiklus.Text.Trim()}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
                     string fájlexc = $@"{könyvtár}\{fájlnév}";
                     Excel_tábla(fájlexc);
-                    if (Nyomtat_igen.Checked) MyF.ExcelNyomtatás(Fájlok);
+                    if (Nyomtat_igen.Checked) MyF.ExcelNyomtatás(Fájlok, munkalap);
                     //fájl törlése
                     if (!Töröl_igen.Checked) MyF.Megnyitás(fájlexc);
                 }
@@ -952,7 +952,7 @@ namespace Villamos.Villamos_Ablakok
                         Pályaszám.Text = psz;
                         Excel_tábla(fájlexc);
                     }
-                    if (Nyomtat_igen.Checked) MyF.ExcelNyomtatás(Fájlok, Töröl_igen.Checked);
+                    if (Nyomtat_igen.Checked) MyF.ExcelNyomtatás(Fájlok, munkalap, Töröl_igen.Checked);
                     if (!Töröl_igen.Checked) MyF.Megnyitások(Fájlok);
                 }
 

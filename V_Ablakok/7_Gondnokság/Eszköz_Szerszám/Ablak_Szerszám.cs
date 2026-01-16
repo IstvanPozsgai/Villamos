@@ -2799,7 +2799,7 @@ namespace Villamos
 
                 if (Napló_Nyomtat.Checked)
                 {
-                    MyF.ExcelNyomtatás(Fájlok);
+                    MyF.ExcelNyomtatás(Fájlok, munkalap);
                     MessageBox.Show("A bizonylatok nyomtatása elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
@@ -4049,7 +4049,7 @@ namespace Villamos
                 List<string> Fájlok = new List<string> { fájlexc };
                 if (Napló_Nyomtat.Checked)
                 {
-                    MyF.ExcelNyomtatás(Fájlok);
+                    MyF.ExcelNyomtatás(Fájlok, munkalap);
                     MessageBox.Show("A bizonylatok nyomtatása elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
@@ -4452,7 +4452,7 @@ namespace Villamos
                 List<string> Fájlok = new List<string> { fájlexc };
                 if (Napló_Nyomtat.Checked)
                 {
-                    MyF.ExcelNyomtatás(Fájlok);
+                    MyF.ExcelNyomtatás(Fájlok, munkalap);
                     MessageBox.Show("A bizonylatok nyomtatása elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 

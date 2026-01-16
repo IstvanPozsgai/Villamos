@@ -1969,7 +1969,7 @@ namespace Villamos
         }
 
 
-        Ablak_Nosztalgia Új_Ablak_Nosztalgia;
+        //     Ablak_Nosztalgia Új_Ablak_Nosztalgia;
         private void NosztalgiaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //if (Új_Ablak_Nosztalgia == null)
@@ -1987,7 +1987,7 @@ namespace Villamos
 
         private void Ablak_Nosztalgia_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Új_Ablak_Nosztalgia = null;
+            //         Új_Ablak_Nosztalgia = null;
         }
 
         #endregion

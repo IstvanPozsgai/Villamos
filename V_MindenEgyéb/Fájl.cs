@@ -10,6 +10,7 @@ using MyE = Microsoft.Office.Interop.Excel;
 
 public static partial class Függvénygyűjtemény
 {
+    public static object misValue = System.Reflection.Missing.Value;
     public static void Megnyitás(string Fájlhelye)
     {
         try
@@ -61,7 +62,7 @@ public static partial class Függvénygyűjtemény
         }
     }
 
-    public static void ExcelNyomtatás(List<string> Fájlok, bool törlés = false)
+    public static void ExcelNyomtatás(List<string> Fájlok, string munkalap, bool törlés = false, int kezdőoldal = 1, int példányszám = 1)
     {
         foreach (string Fájl in Fájlok)
         {
@@ -85,8 +86,13 @@ public static partial class Függvénygyűjtemény
                 // Munkafüzet megnyitása
                 workbook = excelApp.Workbooks.Open(Fájl);
 
-                // Nyomtatás az alapértelmezett nyomtatóra (minden munkalap)
-                workbook.PrintOut(); // Esetleg megadhatsz From, To paramétereket is
+                MyE.Worksheet Munkalap = (MyE.Worksheet)workbook.Worksheets[munkalap];
+
+
+                Munkalap.PrintOutEx(kezdőoldal, misValue, példányszám, false);
+
+                //// Nyomtatás az alapértelmezett nyomtatóra (minden munkalap)
+                //workbook.PrintOut(); // Esetleg megadhatsz From, To paramétereket is
 
                 // Munkafüzet bezárása mentés nélkül
                 workbook.Close(SaveChanges: false);

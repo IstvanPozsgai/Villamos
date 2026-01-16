@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Kezelők;
 using Villamos.Adatszerkezet;
+using Villamos.Kezelők;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -11,8 +11,10 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
 {
     public class Szatube_NyomtatasSzabi
     {
-
+#pragma warning disable IDE0044
         List<string> NyomtatásiFájlok = new List<string>();
+#pragma warning restore IDE0044
+
 
         // Jelenlegi állapotot tekintve az előbb megbeszéltek (külön fájlba való mentés) még nem készültek el
         public Szatube_NyomtatasSzabi(Kezelő_Szatube_Szabadság kézSzabadság, string cmbTelephely, int adat_Évek)
@@ -38,7 +40,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             MyX.ExcelMegnyitás(fájlexcel);
             MyX.Munkalap_aktív(munkalap);
             int elem = 0;
-         
+
             for (int i = 0; i < SzűrtLista.Count; i++)
             {
                 elem++;
@@ -146,7 +148,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
                     MyX.Munkalap_aktív(munkalap);
                     elem = 0;
                 }
-                
+
             }
             if (elem != 0)
             {
@@ -156,8 +158,8 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
                 NyomtatásiFájlok.Add(MentésiFájl);
                 MyX.ExcelBezárás();
             }
-        
-            MyF.ExcelNyomtatás(NyomtatásiFájlok,true);
+
+            MyF.ExcelNyomtatás(NyomtatásiFájlok, munkalap, true);
         }
 
         private int Összesnapja(string törzsszám)

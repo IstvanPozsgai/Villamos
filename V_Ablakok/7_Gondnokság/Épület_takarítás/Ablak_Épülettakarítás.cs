@@ -2016,7 +2016,7 @@ namespace Villamos
 
                 int l = 0;
                 Holtart.Be(Helyiséglista.CheckedItems.Count + 1);
-
+                string munkalap = "Munka1";
                 for (l = 0; l < Helyiséglista.CheckedItems.Count; l++)
                 {
                     // helyiség kód visszafejtése
@@ -2025,7 +2025,7 @@ namespace Villamos
 
                     string fájlexc = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                     fájlexc += $@"\Takarítási_napló_{helységkód.Trim()}_{DateTime.Now:yyMMddHHmmss}.xlsx";
-                    string munkalap = "Munka1";
+
                     // megnyitjuk az excelt
                     MyX.ExcelLétrehozás(munkalap);
                     MyX.Munkalap_betű(munkalap, BeBetű);
@@ -2231,7 +2231,7 @@ namespace Villamos
                 }
                 Holtart.Ki();
                 //Nyomtatás
-                if (Option9.Checked) MyF.ExcelNyomtatás(Fájlok, Option10.Checked);
+                if (Option9.Checked) MyF.ExcelNyomtatás(Fájlok, munkalap, Option10.Checked);
 
                 MessageBox.Show("A kiválasztott elemek nyomtatása befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

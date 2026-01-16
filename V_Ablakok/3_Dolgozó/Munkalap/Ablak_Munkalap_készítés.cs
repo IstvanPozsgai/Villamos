@@ -23,7 +23,11 @@ namespace Villamos
         readonly Kezelő_Jármű2 KézT5C5 = new Kezelő_Jármű2();
 
         List<Adat_Dolgozó_Alap> AdatokDolgozó = new List<Adat_Dolgozó_Alap>();
+
+
+#pragma warning disable IDE0044
         List<string> Fájlok = new List<string>();
+#pragma warning restore IDE0044
 
         #region Alap
         public Ablak_Munkalap_készítés()
@@ -602,7 +606,7 @@ namespace Villamos
                 else
                     ExcelKészítés_Csoportos();
                 //Csak akkor törli ki a fájlt ha nyomtatás volt és kéri a felhasználó.
-                if (Option9.Checked && Fájlok.Count > 0) MyF.ExcelNyomtatás(Fájlok, Option10.Checked);
+                if (Option9.Checked && Fájlok.Count > 0) MyF.ExcelNyomtatás(Fájlok, munkalap, Option10.Checked);
 
                 MessageBox.Show("A Munkalapok generálása befejeződött.", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

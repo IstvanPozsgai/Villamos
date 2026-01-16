@@ -237,7 +237,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             MyX.ExcelMentés(fájlexc);
             NyomtatásiFájlok.Add(fájlexc);
             MyX.ExcelBezárás();
-            MyF.ExcelNyomtatás(NyomtatásiFájlok, !Töröl);
+            MyF.ExcelNyomtatás(NyomtatásiFájlok,munkalap, !Töröl);
 
         }
     }
