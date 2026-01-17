@@ -2109,7 +2109,7 @@ namespace Villamos
 
                 Pdf_listbox.Items.Clear();
 
-                string helypdf = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_PDF";
+                string helypdf = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\{Könyvtár_adat}\Szerszám_PDF";
                 var Directories = new System.IO.DirectoryInfo(helypdf);
 
                 string mialapján = PDF_Azonosító.Text.Trim() + "_*.pdf";
@@ -2168,7 +2168,7 @@ namespace Villamos
                 if (PDF_Azonosító.Text.Trim() == "") throw new HibásBevittAdat("Nincs megadva az azonosító.");
                 if (Feltöltendő.Text.Trim() == "") throw new HibásBevittAdat("Nincs feltöltendő fájl.");
 
-                string helypdf = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_PDF";
+                string helypdf = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\{Könyvtár_adat}\Szerszám_PDF";
                 if (!Directory.Exists(helypdf))
                 {
                     // Megnézzük, hogy létezik-e a könyvtár, ha nem létrehozzuk
@@ -2228,7 +2228,7 @@ namespace Villamos
 
                 if (MessageBox.Show("Biztos, hogy a töröljük a fájlt?", "Figyelmeztetés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                 {
-                    string helypdf = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_pdf\";
+                    string helypdf = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\{Könyvtár_adat}\Szerszám_pdf\";
                     File.Delete(helypdf + Pdf_listbox.SelectedItems[0].ToStrTrim());
                     // igent választottuk
                     PDF_lista_szűrés();
@@ -2283,7 +2283,7 @@ namespace Villamos
             try
             {
                 if (Pdf_listbox.SelectedItems.Count == 0) return;
-                string helypdf = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_PDF\" + Pdf_listbox.SelectedItems[0].ToString();
+                string helypdf = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\{Könyvtár_adat}\Szerszám_PDF\" + Pdf_listbox.SelectedItems[0].ToString();
                 Kezelő_Pdf.PdfMegnyitás(PDF_néző, helypdf);
             }
             catch (HibásBevittAdat ex)
