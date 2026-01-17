@@ -791,7 +791,7 @@ namespace Villamos
             try
             {
 
-                string helykép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_képek";
+                string helykép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\{Könyvtár_adat}\Szerszám_képek";
                 if (!System.IO.Directory.Exists(helykép))
                 {
                     // Megnézzük, hogy létezik-e a könyvtár, ha nem létrehozzuk
@@ -827,7 +827,7 @@ namespace Villamos
             int válasz = 0;
             try
             {
-                string helykép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_PDF";
+                string helykép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\{Könyvtár_adat}\Szerszám_PDF";
                 if (System.IO.Directory.Exists(helykép) == false)
                 {
                     // Megnézzük, hogy létezik-e a könyvtár, ha nem létrehozzuk
@@ -1871,7 +1871,7 @@ namespace Villamos
 
                 Kép_listbox.Items.Clear();
 
-                string helykép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_képek";
+                string helykép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\{Könyvtár_adat}\Szerszám_képek";
                 DirectoryInfo Directories = new System.IO.DirectoryInfo(helykép);
 
                 string mialapján = $"{Kép_Azonosító.Text.Trim()}*.jpg";
@@ -1942,7 +1942,7 @@ namespace Villamos
         {
             if (Kép_listbox.SelectedItems.Count == 0) return;
 
-            Kép_Feltöltendő.Text = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_képek\" + Kép_listbox.SelectedItems[0].ToString();
+            Kép_Feltöltendő.Text = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\{Könyvtár_adat}\Szerszám_képek\" + Kép_listbox.SelectedItems[0].ToString();
             Kép_megjelenítés();
         }
 
@@ -1953,7 +1953,7 @@ namespace Villamos
                 if (Kép_Azonosító.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve egy Azonosítós sem.");
                 if (Kép_Feltöltendő.Text.Trim() == "") throw new HibásBevittAdat("Nincs kijelölve egy feltöltendő kép sem.");
 
-                string helykép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_képek";
+                string helykép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\{Könyvtár_adat}\Szerszám_képek";
                 if (Directory.Exists(helykép) == false)
                 {
                     // Megnézzük, hogy létezik-e a könyvtár, ha nem létrehozzuk
@@ -2008,7 +2008,7 @@ namespace Villamos
                 if (Kép_listbox.SelectedItems[0].ToStrTrim() == "") throw new HibásBevittAdat("Nincs kijelölve egy kép sem.");
                 if (MessageBox.Show("Biztos, hogy a töröljük a fájlt?", "Figyelmeztetés", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                 {
-                    string helykép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_képek\";
+                    string helykép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\{Könyvtár_adat}\Szerszám_képek\";
                     File.Delete(helykép + Kép_listbox.SelectedItems[0].ToStrTrim());
                     Kép_lista_szűrés();
                     Kép_Feltöltendő.Text = "";
@@ -2034,7 +2034,7 @@ namespace Villamos
                 if (Kép_listbox.SelectedItems.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy kép sem.");
                 if (Kép_listbox.SelectedItems[0].ToStrTrim() == "") throw new HibásBevittAdat("Nincs kijelölve egy kép sem.");
 
-                string helykép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\{Könyvtár_adat}\Szerszám_képek\";
+                string helykép = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\{Könyvtár_adat}\Szerszám_képek\";
                 if (!Directory.Exists(helykép)) throw new HibásBevittAdat("A tárhely nem létezik.");
 
                 string hova = "";
