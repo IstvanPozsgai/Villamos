@@ -112,7 +112,6 @@ namespace Villamos
                     hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Naplózás".KönyvSzerk();
                     hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Villamos".KönyvSzerk();
                     hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Segéd".KönyvSzerk();
-                    hely = $@"{Application.StartupPath}\{Telephely}\Szerszám".KönyvSzerk();
                 }
             }
             catch (HibásBevittAdat ex)
