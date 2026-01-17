@@ -837,7 +837,7 @@ namespace Villamos
                 Kép_szűrés.Items.Clear();
                 DirectoryInfo Directories = new DirectoryInfo(helykép);
 
-                string mialapján = $"{Azonosító}_*.jpg";
+                string mialapján = $"{Azonosító}_*.pdf";
 
                 FileInfo[] fileInfo = Directories.GetFiles(mialapján, System.IO.SearchOption.AllDirectories);
 
