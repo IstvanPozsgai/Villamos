@@ -22,8 +22,6 @@ namespace Villamos
         : base(message, innerException) { }
     }
 
-
-
     public static class HibaNapló
     {
         /// <summary>
@@ -54,20 +52,21 @@ namespace Villamos
 
             // E-mail küldés
             Email(Képernyőfájl, szöveg, HibaKód);
-
+            // JAVÍTANDÓ:Kell a napi fájl?
             string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{DateTime.Today:yyyy}".KönyvSzerk();
             hely += $@"\Hiba{DateTime.Today:yyyyMMdd}.log";
             File.AppendAllText(hely, szöveg);
 
             // beírjuk a csv fájlba
             hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Hibanapló\{DateTime.Today:yyyy}\hiba{DateTime.Today:yyyy}.csv";
+            string szöveg2;
             if (!File.Exists(hely))
             {
                 //fejléc 
-                szöveg = "Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum\n";
-                File.AppendAllText(hely, szöveg, System.Text.Encoding.GetEncoding("iso-8859-2"));
+                szöveg2 = "Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum\n";
+                File.AppendAllText(hely, szöveg2, System.Text.Encoding.GetEncoding("iso-8859-2"));
             }
-            szöveg = DateTime.Now.ToString("yyyy.MM.dd HH.mm.ss") + ";"
+            szöveg2 = DateTime.Now.ToString("yyyy.MM.dd HH.mm.ss") + ";"
                         + Program.PostásTelephely + ";"
                         + Program.PostásNév + ";"
                         + MyF.Szöveg_Tisztítás(hibaUzenet, 0, -1, true) + ";"
@@ -76,20 +75,36 @@ namespace Villamos
                         + MyF.Szöveg_Tisztítás(névtér, 0, -1, true) + ";"
                         + MyF.Szöveg_Tisztítás(Egyéb, 0, -1, true) + ";"
                         + DateTime.Today.ToString("yyyy.MM.dd") + "\n";
-            File.AppendAllText(hely, szöveg, Encoding.GetEncoding("iso-8859-2"));
+            File.AppendAllText(hely, szöveg2, Encoding.GetEncoding("iso-8859-2"));
 
 
-
-            //Buborék
-            NotifyIcon BuborékAblak = new NotifyIcon
+            if (KiléptetőVizsgálat(szöveg))
             {
-                Icon = SystemIcons.Error,
-                BalloonTipTitle = "Programhiba",
-                BalloonTipText = "A hiba képernyőképpel el lett küldve a pozsgaii@bkv.hu címre.",
-                BalloonTipIcon = ToolTipIcon.Info,
-                Visible = true
-            };
-            BuborékAblak.ShowBalloonTip(30000);
+                //Buborék
+                NotifyIcon BuborékAblak = new NotifyIcon
+                {
+                    Icon = SystemIcons.Error,
+                    BalloonTipTitle = "Hálózati hiba?",
+                    BalloonTipText = "A Villamos program hálózati hiba miatt leáll.",
+                    BalloonTipIcon = ToolTipIcon.Info,
+                    Visible = true
+                };
+                BuborékAblak.ShowBalloonTip(30000);
+                Application.Exit();
+            }
+            else
+            {
+                //Buborék
+                NotifyIcon BuborékAblak = new NotifyIcon
+                {
+                    Icon = SystemIcons.Error,
+                    BalloonTipTitle = "Programhiba",
+                    BalloonTipText = "A hiba képernyőképpel el lett küldve a pozsgaii@bkv.hu címre.",
+                    BalloonTipIcon = ToolTipIcon.Info,
+                    Visible = true
+                };
+                BuborékAblak.ShowBalloonTip(30000);
+            }
         }
 
         private static string KépernyőKép()
@@ -104,7 +119,7 @@ namespace Villamos
 
         private static void Email(string hely, string hiba, int hibakod)
         {
-            //   if (!hiba.Contains("0x800AC472"))
+            if (EmailVizsgál(hiba))
             {
 
                 MyO._Application _app = new MyO.Application();
@@ -118,6 +133,23 @@ namespace Villamos
                 if (File.Exists(hely)) mail.Attachments.Add(hely);
                 ((MyO._MailItem)mail).Send();
             }
+        }
+
+        private static bool EmailVizsgál(string hiba)
+        {
+            bool Válasz = true;
+            if (hiba.Contains("800AC472")) Válasz = false;
+            if (hiba.Contains("Nem található a következő elérési út egy része")) Válasz = false;
+            if (hiba.Contains("A folyamat nem éri el a következő fájlt, mert azt egy másik folyamat használja")) Válasz = false;
+
+            return Válasz;
+        }
+
+        private static bool KiléptetőVizsgálat(string hiba)
+        {
+            bool Válasz = false;
+            if (hiba.Contains("Nem található a következő elérési út egy része")) Válasz = true;
+            return Válasz;
         }
     }
 }

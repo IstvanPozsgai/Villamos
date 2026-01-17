@@ -15,8 +15,8 @@ namespace Villamos
             {
                 //Ha létezik a fájl akkor nem foglalkozunk tovább vele
                 if (File.Exists(fájl)) return Válasz;
-                //Ha nincs telephely a fájlba akkor hibával leállítjuk a programot
 
+                //Ha nincs telephely a fájlba akkor hibával leállítjuk a programot
                 if (Program.Postás_Telephelyek.Count < 1) TelephelyekFelöltése();
                 bool NemHibás = true;
                 foreach (string Elem in Program.Postás_Telephelyek)
