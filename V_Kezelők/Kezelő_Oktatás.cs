@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Főmérnökség_oktatás.mdb";
         readonly string jelszó = "pázmányt";
+        readonly string táblanév = "oktatásrajelöltek";
 
         public Kezelő_Oktatásrajelöltek()
         {
@@ -21,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Oktatásrajelöltek> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM oktatásrajelöltek";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Oktatásrajelöltek> Adatok = new List<Adat_Oktatásrajelöltek>();
             Adat_Oktatásrajelöltek Adat;
 
@@ -60,7 +61,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Oktatásrajelöltek Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO oktatásrajelöltek (HRazonosító, IDoktatás, Mikortól,  státus,  telephely)";
+                    string szöveg = $"INSERT INTO {táblanév} (HRazonosító, IDoktatás, Mikortól,  státus,  telephely)";
                     szöveg += $" VALUES ('{Adat.HRazonosító}', ";
                     szöveg += $"{Adat.IDoktatás}, ";
                     szöveg += $"'{Adat.Mikortól:yyyy.MM.dd}', {Adat.Státus},";
@@ -88,7 +89,9 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Oktatásrajelöltek Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE oktatásrajelöltek SET mikortól='{Adat.Mikortól:yyyy.MM.dd}'";
+                    string szöveg = $"UPDATE {táblanév} SET ";
+                    szöveg += $" mikortól='{Adat.Mikortól:yyyy.MM.dd}', ";
+                    szöveg += $" státus={Adat.Státus} ";
                     szöveg += $" WHERE idoktatás={Adat.IDoktatás}";
                     szöveg += $" and hrazonosító='{Adat.HRazonosító}'";
                     szöveg += $" AND telephely='{Adat.Telephely}'";
@@ -114,7 +117,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Oktatásrajelöltek Adat in Adatok)
                 {
-                    string szöveg = "UPDATE oktatásrajelöltek SET státus=1 ";
+                    string szöveg = $"UPDATE {táblanév} SET státus=1 ";
                     szöveg += $" WHERE idoktatás={Adat.IDoktatás}";
                     szöveg += $" and hrazonosító='{Adat.HRazonosító}'";
                     szöveg += $" AND telephely='{Adat.Telephely}'";
@@ -140,7 +143,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Oktatásrajelöltek Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE oktatásrajelöltek SET mikortól='{Adat.Mikortól:yyyy.MM.dd}' ";
+                    string szöveg = $"UPDATE {táblanév} SET mikortól='{Adat.Mikortól:yyyy.MM.dd}' ";
                     szöveg += $" WHERE idoktatás={Adat.IDoktatás}";
                     szöveg += $" and hrazonosító='{Adat.HRazonosító}'";
                     szöveg += $" AND telephely='{Adat.Telephely}'";
@@ -164,7 +167,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE oktatásrajelöltek SET státus=1 ";
+                string szöveg = $"UPDATE {táblanév} SET státus=1 ";
                 szöveg += $" WHERE idoktatás={Adat.IDoktatás}";
                 szöveg += $" and hrazonosító='{Adat.HRazonosító}'";
                 szöveg += $" AND telephely='{Adat.Telephely}'";
@@ -185,7 +188,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE oktatásrajelöltek SET mikortól='{Adat.Mikortól:yyyy.MM.dd}' ";
+                string szöveg = $"UPDATE {táblanév} SET mikortól='{Adat.Mikortól:yyyy.MM.dd}' ";
                 szöveg += $" WHERE idoktatás={Adat.IDoktatás}";
                 szöveg += $" and hrazonosító='{Adat.HRazonosító}'";
                 szöveg += $" AND telephely='{Adat.Telephely}'";
