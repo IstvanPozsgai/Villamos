@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using static System.IO.File;
 using MyA = Adatbázis;
 
@@ -112,7 +112,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE mérés SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" Azonosító='{Adat.Azonosító.Trim()}' ,";
                 szöveg += $" Kerékpár_szám='{Adat.Kerékpár_szám.Trim()}', ";
                 szöveg += $" Típus_Eszt='{Adat.Típus_Eszt.Trim()}', ";
@@ -143,7 +143,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGY = new List<string>();
                 foreach (Adat_Baross_Mérési_Adatok Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE mérés SET ";
+                    string szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $" Státus={Adat.Státus} ";
                     szöveg += $" WHERE Eszterga_Id={Adat.Eszterga_Id}";
                     SzövegGY.Add(szöveg);
@@ -172,7 +172,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGY = new List<string>();
                 foreach (Adat_Baross_Mérési_Adatok Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE mérés SET Státus={Adat.Státus}, ";
+                    string szöveg = $"UPDATE {táblanév} SET Státus={Adat.Státus}, ";
                     szöveg += $" Megjegyzés='{Adat.Megjegyzés}'";
                     szöveg += $" WHERE Eszterga_Id={Adat.Eszterga_Id}";
                     SzövegGY.Add(szöveg);
@@ -197,7 +197,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (long ID in Idk)
                 {
-                    string szöveg = $"DELETE FROM mérés WHERE Eszterga_Id={ID}";
+                    string szöveg = $"DELETE FROM {táblanév} WHERE Eszterga_Id={ID}";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABtörlés(hely, jelszó, SzövegGy);
@@ -220,7 +220,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 for (int i = 0; i < SzövegVáltok.Count; i++)
                 {
-                    string szöveg = "INSERT INTO mérés (Dátum_1, Azonosító, Tulajdonos, kezelő, Profil, Profil_szám, Kerékpár_szám, Adat_1, Adat_2,";
+                    string szöveg = $"INSERT INTO {táblanév} (Dátum_1, Azonosító, Tulajdonos, kezelő, Profil, Profil_szám, Kerékpár_szám, Adat_1, Adat_2,";
                     szöveg += " Adat_3, Típus_Eszt, KMU, Pozíció_Eszt, Tengely_Aznosító, Adat_4, Dátum_2, Táv_Belső_Futó_K, Táv_Nyom_K, Delta_K,";
                     szöveg += " B_Átmérő_K, J_Átmérő_K, B_Axiális_K, J_Axiális_K, B_Radiális_K, J_Radiális_K, B_Nyom_Mag_K, J_Nyom_Mag_K, B_Nyom_Vast_K,";
                     szöveg += " J_nyom_Vast_K, B_Nyom_Vast_B_K, J_nyom_Vast_B_K, B_QR_K, J_QR_K, B_Profilhossz_K, J_Profilhossz_K, Dátum_3, Táv_Belső_Futó_Ú,";
@@ -241,7 +241,5 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
     }
 }

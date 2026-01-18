@@ -4,8 +4,8 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         string hely;
         readonly string jelszó = "kasosmiklós";
+        readonly string táblanév = "méréstábla";
 
         private void FájlBeállítás(int Év)
         {
@@ -27,7 +28,7 @@ namespace Villamos.Kezelők
             Adat_Akkumulátor_Mérés Adat;
 
             FájlBeállítás(Év);
-            string szöveg = "SELECT * FROM méréstábla ORDER BY gyáriszám, Mérésdátuma asc";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY gyáriszám, Mérésdátuma asc";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -72,7 +73,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (int ID in Számok)
                 {
-                    string szöveg = $"UPDATE méréstábla SET Rögzítő='TÖRÖLT' WHERE ID={ID}";
+                    string szöveg = $"UPDATE {táblanév} SET Rögzítő='TÖRÖLT' WHERE ID={ID}";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
@@ -94,7 +95,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Év);
 
-                string szöveg = "INSERT INTO méréstábla ";
+                string szöveg = $"INSERT INTO {táblanév} ";
                 szöveg += "(Gyáriszám, Kisütésiáram, Kezdetifesz, Végfesz, Kisütésiidő, Kapacitás, Megjegyzés, Van, Mérésdátuma, Rögzítés, Rögzítő, id)";
                 szöveg += " VALUES (";
                 szöveg += $"'{Adat.Gyáriszám}', ";//Gyáriszám
@@ -141,6 +142,5 @@ namespace Villamos.Kezelők
             }
             return Válasz;
         }
-
     }
 }
