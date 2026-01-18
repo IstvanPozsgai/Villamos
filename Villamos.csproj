@@ -394,6 +394,7 @@
     </Compile>
     <Compile Include="V_Input_Forms\InputSelect.cs" />
     <Compile Include="V_Input_Forms\InputTextbox.cs" />
+    <Compile Include="V_Input_Forms\InputTime.cs" />
     <Compile Include="V_Kezelők\Kezelő_AnyagTörzs.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés_MindenMásol.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF_KM_Attekintes.cs" />
