@@ -9,7 +9,7 @@ namespace InputForms
     class InputForm : Panel
     {
         readonly Dictionary<string, InputField> fields;
-      readonly   Button button;
+        readonly Button button;
         Action clickAction;
         int LeftMax = 0;
         int Ymax = 0;
@@ -78,6 +78,8 @@ namespace InputForms
             fields.Add(name, field);
             field.Add(this);
             field.MoveTo(5, y);
+            Ymax = Ymax + field.Height + 10;
+
             if (button != null)
             {
                 //Gomb új pozíció
@@ -99,6 +101,7 @@ namespace InputForms
             fields.Add(name, field);
             field.Add(this);
             field.MoveTo(5, y);
+            Ymax = Ymax + field.Height + 10;
 
             //Gomb új pozíció
             y += 80;
@@ -112,6 +115,27 @@ namespace InputForms
             return this;
         }
 
+        public InputForm Add(string name, InputTime field)
+        {
+            //   int y = 10 + (fields.Count * 40);
+            int y = 10 + Ymax;
+
+            fields.Add(name, field);
+            field.Add(this);
+            field.MoveTo(5, y);
+            Ymax = Ymax + field.Height + 10;
+
+            //Gomb új pozíció
+            y += 80;
+            button.Top = y;
+
+
+            //Panel új magasság
+            y += 50;
+            Height = y;
+
+            return this;
+        }
         public InputForm Add(string name, InputDate field)
         {
             //   int y = 10 + (fields.Count * 40);
@@ -120,6 +144,7 @@ namespace InputForms
             fields.Add(name, field);
             field.Add(this);
             field.MoveTo(5, y);
+            Ymax = Ymax + field.Height + 10;
 
             //Gomb új pozíció
             y += 80;

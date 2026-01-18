@@ -8,6 +8,10 @@ namespace InputForms
     {
         readonly Label label;
         readonly DateTime Dátum;
+
+        public int Height => input.Height;
+
+
         public InputDate(string LabelSzöveg, DateTime dátum, Control parent = null) : base(parent)
         {
             Dátum = dátum;

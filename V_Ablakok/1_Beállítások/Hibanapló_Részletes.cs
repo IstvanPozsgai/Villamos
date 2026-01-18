@@ -15,8 +15,8 @@ namespace Villamos
             Ablak = new Form();
 
             form = new InputForm(Ablak);
-            form.Add("Dátum", (new InputTextbox("Dátum:", AdatSor[0]).SetWidth(100).SetHeight(26)))
-                .Add("Idő", (new InputTextbox("Idő: ", AdatSor[1]).SetWidth(100).SetHeight(26)))
+            form.Add("Dátum", (new InputDate("Dátum:", AdatSor[0].ToÉrt_DaTeTime()).SetWidth(100).SetHeight(26)))
+                .Add("Idő", (new InputTime("Idő: ", AdatSor[1].ToÉrt_DaTeTime()).SetWidth(100).SetHeight(26)))
                 .Add("Telephely", (new InputTextbox("Telephely: ", AdatSor[2]).SetWidth(200).SetHeight(26)))
                 .Add("Felhasználó", (new InputTextbox("Felhasználó: ", AdatSor[3]).SetWidth(200).SetHeight(26)))
                 .Add("HibaÜzenet", (new InputTextbox("Hiba üzenet:", AdatSor[4]).SetWidth(600).SetHeight(78)).FüggőlegesGörgetés())

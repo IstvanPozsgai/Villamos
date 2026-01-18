@@ -9,6 +9,7 @@ namespace InputForms
         readonly string[] Options;
         readonly Label label;
         readonly int MaxLength;
+        public int Height => input.Height;
 
         public InputSelect(string LabelSzöveg, string[] options, int maxLength = 15, Control parent = null) : base(parent)
         {

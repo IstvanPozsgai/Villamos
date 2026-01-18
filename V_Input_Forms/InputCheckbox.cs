@@ -7,7 +7,7 @@ namespace InputForms
     {
         private readonly string Text;
         private readonly bool ChecKed;
-
+        public int Height => input.Height;
 
         public InputCheckbox(string text, bool isChecked, Control parent = null) : base(parent) // ← először inicializáljuk az ős osztályt
         {
