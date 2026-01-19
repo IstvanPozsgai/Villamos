@@ -20,8 +20,7 @@ namespace Villamos.Kezelők
             hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év}.mdb";
             if (!File.Exists(hely))
             {
-                Adatbázis_Létrehozás.Munkalap_tábla(hely.KönyvSzerk());
-                // ha nincs olyan évi adatbázis, akkor létrehozzuk az előző évi alapján ha van.
+                              // ha nincs olyan évi adatbázis, akkor létrehozzuk az előző évi alapján ha van.
                 AdatbázisLétrehozás(Telephely, Év);
             }
         }
