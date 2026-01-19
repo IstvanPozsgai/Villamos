@@ -140,6 +140,7 @@ namespace Villamos
             bool Válasz = true;
             if (hiba.Contains("800AC472")) Válasz = false;
             if (hiba.Contains("Nem található a következő elérési út egy része")) Válasz = false;
+            if (hiba.Contains("is not a valid path.")) Válasz = false;
             if (hiba.Contains("A folyamat nem éri el a következő fájlt, mert azt egy másik folyamat használja")) Válasz = false;
 
             return Válasz;
@@ -149,6 +150,7 @@ namespace Villamos
         {
             bool Válasz = false;
             if (hiba.Contains("Nem található a következő elérési út egy része")) Válasz = true;
+            if (hiba.Contains("is not a valid path.")) Válasz = true;
             return Válasz;
         }
     }
