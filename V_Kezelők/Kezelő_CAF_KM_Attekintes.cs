@@ -536,7 +536,7 @@ namespace Villamos.Kezelők
             List<int> NemTortentPvizsgalat = new List<int>();
 
             List<int> azonositoLista = OsszesPalyaszam();
-
+            //Pozsi: Itt megint végigmenjünk a lista összes pályaszámát.
             for (int i = 0; i <= azonositoLista.Count() - 1; i++)
             {
                 string Palyaszam = $"{azonositoLista[i]}";
@@ -550,6 +550,7 @@ namespace Villamos.Kezelők
 
         private List<int> OsszesPalyaszam()
         {
+            //Pozsi:Ez is annyiszor fut le ahány pályaszám van, ezt is csak egyszer kellene feltölteni, utána lehet linq
             return KézJármű.Lista_Adatok("Főmérnökség")
                    .Where(a => a.Típus.Contains("CAF") && !a.Azonosító.StartsWith("V"))
                    .Select(a => int.Parse(a.Azonosító))
@@ -589,6 +590,8 @@ namespace Villamos.Kezelők
 
         public void Erteket_Frissit_Osszes(string palya)
         {
+            //Pozsi: ez egy pályaszám lista ami tartalmazza az ? a történt, vagy nem történtet?
+            //Lefut annyiszor ahány kocsi van, osztályszintűvé tenni és csak egyszer kellene feltölteni.
             List<int> TortentPvizsgalat = NemTortentPvizsgalat();
 
             if (!TortentPvizsgalat.Contains(palya.ToÉrt_Int()))
