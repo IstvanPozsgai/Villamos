@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Típusrendezéstábla> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM típusrendezéstábla order by sorszám";
+            string szöveg = $"SELECT * FROM típusrendezéstábla order by sorszám";
             List<Adat_Kiegészítő_Típusrendezéstábla> Adatok = new List<Adat_Kiegészítő_Típusrendezéstábla>();
             Adat_Kiegészítő_Típusrendezéstábla Adat;
 
@@ -57,7 +57,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO típusrendezéstábla ( sorszám, főkategória, típus, altípus, telephely, telephelyitípus)";
+                string szöveg = $"INSERT INTO típusrendezéstábla ( sorszám, főkategória, típus, altípus, telephely, telephelyitípus)";
                 szöveg += $" VALUES ({Adat.Sorszám}, ";
                 szöveg += $"'{Adat.Főkategória}', ";
                 szöveg += $"'{Adat.Típus}', ";

@@ -23,7 +23,7 @@ namespace Villamos.Kezelők
         public List<Adat_Kidobó_Változat> Lista_Adat(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = "SELECT * FROM Változattábla  order by id";
+            string szöveg = $"SELECT * FROM Változattábla  order by id";
             List<Adat_Kidobó_Változat> Adatok = new List<Adat_Kidobó_Változat>();
             Adat_Kidobó_Változat Adat;
 
@@ -57,7 +57,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO Változattábla (id, változatnév) VALUES (";
+                string szöveg = $"INSERT INTO Változattábla (id, változatnév) VALUES (";
                 szöveg += $"{Sorszám(hely)}, '{Adat.Változatnév}') ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

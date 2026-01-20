@@ -2,8 +2,8 @@
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 
 namespace Villamos.Kezelők
 {
@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\behajtási\Behajtási_alap.mdb".KönyvSzerk();
         readonly string jelszó = "egérpad";
+        readonly string táblanév = "jogosultságtípus";
 
         public Kezelő_Behajtás_Jogosultság()
         {
@@ -19,7 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Behajtás_Jogosultság> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM jogosultságtípus ORDER BY id";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY id";
             List<Adat_Behajtás_Jogosultság> Adatok = new List<Adat_Behajtás_Jogosultság>();
             Adat_Behajtás_Jogosultság Adat;
 

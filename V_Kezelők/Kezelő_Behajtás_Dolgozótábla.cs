@@ -13,7 +13,8 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "egérpad";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\behajtási\Behajtási_alap.mdb";
-        // JAVÍTANDÓ:itt tartok
+        readonly string táblanév = "Dolgozóktábla";
+
         public Kezelő_Behajtás_Dolgozótábla()
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Alap(hely.KönyvSzerk());
@@ -21,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Behajtás_Dolgozótábla> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM Dolgozóktábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Behajtás_Dolgozótábla> Adatok = new List<Adat_Behajtás_Dolgozótábla>();
             Adat_Behajtás_Dolgozótábla Adat;
 
@@ -56,7 +57,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE dolgozóktábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" Dolgozónév='{Adat.Dolgozónév}', ";
                 szöveg += $" munkakör='{Adat.Munkakör}', ";
                 szöveg += $" szervezetiegység='{Adat.Szervezetiegység}', ";
@@ -80,7 +81,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO dolgozóktábla ( Dolgozószám, Dolgozónév, munkakör, szervezetiegység, státus )  VALUES ( ";
+                string szöveg = $"INSERT INTO {táblanév} ( Dolgozószám, Dolgozónév, munkakör, szervezetiegység, státus )  VALUES ( ";
                 szöveg += $"'{Adat.Dolgozószám}', ";
                 szöveg += $"'{Adat.Dolgozónév}', ";
                 szöveg += $"'{Adat.Munkakör}', ";

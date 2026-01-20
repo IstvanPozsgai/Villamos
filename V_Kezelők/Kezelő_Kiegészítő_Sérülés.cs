@@ -61,7 +61,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO sérülés ";
+                string szöveg = $"INSERT INTO sérülés ";
                 szöveg += " (id, név, csoport1, csoport2, sorrend1, sorrend2, vezér1, vezér2, költséghely ) VALUES ";
                 szöveg += $"({Adat.ID}, ";
                 szöveg += $"'{Adat.Név}', ";
@@ -90,7 +90,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE sérülés SET ";
+                string szöveg = $"UPDATE sérülés SET ";
                 szöveg += $"név='{Adat.Név}', ";
                 szöveg += $"csoport1={Adat.Csoport1}, ";
                 szöveg += $"csoport2={Adat.Csoport2}, ";

@@ -21,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Jármű_Takarítás_Kötbér> Lista_Adat()
         {
-            string szöveg = "SELECT * FROM kötbér order by takarítási_fajta";
+            string szöveg = $"SELECT * FROM kötbér order by takarítási_fajta";
             List<Adat_Jármű_Takarítás_Kötbér> Adatok = new List<Adat_Jármű_Takarítás_Kötbér>();
             Adat_Jármű_Takarítás_Kötbér Adat;
 
@@ -52,7 +52,7 @@ namespace Villamos.Kezelők
 
         public void Rögzítés(Adat_Jármű_Takarítás_Kötbér Adat)
         {
-            string szöveg = "INSERT INTO kötbér (Takarítási_fajta, NemMegfelel, Póthatáridő ) VALUES (";
+            string szöveg = $"INSERT INTO kötbér (Takarítási_fajta, NemMegfelel, Póthatáridő ) VALUES (";
             szöveg += $"'{Adat.Takarítási_fajta}', "; // Takarítási_fajta
             szöveg += $"{Adat.NemMegfelel}, "; // NemMegfelel
             szöveg += $"{Adat.Póthatáridő}) ";
@@ -61,7 +61,7 @@ namespace Villamos.Kezelők
 
         public void Módosítás(Adat_Jármű_Takarítás_Kötbér Adat)
         {
-            string szöveg = "UPDATE kötbér  SET ";
+            string szöveg = $"UPDATE kötbér  SET ";
             szöveg += $" NemMegfelel={Adat.NemMegfelel}, "; // NemMegfelel
             szöveg += $" Póthatáridő={Adat.Póthatáridő}"; // Póthatáridő
             szöveg += $" WHERE  takarítási_fajta='{Adat.Takarítási_fajta}'";

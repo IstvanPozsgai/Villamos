@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Jármű_Vendég> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM vendégtábla order by azonosító";
+            string szöveg = $"SELECT * FROM vendégtábla order by azonosító";
             List<Adat_Jármű_Vendég> Adatok = new List<Adat_Jármű_Vendég>();
             Adat_Jármű_Vendég Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -86,7 +86,7 @@ namespace Villamos.Kezelők
                 if (EgyAdat != null)
                 {
                     // Ha már létezik, akkor módosítjuk
-                    string szöveg = "UPDATE vendégtábla  SET ";
+                    string szöveg = $"UPDATE vendégtábla  SET ";
                     szöveg += $"típus='{Adat.Típus.Trim()}', "; // típus
                     szöveg += $"BázisTelephely='{Adat.BázisTelephely.Trim()}', "; // BázisTelephely
                     szöveg += $"KiadóTelephely='{Adat.KiadóTelephely.Trim()}' "; // KiadóTelephely
@@ -97,7 +97,7 @@ namespace Villamos.Kezelők
                 else
                 {
                     // ha nem létezik 
-                    string szöveg = "INSERT INTO vendégtábla  (  azonosító, típus, BázisTelephely, KiadóTelephely ) VALUES (";
+                    string szöveg = $"INSERT INTO vendégtábla  (  azonosító, típus, BázisTelephely, KiadóTelephely ) VALUES (";
                     szöveg += $"'{Adat.Azonosító.Trim()}', "; // azonosító
                     szöveg += $"'{Adat.Típus.Trim()}', "; // típus
                     szöveg += $"'{Adat.BázisTelephely.Trim()}', "; // BázisTelephely

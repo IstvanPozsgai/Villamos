@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Főkategóriatábla> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM főkategóriatábla  order by  sorszám";
+            string szöveg = $"SELECT * FROM főkategóriatábla  order by  sorszám";
             List<Adat_Kiegészítő_Főkategóriatábla> Adatok = new List<Adat_Kiegészítő_Főkategóriatábla>();
             Adat_Kiegészítő_Főkategóriatábla Adat;
 

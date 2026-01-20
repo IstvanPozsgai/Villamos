@@ -25,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_MunkaRend> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = "SELECT * FROM munkarendtábla ORDER BY id";
+            string szöveg = $"SELECT * FROM munkarendtábla ORDER BY id";
             List<Adat_MunkaRend> Adatok = new List<Adat_MunkaRend>();
             Adat_MunkaRend Adat;
 
@@ -60,7 +60,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = "INSERT INTO munkarendtábla (id, munkarend, látszódik)  VALUES (";
+                string szöveg = $"INSERT INTO munkarendtábla (id, munkarend, látszódik)  VALUES (";
                 szöveg += $"{Sorszám(Telephely, Év)}, ";
                 szöveg += $"'{Adat.Munkarend}', ";
                 szöveg += $" {Adat.Látszódik} ) ";

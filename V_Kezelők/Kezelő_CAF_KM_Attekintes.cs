@@ -51,7 +51,7 @@ namespace Villamos.Kezelők
         // Az Adatbázis_Létrehozás osztályban szerepel a lenti SQL szintaxis.
         private void Tabla_Letrehozasa()
         {
-            string szöveg = "CREATE TABLE KM_Attekintes (";
+            string szöveg = $"CREATE TABLE {táblanév} (";
             szöveg += "azonosito CHAR(10), ";
             szöveg += "utolso_vizsgalat_valos_allasa LONG, ";
             szöveg += "kov_p0 LONG, ";
@@ -309,7 +309,7 @@ namespace Villamos.Kezelők
                                                        .OrderByDescending(a => a.Dátum)
                                                        .FirstOrDefault();
             // Visszaadja a következő P vizsgálat KM várt értékét.
-          
+
             if (Adott_Villamos != null)
                 return ((Adott_Villamos.KM_Sorszám + 1) * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
             else
@@ -551,7 +551,7 @@ namespace Villamos.Kezelők
             List<int> azonositoLista = OsszesPalyaszam();
             //Pozsi: Itt megint végigmenjünk a lista összes pályaszámát.
             List<Adat_CAF_Adatok> Lista_Adatok = KézAdatok.Lista_Adatok();
-            for (int i = 0; i < azonositoLista.Count() ; i++)
+            for (int i = 0; i < azonositoLista.Count(); i++)
             {
                 string Palyaszam = $"{azonositoLista[i]}";
                 if (Lista_Adatok.FirstOrDefault(a => a.Azonosító == Palyaszam && a.IDŐvKM == 2) == null)

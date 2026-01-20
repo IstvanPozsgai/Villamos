@@ -21,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Fortetípus> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM fortetípus order by sorszám";
+            string szöveg = $"SELECT * FROM fortetípus order by sorszám";
             List<Adat_Kiegészítő_Fortetípus> Adatok = new List<Adat_Kiegészítő_Fortetípus>();
             Adat_Kiegészítő_Fortetípus Adat;
 
@@ -56,7 +56,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO fortetípus ( sorszám, ftípus, telephely, telephelyitípus )";
+                string szöveg = $"INSERT INTO fortetípus ( sorszám, ftípus, telephely, telephelyitípus )";
                 szöveg += $" VALUES ({Adat.Sorszám}, ";
                 szöveg += $"'{Adat.Ftípus}', ";
                 szöveg += $"'{Adat.Telephely}', ";

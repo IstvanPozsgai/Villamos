@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "lilaakác";
         string hely = "";
+        readonly string táblanév = "Adattábla";
 
 
         private void FájlBeállítás(string Telephely, DateTime Dátum, string Napszak, bool Létrejön = true)
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_Főkönyv_Nap> Lista_Adatok(string Telephely, DateTime Dátum, string Napszak, bool Eredeti = false)
         {
             FájlBeállítás(Telephely, Dátum, Napszak, false);
-            string szöveg = "SELECT * FROM Adattábla ORDER BY azonosító";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY azonosító";
             List<Adat_Főkönyv_Nap> Adatok = new List<Adat_Főkönyv_Nap>();
             Adat_Főkönyv_Nap Adat;
             if (!File.Exists(hely)) return Adatok;
@@ -100,7 +101,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Főkönyv_Nap Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO Adattábla  (Státus, hibaleírása, típus, azonosító, szerelvény, ";
+                    string szöveg = $"INSERT INTO {táblanév}  (Státus, hibaleírása, típus, azonosító, szerelvény, ";
                     szöveg += "viszonylat, forgalmiszám, kocsikszáma, tervindulás, tényindulás, ";
                     szöveg += "tervérkezés, tényérkezés, miótaáll, napszak, megjegyzés ) VALUES (";
                     szöveg += $"{Adat.Státus},";              //  Státus
@@ -139,7 +140,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely, Dátum, Napszak);
 
-                string szöveg = "INSERT INTO Adattábla  (Státus, hibaleírása, típus, azonosító, szerelvény, ";
+                string szöveg = $"INSERT INTO {táblanév}  (Státus, hibaleírása, típus, azonosító, szerelvény, ";
                 szöveg += "viszonylat, forgalmiszám, kocsikszáma, tervindulás, tényindulás, ";
                 szöveg += "tervérkezés, tényérkezés, miótaáll, napszak, megjegyzés ) VALUES (";
                 szöveg += $"{Adat.Státus},";              //  Státus
@@ -179,7 +180,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (string Azonosító in Azonosítók)
                 {
-                    string szöveg = "UPDATE Adattábla SET viszonylat='-', forgalmiszám='-',  ";
+                    string szöveg = $"UPDATE {táblanév} SET viszonylat='-', forgalmiszám='-',  ";
                     szöveg += "tervindulás='1900.01.01 00:00:00', ";
                     szöveg += "tényindulás='1900.01.01 00:00:00', ";
                     szöveg += "tervérkezés='1900.01.01 00:00:00', ";
@@ -207,7 +208,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum, Napszak);
-                string szöveg = "UPDATE Adattábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" Státus={Adat.Státus}, ";
                 szöveg += $" hibaleírása='{Adat.Hibaleírása}', ";
                 szöveg += $" típus='{Adat.Típus}', ";
@@ -241,7 +242,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum, Napszak);
-                string szöveg = "UPDATE Adattábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"viszonylat='{Adat.Viszonylat}', ";
                 szöveg += $"forgalmiszám='{Adat.Forgalmiszám}', ";
                 szöveg += $"kocsikszáma={Adat.Kocsikszáma}, ";
@@ -273,7 +274,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Főkönyv_Nap Adat in Adatok)
                 {
-                    string szöveg = "UPDATE Adattábla SET ";
+                    string szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $"viszonylat='{Adat.Viszonylat}', ";
                     szöveg += $"forgalmiszám='{Adat.Forgalmiszám}', ";
                     szöveg += $"kocsikszáma={Adat.Kocsikszáma}, ";
@@ -303,7 +304,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum, Napszak);
-                MyA.ABtörlés(hely, jelszó, $"DELETE * FROM Adattábla");
+                MyA.ABtörlés(hely, jelszó, $"DELETE * FROM {táblanév}");
             }
             catch (HibásBevittAdat ex)
             {
@@ -322,7 +323,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum, Napszak);
-                string szöveg = $"DELETE FROM adattábla where azonosító='{Azonosító}'";
+                string szöveg = $"DELETE FROM {táblanév} where azonosító='{Azonosító}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

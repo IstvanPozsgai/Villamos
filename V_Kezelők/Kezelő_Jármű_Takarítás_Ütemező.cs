@@ -21,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Jármű_Takarítás_Ütemező> Lista_Adat()
         {
-            string szöveg = "SELECT * FROM ütemező ";
+            string szöveg = $"SELECT * FROM ütemező ";
             List<Adat_Jármű_Takarítás_Ütemező> Adatok = new List<Adat_Jármű_Takarítás_Ütemező>();
             Adat_Jármű_Takarítás_Ütemező Adat;
 
@@ -59,7 +59,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE ütemező  SET ";
+                string szöveg = $"UPDATE ütemező  SET ";
                 szöveg += $"Kezdő_dátum='{Adat.Dátum:yyyy.MM.dd}', ";   // Kezdő_dátum
                 szöveg += $"növekmény={Adat.Növekmény}, ";// növekmény
                 szöveg += $"Mérték='{Adat.Mérték}', "; // Mérték
@@ -84,7 +84,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO ütemező (azonosító, Kezdő_dátum, növekmény, Mérték, Takarítási_fajta, Telephely, státus) VALUES (";
+                string szöveg = $"INSERT INTO ütemező (azonosító, Kezdő_dátum, növekmény, Mérték, Takarítási_fajta, Telephely, státus) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";// azonosító
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', ";// Kezdő_dátum
                 szöveg += $"{Adat.Növekmény}, ";// növekmény

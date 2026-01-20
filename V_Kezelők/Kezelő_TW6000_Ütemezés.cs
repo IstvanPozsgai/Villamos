@@ -23,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_TW6000_Ütemezés> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM ütemezés";
+            string szöveg = $"SELECT * FROM ütemezés";
             List<Adat_TW6000_Ütemezés> Adatok = new List<Adat_TW6000_Ütemezés>();
             Adat_TW6000_Ütemezés Adat;
 
@@ -68,7 +68,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_TW6000_Ütemezés Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO ütemezés (azonosító, ciklusrend, elkészült, megjegyzés, ";
+                    string szöveg = $"INSERT INTO ütemezés (azonosító, ciklusrend, elkészült, megjegyzés, ";
                     szöveg += " státus, velkészülés, vesedékesség, vizsgfoka, ";
                     szöveg += " vsorszám, vütemezés, vvégezte) VALUES (";
                     szöveg += $"'{Adat.Azonosító}', ";
@@ -103,7 +103,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO ütemezés (azonosító, ciklusrend, elkészült, megjegyzés, ";
+                string szöveg = $"INSERT INTO ütemezés (azonosító, ciklusrend, elkészült, megjegyzés, ";
                 szöveg += " státus, velkészülés, vesedékesség, vizsgfoka, ";
                 szöveg += " vsorszám, vütemezés, vvégezte) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', "; // azonosító
@@ -166,7 +166,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE ütemezés SET ";
+                string szöveg = $"UPDATE ütemezés SET ";
                 szöveg += $" megjegyzés='Előjegyezve: {Adat.Megjegyzés}',";
                 szöveg += $" státus={Adat.Státus} ";
                 szöveg += $" WHERE  vütemezés=#{Adat.Vütemezés:MM-dd-yyyy}# ";
@@ -194,7 +194,7 @@ namespace Villamos.Kezelők
                 List<Adat_TW6000_Ütemezés> AdatokTárolt = Lista_Adatok();
                 foreach (Adat_TW6000_Ütemezés Adat in Adatok)
                 {
-                    string szöveg = "UPDATE ütemezés SET ";
+                    string szöveg = $"UPDATE ütemezés SET ";
                     szöveg += $" státus={Adat.Státus},";
                     szöveg += $" megjegyzés ='{Adat.Megjegyzés}' ";
                     szöveg += $" WHERE azonosító='{Adat.Azonosító}'";

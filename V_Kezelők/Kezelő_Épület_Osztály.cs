@@ -4,8 +4,8 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Épület_Takarítás_Osztály
     {
         readonly string jelszó = "seprűéslapát";
-        string tábla = "takarításosztály";
+        readonly string táblanév = "takarításosztály";
         string hely;
 
         private void FájlBeállítás(string Telephely)
@@ -26,7 +26,7 @@ namespace Villamos.Kezelők
         {
             FájlBeállítás(Telephely);
             List<Adat_Épület_Takarítás_Osztály> Adatok = new List<Adat_Épület_Takarítás_Osztály>();
-            string szöveg = $"SELECT * FROM {tábla} order by id";
+            string szöveg = $"SELECT * FROM {táblanév} order by id";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -60,7 +60,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE {tábla}  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"osztály='{Adat.Osztály}', ";
                 szöveg += $"E1Ft={Adat.E1Ft.ToString().Replace(",", ".")}, ";
                 szöveg += $"E2Ft={Adat.E2Ft.ToString().Replace(",", ".")}, ";
@@ -84,7 +84,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"INSERT INTO {tábla}  (id, osztály, E1Ft, E2Ft, E3Ft, státus) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév}  (id, osztály, E1Ft, E2Ft, E3Ft, státus) VALUES (";
                 szöveg += $"{Sorszám(Telephely)}, ";
                 szöveg += $"'{Adat.Osztály}', ";
                 szöveg += $"{Adat.E1Ft.ToString().Replace(",", ".")}, ";
@@ -111,7 +111,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Épület_Takarítás_Osztály Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE {tábla}  SET ";
+                    string szöveg = $"UPDATE {táblanév}  SET ";
                     szöveg += $"E1Ft={Adat.E1Ft.ToString().Replace(',', '.')}, ";
                     szöveg += $"E2Ft={Adat.E2Ft.ToString().Replace(',', '.')}, ";
                     szöveg += $"E3Ft={Adat.E3Ft.ToString().Replace(',', '.')} ";
@@ -140,7 +140,7 @@ namespace Villamos.Kezelők
                 int i = Sorszám(Telephely);
                 foreach (Adat_Épület_Takarítás_Osztály Adat in Adatok)
                 {
-                    string szöveg = $"INSERT INTO {tábla} (id, osztály, E1Ft, E2Ft, E3Ft, státus) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (id, osztály, E1Ft, E2Ft, E3Ft, státus) VALUES (";
                     szöveg += $"{i}, ";
                     szöveg += $"'{Adat.Osztály}', ";
                     szöveg += $"{Adat.E1Ft.ToString().Replace(",", ".")}, ";
@@ -167,7 +167,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE {tábla}  SET státus=true ";
+                string szöveg = $"UPDATE {táblanév}  SET státus=true ";
                 szöveg += $" WHERE id={Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

@@ -85,7 +85,7 @@ namespace Villamos.Kezelők
         {
             List<Adat_TTP_Év> Adatok = new List<Adat_TTP_Év>();
             Adat_TTP_Év Adat;
-            string szöveg = "SELECT * FROM TTP_Év  ORDER BY Életkor";
+            string szöveg = $"SELECT * FROM TTP_Év  ORDER BY Életkor";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {

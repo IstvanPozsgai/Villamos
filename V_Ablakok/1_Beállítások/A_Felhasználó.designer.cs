@@ -225,7 +225,7 @@ namespace Villamos
             this.Chk_Insert.Name = "Chk_Insert";
             this.Chk_Insert.Size = new System.Drawing.Size(69, 24);
             this.Chk_Insert.TabIndex = 23;
-            this.Chk_Insert.Text = "Insert";
+            this.Chk_Insert.Text = $"INSERT";
             this.Chk_Insert.UseVisualStyleBackColor = true;
             // 
             // Chk_PageUp

@@ -78,7 +78,7 @@ namespace Villamos.Kezelők
             try
             {
 
-                string szöveg = "INSERT INTO Cégek (cégid, cég, címe, cég_email, felelős_személy, Felelős_telefonszám, munkaleírás,";
+                string szöveg = $"INSERT INTO Cégek (cégid, cég, címe, cég_email, felelős_személy, Felelős_telefonszám, munkaleírás,";
                 szöveg += " mikor, érv_kezdet, érv_vég, Engedélyezés_dátuma, engedélyező, engedély, státus, terület)  VALUES (";
                 szöveg += $"{Adat.Cégid}, "; // cégid
                 szöveg += $"'{Adat.Cég}', "; // cég

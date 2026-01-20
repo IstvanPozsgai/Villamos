@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "lilaakác";
         string hely;
+        readonly string táblanév = "zseltábla";
 
         private void FájlBeállítás(string Telephely, DateTime Dátum, string Napszak)
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Főkönyv_ZSER> Lista_Adatok(string Telephely, DateTime Dátum, string Napszak)
         {
             FájlBeállítás(Telephely, Dátum, Napszak);
-            string szöveg = "SELECT * FROM zseltábla Order By viszonylat,forgalmiszám,tervindulás";
+            string szöveg = $"SELECT * FROM {táblanév} Order By viszonylat,forgalmiszám,tervindulás";
             List<Adat_Főkönyv_ZSER> Adatok = new List<Adat_Főkönyv_ZSER>();
             Adat_Főkönyv_ZSER Adat;
 
@@ -76,7 +77,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Főkönyv_ZSER Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO ZSELtábla (viszonylat, forgalmiszám, tervindulás, tényindulás, tervérkezés, tényérkezés, státus, ";
+                    string szöveg = $"INSERT INTO {táblanév} (viszonylat, forgalmiszám, tervindulás, tényindulás, tervérkezés, tényérkezés, státus, ";
                     szöveg += " szerelvénytípus, kocsikszáma, megjegyzés, kocsi1, kocsi2, kocsi3, kocsi4, kocsi5, kocsi6, ellenőrző, napszak)  VALUES (";
                     szöveg += $"'{Adat.Viszonylat}', '{Adat.Forgalmiszám}', '{Adat.Tervindulás:yyyy.MM.dd HH:mm:ss}', '{Adat.Tényindulás:yyyy.MM.dd HH:mm:ss}', ";
                     szöveg += $"'{Adat.Tervérkezés:yyyy.MM.dd HH:mm:ss}', '{Adat.Tényérkezés:yyyy.MM.dd HH:mm:ss}', '{Adat.Státus}', ";
@@ -103,7 +104,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely, Dátum, Napszak);
 
-                string szöveg = "INSERT INTO ZSELtábla (viszonylat, forgalmiszám, tervindulás, tényindulás, tervérkezés, tényérkezés, státus, ";
+                string szöveg = $"INSERT INTO {táblanév} (viszonylat, forgalmiszám, tervindulás, tényindulás, tervérkezés, tényérkezés, státus, ";
                 szöveg += " szerelvénytípus, kocsikszáma, megjegyzés, kocsi1, kocsi2, kocsi3, kocsi4, kocsi5, kocsi6, ellenőrző, napszak)  VALUES (";
                 szöveg += $"'{Adat.Viszonylat}', '{Adat.Forgalmiszám}', '{Adat.Tervindulás:yyyy.MM.dd HH:mm:ss}', '{Adat.Tényindulás:yyyy.MM.dd HH:mm:ss}', ";
                 szöveg += $"'{Adat.Tervérkezés:yyyy.MM.dd HH:mm:ss}', '{Adat.Tényérkezés:yyyy.MM.dd HH:mm:ss}', '{Adat.Státus}', ";
@@ -128,7 +129,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum, Napszak);
-                string szöveg = "UPDATE zseltábla  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"tényindulás='{Adat.Tényindulás}', ";  // tényindulás
                 szöveg += $"tervérkezés='{Adat.Tervérkezés}', "; // tervérkezés
                 szöveg += $"tényérkezés='{Adat.Tényérkezés}', "; // tényérkezés
@@ -168,7 +169,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Főkönyv_ZSER Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE zseltábla SET ellenőrző='{Adat.Ellenőrző}' ";
+                    string szöveg = $"UPDATE {táblanév} SET ellenőrző='{Adat.Ellenőrző}' ";
                     szöveg += $" WHERE viszonylat='{Adat.Viszonylat}' AND ";
                     szöveg += $" forgalmiszám='{Adat.Forgalmiszám}' AND ";
                     szöveg += $" tervindulás=#{Adat.Tervindulás:yyyy-MM-dd HH:mm:ss}# ";
@@ -195,7 +196,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Főkönyv_ZSER Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE zseltábla SET napszak='{Adat.Napszak}' ";
+                    string szöveg = $"UPDATE {táblanév} SET napszak='{Adat.Napszak}' ";
                     szöveg += $" WHERE viszonylat='{Adat.Viszonylat}' AND ";
                     szöveg += $" forgalmiszám='{Adat.Forgalmiszám}' AND ";
                     szöveg += $" tervindulás=#{Adat.Tervindulás:yyyy-MM-dd HH:mm:ss}# ";
@@ -219,7 +220,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum, Napszak);
-                MyA.ABtörlés(hely, jelszó, "DELETE * FROM zseltábla");
+                MyA.ABtörlés(hely, jelszó, $"DELETE * FROM {táblanév}");
 
             }
             catch (HibásBevittAdat ex)
@@ -238,7 +239,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum, Napszak);
-                string szöveg = $"DELETE FROM zseltábla  WHERE viszonylat='{Adat.Viszonylat}' ";
+                string szöveg = $"DELETE FROM {táblanév}  WHERE viszonylat='{Adat.Viszonylat}' ";
                 szöveg += $" And forgalmiszám='{Adat.Forgalmiszám}' ";
                 szöveg += $" And tervindulás=#{Adat.Tervindulás:MM-dd-yyyy HH:mm:ss}#";
                 MyA.ABtörlés(hely, jelszó, szöveg);

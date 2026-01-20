@@ -21,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Idő_Kor> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM idő_korrekció ";
+            string szöveg = $"SELECT * FROM idő_korrekció ";
             List<Adat_Kiegészítő_Idő_Kor> Adatok = new List<Adat_Kiegészítő_Idő_Kor>();
             Adat_Kiegészítő_Idő_Kor Adat;
 

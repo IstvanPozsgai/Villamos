@@ -56,7 +56,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO beosegéd (beosztáskód, túlóra, kezdőidő, végeidő, túlóraoka, telephely) VALUES (";
+                string szöveg = $"INSERT INTO beosegéd (beosztáskód, túlóra, kezdőidő, végeidő, túlóraoka, telephely) VALUES (";
                 szöveg += $"'{Adat.Beosztáskód}', ";
                 szöveg += $"{Adat.Túlóra}, ";
                 szöveg += $"'{Adat.Kezdőidő:HH:mm:ss}', ";

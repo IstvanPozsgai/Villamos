@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "lilaakác";
         string hely = "";
+        readonly string táblanév = "segédtábla";
 
         private void FájlBeállítás(string Telephely, DateTime Dátum, string Napszak)
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Főkönyv_SegédTábla> Lista_adatok(string Telephely, DateTime Dátum, string Napszak)
         {
             FájlBeállítás(Telephely, Dátum, Napszak);
-            string szöveg = "SELECT * FROM segédtábla ";
+            string szöveg = $"SELECT * FROM {táblanév} ";
             List<Adat_Főkönyv_SegédTábla> Adatok = new List<Adat_Főkönyv_SegédTábla>();
             Adat_Főkönyv_SegédTábla Adat;
 
@@ -57,7 +58,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum, Napszak);
-                string szöveg = $"INSERT INTO segédtábla (id, Bejelentkezésinév) VALUES ({Adat.Id}, '{Adat.Bejelentkezésinév}')";
+                string szöveg = $"INSERT INTO {táblanév} (id, Bejelentkezésinév) VALUES ({Adat.Id}, '{Adat.Bejelentkezésinév}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -77,7 +78,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum, Napszak);
-                string szöveg = "DELETE FROM segédtábla";
+                string szöveg = $"DELETE FROM {táblanév}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

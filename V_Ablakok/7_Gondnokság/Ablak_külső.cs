@@ -2944,7 +2944,7 @@ namespace Villamos
         {
             try
             {
-                //string szöveg = "Select Telephelyek.Telephely, Telephelyek.Státus, Cégek.Engedély, Cégek.Cég, Cégek.Munkaleírás, Dolgozók.Név, Dolgozók.Okmányszám, Dolgozók.Anyjaneve,";
+                //string szöveg = $"SELECT Telephelyek.Telephely, Telephelyek.Státus, Cégek.Engedély, Cégek.Cég, Cégek.Munkaleírás, Dolgozók.Név, Dolgozók.Okmányszám, Dolgozók.Anyjaneve,";
                 //szöveg += " Dolgozók.Születésihely, Dolgozók.Születésiidő, Dolgozók.Státus ";
                 //szöveg += " FROM(Cégek INNER JOIN Telephelyek On Cégek.Cégid = Telephelyek.Cégid) INNER JOIN Dolgozók On Cégek.Cégid = Dolgozók.Cégid ";
                 //szöveg += $" WHERE Telephelyek.Telephely ='{Cmbtelephely.Text.Trim()}' AND Telephelyek.Státus=True And Cégek.Engedély= 5 And ";
@@ -3026,7 +3026,7 @@ namespace Villamos
         {
             try
             {
-                //string szöveg = "Select  Gépjárművek.Frsz, Cégek.Cég, Telephelyek.Telephely,  Cégek.Munkaleírás ";
+                //string szöveg = $"SELECT  Gépjárművek.Frsz, Cégek.Cég, Telephelyek.Telephely,  Cégek.Munkaleírás ";
                 //szöveg += " FROM(Cégek INNER JOIN Telephelyek On Cégek.Cégid = Telephelyek.Cégid) INNER JOIN Gépjárművek On Cégek.Cégid = Gépjárművek.Cégid ";
                 //szöveg += $" WHERE Telephelyek.Telephely ='{Cmbtelephely.Text.Trim()}' And Cégek.Engedély=5 ";
                 //szöveg += " And Gépjárművek.Státus=false And Telephelyek.Státus= True ORDER BY Cégek.Cég, Cégek.Munkaleírás, Gépjárművek.Frsz";

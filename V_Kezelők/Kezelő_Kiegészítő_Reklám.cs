@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Reklám> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM reklámtábla order by méret";
+            string szöveg = $"SELECT * FROM reklámtábla order by méret";
             List<Adat_Kiegészítő_Reklám> Adatok = new List<Adat_Kiegészítő_Reklám>();
             Adat_Kiegészítő_Reklám Adat;
 

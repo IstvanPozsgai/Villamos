@@ -25,7 +25,7 @@ namespace Villamos.Kezelők
             List<Adat_Munkakör> Adatok = new List<Adat_Munkakör>();
             Adat_Munkakör Adat;
 
-            string szöveg = "Select * FROM munkakörtábla";
+            string szöveg = $"SELECT * FROM munkakörtábla";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -61,7 +61,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO munkakörtábla ";
+                string szöveg = $"INSERT INTO munkakörtábla ";
                 szöveg += "(ID,  Megnevezés, PDFfájlnév, státus, telephely,  Hrazonosító, dátum,  rögzítő)";
                 szöveg += " VALUES (";
                 szöveg += $"{Sorszám()}, ";

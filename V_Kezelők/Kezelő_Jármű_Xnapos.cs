@@ -97,7 +97,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO xnapostábla (kezdődátum, végdátum,  azonosító,  hibaleírása) VALUES (";
+                string szöveg = $"INSERT INTO xnapostábla (kezdődátum, végdátum,  azonosító,  hibaleírása) VALUES (";
                 szöveg += $"'{Adat.Kezdődátum}', '{Adat.Végdátum}', ";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Hibaleírása}')";
@@ -119,7 +119,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = "INSERT INTO xnapostábla (kezdődátum, végdátum,  azonosító,  hibaleírása) VALUES (";
+                string szöveg = $"INSERT INTO xnapostábla (kezdődátum, végdátum,  azonosító,  hibaleírása) VALUES (";
                 szöveg += $"'{Adat.Kezdődátum}', '{Adat.Végdátum}', ";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Hibaleírása}')";

@@ -4,8 +4,8 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\CAF\CAF.mdb";
         readonly string jelszó = "CzabalayL";
+        readonly string táblanév = "alap";
 
         public Kezelő_CAF_alap()
         {
@@ -24,9 +25,9 @@ namespace Villamos.Kezelők
         {
             string szöveg;
             if (Aktív)
-                szöveg = "SELECT * FROM alap WHERE törölt=false ORDER BY azonosító";
+                szöveg = $"SELECT * FROM {táblanév} WHERE törölt=false ORDER BY azonosító";
             else
-                szöveg = $"SELECT * FROM alap ORDER BY azonosító";
+                szöveg = $"SELECT * FROM {táblanév} ORDER BY azonosító";
 
             List<Adat_CAF_alap> Adatok = new List<Adat_CAF_alap>();
             Adat_CAF_alap Adat;
@@ -99,7 +100,7 @@ namespace Villamos.Kezelők
             try
             {
                 // új jármű
-                string szöveg = "INSERT INTO alap (azonosító, Ciklusnap, Utolsó_Nap, Utolsó_Nap_sorszám, Végezte_nap, Vizsgdátum_nap, Cikluskm, Utolsó_Km,";
+                string szöveg = $"INSERT INTO {táblanév} (azonosító, Ciklusnap, Utolsó_Nap, Utolsó_Nap_sorszám, Végezte_nap, Vizsgdátum_nap, Cikluskm, Utolsó_Km,";
                 szöveg += " Utolsó_Km_sorszám, Végezte_km, Vizsgdátum_km, számláló, havikm, KMUkm, KMUdátum, fudátum, Teljeskm, Garancia, törölt, típus ) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', "; // azonosító
                 szöveg += $"'{Adat.Ciklusnap}', "; // Ciklusnap
@@ -138,7 +139,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE alap  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"Ciklusnap='{Adat.Ciklusnap}', "; // Ciklusnap
                 szöveg += $"Utolsó_Nap='{Adat.Utolsó_Nap}', "; // Utolsó_Nap
                 szöveg += $"Utolsó_Nap_sorszám={Adat.Utolsó_Nap_sorszám}, "; // Utolsó_Nap_sorszám
@@ -179,7 +180,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_CAF_alap Adat in Adatok)
                 {
-                    string szöveg = "UPDATE alap  SET ";
+                    string szöveg = $"UPDATE {táblanév}  SET ";
                     szöveg += $"havikm={Adat.Havikm}, "; // havikm,
                     szöveg += $"KMUkm={Adat.KMUkm}, ";  // KMUkm
                     szöveg += $"KMUdátum='{Adat.KMUdátum:MM-dd-yyyy}' "; // KMUdátum,
@@ -203,7 +204,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE alap  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $" Utolsó_nap='{Adat.Utolsó_Nap}', "; // vizsgálatot kapott
                 szöveg += $" Utolsó_Nap_sorszám={Adat.Utolsó_Nap_sorszám}, ";  // vizsgálat sorszáma
                 szöveg += $" Vizsgdátum_nap='{Adat.Vizsgdátum_nap:yyyy.MM.dd}', ";
@@ -226,7 +227,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE alap  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $" Utolsó_km='{utolso_nap}', "; // vizsgálatot kapott
                 szöveg += $" Utolsó_km_sorszám={utolso_nap_sorszama}, ";  // vizsgálat sorszáma
                 szöveg += $" Vizsgdátum_km='{vizsgdatum_km:yyyy.MM.dd}', ";
@@ -250,7 +251,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE alap  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $" Utolsó_km='{Adat.Utolsó_Km}', "; // vizsgálatot kapott
                 szöveg += $" Utolsó_km_sorszám={Adat.Utolsó_Km_sorszám}, ";  // vizsgálat sorszáma
                 szöveg += $" Vizsgdátum_km='{Adat.Vizsgdátum_km:yyyy.MM.dd}', ";
@@ -274,7 +275,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE alap  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $" Utolsó_km='{utolso_km}', "; // vizsgálatot kapott
                 szöveg += $" Utolsó_km_sorszám={utolso_km_sorszama}, ";  // vizsgálat sorszáma
                 szöveg += $" Vizsgdátum_km='{vizsgdatum_km:yyyy.MM.dd}', ";

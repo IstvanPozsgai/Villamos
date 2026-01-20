@@ -23,7 +23,7 @@ namespace Villamos.Kezelők
         {
             List<Adat_OktatásiSegéd> Adatok = new List<Adat_OktatásiSegéd>();
             Adat_OktatásiSegéd Adat;
-            string szöveg = "SELECT * FROM Oktatásisegéd";
+            string szöveg = $"SELECT * FROM Oktatásisegéd";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -62,7 +62,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "Update oktatásisegéd SET ";
+                string szöveg = $"UPDATE oktatásisegéd SET ";
                 szöveg += $"oktatásoka='{Adat.Oktatásoka}', ";
                 szöveg += $"oktatástárgya='{Adat.Oktatástárgya}', ";
                 szöveg += $"oktatáshelye='{Adat.Oktatáshelye}', ";
@@ -91,7 +91,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO oktatásisegéd (IDoktatás,  telephely, oktatásoka, oktatástárgya, oktatáshelye, oktatásidőtartama, oktató, oktatóbeosztása, egyébszöveg, email )";
+                string szöveg = $"INSERT INTO oktatásisegéd (IDoktatás,  telephely, oktatásoka, oktatástárgya, oktatáshelye, oktatásidőtartama, oktató, oktatóbeosztása, egyébszöveg, email )";
                 szöveg += $" VALUES ({Adat.IDoktatás}, ";
                 szöveg += $"'{Adat.Telephely}', ";
                 szöveg += $"'{Adat.Oktatásoka}', ";

@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "forgalmiutasítás";
         string hely;
+        readonly string táblanév = "Jogosultságtábla";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -22,7 +23,7 @@ namespace Villamos.Kezelők
         public List<Adat_Belépés_Jogosultságtábla> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = $"SELECT * FROM Jogosultságtábla order by név";
+            string szöveg = $"SELECT * FROM {táblanév} order by név";
             List<Adat_Belépés_Jogosultságtábla> Adatok = new List<Adat_Belépés_Jogosultságtábla>();
             Adat_Belépés_Jogosultságtábla Adat;
 
@@ -58,7 +59,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO Jogosultságtábla (név, Jogkörúj1, Jogkörúj2) ";
+                string szöveg = $"INSERT INTO {táblanév} (név, Jogkörúj1, Jogkörúj2) ";
                 szöveg += $" Values('{Adat.Név}', ";
                 szöveg += $"'{Adat.Jogkörúj1}', ";
                 szöveg += $"'{Adat.Jogkörúj2}' )";
@@ -81,7 +82,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"Update Jogosultságtábla set ";
+                string szöveg = $"Update {táblanév} set ";
                 szöveg += $"jogkörúj1='{Adat.Jogkörúj1}' ";
                 szöveg += $"WHERE név= '{Adat.Név}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -103,7 +104,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"DELETE * From Jogosultságtábla where név='{Adat.Név}'";
+                string szöveg = $"DELETE * From {táblanév} where név='{Adat.Név}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

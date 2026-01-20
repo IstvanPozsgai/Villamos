@@ -22,7 +22,7 @@ namespace Villamos.Kezelők
         public List<Adat_Váltós_Kijelöltnapok> Lista_Adatok(int Év)
         {
             FájlBeállítás(Év);
-            string szöveg = "SELECT * FROM kijelöltnapok ";
+            string szöveg = $"SELECT * FROM kijelöltnapok ";
             List<Adat_Váltós_Kijelöltnapok> Adatok = new List<Adat_Váltós_Kijelöltnapok>();
             Adat_Váltós_Kijelöltnapok Adat;
 
@@ -58,7 +58,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = "INSERT INTO kijelöltnapok (dátum, csoport,  telephely ) VALUES ( ";
+                string szöveg = $"INSERT INTO kijelöltnapok (dátum, csoport,  telephely ) VALUES ( ";
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', ";
                 szöveg += $"'{Adat.Csoport}', ";
                 szöveg += $"'{Adat.Telephely}') ";
@@ -83,7 +83,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Váltós_Kijelöltnapok Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO kijelöltnapok (dátum, csoport,  telephely ) VALUES ( ";
+                    string szöveg = $"INSERT INTO kijelöltnapok (dátum, csoport,  telephely ) VALUES ( ";
                     szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', ";
                     szöveg += $"'{Adat.Csoport}', ";
                     szöveg += $"'{Adat.Telephely}') ";

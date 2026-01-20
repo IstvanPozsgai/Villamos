@@ -82,7 +82,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE tengely SET ";
+                string szöveg = $"UPDATE tengely SET ";
                 szöveg += $" munkaidő={Adat.Munkaidő} ";
                 szöveg += $" WHERE típus='{Adat.Típus.Trim()}' AND Állapot={Adat.Állapot}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

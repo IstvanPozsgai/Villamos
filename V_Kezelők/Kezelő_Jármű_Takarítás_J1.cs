@@ -23,7 +23,7 @@ namespace Villamos.Kezelők
         public List<Adat_Jármű_Takarítás_J1> Lista_Adat(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = "SELECT * FROM J1adatok";
+            string szöveg = $"SELECT * FROM J1adatok";
             List<Adat_Jármű_Takarítás_J1> Adatok = new List<Adat_Jármű_Takarítás_J1>();
             Adat_Jármű_Takarítás_J1 Adat;
 
@@ -59,7 +59,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = "INSERT INTO j1adatok  (dátum, napszak, típus, J1megfelelő, J1nemmegfelelő) VALUES (";
+                string szöveg = $"INSERT INTO j1adatok  (dátum, napszak, típus, J1megfelelő, J1nemmegfelelő) VALUES (";
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', ";
                 szöveg += $"{Adat.Napszak}, ";
                 szöveg += $"'{Adat.Típus}', ";
@@ -83,7 +83,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = "UPDATE j1adatok SET ";
+                string szöveg = $"UPDATE j1adatok SET ";
                 szöveg += $"J1megfelelő={Adat.J1megfelelő}, ";
                 szöveg += $"J1nemmegfelelő={Adat.J1nemmegfelelő} ";
                 szöveg += $" WHERE Dátum =#{Adat.Dátum:M-d-yyyy}# And napszak={Adat.Napszak} And típus='{Adat.Típus}'";

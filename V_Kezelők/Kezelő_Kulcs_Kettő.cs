@@ -60,7 +60,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Kulcs Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO adattábla ";
+                    string szöveg = $"INSERT INTO adattábla ";
                     szöveg += "(adat1, adat2) VALUES ";
                     szöveg += $"('{Adat.Adat1}', ";
                     szöveg += $" '{Adat.Adat2}')";
@@ -83,7 +83,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO adattábla ";
+                string szöveg = $"INSERT INTO adattábla ";
                 szöveg += "(adat1, adat2) VALUES ";
                 szöveg += $"('{Adat.Adat1}', ";
                 szöveg += $" '{Adat.Adat2}')";
@@ -108,7 +108,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Kulcs Adat in Adatok)
                 {
-                    string szöveg = "UPDATE Adattábla SET ";
+                    string szöveg = $"UPDATE Adattábla SET ";
                     szöveg += $" Adat2='{Adat.Adat2}'";
                     szöveg += $" WHERE Adat1 like '%{Adat.Adat1}%'";
                     SzövegGy.Add(szöveg);
@@ -130,7 +130,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE Adattábla SET ";
+                string szöveg = $"UPDATE Adattábla SET ";
                 szöveg += $" Adat2='{Adat.Adat2}'";
                 szöveg += $" WHERE Adat1 like '%{Adat.Adat1}%'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -209,7 +209,7 @@ namespace Villamos.Kezelők
             try
             {
 
-                string szöveg = "INSERT INTO adat ";
+                string szöveg = $"INSERT INTO adat ";
                 szöveg += "(adat1, adat2, adat3 ) VALUES ";
                 szöveg += $"('{Adat.Adat1}', ";
                 szöveg += $" '{Adat.Adat2}', ";

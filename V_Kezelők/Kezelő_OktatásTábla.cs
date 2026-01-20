@@ -63,7 +63,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO Oktatástábla ( IDoktatás, Téma, Kategória, gyakoriság, ismétlődés, státus, dátum, telephely,listázásisorrend, pdffájl )";
+                string szöveg = $"INSERT INTO Oktatástábla ( IDoktatás, Téma, Kategória, gyakoriság, ismétlődés, státus, dátum, telephely,listázásisorrend, pdffájl )";
                 szöveg += $" VALUES ( {Sorszám()}, ";       //IDoktatás
                 szöveg += $"'{Adat.Téma}', ";                   //    Téma
                 szöveg += $"'{Adat.Kategória}', ";    //    Kategória
@@ -92,7 +92,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE Oktatástábla SET ";
+                string szöveg = $"UPDATE Oktatástábla SET ";
                 szöveg += $" téma='{Adat.Téma}', ";
                 szöveg += $" kategória='{Adat.Kategória}', ";
                 szöveg += $" gyakoriság='{Adat.Gyakoriság}', ";

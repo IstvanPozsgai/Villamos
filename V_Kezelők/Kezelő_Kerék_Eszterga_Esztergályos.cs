@@ -83,7 +83,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE Esztergályos SET ";
+                string szöveg = $"UPDATE Esztergályos SET ";
                 szöveg += $"telephely='{Adat.Telephely}', ";
                 szöveg += $"státus={Adat.Státus} ";
                 szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
@@ -104,7 +104,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO Esztergályos (Dolgozószám, dolgozónév, telephely, státus) VALUES (";
+                string szöveg = $"INSERT INTO Esztergályos (Dolgozószám, dolgozónév, telephely, státus) VALUES (";
                 szöveg += $"'{Adat.Dolgozószám}','{Adat.Dolgozónév}','{Adat.Telephely}', {Adat.Státus} )";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

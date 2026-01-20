@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_ICS_előterv> Lista_Adatok(string hely)
         {
-            string szöveg = "SELECT * FROM KMtábla order by vizsgdátumv desc";
+            string szöveg = $"SELECT * FROM KMtábla order by vizsgdátumv desc";
             List<Adat_ICS_előterv> Adatok = new List<Adat_ICS_előterv>();
             Adat_ICS_előterv Adat;
 
@@ -92,7 +92,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_ICS_előterv Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO kmtábla  (ID, azonosító, jjavszám, KMUkm, KMUdátum, ";
+                    string szöveg = $"INSERT INTO kmtábla  (ID, azonosító, jjavszám, KMUkm, KMUdátum, ";
                     szöveg += " vizsgfok,  vizsgdátumk, vizsgdátumv,";
                     szöveg += " vizsgkm, havikm, vizsgsorszám, fudátum, ";
                     szöveg += " Teljeskm, Ciklusrend, V2végezte, KövV2_Sorszám, KövV2, ";

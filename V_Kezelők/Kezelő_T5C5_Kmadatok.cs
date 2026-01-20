@@ -29,7 +29,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_T5C5_Kmadatok> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM kmtábla";
+            string szöveg = $"SELECT * FROM kmtábla";
             List<Adat_T5C5_Kmadatok> Adatok = new List<Adat_T5C5_Kmadatok>();
             Adat_T5C5_Kmadatok Adat;
 
@@ -85,7 +85,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO kmtábla  (ID, azonosító, jjavszám, KMUkm, KMUdátum, ";
+                string szöveg = $"INSERT INTO kmtábla  (ID, azonosító, jjavszám, KMUkm, KMUdátum, ";
                 szöveg += " vizsgfok,  vizsgdátumk, vizsgdátumv,";
                 szöveg += " vizsgkm, havikm, vizsgsorszám, fudátum, ";
                 szöveg += " Teljeskm, Ciklusrend, V2végezte, KövV2_Sorszám, KövV2, ";

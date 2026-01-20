@@ -585,7 +585,7 @@ namespace Villamos.Villamos_Ablakok
                 if (AdatokÁllomány.Count() != 0)
                 {
                     // módosítás
-                    szöveg = "UPDATE Állomány  SET ";
+                    szöveg = $"UPDATE Állomány  SET ";
                     szöveg += "gyártó='" + Gyártó_text.Text.Trim() + "', ";
                     szöveg += "év=" + év + ", ";
                     szöveg += "Ntípus='" + Típus_text.Text.Trim() + "', ";
@@ -596,7 +596,7 @@ namespace Villamos.Villamos_Ablakok
                 else
                 {
                     // új adat
-                    szöveg = "INSERT INTO Állomány (azonosító, gyártó, év, Ntípus, eszközszám, leltári_szám, " +
+                    szöveg = $"INSERT INTO Állomány (azonosító, gyártó, év, Ntípus, eszközszám, leltári_szám, " +
                         "vizsgálatdátuma, vizsgálatfokozata, vizsgálatszáma, utolsóforgalminap, futásnap, km_v, km_u, utolsórögzítés, telephely" +
                         ") VALUES (";
                     szöveg += $"'{Pályaszám.Text.Trim()}', '{Gyártó_text.Text.Trim()}', {év}, '{Típus_text.Text.Trim()}', '{EszkSz_text.Text.Trim()}', '{LeltSz_text.Text.Trim()}',";
@@ -654,7 +654,7 @@ namespace Villamos.Villamos_Ablakok
                 if (AdatTevékenység != null)
                 {
                     // módosítás
-                    szöveg = "UPDATE Tevékenység  SET ";
+                    szöveg = $"UPDATE Tevékenység  SET ";
                     szöveg += $"vizsgálatdátuma_idő=' {Fut_dátum.Value:yyyy.MM.dd}', ";
                     szöveg += $"vizsgálatfokozata= '{Cmb_FutCiklusE.Text.Trim()}', ";
                     szöveg += $"vizsgálatszáma_idő= '{Fut_sorszám.Text.Trim()}',  ";
@@ -664,7 +664,7 @@ namespace Villamos.Villamos_Ablakok
                 else
                 {
                     // új adat
-                    szöveg = "INSERT INTO Tevékenység (azonosító, vizsgálatdátuma, vizsgálatfokozata, vizsgálatszáma, utolsórögzítés) VALUES (";
+                    szöveg = $"INSERT INTO Tevékenység (azonosító, vizsgálatdátuma, vizsgálatfokozata, vizsgálatszáma, utolsórögzítés) VALUES (";
                     szöveg += $"'{Pályaszám.Text.Trim()}', '{Fut_dátum.Value:yyyy.MM.dd}', '{Cmb_FutCiklusE.Text.Trim()}', '{Fut_sorszám.Text.Trim()}', '{DateTime.Now:yyyy.MM.dd}')";
                 }
 
@@ -706,7 +706,7 @@ namespace Villamos.Villamos_Ablakok
                 if (AdatTevékenység != null)
                 {
                     // módosítás
-                    szöveg = "UPDATE Tevékenység  SET ";
+                    szöveg = $"UPDATE Tevékenység  SET ";
                     if (Cmb_KmCiklus_V1_Cnév.Text.Contains("+"))
                     {
                         szöveg += $"vizsgálatdátuma_idő=' {Txt_V1_dátum.Value:yyyy.MM.dd}', ";
@@ -729,7 +729,7 @@ namespace Villamos.Villamos_Ablakok
                 else
                 {
                     // új adat
-                    szöveg = "INSERT INTO Tevékenység (azonosító, gyártó, év, Ntípus, eszközszám, leltári_szám ) VALUES (";
+                    szöveg = $"INSERT INTO Tevékenység (azonosító, gyártó, év, Ntípus, eszközszám, leltári_szám ) VALUES (";
                     szöveg += $"'{Pályaszám.Text.Trim()} ', '{Gyártó_text.Text.Trim()}', '{Év_text.Text.Trim()}', '{Típus_text.Text.Trim()}', '{EszkSz_text.Text.Trim()}', '{LeltSz_text.Text.Trim()}')";
                 }
 
@@ -774,7 +774,7 @@ namespace Villamos.Villamos_Ablakok
                 string szöveg;
                 if (AdatFutás != null)
                 {
-                    szöveg = "UPDATE Futás SET ";
+                    szöveg = $"UPDATE Futás SET ";
                     szöveg += $" dátum='{Nap_Dátum.Value:yyyy.MM.dd}', ";
                     if (Nap_törlés.Checked) szöveg += "státusz=true, ";
                     else szöveg += "státusz=false, ";
@@ -785,7 +785,7 @@ namespace Villamos.Villamos_Ablakok
                 }
                 else
                 {
-                    szöveg = "INSERT INTO futás (azonosító, dátum, státusz, mikor, ki, telephely)  VALUES (";
+                    szöveg = $"INSERT INTO futás (azonosító, dátum, státusz, mikor, ki, telephely)  VALUES (";
                     szöveg += $"'{Nap_azonosító.Text.Trim()}', ";
                     szöveg += $"'{Nap_Dátum.Value:yyyy.MM.dd}', ";
                     if (Nap_törlés.Checked == true) szöveg += " true, ";
@@ -896,7 +896,7 @@ namespace Villamos.Villamos_Ablakok
                     {
                         int KocsiSz = MyX.Beolvas(munkalap, "o" + i).ToÉrt_Int();
                         string[] kocsicell = { "u", "w", "y", "aa", "ac" };
-                        szöveg = "INSERT INTO Futás (azonosító, dátum, státusz,mikor, ki, telephely )  VALUES (";
+                        szöveg = $"INSERT INTO Futás (azonosító, dátum, státusz,mikor, ki, telephely )  VALUES (";
 
                         if (KocsiSz == 1) szöveg += $"'{MyX.Beolvas(munkalap, "s" + i.ToString()).Substring(1).Trim()} ', "; //kocsi          
                         else
@@ -1014,7 +1014,7 @@ namespace Villamos.Villamos_Ablakok
                         DateTime forgnapElőző = alap;
                         if (i > 1) forgnapElőző = Tábla_lekérdezés.Rows[i - 1].Cells[1].Value.ToÉrt_DaTeTime();
 
-                        szöveg = "UPDATE Állomány SET ";
+                        szöveg = $"UPDATE Állomány SET ";
                         szöveg += $"utolsórögzítés='{DateTime.Now}', ";
                         if (forgNap > forgnapElőző) szöveg += $"utolsóforgalminap='{forgNap}', ";
                         else if (forgNap < forgnapElőző) szöveg += $"utolsóforgalminap='{forgnapElőző}', ";
@@ -1026,7 +1026,7 @@ namespace Villamos.Villamos_Ablakok
                     else
                     {
                         nap = 1;
-                        szöveg = "INSERT INTO Tevékenység (azonosító, utolsórögzítés, vizsgálatdátuma_idő, vizsgálatdátuma_km, utolsóforgalminap, vizsgálatfokozata_idő, vizsgálatfokozata_km, vizsgálatszáma, telephely)  VALUES (";
+                        szöveg = $"INSERT INTO Tevékenység (azonosító, utolsórögzítés, vizsgálatdátuma_idő, vizsgálatdátuma_km, utolsóforgalminap, vizsgálatfokozata_idő, vizsgálatfokozata_km, vizsgálatszáma, telephely)  VALUES (";
                         szöveg += $"'{azon.Trim()}', ";
                         szöveg += "'" + DateTime.Now.ToString() + "', ";
                         szöveg += $" '{alap}', ";
@@ -1542,7 +1542,7 @@ namespace Villamos.Villamos_Ablakok
                     while (utolsó + 1 != i)
                     {
                         //UPDATE Állomány SET Év = '1990' where Azonosító = "1305" (UPDATE szintaktika)
-                        szöveg = "UPDATE Állomány SET km_u='";
+                        szöveg = $"UPDATE Állomány SET km_u='";
                         szöveg += MyX.Beolvas(munkalap, "D" + i) + "',";
                         szöveg += $" utolsórögzítés='{DateTime.Today.ToString("yyyy.MM.dd").Trim()}'";
                         szöveg += " WHERE Azonosító='";
@@ -1661,14 +1661,14 @@ namespace Villamos.Villamos_Ablakok
                                 státus = 3; // ha 3,4 státusa akkor nem kell módosítani.
 
                             // rögzítjük a villamos.mdb-be
-                            szöveg = "UPDATE állománytábla SET ";
+                            szöveg = $"UPDATE állománytábla SET ";
                             szöveg += " hibák=" + hiba.ToString() + ", ";
                             szöveg += " státus=" + státus.ToString();
                             szöveg += " WHERE  [azonosító]='" + ideig_psz.Trim() + "'";
                             MyA.ABMódosítás(hely, jelszó, szöveg);
 
                             // beírjuk a hibákat
-                            szöveg = "INSERT INTO hibatábla (létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
+                            szöveg = $"INSERT INTO hibatábla (létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
                             szöveg += "'" + Program.PostásNév.Trim() + "', ";
                             szöveg += " 3, ";
                             szöveg += "'" + kiegSzöveg.Trim() + "', ";
@@ -1714,7 +1714,7 @@ namespace Villamos.Villamos_Ablakok
             //if (AdatTevékenység != null)
             //{
             //    // módosítás
-            //    szöveg = "UPDATE Tevékenység  SET ";
+            //    szöveg = $"UPDATE Tevékenység  SET ";
             //    if (Cmb_KmCiklus_V1_Cnév.Text.Contains("+"))
             //    {
             //        szöveg += $"vizsgálatdátuma_idő=' {Txt_V1_dátum.Value:yyyy.MM.dd}', ";
@@ -1737,7 +1737,7 @@ namespace Villamos.Villamos_Ablakok
             //else
             //{
             //    // új adat
-            //    szöveg = "INSERT INTO Tevékenység (azonosító, gyártó, év, Ntípus, eszközszám, leltári_szám ) VALUES (";
+            //    szöveg = $"INSERT INTO Tevékenység (azonosító, gyártó, év, Ntípus, eszközszám, leltári_szám ) VALUES (";
             //    szöveg += $"'{Pályaszám.Text.Trim()} ', '{Gyártó_text.Text.Trim()}', '{Év_text.Text.Trim()}', '{Típus_text.Text.Trim()}', '{EszkSz_text.Text.Trim()}', '{LeltSz_text.Text.Trim()}')";
             //}
 

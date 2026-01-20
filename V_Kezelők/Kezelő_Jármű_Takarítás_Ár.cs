@@ -56,7 +56,7 @@ namespace Villamos.Kezelők
 
         public void Módosítás(Adat_Jármű_Takarítás_Árak Adat)
         {
-            string szöveg = "UPDATE árak  SET ";
+            string szöveg = $"UPDATE árak  SET ";
             szöveg += $"JárműTípus='{Adat.JárműTípus}', "; // JárműTípus
             szöveg += $"Takarítási_fajta='{Adat.Takarítási_fajta}', "; // Takarítási_fajta
             szöveg += $"napszak={Adat.Napszak}, ";
@@ -72,7 +72,7 @@ namespace Villamos.Kezelők
             List<string> szövegGy = new List<string>();
             foreach (Adat_Jármű_Takarítás_Árak Adat in Adatok)
             {
-                string szöveg = "UPDATE árak  SET ";
+                string szöveg = $"UPDATE árak  SET ";
                 szöveg += $"JárműTípus='{Adat.JárműTípus}', "; // JárműTípus
                 szöveg += $"Takarítási_fajta='{Adat.Takarítási_fajta}', "; // Takarítási_fajta
                 szöveg += $"napszak={Adat.Napszak}, ";
@@ -90,7 +90,7 @@ namespace Villamos.Kezelők
             List<string> szövegGy = new List<string>();
             foreach (Adat_Jármű_Takarítás_Árak Adat in Adatok)
             {
-                string szöveg = "UPDATE árak  SET ";
+                string szöveg = $"UPDATE árak  SET ";
                 szöveg += $"Érv_vég='{Adat.Érv_vég:yyyy.MM.dd}' ";
                 szöveg += $" WHERE id={Adat.Id}";
                 szövegGy.Add(szöveg);
@@ -100,7 +100,7 @@ namespace Villamos.Kezelők
 
         public void Rögzítés(Adat_Jármű_Takarítás_Árak Adat)
         {
-            string szöveg = "INSERT INTO árak (id, JárműTípus, Takarítási_fajta, napszak, ár, Érv_kezdet, Érv_vég ) VALUES (";
+            string szöveg = $"INSERT INTO árak (id, JárműTípus, Takarítási_fajta, napszak, ár, Érv_kezdet, Érv_vég ) VALUES (";
             szöveg += $"{Adat.Id}, "; // id 
             szöveg += $"'{Adat.JárműTípus}', "; // JárműTípus
             szöveg += $"'{Adat.Takarítási_fajta}', "; // Takarítási_fajta
@@ -117,7 +117,7 @@ namespace Villamos.Kezelők
             List<string> szövegGy = new List<string>();
             foreach (Adat_Jármű_Takarítás_Árak Adat in Adatok)
             {
-                string szöveg = "INSERT INTO árak (id, JárműTípus, Takarítási_fajta, napszak, ár, Érv_kezdet, Érv_vég ) VALUES (";
+                string szöveg = $"INSERT INTO árak (id, JárműTípus, Takarítási_fajta, napszak, ár, Érv_kezdet, Érv_vég ) VALUES (";
                 szöveg += $"{Adat.Id}, "; // id 
                 szöveg += $"'{Adat.JárműTípus}', "; // JárműTípus
                 szöveg += $"'{Adat.Takarítási_fajta}', "; // Takarítási_fajta

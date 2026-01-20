@@ -23,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Védő_Könyv> Lista_Adatok(string Telephely)
         {
-            string szöveg = "SELECT * FROM lista  ORDER BY szerszámkönyvszám";
+            string szöveg = $"SELECT * FROM lista  ORDER BY szerszámkönyvszám";
             FájlBeállítás(Telephely);
             List<Adat_Védő_Könyv> Adatok = new List<Adat_Védő_Könyv>();
             Adat_Védő_Könyv Adat;
@@ -60,7 +60,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO lista  (Szerszámkönyvszám, Szerszámkönyvnév, felelős1, státus ) VALUES (";
+                string szöveg = $"INSERT INTO lista  (Szerszámkönyvszám, Szerszámkönyvnév, felelős1, státus ) VALUES (";
                 szöveg += $"'{Adat.Szerszámkönyvszám}', ";
                 szöveg += $"'{Adat.Szerszámkönyvnév}', ";
                 szöveg += $"'{Adat.Felelős1}', ";
@@ -83,7 +83,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE lista  SET ";
+                string szöveg = $"UPDATE lista  SET ";
                 szöveg += $"Szerszámkönyvnév='{Adat.Szerszámkönyvnév}', ";
                 szöveg += $"felelős1='{Adat.Felelős1}', ";
                 szöveg += $"státus={Adat.Státus} ";

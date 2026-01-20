@@ -59,7 +59,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely);
                 // Ha már létezik, akkor módosítjuk
-                string szöveg = "UPDATE állománytábla  SET ";
+                string szöveg = $"UPDATE állománytábla  SET ";
                 szöveg += $"takarítás='{Adat.Takarítás}', "; // takarítás
                 szöveg += $"haromnapos='{Adat.Haromnapos}' "; // haromnapos
                 szöveg += $" WHERE azonosító='{Adat.Azonosító.Trim()}'";
@@ -107,7 +107,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE Állománytábla SET Állománytábla.haromnapos = 99";
+                string szöveg = $"UPDATE Állománytábla SET Állománytábla.haromnapos = 99";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -126,7 +126,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO állománytábla (azonosító, takarítás, haromnapos) VALUES (";
+                string szöveg = $"INSERT INTO állománytábla (azonosító, takarítás, haromnapos) VALUES (";
                 szöveg += $"'{Adat.Azonosító.Trim()}', "; // azonosító
                 szöveg += $"'{Adat.Takarítás}', "; // takarítás
                 szöveg += $"{Adat.Haromnapos}) "; // haromnapos
@@ -153,7 +153,7 @@ namespace Villamos.Kezelők
                 foreach (Adat_Jármű_2 Adat in Adatok)
                 {
                     // ha nem létezik 
-                    string szöveg = "INSERT INTO állománytábla (azonosító, takarítás, haromnapos) VALUES (";
+                    string szöveg = $"INSERT INTO állománytábla (azonosító, takarítás, haromnapos) VALUES (";
                     szöveg += $"'{Adat.Azonosító.Trim()}', "; // azonosító
                     szöveg += $"'{Adat.Takarítás}', "; // takarítás
                     szöveg += $"{Adat.Haromnapos}) "; // haromnapos

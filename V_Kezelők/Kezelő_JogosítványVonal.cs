@@ -62,7 +62,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO jogosítványvonal ( Sorszám, Törzsszám, Jogvonalérv, Jogvonalmegszerzés, Vonalmegnevezés, Vonalszám, státus)";
+                string szöveg = $"INSERT INTO jogosítványvonal ( Sorszám, Törzsszám, Jogvonalérv, Jogvonalmegszerzés, Vonalmegnevezés, Vonalszám, státus)";
                 szöveg += $" VALUES ({Sorszám()},";
                 szöveg += $"'{Adat.Törzsszám}', ";
                 szöveg += $"'{Adat.Jogvonalérv:yyyy.MM.dd}', ";
@@ -86,7 +86,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE jogosítványvonal SET ";
+                string szöveg = $"UPDATE jogosítványvonal SET ";
                 szöveg += $" jogvonalmegszerzés='{Adat.Jogvonalmegszerzés:yyyy.MM.dd}', ";
                 szöveg += $" jogvonalérv='{Adat.Jogvonalérv:yyyy.MM.dd}' ";
                 szöveg += $" WHERE Törzsszám='{Adat.Törzsszám}'  AND vonalszám='{Adat.Vonalszám}'  AND státus=false";
@@ -107,7 +107,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE jogosítványvonal SET státus=true ";
+                string szöveg = $"UPDATE jogosítványvonal SET státus=true ";
                 szöveg += $" WHERE Törzsszám='{Adat.Törzsszám}'  AND vonalszám='{Adat.Vonalszám}'  AND státus=false";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

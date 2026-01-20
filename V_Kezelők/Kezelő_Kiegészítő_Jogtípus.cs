@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Jogtípus> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM jogtípus  order by  sorszám";
+            string szöveg = $"SELECT * FROM jogtípus  order by  sorszám";
             Adat_Kiegészítő_Jogtípus Adat;
             List<Adat_Kiegészítő_Jogtípus> Adatok = new List<Adat_Kiegészítő_Jogtípus>();
 
@@ -72,7 +72,7 @@ namespace Villamos.Kezelők
             try
             {
                 // módosítás
-                string szöveg = "UPDATE jogtípus  SET ";
+                string szöveg = $"UPDATE jogtípus  SET ";
                 szöveg += $" típus='{Adat.Típus}' ";
                 szöveg += $"WHERE sorszám={Adat.Sorszám}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

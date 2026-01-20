@@ -24,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Jármű_Állomány_Típus> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = "Select * FROM típustábla order by id";
+            string szöveg = $"SELECT * FROM típustábla order by id";
 
             List<Adat_Jármű_Állomány_Típus> Adatok = new List<Adat_Jármű_Állomány_Típus>();
             Adat_Jármű_Állomány_Típus Adat;

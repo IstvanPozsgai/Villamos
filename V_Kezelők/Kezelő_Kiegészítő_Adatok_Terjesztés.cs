@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Adatok_Terjesztés> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM Adatok";
+            string szöveg = $"SELECT * FROM Adatok";
             List<Adat_Kiegészítő_Adatok_Terjesztés> Adatok = new List<Adat_Kiegészítő_Adatok_Terjesztés>();
             Adat_Kiegészítő_Adatok_Terjesztés Adat;
 

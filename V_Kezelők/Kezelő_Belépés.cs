@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "forgalmiutasítás";
         string hely;
+        readonly string táblanév = "bejelentkezés";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -18,10 +19,11 @@ namespace Villamos.Kezelők
             //Nincs kidolgozva
             //if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
         }
+
         public List<Adat_Belépés_Bejelentkezés> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = $"SELECT * FROM bejelentkezés";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Belépés_Bejelentkezés> Adatok = new List<Adat_Belépés_Bejelentkezés>();
             Adat_Belépés_Bejelentkezés Adat;
 
@@ -59,7 +61,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"INSERT INTO Bejelentkezés (Név, Jelszó, Jogkör)";
+                string szöveg = $"INSERT INTO {táblanév} (Név, Jelszó, Jogkör)";
                 szöveg += $"Values('{Adat.Név}', ";
                 szöveg += $"'{Adat.Jelszó}', ";
                 szöveg += $"'{Adat.Jogkör}' )";
@@ -82,7 +84,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE Bejelentkezés SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"jelszó='{Adat.Jelszó}' ";
                 szöveg += $"WHERE név='{Adat.Név}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -104,7 +106,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"DELETE * From Bejelentkezés where név='{Adat.Név}'";
+                string szöveg = $"DELETE * From {táblanév} where név='{Adat.Név}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

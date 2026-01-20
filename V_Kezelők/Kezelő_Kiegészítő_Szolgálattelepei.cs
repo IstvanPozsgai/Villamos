@@ -22,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Szolgálattelepei> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM szolgálattelepeitábla order by sorszám";
+            string szöveg = $"SELECT * FROM szolgálattelepeitábla order by sorszám";
             Adat_Kiegészítő_Szolgálattelepei Adat;
             List<Adat_Kiegészítő_Szolgálattelepei> Adatok = new List<Adat_Kiegészítő_Szolgálattelepei>();
 
@@ -59,7 +59,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO szolgálattelepeitábla ( sorszám, szolgálatnév, telephelynév, felelősmunkahely, raktár )";
+                string szöveg = $"INSERT INTO szolgálattelepeitábla ( sorszám, szolgálatnév, telephelynév, felelősmunkahely, raktár )";
                 szöveg += $" VALUES ({Adat.Sorszám}, ";
                 szöveg += $"'{Adat.Szolgálatnév}', ";
                 szöveg += $"'{Adat.Telephelynév}', ";
@@ -82,7 +82,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE szolgálattelepeitábla SET ";
+                string szöveg = $"UPDATE szolgálattelepeitábla SET ";
                 szöveg += $" sorszám={Adat.Sorszám},";
                 szöveg += $" szolgálatnév='{Adat.Szolgálatnév}', ";
                 szöveg += $" felelősmunkahely='{Adat.Felelősmunkahely}', ";

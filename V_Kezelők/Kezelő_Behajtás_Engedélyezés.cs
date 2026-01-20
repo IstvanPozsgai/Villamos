@@ -4,8 +4,8 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\behajtási\Behajtási_alap.mdb";
         readonly string jelszó = "egérpad";
+        readonly string táblanév = "engedélyezés";
 
         public Kezelő_Behajtás_Engedélyezés()
         {
@@ -22,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Behajtás_Engedélyezés> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM engedélyezés ORDER BY id";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY id";
             List<Adat_Behajtás_Engedélyezés> Adatok = new List<Adat_Behajtás_Engedélyezés>();
             Adat_Behajtás_Engedélyezés Adat;
 
@@ -61,7 +62,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO engedélyezés (id, telephely, emailcím, gondnok, szakszolgálat, telefonszám, szakszolgálatszöveg, beosztás, név) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (id, telephely, emailcím, gondnok, szakszolgálat, telefonszám, szakszolgálatszöveg, beosztás, név) VALUES (";
                 szöveg += $"{Sorszám()}, "; // id 
                 szöveg += $"'{Adat.Telephely}', "; // telephely
                 szöveg += $"'{Adat.Emailcím}', "; // emailcím
@@ -118,7 +119,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE engedélyezés SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" telephely='{Adat.Telephely}', "; // telephely
                 szöveg += $" emailcím='{Adat.Emailcím}', "; // emailcím
                 szöveg += $" gondnok={Adat.Gondnok}, ";
@@ -165,7 +166,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM engedélyezés WHERE id={sorszám}";
+                string szöveg = $"DELETE FROM {táblanév} WHERE id={sorszám}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -194,11 +195,11 @@ namespace Villamos.Kezelők
                 if (Elem == null || Előző == null) throw new HibásBevittAdat("Az első elemet nem lehet előrébb helyezni.");
 
                 List<string> SzövegGy = new List<string>();
-                string szöveg = $"UPDATE engedélyezés SET id=0 WHERE id={Elem.Id}";
+                string szöveg = $"UPDATE {táblanév} SET id=0 WHERE id={Elem.Id}";
                 SzövegGy.Add(szöveg);
-                szöveg = $"UPDATE engedélyezés SET id={Elem.Id} WHERE id={Előző.Id}";
+                szöveg = $"UPDATE {táblanév} SET id={Elem.Id} WHERE id={Előző.Id}";
                 SzövegGy.Add(szöveg);
-                szöveg = $"UPDATE engedélyezés SET id={Előző.Id} WHERE id=0";
+                szöveg = $"UPDATE {táblanév} SET id={Előző.Id} WHERE id=0";
                 SzövegGy.Add(szöveg);
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
             }
@@ -213,5 +214,4 @@ namespace Villamos.Kezelők
             }
         }
     }
-
 }

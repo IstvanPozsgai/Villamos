@@ -4,8 +4,8 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "gémkapocs";
         string hely;
+        readonly string táblanév = "fortekiadástábla";
 
         private void FájlBeállítás(int Év)
         {
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_Forte_Kiadási_Adatok> Lista_Adatok(int Év)
         {
             FájlBeállítás(Év);
-            string szöveg = "SELECT * FROM fortekiadástábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Forte_Kiadási_Adatok> Adatok = new List<Adat_Forte_Kiadási_Adatok>();
             Adat_Forte_Kiadási_Adatok Adat;
 
@@ -65,7 +66,7 @@ namespace Villamos.Kezelők
             List<string> SzövegGy = new List<string>();
             foreach (Adat_Forte_Kiadási_Adatok Adat in Adatok)
             {
-                string szöveg = "INSERT INTO fortekiadástábla  (dátum, napszak, telephelyforte, típusforte, telephely, típus, kiadás, munkanap  ) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév}  (dátum, napszak, telephelyforte, típusforte, telephely, típus, kiadás, munkanap  ) VALUES (";
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', ";
                 szöveg += $"'{Adat.Napszak}', ";
                 szöveg += $"'{Adat.Telephelyforte}', ";
@@ -88,7 +89,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Forte_Kiadási_Adatok Adat in Adatok)
                 {
-                    string szöveg = "UPDATE fortekiadástábla  SET ";
+                    string szöveg = $"UPDATE {táblanév}  SET ";
                     szöveg += $"telephely='{Adat.Telephely}', ";
                     szöveg += $"típus='{Adat.Típus}' ";
                     szöveg += $" WHERE [dátum]=#{Adat.Dátum:M-d-yy}# AND napszak='{Adat.Napszak}' AND ";
@@ -119,7 +120,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = "UPDATE fortekiadástábla  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"munkanap={munkanap}";
                 szöveg += $" WHERE [dátum]=#{Dátum:M-d-yy}#";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -140,7 +141,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = $"DELETE FROM fortekiadástábla where [dátum]=#{Dátum:M-d-yy}#";
+                string szöveg = $"DELETE FROM {táblanév} where [dátum]=#{Dátum:M-d-yy}#";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

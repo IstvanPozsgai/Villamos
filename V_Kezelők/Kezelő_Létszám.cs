@@ -61,7 +61,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE Alaplista SET  ";
+                string szöveg = $"UPDATE Alaplista SET  ";
                 szöveg += $" Csoportnév='{Adat.Csoportnév}', ";
                 szöveg += $" oszlop='{Adat.Oszlop}', ";
                 szöveg += $" sor={Adat.Sor}, ";
@@ -87,8 +87,8 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO Változatok (Azonosító, változatnév) VALUES (";
-                szöveg = "INSERT INTO Alaplista ";
+                string szöveg = $"INSERT INTO Változatok (Azonosító, változatnév) VALUES (";
+                szöveg = $"INSERT INTO Alaplista ";
                 szöveg += "( id, csoportnév, oszlop, sor, szélesség, Változatnév) VALUES (";
                 szöveg += $"{Sorszám(hely)},";
                 szöveg += $" '{Adat.Csoportnév}',";

@@ -25,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_Oktatás_Napló> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = "SELECT * FROM oktatásnapló ";
+            string szöveg = $"SELECT * FROM oktatásnapló ";
             List<Adat_Oktatás_Napló> Adatok = new List<Adat_Oktatás_Napló>();
             Adat_Oktatás_Napló Adat;
 
@@ -69,7 +69,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = "INSERT INTO Oktatásnapló";
+                string szöveg = $"INSERT INTO Oktatásnapló";
                 szöveg += "( Id, Hrazonosító, IDoktatás, oktatásdátuma, kioktatta, rögzítésdátuma, telephely, PDFfájlneve, Számonkérés, státus, rögzítő, megjegyzés)";
                 szöveg += " VALUES (";
                 szöveg += $"{Sorszám(Telephely, Év)}, "; //id
@@ -106,7 +106,7 @@ namespace Villamos.Kezelők
 
                 foreach (Adat_Oktatás_Napló Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO Oktatásnapló";
+                    string szöveg = $"INSERT INTO Oktatásnapló";
                     szöveg += "( Id, Hrazonosító, IDoktatás, oktatásdátuma, kioktatta, rögzítésdátuma, telephely, PDFfájlneve, Számonkérés, státus, rögzítő, megjegyzés)";
                     szöveg += " VALUES (";
                     szöveg += $"{sorszám}, "; //id

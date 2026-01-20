@@ -24,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Hétvége_Előírás> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = "Select * FROM előírás ORDER BY id";
+            string szöveg = $"SELECT * FROM előírás ORDER BY id";
             List<Adat_Hétvége_Előírás> Adatok = new List<Adat_Hétvége_Előírás>();
             Adat_Hétvége_Előírás Adat;
 
@@ -62,7 +62,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE előírás SET ";
+                string szöveg = $"UPDATE előírás SET ";
                 szöveg += $" vonal='{Adat.Vonal}', ";
                 szöveg += $" mennyiség={Adat.Mennyiség},  ";
                 szöveg += $" red={Adat.Red},  ";
@@ -87,7 +87,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO előírás (id, vonal, mennyiség, red, green, blue ) VALUES (";
+                string szöveg = $"INSERT INTO előírás (id, vonal, mennyiség, red, green, blue ) VALUES (";
                 szöveg += $"{Sorszám(Telephely)}, ";
                 szöveg += $"'{Adat.Vonal}', ";
                 szöveg += $"{Adat.Mennyiség}, ";

@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Turnusok> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM turnusok order by csoport";
+            string szöveg = $"SELECT * FROM turnusok order by csoport";
             Adat_Kiegészítő_Turnusok Adat;
             List<Adat_Kiegészítő_Turnusok> Adatok = new List<Adat_Kiegészítő_Turnusok>();
 

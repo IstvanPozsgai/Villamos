@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -65,7 +65,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = $"DELETE FROM típuscseretábla WHERE [dátum]=#{Adat.Dátum:M-d-yy}#";
+                string szöveg = $"DELETE FROM {táblanév} WHERE [dátum]=#{Adat.Dátum:M-d-yy}#";
                 if (Adat.Napszak.Trim() != "")
                     szöveg += $" and napszak='{Adat.Napszak}'";
                 szöveg += $" and telephely='{Adat.Telephely}'";

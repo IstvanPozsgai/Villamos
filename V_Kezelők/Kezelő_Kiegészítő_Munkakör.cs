@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Munkakör> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM Munkakör  order by  kategória, Megnevezés";
+            string szöveg = $"SELECT * FROM Munkakör  order by  kategória, Megnevezés";
             List<Adat_Kiegészítő_Munkakör> Adatok = new List<Adat_Kiegészítő_Munkakör>();
             Adat_Kiegészítő_Munkakör Adat;
 

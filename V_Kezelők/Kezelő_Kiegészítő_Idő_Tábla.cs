@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Idő_Tábla> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM időtábla";
+            string szöveg = $"SELECT * FROM időtábla";
             List<Adat_Kiegészítő_Idő_Tábla> Adatok = new List<Adat_Kiegészítő_Idő_Tábla>();
             Adat_Kiegészítő_Idő_Tábla Adat;
 

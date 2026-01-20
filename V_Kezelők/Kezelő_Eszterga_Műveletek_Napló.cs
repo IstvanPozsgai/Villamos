@@ -23,7 +23,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Eszterga_Karbantartás
         public List<Adat_Eszterga_Muveletek_Naplo> Lista_Adatok(int Év)
         {
             FájlBeállítás(Év);
-            string szoveg = "SELECT * FROM Műveletek_Napló ORDER BY ID ";
+            string szoveg = $"SELECT * FROM Műveletek_Napló ORDER BY ID ";
             List<Adat_Eszterga_Muveletek_Naplo> Adatok = new List<Adat_Eszterga_Muveletek_Naplo>();
             Adat_Eszterga_Muveletek_Naplo Adat;
 

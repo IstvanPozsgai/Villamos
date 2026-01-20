@@ -23,7 +23,7 @@ namespace Villamos.Kezelők
         public List<Adat_Kiadás_összesítő> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = "SELECT * FROM tábla  ";
+            string szöveg = $"SELECT * FROM tábla  ";
 
             List<Adat_Kiadás_összesítő> Adatok = new List<Adat_Kiadás_összesítő>();
             Adat_Kiadás_összesítő Adat;
@@ -86,7 +86,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = "INSERT INTO tábla (dátum, napszak, típus, forgalomban, tartalék, kocsiszíni, félreállítás, főjavítás, személyzet) VALUES (";
+                string szöveg = $"INSERT INTO tábla (dátum, napszak, típus, forgalomban, tartalék, kocsiszíni, félreállítás, főjavítás, személyzet) VALUES (";
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', ";
                 szöveg += $"'{Adat.Napszak}', ";
                 szöveg += $"'{Adat.Típus}', ";

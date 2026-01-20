@@ -58,7 +58,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO Állománytábla  (azonosító, takarítás, E2, E3 ) VALUES (";
+                string szöveg = $"INSERT INTO Állománytábla  (azonosító, takarítás, E2, E3 ) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', '1900.01.01',{Adat.E2}, {Adat.E3})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

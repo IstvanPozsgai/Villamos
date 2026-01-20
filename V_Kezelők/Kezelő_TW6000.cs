@@ -60,7 +60,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO alap (azonosító, start, ciklusrend, megállítás, kötöttstart, vizsgsorszám, vizsgnév, vizsgdátum) VALUES (";
+                string szöveg = $"INSERT INTO alap (azonosító, start, ciklusrend, megállítás, kötöttstart, vizsgsorszám, vizsgnév, vizsgdátum) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Start:yyyy.MM.dd}', ";
                 szöveg += $"'{Adat.Ciklusrend}', ";
@@ -86,7 +86,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE alap SET ";
+                string szöveg = $"UPDATE alap SET ";
                 szöveg += $" Start='{Adat.Start:yyyy.MM.dd}', ";
                 szöveg += $" ciklusrend='{Adat.Ciklusrend}', ";
                 szöveg += $" megállítás={Adat.Megállítás}, ";

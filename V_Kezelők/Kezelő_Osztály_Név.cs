@@ -25,7 +25,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Osztály_Név> Lista_Adat()
         {
-            string szöveg = "SELECT * FROM osztálytábla order by id";
+            string szöveg = $"SELECT * FROM osztálytábla order by id";
             List<Adat_Osztály_Név> Adatok = new List<Adat_Osztály_Név>();
             Adat_Osztály_Név Adat;
 
@@ -60,7 +60,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE  osztálytábla SET";
+                string szöveg = $"UPDATE  osztálytábla SET";
                 szöveg += $" osztálynév='{Adat.Osztálynév}', ";
                 szöveg += $" osztálymező='{Adat.Osztálymező}', ";
                 szöveg += $" használatban={Adat.Használatban} ";
@@ -82,7 +82,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO osztálytábla (id, osztálynév, osztálymező, használatban) VALUES (";
+                string szöveg = $"INSERT INTO osztálytábla (id, osztálynév, osztálymező, használatban) VALUES (";
                 szöveg += $"{Adat.Id}, ";
                 szöveg += $"'{Adat.Osztálynév}', ";
                 szöveg += $"'{Adat.Osztálymező}', ";

@@ -124,7 +124,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGY = new List<string>();
                 foreach (Adat_Kerék_Tábla Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO tábla (kerékberendezés, kerékmegnevezés, kerékgyártásiszám, föléberendezés, azonosító, pozíció, objektumfajta, dátum) VALUES (";
+                    string szöveg = $"INSERT INTO tábla (kerékberendezés, kerékmegnevezés, kerékgyártásiszám, föléberendezés, azonosító, pozíció, objektumfajta, dátum) VALUES (";
                     szöveg += $"'{Adat.Kerékberendezés}', "; // kerékberendezés
                     szöveg += $"'{Adat.Kerékmegnevezés}', "; // kerékmegnevezés
                     szöveg += $"'{Adat.Kerékgyártásiszám}', "; // kerékgyártásiszám

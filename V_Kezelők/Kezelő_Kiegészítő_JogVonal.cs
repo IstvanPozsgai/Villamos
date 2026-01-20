@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Jogvonal> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM jogvonal  order by  sorszám";
+            string szöveg = $"SELECT * FROM jogvonal  order by  sorszám";
             Adat_Kiegészítő_Jogvonal Adat;
             List<Adat_Kiegészítő_Jogvonal> Adatok = new List<Adat_Kiegészítő_Jogvonal>();
 
@@ -72,7 +72,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE jogvonal  SET ";
+                string szöveg = $"UPDATE jogvonal  SET ";
                 szöveg += $" Szám='{Adat.Szám}', ";
                 szöveg += $" megnevezés='{Adat.Megnevezés}' ";
                 szöveg += $"WHERE sorszám={Adat.Sorszám}";

@@ -22,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Technológia_Alap> Lista_Adatok()
         {
-            string szöveg = "SELECT *  FROM Típus_tábla ORDER BY típus";
+            string szöveg = $"SELECT *  FROM Típus_tábla ORDER BY típus";
             List<Adat_Technológia_Alap> Adatok = new List<Adat_Technológia_Alap>();
             Adat_Technológia_Alap Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";

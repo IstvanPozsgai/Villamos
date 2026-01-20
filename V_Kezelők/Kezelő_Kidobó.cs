@@ -93,7 +93,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                string szöveg = "UPDATE kidobótábla  SET ";
+                string szöveg = $"UPDATE kidobótábla  SET ";
                 szöveg += $"Kezdéshely='{Adat.Kezdéshely}', ";
                 szöveg += $"Végzéshely='{Adat.Végzéshely}', ";
                 szöveg += $"megjegyzés='{Adat.Megjegyzés}', ";
@@ -121,7 +121,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Kidobó Adat in Adatok)
                 {
-                    string szöveg = "UPDATE kidobótábla  SET ";
+                    string szöveg = $"UPDATE kidobótábla  SET ";
                     szöveg += $"Kezdéshely='{Adat.Kezdéshely}', ";
                     szöveg += $"Végzéshely='{Adat.Végzéshely}', ";
                     szöveg += $"megjegyzés='{Adat.Megjegyzés}', ";
@@ -151,7 +151,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Kidobó Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO Kidobótábla (viszonylat, forgalmiszám, szolgálatiszám, ";
+                    string szöveg = $"INSERT INTO Kidobótábla (viszonylat, forgalmiszám, szolgálatiszám, ";
                     szöveg += " jvez, kezdés, végzés, ";
                     szöveg += " Kezdéshely, Végzéshely, Kód, ";
                     szöveg += " Tárolásihely, Villamos, Megjegyzés, ";

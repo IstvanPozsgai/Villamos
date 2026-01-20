@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\belépés.mdb";
         readonly string jelszó = "forgalmiutasítás";
-
+        readonly string táblanév = "Verzió";
         public Kezelő_Belépés_Verzió()
         {
             // Nincs kidolgozva
@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Belépés_Verzió> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM Verzió";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Belépés_Verzió> Adatok = new List<Adat_Belépés_Verzió>();
             Adat_Belépés_Verzió Adat;
 
@@ -53,7 +53,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO Verzió (id, verzió ) VALUES ({Adat.Id}, {Adat.Verzió})";
+                string szöveg = $"INSERT INTO {táblanév} (id, verzió ) VALUES ({Adat.Id}, {Adat.Verzió})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -71,7 +71,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE Verzió SET verzió={Adat.Verzió}  WHERE ID={Adat.Id}";
+                string szöveg = $"UPDATE {táblanév} SET verzió={Adat.Verzió}  WHERE ID={Adat.Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

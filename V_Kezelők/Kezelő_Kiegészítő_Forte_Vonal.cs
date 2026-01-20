@@ -21,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Forte_Vonal> Lista_Adatok()
         {
-            string szöveg = "Select * FROM fortevonal order by fortevonal";
+            string szöveg = $"SELECT * FROM fortevonal order by fortevonal";
             List<Adat_Kiegészítő_Forte_Vonal> Adatok = new List<Adat_Kiegészítő_Forte_Vonal>();
             Adat_Kiegészítő_Forte_Vonal Adat;
 

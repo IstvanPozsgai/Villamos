@@ -4,8 +4,8 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "pozsgaii";
         string hely;
+        readonly string táblanév = "tábla";
 
         private void FájlBeállítás(int Év)
         {
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_Főkönyv_Zser_Km> Lista_adatok(int Év)
         {
             FájlBeállítás(Év);
-            string szöveg = "SELECT * FROM tábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Főkönyv_Zser_Km> Adatok = new List<Adat_Főkönyv_Zser_Km>();
             Adat_Főkönyv_Zser_Km Adat;
 
@@ -80,7 +81,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Dátum.Year);
-                string szöveg = $"DELETE FROM tábla WHERE telephely='{Telephely}' AND dátum=#{Dátum:MM-dd-yyyy}#";
+                string szöveg = $"DELETE FROM {táblanév} WHERE telephely='{Telephely}' AND dátum=#{Dátum:MM-dd-yyyy}#";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -102,7 +103,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Főkönyv_Zser_Km Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO tábla (azonosító, dátum, napikm, telephely ) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (azonosító, dátum, napikm, telephely ) VALUES (";
                     szöveg += $"'{Adat.Azonosító}', '{Adat.Dátum:yyyy.MM.dd}', {Adat.Napikm}, '{Adat.Telephely}')";
                     SzövegGy.Add(szöveg);
                 }
