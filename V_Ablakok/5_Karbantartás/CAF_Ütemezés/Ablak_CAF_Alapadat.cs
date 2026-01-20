@@ -183,7 +183,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 AdatokZser = KézZSerKm.Lista_adatok(DateTime.Today.Year - 1);
                 List<Adat_Főkönyv_Zser_Km> Ideig = KézZSerKm.Lista_adatok(DateTime.Today.Year);
                 AdatokZser.AddRange(Ideig);
-                DateTime Kezdődik = DateTime.Now;
+                
                 if (Adatok != null)
                 {
                     Holtart.Be();
@@ -232,16 +232,19 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                     KézCAFAlap.Módosítás_kmAdat(AdatokGy);
 
                     //Frissítem a km adatokat a CAF_KM_Attekintes táblában
-                    Kezdődik = DateTime.Now;
+                 
                     foreach (Adat_CAF_alap rekord in Adatok)
                     {
+                        DateTime Kezdődik = DateTime.Now;
                         Holtart.Lép();
                         KézCafKm.Erteket_Frissit_Osszes(rekord.Azonosító);
+                        DateTime Vége = DateTime.Now;
+                      //  MessageBox.Show($"Az adatok rögzítése befejeződött!\n{(Vége - Kezdődik)}", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 Holtart.Ki();
-                DateTime Vége = DateTime.Now;
-                MessageBox.Show($"Az adatok rögzítése befejeződött!\n{(Vége - Kezdődik)}", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+               
+                MessageBox.Show($"Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {

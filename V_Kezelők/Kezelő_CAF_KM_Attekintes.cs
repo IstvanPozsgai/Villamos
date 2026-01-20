@@ -309,7 +309,11 @@ namespace Villamos.Kezelők
                                                        .OrderByDescending(a => a.Dátum)
                                                        .FirstOrDefault();
             // Visszaadja a következő P vizsgálat KM várt értékét.
-            return ((Adott_Villamos.KM_Sorszám + 1) * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
+          
+            if (Adott_Villamos != null)
+                return ((Adott_Villamos.KM_Sorszám + 1) * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
+            else
+                return 0;
         }
 
         // Visszaadja, hogy a villamos a legutolsó teljesített vizsgálat során az előírt számlálóhoz képest milyen állással teljesítette azt.
@@ -319,7 +323,10 @@ namespace Villamos.Kezelők
                                                        .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.Megjegyzés != "Ütemezési Segéd")
                                                        .OrderByDescending(a => a.Dátum)
                                                        .FirstOrDefault();
-            return (Adott_Villamos.KM_Sorszám * Vizsgalatok_Kozott_Megteheto_Km - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam));
+            if (Adott_Villamos != null)
+                return (Adott_Villamos.KM_Sorszám * Vizsgalatok_Kozott_Megteheto_Km - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam));
+            else
+                return 0;
         }
 
         // Ez már benne van a kezelőben félig meddig, overload-olva beleteszem ezt a verziót is később
@@ -341,13 +348,16 @@ namespace Villamos.Kezelők
             Adat_CAF_Adatok Adott_Villamos = osszes_adat
                                                        .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.Megjegyzés != "Ütemezési Segéd")
                                                        .OrderByDescending(a => a.Dátum)
-                                                       .First();
+                                                       .FirstOrDefault();
+            if (Adott_Villamos != null)
             // Ha 5-el osztható, de 20-al nem, akkor P1 vizsgálat.
-            for (int i = Adott_Villamos.KM_Sorszám; i < 80; i++)
             {
-                if (i % 5 == 0 && i % 20 != 0)
+                for (int i = Adott_Villamos.KM_Sorszám; i < 80; i++)
                 {
-                    return (i * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
+                    if (i % 5 == 0 && i % 20 != 0)
+                    {
+                        return (i * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
+                    }
                 }
             }
             return 0;
@@ -359,13 +369,16 @@ namespace Villamos.Kezelők
             Adat_CAF_Adatok Adott_Villamos = osszes_adat
                                                        .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.Megjegyzés != "Ütemezési Segéd")
                                                        .OrderByDescending(a => a.Dátum)
-                                                       .First();
+                                                       .FirstOrDefault();
+            if (Adott_Villamos != null)
             // Ha csak 20-al osztható, akkor P2/P3 vizsgálat.
-            for (int i = Adott_Villamos.KM_Sorszám; i < 80; i++)
             {
-                if (i % 20 == 0)
+                for (int i = Adott_Villamos.KM_Sorszám; i < 80; i++)
                 {
-                    return (i * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
+                    if (i % 20 == 0)
+                    {
+                        return (i * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
+                    }
                 }
             }
             return 0;
@@ -537,10 +550,11 @@ namespace Villamos.Kezelők
 
             List<int> azonositoLista = OsszesPalyaszam();
             //Pozsi: Itt megint végigmenjünk a lista összes pályaszámát.
-            for (int i = 0; i <= azonositoLista.Count() - 1; i++)
+            List<Adat_CAF_Adatok> Lista_Adatok = KézAdatok.Lista_Adatok();
+            for (int i = 0; i < azonositoLista.Count() ; i++)
             {
                 string Palyaszam = $"{azonositoLista[i]}";
-                if (KézAdatok.Lista_Adatok().FirstOrDefault(a => a.Azonosító == Palyaszam && a.IDŐvKM == 2) == null)
+                if (Lista_Adatok.FirstOrDefault(a => a.Azonosító == Palyaszam && a.IDŐvKM == 2) == null)
                 {
                     NemTortentPvizsgalat.Add(Palyaszam.ToÉrt_Int());
                 }
