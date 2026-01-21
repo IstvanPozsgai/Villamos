@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
     public class Kezelő_ICS_előterv
     {
         readonly string jelszó = "pocsaierzsi";
-
+        //ITT TARTOK
         private void FájlBeállítás(string hely)
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.ElőtervkmfutástáblaICS(hely.KönyvSzerk());

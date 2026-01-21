@@ -14,7 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "pozsgaii";
         string hely;
-        // ITT TARTOK
+        readonly string táblanév = "beosztás";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -25,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_Hétvége_Beosztás> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = $"SELECT * FROM beosztás order by vonal,id";
+            string szöveg = $"SELECT * FROM {táblanév} order by vonal,id";
             List<Adat_Hétvége_Beosztás> Adatok = new List<Adat_Hétvége_Beosztás>();
             Adat_Hétvége_Beosztás Adat;
 
@@ -71,7 +71,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"DELETE FROM beosztás ";
+                string szöveg = $"DELETE FROM {táblanév} ";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -90,7 +90,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"DELETE FROM beosztás where kocsi1='{Azonosító}'";
+                string szöveg = $"DELETE FROM {táblanév} where kocsi1='{Azonosító}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -109,7 +109,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"INSERT INTO beosztás (id, vonal, kocsi1, kocsi2, kocsi3, kocsi4, kocsi5, kocsi6, vissza1, vissza2, vissza3, vissza4, vissza5, vissza6) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (id, vonal, kocsi1, kocsi2, kocsi3, kocsi4, kocsi5, kocsi6, vissza1, vissza2, vissza3, vissza4, vissza5, vissza6) VALUES (";
                 szöveg += $"{Sorszám(Telephely)}, ";
                 szöveg += $"'{Adat.Vonal}', ";
                 szöveg += $"'{Adat.Kocsi1}', ";
@@ -142,7 +142,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE beosztás SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" vonal ='{Adat.Vonal}', ";
                 szöveg += $" Kocsi2 ='{Adat.Kocsi2}', ";
                 szöveg += $" Kocsi3 ='{Adat.Kocsi3}', ";
