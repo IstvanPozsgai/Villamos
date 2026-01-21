@@ -74,9 +74,6 @@ namespace Villamos
                 Alapadatokfeltöltése();
 
                 // GOMBOK láthstódágának korlátozása
-                BtnOktatásÚj.Visible = false;
-                BtnkérelemRögzítés.Visible = false;
-                BtnKérelemPDF.Visible = false;
                 BtnSzakszeng.Visible = false;
                 Elutasít_gomb.Visible = false;
                 BtnDolgozóilsta.Visible = false;
@@ -91,9 +88,6 @@ namespace Villamos
                 if (Program.PostásTelephely == "Főmérnökség")
                 {
                     // Főmérnökségi funciók bekapcsolása
-                    BtnOktatásÚj.Visible = true;
-                    BtnkérelemRögzítés.Visible = true;
-                    BtnKérelemPDF.Visible = true;
                     BtnSzakszeng.Visible = true;
                     Elutasít_gomb.Visible = true;
                     BtnDolgozóilsta.Visible = true;
