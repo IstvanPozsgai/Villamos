@@ -595,6 +595,13 @@ namespace Villamos
             }
         }
 
+        private void TxtkérelemHR_Leave(object sender, EventArgs e)
+        {
+            FrissítésGombEseménye();
+            AutókSzámaLekérdezés();
+            AutókRendszámaLekérdezés();
+        }
+
         private void FrissítésGombEseménye()
         {
             try
@@ -638,6 +645,7 @@ namespace Villamos
             CmbKérelemTípus.Text = CmbKérelemTípus.Items[0].ToString();
             DatÉrvényes.Value = DatadminÉrvényes.Value;
             Kérelemalaptábla();
+            TxtkérelemHR.Focus();
         }
 
         private void Kérelemújraírás()
@@ -3348,5 +3356,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+  
     }
 }
