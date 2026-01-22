@@ -497,6 +497,7 @@ namespace Villamos
                 List<Adat_Főkönyv_Nap> Adatok = FN_Kéz.Lista_Adatok(Választott_Telephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
                 Adatok = (from a in Adatok
                           where a.Viszonylat != "-"
+                          && a.Napszak.Trim () == (Délelőtt.Checked ? "DE" : "DU")
                           orderby a.Viszonylat, a.Tényindulás, a.Forgalmiszám, a.Azonosító
                           select a).ToList();
                 // típusokat letároljuk

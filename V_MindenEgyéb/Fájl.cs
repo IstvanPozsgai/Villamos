@@ -218,6 +218,7 @@ public static partial class Függvénygyűjtemény
                 // Ha a spoolerhez nem férünk hozzá, inkább ne töröljük vakon.
                 törlés = false;
                 // Log ide...
+                MessageBox.Show($"Hiba a(z) {Fájl} fájl nyomtatása közben: {spoolEx.Message}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             // Fájl törlése
