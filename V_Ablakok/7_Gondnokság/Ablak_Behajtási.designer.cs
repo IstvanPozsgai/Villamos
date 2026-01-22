@@ -99,7 +99,7 @@ namespace Villamos
             this.Btn2szak = new System.Windows.Forms.Button();
             this.Btn1szak = new System.Windows.Forms.Button();
             this.BtnKérelemPDF = new System.Windows.Forms.Button();
-            this.BtnÖsszSzabiLista = new System.Windows.Forms.Button();
+            this.BtnNévFrszFrissítés = new System.Windows.Forms.Button();
             this.BtnOktatásÚj = new System.Windows.Forms.Button();
             this.BtnkérelemRögzítés = new System.Windows.Forms.Button();
             this.PDF = new System.Windows.Forms.TabPage();
@@ -482,7 +482,7 @@ namespace Villamos
             this.Kérelem.Controls.Add(this.Btn2szak);
             this.Kérelem.Controls.Add(this.Btn1szak);
             this.Kérelem.Controls.Add(this.BtnKérelemPDF);
-            this.Kérelem.Controls.Add(this.BtnÖsszSzabiLista);
+            this.Kérelem.Controls.Add(this.BtnNévFrszFrissítés);
             this.Kérelem.Controls.Add(this.BtnOktatásÚj);
             this.Kérelem.Controls.Add(this.BtnkérelemRögzítés);
             this.Kérelem.Location = new System.Drawing.Point(4, 29);
@@ -749,7 +749,7 @@ namespace Villamos
             this.TxtkérelemHR.Name = "TxtkérelemHR";
             this.TxtkérelemHR.Size = new System.Drawing.Size(173, 26);
             this.TxtkérelemHR.TabIndex = 0;
-            this.TxtkérelemHR.Leave += new System.EventHandler(this.TxtkérelemHR_Leave);
+            this.TxtkérelemHR.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.TxtkérelemHR_PreviewKeyDown);
             // 
             // LblKérelemDolgozóNév
             // 
@@ -844,17 +844,17 @@ namespace Villamos
             this.BtnKérelemPDF.UseVisualStyleBackColor = true;
             this.BtnKérelemPDF.Click += new System.EventHandler(this.BtnKérelemPDF_Click);
             // 
-            // BtnÖsszSzabiLista
+            // BtnNévFrszFrissítés
             // 
-            this.BtnÖsszSzabiLista.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.BtnÖsszSzabiLista.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnÖsszSzabiLista.Location = new System.Drawing.Point(731, 49);
-            this.BtnÖsszSzabiLista.Name = "BtnÖsszSzabiLista";
-            this.BtnÖsszSzabiLista.Size = new System.Drawing.Size(45, 45);
-            this.BtnÖsszSzabiLista.TabIndex = 79;
-            this.ToolTip1.SetToolTip(this.BtnÖsszSzabiLista, "Ha létezik SAP adatokban akkor megkeresi a dolgozót.");
-            this.BtnÖsszSzabiLista.UseVisualStyleBackColor = true;
-            this.BtnÖsszSzabiLista.Click += new System.EventHandler(this.BtnÖsszSzabiLista_Click);
+            this.BtnNévFrszFrissítés.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.BtnNévFrszFrissítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnNévFrszFrissítés.Location = new System.Drawing.Point(731, 49);
+            this.BtnNévFrszFrissítés.Name = "BtnNévFrszFrissítés";
+            this.BtnNévFrszFrissítés.Size = new System.Drawing.Size(45, 45);
+            this.BtnNévFrszFrissítés.TabIndex = 79;
+            this.ToolTip1.SetToolTip(this.BtnNévFrszFrissítés, "Ha létezik SAP adatokban akkor megkeresi a dolgozót.");
+            this.BtnNévFrszFrissítés.UseVisualStyleBackColor = true;
+            this.BtnNévFrszFrissítés.Click += new System.EventHandler(this.BtnNévFrszFrissítés_Click);
             // 
             // BtnOktatásÚj
             // 
@@ -1602,7 +1602,7 @@ namespace Villamos
         internal Label LblAdminKérelemOka;
         internal Button BtnAdminOkTöröl;
         internal Button BtnAdminOkrögzítés;
-        internal Button BtnÖsszSzabiLista;
+        internal Button BtnNévFrszFrissítés;
         internal TextBox TxtKérrelemPDF;
         internal Label LblKérelemPDFneve;
         internal Button BtnKérelemPDF;

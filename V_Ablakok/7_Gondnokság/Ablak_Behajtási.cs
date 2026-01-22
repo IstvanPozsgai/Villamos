@@ -528,11 +528,17 @@ namespace Villamos
             }
         }
 
-        private void BtnÖsszSzabiLista_Click(object sender, EventArgs e)
+        private void BtnNévFrszFrissítés_Click(object sender, EventArgs e)
+        {
+            NévFrszFrissítés();
+        }
+
+        private void NévFrszFrissítés()
         {
             FrissítésGombEseménye();
             AutókSzámaLekérdezés();
             AutókRendszámaLekérdezés();
+     
         }
 
         private void AutókSzámaLekérdezés()
@@ -595,12 +601,15 @@ namespace Villamos
             }
         }
 
-        private void TxtkérelemHR_Leave(object sender, EventArgs e)
+        private void TxtkérelemHR_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            FrissítésGombEseménye();
-            AutókSzámaLekérdezés();
-            AutókRendszámaLekérdezés();
+            if (e.KeyCode == Keys.Tab )
+            {
+                NévFrszFrissítés();
+            }
         }
+
+
 
         private void FrissítésGombEseménye()
         {
