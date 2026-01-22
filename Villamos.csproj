@@ -121,6 +121,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Messaging" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
@@ -1867,6 +1868,7 @@
       <DependentUpon>Ablak_Hibanaplo.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <Compile Include="V_MindenEgyéb\NyomtatasHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Aha-Soft-Standard-Transport-Tram.ico" />

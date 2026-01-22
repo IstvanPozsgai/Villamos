@@ -40,6 +40,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             MyX.ExcelMegnyitás(fájlexcel);
             MyX.Munkalap_aktív(munkalap);
             int elem = 0;
+            int fájlSzám = 0;
 
             for (int i = 0; i < SzűrtLista.Count; i++)
             {
@@ -139,7 +140,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
                 // ha négy név van vagy ha a jelöltek számát elértük, akkor nyomtat majd a beírt adatokat törli
                 if (elem == 4)
                 {
-                    string fájlnév = $"Szabadság_{Program.PostásNév}_{elem}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+                    string fájlnév = $"Szabadság_{Program.PostásNév}_{++fájlSzám}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
                     string MentésiFájl = $@"{könyvtár}\{fájlnév}";
                     MyX.ExcelMentés(MentésiFájl);
                     NyomtatásiFájlok.Add(MentésiFájl);
@@ -152,14 +153,14 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             }
             if (elem != 0)
             {
-                string fájlnév = $"Szabadság_{Program.PostásNév}_{elem}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+                string fájlnév = $"Szabadság_{Program.PostásNév}_{++fájlSzám}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
                 string MentésiFájl = $@"{könyvtár}\{fájlnév}";
                 MyX.ExcelMentés(MentésiFájl);
                 NyomtatásiFájlok.Add(MentésiFájl);
                 MyX.ExcelBezárás();
             }
 
-            MyF.ExcelNyomtatás(NyomtatásiFájlok, munkalap, true);
+            MyF.ExcelNyomtatás(NyomtatásiFájlok, munkalap, true );
         }
 
         private int Összesnapja(string törzsszám)

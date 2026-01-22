@@ -343,5 +343,10 @@ namespace Villamos.Ablakok
                 MenüNév.Text = item.Name;
             }
         }
+
+        private void BtnSugó_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
