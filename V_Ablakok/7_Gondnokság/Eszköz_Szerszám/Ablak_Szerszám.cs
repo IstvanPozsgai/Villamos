@@ -2520,6 +2520,7 @@ namespace Villamos
 
         private void Napló_Honnan_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            Napló_Honnan.Text = Napló_Honnan.Items[Napló_Honnan.SelectedIndex].ToString();
             if (Napló_Honnan.Text.Trim() == "") return;
             Napló_Honnannév.Text = "";
             Adat_Szerszám_Könyvtörzs ElemKönyv = (from a in AdatokKönyv
@@ -2533,6 +2534,7 @@ namespace Villamos
 
         private void Napló_Hova_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            Napló_Hova.Text = Napló_Hova.Items[Napló_Hova.SelectedIndex].ToString();
             if (Napló_Hova.Text.Trim() == "") return;
             Napló_Hovánév.Text = "";
             Adat_Szerszám_Könyvtörzs ElemKönyv = (from a in AdatokKönyv
