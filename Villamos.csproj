@@ -371,6 +371,8 @@
     <Compile Include="V_Adatszerkezet\Adat_Beallitas_Diagram.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Ciklus_Sorrend.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Beosztás_Új.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Hiba.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Hiba_Elrendezés.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztagia_Futás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztalgia_Állomány.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Raktár.cs" />
@@ -387,6 +389,7 @@
     <Compile Include="V_Adatszerkezet\Beállítás_Nyomtatás.cs" />
     <Compile Include="V_Függvények\HtmlToDataTable.cs" />
     <Compile Include="V_Függvények\Oszlopneve.cs" />
+    <Compile Include="V_Input_Forms\DataGridViewHelper.cs" />
     <Compile Include="V_Input_Forms\InputCheckbox.cs" />
     <Compile Include="V_Input_Forms\InputDate.cs" />
     <Compile Include="V_Input_Forms\InputField.cs" />

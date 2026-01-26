@@ -1,28 +1,25 @@
-﻿using System;
+﻿using InputForms;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 
 namespace Villamos
 {
     public partial class Ablak_Hibanaplo : Form
     {
+        private DataGridViewHelper<Adat_Hiba> Tábla;
+        List<Adat_Hiba> Adatok = new List<Adat_Hiba>();
         Hibanapló_Részletes Ablak;
-        readonly DataTable AdatTábla = new DataTable();
-
-#pragma warning disable IDE0044
-        List<string> SorAdat = new List<string>();
-#pragma warning restore IDE0044
-
+        Adat_Hiba EgyAdat = new Adat_Hiba();
 
         public Ablak_Hibanaplo()
         {
             InitializeComponent();
-            Start();
+            TáblázatBeállítás();
         }
 
         private void Ablak_Hibanaplo_Load(object sender, EventArgs e)
@@ -30,46 +27,39 @@ namespace Villamos
 
         }
 
-        private void Start()
+        private void TáblázatBeállítás()
         {
-            Fejlec();
-            Tablalista_kiírás();
+            List<Adat_Hiba_Elrendezés> Beállítás = new List<Adat_Hiba_Elrendezés>
+            {
+                new Adat_Hiba_Elrendezés{ Változó="Dátum", Felirat="Dátum", Szélesség=100},
+                new Adat_Hiba_Elrendezés{ Változó="Idő", Felirat="Idő", Szélesség=85},
+                new Adat_Hiba_Elrendezés{ Változó="Telephely", Felirat="Telephely", Szélesség=130},
+                new Adat_Hiba_Elrendezés{ Változó="Felhasználó", Felirat="Felhasználó", Szélesség=115},
+                new Adat_Hiba_Elrendezés{ Változó="HibaÜzenet", Felirat="Hiba üzenet", Szélesség=450},
+                new Adat_Hiba_Elrendezés{ Változó="HibaOsztály", Felirat="Hiba osztály", Szélesség=300},
+                new Adat_Hiba_Elrendezés{ Változó="HibaMetódus", Felirat="Hiba metódus", Szélesség=300},
+                new Adat_Hiba_Elrendezés{ Változó="Névtér", Felirat="Névtér", Szélesség=100},
+                new Adat_Hiba_Elrendezés{ Változó="Egyéb", Felirat="Egyéb", Szélesség=130},
+                new Adat_Hiba_Elrendezés{ Változó="TeljesIdő", Felirat="TeljesIdő", Szélesség=50,Látható=false  },
+            };
+            AdatokFeltöltése();
+
+            Tábla = new DataGridViewHelper<Adat_Hiba>(this)
+               .SetLocationAndSize(5, 55, 770, 200)
+               .SetAnchor(AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom)
+               .AddItems(Adatok)
+               .ConfigureColumns(Beállítás)
+               .ShowRowHeaders(false)
+               .OnSelectionChanged(p => EgyAdat = p)
+
+                   ;
         }
 
-        private void Tablalista_kiírás()
-        {
-            ABFeltöltése();
-            Hibanaplo_Tablazat.CleanFilterAndSort();
-            Hibanaplo_Tablazat.DataSource = AdatTábla;
-            Hibanaplo_Tablazat.Sort(Hibanaplo_Tablazat.Columns["TeljesIdő"], ListSortDirection.Descending);
-            OszlopSzélesség();
-            Hibanaplo_Tablazat.Refresh();
-            Hibanaplo_Tablazat.Visible = true;
-            Hibanaplo_Tablazat.ClearSelection();
-        }
-
-        private void Fejlec()
-        {
-            // Dátum;Idő;Telephely;Felhasználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; TeljesIdő
-            AdatTábla.Columns.Clear();
-            AdatTábla.Columns.Add("Dátum");
-            AdatTábla.Columns.Add("Idő");
-            AdatTábla.Columns.Add("Telephely");
-            AdatTábla.Columns.Add("Felhasználó");
-            AdatTábla.Columns.Add("Hiba üzenet");
-            AdatTábla.Columns.Add("Hiba osztály");
-            AdatTábla.Columns.Add("Hiba metódus");
-            AdatTábla.Columns.Add("Névtér");
-            AdatTábla.Columns.Add("Egyéb");
-            AdatTábla.Columns.Add("TeljesIdő");
-        }
-
-        private void ABFeltöltése()
+        private void AdatokFeltöltése()
         {
             try
             {
-                AdatTábla.Clear();
-
+                Adatok.Clear();
                 int ideiEv = DateTime.Now.Year;
                 List<string> osszesSor = new List<string>();
                 osszesSor.AddRange(ÉvesLogFajltBetolt(ideiEv).Skip(1));
@@ -78,24 +68,27 @@ namespace Villamos
                 foreach (string sor in osszesSor)
                 {
                     // Dátum;Telephely;Felhsználó;Hiba üzenet;Hiba Osztály; Hiba Metódus; Névtér; Egyéb; Dátum
-                    DataRow Soradat = AdatTábla.NewRow();
+
                     string[] mezok = sor.Split(';');
                     string[] darabol = mezok[0].Split(' ');
                     string Dátum = darabol[0].ToÉrt_DaTeTime().ToString("yyyy.MM.dd");
                     string Idő = darabol[1].Replace(".", ":").ToÉrt_DaTeTime().ToString("HH:mm:ss");
-
-                    Soradat["Dátum"] = Dátum;
-                    Soradat["Idő"] = Idő;
-                    Soradat["Telephely"] = mezok[1];
-                    Soradat["Felhasználó"] = mezok[2];
-                    Soradat["Hiba üzenet"] = mezok[3];
-                    Soradat["Hiba osztály"] = mezok[4];
-                    Soradat["Hiba metódus"] = mezok[5];
-                    Soradat["Névtér"] = mezok[6];
-                    Soradat["Egyéb"] = mezok[7];
-                    Soradat["TeljesIdő"] = mezok[0];
-                    AdatTábla.Rows.Add(Soradat);
+                    Adat_Hiba Elem = new Adat_Hiba
+                    {
+                        Dátum = Dátum,
+                        Idő = Idő,
+                        Telephely = mezok[1],
+                        Felhasználó = mezok[2],
+                        HibaÜzenet = mezok[3],
+                        HibaOsztály = mezok[4],
+                        HibaMetódus = mezok[5],
+                        Névtér = mezok[6],
+                        Egyéb = mezok[7],
+                        TeljesIdő = mezok[0]
+                    };
+                    Adatok.Add(Elem);
                 }
+                Adatok = Adatok.OrderByDescending(x => x.TeljesIdő).ToList();
             }
             catch (HibásBevittAdat ex)
             {
@@ -106,21 +99,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void OszlopSzélesség()
-        {
-            Hibanaplo_Tablazat.Columns["Dátum"].Width = 100;
-            Hibanaplo_Tablazat.Columns["Idő"].Width = 85;
-            Hibanaplo_Tablazat.Columns["Telephely"].Width = 130;
-            Hibanaplo_Tablazat.Columns["Felhasználó"].Width = 115;
-            Hibanaplo_Tablazat.Columns["Hiba üzenet"].Width = 450;
-            Hibanaplo_Tablazat.Columns["Hiba osztály"].Width = 300;
-            Hibanaplo_Tablazat.Columns["Hiba metódus"].Width = 300;
-            Hibanaplo_Tablazat.Columns["Névtér"].Width = 100;
-            Hibanaplo_Tablazat.Columns["Egyéb"].Width = 100;
-
-            Hibanaplo_Tablazat.Columns["TeljesIdő"].Visible = false;
         }
 
         private string[] ÉvesLogFajltBetolt(int ev)
@@ -155,33 +133,10 @@ namespace Villamos
         {
             try
             {
-                if (SorAdat.Count < 1) throw new HibásBevittAdat("Nincs kiválasztva érvényes sor.");
+                if (Adatok.Count < 1) throw new HibásBevittAdat("Nincs kiválasztva érvényes sor.");
                 Ablak?.Close();
                 Ablak = new Hibanapló_Részletes();
-                Ablak.RészletesAdatok(SorAdat);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Hibanaplo_Tablazat_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                if (e.RowIndex < 0) return;
-                Hibanaplo_Tablazat.Rows[e.RowIndex].Selected = true;
-                SorAdat.Clear();
-                for (int oszlop = 0; oszlop < Hibanaplo_Tablazat.Columns.Count; oszlop++)
-                {
-                    SorAdat.Add(Hibanaplo_Tablazat.Rows[e.RowIndex].Cells[oszlop].Value.ToStrTrim());
-                }
+                Ablak.RészletesAdatok(EgyAdat);
             }
             catch (HibásBevittAdat ex)
             {
