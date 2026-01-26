@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő2.mdb".KönyvSzerk();
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "védelem";
 
         public Kezelő_Kiegészítő_Védelem()
         {
@@ -20,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Védelem> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM védelem  order by  sorszám";
+            string szöveg = $"SELECT * FROM  {táblanév} order by  sorszám";
             List<Adat_Kiegészítő_Védelem> Adatok = new List<Adat_Kiegészítő_Védelem>();
             Adat_Kiegészítő_Védelem Adat;
 
@@ -53,7 +54,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO védelem ( sorszám, megnevezés ) VALUES ({Sorszám()}, '{Adat.Megnevezés}' )";     // új rögtzítés
+                string szöveg = $"INSERT INTO {táblanév} ( sorszám, megnevezés ) VALUES ({Sorszám()}, '{Adat.Megnevezés}' )";     // új rögtzítés
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -71,7 +72,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE védelem  SET megnevezés='{Adat.Megnevezés}' WHERE sorszám={Adat.Sorszám}";     // módosítás
+                string szöveg = $"UPDATE {táblanév}  SET megnevezés='{Adat.Megnevezés}' WHERE sorszám={Adat.Sorszám}";     // módosítás
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

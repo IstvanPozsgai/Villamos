@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő.mdb";
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "Adatok";
 
         public Kezelő_Kiegészítő_Adatok_Terjesztés()
         {
@@ -20,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Adatok_Terjesztés> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM Adatok";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Kiegészítő_Adatok_Terjesztés> Adatok = new List<Adat_Kiegészítő_Adatok_Terjesztés>();
             Adat_Kiegészítő_Adatok_Terjesztés Adat;
 
@@ -54,7 +55,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE Adatok SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"szöveg='{Adat.Szöveg}', ";
                 szöveg += $"email='{Adat.Email}' ";
                 szöveg += $"WHERE id={Adat.Id} ";

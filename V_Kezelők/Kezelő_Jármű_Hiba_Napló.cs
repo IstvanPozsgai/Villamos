@@ -15,6 +15,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "pozsgaii";
         string hely;
+        readonly string táblanév = "hibatábla";
 
         private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
@@ -26,7 +27,7 @@ namespace Villamos.Kezelők
         {
             FájlBeállítás(Telephely, Dátum);
             List<Adat_Jármű_hiba> Adatok = new List<Adat_Jármű_hiba>();
-            string szöveg = $"SELECT * FROM hibatábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -81,7 +82,7 @@ namespace Villamos.Kezelők
                     if (Adatok != null && Adatok.Count > 0)
                         Sorszám = Adatok.Max(a => a.Hibáksorszáma) + 1;
                     // ha nem létezik 
-                    string szöveg = $"INSERT INTO hibatábla  ( létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév}  ( létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
                     szöveg += $"'{Adat.Létrehozta.Trim()}', ";
                     szöveg += $"{Adat.Korlát}, ";
                     szöveg += $"'{Adat.Hibaleírása.Trim()}', ";

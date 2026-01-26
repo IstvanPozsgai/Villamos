@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
         readonly string jelszó = "seprűéslapát";
+        readonly string táblanév = "mátrix";
 
         public Kezelő_Jármű_Takarítás_Mátrix()
         {
@@ -21,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Jármű_Takarítás_Mátrix> Lista_Adat()
         {
-            string szöveg = $"SELECT * FROM mátrix order by id";
+            string szöveg = $"SELECT * FROM {táblanév} order by id";
             List<Adat_Jármű_Takarítás_Mátrix> Adatok = new List<Adat_Jármű_Takarítás_Mátrix>();
             Adat_Jármű_Takarítás_Mátrix Adat;
 
@@ -54,7 +55,7 @@ namespace Villamos.Kezelők
 
         public void Rögzítés(Adat_Jármű_Takarítás_Mátrix Adat)
         {
-            string szöveg = $"INSERT INTO mátrix (id, fajta, fajtamásik, igazság ) VALUES (";
+            string szöveg = $"INSERT INTO {táblanév} (id, fajta, fajtamásik, igazság ) VALUES (";
             szöveg += $"{Adat.Id},";
             szöveg += $"'{Adat.Fajta}', ";
             szöveg += $"'{Adat.Fajtamásik}', ";
@@ -67,7 +68,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE mátrix  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $" igazság={Adat.Igazság} ";
                 szöveg += $" WHERE fajta='{Adat.Fajta}' AND fajtamásik='{Adat.Fajtamásik}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

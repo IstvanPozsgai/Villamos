@@ -12,6 +12,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő.mdb".KönyvSzerk();
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "idő_korrekció";
 
         public Kezelő_Kiegészítő_Idő_Kor()
         {
@@ -21,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Idő_Kor> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM idő_korrekció ";
+            string szöveg = $"SELECT * FROM {táblanév} ";
             List<Adat_Kiegészítő_Idő_Kor> Adatok = new List<Adat_Kiegészítő_Idő_Kor>();
             Adat_Kiegészítő_Idő_Kor Adat;
 
@@ -55,7 +56,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO idő_korrekció  (id, kiadási, érkezési ) ";
+                string szöveg = $"INSERT INTO {táblanév}  (id, kiadási, érkezési ) ";
                 szöveg += $"VALUES ('{Adat.Id}, ";
                 szöveg += $"{Adat.Kiadási}, ";
                 szöveg += $"{Adat.Érkezési}) ";
@@ -77,7 +78,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE idő_korrekció Set ";
+                string szöveg = $"UPDATE {táblanév} Set ";
                 szöveg += $"érkezési={Adat.Érkezési}, ";
                 szöveg += $"kiadási={Adat.Kiadási} ";
                 szöveg += $" where id={Adat.Id} ";

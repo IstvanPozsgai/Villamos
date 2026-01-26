@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "plédke";
         string hely;
+        readonly string táblanév = "xnapostábla";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -29,7 +30,7 @@ namespace Villamos.Kezelők
         public List<Adat_Jármű_Xnapos> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = $"SELECT * FROM xnapostábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Jármű_Xnapos> Adatok = new List<Adat_Jármű_Xnapos>();
             Adat_Jármű_Xnapos Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -62,7 +63,7 @@ namespace Villamos.Kezelők
         public List<Adat_Jármű_Xnapos> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = $"SELECT * FROM xnapostábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Jármű_Xnapos> Adatok = new List<Adat_Jármű_Xnapos>();
             Adat_Jármű_Xnapos Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -97,7 +98,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"INSERT INTO xnapostábla (kezdődátum, végdátum,  azonosító,  hibaleírása) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (kezdődátum, végdátum,  azonosító,  hibaleírása) VALUES (";
                 szöveg += $"'{Adat.Kezdődátum}', '{Adat.Végdátum}', ";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Hibaleírása}')";
@@ -119,7 +120,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"INSERT INTO xnapostábla (kezdődátum, végdátum,  azonosító,  hibaleírása) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (kezdődátum, végdátum,  azonosító,  hibaleírása) VALUES (";
                 szöveg += $"'{Adat.Kezdődátum}', '{Adat.Végdátum}', ";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Hibaleírása}')";
@@ -141,7 +142,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE xnapostábla SET hibaleírása='{Adat.Hibaleírása}' ";
+                string szöveg = $"UPDATE {táblanév} SET hibaleírása='{Adat.Hibaleírása}' ";
                 szöveg += $" WHERE [azonosító]='{Adat.Azonosító}' ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -161,7 +162,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"DELETE FROM xnapostábla WHERE [azonosító]='{Azonosító}' ";
+                string szöveg = $"DELETE FROM {táblanév} WHERE [azonosító]='{Azonosító}' ";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

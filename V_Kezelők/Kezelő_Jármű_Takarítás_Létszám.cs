@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "seprűéslapát";
         string hely;
+        readonly string táblanév = "létszám";
 
         private void FájlBeállítás(string Telephely, int Év)
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Jármű_Takarítás_Létszám> Lista_Adat(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = $"SELECT * FROM létszám";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Jármű_Takarítás_Létszám> Adatok = new List<Adat_Jármű_Takarítás_Létszám>();
             Adat_Jármű_Takarítás_Létszám Adat;
 
@@ -60,7 +61,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"INSERT INTO létszám (dátum, napszak, előírt, megjelent, ruhátlan) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (dátum, napszak, előírt, megjelent, ruhátlan) VALUES (";
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', ";     //dátum
                 szöveg += $"{Adat.Napszak}, ";     //napszak,
                 szöveg += $"{Adat.Előírt}, ";     //előírt,
@@ -85,7 +86,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"UPDATE létszám  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"előírt={Adat.Előírt}, ";
                 szöveg += $"megjelent={Adat.Megjelent}, ";
                 szöveg += $"ruhátlan={Adat.Ruhátlan} ";

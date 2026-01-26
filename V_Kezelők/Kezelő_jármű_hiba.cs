@@ -15,6 +15,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "pozsgaii";
         string hely, helynapló;
+        readonly string táblanév = "hibatábla";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -32,7 +33,7 @@ namespace Villamos.Kezelők
         {
             FájlBeállítás(Telephely, Dátum);
             List<Adat_Jármű_hiba> Adatok = new List<Adat_Jármű_hiba>();
-            string szöveg = $"SELECT * FROM hibatábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{helynapló}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -69,7 +70,7 @@ namespace Villamos.Kezelők
         {
             FájlBeállítás(Telephely);
             List<Adat_Jármű_hiba> Adatok = new List<Adat_Jármű_hiba>();
-            string szöveg = $"SELECT * FROM hibatábla ORDER BY Azonosító";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY Azonosító";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -124,7 +125,7 @@ namespace Villamos.Kezelők
                     if (Adatok != null && Adatok.Count > 0)
                         Sorszám = Adatok.Max(a => a.Hibáksorszáma) + 1;
                     // ha nem létezik 
-                    string szöveg = $"INSERT INTO hibatábla  ( létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév}  ( létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
                     szöveg += $"'{Adat.Létrehozta.Trim()}', ";
                     szöveg += $"{Adat.Korlát}, ";
                     szöveg += $"'{Adat.Hibaleírása.Trim()}', ";
@@ -161,7 +162,7 @@ namespace Villamos.Kezelők
 
                 if (AdatokNapló != null && AdatokNapló.Count > 0) Sorszám = AdatokNapló.Max(a => a.Hibáksorszáma) + 1;
                 // ha nem létezik 
-                string szöveg = $"INSERT INTO hibatábla  ( létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév}  ( létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
                 szöveg += $"'{Adat.Létrehozta.Trim()}', ";
                 szöveg += $"{Adat.Korlát}, ";
                 szöveg += $"'{Adat.Hibaleírása.Trim()}', ";
@@ -359,7 +360,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg =$"DELETE FROM Hibatábla ";
+                string szöveg =$"DELETE FROM {táblanév} ";
                 szöveg += $" WHERE azonosító='{Adat.Azonosító}' AND hibáksorszáma={Adat.Hibáksorszáma}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
                 if (naplóz) Rögzítés_Napló(Telephely, DateTime.Now, Adat);
@@ -380,7 +381,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"DELETE FROM hibatábla WHERE [azonosító]='{Azonosító}'";
+                string szöveg = $"DELETE FROM {táblanév} WHERE [azonosító]='{Azonosító}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -399,7 +400,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE Hibatábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"Korlát={Adat.Korlát}, ";
                 szöveg += $"létrehozta='{Program.PostásNév.Trim()}', ";
                 szöveg += $"hibaleírása='{Adat.Hibaleírása}', ";
@@ -436,7 +437,7 @@ namespace Villamos.Kezelők
                 List<string> szövegGy = new List<string>();
                 for (int i = 0; i < Adatok.Count; i++)
                 {
-                    string szöveg = $"UPDATE Hibatábla SET hibáksorszáma={i + 1} WHERE azonosító='{Azonosító}'";
+                    string szöveg = $"UPDATE {táblanév} SET hibáksorszáma={i + 1} WHERE azonosító='{Azonosító}'";
                     szöveg += $" And  hibaleírása='{Adatok[i].Hibaleírása}' AND idő=#{Adatok[i].Idő:MM-dd-yyyy HH:mm:ss}#";
                     szövegGy.Add(szöveg);
                 }
@@ -498,12 +499,12 @@ namespace Villamos.Kezelők
 
                 if (Előző == null || Következő == null) return;         //Ha valamelyik nincs akkor kilép
 
-                string szöveg = $"UPDATE hibatábla  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"hibáksorszáma={Következő.Hibáksorszáma} ";
                 szöveg += $" WHERE létrehozta='{Előző.Létrehozta}' AND hibaleírása='{Előző.Hibaleírása}' AND azonosító='{Előző.Azonosító}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
-                szöveg = $"UPDATE hibatábla  SET ";
+                szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"hibáksorszáma={Előző.Hibáksorszáma} ";
                 szöveg += $" WHERE létrehozta='{Következő.Létrehozta}' AND hibaleírása='{Következő.Hibaleírása}' AND azonosító='{Következő.Azonosító}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -535,7 +536,7 @@ namespace Villamos.Kezelők
                 foreach (Adat_Jármű_hiba Adat in Adatok)
                 {
                     // ha nem létezik 
-                    string szöveg = $"INSERT INTO hibatábla  ( létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév}  ( létrehozta, korlát, hibaleírása, idő, javítva, típus, azonosító, hibáksorszáma ) VALUES (";
                     szöveg += $"'{Adat.Létrehozta.Trim()}', ";
                     szöveg += $"{Adat.Korlát}, ";
                     szöveg += $"'{MyF.Szöveg_Tisztítás(Adat.Hibaleírása.Trim(), 0, -1)}', ";

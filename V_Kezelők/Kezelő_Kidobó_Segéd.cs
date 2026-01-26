@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "erzsébet";
         string hely;
+        readonly string táblanév = "Kidobósegédtábla";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Kidobó_Segéd> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = $"SELECT * FROM Kidobósegédtábla  order by változatnév, szolgálatiszám";
+            string szöveg = $"SELECT * FROM {táblanév} order by változatnév, szolgálatiszám";
             List<Adat_Kidobó_Segéd> Adatok = new List<Adat_Kidobó_Segéd>();
             Adat_Kidobó_Segéd Adat;
 
@@ -69,7 +70,7 @@ namespace Villamos.Kezelők
                                                   select a).ToList();
                 if (Adatok != null && Adatok.Count > 0)
                 {
-                    string szöveg = $"DELETE FROM Kidobósegédtábla WHERE Változatnév='{változatnév}'";
+                    string szöveg = $"DELETE FROM {táblanév} WHERE Változatnév='{változatnév}'";
                     MyA.ABtörlés(hely, jelszó, szöveg);
                 }
             }
@@ -96,7 +97,7 @@ namespace Villamos.Kezelők
                                                   select a).ToList();
                 if (Adatok != null && Adatok.Count > 0)
                 {
-                    string szöveg = $"DELETE FROM Kidobósegédtábla WHERE Változatnév='{változatnév}' AND szolgálatiszám='{szolgálatiszám}'";
+                    string szöveg = $"DELETE FROM {táblanév} WHERE Változatnév='{változatnév}' AND szolgálatiszám='{szolgálatiszám}'";
                     MyA.ABtörlés(hely, jelszó, szöveg);
                 }
             }
@@ -116,7 +117,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"INSERT INTO Kidobósegédtábla (változatnév, forgalmiszám, szolgálatiszám, Kezdéshely, Végzéshely, megjegyzés, Kezdés, Végzés) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (változatnév, forgalmiszám, szolgálatiszám, Kezdéshely, Végzéshely, megjegyzés, Kezdés, Végzés) VALUES (";
                 szöveg += $"'{Adat.Változatnév}', ";      //változatnév
                 szöveg += $"'{Adat.Forgalmiszám}', ";      //forgalmiszám
                 szöveg += $"'{Adat.Szolgálatiszám}', ";    //szolgálatiszám
@@ -143,7 +144,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE Kidobósegédtábla  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"Kezdéshely='{Adat.Kezdéshely}', ";
                 szöveg += $"Végzéshely='{Adat.Végzéshely}', ";
                 szöveg += $"megjegyzés='{Adat.Megjegyzés}', ";

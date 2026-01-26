@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "egycsészekávé";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Főmérnökség1.mdb";
+        readonly string táblanév = "jogosítványtípus";
 
         public Kezelő_JogosítványTípus()
         {
@@ -22,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_JogosítványTípus> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM jogosítványtípus";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_JogosítványTípus> Adatok = new List<Adat_JogosítványTípus>();
             Adat_JogosítványTípus Adat;
 
@@ -59,7 +60,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO jogosítványtípus (Sorszám, Törzsszám, jogtípus, jogtípusérvényes, jogtípusmegszerzés, státus)";
+                string szöveg = $"INSERT INTO {táblanév} (Sorszám, Törzsszám, jogtípus, jogtípusérvényes, jogtípusmegszerzés, státus)";
                 szöveg += $" VALUES ({Sorszám()}, ";
                 szöveg += $"'{Adat.Törzsszám}', ";
                 szöveg += $"'{Adat.Jogtípus}', ";
@@ -82,7 +83,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE jogosítványtípus SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" jogtípusmegszerzés='{Adat.Jogtípusmegszerzés:yyyy.MM.dd}', ";
                 szöveg += $" jogtípusérvényes='{Adat.Jogtípusérvényes:yyyy.MM.dd}' ";
                 szöveg += $" WHERE Törzsszám='{Adat.Törzsszám}' AND jogtípus='{Adat.Jogtípus}' AND státus=false";
@@ -103,7 +104,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE jogosítványtípus SET státus=true ";
+                string szöveg = $"UPDATE {táblanév} SET státus=true ";
                 szöveg += $" WHERE Törzsszám='{Adat.Törzsszám}' AND jogtípus='{Adat.Jogtípus}' AND státus=false";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

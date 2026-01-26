@@ -12,6 +12,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő.mdb";
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "telephelytábla";
 
         public Kezelő_kiegészítő_telephely()
         {
@@ -21,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_kiegészítő_telephely> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM telephelytábla order by sorszám";
+            string szöveg = $"SELECT * FROM {táblanév} order by sorszám";
             List<Adat_kiegészítő_telephely> Adatok = new List<Adat_kiegészítő_telephely>();
             Adat_kiegészítő_telephely Adat;
 
@@ -56,7 +57,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO telephelytábla ( sorszám, telephelynév, telephelykönyvtár, fortekód )";
+                string szöveg = $"INSERT INTO {táblanév} ( sorszám, telephelynév, telephelykönyvtár, fortekód )";
                 szöveg += $" VALUES ({Adat.Sorszám}, ";
                 szöveg += $"'{Adat.Telephelynév}', ";
                 szöveg += $"'{Adat.Telephelykönyvtár}', ";
@@ -78,7 +79,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE telephelytábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" telephelykönyvtár='{Adat.Telephelykönyvtár}', ";
                 szöveg += $" fortekód='{Adat.Fortekód}' ";
                 szöveg += $" WHERE telephelynév='{Adat.Telephelynév}' and sorszám={Adat.Sorszám}";
@@ -99,7 +100,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM telephelytábla where telephelynév='{Adat.Telephelynév}' and sorszám={Adat.Sorszám}";
+                string szöveg = $"DELETE FROM {táblanév} where telephelynév='{Adat.Telephelynév}' and sorszám={Adat.Sorszám}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -117,13 +118,13 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE telephelytábla SET sorszám='{0}' WHERE  sorszám={sor1}";
+                string szöveg = $"UPDATE {táblanév} SET sorszám='{0}' WHERE  sorszám={sor1}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
-                szöveg = $"UPDATE telephelytábla SET sorszám='{sor1}' WHERE  sorszám={sor2}";
+                szöveg = $"UPDATE {táblanév} SET sorszám='{sor1}' WHERE  sorszám={sor2}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
-                szöveg = $"UPDATE telephelytábla SET sorszám='{sor2}' WHERE  sorszám={0}";
+                szöveg = $"UPDATE {táblanév} SET sorszám='{sor2}' WHERE  sorszám={0}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
-                szöveg = $"DELETE FROM telephelytábla where  sorszám={0}";
+                szöveg = $"DELETE FROM {táblanév} where  sorszám={0}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
 
             }

@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő.mdb".KönyvSzerk();
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "típusrendezéstábla";
 
         public Kezelő_Kiegészítő_Típusrendezéstábla()
         {
@@ -20,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Típusrendezéstábla> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM típusrendezéstábla order by sorszám";
+            string szöveg = $"SELECT * FROM {táblanév} order by sorszám";
             List<Adat_Kiegészítő_Típusrendezéstábla> Adatok = new List<Adat_Kiegészítő_Típusrendezéstábla>();
             Adat_Kiegészítő_Típusrendezéstábla Adat;
 
@@ -57,7 +58,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO típusrendezéstábla ( sorszám, főkategória, típus, altípus, telephely, telephelyitípus)";
+                string szöveg = $"INSERT INTO {táblanév} ( sorszám, főkategória, típus, altípus, telephely, telephelyitípus)";
                 szöveg += $" VALUES ({Adat.Sorszám}, ";
                 szöveg += $"'{Adat.Főkategória}', ";
                 szöveg += $"'{Adat.Típus}', ";
@@ -81,7 +82,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM típusrendezéstábla where sorszám={Adat.Sorszám}";
+                string szöveg = $"DELETE FROM {táblanév} where sorszám={Adat.Sorszám}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -99,7 +100,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE típusrendezéstábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"sorszám='{Adat.Sorszám}'";
                 szöveg += $"WHERE telephely='{Adat.Telephely}' ";
                 szöveg += $"and telephelyitípus='{Adat.Telephelyitípus}'";
