@@ -82,7 +82,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE tengely SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" munkaidő={Adat.Munkaidő} ";
                 szöveg += $" WHERE típus='{Adat.Típus.Trim()}' AND Állapot={Adat.Állapot}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -102,7 +102,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO tengely ( Típus, munkaidő, állapot) VALUES ('{Adat.Típus.Trim()}', {Adat.Munkaidő}, {Adat.Állapot})";
+                string szöveg = $"INSERT INTO {táblanév} ( Típus, munkaidő, állapot) VALUES ('{Adat.Típus.Trim()}', {Adat.Munkaidő}, {Adat.Állapot})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
             }

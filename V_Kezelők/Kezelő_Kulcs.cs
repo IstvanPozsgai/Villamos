@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Villamos\Kulcs.mdb";
         readonly string jelszó = "Tóth_Katalin";
+        // ITT TARTOK
 
         public Kezelő_Kulcs()
         {

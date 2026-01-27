@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő.mdb".KönyvSzerk();
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "időtábla";
 
         public Kezelő_Kiegészítő_Idő_Tábla()
         {
@@ -20,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Idő_Tábla> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM időtábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Kiegészítő_Idő_Tábla> Adatok = new List<Adat_Kiegészítő_Idő_Tábla>();
             Adat_Kiegészítő_Idő_Tábla Adat;
 
@@ -55,7 +56,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE időtábla Set ";
+                string szöveg = $"UPDATE {táblanév} Set ";
                 szöveg += $"reggel='{Adat.Reggel}', ";
                 szöveg += $"este='{Adat.Este}', ";
                 szöveg += $"délután='{Adat.Délután}' ";

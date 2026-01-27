@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_Takarítás.mdb";
         readonly string jelszó = "seprűéslapát";
+        readonly string táblanév = "kötbér";
 
         public Kezelő_Jármű_Takarítás_Kötbér()
         {
@@ -21,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Jármű_Takarítás_Kötbér> Lista_Adat()
         {
-            string szöveg = $"SELECT * FROM kötbér order by takarítási_fajta";
+            string szöveg = $"SELECT * FROM {táblanév} order by takarítási_fajta";
             List<Adat_Jármű_Takarítás_Kötbér> Adatok = new List<Adat_Jármű_Takarítás_Kötbér>();
             Adat_Jármű_Takarítás_Kötbér Adat;
 
@@ -52,7 +53,7 @@ namespace Villamos.Kezelők
 
         public void Rögzítés(Adat_Jármű_Takarítás_Kötbér Adat)
         {
-            string szöveg = $"INSERT INTO kötbér (Takarítási_fajta, NemMegfelel, Póthatáridő ) VALUES (";
+            string szöveg = $"INSERT INTO {táblanév} (Takarítási_fajta, NemMegfelel, Póthatáridő ) VALUES (";
             szöveg += $"'{Adat.Takarítási_fajta}', "; // Takarítási_fajta
             szöveg += $"{Adat.NemMegfelel}, "; // NemMegfelel
             szöveg += $"{Adat.Póthatáridő}) ";
@@ -61,7 +62,7 @@ namespace Villamos.Kezelők
 
         public void Módosítás(Adat_Jármű_Takarítás_Kötbér Adat)
         {
-            string szöveg = $"UPDATE kötbér  SET ";
+            string szöveg = $"UPDATE {táblanév}  SET ";
             szöveg += $" NemMegfelel={Adat.NemMegfelel}, "; // NemMegfelel
             szöveg += $" Póthatáridő={Adat.Póthatáridő}"; // Póthatáridő
             szöveg += $" WHERE  takarítási_fajta='{Adat.Takarítási_fajta}'";

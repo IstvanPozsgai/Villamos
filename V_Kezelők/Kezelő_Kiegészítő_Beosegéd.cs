@@ -56,7 +56,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO beosegéd (beosztáskód, túlóra, kezdőidő, végeidő, túlóraoka, telephely) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (beosztáskód, túlóra, kezdőidő, végeidő, túlóraoka, telephely) VALUES (";
                 szöveg += $"'{Adat.Beosztáskód}', ";
                 szöveg += $"{Adat.Túlóra}, ";
                 szöveg += $"'{Adat.Kezdőidő:HH:mm:ss}', ";
@@ -80,7 +80,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = " UPDATE  beosegéd SET ";
+                string szöveg = $" UPDATE  {táblanév} SET ";
                 szöveg += $" túlóra={Adat.Túlóra}, ";
                 szöveg += $" túlóraoka='{Adat.Túlóraoka}', ";
                 szöveg += $" kezdőidő='{Adat.Kezdőidő:HH:mm:ss}', ";
@@ -103,7 +103,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM beosegéd where beosztáskód='{Beosztáskód.Trim()}' AND telephely='{Telephely.Trim()}'";
+                string szöveg = $"DELETE FROM {táblanév} where beosztáskód='{Beosztáskód.Trim()}' AND telephely='{Telephely.Trim()}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

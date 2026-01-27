@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő2.mdb";
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "jogtípus";
 
         public Kezelő_Kiegészítő_Jogtípus()
         {
@@ -20,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Jogtípus> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM jogtípus  order by  sorszám";
+            string szöveg = $"SELECT * FROM  {táblanév} order by  sorszám";
             Adat_Kiegészítő_Jogtípus Adat;
             List<Adat_Kiegészítő_Jogtípus> Adatok = new List<Adat_Kiegészítő_Jogtípus>();
 
@@ -53,7 +54,7 @@ namespace Villamos.Kezelők
             try
             {
                 // új rögtzítés
-                string szöveg = $"INSERT INTO jogtípus ( típus ) VALUES ( '{Adat.Típus}' )";
+                string szöveg = $"INSERT INTO {táblanév} ( típus ) VALUES ( '{Adat.Típus}' )";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -72,7 +73,7 @@ namespace Villamos.Kezelők
             try
             {
                 // módosítás
-                string szöveg = $"UPDATE jogtípus  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $" típus='{Adat.Típus}' ";
                 szöveg += $"WHERE sorszám={Adat.Sorszám}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

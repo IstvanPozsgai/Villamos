@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő.mdb";
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "szolgálattábla";
 
         public Kezelő_Kiegészítő_Szolgálat()
         {
@@ -20,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Szolgálat> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM szolgálattábla order by sorszám";
+            string szöveg = $"SELECT * FROM {táblanév} order by sorszám";
             Adat_Kiegészítő_Szolgálat Adat;
             List<Adat_Kiegészítő_Szolgálat> Adatok = new List<Adat_Kiegészítő_Szolgálat>();
 
@@ -54,7 +55,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO szolgálattábla (sorszám, szolgálatnév) VALUES ";
+                string szöveg = $"INSERT INTO {táblanév} (sorszám, szolgálatnév) VALUES ";
                 szöveg += $" ({Adat.Sorszám}, ";
                 szöveg += $"'{Adat.Szolgálatnév}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -74,7 +75,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM szolgálattábla WHERE szolgálatnév='{Adat.Szolgálatnév}'";
+                string szöveg = $"DELETE FROM {táblanév} WHERE szolgálatnév='{Adat.Szolgálatnév}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -92,7 +93,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE szolgálattábla SET szolgálatnév='{Adat.Szolgálatnév}' ";
+                string szöveg = $"UPDATE {táblanév} SET szolgálatnév='{Adat.Szolgálatnév}' ";
                 szöveg += $"WHERE sorszám={Adat.Sorszám} ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

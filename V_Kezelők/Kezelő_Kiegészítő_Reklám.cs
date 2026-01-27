@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő.mdb";
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "reklámtábla";
 
         public Kezelő_Kiegészítő_Reklám()
         {
@@ -20,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Reklám> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM reklámtábla order by méret";
+            string szöveg = $"SELECT * FROM {táblanév} order by méret";
             List<Adat_Kiegészítő_Reklám> Adatok = new List<Adat_Kiegészítő_Reklám>();
             Adat_Kiegészítő_Reklám Adat;
 
@@ -52,7 +53,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO reklámtábla ( méret ) ";
+                string szöveg = $"INSERT INTO {táblanév} ( méret ) ";
                 szöveg += $"VALUES ('{Adat.Méret}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -71,7 +72,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE  FROM reklámtábla WHERE méret='{Adat.Méret}'";
+                string szöveg = $"DELETE  FROM {táblanév} WHERE méret='{Adat.Méret}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

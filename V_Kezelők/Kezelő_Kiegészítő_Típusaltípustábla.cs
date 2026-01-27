@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő.mdb".KönyvSzerk();
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "típusaltípustábla";
 
         public Kezelő_Kiegészítő_Típusaltípustábla()
         {
@@ -20,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Típusaltípustábla> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM típusaltípustábla order by sorszám";
+            string szöveg = $"SELECT * FROM {táblanév} order by sorszám";
             List<Adat_Kiegészítő_Típusaltípustábla> Adatok = new List<Adat_Kiegészítő_Típusaltípustábla>();
             Adat_Kiegészítő_Típusaltípustábla Adat;
 
@@ -55,7 +56,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO típusaltípustábla ( sorszám, Főkategória, típus, altípus )";
+                string szöveg = $"INSERT INTO {táblanév} ( sorszám, Főkategória, típus, altípus )";
                 szöveg += $" VALUES ({Adat.Sorszám}, ";
                 szöveg += $"'{Adat.Főkategória}', ";
                 szöveg += $"'{Adat.Típus}', ";
@@ -77,7 +78,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM típusaltípustábla where  sorszám={Adat.Sorszám}";
+                string szöveg = $"DELETE FROM {táblanév} where  sorszám={Adat.Sorszám}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -95,7 +96,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE típusaltípustábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"sorszám= '{Adat.Sorszám}'";
                 szöveg += $"WHERE altípus='{Adat.AlTípus}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

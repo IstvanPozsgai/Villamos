@@ -14,7 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "seprűéslapát";
         string hely;
-
+        readonly string táblanév = "takarítások_napló";
 
         private void FájlBeállítás(int Év)
         {
@@ -25,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_Jármű_Takarítás_Napló> Lista_Adatok(int Év)
         {
             FájlBeállítás(Év);
-            string szöveg = $"SELECT * FROM takarítások_napló";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Jármű_Takarítás_Napló> Adatok = new List<Adat_Jármű_Takarítás_Napló>();
             Adat_Jármű_Takarítás_Napló Adat;
 
@@ -64,7 +64,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = $"INSERT INTO takarítások_napló  (azonosító, dátum, takarítási_fajta, telephely, státus, Mikor, Módosító ) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév}  (azonosító, dátum, takarítási_fajta, telephely, státus, Mikor, Módosító ) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";        // azonosító
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', "; // dátum
                 szöveg += $"'{Adat.Takarítási_fajta}', "; // takarítási_fajta
@@ -92,7 +92,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = $"INSERT INTO takarítások_napló  (azonosító, dátum, takarítási_fajta, telephely, státus, Mikor, Módosító ) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév}  (azonosító, dátum, takarítási_fajta, telephely, státus, Mikor, Módosító ) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";        // azonosító
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', "; // dátum
                 szöveg += $"'{Adat.Takarítási_fajta}', "; // takarítási_fajta
@@ -127,7 +127,7 @@ namespace Villamos.Kezelők
                           select a).ToList();
                 if (Adatok.Count > 0)
                 {
-                    string szöveg = $"UPDATE takarítások_napló  SET ";
+                    string szöveg = $"UPDATE {táblanév}  SET ";
                     szöveg += $"státus =1 ";
                     szöveg += $" WHERE [azonosító]='{Adat.Azonosító}'";
                     szöveg += $" AND takarítási_fajta='Gépi'";

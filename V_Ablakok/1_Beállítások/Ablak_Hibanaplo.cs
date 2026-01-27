@@ -12,7 +12,7 @@ namespace Villamos
     public partial class Ablak_Hibanaplo : Form
     {
         private DataGridViewHelper<Adat_Hiba> Tábla;
-        readonly List<Adat_Hiba> Adatok = new List<Adat_Hiba>();
+        List<Adat_Hiba> Adatok = new List<Adat_Hiba>();
         Hibanapló_Részletes Ablak;
         Adat_Hiba EgyAdat = new Adat_Hiba();
 
@@ -88,6 +88,7 @@ namespace Villamos
                     };
                     Adatok.Add(Elem);
                 }
+                Adatok = Adatok.OrderByDescending(x => x.TeljesIdő).ToList();
             }
             catch (HibásBevittAdat ex)
             {
