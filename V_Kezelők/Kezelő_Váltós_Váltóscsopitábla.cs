@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Váltóscsoportvezetők.mdb".KönyvSzerk();
         readonly string jelszó = "Gábor";
+        readonly string táblanév = "tábla";
 
         public Kezelő_Váltós_Váltóscsopitábla()
         {
@@ -21,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Váltós_Váltóscsopitábla> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM tábla  order by  csoport,telephely";
+            string szöveg = $"SELECT * FROM  {táblanév} order by  csoport,telephely";
             List<Adat_Váltós_Váltóscsopitábla> Adatok = new List<Adat_Váltós_Váltóscsopitábla>();
             Adat_Váltós_Váltóscsopitábla Adat;
 
@@ -56,7 +57,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO tábla (csoport, telephely, név) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (csoport, telephely, név) VALUES (";
                 szöveg += $"'{Adat.Csoport}', ";
                 szöveg += $"'{Adat.Telephely}', ";
                 szöveg += $"'{Adat.Név}') ";
@@ -77,7 +78,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = " UPDATE  tábla SET ";
+                string szöveg = " UPDATE  {táblanév} SET ";
                 szöveg += $" név='{Adat.Név}' ";
                 szöveg += $" WHERE csoport='{Adat.Csoport}' and telephely='{Adat.Telephely}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -97,7 +98,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM tábla WHERE csoport='{Adat.Csoport}' and telephely='{Adat.Telephely}'";
+                string szöveg = $"DELETE FROM {táblanév} WHERE csoport='{Adat.Csoport}' and telephely='{Adat.Telephely}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

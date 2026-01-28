@@ -114,7 +114,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"UPDATE szabadság SET szabiok='{Adat.Szabiok}' WHERE törzsszám='{Adat.Törzsszám}' AND [Kezdődátum]=#{Adat.Kezdődátum:M-d-yy}# AND [státus]<>3";
+                string szöveg = $"UPDATE {táblanév} SET szabiok='{Adat.Szabiok}' WHERE törzsszám='{Adat.Törzsszám}' AND [Kezdődátum]=#{Adat.Kezdődátum:M-d-yy}# AND [státus]<>3";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         string hely;
         readonly string jelszó = "pozsgaii";
+        readonly string táblanév = "állománytábla";
 
         private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
@@ -42,7 +43,7 @@ namespace Villamos.Kezelők
                     string telep = "_";
                     if (Telephely == Adat.Telephely) telep = Adat.Telephely;
 
-                    string szöveg = $"INSERT INTO állománytábla (azonosító, utolsórögzítés, vizsgálatdátuma, utolsóforgalminap, Vizsgálatfokozata, vizsgálatszáma, futásnap, telephely) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (azonosító, utolsórögzítés, vizsgálatdátuma, utolsóforgalminap, Vizsgálatfokozata, vizsgálatszáma, futásnap, telephely) VALUES (";
                     szöveg += $"'{Adat.Azonosító}', ";                       // azonosító
                     szöveg += $"'{Adat.Utolsórögzítés:yyyy.MM.dd}', ";       // utolsórögzítés
                     szöveg += $"'{Adat.Vizsgálatdátuma:yyyy.MM.dd}', ";      // vizsgálatdátuma
@@ -74,7 +75,7 @@ namespace Villamos.Kezelők
                 string telep = "_";
                 if (Telephely == Adat.Telephely) telep = Adat.Telephely;
 
-                string szöveg = $"INSERT INTO állománytábla (azonosító, utolsórögzítés, vizsgálatdátuma, utolsóforgalminap, Vizsgálatfokozata, vizsgálatszáma, futásnap, telephely) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (azonosító, utolsórögzítés, vizsgálatdátuma, utolsóforgalminap, Vizsgálatfokozata, vizsgálatszáma, futásnap, telephely) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";                       // azonosító
                 szöveg += $"'{Adat.Utolsórögzítés:yyyy.MM.dd}', ";       // utolsórögzítés
                 szöveg += $"'{Adat.Vizsgálatdátuma:yyyy.MM.dd}', ";      // vizsgálatdátuma
@@ -100,7 +101,7 @@ namespace Villamos.Kezelők
         public List<Adat_T5C5_Göngyöl> Lista_Adatok(string Telephely, DateTime Dátum)
         {
             FájlBeállítás(Telephely, Dátum);
-            string szöveg = $"SELECT * FROM Állománytábla ORDER BY azonosító";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY azonosító";
             List<Adat_T5C5_Göngyöl> Adatok = new List<Adat_T5C5_Göngyöl>();
             Adat_T5C5_Göngyöl Adat;
 
@@ -143,7 +144,7 @@ namespace Villamos.Kezelők
                 List<string> szövegGy = new List<string>();
                 foreach (Adat_T5C5_Göngyöl Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE állománytábla SET ";
+                    string szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $" utolsórögzítés='{Adat.Utolsórögzítés:yyyy.MM.dd}', ";
                     szöveg += $" vizsgálatdátuma='{Adat.Vizsgálatdátuma:yyyy.MM.dd}', ";
                     szöveg += $" Vizsgálatfokozata='{Adat.Vizsgálatfokozata}', ";
@@ -172,7 +173,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                string szöveg = $"UPDATE állománytábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" utolsórögzítés='{Adat.Utolsórögzítés:yyyy.MM.dd}', ";
                 szöveg += $" vizsgálatdátuma='{Adat.Vizsgálatdátuma:yyyy.MM.dd}', ";
                 szöveg += $" Vizsgálatfokozata='{Adat.Vizsgálatfokozata}', ";
@@ -203,7 +204,7 @@ namespace Villamos.Kezelők
                 List<string> szövegGy = new List<string>();
                 foreach (string Adat in Azonosítók)
                 {
-                    string szöveg = $"DELETE FROM állománytábla WHERE [azonosító]='{Adat}'";
+                    string szöveg = $"DELETE FROM {táblanév} WHERE [azonosító]='{Adat}'";
                     szövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, szövegGy);

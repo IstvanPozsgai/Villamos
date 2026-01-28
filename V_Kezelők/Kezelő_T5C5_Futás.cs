@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "lilaakác";
         string hely;
+        readonly string táblanév = "futástábla";
 
         private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_T5C5_Futás> Lista_Adatok(string Telephely, DateTime Dátum)
         {
             FájlBeállítás(Telephely, Dátum);
-            string szöveg = $"SELECT * FROM futástábla order by azonosító";
+            string szöveg = $"SELECT * FROM {táblanév} order by azonosító";
             List<Adat_T5C5_Futás> Adatok = new List<Adat_T5C5_Futás>();
             Adat_T5C5_Futás Adat;
 
@@ -59,7 +60,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                MyA.ABtörlés(hely, jelszó,$"DELETE * FROM Futástábla");
+                MyA.ABtörlés(hely, jelszó,$"DELETE * FROM {táblanév}");
             }
             catch (HibásBevittAdat ex)
             {
@@ -80,7 +81,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_T5C5_Futás Adat in Adatok)
                 {
-                    string szöveg = $"INSERT INTO Futástábla (azonosító, Dátum, Futásstátus, Státus) VALUES ( ";
+                    string szöveg = $"INSERT INTO {táblanév} (azonosító, Dátum, Futásstátus, Státus) VALUES ( ";
                     szöveg += $"'{Adat.Azonosító}', '{Adat.Dátum:yyyy.MM.dd}', '{Adat.Futásstátus}', {Adat.Státus})";
                     SzövegGy.Add(szöveg);
                 }
@@ -105,7 +106,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_T5C5_Futás Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE futástábla SET ";
+                    string szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $" dátum='{Adat.Dátum:yyyy.MM.dd}', ";
                     szöveg += $" Futásstátus='{Adat.Futásstátus}', ";
                     szöveg += $" státus={Adat.Státus} ";
@@ -130,7 +131,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                string szöveg = $"UPDATE futástábla  SET  futásstátus='{Adat.Futásstátus}' WHERE azonosító='{Adat.Azonosító}'";
+                string szöveg = $"UPDATE {táblanév}  SET  futásstátus='{Adat.Futásstátus}' WHERE azonosító='{Adat.Azonosító}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -152,7 +153,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (string Azonosító in Azonosítók)
                 {
-                    string szöveg = $"UPDATE futástábla  SET futásstátus='Forgalomban' WHERE azonosító='{Azonosító}'";
+                    string szöveg = $"UPDATE {táblanév}  SET futásstátus='Forgalomban' WHERE azonosító='{Azonosító}'";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);

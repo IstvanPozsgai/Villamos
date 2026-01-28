@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Bezzegh";
         string hely;
+        readonly string táblanév = "kivételek";
 
         private void FájlBeállítás(string Típus)
         {
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_Technológia_Kivételek> Lista_Adatok(string Típus)
         {
             FájlBeállítás(Típus);
-            string szöveg = $"SELECT * FROM kivételek";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Technológia_Kivételek> Adatok = new List<Adat_Technológia_Kivételek>();
             Adat_Technológia_Kivételek Adat;
 
@@ -60,7 +61,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Típus);
-                string szöveg = $"INSERT INTO kivételek  (id, azonosító, altípus ) VALUES ({Sorszám(Típus)}, '{Adat.Azonosító}', '{Adat.Altípus}')";
+                string szöveg = $"INSERT INTO {táblanév}  (id, azonosító, altípus ) VALUES ({Sorszám(Típus)}, '{Adat.Azonosító}', '{Adat.Altípus}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -99,7 +100,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Típus);
-                string szöveg = $"DELETE FROM Kivételek WHERE id={sorszám}";
+                string szöveg = $"DELETE FROM {táblanév} WHERE id={sorszám}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

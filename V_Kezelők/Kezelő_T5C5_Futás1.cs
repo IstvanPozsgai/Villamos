@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "lilaakác";
         string hely;
+        readonly string táblanév = "futástábla1";
 
         private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_T5C5_Futás1> Lista_Adatok(string Telephely, DateTime Dátum)
         {
             FájlBeállítás(Telephely, Dátum);
-            string szöveg = $"SELECT * FROM futástábla1 ";
+            string szöveg = $"SELECT * FROM  {táblanév}";
             List<Adat_T5C5_Futás1> Adatok = new List<Adat_T5C5_Futás1>();
             Adat_T5C5_Futás1 Adat;
 
@@ -57,7 +58,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely, Dátum);
 
-                string szöveg = $"INSERT INTO Futástábla1 (Státus) VALUES ({Adat.Státus})";
+                string szöveg = $"INSERT INTO {táblanév} (Státus) VALUES ({Adat.Státus})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -76,7 +77,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                MyA.ABtörlés(hely, jelszó,$"DELETE * FROM Futástábla1");
+                MyA.ABtörlés(hely, jelszó,$"DELETE * FROM {táblanév}");
             }
             catch (HibásBevittAdat ex)
             {
@@ -94,7 +95,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                string szöveg = $"Update futástábla1  SET  státus={Adat.Státus}";
+                string szöveg = $"Update {táblanév}  SET  státus={Adat.Státus}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

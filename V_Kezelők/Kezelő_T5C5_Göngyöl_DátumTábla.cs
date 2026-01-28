@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         string hely;
         readonly string jelszó = "pozsgaii";
+        readonly string táblanév = "Dátumtábla";
 
         private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_T5C5_Göngyöl_DátumTábla> Lista_Adatok(string Telephely, DateTime Dátum)
         {
             FájlBeállítás(Telephely, Dátum);
-            string szöveg = $"SELECT * From Dátumtábla ";
+            string szöveg = $"SELECT * From {táblanév} ";
             List<Adat_T5C5_Göngyöl_DátumTábla> Adatok = new List<Adat_T5C5_Göngyöl_DátumTábla>();
             Adat_T5C5_Göngyöl_DátumTábla Adat;
 
@@ -59,7 +60,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                string szöveg = $"INSERT INTO Dátumtábla (telephely, utolsórögzítés, zárol) ";
+                string szöveg = $"INSERT INTO {táblanév} (telephely, utolsórögzítés, zárol) ";
                 szöveg += $"VALUES ('{Adat.Telephely}',";
                 szöveg += $"'{Adat.Utolsórögzítés:yyyy.MM.dd}',";
                 szöveg += $"{Adat.Zárol})";
@@ -81,7 +82,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                string szöveg = $"UPDATE Dátumtábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"utolsórögzítés='{Adat.Utolsórögzítés:yyyy.MM.dd}' ";
                 szöveg += $"WHERE telephely='{Adat.Telephely}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -102,7 +103,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                string szöveg = $"UPDATE dátumtábla SET Zárol={Zárolás} WHERE telephely='{CMBTelephely}'";
+                string szöveg = $"UPDATE {táblanév} SET Zárol={Zárolás} WHERE telephely='{CMBTelephely}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -121,7 +122,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                string szöveg = $" UPDATE Dátumtábla SET Zárol = False WHERE Zárol = True";
+                string szöveg = $" UPDATE {táblanév} SET Zárol = False WHERE Zárol = True";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

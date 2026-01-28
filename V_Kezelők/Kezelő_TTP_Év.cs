@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}/Főmérnökség/adatok/TTP/TTP_Adatbázis.mdb";
         readonly string jelszó = "rudolfg";
+        readonly string táblanév = "TTP_Év";
 
         public Kezelő_TTP_Év()
         {
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO TTP_Év (Életkor, Év) ";
+                string szöveg = $"INSERT INTO {táblanév} (Életkor, Év) ";
                 szöveg += "VALUES (";
                 szöveg += $" {Adat.Életkor}, ";
                 szöveg += $" {Adat.Év} )";
@@ -46,7 +47,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE TTP_Év SET Év={Adat.Év}";
+                string szöveg = $"UPDATE {táblanév} SET Év={Adat.Év}";
                 szöveg += $" WHERE Életkor={Adat.Életkor}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -66,7 +67,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM TTP_Év WHERE Életkor={Életkor}";
+                string szöveg = $"DELETE FROM {táblanév} WHERE Életkor={Életkor}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -85,7 +86,7 @@ namespace Villamos.Kezelők
         {
             List<Adat_TTP_Év> Adatok = new List<Adat_TTP_Év>();
             Adat_TTP_Év Adat;
-            string szöveg = $"SELECT * FROM TTP_Év  ORDER BY Életkor";
+            string szöveg = $"SELECT * FROM {táblanév}  ORDER BY Életkor";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {

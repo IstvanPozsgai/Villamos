@@ -14,7 +14,6 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "repülő";
         string hely;
-        readonly string táblanév = "Alaplista";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -27,7 +26,7 @@ namespace Villamos.Kezelők
             FájlBeállítás(Telephely);
             List<Adat_Létszám_Elrendezés_Változatok> Adatok = new List<Adat_Létszám_Elrendezés_Változatok>();
             Adat_Létszám_Elrendezés_Változatok Adat;
-            string szöveg = $"Select * FROM {táblanév} order by  id";
+            string szöveg = $"Select * FROM Alaplista order by  id";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -62,7 +61,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE {táblanév} SET  ";
+                string szöveg = $"UPDATE Alaplista SET  ";
                 szöveg += $" Csoportnév='{Adat.Csoportnév}', ";
                 szöveg += $" oszlop='{Adat.Oszlop}', ";
                 szöveg += $" sor={Adat.Sor}, ";
@@ -89,7 +88,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely);
                 string szöveg = $"INSERT INTO Változatok (Azonosító, változatnév) VALUES (";
-                szöveg = $"INSERT INTO {táblanév} ";
+                szöveg = $"INSERT INTO Alaplista ";
                 szöveg += "( id, csoportnév, oszlop, sor, szélesség, Változatnév) VALUES (";
                 szöveg += $"{Sorszám(hely)},";
                 szöveg += $" '{Adat.Csoportnév}',";
@@ -117,9 +116,9 @@ namespace Villamos.Kezelők
                 FájlBeállítás(Telephely);
                 string szöveg;
                 if (Adat.Id == 0)
-                    szöveg = $"DELETE FROM {táblanév} WHERE Változatnév='{Adat.Változatnév}'";
+                    szöveg = $"DELETE FROM Alaplista WHERE Változatnév='{Adat.Változatnév}'";
                 else
-                    szöveg = $"DELETE FROM {táblanév} WHERE sorszám={Adat.Id}";
+                    szöveg = $"DELETE FROM Alaplista WHERE sorszám={Adat.Id}";
 
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

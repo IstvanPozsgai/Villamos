@@ -15,6 +15,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Bezzegh";
         string hely;
+        readonly string táblanév = "karbantartás";
 
         private void FájlBeállítás(string Típus)
         {
@@ -25,7 +26,7 @@ namespace Villamos.Kezelők
         public List<Adat_technológia_Ciklus> Lista_Adatok(string Típus)
         {
             FájlBeállítás(Típus);
-            string szöveg = $"SELECT * FROM karbantartás ORDER BY sorszám";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY sorszám";
             List<Adat_technológia_Ciklus> Adatok = new List<Adat_technológia_Ciklus>();
             Adat_technológia_Ciklus Adat;
 
@@ -71,7 +72,7 @@ namespace Villamos.Kezelők
 
                 if (Elem == null)
                 {
-                    szöveg = $"INSERT INTO Karbantartás  (Sorszám, Fokozat, Csoportos, Elérés, Verzió) VALUES (";
+                    szöveg = $"INSERT INTO {táblanév}  (Sorszám, Fokozat, Csoportos, Elérés, Verzió) VALUES (";
                     szöveg += $"{sorszám}, ";
                     szöveg += $"'{Adat.Fokozat}', ";
                     szöveg += $"{Adat.Csoportos}, ";
@@ -80,7 +81,7 @@ namespace Villamos.Kezelők
                 }
                 else
                 {
-                    szöveg = $"UPDATE Karbantartás  SET ";
+                    szöveg = $"UPDATE {táblanév}  SET ";
                     szöveg += $"Fokozat='{Adat.Fokozat}', ";
                     szöveg += $"Csoportos={Adat.Csoportos}, ";
                     szöveg += $"Elérés='{Adat.Elérés}', ";
@@ -109,7 +110,7 @@ namespace Villamos.Kezelők
 
                 if (Elem != null)
                 {
-                    string szöveg = $"DELETE FROM Karbantartás WHERE sorszám={Sorszám}";
+                    string szöveg = $"DELETE FROM {táblanév} WHERE sorszám={Sorszám}";
                     MyA.ABtörlés(hely, jelszó, szöveg);
                 }
             }

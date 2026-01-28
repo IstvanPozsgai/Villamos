@@ -15,6 +15,7 @@ namespace Villamos.Kezelők
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos4TW.mdb";
         readonly string jelszó = "czapmiklós";
         readonly Kezelő_TW600_ÜtemNapló KézNapló = new Kezelő_TW600_ÜtemNapló();
+        readonly string táblanév = "ütemezés";
 
         public Kezelő_TW6000_Ütemezés()
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_TW6000_Ütemezés> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM ütemezés";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_TW6000_Ütemezés> Adatok = new List<Adat_TW6000_Ütemezés>();
             Adat_TW6000_Ütemezés Adat;
 
@@ -68,7 +69,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_TW6000_Ütemezés Adat in Adatok)
                 {
-                    string szöveg = $"INSERT INTO ütemezés (azonosító, ciklusrend, elkészült, megjegyzés, ";
+                    string szöveg = $"INSERT INTO {táblanév} (azonosító, ciklusrend, elkészült, megjegyzés, ";
                     szöveg += " státus, velkészülés, vesedékesség, vizsgfoka, ";
                     szöveg += " vsorszám, vütemezés, vvégezte) VALUES (";
                     szöveg += $"'{Adat.Azonosító}', ";
@@ -103,7 +104,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO ütemezés (azonosító, ciklusrend, elkészült, megjegyzés, ";
+                string szöveg = $"INSERT INTO {táblanév} (azonosító, ciklusrend, elkészült, megjegyzés, ";
                 szöveg += " státus, velkészülés, vesedékesség, vizsgfoka, ";
                 szöveg += " vsorszám, vütemezés, vvégezte) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', "; // azonosító
@@ -136,7 +137,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE ütemezés SET ciklusrend='{Adat.Ciklusrend}', ";
+                string szöveg = $"UPDATE {táblanév} SET ciklusrend='{Adat.Ciklusrend}', ";
                 szöveg += $"elkészült={Adat.Elkészült}, ";
                 szöveg += $"megjegyzés='{Adat.Megjegyzés}', ";
                 szöveg += $"státus={Adat.Státus}, ";
@@ -166,7 +167,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE ütemezés SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" megjegyzés='Előjegyezve: {Adat.Megjegyzés}',";
                 szöveg += $" státus={Adat.Státus} ";
                 szöveg += $" WHERE  vütemezés=#{Adat.Vütemezés:MM-dd-yyyy}# ";
@@ -194,7 +195,7 @@ namespace Villamos.Kezelők
                 List<Adat_TW6000_Ütemezés> AdatokTárolt = Lista_Adatok();
                 foreach (Adat_TW6000_Ütemezés Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE ütemezés SET ";
+                    string szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $" státus={Adat.Státus},";
                     szöveg += $" megjegyzés ='{Adat.Megjegyzés}' ";
                     szöveg += $" WHERE azonosító='{Adat.Azonosító}'";
@@ -245,7 +246,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_TW6000_Ütemezés Adat in Adatok)
                 {
-                    string szöveg = $"DELETE FROM  ütemezés WHERE azonosító='{Adat.Azonosító}'";
+                    string szöveg = $"DELETE FROM  {táblanév} WHERE azonosító='{Adat.Azonosító}'";
                     szöveg += $" AND vütemezés=#{Adat.Vütemezés:MM-dd-yyyy}#";
                     szöveg += $" AND státus={Adat.Státus}";
                     SzövegGy.Add(szöveg);

@@ -13,10 +13,11 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő.mdb".KönyvSzerk();
         readonly string jelszó = "Mocó";
+            readonly string táblanév = "Szerszám_FejLáb";
 
         public Kezelő_Szerszám_FejLáb()
         {
-            string szöveg = $"SELECT * FROM Szerszám_FejLáb";
+            string szöveg = $"SELECT * FROM {táblanév}";
             if (!MyA.ABvanTábla(hely, jelszó, szöveg)) Adatbázis_Létrehozás.Szerszám_FejLáb(hely);
         }
 
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         {
             List<Adat_Szerszám_FejLáb> Adatok = new List<Adat_Szerszám_FejLáb>();
             Adat_Szerszám_FejLáb Adat;
-            string szöveg = $"SELECT * FROM Szerszám_FejLáb ";
+            string szöveg = $"SELECT * FROM {táblanév} ";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -66,7 +67,7 @@ namespace Villamos.Kezelők
                 string szöveg;
                 if (Egy_Adat == null)
                 {
-                    szöveg = $"INSERT INTO Szerszám_FejLáb (Típus, Fejléc_Bal, Fejléc_Közép, Fejléc_Jobb, Lábléc_Bal, Lábléc_Közép, Lábléc_Jobb) VALUES (";
+                    szöveg = $"INSERT INTO {táblanév} (Típus, Fejléc_Bal, Fejléc_Közép, Fejléc_Jobb, Lábléc_Bal, Lábléc_Közép, Lábléc_Jobb) VALUES (";
                     szöveg += $"'{Adat.Típus}', ";
                     szöveg += $"'{Adat.Fejléc_Bal}', ";
                     szöveg += $"'{Adat.Fejléc_Közép}', ";
@@ -77,7 +78,7 @@ namespace Villamos.Kezelők
                 }
                 else
                 {
-                    szöveg = $"UPDATE Szerszám_FejLáb SET ";
+                    szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $"Fejléc_Bal='{Adat.Fejléc_Bal}', ";
                     szöveg += $"Fejléc_Közép='{Adat.Fejléc_Közép}', ";
                     szöveg += $"Fejléc_Jobb='{Adat.Fejléc_Jobb}', ";

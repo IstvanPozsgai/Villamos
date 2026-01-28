@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}/Főmérnökség/adatok/TTP/TTP_Adatbázis.mdb";
         readonly string jelszó = "rudolfg";
+        readonly string táblanév = "TTP_Naptár";
 
         public Kezelő_TTP_Naptár()
         {
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         {
             List<Adat_TTP_Naptár> Adatok = new List<Adat_TTP_Naptár>();
             Adat_TTP_Naptár Adat;
-            string szöveg = $"SELECT * FROM TTP_Naptár";
+            string szöveg = $"SELECT * FROM {táblanév}";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -53,7 +54,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE TTP_Naptár SET Munkanap={Adat.Munkanap} WHERE Dátum=#{Adat.Dátum:MM-dd-yyyy}# ";
+                string szöveg = $"UPDATE {táblanév} SET Munkanap={Adat.Munkanap} WHERE Dátum=#{Adat.Dátum:MM-dd-yyyy}# ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -75,7 +76,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_TTP_Naptár Adat in Adatok)
                 {
-                    string szöveg = $"INSERT INTO TTP_Naptár (Dátum, Munkanap) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (Dátum, Munkanap) VALUES (";
                     szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', {Adat.Munkanap})";
                     SzövegGy.Add(szöveg);
                 }

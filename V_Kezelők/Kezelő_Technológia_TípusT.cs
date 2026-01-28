@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Bezzegh";
         string hely;
+        readonly string táblanév = "típus_tábla";
 
         private void FájlBeállítás(string Típus)
         {
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_Technológia_Alap> Lista_Adatok(string Típus)
         {
             FájlBeállítás(Típus);
-            string szöveg = $"SELECT * FROM típus_tábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Technológia_Alap> Adatok = new List<Adat_Technológia_Alap>();
             Adat_Technológia_Alap Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -56,7 +57,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO Típus_tábla (id, Típus) VALUES ({Sorszám(Típus)}, '{adat.Típus.Trim()}' )";
+                string szöveg = $"INSERT INTO {táblanév} (id, Típus) VALUES ({Sorszám(Típus)}, '{adat.Típus.Trim()}' )";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -99,7 +100,7 @@ namespace Villamos.Kezelők
 
                 if (Elem != null)
                 {
-                    string szöveg = $"DELETE FROM típus_tábla WHERE típus='{elem}'";
+                    string szöveg = $"DELETE FROM {táblanév} WHERE típus='{elem}'";
                     MyA.ABtörlés(hely, jelszó, szöveg);
                 }
             }

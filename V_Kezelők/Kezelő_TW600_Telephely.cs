@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
 
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos4TW.mdb";
         readonly string jelszó = "czapmiklós";
+        readonly string táblanév = "telephely";
 
         public Kezelő_TW600_Telephely()
         {
@@ -22,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_TW6000_Telephely> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM telephely order by sorrend";
+            string szöveg = $"SELECT * FROM {táblanév} order by sorrend";
             List<Adat_TW6000_Telephely> Adatok = new List<Adat_TW6000_Telephely>();
             Adat_TW6000_Telephely Adat;
 
@@ -54,7 +55,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO telephely (telephely, sorrend) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (telephely, sorrend) VALUES (";
                 szöveg += $"'{Adat.Telephely}', ";
                 szöveg += $"{Adat.Sorrend})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -74,7 +75,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE  telephely SET sorrend={Adat.Sorrend}";
+                string szöveg = $"UPDATE  {táblanév} SET sorrend={Adat.Sorrend}";
                 szöveg += $" WHERE telephely='{Adat.Telephely}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -93,7 +94,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM telephely where telephely='{Üzemek}'";
+                string szöveg = $"DELETE FROM {táblanév} where telephely='{Üzemek}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

@@ -61,7 +61,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"INSERT INTO munkarendtábla (id, munkarend, látszódik)  VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (id, munkarend, látszódik)  VALUES (";
                 szöveg += $"{Sorszám(Telephely, Év)}, ";
                 szöveg += $"'{Adat.Munkarend}', ";
                 szöveg += $" {Adat.Látszódik} ) ";

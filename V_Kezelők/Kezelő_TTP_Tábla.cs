@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}/Főmérnökség/adatok/TTP/TTP_Adatbázis.mdb";
         readonly string jelszó = "rudolfg";
+        readonly string táblanév = "TTP_Tábla";
 
         public Kezelő_TTP_Tábla()
         {
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         {
             List<Adat_TTP_Tábla> Adatok = new List<Adat_TTP_Tábla>();
             Adat_TTP_Tábla Adat;
-            string szöveg = $"SELECT * FROM TTP_Tábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -64,7 +65,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE TTP_Tábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"[Lejárat_Dátum]='{Adat.Lejárat_Dátum:d}', ";
                 szöveg += $"[TTP_Dátum]='{Adat.TTP_Dátum:d}', ";
                 szöveg += $"[TTP_Javítás]={Adat.TTP_Javítás}, ";
@@ -91,7 +92,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO TTP_Tábla (";
+                string szöveg = $"INSERT INTO {táblanév} (";
                 szöveg += $"[Azonosító], ";
                 szöveg += $"[Lejárat_Dátum], ";
                 szöveg += $"[Ütemezés_Dátum], ";
@@ -129,7 +130,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM TTP_Tábla ";
+                string szöveg = $"DELETE FROM {táblanév} ";
                 szöveg += $" WHERE [Azonosító]='{Adat.Azonosító}' AND [Ütemezés_Dátum]=#{Adat.Ütemezés_Dátum:MM-dd-yyyy}#";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

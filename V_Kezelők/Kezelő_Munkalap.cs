@@ -14,7 +14,6 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "kismalac";
         string hely;
-        readonly string táblanév = "folyamattábla";
 
         private void FájlBeállítás(string Telephely, int Év)
         {
@@ -29,7 +28,7 @@ namespace Villamos.Kezelők
         public List<Adat_Munka_Folyamat> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = $"SELECT * FROM {táblanév} ORDER BY id";
+            string szöveg = $"SELECT * FROM folyamattábla ORDER BY id";
             List<Adat_Munka_Folyamat> Adatok = new List<Adat_Munka_Folyamat>();
             Adat_Munka_Folyamat Adat;
 
@@ -87,7 +86,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $" UPDATE  {táblanév} SET ";
+                string szöveg = $" UPDATE  folyamattábla SET ";
                 szöveg += $" Rendelésiszám='{Adat.Rendelésiszám}', ";
                 szöveg += $" azonosító='{Adat.Azonosító}', ";
                 szöveg += $" munkafolyamat='{Adat.Munkafolyamat}', ";
@@ -111,7 +110,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $" UPDATE {táblanév} SET látszódik={látszódik} WHERE id={sorszám}";
+                string szöveg = $" UPDATE folyamattábla SET látszódik={látszódik} WHERE id={sorszám}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -130,7 +129,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"INSERT INTO {táblanév} (id, Rendelésiszám, azonosító, munkafolyamat, látszódik)  VALUES (";
+                string szöveg = $"INSERT INTO folyamattábla (id, Rendelésiszám, azonosító, munkafolyamat, látszódik)  VALUES (";
                 szöveg += $"{Sorszám(Telephely, Év)}, ";
                 szöveg += $"'{Adat.Rendelésiszám}', ";
                 szöveg += $"'{Adat.Azonosító}', ";
@@ -154,7 +153,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg =$"DELETE FROM {táblanév} WHERE látszódik=false";
+                string szöveg =$"DELETE FROM folyamattábla WHERE látszódik=false";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -240,7 +239,7 @@ namespace Villamos.Kezelők
                 {
                     // új adat rögzítése
                     id++;
-                    string szöveg = $"INSERT INTO {táblanév} (id, Rendelésiszám, azonosító, munkafolyamat, látszódik)  VALUES (";
+                    string szöveg = $"INSERT INTO folyamattábla (id, Rendelésiszám, azonosító, munkafolyamat, látszódik)  VALUES (";
                     szöveg += id + ", ";
                     szöveg += "'" + rekord.Rendelésiszám.Trim() + "', ";
                     szöveg += "'" + rekord.Azonosító.Trim() + "', ";
@@ -305,7 +304,7 @@ namespace Villamos.Kezelők
                 foreach (Adat_Munka_Folyamat elem in Adatok)
                 {
                     i++;
-                    string szöveg = $"UPDATE {táblanév} SET id={i} WHERE munkafolyamat='{elem.Munkafolyamat}'";
+                    string szöveg = $"UPDATE folyamattábla SET id={i} WHERE munkafolyamat='{elem.Munkafolyamat}'";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
@@ -326,7 +325,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"UPDATE {táblanév} SET Rendelésiszám='{Újrendelés}' WHERE Rendelésiszám='{Rendelés}'";
+                string szöveg = $"UPDATE folyamattábla SET Rendelésiszám='{Újrendelés}' WHERE Rendelésiszám='{Rendelés}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -345,7 +344,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"UPDATE {táblanév} SET azonosító='{ÚjPályaszám}' WHERE azonosító='{Pályaszám}'";
+                string szöveg = $"UPDATE folyamattábla SET azonosító='{ÚjPályaszám}' WHERE azonosító='{Pályaszám}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -364,13 +363,13 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"UPDATE {táblanév} SET id=0 WHERE id={sorszámMásodik}";
+                string szöveg = $"UPDATE folyamattábla SET id=0 WHERE id={sorszámMásodik}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
-                szöveg = $"UPDATE {táblanév} SET id={sorszámMásodik} WHERE id={sorszámElső}";
+                szöveg = $"UPDATE folyamattábla SET id={sorszámMásodik} WHERE id={sorszámElső}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
-                szöveg = $"UPDATE {táblanév} SET id={sorszámElső} WHERE id={0}";
+                szöveg = $"UPDATE folyamattábla SET id={sorszámElső} WHERE id={0}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
-                szöveg =$"DELETE FROM {táblanév} WHERE id=0";
+                szöveg =$"DELETE FROM folyamattábla WHERE id=0";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
