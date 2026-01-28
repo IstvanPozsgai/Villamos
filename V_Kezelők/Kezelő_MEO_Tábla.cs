@@ -15,7 +15,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_MEO_Tábla> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM tábla ORDER BY név, típus";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY név, típus";
             List<Adat_MEO_Tábla> Adatok = new List<Adat_MEO_Tábla>();
             Adat_MEO_Tábla Adat;
 

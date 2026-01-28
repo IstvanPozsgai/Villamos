@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "kismalac";
         string hely;
+        readonly string táblanév = "szolgálattábla";
 
         private void FájlBeállítás(string Telephely, int Év)
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Munka_Szolgálat> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = $"SELECT * FROM szolgálattábla ";
+            string szöveg = $"SELECT * FROM {táblanév} ";
             List<Adat_Munka_Szolgálat> Adatok = new List<Adat_Munka_Szolgálat>();
             Adat_Munka_Szolgálat Adat;
 
@@ -66,7 +67,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = " UPDATE  szolgálattábla SET ";
+                string szöveg = $" UPDATE  {táblanév} SET ";
                 szöveg += $" költséghely='{Adat.Költséghely}', ";
                 szöveg += $" szolgálat='{Adat.Szolgálat}', ";
                 szöveg += $" üzem='{Adat.Üzem}' ";
@@ -89,7 +90,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"INSERT INTO szolgálattábla (költséghely, szolgálat, üzem, A1, A2, A3, A4, A5, A6, A7)  VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (költséghely, szolgálat, üzem, A1, A2, A3, A4, A5, A6, A7)  VALUES (";
                 szöveg += $"'{Adat.Költséghely}', ";
                 szöveg += $"'{Adat.Szolgálat}', ";
                 szöveg += $"'{Adat.Üzem}', ";

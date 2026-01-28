@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "felépítés";
         string hely;
+        readonly string táblanév = "időválaszték";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_Munka_Idő> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = $"SELECT * FROM időválaszték ORDER BY id";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY id";
             List<Adat_Munka_Idő> Adatok = new List<Adat_Munka_Idő>();
             Adat_Munka_Idő Adat;
 
@@ -58,7 +59,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"INSERT INTO időválaszték (id, idő) VALUES ({Sorszám(hely)},{Adat.Idő})";
+                string szöveg = $"INSERT INTO {táblanév} (id, idő) VALUES ({Sorszám(hely)},{Adat.Idő})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -77,7 +78,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE időválaszték SET idő={Adat.Idő} WHERE id={Adat.ID}";
+                string szöveg = $"UPDATE {táblanév} SET idő={Adat.Idő} WHERE id={Adat.ID}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -96,7 +97,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"DELETE FROM időválaszték WHERE idő={Adat.Idő}";
+                string szöveg = $"DELETE FROM {táblanév} WHERE idő={Adat.Idő}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

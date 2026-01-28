@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "felépítés";
         string hely;
+        readonly string táblanév = "rendeléstábla";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Munka_Rendelés> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = $"SELECT * FROM rendeléstábla  order by  id";
+            string szöveg = $"SELECT * FROM  {táblanév} order by  id";
             List<Adat_Munka_Rendelés> Adatok = new List<Adat_Munka_Rendelés>();
             Adat_Munka_Rendelés Adat;
 
@@ -60,7 +61,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"INSERT INTO  rendeléstábla (rendelés, művelet, megnevezés, pályaszám) VALUES (";
+                string szöveg = $"INSERT INTO  {táblanév} (rendelés, művelet, megnevezés, pályaszám) VALUES (";
                 szöveg += $"'{Adat.Rendelés}', ";
                 szöveg += $"'{Adat.Műveletet}', ";
                 szöveg += $"'{Adat.Megnevezés}', ";
@@ -83,7 +84,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE rendeléstábla  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $" megnevezés='{Adat.Megnevezés}', ";
                 szöveg += $" pályaszám='{Adat.Pályaszám}', ";
                 szöveg += $" rendelés='{Adat.Rendelés}', ";
@@ -107,7 +108,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"DELETE FROM rendeléstábla WHERE id={ID}";
+                string szöveg = $"DELETE FROM {táblanév} WHERE id={ID}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

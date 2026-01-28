@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "dekádoló";
         string hely;
+        readonly string táblanév = "Adatoktábla";
 
         private void FájlBeállítás(string Telephely, int Év)
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Munka_Adatok> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = $"SELECT * FROM Adatoktábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Munka_Adatok> Adatok = new List<Adat_Munka_Adatok>();
             Adat_Munka_Adatok Adat;
 
@@ -66,7 +67,7 @@ namespace Villamos.Kezelők
                 List<string> szövegGy = new List<string>();
                 foreach (Adat_Munka_Adatok adat in Adatok)
                 {
-                    string szöveg = $"INSERT INTO Adatoktábla (rendelés, művelet, megnevezés, pályaszám, idő, dátum, státus) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (rendelés, művelet, megnevezés, pályaszám, idő, dátum, státus) VALUES (";
                     szöveg += $"'{adat.Rendelés}', ";
                     szöveg += $"'{adat.Művelet}', ";
                     szöveg += $"'{adat.Megnevezés}', ";
@@ -96,7 +97,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"UPDATE Adatoktábla SET rendelés='{rendelés}' WHERE id={Id}";
+                string szöveg = $"UPDATE {táblanév} SET rendelés='{rendelés}' WHERE id={Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -118,7 +119,7 @@ namespace Villamos.Kezelők
                 List<string> szövegGy = new List<string>();
                 foreach (long elem in idk)
                 {
-                    string szöveg = $"UPDATE Adatoktábla SET státus=false WHERE id={elem}";
+                    string szöveg = $"UPDATE {táblanév} SET státus=false WHERE id={elem}";
                     szövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, szövegGy);

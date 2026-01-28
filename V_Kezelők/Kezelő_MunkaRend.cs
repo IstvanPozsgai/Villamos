@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "kismalac";
         string hely;
+        readonly string táblanév = "munkarendtábla";
 
         private void FájlBeállítás(string Telephely, int Év)
         {
@@ -25,7 +26,7 @@ namespace Villamos.Kezelők
         public List<Adat_MunkaRend> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = $"SELECT * FROM munkarendtábla ORDER BY id";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY id";
             List<Adat_MunkaRend> Adatok = new List<Adat_MunkaRend>();
             Adat_MunkaRend Adat;
 
@@ -82,7 +83,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = " UPDATE  munkarendtábla SET ";
+                string szöveg = $" UPDATE  {táblanév} SET ";
                 szöveg += $" munkarend='{Adat.Munkarend}' ";
                 szöveg += $" WHERE id={Adat.ID}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -104,7 +105,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely, Év);
                 string jelszó = "kismalac";
-                string szöveg = $"UPDATE munkarendtábla SET látszódik={Látszódik} WHERE id={sorszám}";
+                string szöveg = $"UPDATE {táblanév} SET látszódik={Látszódik} WHERE id={sorszám}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
