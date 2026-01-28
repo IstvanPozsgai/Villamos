@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "seprűéslapát";
         string hely;
+        readonly string táblanév = "vezénylés";
 
         private void FájlBeállítás(string Telephely, int Év)
         {
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_Jármű_Takarítás_Vezénylés> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = "SELECT * FROM vezénylés";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Jármű_Takarítás_Vezénylés> Adatok = new List<Adat_Jármű_Takarítás_Vezénylés>();
             Adat_Jármű_Takarítás_Vezénylés Adat;
 
@@ -91,7 +92,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO Vezénylés (id, azonosító, dátum, takarítási_fajta, szerelvényszám,  státus ) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (id, azonosító, dátum, takarítási_fajta, szerelvényszám,  státus ) VALUES (";
                 szöveg += $"{Sorszám(Telephely, Év)}, "; // id
                 szöveg += $" '{Adat.Azonosító}', "; // azonosító
                 szöveg += $" '{Adat.Dátum:yyyy.MM.dd}', ";  // dátum
@@ -115,7 +116,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE Vezénylés  SET  státus=0 ";
+                string szöveg = $"UPDATE {táblanév}  SET  státus=0 ";
                 szöveg += $" WHERE dátum=#{Adat.Dátum:MM-dd-yyyy}# And azonosító='{Adat.Azonosító}' AND takarítási_fajta='{Adat.Takarítási_fajta}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
@@ -145,7 +146,7 @@ namespace Villamos.Kezelők
                                                        select a).FirstOrDefault();
                 if (Elem != null)
                 {
-                    string szöveg = "UPDATE Vezénylés  SET  státus=9 ";
+                    string szöveg = $"UPDATE {táblanév}  SET  státus=9 ";
                     szöveg += $" WHERE dátum=#{Adat.Dátum:MM-dd-yyyy}# And azonosító='{Adat.Azonosító}' AND takarítási_fajta='{Adat.Takarítási_fajta}'";
                     MyA.ABMódosítás(hely, jelszó, szöveg);
                 }

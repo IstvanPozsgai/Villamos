@@ -90,7 +90,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = "UPDATE tábla  SET ";
+                string szöveg = $"UPDATE tábla  SET ";
                 szöveg += " törölt=true,";
                 szöveg += $" mikor='{Adat.Mikor}', ";
                 szöveg += $" ki='{Adat.Ki}' ";

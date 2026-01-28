@@ -4,16 +4,17 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_DigitálisMunkalap_Fej
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\DigitálisMunkalap\MunkalapAdatok.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\DigitálisMunkalap\MunkalapAdatok.mdb";
         readonly string jelszó = "";
+        readonly string táblanév = "FejTábla";
 
         public Kezelő_DigitálisMunkalap_Fej()
         {
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         {
             List<Adat_DigitálisMunkalap_Fej> Adatok = new List<Adat_DigitálisMunkalap_Fej>();
             Adat_DigitálisMunkalap_Fej Adat;
-            string szöveg = "SELECT * FROM FejTábla ";
+            string szöveg = $"SELECT * FROM {táblanév} ";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -76,13 +77,11 @@ namespace Villamos.Kezelők
             return Válasz;
         }
 
-
-
         public void Rögzítés(Adat_DigitálisMunkalap_Fej Adat)
         {
             try
             {
-                string szöveg = "INSERT INTO FejTábla (Id, Típus, Karbantartási_fokozat, EllDolgozóNév, EllDolgozószám, Telephely, Dátum) ";
+                string szöveg = $"INSERT INTO {táblanév} (Id, Típus, Karbantartási_fokozat, EllDolgozóNév, EllDolgozószám, Telephely, Dátum) ";
                 szöveg += " VALUES (";
                 szöveg += $"{Adat.Id}, ";//Id
                 szöveg += $"'{Adat.Típus}', ";//Típus

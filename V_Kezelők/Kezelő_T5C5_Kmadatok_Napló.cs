@@ -23,7 +23,7 @@ namespace Villamos.Kezelők
         public List<Adat_T5C5_Kmadatok_Napló> Lista_Adatok(int Év)
         {
             FájlBeállítás(Év);
-            string szöveg = "SELECT * FROM kmtáblaNapló";
+            string szöveg = $"SELECT * FROM kmtáblaNapló";
             List<Adat_T5C5_Kmadatok_Napló> Adatok = new List<Adat_T5C5_Kmadatok_Napló>();
             Adat_T5C5_Kmadatok_Napló Adat;
 
@@ -82,7 +82,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = "INSERT INTO kmtáblaNapló  (ID, azonosító, jjavszám, KMUkm, KMUdátum, ";
+                string szöveg = $"INSERT INTO kmtáblaNapló  (ID, azonosító, jjavszám, KMUkm, KMUdátum, ";
                 szöveg += " vizsgfok,  vizsgdátumk, vizsgdátumv,";
                 szöveg += " vizsgkm, havikm, vizsgsorszám, fudátum, ";
                 szöveg += " Teljeskm, Ciklusrend, V2végezte, KövV2_Sorszám, KövV2, ";

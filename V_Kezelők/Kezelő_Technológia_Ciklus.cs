@@ -25,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_technológia_Ciklus> Lista_Adatok(string Típus)
         {
             FájlBeállítás(Típus);
-            string szöveg = "SELECT * FROM karbantartás ORDER BY sorszám";
+            string szöveg = $"SELECT * FROM karbantartás ORDER BY sorszám";
             List<Adat_technológia_Ciklus> Adatok = new List<Adat_technológia_Ciklus>();
             Adat_technológia_Ciklus Adat;
 
@@ -71,7 +71,7 @@ namespace Villamos.Kezelők
 
                 if (Elem == null)
                 {
-                    szöveg = "INSERT INTO Karbantartás  (Sorszám, Fokozat, Csoportos, Elérés, Verzió) VALUES (";
+                    szöveg = $"INSERT INTO Karbantartás  (Sorszám, Fokozat, Csoportos, Elérés, Verzió) VALUES (";
                     szöveg += $"{sorszám}, ";
                     szöveg += $"'{Adat.Fokozat}', ";
                     szöveg += $"{Adat.Csoportos}, ";
@@ -80,7 +80,7 @@ namespace Villamos.Kezelők
                 }
                 else
                 {
-                    szöveg = "UPDATE Karbantartás  SET ";
+                    szöveg = $"UPDATE Karbantartás  SET ";
                     szöveg += $"Fokozat='{Adat.Fokozat}', ";
                     szöveg += $"Csoportos={Adat.Csoportos}, ";
                     szöveg += $"Elérés='{Adat.Elérés}', ";

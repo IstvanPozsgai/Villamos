@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -13,8 +13,9 @@ namespace Villamos.Kezelők
 
     public class Kezelő_DigitálisMunkalap_Dolgozó
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\DigitálisMunkalap\MunkalapAdatok.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\DigitálisMunkalap\MunkalapAdatok.mdb";
         readonly string jelszó = "";
+        readonly string táblanév = "DolgozóTábla";
         public Kezelő_DigitálisMunkalap_Dolgozó()
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.DigitálisMunkalap(hely.KönyvSzerk());
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         {
             List<Adat_DigitálisMunkalap_Dolgozó> Adatok = new List<Adat_DigitálisMunkalap_Dolgozó>();
             Adat_DigitálisMunkalap_Dolgozó Adat;
-            string szöveg = "SELECT * FROM DolgozóTábla ";
+            string szöveg = $"SELECT * FROM {táblanév} ";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -53,7 +54,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-
         public void Rögzítés(List<Adat_DigitálisMunkalap_Dolgozó> Adatok)
         {
             try
@@ -62,7 +62,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_DigitálisMunkalap_Dolgozó Adat in Adatok)
                 {
-                    string szöveg = "INSERT  INTO DolgozóTábla (Fej_Id, DolgozóNév, Dolgozószám, Technológia_Id) ";
+                    string szöveg = $"INSERT INTO {táblanév} (Fej_Id, DolgozóNév, Dolgozószám, Technológia_Id) ";
                     szöveg += " VALUES (";
                     szöveg += $"{Adat.Fej_Id}, ";  //Fej_Id
                     szöveg += $"'{Adat.DolgozóNév}', ";  //DolgozóNév

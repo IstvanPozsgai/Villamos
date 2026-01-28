@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "forgalmirendszám";
         string hely;
+        readonly string táblanév = "alapadatok";
 
         private void FájlBeállítás(string Könyvtár, string Fájl)
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Behajtás_Behajtási> Lista_Adatok(string Könyvtár, string Fájl)
         {
             FájlBeállítás(Könyvtár, Fájl);
-            string szöveg = "SELECT * FROM alapadatok ";
+            string szöveg = $"SELECT * FROM {táblanév} ";
             List<Adat_Behajtás_Behajtási> Adatok = new List<Adat_Behajtás_Behajtási>();
             Adat_Behajtás_Behajtási Adat;
 
@@ -90,7 +91,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Könyvtár, Fájl);
-                string szöveg = "INSERT INTO alapadatok ( Sorszám, Szolgálatihely, Hrazonosító, Név, Rendszám, ";
+                string szöveg = $"INSERT INTO {táblanév} ( Sorszám, Szolgálatihely, Hrazonosító, Név, Rendszám, ";
                 szöveg += "Angyalföld_engedély, Baross_engedély, Budafok_engedély, Ferencváros_engedély, Fogaskerekű_engedély, Hungária_engedély, Kelenföld_engedély, ";
                 szöveg += "Száva_engedély, Szépilona_engedély, Zugló_engedély, Státus, Dátum, PDF, oka, ";
                 szöveg += "Angyalföld_megjegyzés, Baross_megjegyzés, Budafok_megjegyzés, Ferencváros_megjegyzés, Fogaskerekű_megjegyzés, Hungária_megjegyzés, Kelenföld_megjegyzés, ";
@@ -154,7 +155,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Könyvtár, Fájl);
-                string szöveg = "UPDATE alapadatok Set ";
+                string szöveg = $"UPDATE {táblanév} Set ";
                 szöveg += $" Hrazonosító='{Adat.HRazonosító}', ";
                 szöveg += $" Név='{Adat.Név}', ";
                 szöveg += $" Szolgálatihely='{Adat.Szolgálatihely}', ";
@@ -208,7 +209,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Könyvtár, Fájl);
-                string szöveg = "UPDATE alapadatok SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"{Telephely}_engedély={Gondnok}, ";
                 szöveg += $"{Telephely}_megjegyzés='{Megjegyzés}'";
                 szöveg += $" WHERE sorszám='{Sorszám}'";
@@ -230,7 +231,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Könyvtár, Fájl);
-                string szöveg = $"UPDATE alapadatok Set Státus={Adat.Státus}";
+                string szöveg = $"UPDATE {táblanév} Set Státus={Adat.Státus}";
                 szöveg += $" WHERE sorszám='{Adat.Sorszám}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -250,7 +251,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Könyvtár, Fájl);
-                string szöveg = $"UPDATE alapadatok SET {Szakszolg}={SzakszolgEng} WHERE sorszám='{sorSzám}'";
+                string szöveg = $"UPDATE {táblanév} SET {Szakszolg}={SzakszolgEng} WHERE sorszám='{sorSzám}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -264,5 +265,4 @@ namespace Villamos.Kezelők
             }
         }
     }
-
 }

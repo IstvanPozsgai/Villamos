@@ -27,7 +27,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_TW6000_Alap Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO alap (azonosító, start, ciklusrend, megállítás, kötöttstart, vizsgsorszám, vizsgnév, vizsgdátum) VALUES (";
+                    string szöveg = $"INSERT INTO alap (azonosító, start, ciklusrend, megállítás, kötöttstart, vizsgsorszám, vizsgnév, vizsgdátum) VALUES (";
                     szöveg += $"'{Adat.Azonosító}', ";
                     szöveg += $"'{Adat.Start:yyyy.MM.dd}', ";
                     szöveg += $"'{Adat.Ciklusrend}', ";
@@ -90,7 +90,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_TW6000_Ütemezés> Lista_AdatokÜtem(string hely)
         {
-            string szöveg = "SELECT * FROM ütemezés";
+            string szöveg = $"SELECT * FROM ütemezés";
             List<Adat_TW6000_Ütemezés> Adatok = new List<Adat_TW6000_Ütemezés>();
             Adat_TW6000_Ütemezés Adat;
 
@@ -136,7 +136,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_TW6000_Ütemezés Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO ütemezés (azonosító, ciklusrend, elkészült, megjegyzés, ";
+                    string szöveg = $"INSERT INTO ütemezés (azonosító, ciklusrend, elkészült, megjegyzés, ";
                     szöveg += " státus, velkészülés, vesedékesség, vizsgfoka, ";
                     szöveg += " vsorszám, vütemezés, vvégezte) VALUES (";
                     szöveg += $"'{Adat.Azonosító}', ";

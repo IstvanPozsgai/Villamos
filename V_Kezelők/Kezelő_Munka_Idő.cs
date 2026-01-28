@@ -24,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Munka_Idő> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = "SELECT * FROM időválaszték ORDER BY id";
+            string szöveg = $"SELECT * FROM időválaszték ORDER BY id";
             List<Adat_Munka_Idő> Adatok = new List<Adat_Munka_Idő>();
             Adat_Munka_Idő Adat;
 

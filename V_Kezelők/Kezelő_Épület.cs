@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -73,7 +73,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Épület_Takarításrakijelölt Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO takarításrakijelölt (E1elvégzettdb, E1kijelöltdb, E1rekijelölt,";
+                    string szöveg = $"INSERT INTO {táblanév} (E1elvégzettdb, E1kijelöltdb, E1rekijelölt,";
                     szöveg += " E2elvégzettdb, E2kijelöltdb, E2rekijelölt,";
                     szöveg += " E3elvégzettdb, E3kijelöltdb, E3rekijelölt,";
                     szöveg += " helységkód, hónap, Megnevezés, osztály ) VALUES (";
@@ -113,7 +113,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Épület_Takarításrakijelölt Adat in Adatok)
                 {
-                    string szöveg = "UPDATE takarításrakijelölt SET ";
+                    string szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $"E1kijelöltdb={Adat.E1kijelöltdb}, ";
                     szöveg += $"E2kijelöltdb={Adat.E2kijelöltdb}, ";
                     szöveg += $"E3kijelöltdb={Adat.E3kijelöltdb} ";
@@ -143,7 +143,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Épület_Takarításrakijelölt Adat in Adatok)
                 {
-                    string szöveg = "UPDATE takarításrakijelölt SET ";
+                    string szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $"E1kijelöltdb={Adat.E1kijelöltdb}, ";
                     szöveg += $"E2kijelöltdb={Adat.E2kijelöltdb}, ";
                     szöveg += $"E3kijelöltdb={Adat.E3kijelöltdb}, ";
@@ -181,7 +181,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Épület_Takarításrakijelölt Adat in Adatok)
                 {
-                    string szöveg = "UPDATE takarításrakijelölt  SET ";
+                    string szöveg = $"UPDATE {táblanév}  SET ";
                     szöveg += $"E1elvégzettdb={Adat.E1elvégzettdb}, ";
                     szöveg += $"E2elvégzettdb={Adat.E2elvégzettdb}, ";
                     szöveg += $"E3elvégzettdb={Adat.E3elvégzettdb} ";

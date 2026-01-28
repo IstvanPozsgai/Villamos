@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -13,11 +13,11 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "plédke";
         string hely;
-        string táblanév = "típuscseretábla";
+        readonly string táblanév = "típuscseretábla";
 
         private void FájlBeállítás(string Telephely, int Év)
         {
-            hely = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\főkönyv\típuscsere{Év}.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\főkönyv\típuscsere{Év}.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Tipuscsereösszesítőtábla(hely.KönyvSzerk());
         }
 
@@ -65,7 +65,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"DELETE FROM típuscseretábla where dátum=#{Dátum:MM-dd-yyyy}#";
+                string szöveg = $"DELETE FROM {táblanév} where dátum=#{Dátum:MM-dd-yyyy}#";
                 szöveg += $" and napszak='{Napszak}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
@@ -85,7 +85,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = "INSERT INTO típuscseretábla (dátum, napszak, típuselőírt, típuskiadott, viszonylat, forgalmiszám, tervindulás, azonosító, kocsi) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (dátum, napszak, típuselőírt, típuskiadott, viszonylat, forgalmiszám, tervindulás, azonosító, kocsi) VALUES (";
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', ";
                 szöveg += $"'{Adat.Napszak}', ";
                 szöveg += $"'{Adat.Típuselőírt}', ";

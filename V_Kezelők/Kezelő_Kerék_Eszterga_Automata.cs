@@ -79,7 +79,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE Automata SET UtolsóÜzenet='{Adat.UtolsóÜzenet:yyyy.MM.dd}'";
+                string szöveg = $"UPDATE {táblanév} SET UtolsóÜzenet='{Adat.UtolsóÜzenet:yyyy.MM.dd}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -97,7 +97,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO Automata (FelhasználóiNév, UtolsóÜzenet) VALUES ( '{Adat.FelhasználóiNév}', '{Adat.UtolsóÜzenet:yyyy.MM.dd}')";
+                string szöveg = $"INSERT INTO {táblanév} (FelhasználóiNév, UtolsóÜzenet) VALUES ( '{Adat.FelhasználóiNév}', '{Adat.UtolsóÜzenet:yyyy.MM.dd}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -115,7 +115,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM Automata  WHERE FelhasználóiNév='{felhasználó}'";
+                string szöveg = $"DELETE FROM {táblanév}  WHERE FelhasználóiNév='{felhasználó}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

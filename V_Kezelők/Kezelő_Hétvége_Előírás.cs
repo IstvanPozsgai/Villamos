@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "pozsgaii";
         string hely;
+        readonly string táblanév = "előírás";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         public List<Adat_Hétvége_Előírás> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = "Select * FROM előírás ORDER BY id";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY id";
             List<Adat_Hétvége_Előírás> Adatok = new List<Adat_Hétvége_Előírás>();
             Adat_Hétvége_Előírás Adat;
 
@@ -62,7 +63,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE előírás SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" vonal='{Adat.Vonal}', ";
                 szöveg += $" mennyiség={Adat.Mennyiség},  ";
                 szöveg += $" red={Adat.Red},  ";
@@ -87,7 +88,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO előírás (id, vonal, mennyiség, red, green, blue ) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (id, vonal, mennyiség, red, green, blue ) VALUES (";
                 szöveg += $"{Sorszám(Telephely)}, ";
                 szöveg += $"'{Adat.Vonal}', ";
                 szöveg += $"{Adat.Mennyiség}, ";
@@ -112,7 +113,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"DELETE FROM előírás where id={Id}";
+                string szöveg = $"DELETE FROM {táblanév} where id={Id}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -161,11 +162,11 @@ namespace Villamos.Kezelők
                     ElőzőId = Elem.Id;
                 }
 
-                string szöveg = $"UPDATE előírás SET id={0} WHERE id={Id}";
+                string szöveg = $"UPDATE {táblanév} SET id={0} WHERE id={Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
-                szöveg = $"UPDATE előírás SET id={Id} WHERE id={ElőzőId}";
+                szöveg = $"UPDATE {táblanév} SET id={Id} WHERE id={ElőzőId}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
-                szöveg = $"UPDATE előírás SET id={ElőzőId} WHERE id={0}";
+                szöveg = $"UPDATE {táblanév} SET id={ElőzőId} WHERE id={0}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

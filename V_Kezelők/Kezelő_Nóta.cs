@@ -79,7 +79,7 @@ namespace Villamos.Kezelők
                 string szöveg;
                 if (Program.Postás_Vezér || Program.PostásTelephely == "Főmérnökség")
                 {
-                    szöveg = "UPDATE Nóta_Adatok SET ";
+                    szöveg = $"UPDATE Nóta_Adatok SET ";
                     szöveg += $"Berendezés='{Adat.Berendezés}', ";
                     szöveg += $"Készlet_Sarzs='{Adat.Készlet_Sarzs}', ";
                     szöveg += $"Raktár='{Adat.Raktár}', ";
@@ -95,7 +95,7 @@ namespace Villamos.Kezelők
                 }
                 else
                 {
-                    szöveg = "UPDATE Nóta_Adatok SET ";
+                    szöveg = $"UPDATE Nóta_Adatok SET ";
                     szöveg += $"Telephely='{Adat.Telephely}', ";
                     szöveg += $"Forgóváz='{Adat.Forgóváz}', ";
                     szöveg += $"Beépíthető={Adat.Beépíthető}, ";
@@ -119,7 +119,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT  INTO Nóta_Adatok ";
+                string szöveg = $"INSERT  INTO Nóta_Adatok ";
                 szöveg += "(Berendezés, Készlet_Sarzs, Raktár, Telephely, Forgóváz, Beépíthető, MűszakiM, OsztásiM, Dátum, Státus, Id, Cikkszám) VALUES (";
                 szöveg += $"'{Adat.Berendezés}', ";      // Berendezés
                 szöveg += $"'{Adat.Készlet_Sarzs}', ";   // Készlet_Sarzs
@@ -179,7 +179,7 @@ namespace Villamos.Kezelők
                     {
                         if (Adat.Készlet_Sarzs.Trim() == "02")
                         {
-                            string szöveg = "UPDATE Nóta_Adatok SET ";
+                            string szöveg = $"UPDATE Nóta_Adatok SET ";
                             szöveg += $"Készlet_Sarzs='{Adat.Készlet_Sarzs}', ";
                             szöveg += $"Raktár='{Adat.Raktár}', ";
                             szöveg += $"Státus=7 ";
@@ -188,7 +188,7 @@ namespace Villamos.Kezelők
                         }
                         else
                         {
-                            string szöveg = "UPDATE Nóta_Adatok SET ";
+                            string szöveg = $"UPDATE Nóta_Adatok SET ";
                             szöveg += $"Készlet_Sarzs='{Adat.Készlet_Sarzs}', ";
                             szöveg += $"Raktár='{Adat.Raktár}' ";
                             szöveg += $" WHERE [Id] ={Adat.Id}";
@@ -199,7 +199,7 @@ namespace Villamos.Kezelők
                     {
                         if (Adat.Készlet_Sarzs.Trim() == "02")
                         {
-                            string szöveg = "UPDATE Nóta_Adatok SET ";
+                            string szöveg = $"UPDATE Nóta_Adatok SET ";
                             szöveg += $"Készlet_Sarzs='{Adat.Készlet_Sarzs}', ";
                             szöveg += $"Raktár='{Adat.Raktár}', ";
                             szöveg += $"Telephely='{Telephely}', ";
@@ -209,7 +209,7 @@ namespace Villamos.Kezelők
                         }
                         else
                         {
-                            string szöveg = "UPDATE Nóta_Adatok SET ";
+                            string szöveg = $"UPDATE Nóta_Adatok SET ";
                             szöveg += $"Készlet_Sarzs='{Adat.Készlet_Sarzs}', ";
                             szöveg += $"Raktár='{Adat.Raktár}', ";
                             szöveg += $"Telephely='{Telephely}' ";
@@ -249,7 +249,7 @@ namespace Villamos.Kezelők
                         if (AdatRaktár != null) Telephely = AdatRaktár.Telephelynév;
                     }
 
-                    string szöveg = "INSERT  INTO Nóta_Adatok ";
+                    string szöveg = $"INSERT  INTO Nóta_Adatok ";
                     szöveg += "(Berendezés, Készlet_Sarzs, Raktár, Telephely, Forgóváz, Beépíthető, MűszakiM, OsztásiM, Dátum, Státus, Id, cikkszám) VALUES (";
                     szöveg += $"'{Adat.Berendezés}', ";      // Berendezés
                     szöveg += $"'{Adat.Készlet_Sarzs}', ";   // Készlet_Sarzs
@@ -307,7 +307,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGY = new List<string>();
                 foreach (long Id in IDk)
                 {
-                    string szöveg = "UPDATE Nóta_Adatok SET Státus=9 ";
+                    string szöveg = $"UPDATE Nóta_Adatok SET Státus=9 ";
                     szöveg += $" WHERE [Id] ={Id}";
                     SzövegGY.Add(szöveg);
                 }

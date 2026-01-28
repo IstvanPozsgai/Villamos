@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
@@ -82,7 +82,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 Kalkulál.Enabled = false;
 
 
-                // csak főmérnökségi belépéssel módosítható
+                // csak Főmérnökségi belépéssel módosítható
 
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                     Alap_rögzít.Visible = true;
@@ -173,6 +173,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         private void Kalkulál_Click(object sender, EventArgs e)
         {
+           
             try
             {
                 // Ebben az eljárásban minden kocsi adatát akarjuk  ellenőrizni
@@ -182,7 +183,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 AdatokZser = KézZSerKm.Lista_adatok(DateTime.Today.Year - 1);
                 List<Adat_Főkönyv_Zser_Km> Ideig = KézZSerKm.Lista_adatok(DateTime.Today.Year);
                 AdatokZser.AddRange(Ideig);
-
+                
                 if (Adatok != null)
                 {
                     Holtart.Be();
@@ -229,13 +230,21 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
                     }
                     KézCAFAlap.Módosítás_kmAdat(AdatokGy);
-                    
+
                     //Frissítem a km adatokat a CAF_KM_Attekintes táblában
+                 
                     foreach (Adat_CAF_alap rekord in Adatok)
+                    {
+                        DateTime Kezdődik = DateTime.Now;
+                        Holtart.Lép();
                         KézCafKm.Erteket_Frissit_Osszes(rekord.Azonosító);
+                        DateTime Vége = DateTime.Now;
+                      //  MessageBox.Show($"Az adatok rögzítése befejeződött!\n{(Vége - Kezdődik)}", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
                 Holtart.Ki();
-                MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+               
+                MessageBox.Show($"Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {

@@ -2492,6 +2492,7 @@ namespace Villamos
                 if (AdatNap == null || AdatNap.Count == 0) throw new HibásBevittAdat("Nincs listázandó adat."); ;
                 Tábla_utolsó.Refresh();
                 Tábla_utolsó.Visible = false;
+                Tábla_utolsó.CleanFilterAndSort();
                 AdatTábla_Utolsó.Clear();
 
                 // fejléc elkészítése
@@ -2519,7 +2520,7 @@ namespace Villamos
 
                     AdatTábla_Utolsó.Rows.Add(Soradat);
                 }
-                Tábla_utolsó.CleanFilterAndSort();
+
                 Tábla_utolsó.DataSource = AdatTábla_Utolsó;
 
                 Tábla_utolsó.Columns["Azonosító"].Width = 100;
@@ -2658,9 +2659,9 @@ namespace Villamos
                           select a).ToList();
 
                 Tábla_utolsó.Visible = false;
+                Tábla_utolsó.CleanFilterAndSort();
                 Tábla_utolsó_Fejléc();
                 Tábla_Tartalom(Adatok);
-                Tábla_utolsó.CleanFilterAndSort();
                 Tábla_utolsó.DataSource = AdatTábla_Utolsó;
                 Tábla_utolsó_OszlopSzél();
                 Tábla_utolsó.Visible = true;

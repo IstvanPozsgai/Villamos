@@ -48,7 +48,7 @@ namespace Villamos.Kezelők
         public List<Adat_Utasítás> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = "SELECT * FROM üzenetek ORDER BY sorszám desc";
+            string szöveg = $"SELECT * FROM üzenetek ORDER BY sorszám desc";
             List<Adat_Utasítás> Adatok = new List<Adat_Utasítás>();
             Adat_Utasítás Adat;
 
@@ -87,7 +87,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely, Év);
                 Válasz = Sorszám(Telephely, Év);
-                string szöveg = "INSERT INTO üzenetek (sorszám, szöveg, írta, mikor, érvényes) VALUES ";
+                string szöveg = $"INSERT INTO üzenetek (sorszám, szöveg, írta, mikor, érvényes) VALUES ";
                 szöveg += $"({Válasz}, '{Adat.Szöveg}', '{Adat.Írta}', '{Adat.Mikor}', {Adat.Érvényes})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 

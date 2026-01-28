@@ -68,7 +68,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = "INSERT INTO ütemezésnapló (azonosító, ciklusrend, vizsgfoka, vsorszám, megjegyzés, vesedékesség, vütemezés, vvégezte, ";
+                string szöveg = $"INSERT INTO ütemezésnapló (azonosító, ciklusrend, vizsgfoka, vsorszám, megjegyzés, vesedékesség, vütemezés, vvégezte, ";
                 szöveg += "  velkészülés, státus, elkészült, rögzítő, rögzítésideje) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Ciklusrend}', ";
@@ -104,7 +104,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_TW6000_Ütemezés Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO ütemezésnapló (azonosító, ciklusrend, elkészült, megjegyzés, ";
+                    string szöveg = $"INSERT INTO ütemezésnapló (azonosító, ciklusrend, elkészült, megjegyzés, ";
                     szöveg += " státus, velkészülés, vesedékesség, vizsgfoka, ";
                     szöveg += " vsorszám, vütemezés, vvégezte,Rögzítésideje, Rögzítő ) VALUES (";
                     szöveg += $"'{Adat.Azonosító}', ";
@@ -141,7 +141,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Év);
 
-                string szöveg = "INSERT INTO ütemezésnapló (azonosító, ciklusrend, elkészült, megjegyzés, ";
+                string szöveg = $"INSERT INTO ütemezésnapló (azonosító, ciklusrend, elkészült, megjegyzés, ";
                 szöveg += " státus, velkészülés, vesedékesség, vizsgfoka, ";
                 szöveg += " vsorszám, vütemezés, vvégezte,Rögzítésideje, Rögzítő ) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";

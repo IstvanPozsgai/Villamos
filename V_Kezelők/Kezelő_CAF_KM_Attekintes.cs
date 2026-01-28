@@ -52,7 +52,7 @@ namespace Villamos.Kezelők
         // Az Adatbázis_Létrehozás osztályban szerepel a lenti SQL szintaxis.
         private void Tabla_Letrehozasa()
         {
-            string szöveg = "CREATE TABLE KM_Attekintes (";
+            string szöveg = $"CREATE TABLE {táblanév} (";
             szöveg += "azonosito CHAR(10), ";
             szöveg += "utolso_vizsgalat_valos_allasa LONG, ";
             szöveg += "kov_p0 LONG, ";
@@ -310,7 +310,11 @@ namespace Villamos.Kezelők
                                                        .OrderByDescending(a => a.Dátum)
                                                        .FirstOrDefault();            
             // Visszaadja a következő P vizsgálat KM várt értékét.
-            return ((Adott_Villamos.KM_Sorszám + 1) * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
+
+            if (Adott_Villamos != null)
+                return ((Adott_Villamos.KM_Sorszám + 1) * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
+            else
+                return 0;
         }
 
         // Visszaadja, hogy a villamos a legutolsó teljesített vizsgálat során az előírt számlálóhoz képest milyen állással teljesítette azt.
@@ -320,7 +324,10 @@ namespace Villamos.Kezelők
                                                        .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.Megjegyzés != "Ütemezési Segéd")
                                                        .OrderByDescending(a => a.Dátum)
                                                        .FirstOrDefault();
-            return (Adott_Villamos.KM_Sorszám * Vizsgalatok_Kozott_Megteheto_Km - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam));
+            if (Adott_Villamos != null)
+                return (Adott_Villamos.KM_Sorszám * Vizsgalatok_Kozott_Megteheto_Km - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam));
+            else
+                return 0;
         }
 
         // Ez már benne van a kezelőben félig meddig, overload-olva beleteszem ezt a verziót is később
@@ -342,13 +349,16 @@ namespace Villamos.Kezelők
             Adat_CAF_Adatok Adott_Villamos = osszes_adat
                                                        .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.Megjegyzés != "Ütemezési Segéd")
                                                        .OrderByDescending(a => a.Dátum)
-                                                       .First();
+                                                       .FirstOrDefault();
+            if (Adott_Villamos != null)
             // Ha 5-el osztható, de 20-al nem, akkor P1 vizsgálat.
-            for (int i = Adott_Villamos.KM_Sorszám; i < 80; i++)
             {
-                if (i % 5 == 0 && i % 20 != 0)
+                for (int i = Adott_Villamos.KM_Sorszám; i < 80; i++)
                 {
-                    return (i * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
+                    if (i % 5 == 0 && i % 20 != 0)
+                    {
+                        return (i * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
+                    }
                 }
             }
             return 0;
@@ -360,13 +370,16 @@ namespace Villamos.Kezelők
             Adat_CAF_Adatok Adott_Villamos = osszes_adat
                                                        .Where(a => a.IDŐvKM == 2 && a.Státus == 6 && a.Azonosító == Aktualis_palyaszam && a.Megjegyzés != "Ütemezési Segéd")
                                                        .OrderByDescending(a => a.Dátum)
-                                                       .First();
+                                                       .FirstOrDefault();
+            if (Adott_Villamos != null)
             // Ha csak 20-al osztható, akkor P2/P3 vizsgálat.
-            for (int i = Adott_Villamos.KM_Sorszám; i < 80; i++)
             {
-                if (i % 20 == 0)
+                for (int i = Adott_Villamos.KM_Sorszám; i < 80; i++)
                 {
-                    return (i * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
+                    if (i % 20 == 0)
+                    {
+                        return (i * Vizsgalatok_Kozott_Megteheto_Km) - Utolso_KM_Vizsgalat_Erteke(Aktualis_palyaszam);
+                    }
                 }
             }
             return 0;
@@ -537,11 +550,12 @@ namespace Villamos.Kezelők
             List<int> NemTortentPvizsgalat = new List<int>();
 
             List<int> azonositoLista = OsszesPalyaszam();
-
-            for (int i = 0; i <= azonositoLista.Count() - 1; i++)
+            //Pozsi: Itt megint végigmenjünk a lista összes pályaszámát.
+            List<Adat_CAF_Adatok> Lista_Adatok = KézAdatok.Lista_Adatok();
+            for (int i = 0; i < azonositoLista.Count(); i++)
             {
                 string Palyaszam = $"{azonositoLista[i]}";
-                if (KézAdatok.Lista_Adatok().FirstOrDefault(a => a.Azonosító == Palyaszam && a.IDŐvKM == 2) == null)
+                if (Lista_Adatok.FirstOrDefault(a => a.Azonosító == Palyaszam && a.IDŐvKM == 2) == null)
                 {
                     NemTortentPvizsgalat.Add(Palyaszam.ToÉrt_Int());
                 }
@@ -551,6 +565,7 @@ namespace Villamos.Kezelők
 
         private List<int> OsszesPalyaszam()
         {
+            //Pozsi:Ez is annyiszor fut le ahány pályaszám van, ezt is csak egyszer kellene feltölteni, utána lehet linq
             return KézJármű.Lista_Adatok("Főmérnökség")
                    .Where(a => a.Típus.Contains("CAF") && !a.Azonosító.StartsWith("V"))
                    .Select(a => int.Parse(a.Azonosító))
@@ -597,6 +612,8 @@ namespace Villamos.Kezelők
 
         public void Erteket_Frissit_Osszes(string palya)
         {
+            //Pozsi: ez egy pályaszám lista ami tartalmazza az ? a történt, vagy nem történtet?
+            //Lefut annyiszor ahány kocsi van, osztályszintűvé tenni és csak egyszer kellene feltölteni.
             List<int> TortentPvizsgalat = NemTortentPvizsgalat();
 
             if (!TortentPvizsgalat.Contains(palya.ToÉrt_Int()))

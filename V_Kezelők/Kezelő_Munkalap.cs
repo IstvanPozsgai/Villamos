@@ -20,8 +20,7 @@ namespace Villamos.Kezelők
             hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év}.mdb";
             if (!File.Exists(hely))
             {
-                Adatbázis_Létrehozás.Munkalap_tábla(hely.KönyvSzerk());
-                // ha nincs olyan évi adatbázis, akkor létrehozzuk az előző évi alapján ha van.
+                              // ha nincs olyan évi adatbázis, akkor létrehozzuk az előző évi alapján ha van.
                 AdatbázisLétrehozás(Telephely, Év);
             }
         }
@@ -29,7 +28,7 @@ namespace Villamos.Kezelők
         public List<Adat_Munka_Folyamat> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = "SELECT * FROM folyamattábla ORDER BY id";
+            string szöveg = $"SELECT * FROM folyamattábla ORDER BY id";
             List<Adat_Munka_Folyamat> Adatok = new List<Adat_Munka_Folyamat>();
             Adat_Munka_Folyamat Adat;
 
@@ -130,7 +129,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = "INSERT INTO folyamattábla (id, Rendelésiszám, azonosító, munkafolyamat, látszódik)  VALUES (";
+                string szöveg = $"INSERT INTO folyamattábla (id, Rendelésiszám, azonosító, munkafolyamat, látszódik)  VALUES (";
                 szöveg += $"{Sorszám(Telephely, Év)}, ";
                 szöveg += $"'{Adat.Rendelésiszám}', ";
                 szöveg += $"'{Adat.Azonosító}', ";
@@ -154,7 +153,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = "DELETE FROM folyamattábla WHERE látszódik=false";
+                string szöveg =$"DELETE FROM folyamattábla WHERE látszódik=false";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -214,7 +213,7 @@ namespace Villamos.Kezelők
             {
                 // új adat rögzítése
                 id++;
-                string szöveg = "INSERT INTO munkarendtábla (id, munkarend, látszódik)  VALUES (";
+                string szöveg = $"INSERT INTO munkarendtábla (id, munkarend, látszódik)  VALUES (";
                 szöveg += id + ", ";
                 szöveg += "'" + rekord.Munkarend.Trim() + "', ";
                 szöveg += " true ) ";
@@ -240,7 +239,7 @@ namespace Villamos.Kezelők
                 {
                     // új adat rögzítése
                     id++;
-                    string szöveg = "INSERT INTO folyamattábla (id, Rendelésiszám, azonosító, munkafolyamat, látszódik)  VALUES (";
+                    string szöveg = $"INSERT INTO folyamattábla (id, Rendelésiszám, azonosító, munkafolyamat, látszódik)  VALUES (";
                     szöveg += id + ", ";
                     szöveg += "'" + rekord.Rendelésiszám.Trim() + "', ";
                     szöveg += "'" + rekord.Azonosító.Trim() + "', ";
@@ -273,7 +272,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Munka_Szolgálat rekord in Adatok)
                 {
-                    string szöveg = "INSERT INTO szolgálattábla (költséghely, szolgálat, üzem, A1, A2, A3, A4, A5, A6, A7)  VALUES (";
+                    string szöveg = $"INSERT INTO szolgálattábla (költséghely, szolgálat, üzem, A1, A2, A3, A4, A5, A6, A7)  VALUES (";
                     szöveg += $"'{rekord.Költséghely}',";
                     szöveg += $"'{rekord.Szolgálat}',";
                     szöveg += $"'{rekord.Üzem}',";
@@ -370,7 +369,7 @@ namespace Villamos.Kezelők
                 MyA.ABMódosítás(hely, jelszó, szöveg);
                 szöveg = $"UPDATE folyamattábla SET id={sorszámElső} WHERE id={0}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
-                szöveg = "DELETE FROM folyamattábla WHERE id=0";
+                szöveg =$"DELETE FROM folyamattábla WHERE id=0";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

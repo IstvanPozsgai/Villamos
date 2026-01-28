@@ -12,6 +12,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos.mdb";
         readonly string jelszó = "pozsgaii";
+        readonly string táblanév = "vendégtábla";
 
         public Kezelő_Jármű_Vendég()
         {
@@ -20,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Jármű_Vendég> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM vendégtábla order by azonosító";
+            string szöveg = $"SELECT * FROM {táblanév} order by azonosító";
             List<Adat_Jármű_Vendég> Adatok = new List<Adat_Jármű_Vendég>();
             Adat_Jármű_Vendég Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -59,7 +60,7 @@ namespace Villamos.Kezelők
 
                 if (EgyAdat != null)
                 {
-                    string szöveg = $"DELETE FROM vendégtábla WHERE azonosító='{Adat.Azonosító.Trim()}'";
+                    string szöveg = $"DELETE FROM {táblanév} WHERE azonosító='{Adat.Azonosító.Trim()}'";
                     MyA.ABtörlés(hely, jelszó, szöveg);
                     throw new HibásBevittAdat("Az adat törlése megtörtént.");
                 }
@@ -86,7 +87,7 @@ namespace Villamos.Kezelők
                 if (EgyAdat != null)
                 {
                     // Ha már létezik, akkor módosítjuk
-                    string szöveg = "UPDATE vendégtábla  SET ";
+                    string szöveg = $"UPDATE {táblanév}  SET ";
                     szöveg += $"típus='{Adat.Típus.Trim()}', "; // típus
                     szöveg += $"BázisTelephely='{Adat.BázisTelephely.Trim()}', "; // BázisTelephely
                     szöveg += $"KiadóTelephely='{Adat.KiadóTelephely.Trim()}' "; // KiadóTelephely
@@ -97,7 +98,7 @@ namespace Villamos.Kezelők
                 else
                 {
                     // ha nem létezik 
-                    string szöveg = "INSERT INTO vendégtábla  (  azonosító, típus, BázisTelephely, KiadóTelephely ) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév}  (  azonosító, típus, BázisTelephely, KiadóTelephely ) VALUES (";
                     szöveg += $"'{Adat.Azonosító.Trim()}', "; // azonosító
                     szöveg += $"'{Adat.Típus.Trim()}', "; // típus
                     szöveg += $"'{Adat.BázisTelephely.Trim()}', "; // BázisTelephely

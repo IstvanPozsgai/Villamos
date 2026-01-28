@@ -1809,8 +1809,20 @@ namespace Villamos
 
         private void BtnRögzítFrissít_Click(object sender, EventArgs e)
         {
-            if (Dátumtól.Value.Year != Dátumig.Value.Year) throw new HibásBevittAdat("A két dátum azonos évben kell, hogy legyen.");
-            Listanapló();
+            try
+            {
+                if (Dátumtól.Value.Year > Dátumig.Value.Year) throw new HibásBevittAdat("A végző dátum kisebb, mint a kezdő dátum.");
+                Listanapló();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Listanapló()
@@ -1824,7 +1836,18 @@ namespace Villamos
                 Chkoktat.Checked = false;
                 Chkelrendelés.Checked = false;
 
+                //Több év adatát betöltjük
                 List<Adat_Oktatás_Napló> Adatok = Kéz_Okt_Nap.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year);
+                if (Dátumtól.Value.Year != Dátumig.Value.Year)
+                {
+                    for (int év = (Dátumtól.Value.Year + 1); év < Dátumig.Value.Year; év++)
+                    {
+                        List<Adat_Oktatás_Napló> AdatokIdeig = Kéz_Okt_Nap.Lista_Adatok(Cmbtelephely.Text.Trim(), év);
+                        Adatok.AddRange(AdatokIdeig);
+                    }
+                }
+
+
                 Adatok = (from a in Adatok
                           where a.Telephely == Cmbtelephely.Text.Trim()
                           && a.Rögzítésdátuma > Dátumtól.Value

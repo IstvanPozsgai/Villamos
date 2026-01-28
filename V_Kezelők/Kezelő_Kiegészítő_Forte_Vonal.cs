@@ -12,6 +12,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "fortevonal";
 
         public Kezelő_Kiegészítő_Forte_Vonal()
         {
@@ -21,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Forte_Vonal> Lista_Adatok()
         {
-            string szöveg = "Select * FROM fortevonal order by fortevonal";
+            string szöveg = $"SELECT * FROM {táblanév} order by fortevonal";
             List<Adat_Kiegészítő_Forte_Vonal> Adatok = new List<Adat_Kiegészítő_Forte_Vonal>();
             Adat_Kiegészítő_Forte_Vonal Adat;
 
@@ -53,7 +54,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO fortevonal (fortevonal) ";
+                string szöveg = $"INSERT INTO {táblanév} (fortevonal) ";
                 szöveg += $"VALUES ('{Adat.ForteVonal}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -72,7 +73,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE  FROM fortevonal WHERE fortevonal='{Adat.ForteVonal}'";
+                string szöveg = $"DELETE  FROM {táblanév} WHERE fortevonal='{Adat.ForteVonal}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

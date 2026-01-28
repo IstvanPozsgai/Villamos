@@ -6,10 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -34,6 +33,11 @@ namespace Villamos
         List<Adat_Védő_Cikktörzs> AdatokCikk = new List<Adat_Védő_Cikktörzs>();
         List<Adat_Védő_Könyv> AdatokKönyv = new List<Adat_Védő_Könyv>();
         List<Adat_Védő_Könyvelés> AdatokKönyvelés = new List<Adat_Védő_Könyvelés>();
+
+        readonly Beállítás_Betű BeBetűC = new Beállítás_Betű { Név = "Calibri", Méret = 11 };
+        readonly Beállítás_Betű BeBetűCV = new Beállítás_Betű { Név = "Calibri", Méret = 11, Vastag = true };
+        readonly Beállítás_Betű BeBetűC16 = new Beállítás_Betű { Név = "Calibri", Méret = 16 };
+        readonly Beállítás_Betű BeBetűC16V = new Beállítás_Betű { Név = "Calibri", Méret = 16, Vastag = true };
 
 #pragma warning disable
         DataTable AdatTáblaALap = new DataTable();
@@ -183,7 +187,7 @@ namespace Villamos
                 Könyv_Rögzít.Enabled = false;
                 Rögzít.Enabled = false;
 
-                // csak főmérnökségi belépéssel törölhető
+                // csak Főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
                 }
@@ -224,7 +228,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\védőfelszerelés.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -680,7 +684,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, Alap_tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -965,7 +969,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, Könyv_tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1277,7 +1281,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, Napló_Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1389,7 +1393,8 @@ namespace Villamos
 
 
                 // megnyitjuk az excelt
-                MyE.ExcelLétrehozás();
+                MyX.ExcelLétrehozás(munkalap);
+                MyX.Munkalap_betű(munkalap, BeBetűC);
 
                 Holtart.Be(20);
 
@@ -1397,41 +1402,41 @@ namespace Villamos
                 Szervezet_Feltöltés();
 
                 // Szervezeti kiírások
-                MyE.Oszlopszélesség(munkalap, "a:a", 23);
-                MyE.Oszlopszélesség(munkalap, "b:b", 54);
-                MyE.Oszlopszélesség(munkalap, "c:d", 17);
-                MyE.Oszlopszélesség(munkalap, "e:e", 14);
-                MyE.Kiir(Szervezet1.Trim(), "a1");
-                MyE.Kiir(Szervezet2.Trim(), "a2");
-                MyE.Kiir(Szervezet3.Trim(), "a3");
-                MyE.Betű("a1:a3", false, false, true);
-                MyE.Egyesít(munkalap, "a5:E5");
-                MyE.Betű("a5", 16);
-                MyE.Betű("a5", false, false, true);
+                MyX.Oszlopszélesség(munkalap, "a:a", 23);
+                MyX.Oszlopszélesség(munkalap, "b:b", 54);
+                MyX.Oszlopszélesség(munkalap, "c:d", 17);
+                MyX.Oszlopszélesség(munkalap, "e:e", 14);
+                MyX.Kiir(Szervezet1.Trim(), "a1");
+                MyX.Kiir(Szervezet2.Trim(), "a2");
+                MyX.Kiir(Szervezet3.Trim(), "a3");
+                MyX.Betű(munkalap, "a1:a3", BeBetűCV);
+                MyX.Egyesít(munkalap, "a5:E5");
+                MyX.Betű(munkalap, "a5", BeBetűC16V);
+
                 switch (eset)
                 {
                     case 1:
                         {
-                            MyE.Kiir("Bizonylat a Védőeszköz felvételről", "a5");
+                            MyX.Kiir("Bizonylat a Védőeszköz felvételről", "a5");
                             break;
                         }
                     case 2:
                         {
-                            MyE.Kiir("Bizonylat a Védőeszköz leadásáról", "a5");
+                            MyX.Kiir("Bizonylat a Védőeszköz leadásáról", "a5");
                             break;
                         }
                     case 3:
                         {
-                            MyE.Kiir("Bizonylat a selejtessévált Védőeszköz leadásáról", "a5");
+                            MyX.Kiir("Bizonylat a selejtessévált Védőeszköz leadásáról", "a5");
                             break;
                         }
                 }
-                MyE.Egyesít(munkalap, "b7:E7");
-                MyE.Egyesít(munkalap, "b9:E9");
-                MyE.Egyesít(munkalap, "b11:E11");
-                MyE.Kiir("Könyvszám:", "a7");
-                MyE.Kiir("Könyv megnevezése:", "a9");
-                MyE.Kiir("Könyvért felelős", "a11");
+                MyX.Egyesít(munkalap, "b7:E7");
+                MyX.Egyesít(munkalap, "b9:E9");
+                MyX.Egyesít(munkalap, "b11:E11");
+                MyX.Kiir("Könyvszám:", "a7");
+                MyX.Kiir("Könyv megnevezése:", "a9");
+                MyX.Kiir("Könyvért felelős", "a11");
 
                 // beírjuk a védőkönyv adatokat
                 AdatokKönyv = KézKönyv.Lista_Adatok(Cmbtelephely.Text.Trim());
@@ -1442,48 +1447,46 @@ namespace Villamos
 
                 if (Elem != null)
                 {
-                    MyE.Kiir(Elem.Szerszámkönyvszám, "b7");
-                    MyE.Kiir(Elem.Szerszámkönyvnév, "b9");
-                    MyE.Kiir(Elem.Felelős1, "b11");
-
+                    MyX.Kiir(Elem.Szerszámkönyvszám, "b7");
+                    MyX.Kiir(Elem.Szerszámkönyvnév, "b9");
+                    MyX.Kiir(Elem.Felelős1, "b11");
                 }
 
                 Holtart.Lép();
 
                 // elkészítjük a fejlécet
-                MyE.Kiir("Nyilvántartásiszám:", "a15");
-                MyE.Kiir("Védőeszköz megnevezése:", "b15");
-                MyE.Kiir("Méret:", "c15");
-                MyE.Kiir("Bizonylatszám:", "d15");
-                MyE.Kiir("Mennyiség:", "e15");
+                MyX.Kiir("Nyilvántartásiszám:", "a15");
+                MyX.Kiir("Védőeszköz megnevezése:", "b15");
+                MyX.Kiir("Méret:", "c15");
+                MyX.Kiir("Bizonylatszám:", "d15");
+                MyX.Kiir("Mennyiség:", "e15");
                 // beírjuk a felvett szerszámokat
                 int sor = 16;
                 int hanyadik = 0;
 
                 for (int j = 0; j < Napló_Tábla.Rows.Count; j++)
                 {
-
                     if (Napló_Tábla.Rows[j].Selected == true)
                     {
                         // ha ki van jelölve
-                        MyE.Kiir(Napló_Tábla.Rows[j].Cells[0].Value.ToString(), "A" + sor.ToString());
-                        MyE.Kiir(Napló_Tábla.Rows[j].Cells[1].Value.ToString(), "b" + sor.ToString());
-                        MyE.Kiir(Napló_Tábla.Rows[j].Cells[3].Value.ToString(), "e" + sor.ToString());
+                        MyX.Kiir(Napló_Tábla.Rows[j].Cells[0].Value.ToString(), "A" + sor.ToString());
+                        MyX.Kiir(Napló_Tábla.Rows[j].Cells[1].Value.ToString(), "b" + sor.ToString());
+                        MyX.Kiir(Napló_Tábla.Rows[j].Cells[3].Value.ToString(), "e" + sor.ToString());
                         if (Napló_Tábla.Rows[j].Cells[2].Value.ToStrTrim() != "0")
                         {
-                            MyE.Kiir(Napló_Tábla.Rows[j].Cells[2].Value.ToString(), "c" + sor.ToString());
+                            MyX.Kiir(Napló_Tábla.Rows[j].Cells[2].Value.ToString(), "c" + sor.ToString());
                         }
                         else
                         {
-                            MyE.Kiir("-", "c" + sor.ToString());
+                            MyX.Kiir("-", "c" + sor.ToString());
                         }
                         if (Napló_Tábla.Rows[j].Cells[4].Value.ToStrTrim() != "0")
                         {
-                            MyE.Kiir(Napló_Tábla.Rows[j].Cells[4].Value.ToString(), "d" + sor.ToString());
+                            MyX.Kiir(Napló_Tábla.Rows[j].Cells[4].Value.ToString(), "d" + sor.ToString());
                         }
                         else
                         {
-                            MyE.Kiir("-", "d" + sor.ToString());
+                            MyX.Kiir("-", "d" + sor.ToString());
                         }
                         sor += 1;
                         hanyadik += 1;
@@ -1493,109 +1496,111 @@ namespace Villamos
 
                 Holtart.Lép();
                 // keretezünk
-                MyE.Rácsoz("a15:e" + sor.ToString());
-                MyE.Vastagkeret("a15:e15");
-                MyE.Vastagkeret("a15:e" + sor.ToString());
+                MyX.Rácsoz(munkalap, $"a15:e{sor - 1}");
+                MyX.Rácsoz(munkalap, "a15:e15");
+
                 sor += 2;
-                MyE.Kiir("Kelt:" + DateTime.Now.ToString(), "a" + sor.ToString());
+                MyX.Kiir("Kelt:" + DateTime.Now.ToString(), "a" + sor.ToString());
                 sor += 2;
                 switch (eset)
                 {
                     case 1:
                         {
-                            MyE.Kiir("A felsorolt Védőeszköz(ök)et használatra felvettem.", "a" + sor.ToString());
+                            MyX.Kiir("A felsorolt Védőeszköz(ök)et használatra felvettem.", "a" + sor.ToString());
                             break;
                         }
                     case 2:
                         {
-                            MyE.Kiir("A felsorolt Védőeszköz(ök)et tovább használatra leadtam.", "a" + sor.ToString());
+                            MyX.Kiir("A felsorolt Védőeszköz(ök)et tovább használatra leadtam.", "a" + sor.ToString());
                             break;
                         }
                     case 3:
                         {
-                            MyE.Kiir("A felsorolt Védőeszköz(ök)et selejtezés / javítás céljából leadtam.", "a" + sor.ToString());
+                            MyX.Kiir("A felsorolt Védőeszköz(ök)et selejtezés / javítás céljából leadtam.", "a" + sor.ToString());
                             break;
                         }
                 }
                 sor += 2;
-                MyE.Egyesít(munkalap, "c" + sor.ToString() + ":e" + sor.ToString());
-                MyE.Kiir("Dolgozó aláírása", "c" + sor.ToString());
+                MyX.Egyesít(munkalap, "c" + sor.ToString() + ":e" + sor.ToString());
+                MyX.Kiir("Dolgozó aláírása", "c" + sor.ToString());
 
                 // pontozás az aláírásnak
-                MyE.Egyesít(munkalap, "c" + sor + ":e" + sor);
-                MyE.Pontvonal("c" + sor + ":e" + sor);
+                MyX.Egyesít(munkalap, "c" + sor + ":e" + sor);
+                MyX.Pontvonal(munkalap, "c" + sor + ":e" + sor);
 
                 sor += 2;
                 switch (eset)
                 {
                     case 1:
                         {
-                            MyE.Kiir("A dolgozónak kiadtam  a felsorolt védőeszköz(ök)et.", "a" + sor.ToString());
+                            MyX.Kiir("A dolgozónak kiadtam  a felsorolt védőeszköz(ök)et.", "a" + sor.ToString());
                             break;
                         }
                     case 2:
                         {
-                            MyE.Kiir("A dolgozótól visszavettem a fenn felsorolt védőeszköz(ök)et.", "a" + sor.ToString());
+                            MyX.Kiir("A dolgozótól visszavettem a fenn felsorolt védőeszköz(ök)et.", "a" + sor.ToString());
                             break;
                         }
                     case 3:
                         {
-                            MyE.Kiir("A dolgozótól visszavettem a fenn felsorolt védőeszköz(ök)et.", "a" + sor.ToString());
+                            MyX.Kiir("A dolgozótól visszavettem a fenn felsorolt védőeszköz(ök)et.", "a" + sor.ToString());
                             break;
                         }
                 }
                 Holtart.Lép();
                 sor += 2;
-                MyE.Egyesít(munkalap, "c" + sor.ToString() + ":e" + sor.ToString());
-                MyE.Kiir("Raktáros", "c" + sor.ToString());
+                MyX.Egyesít(munkalap, "c" + sor.ToString() + ":e" + sor.ToString());
+                MyX.Kiir("Raktáros", "c" + sor.ToString());
 
                 // pontozás az aláírásnak
-                MyE.Egyesít(munkalap, "c" + sor + ":e" + sor);
-                MyE.Pontvonal("c" + sor + ":e" + sor);
+                MyX.Egyesít(munkalap, "c" + sor + ":e" + sor);
+                MyX.Pontvonal(munkalap, "c" + sor + ":e" + sor);
 
                 if (eset == 3)
                 {
                     sor += 2;
-                    MyE.Egyesít(munkalap, "a" + sor.ToString() + ":e" + sor.ToString());
-                    MyE.Kiir("A leadott Védőeszköz(ök)et megvizsgáltam és megállapítottam ,hogy a", "a" + sor.ToString());
+                    MyX.Egyesít(munkalap, "a" + sor.ToString() + ":e" + sor.ToString());
+                    MyX.Kiir("A leadott Védőeszköz(ök)et megvizsgáltam és megállapítottam ,hogy a", "a" + sor.ToString());
                     sor += 2;
-                    MyE.Egyesít(munkalap, "a" + sor.ToString() + ":e" + sor.ToString());
-                    MyE.Kiir("kártérítési felelősség fenn áll.         /      kártérítési felelősséggel a dolgozó nem tartozik.", "a" + sor.ToString());
+                    MyX.Egyesít(munkalap, "a" + sor.ToString() + ":e" + sor.ToString());
+                    MyX.Kiir("kártérítési felelősség fenn áll.         /      kártérítési felelősséggel a dolgozó nem tartozik.", "a" + sor.ToString());
                     sor += 2;
-                    MyE.Egyesít(munkalap, "c" + sor.ToString() + ":e" + sor.ToString());
-                    MyE.Kiir("Munkahelyivezető", "c" + sor.ToString());
+                    MyX.Egyesít(munkalap, "c" + sor.ToString() + ":e" + sor.ToString());
+                    MyX.Kiir("Munkahelyivezető", "c" + sor.ToString());
 
                     // pontozás az aláírásnak
-                    MyE.Egyesít(munkalap, "c" + sor + ":e" + sor);
-                    MyE.Pontvonal("c" + sor + ":e" + sor);
+                    MyX.Egyesít(munkalap, "c" + sor + ":e" + sor);
+                    MyX.Pontvonal(munkalap, "c" + sor + ":e" + sor);
                 }
                 // nyomtatási beállítások
-                MyE.NyomtatásiTerület_részletes(munkalap, "a1:e" + sor,
-                    balMargó: 10, jobbMargó: 10, felsőMargó: 10, alsóMargó: 10,
-                    oldalmagas: "false");
-
-                if (Napló_Nyomtat.Checked == true)
+                Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
                 {
-                    MyE.Nyomtatás(munkalap, 1, 2);
-                    MessageBox.Show("A Védőeszköz bizonylatok nyomtatása elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"a1:e{sor}",
+                    BalMargó = 10,
+                    JobbMargó = 10,
+                    AlsóMargó = 10,
+                    FelsőMargó = 10,
+                    LapSzéles = 1
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
                 // bezárjuk az Excel-t
-                MyE.Aktív_Cella(munkalap, "A1");
-                MyE.ExcelMentés(fájlexc);
-                MyE.ExcelBezárás();
-
-                if (Napló_Fájltöröl.Checked)
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
+                Holtart.Ki();
+                if (Napló_Nyomtat.Checked)
                 {
-                    if (Napló_Nyomtat.Checked == true)
-                        File.Delete(fájlexc + ".xlsx");
+                    List<string> Fájlok = new List<string> { fájlexc };
+                    MyF.ExcelNyomtatás(Fájlok, munkalap, Napló_Fájltöröl.Checked);
+                    MessageBox.Show("A Védőeszköz bizonylatok nyomtatása elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                else
+                if (!Napló_Fájltöröl.Checked)
                 {
-                    MyE.Megnyitás(fájlexc);
+                    MyF.Megnyitás(fájlexc);
                     MessageBox.Show("A Védőeszköz bizonylat elkészült.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                Holtart.Ki();
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -1981,7 +1986,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, Lekérd_Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2268,7 +2273,6 @@ namespace Villamos
                 foreach (string Elem in Lekérd_Szerszámkönyvszám.CheckedItems)
                 {
                     string[] darabol = Elem.Split('=');
-                    //    string szöveg = $"SELECT * FROM lista WHERE szerszámkönyvszám ='{darabol[0].Trim()}'  ORDER BY azonosító";
                     List<Adat_Védő_Könyvelés> Adatok = (from a in AdatokKönyvelés
                                                         where a.Szerszámkönyvszám == darabol[0].Trim()
                                                         select a).ToList();
@@ -2289,32 +2293,33 @@ namespace Villamos
                     if (Lekérd_Tábla.Rows.Count > 0)
                     {
                         // a fájlnév előkészítése
-                        fájlexc = $@"{könyvtár}\Védőkönyv_{darabol[0].Trim()}_{Program.PostásTelephely.Trim()}.xlsx";
+                        fájlexc = $@"{könyvtár}\Védőkönyv_{darabol[0].Trim()}_{Program.PostásNév.Trim()}.xlsx";
                         if (File.Exists(fájlexc)) File.Delete(fájlexc);
 
                         // megnyitjuk az excelt
-                        MyE.ExcelLétrehozás();
+                        MyX.ExcelLétrehozás(munkalap);
+                        MyX.Munkalap_betű(munkalap, BeBetűC);
 
-                        MyE.Oszlopszélesség(munkalap, "A:a", 23);
-                        MyE.Oszlopszélesség(munkalap, "B:b", 54);
-                        MyE.Oszlopszélesség(munkalap, "c:d", 17);
-                        MyE.Oszlopszélesség(munkalap, "E:e", 14);
-                        MyE.Oszlopszélesség(munkalap, "F:f", 16);
-                        MyE.Kiir(Szervezet1.Trim(), "a1");
-                        MyE.Kiir(Szervezet2.Trim(), "a2");
-                        MyE.Kiir(Szervezet3.Trim(), "a3");
-                        MyE.Betű("a1:a3", false, false, true);
-                        MyE.Egyesít(munkalap, "a5:E5");
-                        MyE.Betű("a5", 16);
-                        MyE.Betű("a5", false, false, true);
-                        MyE.Kiir("Egyéni védőeszköz nyilvántartó lap", "a5");
+                        MyX.Oszlopszélesség(munkalap, "A:a", 23);
+                        MyX.Oszlopszélesség(munkalap, "B:b", 54);
+                        MyX.Oszlopszélesség(munkalap, "c:d", 17);
+                        MyX.Oszlopszélesség(munkalap, "E:e", 14);
+                        MyX.Oszlopszélesség(munkalap, "F:f", 16);
+                        MyX.Kiir(Szervezet1.Trim(), "a1");
+                        MyX.Kiir(Szervezet2.Trim(), "a2");
+                        MyX.Kiir(Szervezet3.Trim(), "a3");
+                        MyX.Betű(munkalap, "a1:a3", BeBetűCV);
+                        MyX.Egyesít(munkalap, "a5:E5");
+                        MyX.Betű(munkalap, "a5", BeBetűC16V);
 
-                        MyE.Egyesít(munkalap, "b7:E7");
-                        MyE.Egyesít(munkalap, "b9:E9");
-                        MyE.Egyesít(munkalap, "b11:E11");
-                        MyE.Kiir("Könyvszám:", "a7");
-                        MyE.Kiir("Könyv megnevezése:", "a9");
-                        MyE.Kiir("Könyvért felelős", "a11");
+                        MyX.Kiir("Egyéni védőeszköz nyilvántartó lap", "a5");
+
+                        MyX.Egyesít(munkalap, "b7:E7");
+                        MyX.Egyesít(munkalap, "b9:E9");
+                        MyX.Egyesít(munkalap, "b11:E11");
+                        MyX.Kiir("Könyvszám:", "a7");
+                        MyX.Kiir("Könyv megnevezése:", "a9");
+                        MyX.Kiir("Könyvért felelős", "a11");
 
                         // beírjuk a szerszámkönyv adatokat
                         Adat_Védő_Könyv Könyv = (from a in AdatokKönyv
@@ -2322,60 +2327,66 @@ namespace Villamos
                                                  select a).FirstOrDefault();
                         if (Könyv != null)
                         {
-                            MyE.Kiir(Könyv.Szerszámkönyvszám.Trim(), "b7");
-                            MyE.Kiir(Könyv.Szerszámkönyvnév.Trim(), "b9");
-                            MyE.Kiir(Könyv.Felelős1.Trim(), "b11");
+                            MyX.Kiir(Könyv.Szerszámkönyvszám.Trim(), "b7");
+                            MyX.Kiir(Könyv.Szerszámkönyvnév.Trim(), "b9");
+                            MyX.Kiir(Könyv.Felelős1.Trim(), "b11");
                         }
                         // elkészítjük a fejlécet
-                        MyE.Kiir("Nyilvántartásiszám:", "a15");
-                        MyE.Kiir("Védőeszköz megnevezése:", "b15");
-                        MyE.Kiir("Méret:", "c15");
-                        MyE.Kiir("Bizonylatszám:", "e15");
-                        MyE.Kiir("Mennyiség:", "d15");
-                        MyE.Kiir("Felvétel dátuma:", "f15");
+                        MyX.Kiir("Nyilvántartásiszám:", "a15");
+                        MyX.Kiir("Védőeszköz megnevezése:", "b15");
+                        MyX.Kiir("Méret:", "c15");
+                        MyX.Kiir("Bizonylatszám:", "e15");
+                        MyX.Kiir("Mennyiség:", "d15");
+                        MyX.Kiir("Felvétel dátuma:", "f15");
                         // beírjuk a felvett védőeszközöket
 
                         for (int sorT = 0; sorT < Lekérd_Tábla.RowCount; sorT++)
                         {
                             for (int oszlop = 0; oszlop <= 5; oszlop++)
-                                MyE.Kiir(Lekérd_Tábla.Rows[sorT].Cells[oszlop].Value.ToString(), MyE.Oszlopnév(oszlop + 1) + (sorT + 16).ToString());
+                                MyX.Kiir(Lekérd_Tábla.Rows[sorT].Cells[oszlop].Value.ToString(), MyF.Oszlopnév(oszlop + 1) + (sorT + 16).ToString());
                         }
 
                         int sor = Lekérd_Tábla.Rows.Count + 15;
 
                         // keretezünk
-                        MyE.Rácsoz("a15:f" + sor.ToString());
-                        MyE.Vastagkeret("a15:f15");
-                        MyE.Vastagkeret("a15:f" + sor.ToString());
+                        MyX.Rácsoz(munkalap, "a15:f" + sor.ToString());
+                        MyX.Rácsoz(munkalap, "a15:f15");
                         sor += 2;
-                        MyE.Kiir("Kelt:" + DateTime.Today.ToString("yyyy.MM.dd"), "a" + sor.ToString());
+                        MyX.Kiir("Kelt:" + DateTime.Today.ToString("yyyy.MM.dd"), "a" + sor.ToString());
                         sor += 2;
-                        MyE.Kiir("A felsorolt védőeszköz(öke)t használatra felvettem.", "a" + sor.ToString());
+                        MyX.Kiir("A felsorolt védőeszköz(öke)t használatra felvettem.", "a" + sor.ToString());
                         sor += 2;
-                        MyE.Egyesít(munkalap, "c" + sor.ToString() + ":f" + sor.ToString());
-                        MyE.Kiir("Dolgozó aláírása", "c" + sor.ToString());
+                        MyX.Egyesít(munkalap, "c" + sor.ToString() + ":f" + sor.ToString());
+                        MyX.Kiir("Dolgozó aláírása", "c" + sor.ToString());
 
                         // pontozás az aláírásnak
-                        MyE.Egyesít(munkalap, "c" + sor + ":f" + sor);
-                        MyE.Pontvonal("c" + sor + ":f" + sor);
+                        MyX.Egyesít(munkalap, "c" + sor + ":f" + sor);
+                        MyX.Pontvonal(munkalap, "c" + sor + ":f" + sor);
 
 
                         sor += 5;
-                        MyE.Egyesít(munkalap, "c" + sor.ToString() + ":f" + sor.ToString());
-                        MyE.Kiir("Raktáros", "c" + sor.ToString());
+                        MyX.Egyesít(munkalap, "c" + sor.ToString() + ":f" + sor.ToString());
+                        MyX.Kiir("Raktáros", "c" + sor.ToString());
                         // pontozás az aláírásnak
-                        MyE.Egyesít(munkalap, "c" + sor + ":f" + sor);
-                        MyE.Pontvonal("c" + sor + ":f" + sor);
+                        MyX.Egyesít(munkalap, "c" + sor + ":f" + sor);
+                        MyX.Pontvonal(munkalap, "c" + sor + ":f" + sor);
 
                         // nyomtatási beállítások
-                        MyE.NyomtatásiTerület_részletes(munkalap, "a1:f" + sor,
-                            10, 10,
-                            10, 10);
+                        Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                        {
+                            Munkalap = munkalap,
+                            NyomtatásiTerület = $"a1:e{sor}",
+                            BalMargó = 10,
+                            JobbMargó = 10,
+                            AlsóMargó = 10,
+                            FelsőMargó = 10,
+                            LapSzéles = 1
+                        };
+                        MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
                         // bezárjuk az Excel-t
-                        MyE.Aktív_Cella(munkalap, "A1");
-                        MyE.ExcelMentés(fájlexc);
-                        MyE.ExcelBezárás();
+                        MyX.ExcelMentés(fájlexc);
+                        MyX.ExcelBezárás();
                     }
                 }
                 Holtart.Ki();
@@ -3814,27 +3825,28 @@ namespace Villamos
                             File.Delete(fájlexc);
 
                         // megnyitjuk az excelt
-                        MyE.ExcelLétrehozás();
-                        MyE.Oszlopszélesség(munkalap, "a:a", 20);
-                        MyE.Oszlopszélesség(munkalap, "b:b", 19);
-                        MyE.Oszlopszélesség(munkalap, "c:c", 19);
-                        MyE.Oszlopszélesség(munkalap, "D:d", 22);
-                        MyE.Oszlopszélesség(munkalap, "E:e", 30);
-                        MyE.Kiir(Szervezet1.Trim(), "a1");
-                        MyE.Kiir(Szervezet2.Trim(), "a2");
-                        MyE.Kiir(Szervezet3.Trim(), "a3");
+                        MyX.ExcelLétrehozás(munkalap);
+                        MyX.Munkalap_betű(munkalap, BeBetűC);
+                        MyX.Oszlopszélesség(munkalap, "a:a", 20);
+                        MyX.Oszlopszélesség(munkalap, "b:b", 19);
+                        MyX.Oszlopszélesség(munkalap, "c:c", 19);
+                        MyX.Oszlopszélesség(munkalap, "D:d", 22);
+                        MyX.Oszlopszélesség(munkalap, "E:e", 30);
+                        MyX.Kiir(Szervezet1.Trim(), "a1");
+                        MyX.Kiir(Szervezet2.Trim(), "a2");
+                        MyX.Kiir(Szervezet3.Trim(), "a3");
 
-                        MyE.Kiir("31/VU/2020. 3. számú melléklete", "e1");
-                        MyE.Betű("a1:a3", false, false, true);
-                        MyE.Egyesít(munkalap, "a5:E5");
-                        MyE.Betű("a5", 16);
-                        MyE.Betű("a5", false, false, true);
-                        MyE.Kiir("Egyéni védőeszközök személyenkénti meghatározása", "a5");
+                        MyX.Kiir("31/VU/2020. 3. számú melléklete", "e1");
+                        MyX.Betű(munkalap, "a1:a3", BeBetűCV);
+                        MyX.Egyesít(munkalap, "a5:E5");
+                        MyX.Betű(munkalap, "a5", BeBetűC16V);
 
-                        MyE.Egyesít(munkalap, "b7:E7");
-                        MyE.Egyesít(munkalap, "b9:E9");
-                        MyE.Kiir("Munkavállaló neve:", "a7");
-                        MyE.Kiir("HR azonosító:", "a9");
+                        MyX.Kiir("Egyéni védőeszközök személyenkénti meghatározása", "a5");
+
+                        MyX.Egyesít(munkalap, "b7:E7");
+                        MyX.Egyesít(munkalap, "b9:E9");
+                        MyX.Kiir("Munkavállaló neve:", "a7");
+                        MyX.Kiir("HR azonosító:", "a9");
 
 
                         // beírjuk a szerszámkönyv adatokat
@@ -3843,59 +3855,65 @@ namespace Villamos
                         if (Könyv != null && Könyv.Felelős1.Contains("="))
                         {
                             string[] dara = Könyv.Felelős1.Split('=');
-                            MyE.Kiir(dara[1].Trim(), "b9");
-                            MyE.Kiir(dara[0].Trim(), "b7");
+                            MyX.Kiir(dara[1].Trim(), "b9");
+                            MyX.Kiir(dara[0].Trim(), "b7");
                         }
 
                         // elkészítjük a fejlécet
-                        MyE.Kiir("A védelem iránya", "a11");
-                        MyE.Kiir("Kockázatok jellegének megnevezése", "b11");
-                        MyE.Kiir("A szükséges egyéni védőeszköz védelmi szintje, szabványszáma", "c11");
-                        MyE.Kiir("Védelmi szint meghatározása", "D11");
-                        MyE.Kiir("Egyéni védőeszköz megnevezése (minimális követelménye)", "E11");
-                        MyE.Sormagasság((11).ToString() + ":" + (11).ToString(), 80);
-                        MyE.Sortörésseltöbbsorba((11).ToString() + ":" + (11).ToString());
+                        MyX.Kiir("A védelem iránya", "a11");
+                        MyX.Kiir("Kockázatok jellegének megnevezése", "b11");
+                        MyX.Kiir("A szükséges egyéni védőeszköz védelmi szintje, szabványszáma", "c11");
+                        MyX.Kiir("Védelmi szint meghatározása", "D11");
+                        MyX.Kiir("Egyéni védőeszköz megnevezése (minimális követelménye)", "E11");
+                        MyX.Sormagasság(munkalap, (11).ToString() + ":" + (11).ToString(), 80);
+                        MyX.Sortörésseltöbbsorba(munkalap, (11).ToString() + ":" + (11).ToString());
 
-                        MyE.Sormagasság("11:11", 80);
-                        MyE.Igazít_vízszintes("11:11", "közép");
+                        MyX.Sormagasság(munkalap, "11:11", 80);
+                        MyX.Igazít_vízszintes(munkalap, "11:11", "közép");
 
                         // tartalom kiírása
                         for (int sorT = 0; sorT < Lekérd_Tábla.RowCount; sorT++)
                         {
                             for (int oszlop = 1; oszlop <= 5; oszlop++)
                             {
-                                MyE.Kiir(Lekérd_Tábla.Rows[sorT].Cells[oszlop].Value.ToString(), MyE.Oszlopnév(oszlop) + (sorT + 12).ToString());
-                                MyE.Sormagasság((sorT + 12).ToString() + ":" + (sorT + 12).ToString(), 45);
-                                MyE.Sortörésseltöbbsorba((sorT + 12).ToString() + ":" + (sorT + 12).ToString());
+                                MyX.Kiir(Lekérd_Tábla.Rows[sorT].Cells[oszlop].Value.ToString(), MyF.Oszlopnév(oszlop) + (sorT + 12).ToString());
+                                MyX.Sormagasság(munkalap, (sorT + 12).ToString() + ":" + (sorT + 12).ToString(), 45);
+                                MyX.Sortörésseltöbbsorba(munkalap, (sorT + 12).ToString() + ":" + (sorT + 12).ToString());
                             }
                             Holtart.Lép();
                         }
                         int sor = Lekérd_Tábla.Rows.Count + 11;
 
                         // keretezünk
-                        MyE.Rácsoz("a11:e" + sor.ToString());
-                        MyE.Vastagkeret("a11:e11");
-                        MyE.Vastagkeret("a11:e" + sor.ToString());
+                        MyX.Rácsoz(munkalap, "a11:e" + sor.ToString());
+                        MyX.Rácsoz(munkalap, "a11:e11");
                         sor += 2;
-                        MyE.Kiir("Kelt:" + DateTime.Today.ToString("yyyy.MM.dd"), "a" + sor.ToString());
+                        MyX.Kiir("Kelt:" + DateTime.Today.ToString("yyyy.MM.dd"), "a" + sor.ToString());
                         sor += 2;
 
-                        MyE.Egyesít(munkalap, "c" + sor.ToString() + ":e" + sor.ToString());
-                        MyE.Kiir("Munkáltató aláírása", "c" + sor.ToString());
+                        MyX.Egyesít(munkalap, "c" + sor.ToString() + ":e" + sor.ToString());
+                        MyX.Kiir("Munkáltató aláírása", "c" + sor.ToString());
 
                         // pontozás az aláírásnak
-                        MyE.Egyesít(munkalap, "c" + sor + ":e" + sor);
-                        MyE.Pontvonal("c" + sor + ":e" + sor);
+                        MyX.Egyesít(munkalap, "c" + sor + ":e" + sor);
+                        MyX.Pontvonal(munkalap, "c" + sor + ":e" + sor);
 
                         // nyomtatási beállítások
-                        MyE.NyomtatásiTerület_részletes(munkalap, "a1:e" + sor,
-                           10, 10,
-                           10, 10, oldalmagas: "false");
+                        Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
+                        {
+                            Munkalap = munkalap,
+                            NyomtatásiTerület = $"a1:e{sor}",
+                            BalMargó = 10,
+                            JobbMargó = 10,
+                            AlsóMargó = 10,
+                            FelsőMargó = 10,
+                            LapSzéles = 1
+                        };
+                        MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
                         // bezárjuk az Excel-t
-                        MyE.Aktív_Cella(munkalap, "A1");
-                        MyE.ExcelMentés(fájlexc);
-                        MyE.ExcelBezárás();
+                        MyX.ExcelMentés(fájlexc);
+                        MyX.ExcelBezárás();
                     }
                 }
                 Holtart.Ki();

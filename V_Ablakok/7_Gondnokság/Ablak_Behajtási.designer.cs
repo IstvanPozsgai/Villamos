@@ -40,6 +40,7 @@ namespace Villamos
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ablak_Behajtási));
             this.Fülek = new System.Windows.Forms.TabControl();
             this.Engedélyek = new System.Windows.Forms.TabPage();
+            this.FájlTöröl = new System.Windows.Forms.CheckBox();
             this.Nézet_Egyszerű = new System.Windows.Forms.CheckBox();
             this.TxtRendszámszűrő = new System.Windows.Forms.TextBox();
             this.LblEngedélyRendszám = new System.Windows.Forms.Label();
@@ -59,6 +60,7 @@ namespace Villamos
             this.BtnEngedélyListaFrissít = new System.Windows.Forms.Button();
             this.TáblaLista = new System.Windows.Forms.DataGridView();
             this.Kérelem = new System.Windows.Forms.TabPage();
+            this.AutóLista = new System.Windows.Forms.Label();
             this.KérelemTábla = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -97,7 +99,7 @@ namespace Villamos
             this.Btn2szak = new System.Windows.Forms.Button();
             this.Btn1szak = new System.Windows.Forms.Button();
             this.BtnKérelemPDF = new System.Windows.Forms.Button();
-            this.BtnÖsszSzabiLista = new System.Windows.Forms.Button();
+            this.BtnNévFrszFrissítés = new System.Windows.Forms.Button();
             this.BtnOktatásÚj = new System.Windows.Forms.Button();
             this.BtnkérelemRögzítés = new System.Windows.Forms.Button();
             this.PDF = new System.Windows.Forms.TabPage();
@@ -157,7 +159,6 @@ namespace Villamos
             this.LblTelephelyBeállítás = new System.Windows.Forms.Label();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
-            this.AutóLista = new System.Windows.Forms.Label();
             this.Fülek.SuspendLayout();
             this.Engedélyek.SuspendLayout();
             this.PanelEngedély.SuspendLayout();
@@ -203,6 +204,7 @@ namespace Villamos
             // Engedélyek
             // 
             this.Engedélyek.BackColor = System.Drawing.Color.LightSalmon;
+            this.Engedélyek.Controls.Add(this.FájlTöröl);
             this.Engedélyek.Controls.Add(this.Nézet_Egyszerű);
             this.Engedélyek.Controls.Add(this.TxtRendszámszűrő);
             this.Engedélyek.Controls.Add(this.LblEngedélyRendszám);
@@ -219,6 +221,18 @@ namespace Villamos
             this.Engedélyek.Size = new System.Drawing.Size(1263, 557);
             this.Engedélyek.TabIndex = 6;
             this.Engedélyek.Text = "Engedélyek listája";
+            // 
+            // FájlTöröl
+            // 
+            this.FájlTöröl.AutoSize = true;
+            this.FájlTöröl.Checked = true;
+            this.FájlTöröl.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.FájlTöröl.Location = new System.Drawing.Point(639, 37);
+            this.FájlTöröl.Name = "FájlTöröl";
+            this.FájlTöröl.Size = new System.Drawing.Size(96, 24);
+            this.FájlTöröl.TabIndex = 118;
+            this.FájlTöröl.Text = "Fájl törlés";
+            this.FájlTöröl.UseVisualStyleBackColor = true;
             // 
             // Nézet_Egyszerű
             // 
@@ -468,7 +482,7 @@ namespace Villamos
             this.Kérelem.Controls.Add(this.Btn2szak);
             this.Kérelem.Controls.Add(this.Btn1szak);
             this.Kérelem.Controls.Add(this.BtnKérelemPDF);
-            this.Kérelem.Controls.Add(this.BtnÖsszSzabiLista);
+            this.Kérelem.Controls.Add(this.BtnNévFrszFrissítés);
             this.Kérelem.Controls.Add(this.BtnOktatásÚj);
             this.Kérelem.Controls.Add(this.BtnkérelemRögzítés);
             this.Kérelem.Location = new System.Drawing.Point(4, 29);
@@ -478,6 +492,15 @@ namespace Villamos
             this.Kérelem.Size = new System.Drawing.Size(1263, 557);
             this.Kérelem.TabIndex = 1;
             this.Kérelem.Text = "Kérelem";
+            // 
+            // AutóLista
+            // 
+            this.AutóLista.AutoSize = true;
+            this.AutóLista.Location = new System.Drawing.Point(605, 180);
+            this.AutóLista.Name = "AutóLista";
+            this.AutóLista.Size = new System.Drawing.Size(138, 20);
+            this.AutóLista.TabIndex = 212;
+            this.AutóLista.Text = "Autók rendszáma:";
             // 
             // KérelemTábla
             // 
@@ -494,11 +517,11 @@ namespace Villamos
             this.Column3,
             this.Column4,
             this.Column5});
-            this.KérelemTábla.Location = new System.Drawing.Point(3, 401);
+            this.KérelemTábla.Location = new System.Drawing.Point(3, 429);
             this.KérelemTábla.Name = "KérelemTábla";
             this.KérelemTábla.RowHeadersVisible = false;
             this.KérelemTábla.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.KérelemTábla.Size = new System.Drawing.Size(1253, 153);
+            this.KérelemTábla.Size = new System.Drawing.Size(1253, 125);
             this.KérelemTábla.TabIndex = 211;
             this.KérelemTábla.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.KérelemTábla_CellValueChanged);
             // 
@@ -548,7 +571,7 @@ namespace Villamos
             // 
             this.CMBkérelemStátus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CMBkérelemStátus.FormattingEnabled = true;
-            this.CMBkérelemStátus.Location = new System.Drawing.Point(926, 10);
+            this.CMBkérelemStátus.Location = new System.Drawing.Point(617, 10);
             this.CMBkérelemStátus.Name = "CMBkérelemStátus";
             this.CMBkérelemStátus.Size = new System.Drawing.Size(223, 28);
             this.CMBkérelemStátus.TabIndex = 109;
@@ -556,7 +579,7 @@ namespace Villamos
             // LblKérelemEngedélyStátus
             // 
             this.LblKérelemEngedélyStátus.AutoSize = true;
-            this.LblKérelemEngedélyStátus.Location = new System.Drawing.Point(781, 18);
+            this.LblKérelemEngedélyStátus.Location = new System.Drawing.Point(472, 18);
             this.LblKérelemEngedélyStátus.Name = "LblKérelemEngedélyStátus";
             this.LblKérelemEngedélyStátus.Size = new System.Drawing.Size(139, 20);
             this.LblKérelemEngedélyStátus.TabIndex = 108;
@@ -569,7 +592,7 @@ namespace Villamos
             this.CmbKérelemTípus.Location = new System.Drawing.Point(199, 209);
             this.CmbKérelemTípus.Name = "CmbKérelemTípus";
             this.CmbKérelemTípus.Size = new System.Drawing.Size(246, 28);
-            this.CmbKérelemTípus.TabIndex = 107;
+            this.CmbKérelemTípus.TabIndex = 2;
             // 
             // LblKérelemJogosultságTípus
             // 
@@ -669,7 +692,7 @@ namespace Villamos
             this.CmbkérelemOka.Location = new System.Drawing.Point(199, 244);
             this.CmbkérelemOka.Name = "CmbkérelemOka";
             this.CmbkérelemOka.Size = new System.Drawing.Size(526, 28);
-            this.CmbkérelemOka.TabIndex = 21;
+            this.CmbkérelemOka.TabIndex = 3;
             // 
             // LblKérelemKérelemOka
             // 
@@ -702,7 +725,7 @@ namespace Villamos
             this.TxtKérelemFrsz.Location = new System.Drawing.Point(199, 177);
             this.TxtKérelemFrsz.Name = "TxtKérelemFrsz";
             this.TxtKérelemFrsz.Size = new System.Drawing.Size(173, 26);
-            this.TxtKérelemFrsz.TabIndex = 17;
+            this.TxtKérelemFrsz.TabIndex = 1;
             // 
             // Txtkérelemnév
             // 
@@ -725,7 +748,8 @@ namespace Villamos
             this.TxtkérelemHR.Location = new System.Drawing.Point(199, 43);
             this.TxtkérelemHR.Name = "TxtkérelemHR";
             this.TxtkérelemHR.Size = new System.Drawing.Size(173, 26);
-            this.TxtkérelemHR.TabIndex = 12;
+            this.TxtkérelemHR.TabIndex = 0;
+            this.TxtkérelemHR.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.TxtkérelemHR_PreviewKeyDown);
             // 
             // LblKérelemDolgozóNév
             // 
@@ -749,7 +773,7 @@ namespace Villamos
             // 
             this.Btnkilelöltörlés.BackgroundImage = global::Villamos.Properties.Resources.üres_lista;
             this.Btnkilelöltörlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btnkilelöltörlés.Location = new System.Drawing.Point(1128, 353);
+            this.Btnkilelöltörlés.Location = new System.Drawing.Point(854, 373);
             this.Btnkilelöltörlés.Name = "Btnkilelöltörlés";
             this.Btnkilelöltörlés.Size = new System.Drawing.Size(45, 45);
             this.Btnkilelöltörlés.TabIndex = 103;
@@ -761,7 +785,7 @@ namespace Villamos
             // 
             this.BtnKijelölcsop.BackgroundImage = global::Villamos.Properties.Resources.mndent_kijelöl;
             this.BtnKijelölcsop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnKijelölcsop.Location = new System.Drawing.Point(1078, 353);
+            this.BtnKijelölcsop.Location = new System.Drawing.Point(804, 373);
             this.BtnKijelölcsop.Name = "BtnKijelölcsop";
             this.BtnKijelölcsop.Size = new System.Drawing.Size(45, 45);
             this.BtnKijelölcsop.TabIndex = 102;
@@ -774,7 +798,7 @@ namespace Villamos
             this.Btn3szak.BackgroundImage = global::Villamos.Properties.Resources._3B;
             this.Btn3szak.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Btn3szak.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.Btn3szak.Location = new System.Drawing.Point(1028, 353);
+            this.Btn3szak.Location = new System.Drawing.Point(754, 373);
             this.Btn3szak.Name = "Btn3szak";
             this.Btn3szak.Size = new System.Drawing.Size(45, 45);
             this.Btn3szak.TabIndex = 101;
@@ -787,7 +811,7 @@ namespace Villamos
             this.Btn2szak.BackgroundImage = global::Villamos.Properties.Resources._2B;
             this.Btn2szak.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Btn2szak.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.Btn2szak.Location = new System.Drawing.Point(978, 353);
+            this.Btn2szak.Location = new System.Drawing.Point(704, 373);
             this.Btn2szak.Name = "Btn2szak";
             this.Btn2szak.Size = new System.Drawing.Size(45, 45);
             this.Btn2szak.TabIndex = 100;
@@ -800,7 +824,7 @@ namespace Villamos
             this.Btn1szak.BackgroundImage = global::Villamos.Properties.Resources._1B;
             this.Btn1szak.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Btn1szak.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.Btn1szak.Location = new System.Drawing.Point(926, 353);
+            this.Btn1szak.Location = new System.Drawing.Point(652, 373);
             this.Btn1szak.Name = "Btn1szak";
             this.Btn1szak.Size = new System.Drawing.Size(45, 45);
             this.Btn1szak.TabIndex = 99;
@@ -815,22 +839,22 @@ namespace Villamos
             this.BtnKérelemPDF.Location = new System.Drawing.Point(854, 259);
             this.BtnKérelemPDF.Name = "BtnKérelemPDF";
             this.BtnKérelemPDF.Size = new System.Drawing.Size(45, 45);
-            this.BtnKérelemPDF.TabIndex = 82;
+            this.BtnKérelemPDF.TabIndex = 4;
             this.ToolTip1.SetToolTip(this.BtnKérelemPDF, "PDF fájl kiválasztása");
             this.BtnKérelemPDF.UseVisualStyleBackColor = true;
             this.BtnKérelemPDF.Click += new System.EventHandler(this.BtnKérelemPDF_Click);
             // 
-            // BtnÖsszSzabiLista
+            // BtnNévFrszFrissítés
             // 
-            this.BtnÖsszSzabiLista.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.BtnÖsszSzabiLista.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnÖsszSzabiLista.Location = new System.Drawing.Point(731, 49);
-            this.BtnÖsszSzabiLista.Name = "BtnÖsszSzabiLista";
-            this.BtnÖsszSzabiLista.Size = new System.Drawing.Size(45, 45);
-            this.BtnÖsszSzabiLista.TabIndex = 79;
-            this.ToolTip1.SetToolTip(this.BtnÖsszSzabiLista, "Ha létezik SAP adatokban akkor megkeresi a dolgozót.");
-            this.BtnÖsszSzabiLista.UseVisualStyleBackColor = true;
-            this.BtnÖsszSzabiLista.Click += new System.EventHandler(this.BtnÖsszSzabiLista_Click);
+            this.BtnNévFrszFrissítés.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.BtnNévFrszFrissítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnNévFrszFrissítés.Location = new System.Drawing.Point(731, 49);
+            this.BtnNévFrszFrissítés.Name = "BtnNévFrszFrissítés";
+            this.BtnNévFrszFrissítés.Size = new System.Drawing.Size(45, 45);
+            this.BtnNévFrszFrissítés.TabIndex = 79;
+            this.ToolTip1.SetToolTip(this.BtnNévFrszFrissítés, "Ha létezik SAP adatokban akkor megkeresi a dolgozót.");
+            this.BtnNévFrszFrissítés.UseVisualStyleBackColor = true;
+            this.BtnNévFrszFrissítés.Click += new System.EventHandler(this.BtnNévFrszFrissítés_Click);
             // 
             // BtnOktatásÚj
             // 
@@ -848,7 +872,7 @@ namespace Villamos
             // 
             this.BtnkérelemRögzítés.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.BtnkérelemRögzítés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnkérelemRögzítés.Location = new System.Drawing.Point(1175, 6);
+            this.BtnkérelemRögzítés.Location = new System.Drawing.Point(854, 12);
             this.BtnkérelemRögzítés.Name = "BtnkérelemRögzítés";
             this.BtnkérelemRögzítés.Size = new System.Drawing.Size(45, 45);
             this.BtnkérelemRögzítés.TabIndex = 65;
@@ -874,6 +898,7 @@ namespace Villamos
             this.PDF_néző.Location = new System.Drawing.Point(6, 8);
             this.PDF_néző.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.PDF_néző.Name = "PDF_néző";
+            this.PDF_néző.ShowToolbar = false;
             this.PDF_néző.Size = new System.Drawing.Size(1251, 541);
             this.PDF_néző.TabIndex = 68;
             this.PDF_néző.ZoomMode = PdfiumViewer.PdfViewerZoomMode.FitWidth;
@@ -1492,15 +1517,6 @@ namespace Villamos
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
-            // AutóLista
-            // 
-            this.AutóLista.AutoSize = true;
-            this.AutóLista.Location = new System.Drawing.Point(605, 180);
-            this.AutóLista.Name = "AutóLista";
-            this.AutóLista.Size = new System.Drawing.Size(138, 20);
-            this.AutóLista.TabIndex = 212;
-            this.AutóLista.Text = "Autók rendszáma:";
-            // 
             // Ablak_Behajtási
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1586,7 +1602,7 @@ namespace Villamos
         internal Label LblAdminKérelemOka;
         internal Button BtnAdminOkTöröl;
         internal Button BtnAdminOkrögzítés;
-        internal Button BtnÖsszSzabiLista;
+        internal Button BtnNévFrszFrissítés;
         internal TextBox TxtKérrelemPDF;
         internal Label LblKérelemPDFneve;
         internal Button BtnKérelemPDF;
@@ -1669,5 +1685,6 @@ namespace Villamos
         internal Button Elutasít_gomb;
         private CheckBox Aktuálissor;
         internal Label AutóLista;
+        internal CheckBox FájlTöröl;
     }
 }

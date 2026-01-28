@@ -11,14 +11,14 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
         readonly string jelszó = "CzabalayL";
-
+        readonly string táblanév = "szinezés";
         public Kezelő_CAF_Szinezés()
         {
         }
 
         public List<Adat_CAF_Szinezés> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM szinezés order by Telephely";
+            string szöveg = $"SELECT * FROM {táblanév} order by Telephely";
             List<Adat_CAF_Szinezés> Adatok = new List<Adat_CAF_Szinezés>();
             Adat_CAF_Szinezés Adat;
 
@@ -64,7 +64,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO szinezés (telephely, színpsz, színpszgar, színIstűrés, színIS, színP, színSzombat, színVasárnap, szín_e, szín_dollár, ";
+                string szöveg = $"INSERT INTO {táblanév} (telephely, színpsz, színpszgar, színIstűrés, színIS, színP, színSzombat, színVasárnap, szín_e, szín_dollár, ";
                 szöveg += " szín_kukac, szín_hasteg, szín_jog, szín_nagyobb ) VALUES (";
                 szöveg += $"'{Adat.Telephely}', "; // telephely
                 szöveg += Adat.SzínPsz + ", "; // színpsz
@@ -98,7 +98,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE  szinezés SET ";
+                string szöveg = $"UPDATE  {táblanév} SET ";
                 szöveg += $"színpsz={Adat.SzínPsz}, "; // színpsz
                 szöveg += $"színpszgar={Adat.SzínPSZgar}, "; // színpszgar
                 szöveg += $"színIstűrés={Adat.SzínIStűrés}, "; // színIstűrés
@@ -131,7 +131,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM szinezés where telephely ='{Telephely}'";
+                string szöveg = $"DELETE FROM {táblanév} where telephely ='{Telephely}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

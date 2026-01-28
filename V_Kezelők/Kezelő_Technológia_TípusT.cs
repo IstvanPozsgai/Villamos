@@ -24,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Technológia_Alap> Lista_Adatok(string Típus)
         {
             FájlBeállítás(Típus);
-            string szöveg = "SELECT * FROM típus_tábla";
+            string szöveg = $"SELECT * FROM típus_tábla";
             List<Adat_Technológia_Alap> Adatok = new List<Adat_Technológia_Alap>();
             Adat_Technológia_Alap Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";

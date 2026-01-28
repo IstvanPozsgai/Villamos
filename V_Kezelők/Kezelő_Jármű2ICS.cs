@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "pozsgaii";
         string hely;
+        readonly string táblanév = "állománytábla";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -25,7 +26,7 @@ namespace Villamos.Kezelők
             FájlBeállítás(Telephely);
             List<Adat_Jármű_2ICS> Adatok = new List<Adat_Jármű_2ICS>();
             Adat_Jármű_2ICS adat;
-            string szöveg = $"SELECT * FROM állománytábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -58,7 +59,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO Állománytábla  (azonosító, takarítás, E2, E3 ) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév}  (azonosító, takarítás, E2, E3 ) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', '1900.01.01',{Adat.E2}, {Adat.E3})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -78,7 +79,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE Állománytábla  SET E2='{Adat.E2}', E3='{Adat.E3}'";
+                string szöveg = $"UPDATE {táblanév}  SET E2='{Adat.E2}', E3='{Adat.E3}'";
                 szöveg += $" WHERE azonosító='{Adat.Azonosító}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -98,7 +99,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"DELETE FROM állománytábla WHERE azonosító='{Azonosító}'";
+                string szöveg = $"DELETE FROM {táblanév} WHERE azonosító='{Azonosító}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

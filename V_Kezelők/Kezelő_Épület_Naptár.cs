@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -123,7 +123,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = "UPDATE naptár  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"előterv={előterv} ";
                 szöveg += $"  WHERE hónap={Hónap}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

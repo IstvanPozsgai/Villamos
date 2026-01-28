@@ -26,7 +26,7 @@ namespace Villamos.Kezelők
         public List<Adat_Üzenet> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = "SELECT * FROM üzenetek ";
+            string szöveg = $"SELECT * FROM üzenetek ";
             List<Adat_Üzenet> Adatok = new List<Adat_Üzenet>();
             Adat_Üzenet Adat;
 
@@ -66,7 +66,7 @@ namespace Villamos.Kezelők
                 FájlBeállítás(Telephely, Év);
                 double id = Sorszám(Telephely, Év);
 
-                string szöveg = "INSERT INTO üzenetek  (sorszám, szöveg, írta, mikor,válaszsorszám ) VALUES (";
+                string szöveg = $"INSERT INTO üzenetek  (sorszám, szöveg, írta, mikor,válaszsorszám ) VALUES (";
                 szöveg += $"{id}, "; // sorszám
                 szöveg += $"'{Adat.Szöveg}', "; // szöveg
                 szöveg += $"'{Adat.Írta}', ";

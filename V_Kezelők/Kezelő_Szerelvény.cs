@@ -27,7 +27,7 @@ namespace Villamos.Kezelők
         public List<Adat_Szerelvény> Lista_Adatok(string Telephely, bool előírt = false)
         {
             FájlBeállítás(Telephely, előírt);
-            string szöveg = "Select * FROM szerelvénytábla ORDER BY kocsi1";
+            string szöveg = $"SELECT * FROM szerelvénytábla ORDER BY kocsi1";
             List<Adat_Szerelvény> AdatKocsik = new List<Adat_Szerelvény>();
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -108,7 +108,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, előírt);
-                string szöveg = "UPDATE szerelvénytábla SET ";
+                string szöveg = $"UPDATE szerelvénytábla SET ";
                 szöveg += $"kocsi1='{Adat.Kocsi1}', ";
                 szöveg += $"kocsi2='{Adat.Kocsi2}', ";
                 szöveg += $"kocsi3='{Adat.Kocsi3}', ";
@@ -135,7 +135,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, előírt);
-                string szöveg = "INSERT INTO szerelvénytábla (id, kocsi1, kocsi2, kocsi3, kocsi4, kocsi5, kocsi6, szerelvényhossz) VALUES (";
+                string szöveg = $"INSERT INTO szerelvénytábla (id, kocsi1, kocsi2, kocsi3, kocsi4, kocsi5, kocsi6, szerelvényhossz) VALUES (";
                 szöveg += $"{Adat.Szerelvény_ID}, '{Adat.Kocsi1}', '{Adat.Kocsi2}', '{Adat.Kocsi3}', '{Adat.Kocsi4}', '{Adat.Kocsi5}', '{Adat.Kocsi6}', {Adat.Szerelvényhossz})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -158,7 +158,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Szerelvény Adat in Adatok)
                 {
-                    string szöveg = "UPDATE szerelvénytábla SET ";
+                    string szöveg = $"UPDATE szerelvénytábla SET ";
                     szöveg += $"szerelvényhossz={Adat.Szerelvényhossz} ";
                     szöveg += $" WHERE id={Adat.Szerelvény_ID}";
                     SzövegGy.Add(szöveg);

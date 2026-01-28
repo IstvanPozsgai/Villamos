@@ -121,6 +121,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Messaging" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
@@ -370,6 +371,8 @@
     <Compile Include="V_Adatszerkezet\Adat_Beallitas_Diagram.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Ciklus_Sorrend.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Beosztás_Új.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Hiba.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Hiba_Elrendezés.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztagia_Futás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztalgia_Állomány.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Raktár.cs" />
@@ -386,6 +389,7 @@
     <Compile Include="V_Adatszerkezet\Beállítás_Nyomtatás.cs" />
     <Compile Include="V_Függvények\HtmlToDataTable.cs" />
     <Compile Include="V_Függvények\Oszlopneve.cs" />
+    <Compile Include="V_Input_Forms\DataGridViewHelper.cs" />
     <Compile Include="V_Input_Forms\InputCheckbox.cs" />
     <Compile Include="V_Input_Forms\InputDate.cs" />
     <Compile Include="V_Input_Forms\InputField.cs" />
@@ -394,6 +398,7 @@
     </Compile>
     <Compile Include="V_Input_Forms\InputSelect.cs" />
     <Compile Include="V_Input_Forms\InputTextbox.cs" />
+    <Compile Include="V_Input_Forms\InputTime.cs" />
     <Compile Include="V_Kezelők\Kezelő_AnyagTörzs.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés_MindenMásol.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF_KM_Attekintes.cs" />
@@ -1866,6 +1871,7 @@
       <DependentUpon>Ablak_Hibanaplo.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <Compile Include="V_MindenEgyéb\NyomtatasHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Aha-Soft-Standard-Transport-Tram.ico" />

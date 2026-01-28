@@ -14,6 +14,8 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "pozsgaii";
         string hely;
+        readonly string táblanév = "típustábla";
+
 
         private void FájlBeállítás(string Telephely)
         {
@@ -24,7 +26,7 @@ namespace Villamos.Kezelők
         public List<Adat_Jármű_Állomány_Típus> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = "Select * FROM típustábla order by id";
+            string szöveg = $"SELECT * FROM {táblanév} order by id";
 
             List<Adat_Jármű_Állomány_Típus> Adatok = new List<Adat_Jármű_Állomány_Típus>();
             Adat_Jármű_Állomány_Típus Adat;
@@ -59,7 +61,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"INSERT INTO típustábla (id, típus, állomány)";
+                string szöveg = $"INSERT INTO {táblanév} (id, típus, állomány)";
                 szöveg += $" VALUES ({Sorszám(Telephely)},";
                 szöveg += $" '{Adat.Típus}',";
                 szöveg += $" {Adat.Állomány} )";
@@ -81,7 +83,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"DELETE FROM típustábla WHERE típus='{Adat.Típus}'";
+                string szöveg = $"DELETE FROM {táblanév} WHERE típus='{Adat.Típus}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -100,7 +102,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"Update típustábla SET ";
+                string szöveg = $"Update {táblanév} SET ";
                 szöveg += $"id = '{Adat.Id}' ";
                 szöveg += $"WHERE típus = '{Adat.Típus}'";
 

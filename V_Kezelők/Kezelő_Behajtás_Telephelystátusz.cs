@@ -2,15 +2,16 @@
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_Behajtás_Telephelystátusz
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\behajtási\Behajtási_alap.mdb";
         readonly string jelszó = "egérpad";
+        readonly string táblanév = "telephelystátus";
 
         public Kezelő_Behajtás_Telephelystátusz()
         {
@@ -19,7 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Behajtás_Telephelystátusz> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM telephelystátus";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Behajtás_Telephelystátusz> Adatok = new List<Adat_Behajtás_Telephelystátusz>();
             Adat_Behajtás_Telephelystátusz Adat;
 

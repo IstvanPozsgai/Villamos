@@ -23,7 +23,7 @@ namespace Villamos.Kezelők
         public List<Adat_Munka_Adatok> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = "SELECT * FROM Adatoktábla";
+            string szöveg = $"SELECT * FROM Adatoktábla";
             List<Adat_Munka_Adatok> Adatok = new List<Adat_Munka_Adatok>();
             Adat_Munka_Adatok Adat;
 
@@ -66,7 +66,7 @@ namespace Villamos.Kezelők
                 List<string> szövegGy = new List<string>();
                 foreach (Adat_Munka_Adatok adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO Adatoktábla (rendelés, művelet, megnevezés, pályaszám, idő, dátum, státus) VALUES (";
+                    string szöveg = $"INSERT INTO Adatoktábla (rendelés, művelet, megnevezés, pályaszám, idő, dátum, státus) VALUES (";
                     szöveg += $"'{adat.Rendelés}', ";
                     szöveg += $"'{adat.Művelet}', ";
                     szöveg += $"'{adat.Megnevezés}', ";

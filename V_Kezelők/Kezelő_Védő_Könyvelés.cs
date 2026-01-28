@@ -22,7 +22,7 @@ namespace Villamos.Kezelők
         public List<Adat_Védő_Könyvelés> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = "SELECT * FROM lista WHERE státus=0 ORDER BY azonosító";
+            string szöveg = $"SELECT * FROM lista WHERE státus=0 ORDER BY azonosító";
             List<Adat_Védő_Könyvelés> Adatok = new List<Adat_Védő_Könyvelés>();
             Adat_Védő_Könyvelés Adat;
 
@@ -62,7 +62,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO lista (Azonosító, Szerszámkönyvszám, Mennyiség, gyáriszám, dátum, státus) VALUES (";
+                string szöveg = $"INSERT INTO lista (Azonosító, Szerszámkönyvszám, Mennyiség, gyáriszám, dátum, státus) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Szerszámkönyvszám}', ";
                 szöveg += $"{Adat.Mennyiség}, ";
@@ -88,7 +88,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE lista SET ";
+                string szöveg = $"UPDATE lista SET ";
                 szöveg += $"Mennyiség={Adat.Mennyiség}, ";
                 szöveg += $"gyáriszám='{Adat.Gyáriszám}', ";
                 szöveg += $"dátum ='{Adat.Dátum}' ";
@@ -112,7 +112,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "DELETE FROM lista ";
+                string szöveg =$"DELETE FROM lista ";
                 szöveg += $" WHERE Azonosító='{Adat.Azonosító}'";
                 szöveg += $" AND Szerszámkönyvszám='{Adat.Szerszámkönyvszám}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);

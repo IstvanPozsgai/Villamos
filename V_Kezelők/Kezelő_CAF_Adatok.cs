@@ -4,16 +4,17 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_CAF_Adatok
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\CAF\CAF.mdb";
         readonly string jelszó = "CzabalayL";
+        readonly string táblanév = "Adatok";
 
         public Kezelő_CAF_Adatok()
         {
@@ -22,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_CAF_Adatok> Lista_Adatok(int Év = 1900)
         {
-            string szöveg = "SELECT * FROM adatok ORDER BY azonosító";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY azonosító";
             List<Adat_CAF_Adatok> Adatok = new List<Adat_CAF_Adatok>();
             Adat_CAF_Adatok Adat;
 
@@ -71,7 +72,7 @@ namespace Villamos.Kezelők
             {
                 for (int i = Év; i < DateTime.Today.Year; i++)
                 {
-                    string helyNapló = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF_{i}.mdb";
+                    string helyNapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\CAF\CAF_{i}.mdb";
                     if (File.Exists(helyNapló))
                         Válasz.AddRange(Lista_Adatok(helyNapló));
                 }
@@ -271,7 +272,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program, Telephely, KmRogzitett_e) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program, Telephely, KmRogzitett_e) VALUES (";
                 szöveg += $"{Sorszám}, "; // id 
                 szöveg += $"'{Adat.Azonosító}', "; // azonosító
                 szöveg += $"'{Adat.Vizsgálat.Trim()}', "; // vizsgálat
@@ -306,7 +307,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_CAF_Adatok Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program, Telephely, KmRogzitett_e) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program, Telephely, KmRogzitett_e) VALUES (";
                     szöveg += $"{sorszám}, "; // id 
                     szöveg += $"'{Adat.Azonosító}', "; // azonosító
                     szöveg += $"'{Adat.Vizsgálat.Trim()}', "; // vizsgálat
@@ -344,7 +345,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_CAF_Adatok Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO adatok (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program, Telephely, KmRogzitett_e) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (id, azonosító, vizsgálat, Dátum, számláló, státus, km_sorszám, idő_sorszám, idővKM, megjegyzés, Dátum_program, Telephely, KmRogzitett_e) VALUES (";
                     szöveg += $"{sorszám}, "; // id 
                     szöveg += $"'{Adat.Azonosító}', "; // azonosító
                     szöveg += $"'{Adat.Vizsgálat.Trim()}', "; // vizsgálat
@@ -378,7 +379,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE adatok  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"vizsgálat='{Adat.Vizsgálat}', "; // vizsgálat
                 szöveg += $"Dátum='{Adat.Dátum:yyyy.MM.dd}', "; // Dátum
                 szöveg += $"számláló={Adat.Számláló}, "; // számláló
@@ -408,7 +409,7 @@ namespace Villamos.Kezelők
             string szöveg;
             try
             {
-                szöveg = $"UPDATE adatok  SET Státus={státus}, KmRogzitett_e={státus == 2}, Telephely='{Telephely}'  WHERE id={Sorszám}";
+                szöveg = $"UPDATE {táblanév}  SET Státus={státus}, KmRogzitett_e={státus == 2}, Telephely='{Telephely}'  WHERE id={Sorszám}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -427,7 +428,7 @@ namespace Villamos.Kezelők
             string szöveg;
             try
             {
-                szöveg = $"UPDATE adatok SET Számláló={Szamlalo}, KmRogzitett_e=FALSE, Telephely='{Telephely}' WHERE id={Id}";
+                szöveg = $"UPDATE {táblanév} SET Számláló={Szamlalo}, KmRogzitett_e=FALSE, Telephely='{Telephely}' WHERE id={Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -445,7 +446,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM adatok WHERE [Dátum]>=#{Dátum:MM-dd-yyyy}# AND azonosító='{Azonosító}' And státus={státus}";
+                string szöveg = $"DELETE FROM {táblanév} WHERE [Dátum]>=#{Dátum:MM-dd-yyyy}# AND azonosító='{Azonosító}' And státus={státus}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -466,7 +467,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_CAF_Adatok_Pót Adat in Adatok)
                 {
-                    string szöveg = $"DELETE FROM adatok WHERE [Dátum]>=#{Adat.Dátum:MM-dd-yyyy}# AND azonosító='{Adat.Azonosító}' And státus={Adat.Státus}";
+                    string szöveg = $"DELETE FROM {táblanév} WHERE [Dátum]>=#{Adat.Dátum:MM-dd-yyyy}# AND azonosító='{Adat.Azonosító}' And státus={Adat.Státus}";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABtörlés(hely, jelszó, SzövegGy);
@@ -489,7 +490,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_CAF_Adatok Adat in Adatok)
                 {
-                    string szöveg = $"DELETE FROM adatok WHERE id={Adat.Id}";
+                    string szöveg = $"DELETE FROM {táblanév} WHERE id={Adat.Id}";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABtörlés(hely, jelszó, SzövegGy);
@@ -512,7 +513,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_CAF_Adatok_Pót Adat in Adatok)
                 {
-                    string szöveg = "UPDATE adatok  SET Státus=2 ";
+                    string szöveg = $"UPDATE {táblanév}  SET Státus=2 ";
                     szöveg += $" WHERE azonosító='{Adat.Azonosító}' AND dátum>=#{Adat.Dátumtól:MM-dd-yyyy}# ";
                     szöveg += $" AND dátum<=#{Adat.Dátumig:MM-dd-yyyy}# AND Státus={Adat.Státus} AND KmRogzitett_e=TRUE";
                     SzövegGy.Add(szöveg);
@@ -534,7 +535,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string helyNapló = $@"{Application.StartupPath}\Főmérnökség\adatok\CAF\CAF_{Dátum.Year}.mdb";
+                string helyNapló = $@"{Application.StartupPath}\Főmérnökség\Adatok\CAF\CAF_{Dátum.Year}.mdb";
                 if (File.Exists(helyNapló)) throw new HibásBevittAdat("Már az archiválás bevefejőzött.");
                 //Adattábla létrehozása
                 Adatbázis_Létrehozás.CAFAdatokArchív(helyNapló.KönyvSzerk());
@@ -558,7 +559,7 @@ namespace Villamos.Kezelők
         {
             List<Adat_CAF_Adatok> Adatok = new List<Adat_CAF_Adatok>();
             Adat_CAF_Adatok Adat;
-            string szöveg = "SELECT * FROM adatok ORDER BY azonosító";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY azonosító";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -607,7 +608,7 @@ namespace Villamos.Kezelők
 
                     if (item.Státus == 2)
                     {
-                        string szöveg = "UPDATE adatok  SET ";
+                        string szöveg = $"UPDATE {táblanév}  SET ";
                         szöveg += $"KmRogzitett_e=True ";
                         szöveg += $" WHERE id={item.Id}";
                         MyA.ABMódosítás(hely, jelszó, szöveg);

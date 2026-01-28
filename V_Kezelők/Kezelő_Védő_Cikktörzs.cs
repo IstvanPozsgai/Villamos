@@ -65,7 +65,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO lista  (azonosító, megnevezés, méret,  státus, költséghely, Védelem, Kockázat, Szabvány, Szint, Munk_megnevezés ) VALUES (";
+                string szöveg = $"INSERT INTO lista  (azonosító, megnevezés, méret,  státus, költséghely, Védelem, Kockázat, Szabvány, Szint, Munk_megnevezés ) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', "; //azonosító
                 szöveg += $"'{Adat.Megnevezés}', ";  //megnevezés
                 szöveg += $"'{Adat.Méret}', "; //méret
@@ -94,7 +94,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE lista  SET ";
+                string szöveg = $"UPDATE lista  SET ";
                 szöveg += $"megnevezés='{Adat.Megnevezés}', ";
                 szöveg += $"méret='{Adat.Méret}', ";
                 szöveg += $"költséghely='{Adat.Költséghely}', ";

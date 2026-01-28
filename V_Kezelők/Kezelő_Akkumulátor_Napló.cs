@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -13,17 +13,18 @@ namespace Villamos.Kezelők
     {
         string hely;
         readonly string jelszó = "kasosmiklós";
+        readonly string táblanév = "Akkutábla_Napló";
 
         private void FájlBeállítás(int Év)
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Akkumulátor\Akkunapló{Év}.mdb".KönyvSzerk();
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Akkumulátor\Akkunapló{Év}.mdb".KönyvSzerk();
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Akku_Mérés(hely);
         }
 
         public List<Adat_Akkumulátor_Napló> Lista_Adatok(int Év)
         {
             FájlBeállítás(Év);
-            string szöveg = $"SELECT * FROM Akkutábla_Napló";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Akkumulátor_Napló> Adatok = new List<Adat_Akkumulátor_Napló>();
             Adat_Akkumulátor_Napló Adat;
 
@@ -69,7 +70,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = "INSERT INTO Akkutábla_Napló ";
+                string szöveg = $"INSERT INTO {táblanév} ";
                 szöveg += "(beépítve, fajta, gyártó, Gyáriszám, típus, garancia, gyártásiidő, státus, Megjegyzés, Módosításdátuma, kapacitás, Telephely, Rögzítés, Rögzítő)";
                 szöveg += " VALUES (";
                 szöveg += $"'{Adat.Beépítve}', "; //beépítve       ,
@@ -98,6 +99,5 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
 }

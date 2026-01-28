@@ -11,7 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\belépés.mdb".KönyvSzerk();
         readonly string jelszó = "forgalmiutasítás";
-
+        readonly string táblanév = "WinTábla";
         public Kezelő_Belépés_WinTábla()
         {
             // Nincs kidolgozva
@@ -20,7 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Belépés_WinTábla> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM WinTábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
 
             List<Adat_Belépés_WinTábla> Adatok = new List<Adat_Belépés_WinTábla>();
             Adat_Belépés_WinTábla Adat;
@@ -55,7 +55,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO Wintábla (Név, telephely, WinUser) VALUES ";
+                string szöveg = $"INSERT INTO {táblanév} (Név, telephely, WinUser) VALUES ";
                 szöveg += $"('{Adat.Név}', ";
                 szöveg += $"'{Adat.Telephely}', ";
                 szöveg += $"'{Adat.WinUser}')";
@@ -76,7 +76,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE WinTábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" telephely='{Adat.Telephely}', ";
                 szöveg += $" WinUser='{Adat.WinUser}' ";
                 szöveg += $" WHERE név='{Adat.Név}'";

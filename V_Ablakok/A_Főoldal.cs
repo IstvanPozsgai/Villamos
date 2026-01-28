@@ -10,13 +10,11 @@ using Villamos.Ablakok;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Ablakok._0_Bejelentkezés;
-using Villamos.V_Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP;
 using Villamos.Villamos_Ablakok._5_Karbantartás.Eszterga_Karbantartás;
 using Villamos.Villamos_Ablakok.Kerékeszterga;
-using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
 using MyF = Függvénygyűjtemény;
 
@@ -367,7 +365,7 @@ namespace Villamos
                 jogosultságKiosztásToolStripMenuItem.Enabled = false;
                 SzoftverkulcsKészítésMenü.Enabled = false;
                 //az új esetén az új beállítással megyünk be.
-                if (panels2.Text.Substring(0,1) == "R") Menü_Beállítása_Új();
+                if (panels2.Text.Substring(0, 1) == "R") Menü_Beállítása_Új();
             }
             catch (HibásBevittAdat ex)
             {
@@ -669,8 +667,8 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\Főoldal.html";
-                Module_Excel.Megnyitás(hely);
+                string hely = $@"{Application.StartupPath}\\VillamosLapok\Főoldal.html";
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1085,7 +1083,7 @@ namespace Villamos
 
         private void Üzenetektext_DoubleClick(object sender, EventArgs e)
         {
-            if(!ÜzenetekToolStripMenuItem.Enabled ) return;
+            if (!ÜzenetekToolStripMenuItem.Enabled) return;
             if (Új_Ablak_üzenet == null)
             {
                 Új_Ablak_üzenet = new Ablak_üzenet();
@@ -1971,25 +1969,25 @@ namespace Villamos
         }
 
 
-        Ablak_Nosztalgia Új_Ablak_Nosztalgia;
+        //     Ablak_Nosztalgia Új_Ablak_Nosztalgia;
         private void NosztalgiaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Új_Ablak_Nosztalgia == null)
-            {
-                Új_Ablak_Nosztalgia = new Ablak_Nosztalgia();
-                Új_Ablak_Nosztalgia.FormClosed += Ablak_Nosztalgia_FormClosed;
-                Új_Ablak_Nosztalgia.Show();
-            }
-            else
-            {
-                Új_Ablak_Nosztalgia.Activate();
-                Új_Ablak_Nosztalgia.WindowState = FormWindowState.Maximized;
-            }
+            //if (Új_Ablak_Nosztalgia == null)
+            //{
+            //    Új_Ablak_Nosztalgia = new Ablak_Nosztalgia();
+            //    Új_Ablak_Nosztalgia.FormClosed += Ablak_Nosztalgia_FormClosed;
+            //    Új_Ablak_Nosztalgia.Show();
+            //}
+            //else
+            //{
+            //    Új_Ablak_Nosztalgia.Activate();
+            //    Új_Ablak_Nosztalgia.WindowState = FormWindowState.Maximized;
+            //}
         }
 
         private void Ablak_Nosztalgia_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Új_Ablak_Nosztalgia = null;
+            //         Új_Ablak_Nosztalgia = null;
         }
 
         #endregion
@@ -2779,7 +2777,7 @@ namespace Villamos
 
         private void Ablak_Hibanaplo_FormClosed(object sender, FormClosedEventArgs e)
         {
-           Új_Ablak_Hibanaplo = null;
+            Új_Ablak_Hibanaplo = null;
         }
     }
 }

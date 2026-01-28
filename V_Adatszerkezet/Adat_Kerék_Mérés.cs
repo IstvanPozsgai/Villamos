@@ -100,14 +100,6 @@ namespace Villamos.Villamos_Adatszerkezet
             Dátum = dátum;
             Objektumfajta = objektumfajta;
         }
-
-        public Adat_Kerék_Tábla(string kerékberendezés, string föléberendezés, string azonosító, string pozíció)
-        {
-            Kerékberendezés = kerékberendezés;
-            Föléberendezés = föléberendezés;
-            Azonosító = azonosító;
-            Pozíció = pozíció;
-        }
     }
 
 

@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "Munkakör";
 
         public Kezelő_Kiegészítő_Munkakör()
         {
@@ -20,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Munkakör> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM Munkakör  order by  kategória, Megnevezés";
+            string szöveg = $"SELECT * FROM {táblanév} order by  kategória, Megnevezés";
             List<Adat_Kiegészítő_Munkakör> Adatok = new List<Adat_Kiegészítő_Munkakör>();
             Adat_Kiegészítő_Munkakör Adat;
 
@@ -55,7 +56,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO Munkakör (Id, megnevezés, Kategória,státus) VALUES ";
+                string szöveg = $"INSERT INTO {táblanév} (Id, megnevezés, Kategória,státus) VALUES ";
                 szöveg += $"({Adat.Id}, '{Adat.Megnevezés}', '{Adat.Kategória}', {Adat.Státus})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -74,7 +75,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE munkakör SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" megnevezés='{Adat.Megnevezés}',";
                 szöveg += $" Kategória='{Adat.Kategória}',";
                 szöveg += $" státus={Adat.Státus}";

@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "főkategóriatábla";
 
         public Kezelő_Kiegészítő_Főkategóriatábla()
         {
@@ -20,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Főkategóriatábla> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM főkategóriatábla  order by  sorszám";
+            string szöveg = $"SELECT * FROM  {táblanév} order by  sorszám";
             List<Adat_Kiegészítő_Főkategóriatábla> Adatok = new List<Adat_Kiegészítő_Főkategóriatábla>();
             Adat_Kiegészítő_Főkategóriatábla Adat;
 
@@ -53,7 +54,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO főkategóriatábla (sorszám, főkategória) ";
+                string szöveg = $"INSERT INTO {táblanév} (sorszám, főkategória) ";
                 szöveg += $"VALUES ({Adat.Sorszám}, ";
                 szöveg += $"'{Adat.Főkategória}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -74,7 +75,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE  FROM főkategóriatábla WHERE főkategória='{Adat.Főkategória}'";
+                string szöveg = $"DELETE  FROM {táblanév} WHERE főkategória='{Adat.Főkategória}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -92,7 +93,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE főkategóriatábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"főkategória='{Adat.Főkategória}' ";
                 szöveg += $"WHERE sorszám={Adat.Sorszám}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

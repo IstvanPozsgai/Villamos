@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(int Év)
         {
-            hely = $@"{Application.StartupPath}\főmérnökség\adatok\{Év}\{Év}_típuscsere_adatok.mdb".KönyvSzerk();
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Év}\{Év}_típuscsere_adatok.mdb".KönyvSzerk();
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Kiadásitípuscserefőmérnöktábla(hely);
         }
 
@@ -65,7 +65,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = $"DELETE FROM típuscseretábla WHERE [dátum]=#{Adat.Dátum:M-d-yy}#";
+                string szöveg = $"DELETE FROM {táblanév} WHERE [dátum]=#{Adat.Dátum:M-d-yy}#";
                 if (Adat.Napszak.Trim() != "")
                     szöveg += $" and napszak='{Adat.Napszak}'";
                 szöveg += $" and telephely='{Adat.Telephely}'";

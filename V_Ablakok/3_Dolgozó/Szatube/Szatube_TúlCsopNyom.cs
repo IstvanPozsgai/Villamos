@@ -1,14 +1,10 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Adatszerkezet;
-using Villamos.Villamos_Adatszerkezet;
+using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
@@ -17,13 +13,16 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
     {
         readonly Beállítás_Betű BeBetuSzazados = new Beállítás_Betű() { Formátum = "0.00", Név = "Calibri" };
         readonly Beállítás_Betű BeBetuCalibri12 = new Beállítás_Betű() { Név = "Calibri", Méret = 12 };
-        public void TúlCsopNyomtat(Kezelő_Kiegészítő_Jelenlétiív KézJelenléti, Kezelő_Kiegészítő_főkönyvtábla KézFő, Kezelő_Dolgozó_Alap KézDolgAlap, string CmbTelephely, string fájlexc, DataGridView Tábla)
+        readonly List<string> NyomtatásiFájlok = new List<string>();
+        public void TúlCsopNyomtat(Kezelő_Kiegészítő_Jelenlétiív KézJelenléti, Kezelő_Kiegészítő_főkönyvtábla KézFő, Kezelő_Dolgozó_Alap KézDolgAlap,
+            string CmbTelephely, string fájlexc, DataGridView Tábla, bool Töröl)
         {
-            MyX.ExcelLétrehozás();
+            string munkalap = "Munka1";
+            MyX.ExcelLétrehozás(munkalap);
             // ************************
             // excel tábla érdemi része
             // ************************
-            string munkalap = "Munka1";
+
             MyX.Munkalap_betű(munkalap, BeBetuCalibri12);
 
             MyX.Oszlopszélesség(munkalap, "A:A", 4);
@@ -60,12 +59,12 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             MyX.VastagFelső(munkalap, "A5:K5");
 
             // logó beszúrása
-            MyX.Kép_beillesztés(munkalap, "A1", Application.StartupPath + @"\Főmérnökség\adatok\BKV.png", 5, 5, 0.6901, 0.788);
+            MyX.Kép_beillesztés(munkalap, "A1", Application.StartupPath + @"\Főmérnökség\Adatok\BKV.png", 5, 5, 0.6901, 0.788);
 
             MyX.Egyesít(munkalap, "a7:k7");
             MyX.Kiir("Rendkívüli munka elrendelő lap (csoportos)", "a7");
             // fejléc elkészítése
-            MyX.Sortörésseltöbbsorba(munkalap, "9:9");
+            MyX.Sortörésseltöbbsorba(munkalap, "A9:K9");
             MyX.Kiir("S.sz.", "A9");
             MyX.Kiir("Név", "B9");
             MyX.Kiir("Azonosító", "C9");
@@ -79,7 +78,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             MyX.Kiir("Munkavállaló " + '\n' + "aláírása", "K9");
             //MyX.Betű("a9:k9");
             MyX.Rácsoz(munkalap, "a9:k9");
-            MyX.Vastagkeret(munkalap, "a9:k9");
+
             int sor = 10;
 
             DateTime eleje;
@@ -161,8 +160,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
                     sor++;
                 }
             }
-            MyX.Rácsoz(munkalap, "a10:k" + (sor - 1).ToString());
-            MyX.Vastagkeret(munkalap, "a10:k" + (sor - 1).ToString());
+            MyX.Rácsoz(munkalap, $"a10:k{sor}");
 
             // dátum
             sor += 1;
@@ -229,15 +227,18 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             {
                 Munkalap = munkalap,
                 NyomtatásiTerület = $"A1:K{sor}",
-                Álló = true
+                Álló = false,
+                LapSzéles = 1,
+                FejlécKözép = Program.PostásNév,
+                FejlécJobb = DateTime.Now.ToString("yyyy.MM.dd HH:mm"),
+                LáblécKözép = "&P/&N"
             };
             MyX.NyomtatásiTerület_részletes(munkalap, beallitas_tulora);
-            //MyX.Nyomtatás(munkalap, 1, 1);
-
-
-            //Holtart.Ki();
-            MyX.ExcelMentés(fájlexc+".xlsx");
+            MyX.ExcelMentés(fájlexc);
+            NyomtatásiFájlok.Add(fájlexc);
             MyX.ExcelBezárás();
+            MyF.ExcelNyomtatás(NyomtatásiFájlok,munkalap, !Töröl);
+
         }
     }
 }

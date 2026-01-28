@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 
@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "forgalmiutasítás";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Főmérnökség2.mdb";
+        readonly string táblanév = "személyes";
 
         public Kezelő_Dolgozó_Személyes()
         {
@@ -24,7 +25,7 @@ namespace Villamos.Kezelők
         {
             List<Adat_Dolgozó_Személyes> Adatok = new List<Adat_Dolgozó_Személyes>();
             Adat_Dolgozó_Személyes Adat;
-            string szöveg = $"SELECT * FROM személyes";
+            string szöveg = $"SELECT * FROM {táblanév}";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -63,7 +64,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE személyes SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" Leánykori='{Adat.Leánykori}', ";
                 szöveg += $" Anyja='{Adat.Anyja}', ";
                 szöveg += $" Születésiidő='{Adat.Születésiidő:yyyy.MM.dd}', ";
@@ -93,7 +94,7 @@ namespace Villamos.Kezelők
             try
             {
 
-                string szöveg = "INSERT INTO személyes (dolgozószám, leánykori, anyja, születésiidő, születésihely, lakcím, ideiglenescím, telefonszám1, telefonszám2, telefonszám3 )";
+                string szöveg = $"INSERT INTO {táblanév} (dolgozószám, leánykori, anyja, születésiidő, születésihely, lakcím, ideiglenescím, telefonszám1, telefonszám2, telefonszám3 )";
                 szöveg += " VALUES ";
                 szöveg += $"('{Adat.Dolgozószám}', ";
                 szöveg += $"'{Adat.Leánykori}', ";

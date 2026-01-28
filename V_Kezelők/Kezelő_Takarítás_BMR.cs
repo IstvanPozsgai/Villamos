@@ -21,7 +21,7 @@ namespace Villamos.V_Kezelők
 
         public List<Adat_Takarítás_BMR> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM TakarításBMR ORDER BY ID";
+            string szöveg = $"SELECT * FROM TakarításBMR ORDER BY ID";
             List<Adat_Takarítás_BMR> Adatok = new List<Adat_Takarítás_BMR>();
             Adat_Takarítás_BMR Adat;
 
@@ -57,7 +57,7 @@ namespace Villamos.V_Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO TakarításBMR (Id, Telephely, JárműÉpület, BMRszám, Dátum) VALUES (";
+                string szöveg = $"INSERT INTO TakarításBMR (Id, Telephely, JárműÉpület, BMRszám, Dátum) VALUES (";
                 szöveg += $"{Adat.Id}, '{Adat.Telephely}', '{Adat.JárműÉpület}', '{Adat.BMRszám}', '{Adat.Dátum}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -80,7 +80,7 @@ namespace Villamos.V_Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Takarítás_BMR Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO TakarításBMR (Id, Telephely, JárműÉpület, BMRszám, Dátum) VALUES (";
+                    string szöveg = $"INSERT INTO TakarításBMR (Id, Telephely, JárműÉpület, BMRszám, Dátum) VALUES (";
                     szöveg += $"{Adat.Id}, '{Adat.Telephely}', '{Adat.JárműÉpület}', '{Adat.BMRszám}', '{Adat.Dátum}')";
                     SzövegGy.Add(szöveg);
                 }
@@ -100,7 +100,7 @@ namespace Villamos.V_Kezelők
 
         public void Módosít(Adat_Takarítás_BMR Adat)
         {
-            string szöveg = "UPDATE TakarításBMR  SET ";
+            string szöveg = $"UPDATE TakarításBMR  SET ";
             //szöveg += $"Dátum='{Adat.Dátum.ToShortDateString()}', ";
             //szöveg += $"Telephely='{Adat.Telephely}', ";
             //szöveg += $"JárműÉpület='{Adat.JárműÉpület}', ";
@@ -116,7 +116,7 @@ namespace Villamos.V_Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Takarítás_BMR Adat in Adatok)
                 {
-                    string szöveg = "UPDATE TakarításBMR  SET ";
+                    string szöveg = $"UPDATE TakarításBMR  SET ";
                     //szöveg += $"Dátum='{Adat.Dátum.ToShortDateString()}', ";
                     //szöveg += $"Telephely='{Adat.Telephely}', ";
                     //szöveg += $"JárműÉpület='{Adat.JárműÉpület}', ";

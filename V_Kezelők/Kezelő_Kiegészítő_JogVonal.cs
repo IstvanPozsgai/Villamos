@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "jogvonal";
 
         public Kezelő_Kiegészítő_JogVonal()
         {
@@ -20,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Jogvonal> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM jogvonal  order by  sorszám";
+            string szöveg = $"SELECT * FROM  {táblanév} order by  sorszám";
             Adat_Kiegészítő_Jogvonal Adat;
             List<Adat_Kiegészítő_Jogvonal> Adatok = new List<Adat_Kiegészítő_Jogvonal>();
 
@@ -54,7 +55,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO jogvonal ( Szám, megnevezés  ) VALUES ( '{Adat.Szám}', '{Adat.Megnevezés}' )";
+                string szöveg = $"INSERT INTO {táblanév} ( Szám, megnevezés  ) VALUES ( '{Adat.Szám}', '{Adat.Megnevezés}' )";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -72,7 +73,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE jogvonal  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $" Szám='{Adat.Szám}', ";
                 szöveg += $" megnevezés='{Adat.Megnevezés}' ";
                 szöveg += $"WHERE sorszám={Adat.Sorszám}";

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -13,17 +13,18 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "plédke";
         string hely;
+        readonly string táblanév = "tábla";
 
         private void FájlBeállítás(string Telephely, int Év)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\főkönyv\személyzet{Év}.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\főkönyv\személyzet{Év}.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Személyzetösszesítőtábla(hely);
         }
 
         public List<Adat_Főkönyv_Személyzet> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = "SELECT * FROM tábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Főkönyv_Személyzet> Adatok = new List<Adat_Főkönyv_Személyzet>();
             Adat_Főkönyv_Személyzet Adat;
 
@@ -62,7 +63,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"DELETE FROM tábla where dátum=#{Dátum:MM-dd-yyyy}#";
+                string szöveg = $"DELETE FROM {táblanév} where dátum=#{Dátum:MM-dd-yyyy}#";
                 szöveg += $" and napszak='{Napszak}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
@@ -82,7 +83,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = "INSERT INTO tábla (dátum, napszak, típus, viszonylat, forgalmiszám, tervindulás, azonosító) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (dátum, napszak, típus, viszonylat, forgalmiszám, tervindulás, azonosító) VALUES (";
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', ";
                 szöveg += $"'{Adat.Napszak}', ";
                 szöveg += $"'{Adat.Típus}', ";

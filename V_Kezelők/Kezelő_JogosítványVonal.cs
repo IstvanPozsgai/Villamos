@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -14,7 +14,8 @@ namespace Villamos.Kezelők
     public class Kezelő_JogosítványVonal
     {
         readonly string jelszó = "egycsészekávé";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Főmérnökség1.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Főmérnökség1.mdb";
+        readonly string táblanév = "jogosítványvonal";
 
         public Kezelő_JogosítványVonal()
         {
@@ -27,7 +28,7 @@ namespace Villamos.Kezelők
             List<Adat_JogosítványVonal> Adatok = new List<Adat_JogosítványVonal>();
             Adat_JogosítványVonal Adat;
 
-            string szöveg = $"SELECT * FROM jogosítványvonal";
+            string szöveg = $"SELECT * FROM {táblanév}";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -62,7 +63,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO jogosítványvonal ( Sorszám, Törzsszám, Jogvonalérv, Jogvonalmegszerzés, Vonalmegnevezés, Vonalszám, státus)";
+                string szöveg = $"INSERT INTO {táblanév} ( Sorszám, Törzsszám, Jogvonalérv, Jogvonalmegszerzés, Vonalmegnevezés, Vonalszám, státus)";
                 szöveg += $" VALUES ({Sorszám()},";
                 szöveg += $"'{Adat.Törzsszám}', ";
                 szöveg += $"'{Adat.Jogvonalérv:yyyy.MM.dd}', ";
@@ -86,7 +87,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE jogosítványvonal SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" jogvonalmegszerzés='{Adat.Jogvonalmegszerzés:yyyy.MM.dd}', ";
                 szöveg += $" jogvonalérv='{Adat.Jogvonalérv:yyyy.MM.dd}' ";
                 szöveg += $" WHERE Törzsszám='{Adat.Törzsszám}'  AND vonalszám='{Adat.Vonalszám}'  AND státus=false";
@@ -107,7 +108,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE jogosítványvonal SET státus=true ";
+                string szöveg = $"UPDATE {táblanév} SET státus=true ";
                 szöveg += $" WHERE Törzsszám='{Adat.Törzsszám}'  AND vonalszám='{Adat.Vonalszám}'  AND státus=false";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

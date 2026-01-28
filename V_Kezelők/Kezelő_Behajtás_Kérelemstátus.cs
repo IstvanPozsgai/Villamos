@@ -2,15 +2,16 @@
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_Behajtás_Kérelemstátus
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\behajtási\Behajtási_alap.mdb";
         readonly string jelszó = "egérpad";
+        readonly string táblanév = "Kérelemstátus";
 
         public Kezelő_Behajtás_Kérelemstátus()
         {
@@ -19,7 +20,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Behajtás_Kérelemsátus> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM Kérelemstátus ORDER BY id";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY id";
             List<Adat_Behajtás_Kérelemsátus> Adatok = new List<Adat_Behajtás_Kérelemsátus>();
             Adat_Behajtás_Kérelemsátus Adat;
 

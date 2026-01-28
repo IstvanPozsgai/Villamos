@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -13,11 +13,11 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "kerekeskút";
         string hely;
-        string táblanév = "adatok";
+        readonly string táblanév = "adatok";
 
         private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\naplózás\{Dátum:yyyyMM}napló.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\naplózás\{Dátum:yyyyMM}napló.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Beosztás_Naplózása(hely.KönyvSzerk());
         }
 

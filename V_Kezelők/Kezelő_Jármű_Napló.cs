@@ -12,7 +12,8 @@ namespace Villamos.Kezelők
     public class Kezelő_Jármű_Napló
     {
         readonly string jelszó = "pozsgaii";
-        string hely;
+        string hely;       
+        readonly string táblanév = "állománytáblanapló";
 
         private void FájlBeállítás(int Év)
         {
@@ -25,7 +26,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = "INSERT INTO Állománytáblanapló (azonosító, típus, honnan, hova, törölt, Módosító, mikor, céltelep, üzenet) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (azonosító, típus, honnan, hova, törölt, Módosító, mikor, céltelep, üzenet) VALUES (";
                 szöveg += $"'{Adat.Azonosító.Trim()}', ";
                 szöveg += $"'{Adat.Típus.Trim()}', ";
                 szöveg += $"'{Adat.Honnan.Trim()}', ";
@@ -52,7 +53,7 @@ namespace Villamos.Kezelők
         public List<Adat_Jármű_Napló> Lista_adatok(int Év)
         {
             FájlBeállítás(Év);
-            string szöveg = $"SELECT * FROM állománytáblanapló ";
+            string szöveg = $"SELECT * FROM {táblanév} ";
             List<Adat_Jármű_Napló> Adatok = new List<Adat_Jármű_Napló>();
             Adat_Jármű_Napló Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -96,7 +97,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Jármű_Napló rekord in Adatok)
                 {
-                    string szöveg = $"UPDATE állománytáblanapló  SET üzenet=1 WHERE üzenet=0 AND céltelep='{rekord.Céltelep}' AND Azonosító='{rekord.Azonosító}'";
+                    string szöveg = $"UPDATE {táblanév}  SET üzenet=1 WHERE üzenet=0 AND céltelep='{rekord.Céltelep}' AND Azonosító='{rekord.Azonosító}'";
                     SzövegGy.Add(szöveg);
                 }
                 string hely = $@"{Application.StartupPath}\Főmérnökség\napló\napló{Év}.mdb".KönyvSzerk();

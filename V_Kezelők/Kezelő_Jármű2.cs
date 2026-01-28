@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "pozsgaii";
         string hely;
+        readonly string táblanév = "állománytábla";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -22,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Jármű_2> Lista_Adatok(string Telephely)
         {
-            string szöveg = $"SELECT * FROM állománytábla ORDER BY Azonosító ";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY Azonosító ";
             FájlBeállítás(Telephely);
             List<Adat_Jármű_2> Adatok = new List<Adat_Jármű_2>();
             Adat_Jármű_2 adat;
@@ -59,7 +60,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely);
                 // Ha már létezik, akkor módosítjuk
-                string szöveg = "UPDATE állománytábla  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"takarítás='{Adat.Takarítás}', "; // takarítás
                 szöveg += $"haromnapos='{Adat.Haromnapos}' "; // haromnapos
                 szöveg += $" WHERE azonosító='{Adat.Azonosító.Trim()}'";
@@ -84,7 +85,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Jármű_2 Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE Állománytábla SET haromnapos={Adat.Haromnapos} WHERE azonosító='{Adat.Azonosító}'";
+                    string szöveg = $"UPDATE {táblanév} SET haromnapos={Adat.Haromnapos} WHERE azonosító='{Adat.Azonosító}'";
                     SzövegGy.Add(szöveg);
                 }
 
@@ -107,7 +108,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE Állománytábla SET Állománytábla.haromnapos = 99";
+                string szöveg = $"UPDATE {táblanév} SET {táblanév}.haromnapos = 99";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -126,7 +127,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO állománytábla (azonosító, takarítás, haromnapos) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (azonosító, takarítás, haromnapos) VALUES (";
                 szöveg += $"'{Adat.Azonosító.Trim()}', "; // azonosító
                 szöveg += $"'{Adat.Takarítás}', "; // takarítás
                 szöveg += $"{Adat.Haromnapos}) "; // haromnapos
@@ -153,7 +154,7 @@ namespace Villamos.Kezelők
                 foreach (Adat_Jármű_2 Adat in Adatok)
                 {
                     // ha nem létezik 
-                    string szöveg = "INSERT INTO állománytábla (azonosító, takarítás, haromnapos) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (azonosító, takarítás, haromnapos) VALUES (";
                     szöveg += $"'{Adat.Azonosító.Trim()}', "; // azonosító
                     szöveg += $"'{Adat.Takarítás}', "; // takarítás
                     szöveg += $"{Adat.Haromnapos}) "; // haromnapos
@@ -177,7 +178,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"DELETE FROM állománytábla WHERE [azonosító]='{Azonosító}'";
+                string szöveg = $"DELETE FROM {táblanév} WHERE [azonosító]='{Azonosító}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

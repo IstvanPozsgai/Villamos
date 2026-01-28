@@ -5,12 +5,10 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Adatszerkezet;
-using Villamos.Villamos_Adatszerkezet;
-using static System.IO.File;
-using MyX = Villamos.MyClosedXML_Excel;
-using MyF = Függvénygyűjtemény;
 using Villamos.V_Ablakok._3_Dolgozó.Szatube;
+using static System.IO.File;
+using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 
 namespace Villamos
@@ -32,8 +30,11 @@ namespace Villamos
         readonly Kezelő_Kiegészítő_Jelenlétiív KézJelenléti = new Kezelő_Kiegészítő_Jelenlétiív();
         readonly Kezelő_Kiegészítő_főkönyvtábla KézFő = new Kezelő_Kiegészítő_főkönyvtábla();
 
-        List<Adat_Szatube_Szabadság> Adatok_Szabadság = new List<Adat_Szatube_Szabadság>();         
+        List<Adat_Szatube_Szabadság> Adatok_Szabadság = new List<Adat_Szatube_Szabadság>();
 
+#pragma warning disable IDE0044
+        List<string> NyomtatásiFájlok = new List<string>();
+#pragma warning restore IDE0044
         public Ablak_Szatube()
         {
             InitializeComponent();
@@ -272,7 +273,7 @@ namespace Villamos
             try
             {
                 Adat_Évek.Items.Clear();
-                string hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\adatok\Szatubecs";
+                string hely = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\Adatok\Szatubecs";
 
                 foreach (string file in System.IO.Directory.GetFiles(hely))
                 {
@@ -700,8 +701,8 @@ namespace Villamos
                 int Évek_ = Adat_Évek.Text.ToÉrt_Int();
 
                 Szatube_NyomtatasSzabi NyomtatSzabi = new Szatube_NyomtatasSzabi(KézSzabadság, Telephely_, Évek_);
-                NyomtatSzabi.Kiir(fájlexcel,Tábla,SzűrtLista,Adatok);
-                
+                NyomtatSzabi.Kiir(fájlexcel, Tábla, SzűrtLista, Adatok);
+
                 // a státusokat átállítja
                 List<double> Idek = new List<double>();
                 for (int i = 0; i < SzűrtLista.Count; i++)
@@ -727,7 +728,7 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }        
+        }
 
         private void BtnÖsszSzabiLista_Click(object sender, EventArgs e)
         {
@@ -995,6 +996,7 @@ namespace Villamos
             try
             {
                 if (Dolgozónév.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
+                Szabadságkiírása(0);
 
                 string[] darabol = Dolgozónév.Text.Trim().Split('=');
                 string fájlexc;
@@ -1005,7 +1007,7 @@ namespace Villamos
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Dolgozó éves szabadság felhasználása ",
-                    FileName = $"Éves_{Dolgozónév.Text.Trim()}-{DateTime.Now:yyyyMMdd}",
+                    FileName = $"Éves_{Dolgozónév.Text.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1020,7 +1022,7 @@ namespace Villamos
                 Szatube_Eves_Osszesito eves_osszesito_excel = new Szatube_Eves_Osszesito();
                 eves_osszesito_excel.Eves_Osszesito(fájlexc, darabol, KézSzabadság, Telephely_, Evek_);
 
-
+                Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
             {
@@ -1039,12 +1041,11 @@ namespace Villamos
             {
                 if (Dolgozónév.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva dolgozó.");
 
-                string fájlexcel = $@"{Application.StartupPath}\" + CmbTelephely.Text.ToString() + @"\nyomtatvány\Szabadságkivétel_egylapos.xlsx";
+                string fájlexcel = $@"{Application.StartupPath}\{CmbTelephely.Text.Trim()}\nyomtatvány\Szabadságkivétel_egylapos.xlsx";
                 if (!Exists(fájlexcel)) throw new HibásBevittAdat("Hiányzik az kitöltendő táblázat!");
 
                 Holtart.Be();
                 MyX.ExcelMegnyitás(fájlexcel);
-                string munkalap = "Munka1";
                 string[] darabol = Dolgozónév.Text.Split('=');
 
                 Holtart.Lép();
@@ -1053,6 +1054,15 @@ namespace Villamos
                 Adat_Dolgozó_Személyes Rekord = (from a in Adatok
                                                  where a.Dolgozószám == darabol[1].Trim()
                                                  select a).FirstOrDefault();
+
+                string könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                string fájlnév = $"Szabadság_Nyilatkozat_{Program.PostásNév}_{Rekord.Dolgozószám}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+                string MentésiFájl = $@"{könyvtár}\{fájlnév}";
+                NyomtatásiFájlok.Clear();
+
+                string munkalap = "Munka1";
+                MyX.Munkalap_aktív(munkalap);
+
                 if (Rekord != null)
                 {
                     MyX.Kiir(Text.Substring(0, 4), "aa1");
@@ -1066,15 +1076,14 @@ namespace Villamos
                     MyX.Kiir(Texttelephely.Trim(), "aa9");
                     MyX.Kiir(darabol[1].Trim(), "aa10");
                 }
-                //JAV:NYOMTAT
-                //MyX.Nyomtatás(munkalap, 1, 1);
-                for (int i = 1; i < 11; i++)
-                    MyX.Kiir("", "AA" + i);
+                //Elmentjük a nyomtatáshoz
+                MyX.ExcelMentés(MentésiFájl);
+                NyomtatásiFájlok.Add(MentésiFájl);
 
-                MyX.ExcelMentés(fájlexcel);
                 MyX.ExcelBezárás();
                 Holtart.Ki();
                 MessageBox.Show("Elkészült az Excel tábla.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MyF.ExcelNyomtatás(NyomtatásiFájlok, munkalap, true);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1086,6 +1095,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void Szabadságokfeltölt()
         {
@@ -1191,16 +1201,12 @@ namespace Villamos
                 if (Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy érvényes sor sem.");
                 Holtart.Be();
 
-                string fájlexc = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Túlóra_{Program.PostásTelephely.Trim()}_{DateTime.Now:yyyyMMddhhmmss}";
+                string fájlexc = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Túlóra_{Program.PostásTelephely.Trim()}_{DateTime.Now:yyyyMMddhhmmss}.xlsx";
                 string Telephely_ = CmbTelephely.Text.Trim();
 
                 Szatube_TúlCsopNyom TúlCsopNyomtatas = new Szatube_TúlCsopNyom();
-                TúlCsopNyomtatas.TúlCsopNyomtat(KézJelenléti,KézFő,KézDolgAlap,Telephely_,fájlexc,Tábla);
+                TúlCsopNyomtatas.TúlCsopNyomtat(KézJelenléti, KézFő, KézDolgAlap, Telephely_, fájlexc, Tábla, CheckBox2.Checked);
 
-                if (!CheckBox2.Checked)
-                {
-                    Delete(fájlexc + ".xlsx");
-                }
                 // a státusokat átállítja
                 List<double> Sorszámok = new List<double>();
                 for (int i = 0; i < Tábla.SelectedRows.Count; i++)
@@ -1210,6 +1216,7 @@ namespace Villamos
 
                 Túlórakiírás(1);
                 MessageBox.Show("A kijelölt tételek nyomtatása megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
             {
@@ -1229,21 +1236,14 @@ namespace Villamos
                 if (Tábla.SelectedRows.Count < 1) throw new HibásBevittAdat("Nincs kiválasztva érvényes sor a táblázatban.");
                 Holtart.Be();
 
-                string fájlexc = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\" + "Túlóra_egyéni_" + Program.PostásNév.Trim() + "_" + DateTime.Now.ToString("yyyyMMddhhmmss");
-
-                string Telephely_ = CmbTelephely.Text.Trim();
                 int AdatEvek = Adat_Évek.Text.ToÉrt_Int();
 
                 Szatube_EgyeniNyomtatas egyeni_nyom = new Szatube_EgyeniNyomtatas();
-                egyeni_nyom.EgyeniNyomtatas(fájlexc, Telephely_, AdatEvek, KézJelenléti, KézFő, KézDolgAlap, KézTúlóra, Tábla);
-
-                if (!CheckBox2.Checked)
-                {
-                    Delete(fájlexc + ".xlsx");
-                }
-
+                egyeni_nyom.EgyeniNyomtatas(CmbTelephely.Text.Trim(), AdatEvek, KézJelenléti, KézFő, KézDolgAlap, KézTúlóra, Tábla);
+                Holtart.Lép();
                 Túlórakiírás(1);
                 MessageBox.Show("A kijelölt tételek nyomtatása megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
             {

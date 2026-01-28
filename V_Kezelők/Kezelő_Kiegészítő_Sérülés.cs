@@ -12,6 +12,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\kiegészítő.mdb".KönyvSzerk();
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "sérülés";
 
         public Kezelő_Kiegészítő_Sérülés()
         {
@@ -21,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Sérülés> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM sérülés ORDER BY id";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY id";
             Adat_Kiegészítő_Sérülés Adat;
             List<Adat_Kiegészítő_Sérülés> Adatok = new List<Adat_Kiegészítő_Sérülés>();
 
@@ -61,7 +62,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO sérülés ";
+                string szöveg = $"INSERT INTO {táblanév} ";
                 szöveg += " (id, név, csoport1, csoport2, sorrend1, sorrend2, vezér1, vezér2, költséghely ) VALUES ";
                 szöveg += $"({Adat.ID}, ";
                 szöveg += $"'{Adat.Név}', ";
@@ -90,7 +91,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE sérülés SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"név='{Adat.Név}', ";
                 szöveg += $"csoport1={Adat.Csoport1}, ";
                 szöveg += $"csoport2={Adat.Csoport2}, ";
@@ -118,7 +119,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"Delete FROM sérülés where id={Adat.ID}";
+                string szöveg = $"Delete FROM {táblanév} where id={Adat.ID}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

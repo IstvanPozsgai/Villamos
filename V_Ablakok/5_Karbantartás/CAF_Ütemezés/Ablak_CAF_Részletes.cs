@@ -566,7 +566,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         private void Ütem_pályaszám_SelectionChangeCommitted(object sender, EventArgs e)
         {
-
+            Ütem_pályaszám.Text = Ütem_pályaszám.Items[Ütem_pályaszám.SelectedIndex].ToString();
             if (Ütem_pályaszám.Text.Trim() != "")
             {
                 Ütem_mezők_ürítése();
@@ -583,6 +583,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         private void Ütem_vizsg_sorszám_idő_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            Ütem_vizsg_sorszám_idő.Text = Ütem_vizsg_sorszám_idő.Items[Ütem_vizsg_sorszám_idő.SelectedIndex].ToString();
             if (Ütem_Ciklus_IDŐ.Text.Trim() == "") return;
             if (Ütem_vizsg_sorszám_idő.Text.Trim() == "") return;
 
@@ -602,6 +603,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         private void Ütem_vizsg_sorszám_km_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            Ütem_vizsg_sorszám_km.Text = Ütem_vizsg_sorszám_km.Items[Ütem_vizsg_sorszám_km.SelectedIndex].ToString();
             if (Ütem_Ciklus_KM.Text.Trim() == "") return;
             if (Ütem_vizsg_sorszám_km.Text.Trim() == "") return;
 
@@ -623,6 +625,8 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
 
         private void Ütem_Köv_Státus_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            Ütem_Köv_Státus.Text = Ütem_Köv_Státus.Items[Ütem_Köv_Státus.SelectedIndex].ToString();
+
             if (Ütem_Köv_Státus.SelectedItem.ToString() == "6- Elvégzett")
             {
                 Ütem_Köv_Számláló.ReadOnly = false;

@@ -42,7 +42,7 @@ namespace Villamos.Kezelők
                     string telep = "_";
                     if (Telephely == Adat.Telephely) telep = Adat.Telephely;
 
-                    string szöveg = "INSERT INTO állománytábla (azonosító, utolsórögzítés, vizsgálatdátuma, utolsóforgalminap, Vizsgálatfokozata, vizsgálatszáma, futásnap, telephely) VALUES (";
+                    string szöveg = $"INSERT INTO állománytábla (azonosító, utolsórögzítés, vizsgálatdátuma, utolsóforgalminap, Vizsgálatfokozata, vizsgálatszáma, futásnap, telephely) VALUES (";
                     szöveg += $"'{Adat.Azonosító}', ";                       // azonosító
                     szöveg += $"'{Adat.Utolsórögzítés:yyyy.MM.dd}', ";       // utolsórögzítés
                     szöveg += $"'{Adat.Vizsgálatdátuma:yyyy.MM.dd}', ";      // vizsgálatdátuma
@@ -74,7 +74,7 @@ namespace Villamos.Kezelők
                 string telep = "_";
                 if (Telephely == Adat.Telephely) telep = Adat.Telephely;
 
-                string szöveg = "INSERT INTO állománytábla (azonosító, utolsórögzítés, vizsgálatdátuma, utolsóforgalminap, Vizsgálatfokozata, vizsgálatszáma, futásnap, telephely) VALUES (";
+                string szöveg = $"INSERT INTO állománytábla (azonosító, utolsórögzítés, vizsgálatdátuma, utolsóforgalminap, Vizsgálatfokozata, vizsgálatszáma, futásnap, telephely) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";                       // azonosító
                 szöveg += $"'{Adat.Utolsórögzítés:yyyy.MM.dd}', ";       // utolsórögzítés
                 szöveg += $"'{Adat.Vizsgálatdátuma:yyyy.MM.dd}', ";      // vizsgálatdátuma
@@ -143,7 +143,7 @@ namespace Villamos.Kezelők
                 List<string> szövegGy = new List<string>();
                 foreach (Adat_T5C5_Göngyöl Adat in Adatok)
                 {
-                    string szöveg = "UPDATE állománytábla SET ";
+                    string szöveg = $"UPDATE állománytábla SET ";
                     szöveg += $" utolsórögzítés='{Adat.Utolsórögzítés:yyyy.MM.dd}', ";
                     szöveg += $" vizsgálatdátuma='{Adat.Vizsgálatdátuma:yyyy.MM.dd}', ";
                     szöveg += $" Vizsgálatfokozata='{Adat.Vizsgálatfokozata}', ";
@@ -172,7 +172,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                string szöveg = "UPDATE állománytábla SET ";
+                string szöveg = $"UPDATE állománytábla SET ";
                 szöveg += $" utolsórögzítés='{Adat.Utolsórögzítés:yyyy.MM.dd}', ";
                 szöveg += $" vizsgálatdátuma='{Adat.Vizsgálatdátuma:yyyy.MM.dd}', ";
                 szöveg += $" Vizsgálatfokozata='{Adat.Vizsgálatfokozata}', ";

@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
         readonly Kezelő_Jármű_Takarítás_Napló KézNapló = new Kezelő_Jármű_Takarítás_Napló();
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Takarítás\Jármű_takarítás.mdb";
         readonly string jelszó = "seprűéslapát";
+        readonly string táblanév = "takarítások";
 
         public Kezelő_Jármű_Takarítás()
         {
@@ -22,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Jármű_Takarítás_Takarítások> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM takarítások";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Jármű_Takarítás_Takarítások> Adatok = new List<Adat_Jármű_Takarítás_Takarítások>();
             Adat_Jármű_Takarítás_Takarítások Adat;
 
@@ -58,7 +59,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO takarítások  (azonosító, dátum, takarítási_fajta, telephely, státus ) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév}  (azonosító, dátum, takarítási_fajta, telephely, státus ) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";         // azonosító
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', ";  // dátum
                 szöveg += $"'{Adat.Takarítási_fajta}', ";  // takarítási_fajta
@@ -82,7 +83,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE takarítások  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"dátum ='{Adat.Dátum:yyyy.MM.dd}', ";
                 szöveg += $"státus ={Adat.Státus} ";
                 szöveg += $" WHERE [azonosító]='{Adat.Azonosító}'";
@@ -105,7 +106,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE takarítások  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"dátum ='{Adat.Dátum:yyyy.MM.dd}', ";
                 szöveg += $"státus ={Adat.Státus} ";
                 szöveg += $" WHERE [azonosító]='{Adat.Azonosító}'";

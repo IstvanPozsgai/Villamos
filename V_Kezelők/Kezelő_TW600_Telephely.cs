@@ -22,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_TW6000_Telephely> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM telephely order by sorrend";
+            string szöveg = $"SELECT * FROM telephely order by sorrend";
             List<Adat_TW6000_Telephely> Adatok = new List<Adat_TW6000_Telephely>();
             Adat_TW6000_Telephely Adat;
 
@@ -54,7 +54,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO telephely (telephely, sorrend) VALUES (";
+                string szöveg = $"INSERT INTO telephely (telephely, sorrend) VALUES (";
                 szöveg += $"'{Adat.Telephely}', ";
                 szöveg += $"{Adat.Sorrend})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

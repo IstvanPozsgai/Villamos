@@ -1777,6 +1777,8 @@ namespace Villamos
             string MilyenÁllapot = "";
             try
             {
+                if (Állapot.Length > 1) Állapot=Állapot.Substring(0, 1);
+        
                 int szám = int.Parse(Állapot);
                 MilyenÁllapot = ((MyEn.Kerék_Állapot)szám).ToString().Replace('_', ' ');
             }

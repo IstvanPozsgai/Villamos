@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "plédke";
         string hely = "";
+        readonly string táblanév = "xnapostábla";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -30,7 +31,7 @@ namespace Villamos.Kezelők
         public List<Adat_Jármű_Javításiátfutástábla> Lista_Adatok(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = "SELECT * FROM xnapostábla ";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Jármű_Javításiátfutástábla> Adatok = new List<Adat_Jármű_Javításiátfutástábla>();
             Adat_Jármű_Javításiátfutástábla Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -63,7 +64,7 @@ namespace Villamos.Kezelők
         public List<Adat_Jármű_Javításiátfutástábla> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = "SELECT * FROM xnapostábla ";
+            string szöveg = $"SELECT * FROM {táblanév} ";
             List<Adat_Jármű_Javításiátfutástábla> Adatok = new List<Adat_Jármű_Javításiátfutástábla>();
             Adat_Jármű_Javításiátfutástábla Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -101,7 +102,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Jármű_Javításiátfutástábla Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO xnapostábla (azonosító, kezdődátum, végdátum, hibaleírása) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (azonosító, kezdődátum, végdátum, hibaleírása) VALUES (";
                     szöveg += $"'{Adat.Azonosító.Trim()}', ";
                     szöveg += $"'{Adat.Kezdődátum:yyyy.MM.dd}', '{Adat.Végdátum:yyyy.MM.dd}', '{Adat.Hibaleírása}')";
                     SzövegGy.Add(szöveg);
@@ -127,7 +128,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Jármű_Javításiátfutástábla Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE xnapostábla SET hibaleírása='{Adat.Hibaleírása}' WHERE [azonosító]='{Adat.Azonosító}'";
+                    string szöveg = $"UPDATE {táblanév} SET hibaleírása='{Adat.Hibaleírása}' WHERE [azonosító]='{Adat.Azonosító}'";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
@@ -151,7 +152,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (string Adat in Adatok)
                 {
-                    string szöveg = $"DELETE FROM xnapostábla WHERE azonosító='{Adat}'";
+                    string szöveg = $"DELETE FROM {táblanév} WHERE azonosító='{Adat}'";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);
@@ -177,7 +178,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Jármű_Javításiátfutástábla Adat in Adatok)
                 {
-                    string szöveg = "INSERT INTO xnapostábla (azonosító, kezdődátum, végdátum, hibaleírása) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (azonosító, kezdődátum, végdátum, hibaleírása) VALUES (";
                     szöveg += $"'{Adat.Azonosító.Trim()}', ";
                     szöveg += $"'{Adat.Kezdődátum:yyyy.MM.dd}', '{Adat.Végdátum:yyyy.MM.dd}', '{Adat.Hibaleírása}')";
                     SzövegGy.Add(szöveg);
@@ -203,7 +204,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Jármű_Javításiátfutástábla Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE xnapostábla SET hibaleírása='{Adat.Hibaleírása}' WHERE [azonosító]='{Adat.Azonosító}'";
+                    string szöveg = $"UPDATE {táblanév} SET hibaleírása='{Adat.Hibaleírása}' WHERE [azonosító]='{Adat.Azonosító}'";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);

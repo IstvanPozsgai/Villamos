@@ -21,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Váltós_Váltóscsopitábla> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM tábla  order by  csoport,telephely";
+            string szöveg = $"SELECT * FROM tábla  order by  csoport,telephely";
             List<Adat_Váltós_Váltóscsopitábla> Adatok = new List<Adat_Váltós_Váltóscsopitábla>();
             Adat_Váltós_Váltóscsopitábla Adat;
 
@@ -56,7 +56,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO tábla (csoport, telephely, név) VALUES (";
+                string szöveg = $"INSERT INTO tábla (csoport, telephely, név) VALUES (";
                 szöveg += $"'{Adat.Csoport}', ";
                 szöveg += $"'{Adat.Telephely}', ";
                 szöveg += $"'{Adat.Név}') ";

@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\Villamos\Kulcs.mdb";
         readonly string jelszó = "Tóth_Katalin";
+        // ITT TARTOK
 
         public Kezelő_Kulcs()
         {
@@ -22,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kulcs> Lista_Adatok()
         {
-            string szöveg = "Select * From Adat";
+            string szöveg = $"SELECT * From Adat";
             List<Adat_Kulcs> Adatok = new List<Adat_Kulcs>();
             Adat_Kulcs Adat;
 
@@ -75,7 +76,7 @@ namespace Villamos.Kezelők
             try
             {
 
-                string szöveg = "INSERT INTO adat ";
+                string szöveg = $"INSERT INTO adat ";
                 szöveg += "(adat1, adat2, adat3 ) VALUES ";
                 szöveg += $"('{Adat.Adat1}', ";
                 szöveg += $" '{Adat.Adat2}', ";

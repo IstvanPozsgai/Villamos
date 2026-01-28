@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "feorszámok";
 
         public Kezelő_Kiegészítő_Feorszámok()
         {
@@ -20,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Feorszámok> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM feorszámok ORDER BY sorszám";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY sorszám";
             Adat_Kiegészítő_Feorszámok Adat;
             List<Adat_Kiegészítő_Feorszámok> Adatok = new List<Adat_Kiegészítő_Feorszámok>();
 
@@ -55,7 +56,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO feorszámok (Feorszám, feormegnevezés, státus) VALUES";
+                string szöveg = $"INSERT INTO {táblanév} (Feorszám, feormegnevezés, státus) VALUES";
                 szöveg += $"('{Adat.Feorszám}', '{Adat.Feormegnevezés}', {Adat.Státus})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -74,7 +75,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE feorszámok  SET";
+                string szöveg = $"UPDATE {táblanév}  SET";
                 szöveg += $" feorszám='{Adat.Feorszám}', ";
                 szöveg += $" feormegnevezés='{Adat.Feormegnevezés}', ";
                 szöveg += $" státus={Adat.Státus} ";
@@ -100,13 +101,13 @@ namespace Villamos.Kezelők
                 Adat_Kiegészítő_Feorszámok Adat1 = Adatok.Find(x => x.Sorszám == Sorszám1);
                 Adat_Kiegészítő_Feorszámok Adat2 = Adatok.Find(x => x.Sorszám == Sorszám1 - 1);
 
-                string szöveg = "UPDATE feorszámok  SET";
+                string szöveg = $"UPDATE {táblanév}  SET";
                 szöveg += $" feorszám='{Adat2.Feorszám}', ";
                 szöveg += $" feormegnevezés='{Adat2.Feormegnevezés}', ";
                 szöveg += $" státus={Adat2.Státus} ";
                 szöveg += $"WHERE sorszám={Adat1.Sorszám}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
-                szöveg = "UPDATE feorszámok  SET";
+                szöveg = $"UPDATE {táblanév}  SET";
                 szöveg += $" feorszám='{Adat1.Feorszám}', ";
                 szöveg += $" feormegnevezés='{Adat1.Feormegnevezés}', ";
                 szöveg += $" státus={Adat1.Státus} ";

@@ -5,10 +5,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
 
@@ -143,7 +142,7 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\Dolgozó.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1115,7 +1114,7 @@ namespace Villamos
         {
             try
             {
-
+                Vonalszám.Text = Vonalszám.Items[Vonalszám.SelectedIndex].ToString();
                 Adat_Kiegészítő_Jogvonal rekord = KézKiegVonal.Lista_Adatok().Where(a => a.Szám == Vonalszám.Text.Trim()).FirstOrDefault();
 
                 if (rekord != null) Vonalmegnevezés.Text = rekord.Megnevezés.Trim();
@@ -1135,7 +1134,7 @@ namespace Villamos
         {
             try
             {
-
+                Vonalmegnevezés.Text = Vonalmegnevezés.Items[Vonalmegnevezés.SelectedIndex].ToString();
                 Adat_Kiegészítő_Jogvonal rekord = KézKiegVonal.Lista_Adatok().Where(a => a.Megnevezés == Vonalmegnevezés.Text.Trim()).FirstOrDefault();
                 if (rekord != null) Vonalszám.Text = rekord.Szám.Trim();
             }
@@ -2164,7 +2163,7 @@ namespace Villamos
                     GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 else
                 {
-                    
+
                 }
 
             }

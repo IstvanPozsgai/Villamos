@@ -47,8 +47,8 @@
             this.BtnFrissít = new System.Windows.Forms.Button();
             this.BtnExcel = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.BtnSugó = new System.Windows.Forms.Button();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -249,6 +249,19 @@
             this.BtnExcel.UseVisualStyleBackColor = true;
             this.BtnExcel.Click += new System.EventHandler(this.BtnExcel_Click);
             // 
+            // BtnSugó
+            // 
+            this.BtnSugó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnSugó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
+            this.BtnSugó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnSugó.Location = new System.Drawing.Point(162, 3);
+            this.BtnSugó.Name = "BtnSugó";
+            this.BtnSugó.Size = new System.Drawing.Size(45, 44);
+            this.BtnSugó.TabIndex = 219;
+            this.toolTip1.SetToolTip(this.BtnSugó, "Online sugó megjelenítése");
+            this.BtnSugó.UseVisualStyleBackColor = true;
+            this.BtnSugó.Click += new System.EventHandler(this.BtnSugó_Click);
+            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.BackColor = System.Drawing.Color.Transparent;
@@ -271,18 +284,6 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(210, 222);
             this.tableLayoutPanel2.TabIndex = 222;
-            // 
-            // BtnSugó
-            // 
-            this.BtnSugó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnSugó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
-            this.BtnSugó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSugó.Location = new System.Drawing.Point(162, 3);
-            this.BtnSugó.Name = "BtnSugó";
-            this.BtnSugó.Size = new System.Drawing.Size(45, 44);
-            this.BtnSugó.TabIndex = 219;
-            this.toolTip1.SetToolTip(this.BtnSugó, "Online sugó megjelenítése");
-            this.BtnSugó.UseVisualStyleBackColor = true;
             // 
             // Ablak_Formok
             // 

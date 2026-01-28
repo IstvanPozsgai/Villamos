@@ -1,21 +1,21 @@
-﻿using DocumentFormat.OpenXml.Vml.Office;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
-using MyE = Villamos.Module_Excel;
 
 namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
 {
     public class Szatube_NyomtatasSzabi
     {
+#pragma warning disable IDE0044
+        List<string> NyomtatásiFájlok = new List<string>();
+#pragma warning restore IDE0044
+
+
         // Jelenlegi állapotot tekintve az előbb megbeszéltek (külön fájlba való mentés) még nem készültek el
         public Szatube_NyomtatasSzabi(Kezelő_Szatube_Szabadság kézSzabadság, string cmbTelephely, int adat_Évek)
         {
@@ -30,6 +30,9 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
 
         public void Kiir(string fájlexcel, DataGridView Tábla, List<double> SzűrtLista, List<Adat_Szatube_Szabadság> Adatok)
         {
+            NyomtatásiFájlok.Clear();
+            string könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
             string munkalap = "Munka1";
             DateTime IdeigDátum;
             string utolsókivettnap;
@@ -37,7 +40,8 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             MyX.ExcelMegnyitás(fájlexcel);
             MyX.Munkalap_aktív(munkalap);
             int elem = 0;
-            //Holtart.Be();
+            int fájlSzám = 0;
+
             for (int i = 0; i < SzűrtLista.Count; i++)
             {
                 elem++;
@@ -136,22 +140,27 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
                 // ha négy név van vagy ha a jelöltek számát elértük, akkor nyomtat majd a beírt adatokat törli
                 if (elem == 4)
                 {
-                    Beállítás_Nyomtatás NyomtatásBeállít = new Beállítás_Nyomtatás() { Munkalap=munkalap };
-                    MyX.NyomtatásiTerület_részletes(munkalap, NyomtatásBeállít);
-                    Laptisztítás();
+                    string fájlnév = $"Szabadság_{Program.PostásNév}_{++fájlSzám}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+                    string MentésiFájl = $@"{könyvtár}\{fájlnév}";
+                    MyX.ExcelMentés(MentésiFájl);
+                    NyomtatásiFájlok.Add(MentésiFájl);
+                    MyX.ExcelBezárás();
+                    MyX.ExcelMegnyitás(fájlexcel);
+                    MyX.Munkalap_aktív(munkalap);
                     elem = 0;
                 }
-                //Holtart.Lép();
+
             }
             if (elem != 0)
             {
-                Beállítás_Nyomtatás NyomtatásBeállít = new Beállítás_Nyomtatás() { Munkalap = munkalap };
-                MyX.NyomtatásiTerület_részletes(munkalap, NyomtatásBeállít);
-                Laptisztítás();
+                string fájlnév = $"Szabadság_{Program.PostásNév}_{++fájlSzám}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+                string MentésiFájl = $@"{könyvtár}\{fájlnév}";
+                MyX.ExcelMentés(MentésiFájl);
+                NyomtatásiFájlok.Add(MentésiFájl);
+                MyX.ExcelBezárás();
             }
-            Laptisztítás();
-            MyX.ExcelMentés(fájlexcel);
-            MyX.ExcelBezárás();
+
+            MyF.ExcelNyomtatás(NyomtatásiFájlok, munkalap, true );
         }
 
         private int Összesnapja(string törzsszám)
@@ -204,72 +213,5 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             }
             return válasz;
         }
-
-        private void Laptisztítás()
-        {
-            MyX.Kiir("", "i5");
-            MyX.Kiir("", "k5");
-            MyX.Kiir("", "m5");
-            MyX.Kiir("", "B9");
-            MyX.Kiir("", "i9");
-            MyX.Kiir("", "d17");
-            MyX.Kiir("", "g17");
-            MyX.Kiir("", "d21");
-            MyX.Kiir("", "g21");
-            MyX.Kiir("", "b27");
-            MyX.Kiir("", "B30");
-            MyX.Kiir("", "g27");
-            MyX.Kiir("", "x5");
-            MyX.Kiir("", "z5");
-            MyX.Kiir("", "ab5");
-            MyX.Kiir("", "q9");
-            MyX.Kiir("", "x9");
-            MyX.Kiir("", "s17");
-            MyX.Kiir("", "v17");
-            MyX.Kiir("", "s21");
-            MyX.Kiir("", "v21");
-            MyX.Kiir("", "q27");
-            MyX.Kiir("", "q30");
-            MyX.Kiir("", "v27");
-            MyX.Kiir("", "i37");
-            MyX.Kiir("", "k37");
-            MyX.Kiir("", "m37");
-            MyX.Kiir("", "B41");
-            MyX.Kiir("", "i41");
-            MyX.Kiir("", "d49");
-            MyX.Kiir("", "g49");
-            MyX.Kiir("", "d53");
-            MyX.Kiir("", "g53");
-            MyX.Kiir("", "b59");
-            MyX.Kiir("", "B62");
-            MyX.Kiir("", "g59");
-            MyX.Kiir("", "x37");
-            MyX.Kiir("", "z37");
-            MyX.Kiir("", "ab37");
-            MyX.Kiir("", "q41");
-            MyX.Kiir("", "x41");
-            MyX.Kiir("", "s49");
-            MyX.Kiir("", "v49");
-            MyX.Kiir("", "s53");
-            MyX.Kiir("", "v53");
-            MyX.Kiir("", "q59");
-            MyX.Kiir("", "q62");
-            MyX.Kiir("", "v59");
-            MyX.Kiir("", "m1");
-            MyX.Kiir("", "ab1");
-            MyX.Kiir("", "m33");
-            MyX.Kiir("", "ab33");
-            MyX.Kiir("", "f4");
-            MyX.Kiir("", "u4");
-            MyX.Kiir("", "f36");
-            MyX.Kiir("", "u36");
-
-            MyX.Kiir("", "b13");
-            MyX.Kiir("", "q13");
-            MyX.Kiir("", "b45");
-            MyX.Kiir("", "q45");
-        }
-
-
     }
 }

@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "pozsgaii";
         string hely;
+        readonly string táblanév = "állománytábla";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -40,7 +41,7 @@ namespace Villamos.Kezelők
 
         private List<Adat_Jármű> Lista_AdatokFő(string Telephely)
         {
-            string szöveg = "SELECT * FROM állománytábla order by azonosító";
+            string szöveg = $"SELECT * FROM {táblanév} order by azonosító";
             FájlBeállítás(Telephely);
 
             List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
@@ -90,7 +91,7 @@ namespace Villamos.Kezelők
 
         private List<Adat_Jármű> Lista_AdatokTelephely(string Telephely)
         {
-            string szöveg = "SELECT * FROM állománytábla order by azonosító";
+            string szöveg = $"SELECT * FROM {táblanév} order by azonosító";
             FájlBeállítás(Telephely);
 
             List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
@@ -144,7 +145,7 @@ namespace Villamos.Kezelők
                 FájlBeállítás(Telephely);
                 if (Telephely == "Főmérnökség")
                 {
-                    string szöveg = "INSERT INTO Állománytábla (azonosító, hibák, státus, típus, üzem, törölt, hibáksorszáma, szerelvény, szerelvénykocsik, miótaáll, valóstípus, valóstípus2, üzembehelyezés) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (azonosító, hibák, státus, típus, üzem, törölt, hibáksorszáma, szerelvény, szerelvénykocsik, miótaáll, valóstípus, valóstípus2, üzembehelyezés) VALUES (";
                     szöveg += $"'{Adat.Azonosító.Trim()}', 0, 0, 'Nincs', 'Közös', false, 0, false, 0, '1900.01.01', ";
                     szöveg += $"'{Adat.Valóstípus.Trim()}', ";
                     szöveg += $"'{Adat.Valóstípus2.Trim()}', '1900.01.01')";
@@ -152,7 +153,7 @@ namespace Villamos.Kezelők
                 }
                 else
                 {
-                    string szöveg = "INSERT INTO Állománytábla (azonosító, hibák, státus, típus, üzem, törölt, hibáksorszáma, szerelvény, szerelvénykocsik, miótaáll, valóstípus, valóstípus2) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (azonosító, hibák, státus, típus, üzem, törölt, hibáksorszáma, szerelvény, szerelvénykocsik, miótaáll, valóstípus, valóstípus2) VALUES (";
                     szöveg += $"'{Adat.Azonosító.Trim()}', 0, 0, '{Adat.Típus}', '{Adat.Üzem}', false, 0, false, 0, '1900.01.01', ";
                     szöveg += $"'{Adat.Valóstípus.Trim()}', ";
                     szöveg += $"'{Adat.Valóstípus2.Trim()}')";
@@ -184,7 +185,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 for (int i = 0; i < Üzemek.Count; i++)
                 {
-                    string szöveg = "UPDATE Állománytábla SET ";
+                    string szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $"üzem='{Üzemek[i].Trim()}' ";
                     szöveg += $" WHERE [azonosító] ='{Azonosítók[i]}'";
                     SzövegGy.Add(szöveg);
@@ -212,7 +213,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE állománytábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" hibák={Adat.Hibák}, ";
                 szöveg += $" státus={Adat.Státus} ";
                 szöveg += $" WHERE  [azonosító]='{Adat.Azonosító}'";
@@ -239,7 +240,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE állománytábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" hibák={Adat.Hibák}, ";
                 szöveg += $" miótaáll='{Adat.Miótaáll}' ";
                 szöveg += $" WHERE  [azonosító]='{Adat.Azonosító}'";
@@ -266,7 +267,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE állománytábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" hibák={Adat.Hibák}, ";
                 szöveg += $" státus={Adat.Státus}, ";
                 szöveg += $" miótaáll='{Adat.Miótaáll}' ";
@@ -294,7 +295,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE állománytábla SET ";
+                string szöveg = $"UPDATE  {táblanév}  SET ";
                 szöveg += $" hibák={Adat.Hibák} ";
                 szöveg += $" WHERE  [azonosító]='{Adat.Azonosító}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -318,7 +319,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Jármű Adat in Adatok)
                 {
-                    string szöveg = "UPDATE állománytábla SET ";
+                    string szöveg = $"UPDATE  {táblanév}  SET ";
                     szöveg += $" üzembehelyezés='{Adat.Üzembehelyezés:yyyy.MM.dd}' ";
                     szöveg += $"where [azonosító] ='{Adat.Azonosító}'";
                     SzövegGy.Add(szöveg);
@@ -341,7 +342,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE Állománytábla SET ";
+                string szöveg = $"UPDATE  {táblanév}  SET ";
                 szöveg += $" üzem='{Adat.Üzem}', típus='{Adat.Típus}' WHERE azonosító='{Adat.Azonosító}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -364,7 +365,7 @@ namespace Villamos.Kezelők
                 string szöveg;
                 if (Telephely == "Főmérnökség")
                 {
-                    szöveg = "UPDATE állománytábla SET ";
+                    szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $"valóstípus='{Adat.Valóstípus}', ";
                     szöveg += $"valóstípus2='{Adat.Valóstípus2}', ";
                     szöveg += $"üzembehelyezés='{Adat.Üzembehelyezés:yyyy.MM.dd}' ";
@@ -372,7 +373,7 @@ namespace Villamos.Kezelők
                 }
                 else
                 {
-                    szöveg = "UPDATE állománytábla SET ";
+                    szöveg = $"UPDATE  {táblanév}  SET ";
                     szöveg += $"valóstípus='{Adat.Valóstípus}', ";
                     szöveg += $"valóstípus2='{Adat.Valóstípus2}' ";
                     szöveg += $"where [azonosító] ='{Adat.Azonosító}'";
@@ -395,7 +396,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE állománytábla SET ";
+                string szöveg = $"UPDATE  {táblanév}  SET ";
                 szöveg += $"miótaáll='{Dátum}' ";
                 szöveg += $"where [azonosító] ='{Azonosító}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -416,7 +417,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE  állománytábla SET ";
+                string szöveg = $"UPDATE  {táblanév}  SET ";
                 szöveg += $" szerelvény={Adat.Szerelvény}, szerelvénykocsik={Adat.Szerelvénykocsik}";
                 szöveg += $" WHERE azonosító='{Adat.Azonosító}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -440,7 +441,7 @@ namespace Villamos.Kezelők
                 List<string> szövegGy = new List<string>();
                 foreach (Adat_Jármű Adat in Adatok)
                 {
-                    string szöveg = "UPDATE  állománytábla SET ";
+                    string szöveg = $"UPDATE  {táblanév}  SET ";
                     szöveg += $" szerelvény={Adat.Szerelvény}, szerelvénykocsik={Adat.Szerelvénykocsik}";
                     szöveg += $" WHERE azonosító='{Adat.Azonosító}'";
                     szövegGy.Add(szöveg);
@@ -464,7 +465,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "UPDATE Állománytábla SET ";
+                string szöveg = $"UPDATE  {táblanév}  SET ";
                 szöveg += $"hibák={Adat.Hibák}, ";
                 szöveg += $"státus={Adat.Státus}, ";
                 szöveg += $"törölt={Adat.Törölt}, ";
@@ -505,14 +506,14 @@ namespace Villamos.Kezelők
                     if (Telephely == "Főmérnökség")
                     {
                         if (Elem.Törölt)
-                            szöveg = $"UPDATE Állománytábla SET törölt=false WHERE [azonosító]='{Azonosító}'";
+                            szöveg = $"UPDATE {táblanév} SET törölt=false WHERE [azonosító]='{Azonosító}'";
                         else
-                            szöveg = $"UPDATE Állománytábla SET törölt=true WHERE [azonosító]='{Azonosító}'";
+                            szöveg = $"UPDATE {táblanév} SET törölt=true WHERE [azonosító]='{Azonosító}'";
                         MyA.ABMódosítás(hely, jelszó, szöveg);
                     }
                     else
                     {
-                        szöveg = $"DELETE FROM állománytábla WHERE [azonosító]='{Azonosító}'";
+                        szöveg = $"DELETE FROM {táblanév} WHERE [azonosító]='{Azonosító}'";
                         MyA.ABtörlés(hely, jelszó, szöveg);
                     }
                 }

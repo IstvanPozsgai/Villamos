@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -12,7 +12,8 @@ namespace Villamos.Kezelők
     public class Kezelő_Behajtás_Dolgozótábla
     {
         readonly string jelszó = "egérpad";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\behajtási\Behajtási_alap.mdb";
+        readonly string táblanév = "Dolgozóktábla";
 
         public Kezelő_Behajtás_Dolgozótábla()
         {
@@ -21,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Behajtás_Dolgozótábla> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM Dolgozóktábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Behajtás_Dolgozótábla> Adatok = new List<Adat_Behajtás_Dolgozótábla>();
             Adat_Behajtás_Dolgozótábla Adat;
 
@@ -56,7 +57,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE dolgozóktábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" Dolgozónév='{Adat.Dolgozónév}', ";
                 szöveg += $" munkakör='{Adat.Munkakör}', ";
                 szöveg += $" szervezetiegység='{Adat.Szervezetiegység}', ";
@@ -80,7 +81,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO dolgozóktábla ( Dolgozószám, Dolgozónév, munkakör, szervezetiegység, státus )  VALUES ( ";
+                string szöveg = $"INSERT INTO {táblanév} ( Dolgozószám, Dolgozónév, munkakör, szervezetiegység, státus )  VALUES ( ";
                 szöveg += $"'{Adat.Dolgozószám}', ";
                 szöveg += $"'{Adat.Dolgozónév}', ";
                 szöveg += $"'{Adat.Munkakör}', ";

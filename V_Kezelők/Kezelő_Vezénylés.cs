@@ -23,7 +23,7 @@ namespace Villamos.Kezelők
         public List<Adat_Vezénylés> Lista_Adatok(string Telephely, DateTime Dátum)
         {
             FájlBeállítás(Telephely, Dátum);
-            string szöveg = "SELECT * FROM vezényléstábla";
+            string szöveg = $"SELECT * FROM vezényléstábla";
             List<Adat_Vezénylés> Adatok = new List<Adat_Vezénylés>();
 
 
@@ -68,7 +68,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                string szöveg = "INSERT INTO vezényléstábla ";
+                string szöveg = $"INSERT INTO vezényléstábla ";
                 szöveg += "(azonosító, Dátum, Státus, vizsgálatraütemez, takarításraütemez, vizsgálat, vizsgálatszám, rendelésiszám, törlés, szerelvényszám, fusson, álljon, típus) VALUES (";
                 szöveg += $"'{Adat.Azonosító}',";
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}', ";
@@ -102,7 +102,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                string szöveg = "UPDATE vezényléstábla SET ";
+                string szöveg = $"UPDATE vezényléstábla SET ";
                 szöveg += $" Státus={Adat.Státus}, ";
                 szöveg += $" vizsgálatraütemez={Adat.Vizsgálatraütemez}, ";
                 szöveg += $" takarításraütemez={Adat.Takarításraütemez}, ";
@@ -137,7 +137,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                string szöveg = "UPDATE vezényléstábla SET törlés=1 ";
+                string szöveg = $"UPDATE vezényléstábla SET törlés=1 ";
                 szöveg += $" WHERE [azonosító] ='{azonosító.Trim()}' AND [dátum]=#{dátum2:M-d-yy}#";
                 szöveg += " AND [törlés]=0";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

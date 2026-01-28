@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -286,7 +286,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum, Eszterga);
-                string szöveg = "UPDATE beosztás SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"Megjegyzés='{Adat.Megjegyzés.Trim()}', ";// Megjegyzés
                 szöveg += $"Kért={Adat.Kért} ";// Kért
                 szöveg += $" WHERE Dolgozószám='{Adat.Dolgozószám}' AND nap=#{Adat.Nap:MM-dd-yyyy}#";
@@ -308,7 +308,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum, Eszterga);
-                string szöveg = "UPDATE beosztás SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"Szabiok='{Adat.Szabiok}' ";// AFTóra
                 szöveg += $" WHERE Dolgozószám='{Adat.Dolgozószám}' AND nap=#{Adat.Nap:MM-dd-yyyy}#";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

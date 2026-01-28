@@ -23,7 +23,7 @@ namespace Villamos.Kezelők
         {
             List<Adat_TTP_Alapadat> Adatok = new List<Adat_TTP_Alapadat>();
             Adat_TTP_Alapadat Adat;
-            string szöveg = "SELECT * FROM TTP_Alapadat";
+            string szöveg = $"SELECT * FROM TTP_Alapadat";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))

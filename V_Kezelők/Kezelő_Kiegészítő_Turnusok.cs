@@ -11,6 +11,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\kiegészítő1.mdb";
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "turnusok";
 
         public Kezelő_Kiegészítő_Turnusok()
         {
@@ -20,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Turnusok> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM turnusok order by csoport";
+            string szöveg = $"SELECT * FROM {táblanév} order by csoport";
             Adat_Kiegészítő_Turnusok Adat;
             List<Adat_Kiegészítő_Turnusok> Adatok = new List<Adat_Kiegészítő_Turnusok>();
 
@@ -51,7 +52,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO turnusok (csoport)";
+                string szöveg = $"INSERT INTO {táblanév} (csoport)";
                 szöveg += $" VALUES ('{Adat.Csoport}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -70,7 +71,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM turnusok WHERE csoport='{Adat.Csoport}'";
+                string szöveg = $"DELETE FROM {táblanév} WHERE csoport='{Adat.Csoport}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

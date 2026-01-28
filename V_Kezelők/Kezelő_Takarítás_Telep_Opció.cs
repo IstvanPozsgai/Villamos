@@ -24,7 +24,7 @@ namespace Villamos.Kezelők
             List<Adat_Takarítás_Telep_Opció> Adatok = new List<Adat_Takarítás_Telep_Opció>();
             Adat_Takarítás_Telep_Opció Adat;
             FájlBeállítás(Telephely, Év);
-            string szöveg = "SELECT * FROM TakarításOpcTelepAdatok";
+            string szöveg = $"SELECT * FROM TakarításOpcTelepAdatok";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -56,7 +56,7 @@ namespace Villamos.Kezelők
         public void Rögzít(string Telephely, int Év, Adat_Takarítás_Telep_Opció Adat)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = "INSERT INTO TakarításOpcTelepAdatok (Id, Dátum, Megrendelt, Teljesített) VALUES (";
+            string szöveg = $"INSERT INTO TakarításOpcTelepAdatok (Id, Dátum, Megrendelt, Teljesített) VALUES (";
             szöveg += $"{Adat.Id}, '{Adat.Dátum}', {Adat.Megrendelt}, {Adat.Teljesített}))";
             MyA.ABMódosítás(hely, jelszó, szöveg);
         }
@@ -68,7 +68,7 @@ namespace Villamos.Kezelők
             List<string> SzövegGy = new List<string>();
             foreach (Adat_Takarítás_Telep_Opció Adat in Adatok)
             {
-                string szöveg = "INSERT INTO TakarításOpcTelepAdatok (Id, Dátum, Megrendelt, Teljesített) VALUES (";
+                string szöveg = $"INSERT INTO TakarításOpcTelepAdatok (Id, Dátum, Megrendelt, Teljesített) VALUES (";
                 szöveg += $"{Adat.Id}, '{Adat.Dátum.ToShortDateString()}', {Adat.Megrendelt}, {Adat.Teljesített})";
                 SzövegGy.Add(szöveg);
             }
@@ -78,7 +78,7 @@ namespace Villamos.Kezelők
         public void Módosít(string Telephely, int Év, Adat_Takarítás_Telep_Opció Adat)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = "UPDATE TakarításOpcTelepAdatok  SET ";
+            string szöveg = $"UPDATE TakarításOpcTelepAdatok  SET ";
             szöveg += $"Dátum='{Adat.Dátum.ToShortDateString()}', ";
             szöveg += $"Megrendelt={Adat.Megrendelt}, ";
             szöveg += $"Teljesített={Adat.Teljesített} ";
@@ -92,7 +92,7 @@ namespace Villamos.Kezelők
             List<string> SzövegGy = new List<string>();
             foreach (Adat_Takarítás_Telep_Opció Adat in Adatok)
             {
-                string szöveg = "UPDATE TakarításOpcTelepAdatok  SET ";
+                string szöveg = $"UPDATE TakarításOpcTelepAdatok  SET ";
                 szöveg += $"Dátum='{Adat.Dátum.ToShortDateString()}', ";
                 szöveg += $"Megrendelt={Adat.Megrendelt}, ";
                 szöveg += $"Teljesített={Adat.Teljesített} ";

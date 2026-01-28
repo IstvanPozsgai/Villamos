@@ -12,6 +12,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb".KönyvSzerk();
         readonly string jelszó = "Mocó";
+        readonly string táblanév = "szolgálattelepeitábla";
 
         public Kezelő_Kiegészítő_Szolgálattelepei()
         {
@@ -22,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Kiegészítő_Szolgálattelepei> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM szolgálattelepeitábla order by sorszám";
+            string szöveg = $"SELECT * FROM {táblanév} order by sorszám";
             Adat_Kiegészítő_Szolgálattelepei Adat;
             List<Adat_Kiegészítő_Szolgálattelepei> Adatok = new List<Adat_Kiegészítő_Szolgálattelepei>();
 
@@ -59,7 +60,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO szolgálattelepeitábla ( sorszám, szolgálatnév, telephelynév, felelősmunkahely, raktár )";
+                string szöveg = $"INSERT INTO {táblanév} ( sorszám, szolgálatnév, telephelynév, felelősmunkahely, raktár )";
                 szöveg += $" VALUES ({Adat.Sorszám}, ";
                 szöveg += $"'{Adat.Szolgálatnév}', ";
                 szöveg += $"'{Adat.Telephelynév}', ";
@@ -82,7 +83,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "UPDATE szolgálattelepeitábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" sorszám={Adat.Sorszám},";
                 szöveg += $" szolgálatnév='{Adat.Szolgálatnév}', ";
                 szöveg += $" felelősmunkahely='{Adat.Felelősmunkahely}', ";
@@ -105,7 +106,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM szolgálattelepeitábla ";
+                string szöveg = $"DELETE FROM {táblanév} ";
                 szöveg += $" where telephelynév='{Adat.Telephelynév}' and sorszám={Adat.Sorszám}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }

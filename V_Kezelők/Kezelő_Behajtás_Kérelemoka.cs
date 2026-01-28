@@ -4,8 +4,8 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -13,8 +13,8 @@ namespace Villamos.Kezelők
     public class Kezelő_Behajtás_Kérelemoka
     {
         readonly string jelszó = "egérpad";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\behajtási\Behajtási_alap.mdb";
-
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\behajtási\Behajtási_alap.mdb";
+        readonly string táblanév = "Kérelemoka";
         public Kezelő_Behajtás_Kérelemoka()
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Alap(hely.KönyvSzerk());
@@ -22,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Behajtás_Kérelemoka> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM Kérelemoka ORDER BY id";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY id";
             List<Adat_Behajtás_Kérelemoka> Adatok = new List<Adat_Behajtás_Kérelemoka>();
             Adat_Behajtás_Kérelemoka Adat;
 
@@ -54,7 +54,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO Kérelemoka (id, ok) VALUES ({Sorszám()}, '{Adat.Ok}')";
+                string szöveg = $"INSERT INTO {táblanév} (id, ok) VALUES ({Sorszám()}, '{Adat.Ok}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -72,7 +72,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE kérelemoka SET id={Adat.Id} WHERE ok='{Adat.Ok}'";
+                string szöveg = $"UPDATE {táblanév} SET id={Adat.Id} WHERE ok='{Adat.Ok}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -111,7 +111,7 @@ namespace Villamos.Kezelők
             try
             {
                 // ha van alatta kocsi akkor nem engedjük törölni a típust
-                string szöveg = $"DELETE FROM Kérelemoka WHERE ok='{Adat.Ok}'";
+                string szöveg = $"DELETE FROM {táblanév} WHERE ok='{Adat.Ok}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "erzsébet";
         string hely;
+        readonly string táblanév = "Változattábla";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Kidobó_Változat> Lista_Adat(string Telephely)
         {
             FájlBeállítás(Telephely);
-            string szöveg = "SELECT * FROM Változattábla  order by id";
+            string szöveg = $"SELECT * FROM {táblanév} order by id";
             List<Adat_Kidobó_Változat> Adatok = new List<Adat_Kidobó_Változat>();
             Adat_Kidobó_Változat Adat;
 
@@ -57,7 +58,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = "INSERT INTO Változattábla (id, változatnév) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (id, változatnév) VALUES (";
                 szöveg += $"{Sorszám(hely)}, '{Adat.Változatnév}') ";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -97,7 +98,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"DELETE FROM Változattábla WHERE Változatnév='{Adat.Változatnév}'";
+                string szöveg = $"DELETE FROM {táblanév} WHERE Változatnév='{Adat.Változatnév}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

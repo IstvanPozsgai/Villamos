@@ -5,11 +5,10 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.MindenEgyéb;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -75,9 +74,6 @@ namespace Villamos
                 Alapadatokfeltöltése();
 
                 // GOMBOK láthstódágának korlátozása
-                BtnOktatásÚj.Visible = false;
-                BtnkérelemRögzítés.Visible = false;
-                BtnKérelemPDF.Visible = false;
                 BtnSzakszeng.Visible = false;
                 Elutasít_gomb.Visible = false;
                 BtnDolgozóilsta.Visible = false;
@@ -91,10 +87,7 @@ namespace Villamos
 
                 if (Program.PostásTelephely == "Főmérnökség")
                 {
-                    // főmérnökségi funciók bekapcsolása
-                    BtnOktatásÚj.Visible = true;
-                    BtnkérelemRögzítés.Visible = true;
-                    BtnKérelemPDF.Visible = true;
+                    // Főmérnökségi funciók bekapcsolása
                     BtnSzakszeng.Visible = true;
                     Elutasít_gomb.Visible = true;
                     BtnDolgozóilsta.Visible = true;
@@ -209,7 +202,7 @@ namespace Villamos
                           where a.Név != "Főmérnökség"
                           orderby a.Név
                           select a).ToList();
-                // Ha főmérnökség akkor minden telephelyet feltölt
+                // Ha Főmérnökség akkor minden telephelyet feltölt
                 Cmbtelephely.Enabled = true;
             }
             else
@@ -405,7 +398,7 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\behajtási.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -535,11 +528,17 @@ namespace Villamos
             }
         }
 
-        private void BtnÖsszSzabiLista_Click(object sender, EventArgs e)
+        private void BtnNévFrszFrissítés_Click(object sender, EventArgs e)
+        {
+            NévFrszFrissítés();
+        }
+
+        private void NévFrszFrissítés()
         {
             FrissítésGombEseménye();
             AutókSzámaLekérdezés();
             AutókRendszámaLekérdezés();
+     
         }
 
         private void AutókSzámaLekérdezés()
@@ -602,6 +601,16 @@ namespace Villamos
             }
         }
 
+        private void TxtkérelemHR_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Tab )
+            {
+                NévFrszFrissítés();
+            }
+        }
+
+
+
         private void FrissítésGombEseménye()
         {
             try
@@ -645,6 +654,7 @@ namespace Villamos
             CmbKérelemTípus.Text = CmbKérelemTípus.Items[0].ToString();
             DatÉrvényes.Value = DatadminÉrvényes.Value;
             Kérelemalaptábla();
+            TxtkérelemHR.Focus();
         }
 
         private void Kérelemújraírás()
@@ -1428,7 +1438,6 @@ namespace Villamos
                     fájlexc = SaveFileDialog1.FileName;
                 else
                     return;
-                // JAVÍTANDÓ: Mivel nem látszik a teljes táblázat, hogy hozzon hibát minden adatot listázunk.
                 Nézet_Egyszerű.Checked = false;
                 LISTAlista();
 
@@ -1436,7 +1445,7 @@ namespace Villamos
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1529,8 +1538,10 @@ namespace Villamos
 
                 int j = 1;
                 // megnyitjuk az excel táblát
-                MyE.ExcelMegnyitás(helyexcel );
-
+                MyX.ExcelMegnyitás(helyexcel);
+                List<string> Fájlok = new List<string>();
+                string könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + $@"\BehajtásiNyomtatás\";
+                if (!Directory.Exists(könyvtár)) Directory.CreateDirectory(könyvtár);
                 int k = 0;
                 int l = 0;
                 string eredmény;
@@ -1538,7 +1549,7 @@ namespace Villamos
                 for (int i = 0; i < TáblaLista.SelectedRows.Count; i++)
                 {
                     Holtart.Lép();
-                    MyE.Munkalap_aktív("Adatok");
+                    MyX.Munkalap_aktív("Adatok");
 
                     j++;
                     k = 0;
@@ -1549,25 +1560,25 @@ namespace Villamos
 
                     if (Elem != null)
                     {
-                        MyE.Kiir($"{TáblaLista.SelectedRows[i].Cells[0].Value}".Trim(), $"b{j}");
+                        MyX.Kiir($"{TáblaLista.SelectedRows[i].Cells[0].Value}".Trim(), $"b{j}");
                         if (Elem.Korlátlan == "Vezetői")
                         {
-                            MyE.Kiir("Vezetői behajtási engedély".ToUpper(), $"c{j}");
-                            MyE.Kiir("    ", $"e{j}");
+                            MyX.Kiir("Vezetői behajtási engedély".ToUpper(), $"c{j}");
+                            MyX.Kiir("    ", $"e{j}");
                         }
                         else if (Elem.Korlátlan == "Normál")
                         {
-                            MyE.Kiir("behajtási engedély".ToUpper(), $"c{j}");
-                            MyE.Kiir("Szabad parkoló esetén", $"e{j}");
+                            MyX.Kiir("behajtási engedély".ToUpper(), $"c{j}");
+                            MyX.Kiir("Szabad parkoló esetén", $"e{j}");
                         }
                         else
                         {
-                            MyE.Kiir("Parkolási engedély".ToUpper(), $"c{j}");
-                            MyE.Kiir(Elem.Korlátlan, $"e{j}");
+                            MyX.Kiir("Parkolási engedély".ToUpper(), $"c{j}");
+                            MyX.Kiir(Elem.Korlátlan, $"e{j}");
                         }
-                        MyE.Kiir(Elem.Név, $"f{j}");
-                        MyE.Kiir(Elem.Rendszám, $"g{j}");
-                        MyE.Kiir($"Érvényes: {Elem.Érvényes:yyyy.MM.dd}", $"h{j}");
+                        MyX.Kiir(Elem.Név, $"f{j}");
+                        MyX.Kiir(Elem.Rendszám, $"g{j}");
+                        MyX.Kiir($"Érvényes: {Elem.Érvényes:yyyy.MM.dd}", $"h{j}");
                         eredmény = "";
 
                         for (l = 6; l <= 17; l++)
@@ -1590,16 +1601,16 @@ namespace Villamos
                             eredmény = "Összes";
                         }
 
-                        MyE.Kiir(eredmény, $"d{j}");
+                        MyX.Kiir(eredmény, $"d{j}");
 
                         if (k == 0)
-                            MyE.Kiir("üzem területére", $"i{j}");
+                            MyX.Kiir("üzem területére", $"i{j}");
 
                         else if (k == 1)
-                            MyE.Kiir("üzem területére", $"i{j}");
+                            MyX.Kiir("üzem területére", $"i{j}");
 
                         else
-                            MyE.Kiir("üzemek területére", $"i{j}");
+                            MyX.Kiir("üzemek területére", $"i{j}");
 
 
                         // Módosítjuk a kérelem státusát
@@ -1612,23 +1623,28 @@ namespace Villamos
                         // ha a hatodikhoz érünk akkor nyomtatunk egyet.
                         if (j == 7)
                         {
-                            MyE.Munkalap_aktív(munkalapnév);
-                            MyE.Nyomtatás(munkalapnév, 1, 1);
+                            MyX.Munkalap_aktív(munkalapnév);
+                            string fájl = $@"{könyvtár}\Behajtási_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+                            Fájlok.Add(fájl);
+                            MyX.ExcelMentésMásként(fájl);
 
                             j = 1;
-                            MyE.Munkalap_aktív("Adatok");
+                            MyX.Munkalap_aktív("Adatok");
                         }
                     }
                 }
                 if (j != 1)
                 {
-                    MyE.Munkalap_aktív(munkalapnév);
-                    MyE.Nyomtatás(munkalapnév, 1, 1);
+                    MyX.Munkalap_aktív(munkalapnév);
+                    string fájl = $@"{könyvtár}\Behajtási_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+                    Fájlok.Add(fájl);
+                    MyX.ExcelMentésMásként(fájl);
 
-                    MyE.Munkalap_aktív("Adatok");
+                    MyX.Munkalap_aktív("Adatok");
                 }
                 // az excel tábla bezárása
-                MyE.ExcelBezárás();
+                MyX.ExcelBezárás();
+                if (Fájlok.Count > 0) MyF.ExcelNyomtatás(Fájlok, munkalapnév, FájlTöröl.Checked);
                 LISTAlista();
                 MessageBox.Show("Az engedélyek nyomtatása megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1850,17 +1866,20 @@ namespace Villamos
                 int j = 1;
 
                 // megnyitjuk az excel táblát
-                MyE.ExcelMegnyitás(helyexcel);
+                MyX.ExcelMegnyitás(helyexcel);
 
                 int k = 0;
                 int l = 0;
                 string eredmény;
                 Adatok_Behajtás = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
+                List<string> Fájlok = new List<string>();
+                string könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + $@"\BehajtásiNyomtatás\";
+                if (!Directory.Exists(könyvtár)) Directory.CreateDirectory(könyvtár);
 
                 for (int i = 0; i < TáblaLista.SelectedRows.Count; i++)
                 {
                     Holtart.Lép();
-                    MyE.Munkalap_aktív("Adatok");
+                    MyX.Munkalap_aktív("Adatok");
 
                     j++;
                     k = 0;
@@ -1868,28 +1887,28 @@ namespace Villamos
                     Adat_Behajtás_Behajtási rekord = (from a in Adatok_Behajtás
                                                       where a.Sorszám == TáblaLista.SelectedRows[i].Cells[0].Value.ToStrTrim()
                                                       select a).FirstOrDefault();
-                    MyE.Kiir(TáblaLista.SelectedRows[i].Cells[0].Value.ToString().Trim(), $"b{j}");
+                    MyX.Kiir(TáblaLista.SelectedRows[i].Cells[0].Value.ToString().Trim(), $"b{j}");
 
 
-                    MyE.Kiir(TáblaLista.SelectedRows[i].Cells[0].Value.ToString().Trim(), $"b{j}");
+                    MyX.Kiir(TáblaLista.SelectedRows[i].Cells[0].Value.ToString().Trim(), $"b{j}");
                     if (rekord.Korlátlan == "Vezetői")
                     {
-                        MyE.Kiir("Vezetői behajtási engedély".ToUpper(), $"c{j}");
-                        MyE.Kiir("    ", $"e{j}");
+                        MyX.Kiir("Vezetői behajtási engedély".ToUpper(), $"c{j}");
+                        MyX.Kiir("    ", $"e{j}");
                     }
                     else if (rekord.Korlátlan == "Normál")
                     {
-                        MyE.Kiir("behajtási engedély".ToUpper(), $"c{j}");
-                        MyE.Kiir("Szabad parkoló esetén", $"e{j}");
+                        MyX.Kiir("behajtási engedély".ToUpper(), $"c{j}");
+                        MyX.Kiir("Szabad parkoló esetén", $"e{j}");
                     }
                     else
                     {
-                        MyE.Kiir("Parkolási engedély".ToUpper(), $"c{j}");
-                        MyE.Kiir(rekord.Korlátlan, $"e{j}");
+                        MyX.Kiir("Parkolási engedély".ToUpper(), $"c{j}");
+                        MyX.Kiir(rekord.Korlátlan, $"e{j}");
                     }
-                    MyE.Kiir(rekord.Név, $"f{j}");
-                    MyE.Kiir(rekord.Rendszám, $"g{j}");
-                    MyE.Kiir($"Érvényes: {rekord.Érvényes:yyyy.MM.dd}", $"h{j}");
+                    MyX.Kiir(rekord.Név, $"f{j}");
+                    MyX.Kiir(rekord.Rendszám, $"g{j}");
+                    MyX.Kiir($"Érvényes: {rekord.Érvényes:yyyy.MM.dd}", $"h{j}");
 
                     eredmény = "";
                     for (l = 6; l <= 17; l++)
@@ -1910,36 +1929,41 @@ namespace Villamos
                         k = 0;
                         eredmény = "Összes";
                     }
-                    MyE.Kiir(eredmény, $"d{j}");
+                    MyX.Kiir(eredmény, $"d{j}");
 
                     if (k == 0)
-                        MyE.Kiir("üzem területére", $"i{j}");
+                        MyX.Kiir("üzem területére", $"i{j}");
 
                     else if (k == 1)
-                        MyE.Kiir("üzem területére", $"i{j}");
+                        MyX.Kiir("üzem területére", $"i{j}");
 
                     else
-                        MyE.Kiir("üzemek területére", $"i{j}");
+                        MyX.Kiir("üzemek területére", $"i{j}");
 
                     // ha a hatodikhoz érünk akkor nyomtatunk egyet.
                     if (j == 7)
                     {
-                        MyE.Munkalap_aktív(munkalapnév);
-                        MyE.Nyomtatás(munkalapnév, 1, 1);
+                        MyX.Munkalap_aktív(munkalapnév);
+                        string fájl = $@"{könyvtár}\Átvétel_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+                        Fájlok.Add(fájl);
+                        MyX.Munkalap_aktív("Adatok");
+                        MyX.ExcelMentésMásként(fájl);
                         j = 1;
-                        MyE.Munkalap_aktív("Adatok");
+
                     }
                 }
                 if (j != 1)
                 {
-                    MyE.Munkalap_aktív(munkalapnév);
-                    MyE.Nyomtatás(munkalapnév, 1, 1);
+                    MyX.Munkalap_aktív(munkalapnév);
+                    string fájl = $@"{könyvtár}\Behajtási_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+                    Fájlok.Add(fájl);
+                    MyX.Munkalap_aktív("Adatok");
+                    MyX.ExcelMentésMásként(fájl);
 
-                    MyE.Munkalap_aktív("Adatok");
                 }
                 // az excel tábla bezárása
-                MyE.ExcelBezárás();
-
+                MyX.ExcelBezárás();
+                if (Fájlok.Count > 0) MyF.ExcelNyomtatás(Fájlok, munkalapnév, FájlTöröl.Checked);
                 LISTAlista();
                 MessageBox.Show("Az átvételi lapok nyomtatása megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -3261,7 +3285,7 @@ namespace Villamos
                 MyX.DataGridViewToXML(fájlexc, DataNapló);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -3327,7 +3351,7 @@ namespace Villamos
                     GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 else
                 {
-                    
+
                 }
 
             }
@@ -3341,5 +3365,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+  
     }
 }

@@ -941,7 +941,7 @@ namespace Villamos.Villamos_Ablakok
                     string fájlnév = $"Technológia_{Program.PostásNév}_{Járműtípus.Text.Trim()}_{Combo_KarbCiklus.Text.Trim()}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
                     string fájlexc = $@"{könyvtár}\{fájlnév}";
                     Excel_tábla(fájlexc);
-                    if (Nyomtat_igen.Checked) MyF.ExcelNyomtatás(Fájlok);
+                    if (Nyomtat_igen.Checked) MyF.ExcelNyomtatás(Fájlok, munkalap);
                     //fájl törlése
                     if (!Töröl_igen.Checked) MyF.Megnyitás(fájlexc);
                 }
@@ -954,7 +954,7 @@ namespace Villamos.Villamos_Ablakok
                         Pályaszám.Text = psz;
                         Excel_tábla(fájlexc);
                     }
-                    if (Nyomtat_igen.Checked) MyF.ExcelNyomtatás(Fájlok, Töröl_igen.Checked);
+                    if (Nyomtat_igen.Checked) MyF.ExcelNyomtatás(Fájlok, munkalap, Töröl_igen.Checked);
                     if (!Töröl_igen.Checked) MyF.Megnyitások(Fájlok);
                 }
 
@@ -1547,7 +1547,7 @@ namespace Villamos.Villamos_Ablakok
 
                 sor++;
                 Kép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\Villamos_{Járműtípus.Text.Trim()}.png";
-                if (File.Exists(Kép)) MyX.Kép_beillesztés(munkalap, "F5", Kép, 300, 100, 0.4, 0.4);
+                if (File.Exists(Kép)) MyX.Kép_beillesztés(munkalap, "F5", Kép, 290, 85, 0.5, 0.5);
 
             }
             catch (HibásBevittAdat ex)

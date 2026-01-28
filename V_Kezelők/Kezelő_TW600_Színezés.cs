@@ -21,7 +21,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_TW6000_Színezés> Lista_Adatok()
         {
-            string szöveg = "SELECT * FROM szinezés ORDER BY vizsgálatnév";
+            string szöveg = $"SELECT * FROM szinezés ORDER BY vizsgálatnév";
             List<Adat_TW6000_Színezés> Adatok = new List<Adat_TW6000_Színezés>();
             Adat_TW6000_Színezés Adat;
 
@@ -53,7 +53,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO szinezés (vizsgálatnév, szín) VALUES (";
+                string szöveg = $"INSERT INTO szinezés (vizsgálatnév, szín) VALUES (";
                 szöveg += $"'{Adat.Vizsgálatnév}', ";
                 szöveg += $"{Adat.Szín})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

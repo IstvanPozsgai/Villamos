@@ -24,7 +24,7 @@ namespace Villamos.Kezelők
         {
             List<Adat_TTP_Tábla> Adatok = new List<Adat_TTP_Tábla>();
             Adat_TTP_Tábla Adat;
-            string szöveg = "SELECT * FROM TTP_Tábla";
+            string szöveg = $"SELECT * FROM TTP_Tábla";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -91,7 +91,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = "INSERT INTO TTP_Tábla (";
+                string szöveg = $"INSERT INTO TTP_Tábla (";
                 szöveg += $"[Azonosító], ";
                 szöveg += $"[Lejárat_Dátum], ";
                 szöveg += $"[Ütemezés_Dátum], ";

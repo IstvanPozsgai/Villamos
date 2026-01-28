@@ -23,7 +23,7 @@ namespace Villamos.Kezelők
         public List<Adat_T5C5_Futás1> Lista_Adatok(string Telephely, DateTime Dátum)
         {
             FájlBeállítás(Telephely, Dátum);
-            string szöveg = "SELECT * FROM futástábla1 ";
+            string szöveg = $"SELECT * FROM futástábla1 ";
             List<Adat_T5C5_Futás1> Adatok = new List<Adat_T5C5_Futás1>();
             Adat_T5C5_Futás1 Adat;
 
@@ -76,7 +76,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Dátum);
-                MyA.ABtörlés(hely, jelszó, "DELETE * FROM Futástábla1");
+                MyA.ABtörlés(hely, jelszó,$"DELETE * FROM Futástábla1");
             }
             catch (HibásBevittAdat ex)
             {
