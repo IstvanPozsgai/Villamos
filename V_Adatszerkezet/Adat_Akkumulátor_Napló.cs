@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Villamos.Adatszerkezet
 {
-    public class Adat_Akkumulátor
+    public class Adat_Akkumulátor_Napló
     {
         public string Beépítve { get; private set; }
         public string Fajta { get; private set; }
@@ -16,8 +20,12 @@ namespace Villamos.Adatszerkezet
         public DateTime Módosításdátuma { get; private set; }
         public int Kapacitás { get; private set; }
         public string Telephely { get; private set; }
+        public DateTime Rögzítés { get; private set; }
+        public string Rögzítő { get; private set; }
 
-        public Adat_Akkumulátor(string beépítve, string fajta, string gyártó, string gyáriszám, string típus, DateTime garancia, DateTime gyártásiidő, int státus, string megjegyzés, DateTime módosításdátuma, int kapacitás, string telephely)
+
+        public Adat_Akkumulátor_Napló(string beépítve, string fajta, string gyártó, string gyáriszám, string típus, DateTime garancia, DateTime gyártásiidő,
+            int státus, string megjegyzés, DateTime módosításdátuma, int kapacitás, string telephely, DateTime rögzítés, string rögzítő)
         {
             Beépítve = beépítve;
             Fajta = fajta;
@@ -31,14 +39,8 @@ namespace Villamos.Adatszerkezet
             Módosításdátuma = módosításdátuma;
             Kapacitás = kapacitás;
             Telephely = telephely;
-        }
-
-        public Adat_Akkumulátor(string beépítve, string gyáriszám, int státus, DateTime módosításdátuma)
-        {
-            Beépítve = beépítve;
-            Gyáriszám = gyáriszám;
-            Státus = státus;
-            Módosításdátuma = módosításdátuma;
+            Rögzítés = rögzítés;
+            Rögzítő = rögzítő;
         }
     }
 }
