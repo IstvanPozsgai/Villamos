@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Data.Sqlite;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
@@ -16,30 +17,62 @@ namespace Villamos.Kezelők
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\SQLite\Test.db";
         readonly string Password = "CzabalayL";
         readonly string TableName = "TestTable";
+        string ConnectionString;
 
 
-        public Kezelő_SQLite()
+        public Kezelő_SQLite()           
         {
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.CAFtábla(hely.KönyvSzerk());
+            EnsureDirectory();
+            ConnectionString = BuildConnectionString();            
+        }
 
-            // Ez később kivehető, ez csak a programrész verziócsere utáni első futtatása miatt került bele, hogy ne kézzel hozzuk létre a táblát.
-            if (!Adatbázis.ABvanTábla(hely, jelszó, $"SELECT * FROM {táblanév}"))
+
+        private void EnsureDirectory()
+        {
+            var dir = Path.GetDirectoryName(hely);
+            if (!Directory.Exists(dir))
             {
-                Tabla_Letrehozasa();
+                Directory.CreateDirectory(dir);
             }
+        }
 
-            if (cache_osszes_adat == null)
+
+        string BuildConnectionString()
+        {
+            return new SqliteConnectionStringBuilder
             {
-                InitializeCache(KézAdatok); // egyszeri töltés
-            }
-            osszes_adat = cache_osszes_adat;
-
-            // Lekéri a Ciklusrend adatbázisból a vizsgálatok közötti megtehető km értékét.
-            // Elég az elsőt lekérnünk, mivel minden vizsgálatra egységesen van meghatározva.
-            Vizsgalatok_Kozott_Megteheto_Km = Kéz_Ciklus.Lista_Adatok().FirstOrDefault(a => a.Típus == "CAF_km").Névleges;
+                DataSource = hely,
+                Mode = SqliteOpenMode.ReadWriteCreate,
+                Password = Password
+            }.ToString();
         }
 
         // Create
+
+        public void CreateTable()
+        {
+            var sql = @"CREATE TABLE authors(
+                        id INTEGER PRIMARY KEY,
+                        username TEXT NOT NULL,
+                        date INTEGER NOT NULL,
+                        trueorfalse INTEGER NOT NULL
+                        )";
+            try
+            {
+                SqliteConnection connection = new SqliteConnection(ConnectionString);
+                connection.Open();
+
+                var command = new SqliteCommand(sql, connection);
+                command.ExecuteNonQuery();               
+
+                connection.Close();
+
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
 
         // Read
 
