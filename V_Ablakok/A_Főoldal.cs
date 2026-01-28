@@ -10,6 +10,7 @@ using Villamos.Ablakok;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Ablakok._0_Bejelentkezés;
+using Villamos.V_Ablakok._1_Beállítások;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP;
@@ -2778,6 +2779,27 @@ namespace Villamos
         private void Ablak_Hibanaplo_FormClosed(object sender, FormClosedEventArgs e)
         {
             Új_Ablak_Hibanaplo = null;
+        }
+
+        Ablak_SQLite Új_Ablak_SQLite;
+        private void SQLiteTesztMenu_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_SQLite == null)
+            {
+                Új_Ablak_SQLite = new Ablak_SQLite();
+                Új_Ablak_SQLite.FormClosed += Ablak_SQLiteTeszt_FormClosed;
+                Új_Ablak_SQLite.Show();
+            }
+            else
+            {
+                Új_Ablak_SQLite.Activate();
+                Új_Ablak_SQLite.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        private void Ablak_SQLiteTeszt_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_SQLite = null;
         }
     }
 }
