@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok;
-using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok.Közös
@@ -66,18 +65,18 @@ namespace Villamos.V_Ablakok.Közös
                 // ide kell az összes gombot tenni amit szabályozni akarunk false
                 int melyikelem = 200;
                 // módosítás 1
-                GombokLátszanak(false );
+                GombokLátszanak(false);
 
                 if (MyF.Vanjoga(melyikelem, 1))
                 {
                     Btnrögzítés.Visible = true;
                 }
                 melyikelem = 200;
-                // módosítás 2 főmérnökségi belépés és mindenhova tud írni
+                // módosítás 2 Főmérnökségi belépés és mindenhova tud írni
                 if (MyF.Vanjoga(melyikelem, 2))
                 {
                     //Minden üzemhez tud írni, így nem kell gomb
-               //     GombokLátszanak(true);
+                    //     GombokLátszanak(true);
 
                 }
             }
@@ -116,6 +115,7 @@ namespace Villamos.V_Ablakok.Közös
 
                 MessageBox.Show($"Az üzenet rögzítése megtörtént!", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Változás?.Invoke();
+                this.Close();
             }
             catch (HibásBevittAdat ex)
             {

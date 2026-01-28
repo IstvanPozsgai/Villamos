@@ -1,4 +1,4 @@
-﻿namespace Villamos.Villamos_Adatszerkezet
+﻿namespace Villamos.Adatszerkezet
 {
   public  class Adat_Alap_kiadás_Típusszín
     {

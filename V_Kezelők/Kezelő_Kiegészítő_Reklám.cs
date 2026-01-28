@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_Kiegészítő_Reklám
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő.mdb";
         readonly string jelszó = "Mocó";
         readonly string táblanév = "reklámtábla";
 

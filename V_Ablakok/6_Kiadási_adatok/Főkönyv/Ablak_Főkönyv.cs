@@ -11,9 +11,7 @@ using Villamos.Kezelők;
 using Villamos.V_Ablakok._6_Kiadási_adatok.Főkönyv;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok._6_Kiadási_adatok.Főkönyv;
-using Villamos.Villamos_Adatszerkezet;
 using Villamos.Villamos_Nyomtatványok;
-using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -214,7 +212,7 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\Főkönyv.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1792,7 +1790,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, ZSER_tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2078,7 +2076,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, NapiTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -3441,7 +3439,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, Km_tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
 
             }
             catch (HibásBevittAdat ex)
@@ -3551,7 +3549,7 @@ namespace Villamos
                     GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 else
                 {
-                    
+
                 }
 
             }

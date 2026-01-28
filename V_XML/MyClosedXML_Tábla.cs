@@ -1,13 +1,10 @@
 ﻿using ArrayToExcel;
-using ClosedXML.Excel;
 using System;
 using System.Data;
-using System.Data.OleDb;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
-using Villamos.V_Adatszerkezet;
 using DataTable = System.Data.DataTable;
 using MyF = Függvénygyűjtemény;
 
@@ -148,7 +145,7 @@ namespace Villamos
                         // Csak akkor alkalmazzuk a színt, ha nem fehér
                         if (háttér != Color.White)
                         {
-                            string mit = $"{Module_Excel.Oszlopnév(oszlop + j)}{sor + i}";
+                            string mit = $"{MyF.Oszlopnév(oszlop + j)}{sor + i}";
                             Háttérszín(munkalapnév, mit, háttér);
                         }
                     }
@@ -162,59 +159,6 @@ namespace Villamos
             {
                 HibaNapló.Log(ex.Message, "Színezés", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\nA hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public static int Tábla_Író(string hely,string jelszó,string szöveg,int sor,string munkalap)
-        {
-            IXLWorksheet ws = xlWorkBook.Worksheet(munkalap);
-
-            string kapcsolatiszöveg =
-                $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}';Jet OLEDB:Database Password={jelszó};";
-
-            using (OleDbConnection kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                kapcsolat.Open();
-
-                using (OleDbDataAdapter adapter = new OleDbDataAdapter(szöveg, kapcsolat))
-                {
-                    DataSet ds = new DataSet();
-                    adapter.Fill(ds);
-
-                    if (ds.Tables.Count == 0)
-                        return 0;
-
-                    DataTable dt = ds.Tables[0];
-
-                    int colCount = dt.Columns.Count;
-                    int rowCount = dt.Rows.Count;
-
-                    // Fejléc
-                    for (int j = 0; j < colCount; j++)
-                    {
-                        ws.Cell(sor, j + 1).Value = dt.Columns[j].ColumnName;
-                    }
-
-                    // Adatok
-                    for (int i = 0; i < rowCount; i++)
-                    {
-                        for (int j = 0; j < colCount; j++)
-                        {
-                            var cell = ws.Cell(i + sor + 1, j + 1);
-                            object v = dt.Rows[i][j];
-
-                            if (v == null || v == DBNull.Value)
-                            {
-                                cell.Clear(XLClearOptions.Contents);
-                            }
-                            else
-                            {
-                                cell.Value = ClosedXML.Excel.XLCellValue.FromObject(v);
-                            }
-                        }
-                    }
-                    return rowCount; // ugyanaz, mint nálad: Tábla.Tables[0].Rows.Count
-                }
             }
         }
     }

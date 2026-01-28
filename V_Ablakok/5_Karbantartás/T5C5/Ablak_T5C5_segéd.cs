@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok
@@ -18,7 +17,7 @@ namespace Villamos.Villamos_Ablakok
         public string Honnan { get; private set; }
         public bool Terv { get; private set; }
         public DateTime Dátum { get; private set; }
-        public string Cmbtelephely { get; private set; }
+        public string CmbTelephely { get; private set; }
 
         readonly Kezelő_Vezénylés KézVezény = new Kezelő_Vezénylés();
         readonly Kezelő_jármű_hiba KézHiba = new Kezelő_jármű_hiba();
@@ -37,7 +36,7 @@ namespace Villamos.Villamos_Ablakok
         {
             PostaAdat = postaAdat;
             Dátum = dátum;
-            Cmbtelephely = telephely;
+            CmbTelephely = telephely;
 
 
             InitializeComponent();
@@ -126,13 +125,16 @@ namespace Villamos.Villamos_Ablakok
             //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
             //ha nem akkor a régit használjuk
             if (Program.PostásJogkör.Substring(0, 1) == "R")
-                GombLathatosagKezelo.Beallit(this);
+            {
+                GombLathatosagKezelo.Beallit(this, CmbTelephely);
+            }
             else
                 Jogosultságkiosztás();
 
             Vonalfeltöltés();
             Panel_Váltás();
         }
+
 
         private void Panel_Váltás()
         {
@@ -263,7 +265,7 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 Ütemező_vonal.Items.Clear();
-                List<Adat_Hétvége_Előírás> Adatok = KézHétElőírás.Lista_Adatok(Cmbtelephely.Trim());
+                List<Adat_Hétvége_Előírás> Adatok = KézHétElőírás.Lista_Adatok(CmbTelephely.Trim());
                 foreach (Adat_Hétvége_Előírás Elem in Adatok)
                     Ütemező_vonal.Items.Add(Elem.Vonal);
 
@@ -591,7 +593,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                AdatokVezénylés = KézVezény.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                AdatokVezénylés = KézVezény.Lista_Adatok(CmbTelephely.Trim(), Dátum);
                 if (AdatokVezénylés == null) return;
                 Adat_Vezénylés AdatVezénylés = (from a in AdatokVezénylés
                                                 where a.Azonosító == azonosító.Trim()
@@ -624,9 +626,9 @@ namespace Villamos.Villamos_Ablakok
                                "T5C5");
 
                 if (AdatVezénylés == null)
-                    KézVezény.Rögzítés(Cmbtelephely.Trim(), Dátum, ADAT);
+                    KézVezény.Rögzítés(CmbTelephely.Trim(), Dátum, ADAT);
                 else
-                    KézVezény.Módosítás(Cmbtelephely.Trim(), Dátum, ADAT);
+                    KézVezény.Módosítás(CmbTelephely.Trim(), Dátum, ADAT);
 
                 Változás?.Invoke();
             }
@@ -679,7 +681,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                AdatokVezénylés = KézVezény.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+                AdatokVezénylés = KézVezény.Lista_Adatok(CmbTelephely.Trim(), Dátum);
                 if (AdatokVezénylés == null) return;
                 Adat_Vezénylés AdatVezénylés = (from a in AdatokVezénylés
                                                 where a.Azonosító == azonosító.Trim()
@@ -688,7 +690,7 @@ namespace Villamos.Villamos_Ablakok
                                                 select a).FirstOrDefault();
                 if (AdatVezénylés != null)
                 {
-                    KézVezény.Módosítás(Cmbtelephely.Trim(), Dátum, azonosító.Trim(), Dátum);
+                    KézVezény.Módosítás(CmbTelephely.Trim(), Dátum, azonosító.Trim(), Dátum);
                     Változás?.Invoke();
                 }
             }
@@ -906,7 +908,7 @@ namespace Villamos.Villamos_Ablakok
                 AlapSzín();
                 if (Ütemező_vonal.Text.Trim() == "") throw new HibásBevittAdat("A vonalat meg kell adni.");
 
-                AdatokElőírt = KézHétBeosztás.Lista_Adatok(Cmbtelephely.Trim());
+                AdatokElőírt = KézHétBeosztás.Lista_Adatok(CmbTelephely.Trim());
                 Adat_Hétvége_Beosztás AdatElőírt = (from a in AdatokElőírt
                                                     where a.Kocsi1 == Azonosító_1.Text.Trim()
                                                     select a).FirstOrDefault();
@@ -943,9 +945,9 @@ namespace Villamos.Villamos_Ablakok
 
 
                 if (AdatElőírt != null)
-                    KézHétBeosztás.Módosítás(Cmbtelephely.Trim(), ADAT);
+                    KézHétBeosztás.Módosítás(CmbTelephely.Trim(), ADAT);
                 else
-                    KézHétBeosztás.Rögzítés(Cmbtelephely.Trim(), ADAT);
+                    KézHétBeosztás.Rögzítés(CmbTelephely.Trim(), ADAT);
 
                 string[] darabol = kapcsolót.Split('-');
 
@@ -1011,13 +1013,13 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                AdatokElőírt = KézHétBeosztás.Lista_Adatok(Cmbtelephely.Trim());
+                AdatokElőírt = KézHétBeosztás.Lista_Adatok(CmbTelephely.Trim());
 
                 Adat_Hétvége_Beosztás AdatElőírt = (from a in AdatokElőírt
                                                     where a.Kocsi1 == Azonosító_1.Text.Trim()
                                                     select a).FirstOrDefault();
 
-                if (AdatElőírt != null) KézHétBeosztás.Törlés(Cmbtelephely.Trim(), Azonosító_1.Text.Trim());
+                if (AdatElőírt != null) KézHétBeosztás.Törlés(CmbTelephely.Trim(), Azonosító_1.Text.Trim());
 
                 MessageBox.Show("Az adatok törlése megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -1037,7 +1039,7 @@ namespace Villamos.Villamos_Ablakok
         private void Színek_Betöltése()
         {
             Kezelő_Hétvége_Előírás Kéz = new Kezelő_Hétvége_Előírás();
-            Szín_Adatok = Kéz.Lista_Adatok(Cmbtelephely.Trim());
+            Szín_Adatok = Kéz.Lista_Adatok(CmbTelephely.Trim());
         }
 
         private void Panel_V_1_DoubleClick(object sender, EventArgs e)

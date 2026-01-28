@@ -4,7 +4,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -16,7 +16,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Típus, string Telephely)
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Technológia\{Típus}.mdb".KönyvSzerk();
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Technológia\{Típus}.mdb".KönyvSzerk();
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Technológia_Telep(hely, Telephely);
             string szöveg = $"SELECT * FROM {Telephely}";
             if (!MyA.ABvanTábla(hely, jelszó, szöveg)) Adatbázis_Létrehozás.Technológia_Telep(hely, Telephely);

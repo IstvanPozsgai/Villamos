@@ -4,11 +4,10 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
+using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
-using MyX = Villamos.MyClosedXML_Excel;
 using MyLista = Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok.Karbantartási_ListaFeltöltés;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
 {
@@ -535,7 +534,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 MyX.DataGridViewToXML(fájlexc, Csoport_tábla);
                 MessageBox.Show("Elkészült az Excel tábla: \n" + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

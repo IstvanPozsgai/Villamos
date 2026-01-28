@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 
 
 public static partial class Függvénygyűjtemény
@@ -42,7 +42,8 @@ public static partial class Függvénygyűjtemény
                 int i = 0;
                 while (volt == false && i < Tábla.Columns.Count)
                 {
-                    if (rekord.Fejléc.Trim() == Tábla.Columns[i].ColumnName.Trim()) volt = true;
+                    if (rekord.Fejléc.Trim() == Tábla.Columns[i].ColumnName.Trim())
+                        volt = true;
                     i++;
                 }
                 if (!volt)

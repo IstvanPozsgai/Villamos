@@ -8,8 +8,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -99,7 +97,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             try
             {
                 string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\TTP_súgó.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -174,7 +172,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 BtnNaptár.Enabled = false;
                 BtnAlapadat.Enabled = false;
 
-                // csak főmérnökségi belépéssel törölhető
+                // csak Főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
                     Btn_TTP_Év.Visible = true;
@@ -275,7 +273,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 MyX.DataGridViewToXML(fájlexc, Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -604,17 +602,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             List<Adat_Jármű> Adatok = new List<Adat_Jármű>(); ;
             try
             {
-                string jelszó = "pozsgaii";
-                string szöveg = "SELECT * FROM állománytábla ORDER BY Azonosító ";
                 Kezelő_Jármű KézJármű = new Kezelő_Jármű();
                 foreach (Adat_Kiegészítő_Sérülés rekord in AdatokTelep)
                 {
-                    string hely = $@"{Application.StartupPath}\{rekord.Név}\Adatok\villamos\Villamos.mdb";
-                    if (File.Exists(hely))
-                    {
-                        List<Adat_Jármű> Ideig = KézJármű.Lista_Adatok(hely, jelszó, szöveg);
-                        Adatok.AddRange(Ideig);
-                    }
+                    List<Adat_Jármű> Ideig = KézJármű.Lista_Adatok(rekord.Név);
+                    Adatok.AddRange(Ideig);
                 }
                 Adatok = (from a in Adatok
                           orderby a.Azonosító
@@ -825,7 +817,8 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 if (Tábla.SelectedRows.Count < 1 || DtGvw_Naptár.SelectedCells.Count < 1) return;   //Ha nincs kiválasztva mindkét táblázatban elem akkor kilép
                 string szöveg = "";
                 int oszlop = DtGvw_Naptár.SelectedCells[0].ColumnIndex;
-                DateTime ÜtemezésDátuma = DtGvw_Naptár.Columns[oszlop].HeaderText.ToÉrt_DaTeTime();
+
+                DateTime ÜtemezésDátuma = MelyikNap(DtGvw_Naptár.Columns[oszlop].HeaderText.ToStrTrim());
                 if (DtGvw_Naptár.Rows[0].Cells[oszlop].Style.BackColor == Color.Red) throw new HibásBevittAdat("Erre a napra nem lehet ütemezni, mert nem munkanap.");
                 if (DtGvw_Naptár.Rows[0].Cells[oszlop].Value.ToStrTrim() != "") throw new HibásBevittAdat("Erre a napra nem lehet ütemezni, mert már van ütemezve.");
 
@@ -874,6 +867,28 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             }
         }
 
+        private DateTime MelyikNap(string Fejléc)
+        {
+            DateTime Válasz = new DateTime(1900, 1, 1, 0, 0, 0);
+            try
+            {
+                string[] dátumDarabol = Fejléc.Split('\n');
+                string[] darabol = dátumDarabol[0].Split('-');
+                Válasz = new DateTime(Dátum.Value.Year, darabol[0].ToÉrt_Int(), darabol[1].ToÉrt_Int(), 0, 0, 0);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return Válasz;
+        }
 
         private void BtnKuka_Click(object sender, EventArgs e)
         {

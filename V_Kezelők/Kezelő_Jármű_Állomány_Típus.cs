@@ -19,7 +19,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\Jármű.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\villamos\Jármű.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Jármű_Állomány_Típus(hely.KönyvSzerk());
         }
 

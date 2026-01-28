@@ -7,8 +7,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -149,7 +147,7 @@ namespace Villamos.Villamos_Ablakok
 
             // ide kell az összes gombot tenni amit szabályozni akarunk false
 
-            // csak főmérnökségi belépéssel törölhető
+            // csak Főmérnökségi belépéssel törölhető
             if (Program.PostásTelephely == "Főmérnökség")
             {
                 Beviteli_táblakészítés.Visible = true;
@@ -257,7 +255,7 @@ namespace Villamos.Villamos_Ablakok
             try
             {
                 string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\Technológia.html";
-                Module_Excel.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -537,7 +535,7 @@ namespace Villamos.Villamos_Ablakok
 
                 MyX.DataGridViewToXML(fájlexc, Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -770,7 +768,7 @@ namespace Villamos.Villamos_Ablakok
                 MyX.ExcelBezárás();
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

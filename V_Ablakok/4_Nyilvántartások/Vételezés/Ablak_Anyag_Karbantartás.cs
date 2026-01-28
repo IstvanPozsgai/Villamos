@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
-using Villamos.V_Kezelők;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Kezelők;
+using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
@@ -42,7 +42,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\akkumulátor.html";
-                Module_Excel.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {

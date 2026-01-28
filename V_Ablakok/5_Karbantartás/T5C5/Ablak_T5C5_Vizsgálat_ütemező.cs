@@ -8,7 +8,6 @@ using Villamos.Kezelők;
 using Villamos.V_Ablakok._5_Karbantartás.T5C5;
 using Villamos.V_Ablakok.Közös;
 using Villamos.Villamos_Ablakok;
-using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -1404,7 +1403,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\V2Vizsgálat.html";
-                Module_Excel.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1453,7 +1452,7 @@ namespace Villamos
                     return;
                 MyX.DataGridViewToXML(fájlexc, Tábla, "Munka1", true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Module_Excel.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

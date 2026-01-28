@@ -7,14 +7,13 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
-
 namespace Villamos
 {
     public class KönyvtárEllenőr
     {
 
         readonly string ikonNév = $"{Path.GetFileNameWithoutExtension(AppDomain.CurrentDomain.FriendlyName)}.lnk";
-        readonly string Program = AppDomain.CurrentDomain.FriendlyName;
+        readonly string _Program = AppDomain.CurrentDomain.FriendlyName;
         readonly string AsztalElérésiÚt = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         string DriveName;
         string BetűJel = "";
@@ -41,6 +40,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         public bool NincsMeghajtó(string hely)
         {
@@ -112,7 +112,7 @@ namespace Villamos
             WshShell shell = new WshShell();
             IWshShortcut lnk = shell.CreateShortcut(Ikon) as IWshShortcut;
             //Van olyan ikon ami a program.exe  és az UNC
-            if (lnk.TargetPath.Contains(Program) && lnk.WorkingDirectory == hely) válasz = true;
+            if (lnk.TargetPath.Contains(_Program) && lnk.WorkingDirectory == hely) válasz = true;
             return válasz;
         }
 
@@ -124,11 +124,11 @@ namespace Villamos
             IWshShortcut shortcut = shell.CreateShortcut(ParancsikonÚt) as IWshShortcut;
 
             // Parancsikon módosítása
-            shortcut.TargetPath = Path.Combine(DriveName, Program);
+            shortcut.TargetPath = Path.Combine(DriveName, _Program);
             shortcut.WorkingDirectory = DriveName;
             shortcut.Description = $"Hely: {DriveName}";
             if (!string.IsNullOrWhiteSpace(DriveName))
-                shortcut.IconLocation = Path.Combine(DriveName, Program);
+                shortcut.IconLocation = Path.Combine(DriveName, _Program);
             shortcut.Save();
         }
 
@@ -138,7 +138,7 @@ namespace Villamos
 
             WshShell shell = new WshShell();
             IWshShortcut shortcut = shell.CreateShortcut(ParancsikonÚt) as IWshShortcut;
-            shortcut.TargetPath = Path.Combine(DriveName, Program);
+            shortcut.TargetPath = Path.Combine(DriveName, _Program);
             shortcut.Description = $"Hely: {DriveName}";
             shortcut.IconLocation = DriveName;
             shortcut.Save();
@@ -150,7 +150,7 @@ namespace Villamos
             {
                 Process.Start(new ProcessStartInfo
                 {
-                    FileName = Path.Combine(DriveName, Program),
+                    FileName = Path.Combine(DriveName, _Program),
                     UseShellExecute = true
 
                 });

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
@@ -281,7 +281,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\V2Vizsgálat.html";
-                Module_Excel.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {

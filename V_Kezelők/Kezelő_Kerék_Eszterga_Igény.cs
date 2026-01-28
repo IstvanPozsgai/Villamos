@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -139,48 +139,6 @@ namespace Villamos.Kezelők
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-
-        //Elkopó
-        public List<Adat_Kerék_Eszterga_Igény> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Kerék_Eszterga_Igény> Adatok = new List<Adat_Kerék_Eszterga_Igény>();
-            Adat_Kerék_Eszterga_Igény Adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kerék_Eszterga_Igény(
-                                        rekord["Pályaszám"].ToStrTrim(),
-                                        rekord["Megjegyzés"].ToStrTrim(),
-                                        rekord["Rögzítés_dátum"].ToÉrt_DaTeTime(),
-                                        rekord["Igényelte"].ToStrTrim(),
-                                        rekord["Tengelyszám"].ToÉrt_Int(),
-                                        rekord["Szerelvény"].ToÉrt_Int(),
-                                        rekord["prioritás"].ToÉrt_Int(),
-                                        rekord["Ütemezés_dátum"].ToÉrt_DaTeTime(),
-                                        rekord["státus"].ToÉrt_Int(),
-                                        rekord["telephely"].ToStrTrim(),
-                                        rekord["típus"].ToStrTrim(),
-                                        rekord["Norma"].ToÉrt_Int()
-                                        );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
         }
     }
 

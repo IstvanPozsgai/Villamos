@@ -97,6 +97,35 @@ namespace Villamos
             }
         }
 
+        public static void VékonyAlsóVonal(string munkalapnév, string Kijelöltterület)
+        {
+            try
+            {
+                IXLWorksheet munkalap = xlWorkBook.Worksheet(munkalapnév);
+                IXLRange tartomány = munkalap.Range(Kijelöltterület);
+
+                // Bal szegély
+                tartomány.Style.Border.LeftBorder = XLBorderStyleValues.None;
+
+                // Jobb szegély
+                tartomány.Style.Border.RightBorder = XLBorderStyleValues.None;
+
+                // Felső szegély
+                tartomány.Style.Border.TopBorder = XLBorderStyleValues.None ;
+
+                // Alsó szegély ← ez a kritikus!
+                tartomány.Style.Border.BottomBorder = XLBorderStyleValues.Thin  ;
+
+            }
+            catch (Exception ex)
+            {
+                StackFrame hívó = new System.Diagnostics.StackTrace().GetFrame(1);
+                string hívóInfo = hívó?.GetMethod()?.DeclaringType?.FullName + "-" + hívó?.GetMethod()?.Name;
+                HibaNapló.Log(ex.Message, $"Aláírásvonal(Kijelöltterület: {Kijelöltterület}) \n Hívó: {hívóInfo}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n A hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         /// <summary>
         /// Nem kezeli a teljes oszlop (A:A) vagy teljes sor (1:1) jelöléseket – csak cellatartományokat (A1:B2 típusúakat).
         /// </summary>

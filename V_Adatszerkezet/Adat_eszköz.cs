@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Villamos.Villamos_Adatszerkezet
+namespace Villamos.Adatszerkezet
 {
-    public  class Adat_Eszköz
+    public class Adat_Eszköz
     {
 
         public string Eszköz { get; private set; }
@@ -44,10 +40,10 @@ namespace Villamos.Villamos_Adatszerkezet
         public bool Státus { get; private set; }
 
         public Adat_Eszköz(string eszköz, string alszám, string megnevezés, string megnevezés_folyt, string gyártási_szám,
-            string leltárszám, DateTime leltár_dátuma, double mennyiség, string bázis_menny_egység, DateTime aktiválás_dátuma, 
+            string leltárszám, DateTime leltár_dátuma, double mennyiség, string bázis_menny_egység, DateTime aktiválás_dátuma,
             string telephely, string telephely_megnevezése, string helyiség, string helyiség_megnevezés, string gyár, string leltári_költséghely,
-            string vonalkód, DateTime leltár_forduló_nap, string szemügyi_törzsszám, string dolgozó_neve, DateTime deaktiválás_dátuma, 
-            string eszközosztály, string üzletág, string cím, string költséghely, string felelős_költséghely, string régi_leltárszám, 
+            string vonalkód, DateTime leltár_forduló_nap, string szemügyi_törzsszám, string dolgozó_neve, DateTime deaktiválás_dátuma,
+            string eszközosztály, string üzletág, string cím, string költséghely, string felelős_költséghely, string régi_leltárszám,
             bool vonalkódozható, string rendszám_pályaszám, string épület_Szerszám, bool épület_van, bool szerszám_van, bool státus)
         {
             Eszköz = eszköz;
@@ -83,6 +79,19 @@ namespace Villamos.Villamos_Adatszerkezet
             Épület_van = épület_van;
             Szerszám_van = szerszám_van;
             Státus = státus;
+        }
+
+        public Adat_Eszköz(string eszköz, string épület_Szerszám)
+        {
+            Eszköz = eszköz;
+            Épület_Szerszám = épület_Szerszám;
+        }
+
+        public Adat_Eszköz(string eszköz, bool épület_van, bool szerszám_van)
+        {
+            Eszköz = eszköz;
+            Épület_van = épület_van;
+            Szerszám_van = szerszám_van;
         }
     }
 }

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Villamos.Adatszerkezet;
-using Villamos.V_Adatszerkezet;
-using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -96,15 +94,15 @@ namespace Villamos.Villamos_Nyomtatványok
                 MyX.Oszlopszélesség(munkalap, MyF.Oszlopnév(1 + j * 7) + ":" + MyF.Oszlopnév(1 + j * 7), 16);
                 MyX.Oszlopszélesség(munkalap, MyF.Oszlopnév(1 + j * 7 + 1) + ":" + MyF.Oszlopnév(1 + j * 7 + 1), 16);
                 //  rácsozzuk
-                MyX.Rácsoz(munkalap,MyF.Oszlopnév(1 + j * 7) + "5:" + MyF.Oszlopnév(7 + j * 7) + "55");
-    
+                MyX.Rácsoz(munkalap, MyF.Oszlopnév(1 + j * 7) + "5:" + MyF.Oszlopnév(7 + j * 7) + "55");
+
             }
 
             MyX.Kiir("Éjszakai jegyellenőrzés", "A3");
             MyX.Kiir($"{Dátum:yyyy.MM} hó {Dátum:dd} nap {Dátum:dddd}", "a1");
 
             MyX.Egyesít(munkalap, "a60:f60");
-            MyX.Aláírásvonal(munkalap,"A60:F60");
+            MyX.Aláírásvonal(munkalap, "A60:F60");
             MyX.Kiir("Váltós csoportvezető", "A60");
 
             // nyomtatási terület

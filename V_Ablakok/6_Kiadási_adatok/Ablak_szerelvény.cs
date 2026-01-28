@@ -7,8 +7,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Ablakok.Közös;
-using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -154,7 +152,7 @@ namespace Villamos.Ablakok
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\szerelvény.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -881,8 +879,8 @@ namespace Villamos.Ablakok
                     }
                 }
                 HibásTábla.Visible = true;
-                HibásTábla.ClearSelection();
                 HibásTábla.Refresh();
+                HibásTábla.ClearSelection();
             }
             catch (Exception ex)
             {
@@ -1003,7 +1001,7 @@ namespace Villamos.Ablakok
                 MyX.DataGridViewToXML(fájlexc, Szerelvénylista, munkalap, true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1704,7 +1702,7 @@ namespace Villamos.Ablakok
                 string munkalap = "Munka1";
                 MyX.DataGridViewToXML(fájlexc, Előírt_Szerelvénylista, munkalap, true);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -2244,7 +2242,7 @@ namespace Villamos.Ablakok
                 MyX.DataGridViewToXML(fájlexc, Tábla_napló);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (Exception ex)
             {

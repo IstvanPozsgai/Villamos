@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok;
-using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok.Közös
@@ -70,7 +69,7 @@ namespace Villamos.V_Ablakok.Közös
                     Btnrögzítés.Visible = true;
                 }
                 melyikelem = 202;
-                // módosítás 2 főmérnökségi belépés és mindenhova tud írni
+                // módosítás 2 Főmérnökségi belépés és mindenhova tud írni
                 if (MyF.Vanjoga(melyikelem, 2))
                 {
                     //Minden üzemhez tud írni, így nem kell gomb

@@ -6,10 +6,8 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok.MEO;
-using Villamos.Villamos_Adatszerkezet;
 using static System.Windows.Forms.CheckedListBox;
 using MyF = Függvénygyűjtemény;
-using MyE = Villamos.Module_Excel;
 using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos
@@ -87,7 +85,7 @@ namespace Villamos
                 Btn_Jog_Tipus_Rogzit.Enabled = false;
                 Btn_Jog_Hatarnap_Rogzit.Enabled = false;
 
-                // csak főmérnökségi belépéssel törölhető
+                // csak Főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely == "Főmérnökség")
                 {
                     Btn_Jog_Torles.Visible = true;
@@ -174,7 +172,7 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\MEO_kerék.html";
-                Module_Excel.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -882,7 +880,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, ListaTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1020,7 +1018,7 @@ namespace Villamos
                 MyX.DataGridViewToXML(fájlexc, LekérdTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

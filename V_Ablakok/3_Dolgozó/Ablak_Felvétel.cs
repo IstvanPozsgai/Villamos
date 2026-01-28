@@ -4,8 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
+using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos
@@ -117,7 +116,7 @@ namespace Villamos
                     }
                     else
                     {
-                        // kiírjuk, hogy honnan lépett be nem főmérnökség és nem szakszolgálat
+                        // kiírjuk, hogy honnan lépett be nem Főmérnökség és nem szakszolgálat
                         Cmbtelephely.Items.Add(Program.PostásTelephely.Trim());
                         Cmbtelephely.Text = Program.PostásTelephely.Trim();
                     }
@@ -229,7 +228,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Dolgozófelvétel.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -341,7 +340,7 @@ namespace Villamos
                 }
                 else
                 {
-                    // kiírjuk, hogy honnan lépett be nem főmérnökség és nem szakszolgálat
+                    // kiírjuk, hogy honnan lépett be nem Főmérnökség és nem szakszolgálat
                     KilépTelephely.Text = Program.PostásTelephely.Trim();
                 }
             }
@@ -1341,7 +1340,7 @@ namespace Villamos
                     GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 else
                 {
-                    
+
                 }
 
             }

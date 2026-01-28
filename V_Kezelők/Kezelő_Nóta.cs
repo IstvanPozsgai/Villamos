@@ -5,9 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
-using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -15,7 +13,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Nóta
     {
         readonly string jelszó = "TörökKasos";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Nóta\NótaT5C5.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Nóta\NótaT5C5.mdb";
 
         readonly Kezelő_Kiegészítő_Szolgálattelepei KézSzolgálattelepei = new Kezelő_Kiegészítő_Szolgálattelepei();
         readonly Kezelő_Kerék_Tábla KézBerendezés = new Kezelő_Kerék_Tábla();

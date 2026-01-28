@@ -1472,11 +1472,7 @@ namespace Villamos
         {
             try
             {
-<<<<<<<< HEAD:V_Ablakok/5_Karbantartás/Fogaskereku/Ablak_Fogaskerekű_Tulajdonságok.cs
-               
-========
 
->>>>>>>> master:V_Ablakok/5_Karbantartás/Fogaskerekű/Ablak_Fogaskerekű_Tulajdonságok.cs
 
                 string fájlexc;
 
@@ -1498,11 +1494,7 @@ namespace Villamos
                 Fogaskereku_Javitasok_Elotervezese_Excel EloExcel = new Fogaskereku_Javitasok_Elotervezese_Excel();
                 EloExcel.ExceltGeneral(fájlexc);
 
-<<<<<<<< HEAD:V_Ablakok/5_Karbantartás/Fogaskereku/Ablak_Fogaskerekű_Tulajdonságok.cs
-                MyE.Megnyitás(fájlexc);
-========
                 MyF.Megnyitás(fájlexc);
->>>>>>>> master:V_Ablakok/5_Karbantartás/Fogaskerekű/Ablak_Fogaskerekű_Tulajdonságok.cs
                 AlHoltart.Visible = false;
                 FőHoltart.Visible = false;
                 MessageBox.Show("A nyomtatvány elkészült !", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1517,13 +1509,8 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-<<<<<<<< HEAD:V_Ablakok/5_Karbantartás/Fogaskereku/Ablak_Fogaskerekű_Tulajdonságok.cs
-       
-
-========
 
 
->>>>>>>> master:V_Ablakok/5_Karbantartás/Fogaskerekű/Ablak_Fogaskerekű_Tulajdonságok.cs
         #endregion
 
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Villamos.Villamos_Adatszerkezet
+namespace Villamos.Adatszerkezet
 {
     public class Adat_TW6000_Alap
     {

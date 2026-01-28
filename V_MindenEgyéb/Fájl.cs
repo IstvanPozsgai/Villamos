@@ -64,11 +64,10 @@ public static partial class Függvénygyűjtemény
 
     public static void ExcelNyomtatásOLd(List<string> Fájlok, string munkalap, bool törlés = false, int kezdőoldal = 1, int példányszám = 1)
     {
-        MyE.Application excelApp = null;
-        MyE.Workbook workbook = null;
-
         foreach (string Fájl in Fájlok)
         {
+            MyE.Application excelApp = null;
+            MyE.Workbook workbook = null;
             if (!File.Exists(Fájl))
             {
                 MessageBox.Show($"Fájl nem található: {Fájl}", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);

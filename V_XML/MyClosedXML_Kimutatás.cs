@@ -1,9 +1,5 @@
 ﻿using ClosedXML.Excel;
 using System;
-<<<<<<< HEAD
-using System.Collections.Generic;
-=======
->>>>>>> master
 using System.Diagnostics;
 using System.Text;
 using System.Windows.Forms;
@@ -45,14 +41,10 @@ namespace Villamos
                 //  Sorok
                 if (beállítás.SorNév != null && beállítás.SorNév.Count > 0)
                     foreach (string nev in beállítás.SorNév)
-<<<<<<< HEAD
-                        pivotTable.RowLabels.Add(nev);
-=======
                     {
                         IXLPivotField field = pivotTable.RowLabels.Add(nev);
                         field.AddSubtotal(XLSubtotalFunction.Automatic);
                     }
->>>>>>> master
 
                 // Oszlopok
                 if (beállítás.OszlopNév != null && beállítás.OszlopNév.Count > 0)
@@ -89,11 +81,8 @@ namespace Villamos
                         }
                     }
                 }
-<<<<<<< HEAD
-=======
            
     
->>>>>>> master
             }
             catch (Exception ex)
             {
@@ -104,50 +93,6 @@ namespace Villamos
             }
         }
 
-<<<<<<< HEAD
-        /// <summary>
-        /// KOMPATIBILITÁSI TÚLTERHELÉS (Overload)
-        /// Ez teszi lehetővé, hogy a régi kódod (ami 11 paramétert használ és nincs benne az összesítés módja)
-        /// továbbra is működjön.
-        /// </summary>
-        public static void Kimutatás_Fő(
-            string munkalap_extra,
-            string munkalap_adat,
-            string balfelső,
-            string jobbalsó,
-            string kimutatás_Munkalap,
-            string Kimutatás_cella,
-            string Kimutatás_név,
-            List<string> összesítNév,
-            List<string> sorNév,
-            List<string> oszlopNév,
-            List<string> SzűrőNév)
-        {
-
-            List<string> alapertelmezettModok = new List<string>();
-
-            if (összesítNév != null)
-                for (int i = 0; i < összesítNév.Count; i++)
-                    alapertelmezettModok.Add("xlSum");
-
-            // JAVÍTANDÓ:       Kimutatás_Fő(
-            //munkalap_adat,
-            //    balfelső,
-            //    jobbalsó,
-            //    kimutatás_Munkalap,
-            //    Kimutatás_cella,
-            //    Kimutatás_név,
-            //    összesítNév,
-            //    alapertelmezettModok,
-            //    sorNév,
-            //    oszlopNév,
-            //    SzűrőNév
-            //);
-        }
-
-
-=======
->>>>>>> master
 
         /// <summary>
         /// Eltávolítja az összes érvénytelen XML karaktert (0x00–0x1F, kivéve \t, \n, \r) 

@@ -3,50 +3,41 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 
-namespace Villamos.V_Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Kiegészítő_Email
     {
         readonly string jelszó = "Mocó";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb";
-        string táblanév = "hibanaplo_email";
-        
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő2.mdb";
+        readonly string táblanév = "hibanaplo_email";
+
         // Statikusan tárolom, hogy csak egyszer kelljen betölteni a címeket.
         public static string ÖsszesEmailCím { get; set; } = string.Empty;
 
         public string Email_Cimek(bool forceReload = false)
         {
-            if (!string.IsNullOrEmpty(ÖsszesEmailCím) && !forceReload)
-                return ÖsszesEmailCím;
+            if (!string.IsNullOrEmpty(ÖsszesEmailCím) && !forceReload) return ÖsszesEmailCím;
 
             List<string> adatok = new List<string>();
             string kapcsolatSzöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}';Jet OLEDB:Database Password={jelszó}";
             string lekérdezés = $"SELECT cim FROM {táblanév}";
 
-            try
+            using (OleDbConnection kapcsolat = new OleDbConnection(kapcsolatSzöveg))
             {
-                using (OleDbConnection kapcsolat = new OleDbConnection(kapcsolatSzöveg))
+                kapcsolat.Open();
+                using (OleDbCommand parancs = new OleDbCommand(lekérdezés, kapcsolat))
+                using (OleDbDataReader rekord = parancs.ExecuteReader())
                 {
-                    kapcsolat.Open();
-                    using (OleDbCommand parancs = new OleDbCommand(lekérdezés, kapcsolat))
-                    using (OleDbDataReader rekord = parancs.ExecuteReader())
+                    while (rekord.Read())
                     {
-                        while (rekord.Read())
-                        {
-                            if (rekord["cim"] != DBNull.Value)
-                                adatok.Add(rekord["cim"].ToString());
-                        }
+                        if (rekord["cim"] != DBNull.Value)
+                            adatok.Add(rekord["cim"].ToString());
                     }
                 }
-                ÖsszesEmailCím = string.Join(";", adatok.Distinct());
             }
-            catch (Exception ex)
-            {
-                //MessageBox.Show($"Hiba az e-mail címek beolvasásakor: {ex.Message}", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            ÖsszesEmailCím = string.Join(";", adatok.Distinct());
             return ÖsszesEmailCím;
         }
 

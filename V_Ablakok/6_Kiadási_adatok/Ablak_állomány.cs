@@ -307,11 +307,7 @@ namespace Villamos
                 // megformázzuk
                 MyX.Rácsoz(munkalap, $"A1:C{sor}");
                 MyX.Rácsoz(munkalap, "A1:C1");
-<<<<<<< HEAD
-               // MyX.Vastagkeret(munkalap, $"A1:C{sor}");
-=======
                 // MyX.Vastagkeret(munkalap, $"A1:C{sor}");
->>>>>>> master
 
                 //Első sor sárga
                 MyX.Háttérszín(munkalap, "A1:C1", Color.Yellow);

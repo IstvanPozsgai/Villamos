@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\villamos\villamos2.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\villamos\villamos2.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Villamostábla(hely.KönyvSzerk());
         }
 
@@ -190,43 +190,6 @@ namespace Villamos.Kezelők
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-
-
-        //Elkopó
-        public List<Adat_Jármű_2> Lista_Adatok(string hely, string jelszó, string szöveg)
-        {
-            List<Adat_Jármű_2> Adatok = new List<Adat_Jármű_2>();
-            Adat_Jármű_2 adat;
-
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                if (!DateTime.TryParse(rekord["takarítás"].ToString(), out DateTime takarítás))
-                                    takarítás = new DateTime(1900, 1, 1);
-
-                                adat = new Adat_Jármű_2(
-                                    rekord["Azonosító"].ToStrTrim(),
-                                    rekord["takarítás"].ToÉrt_DaTeTime(),
-                                    rekord["haromnapos"].ToÉrt_Int()
-                                    );
-                                Adatok.Add(adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
         }
     }
 }

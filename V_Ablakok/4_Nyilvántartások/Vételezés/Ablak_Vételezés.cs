@@ -5,14 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Adatszerkezet;
-using Villamos.V_Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.Közös;
-using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 {
@@ -87,7 +85,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Vételezés_segéd.html";
-                Module_Excel.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -611,7 +609,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         private void Excel_gomb_Click(object sender, EventArgs e)
         {
             if (TáblaFelső.Rows.Count <= 0) return;
-            MyE.Mentés("MyDocuments",
+            MyX.Mentés("MyDocuments",
                                 "Listázott tartalom mentése Excel fájlba",
                                 $"Vételezés-{Program.PostásNév}-{DateTime.Now:yyyyMMddHHmmss}",
                                 "Excel |*.xlsx",
@@ -689,7 +687,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             try
             {
                 if (CikkSzám.Trim() == "") return;
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Rezsiképek".KönyvSzerk();
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Rezsiképek".KönyvSzerk();
 
                 DirectoryInfo dir = new DirectoryInfo(hely);
                 System.IO.FileInfo[] aryFi = dir.GetFiles($"*{CikkSzám.Trim()}*.jpg");

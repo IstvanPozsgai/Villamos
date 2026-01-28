@@ -6,8 +6,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -53,7 +51,7 @@ namespace Villamos
                 Dátum.Value = DateTime.Today;
 
                 // virtuálisan megnyitjuk a képet
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\Fűtés_beállítás.jpg";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\Fűtés_beállítás.jpg";
                 Kezelő_Kép.KépMegnyitás(PictureBox2, hely, ToolTip1);
                 PictureBox2.Top = 10;
                 PictureBox2.Left = 10;
@@ -132,7 +130,7 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\T5C5_fűtés.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -900,7 +898,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, Lekérdezés_Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
 
             }
             catch (HibásBevittAdat ex)

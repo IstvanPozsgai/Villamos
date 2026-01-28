@@ -2024,19 +2024,6 @@ namespace Villamos
                     string helységkód = darabol[0].Trim();
 
                     string fájlexc = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-<<<<<<< HEAD
-                    fájlexc += @"\Takarítási_napló_" + helységkód.Trim() + "_" + DateTime.Now.ToString("yyMMddHHmmss") + ".xlsx";
-
-                    // IDE
-                    DateTime Dátum_ = Dátum.Value;
-                    Epulettakaritas_Takaritasi_Naplo_Excel TakNaploExc = new Epulettakaritas_Takaritasi_Naplo_Excel();
-                    TakNaploExc.ExceltKeszit(fájlexc, Dátum_, AdatokKijelöltek, AdatokAdatTábla, AdatokÉNaptár, helységkód, hónapnap);
-
-                    if (Option10.Checked == true)
-                        File.Delete(fájlexc);
-
-
-=======
                     fájlexc += $@"\Takarítási_napló_{helységkód.Trim()}_{DateTime.Now:yyMMddHHmmss}.xlsx";
 
                     // megnyitjuk az excelt
@@ -2240,7 +2227,6 @@ namespace Villamos
                     MyX.ExcelMentés(fájlexc);
                     MyX.ExcelBezárás();
                     Fájlok.Add(fájlexc);
->>>>>>> master
                     Holtart.Lép();
                 }
                 Holtart.Ki();
@@ -2283,9 +2269,6 @@ namespace Villamos
                 else
                     return;
 
-<<<<<<< HEAD
-                
-=======
                 string munkalap = "Összesítő";
 
                 MyX.ExcelLétrehozás(munkalap);
@@ -2470,7 +2453,6 @@ namespace Villamos
                 MyX.Sormagasság(munkalap, sor.ToString() + ":" + sor.ToString(), 25);
 
                 // bezárjuk az Excel-t
->>>>>>> master
 
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();

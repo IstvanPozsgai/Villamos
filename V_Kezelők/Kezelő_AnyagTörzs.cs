@@ -5,10 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.V_Adatbázis;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
-namespace Villamos.V_Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_AnyagTörzs
     {
@@ -18,7 +18,7 @@ namespace Villamos.V_Kezelők
 
         public Kezelő_AnyagTörzs()
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\rezsi\AnyagTörzs.mdb".KönyvSzerk();
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\rezsi\AnyagTörzs.mdb".KönyvSzerk();
             if (!File.Exists(hely)) Adatbázis_Létrehozás.AnyagTörzs(hely);
         }
 

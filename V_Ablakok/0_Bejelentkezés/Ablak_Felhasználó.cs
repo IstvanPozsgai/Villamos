@@ -7,8 +7,7 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.MindenEgyéb;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
+using MyF = Függvénygyűjtemény;
 
 
 namespace Villamos
@@ -52,7 +51,7 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\felhasználó.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -219,7 +218,6 @@ namespace Villamos
                     for (int i = 0; i < ChkSzervezet.Items.Count; i++)
                     {
                         string itemText = ChkSzervezet.Items[i].ToString();
-                        // JAVÍTANDÓ:Csak azokat a szervezeteket írja ki ahol van jogosultsága
                         //kivéve a globál admin
                         if (szervezetek.Contains(itemText))
                         {
@@ -327,7 +325,6 @@ namespace Villamos
             }
         }
 
-        // JAVÍTANDÓ:   Más telephely dolgozóinak plusz terület adását engedélyezi csak
         //a telephelyek listájának átvizsgálása során ki kell szűrni azokat amikhez nincs joga és törölni kell 
         // ha nincs benne akkor meg bele kell tenni
         private void TelepRögzítés()
@@ -517,7 +514,6 @@ namespace Villamos
                 List<Adat_Kiegészítő_Könyvtár> adatokSzervezet = kezSzervezet.Lista_Adatok().OrderBy(a => a.Név).ToList();
                 CmbSzervezet.Items.Clear();
                 ChkSzervezet.Items.Clear();
-                // JAVÍTANDÓ:Feltöltjük kezdéskor az összes szervezetet
                 string[] darabol = Program.Postás_Felhasználó.Szervezetek.Split(';');
 
                 for (int i = 0; i < adatokSzervezet.Count; i++)

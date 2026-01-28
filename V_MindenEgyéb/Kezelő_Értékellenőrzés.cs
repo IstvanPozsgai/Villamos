@@ -101,14 +101,6 @@ public static class FVGyűjtemény
     /// <returns></returns>
     public static DateTime ToÉrt_DaTeTime(this object str)
     {
-<<<<<<< HEAD
-        if (!DateTime.TryParse(str.ToStrTrim(), out DateTime válasz))
-            válasz = new DateTime(1900, 1, 1);
-        else
-        if (válasz < new DateTime(1900, 1, 1))
-            válasz = new DateTime(1900, 1, 1);
-        return válasz;
-=======
         DateTime Válasz = new DateTime(1900, 1, 1, 0, 0, 0);
         if (DateTime.TryParse(str.ToStrTrim(), out DateTime dátum))
             if (dátum < new DateTime(1900, 1, 1, 0, 0, 0))
@@ -116,7 +108,6 @@ public static class FVGyűjtemény
             else
                 Válasz = dátum;
         return Válasz;
->>>>>>> master
     }
     /// <summary>
     ///  Szöveget alakít át DATETIME abban az esetben, ha nem jó értéket kap 1900.01.01-el tér vissza
@@ -125,14 +116,6 @@ public static class FVGyűjtemény
     /// <returns></returns>
     public static DateTime ToÉrt_DaTeTime(this string str)
     {
-<<<<<<< HEAD
-        if (!DateTime.TryParse(str, out DateTime válasz))
-            válasz = new DateTime(1900, 1, 1);
-        else
-        if (válasz < new DateTime(1900, 1, 1))   
-            válasz = new DateTime(1900, 1, 1);
-        return válasz;
-=======
         DateTime Válasz = new DateTime(1900, 1, 1, 0, 0, 0);
         if (DateTime.TryParse(str.ToStrTrim(), out DateTime dátum))
             if (dátum < new DateTime(1900, 1, 1, 0, 0, 0))
@@ -140,7 +123,6 @@ public static class FVGyűjtemény
             else
                 Válasz = dátum;
         return Válasz;
->>>>>>> master
     }
     /// <summary>
     /// Objectumot alakít át BOOL abban az esetben, ha nem jó értéket kap 0-val tér vissza

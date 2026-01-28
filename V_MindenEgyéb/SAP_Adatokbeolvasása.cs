@@ -6,9 +6,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Adatszerkezet;
-using Villamos.V_Kezelők;
-using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_MindenEgyéb
@@ -172,7 +169,7 @@ namespace Villamos.V_MindenEgyéb
         /// <param name="Év"></param>
         /// <param name="fájlexcel"></param>
         /// <param name="felelősmunkahely"></param>
-        /// <param name="üzem">alapértelmezés szerint üzemek és false esetén főmérnökség</param>
+        /// <param name="üzem">alapértelmezés szerint üzemek és false esetén Főmérnökség</param>
         public static void Menet_beolvasó(string Telephely, int Év, string fájlexcel, string felelősmunkahely, bool üzem = true)
         {
             try
@@ -325,7 +322,7 @@ namespace Villamos.V_MindenEgyéb
         {
             try
             {
-                DataTable Tábla = MyF.Excel_Tábla_Beolvas(fájlexcel);
+                DataTable Tábla = MyF.Html_Tábla_Beolvas(fájlexcel);
                 //Ellenőrzés
                 if (!MyF.Betöltéshelyes("Eszköz", Tábla)) throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt adatok formátuma ! ");
 
@@ -710,8 +707,9 @@ namespace Villamos.V_MindenEgyéb
 
                     TimeSpan számhossz = tervérkezés - tervindulás;
                     TimeSpan menethossz = tényérkezés - tényindulás;
-
-                    if (számhossz.TotalMinutes != menethossz.TotalMinutes && menethossz.TotalMinutes != 0)
+                    //Akkor számolunk ha a terv és tény indulás és érkezések időkülönbsége nem egyezik
+                    //Ha a két hossz érték nagyobb mint 0
+                    if (számhossz.TotalMinutes != menethossz.TotalMinutes && menethossz.TotalMinutes > 0 && számhossz.TotalMinutes > 0)
                     {
                         //Ha nem a teljes számot járja le akkor kiszámoljuk a töredék km-t.
                         km = (int)((km * menethossz.TotalMinutes) / számhossz.TotalMinutes);
@@ -1073,7 +1071,6 @@ namespace Villamos.V_MindenEgyéb
             return Adatok;
         }
 
-        // JAVÍTANDÓ:a sérülés javítások anyagigényének beolvasása nem készült el, mert mókezelője nincs de beolvassa az adatokat, nincs próbálva
         public static List<Adat_Sérülés_Anyag> Sérülés_beolvasó(string fájlexcel)
         {
             List<Adat_Sérülés_Anyag> Adatok = new List<Adat_Sérülés_Anyag>();

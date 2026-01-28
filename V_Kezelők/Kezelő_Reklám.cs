@@ -4,7 +4,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
 
@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Reklám
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\villamos5.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos5.mdb";
         readonly string jelszó = "morecs";
         readonly string táblanév = "reklámtábla";
 

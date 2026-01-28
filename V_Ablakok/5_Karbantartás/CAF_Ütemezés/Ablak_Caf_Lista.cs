@@ -5,8 +5,8 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
+
+
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -60,7 +60,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 // ide kell az összes gombot tenni amit szabályozni akarunk false
                 Archíválás.Enabled = false;
 
-                // csak főmérnökségi belépéssel módosítható
+                // csak Főmérnökségi belépéssel módosítható
 
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {

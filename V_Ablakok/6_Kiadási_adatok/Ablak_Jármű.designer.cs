@@ -41,7 +41,7 @@ namespace Villamos
             this.TabPage1 = new System.Windows.Forms.TabPage();
             this.Panel3 = new System.Windows.Forms.Panel();
             this.MÓD_járműtípus = new System.Windows.Forms.ComboBox();
-            this.MÓD_főmérnökségitípus = new System.Windows.Forms.ComboBox();
+            this.MÓD_Főmérnökségitípus = new System.Windows.Forms.ComboBox();
             this.Mód_pályaszám = new System.Windows.Forms.ComboBox();
             this.Mód_üzembehelyezésdátuma = new System.Windows.Forms.DateTimePicker();
             this.MÓD_típustext = new System.Windows.Forms.TextBox();
@@ -64,7 +64,7 @@ namespace Villamos
             this.Panel1 = new System.Windows.Forms.Panel();
             this.LÉT_hozzáad = new System.Windows.Forms.Button();
             this.LÉT_járműtípus = new System.Windows.Forms.ComboBox();
-            this.LÉT_főmérnökségitípus = new System.Windows.Forms.ComboBox();
+            this.LÉT_Főmérnökségitípus = new System.Windows.Forms.ComboBox();
             this.Label12 = new System.Windows.Forms.Label();
             this.Label11 = new System.Windows.Forms.Label();
             this.LÉT_Pályaszám = new System.Windows.Forms.TextBox();
@@ -171,7 +171,7 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel3.BackColor = System.Drawing.Color.DodgerBlue;
             this.Panel3.Controls.Add(this.MÓD_járműtípus);
-            this.Panel3.Controls.Add(this.MÓD_főmérnökségitípus);
+            this.Panel3.Controls.Add(this.MÓD_Főmérnökségitípus);
             this.Panel3.Controls.Add(this.Mód_pályaszám);
             this.Panel3.Controls.Add(this.Mód_üzembehelyezésdátuma);
             this.Panel3.Controls.Add(this.MÓD_típustext);
@@ -200,15 +200,15 @@ namespace Villamos
             this.MÓD_járműtípus.Size = new System.Drawing.Size(152, 28);
             this.MÓD_járműtípus.TabIndex = 152;
             // 
-            // MÓD_főmérnökségitípus
+            // MÓD_Főmérnökségitípus
             // 
-            this.MÓD_főmérnökségitípus.DropDownHeight = 400;
-            this.MÓD_főmérnökségitípus.FormattingEnabled = true;
-            this.MÓD_főmérnökségitípus.IntegralHeight = false;
-            this.MÓD_főmérnökségitípus.Location = new System.Drawing.Point(208, 45);
-            this.MÓD_főmérnökségitípus.Name = "MÓD_főmérnökségitípus";
-            this.MÓD_főmérnökségitípus.Size = new System.Drawing.Size(152, 28);
-            this.MÓD_főmérnökségitípus.TabIndex = 151;
+            this.MÓD_Főmérnökségitípus.DropDownHeight = 400;
+            this.MÓD_Főmérnökségitípus.FormattingEnabled = true;
+            this.MÓD_Főmérnökségitípus.IntegralHeight = false;
+            this.MÓD_Főmérnökségitípus.Location = new System.Drawing.Point(208, 45);
+            this.MÓD_Főmérnökségitípus.Name = "MÓD_Főmérnökségitípus";
+            this.MÓD_Főmérnökségitípus.Size = new System.Drawing.Size(152, 28);
+            this.MÓD_Főmérnökségitípus.TabIndex = 151;
             // 
             // Mód_pályaszám
             // 
@@ -410,7 +410,7 @@ namespace Villamos
             this.Panel1.BackColor = System.Drawing.Color.YellowGreen;
             this.Panel1.Controls.Add(this.LÉT_hozzáad);
             this.Panel1.Controls.Add(this.LÉT_járműtípus);
-            this.Panel1.Controls.Add(this.LÉT_főmérnökségitípus);
+            this.Panel1.Controls.Add(this.LÉT_Főmérnökségitípus);
             this.Panel1.Controls.Add(this.Label12);
             this.Panel1.Controls.Add(this.Label11);
             this.Panel1.Controls.Add(this.LÉT_Pályaszám);
@@ -442,15 +442,15 @@ namespace Villamos
             this.LÉT_járműtípus.Size = new System.Drawing.Size(152, 28);
             this.LÉT_járműtípus.TabIndex = 5;
             // 
-            // LÉT_főmérnökségitípus
+            // LÉT_Főmérnökségitípus
             // 
-            this.LÉT_főmérnökségitípus.DropDownHeight = 400;
-            this.LÉT_főmérnökségitípus.FormattingEnabled = true;
-            this.LÉT_főmérnökségitípus.IntegralHeight = false;
-            this.LÉT_főmérnökségitípus.Location = new System.Drawing.Point(177, 46);
-            this.LÉT_főmérnökségitípus.Name = "LÉT_főmérnökségitípus";
-            this.LÉT_főmérnökségitípus.Size = new System.Drawing.Size(152, 28);
-            this.LÉT_főmérnökségitípus.TabIndex = 4;
+            this.LÉT_Főmérnökségitípus.DropDownHeight = 400;
+            this.LÉT_Főmérnökségitípus.FormattingEnabled = true;
+            this.LÉT_Főmérnökségitípus.IntegralHeight = false;
+            this.LÉT_Főmérnökségitípus.Location = new System.Drawing.Point(177, 46);
+            this.LÉT_Főmérnökségitípus.Name = "LÉT_Főmérnökségitípus";
+            this.LÉT_Főmérnökségitípus.Size = new System.Drawing.Size(152, 28);
+            this.LÉT_Főmérnökségitípus.TabIndex = 4;
             // 
             // Label12
             // 
@@ -1107,7 +1107,7 @@ namespace Villamos
         internal Button Btn_súgó;
         internal Panel Panel1;
         internal ComboBox LÉT_járműtípus;
-        internal ComboBox LÉT_főmérnökségitípus;
+        internal ComboBox LÉT_Főmérnökségitípus;
         internal Label Label12;
         internal Label Label11;
         internal TextBox LÉT_Pályaszám;
@@ -1141,7 +1141,7 @@ namespace Villamos
         internal Button Mozg_havilista;
         internal ComboBox Mód_pályaszám;
         internal ComboBox MÓD_járműtípus;
-        internal ComboBox MÓD_főmérnökségitípus;
+        internal ComboBox MÓD_Főmérnökségitípus;
         internal Panel Panel4;
         internal ComboBox Cmbtelephely;
         internal Label Label5;

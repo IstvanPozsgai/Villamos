@@ -1,149 +1,246 @@
-﻿using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Villamos.Adatszerkezet;
+using static Villamos.V_MindenEgyéb.Enumok;
 
 
 namespace Villamos
 {
     public static partial class MyClosedXML_Excel
     {
-        public static void FerdeVonalAlkalmaz(string fájlnév, List<Beállítás_Ferde> Beállítások)
+
+        public static void AlkalmazFerdeVonalak(string path, List<Beállítás_Ferde> beállítások)
         {
-            using (SpreadsheetDocument doc = SpreadsheetDocument.Open(fájlnév, true))
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(path, true))
             {
-                WorkbookPart workbookPart = doc.WorkbookPart;
-                List<Sheet> sheets = workbookPart.Workbook.Sheets?.Elements<Sheet>().ToList();
+                WorkbookPart workbookPart = document.WorkbookPart;
+                WorkbookStylesPart stylesPart = workbookPart.WorkbookStylesPart;
 
-                if (sheets == null) return;
-
-                for (int i = 0; i < sheets.Count; i++)
+                if (stylesPart == null)
                 {
-                    Sheet sheet = sheets[i];
-                    string lapNév = sheet?.Name?.Value;
-                    List<Beállítás_Ferde> beállítások = Beállítások.Where(y => y.Munkalap.Trim() == lapNév.Trim()).ToList();
-                    foreach (Beállítás_Ferde beállítás in beállítások)
-                    {
-                        var wsPart = (WorksheetPart)workbookPart.GetPartById(sheet.Id);
-                        var stylesPart = workbookPart.WorkbookStylesPart;
-                        if (stylesPart?.Stylesheet == null) throw new InvalidOperationException("Nincs stílusdefiníció.");
-
-                        Stylesheet stylesheet = stylesPart.Stylesheet;
-
-                        Borders borders = stylesheet.Borders;
-                        if (borders == null || (borders.Count?.Value ?? 0) == 0) throw new InvalidOperationException("Nincs border definíció.");
-
-
-                        // === 1. Meghatározzuk a célcellákat (egyesített cellák figyelembevételével) ===
-                        var mergeCells = wsPart.Worksheet.Elements<MergeCells>().FirstOrDefault();
-                        var mergedMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-                        if (mergeCells != null)
-                        {
-                            foreach (var mc in mergeCells.Elements<MergeCell>())
-                            {
-                                if (string.IsNullOrEmpty(mc.Reference?.Value)) continue;
-                                var cells = ExpandRange(mc.Reference.Value).ToList();
-                                if (cells.Count > 0)
-                                {
-                                    string tl = cells[0];
-                                    foreach (string c in cells) mergedMap[c] = tl;
-                                }
-                            }
-                        }
-
-                        var targetCells = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                        foreach (string cellRef in ExpandRange(beállítás.Terület))
-                        {
-                            targetCells.Add(mergedMap.TryGetValue(cellRef, out var tl) ? tl : cellRef);
-                        }
-
-                        // === 2. Minden célcella stílusának border-jét módosítjuk ===
-                        foreach (string cellRef in targetCells)
-                        {
-                            var cell = GetCell(wsPart, cellRef);
-                            if (cell?.StyleIndex == null) continue;
-
-                            uint styleIndex = cell.StyleIndex.Value;
-                            if (styleIndex >= (stylesheet.CellFormats?.Count?.Value ?? 0)) continue;
-
-                            var cellFormat = stylesheet.CellFormats.ElementAt((int)styleIndex) as CellFormat;
-                            if (cellFormat?.BorderId == null) continue;
-
-                            uint borderId = cellFormat.BorderId.Value;
-                            if (borderId >= (borders.Count?.Value ?? 0)) continue;
-
-                            var border = borders.ElementAt((int)borderId) as Border;
-                            if (border == null) continue;
-
-                            // === 3. Itt történik a varázslat: bekapcsoljuk az átlós szegélyt ===
-                            if (beállítás.Jobb)
-                                border.DiagonalDown = true;
-                            else
-                                border.DiagonalUp = true;
-
-                            border.DiagonalBorder.Style.Value = BorderStyleValues.Thin;
-                            border.DiagonalBorder.Color = new Color { Rgb = HexBinaryValue.FromString("000000") };
-                        }
-
-                        // Mentés
-                        stylesheet.Save();
-                        wsPart.Worksheet.Save();
-                    }
-
+                    stylesPart = workbookPart.AddNewPart<WorkbookStylesPart>();
+                    stylesPart.Stylesheet = new Stylesheet(
+                        new Fonts(new Font()),
+                        new Fills(new Fill()),
+                        new Borders(new Border()),
+                        new CellFormats(new CellFormat())
+                    );
                 }
 
+                Stylesheet stylesheet = stylesPart.Stylesheet;
+
+                if (stylesheet.Borders == null)
+                    stylesheet.Borders = new Borders(new Border());
+
+                if (stylesheet.CellFormats == null)
+                    stylesheet.CellFormats = new CellFormats(new CellFormat());
+
+                foreach (Beállítás_Ferde beállítás in beállítások)
+                {
+                    Sheet sheet = workbookPart.Workbook.Descendants<Sheet>()
+                        .FirstOrDefault(s => s.Name == beállítás.Munkalap);
+
+                    if (sheet == null)
+                        continue;
+
+                    WorksheetPart worksheetPart = (WorksheetPart)workbookPart.GetPartById(sheet.Id);
+                    SheetData sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
+
+                    var cellRefs = GetCellReferences(beállítás.Terület);
+
+                    foreach (var cellRef in cellRefs)
+                    {
+                        ApplyDiagonalToCell(sheetData, cellRef, stylesheet, beállítás);
+                    }
+
+                    worksheetPart.Worksheet.Save();
+                }
+
+                stylesPart.Stylesheet.Save();
             }
         }
 
-        // Cell keresése (már korábban is volt)
-        private static Cell GetCell(WorksheetPart worksheetPart, string cellReference)
+        private static void ApplyDiagonalToCell(SheetData sheetData, string cellRef, Stylesheet stylesheet, Beállítás_Ferde beállítás)
         {
-            var sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
-            string rowPart = string.Concat(cellReference.SkipWhile(char.IsLetter));
-            if (!uint.TryParse(rowPart, out uint rowId)) return null;
+            GetCellCoordinates(cellRef, out int col, out int rowIndex);
 
-            var row = sheetData.Elements<Row>().FirstOrDefault(r => r.RowIndex == rowId);
-            return row?.Elements<Cell>().FirstOrDefault(c => c.CellReference == cellReference);
-        }
-
-        // Tartomány kibontása (már korábban is volt)
-        public static IEnumerable<string> ExpandRange(string range)
-        {
-            if (string.IsNullOrEmpty(range)) yield break;
-            if (!range.Contains(':'))
+            Row row = sheetData.Elements<Row>().FirstOrDefault(r => r.RowIndex == rowIndex);
+            if (row == null)
             {
-                yield return range;
-                yield break;
+                row = new Row() { RowIndex = (uint)rowIndex };
+                sheetData.Append(row);
             }
+
+            Cell cell = row.Elements<Cell>().FirstOrDefault(c => c.CellReference == cellRef);
+            if (cell == null)
+            {
+                cell = new Cell() { CellReference = cellRef };
+                row.Append(cell);
+            }
+
+            uint originalStyleIndex = cell.StyleIndex ?? 0;
+            CellFormat originalFormat = (CellFormat)stylesheet.CellFormats.ElementAt((int)originalStyleIndex);
+
+            Border newBorder = CloneBorder(originalFormat, stylesheet, beállítás);
+
+            newBorder.DiagonalUp = beállítás.Jobb;
+            newBorder.DiagonalDown = !beállítás.Jobb;
+
+            // ✅ FONTOS: diagonális vonal stílusa
+            if (newBorder.DiagonalBorder == null)
+                newBorder.DiagonalBorder = new DiagonalBorder();
+
+            newBorder.DiagonalBorder.Style = BorderStyleValues.Thin;
+
+            uint newBorderId = (uint)stylesheet.Borders.Count;
+            stylesheet.Borders.Append(newBorder);
+
+            uint newFormatId = (uint)stylesheet.CellFormats.Count;
+
+            //CellFormat newFormat = new CellFormat(originalFormat.OuterXml)
+            //{
+            //    BorderId = newBorderId,
+            //    ApplyBorder = true
+            //};
+
+            CellFormat newFormat = new CellFormat
+            {
+                BorderId = newBorderId,
+                ApplyBorder = true
+            };
+
+            // Másold át MINDEN releváns tulajdonságot az eredeti formából
+            if (originalFormat != null)
+            {
+                if (originalFormat.NumberFormatId != null) newFormat.NumberFormatId = originalFormat.NumberFormatId;
+                if (originalFormat.FontId != null) newFormat.FontId = originalFormat.FontId;
+                if (originalFormat.FillId != null) newFormat.FillId = originalFormat.FillId;
+                if (originalFormat.ApplyNumberFormat != null) newFormat.ApplyNumberFormat = originalFormat.ApplyNumberFormat;
+                if (originalFormat.ApplyFont != null) newFormat.ApplyFont = originalFormat.ApplyFont;
+                if (originalFormat.ApplyFill != null) newFormat.ApplyFill = originalFormat.ApplyFill;
+                if (originalFormat.ApplyAlignment != null) newFormat.ApplyAlignment = originalFormat.ApplyAlignment;
+                if (originalFormat.Alignment != null) newFormat.Alignment = (Alignment)originalFormat.Alignment.CloneNode(true);
+                // ... ha van egyéb formázás
+            }
+
+            stylesheet.CellFormats.Append(newFormat);
+
+            cell.StyleIndex = newFormatId;
+        }
+
+
+        private static Border CloneBorder(CellFormat format, Stylesheet stylesheet, Beállítás_Ferde beállítás)
+        {
+            uint borderId = format.BorderId ?? 0;
+            Border original = (Border)stylesheet.Borders.ElementAt((int)borderId);
+
+            // Klónozás
+            LeftBorder left = (LeftBorder)(original.LeftBorder?.CloneNode(true) ?? new LeftBorder());
+            RightBorder right = (RightBorder)(original.RightBorder?.CloneNode(true) ?? new RightBorder());
+            TopBorder top = (TopBorder)(original.TopBorder?.CloneNode(true) ?? new TopBorder());
+            BottomBorder bottom = (BottomBorder)(original.BottomBorder?.CloneNode(true) ?? new BottomBorder());
+            DiagonalBorder diagonal = (DiagonalBorder)(original.DiagonalBorder?.CloneNode(true) ?? new DiagonalBorder());
+
+            //// ✅ Itt tudod felülírni az értékeket
+            if (beállítás.BalOldal != KeretVastagsag.Alap) left.Style = MilyenVastag(beállítás.BalOldal);
+            if (beállítás.JobbOldal != KeretVastagsag.Alap) right.Style = MilyenVastag(beállítás.JobbOldal);
+            if (beállítás.Felső != KeretVastagsag.Alap) top.Style = MilyenVastag(beállítás.Felső);
+            if (beállítás.Alsó != KeretVastagsag.Alap) bottom.Style = MilyenVastag(beállítás.Alsó);
+
+
+            //left.Style = BorderStyleValues.Thin;
+            //left.Color = new Color() { Rgb = "000000" };
+            //// piros
+            //// Példa: top border vékony fekete
+            //top.Style = BorderStyleValues.Thin;
+            //top.Color = new Color() { Rgb = "000000" };
+
+            return new Border(left, right, top, bottom, diagonal);
+        }
+
+
+        private static BorderStyleValues MilyenVastag(KeretVastagsag Oldal)
+        {
+            if (Oldal == KeretVastagsag.Vékony)
+                return BorderStyleValues.Thin;
+            else if (Oldal == KeretVastagsag.Közepes)
+                return BorderStyleValues.Medium;
+            else if (Oldal == KeretVastagsag.Vastag)
+                return BorderStyleValues.Thick;
+            else
+                return BorderStyleValues.None;
+        }
+
+        private static List<string> GetCellReferences(string range)
+        {
+            var result = new List<string>();
+
             var parts = range.Split(':');
-            (int c1, uint r1) = ParseRef(parts[0]);
-            (int c2, uint r2) = ParseRef(parts[1]);
-            int minC = Math.Min(c1, c2), maxC = Math.Max(c1, c2);
-            uint minR = Math.Min(r1, r2), maxR = Math.Max(r1, r2);
-            for (uint r = minR; r <= maxR; r++)
-                for (int c = minC; c <= maxC; c++)
-                    yield return GetColName(c) + r;
+            if (parts.Length == 1)
+            {
+                result.Add(parts[0].ToUpper());
+                return result;
+            }
+
+            var start = parts[0].ToUpper();
+            var end = parts[1].ToUpper();
+
+            GetCellCoordinates(start, out int startCol, out int startRow);
+            GetCellCoordinates(end, out int endCol, out int endRow);
+
+            for (int col = startCol; col <= endCol; col++)
+            {
+                for (int row = startRow; row <= endRow; row++)
+                {
+                    result.Add(ColumnNumberToName(col) + row);
+                }
+            }
+
+            return result;
         }
 
-        private static (int, uint) ParseRef(string r)
+        private static void GetCellCoordinates(string cellRef, out int col, out int row)
         {
-            var l = string.Concat(r.TakeWhile(char.IsLetter)).ToUpper();
-            var d = string.Concat(r.Skip(l.Length));
-            uint row = uint.Parse(d);
-            int col = 0;
-            foreach (char ch in l) col = col * 26 + (ch - 'A' + 1);
-            return (col, row);
+            string colPart = new string(cellRef.TakeWhile(char.IsLetter).ToArray());
+            string rowPart = new string(cellRef.SkipWhile(char.IsLetter).ToArray());
+
+            col = ColumnNameToNumber(colPart);
+            row = int.Parse(rowPart);
         }
 
-        private static string GetColName(int c)
+        private static int ColumnNameToNumber(string columnName)
         {
-            string s = "";
-            while (c > 0) { c--; s = (char)('A' + (c % 26)) + s; c /= 26; }
-            return s;
+            int sum = 0;
+            foreach (char c in columnName)
+            {
+                sum *= 26;
+                sum += (c - 'A' + 1);
+            }
+            return sum;
         }
+
+        private static string ColumnNumberToName(int columnNumber)
+        {
+            string columnName = "";
+            while (columnNumber > 0)
+            {
+                int modulo = (columnNumber - 1) % 26;
+                columnName = Convert.ToChar('A' + modulo) + columnName;
+                columnNumber = (columnNumber - modulo) / 26;
+            }
+            return columnName;
+        }
+
     }
+
+
+
+
 }
+
+
+
+

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
 using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
 
@@ -26,7 +25,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
-            helynapló = $@"{Application.StartupPath}\{Telephely}\adatok\hibanapló\{Dátum:yyyyMM}hibanapló.mdb";
+            helynapló = $@"{Application.StartupPath}\{Telephely}\Adatok\hibanapló\{Dátum:yyyyMM}hibanapló.mdb";
             if (!File.Exists(helynapló)) Adatbázis_Létrehozás.Hibatáblalap(helynapló.KönyvSzerk());
         }
 

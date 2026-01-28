@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -52,7 +50,7 @@ namespace Villamos.Villamos_Ablakok
         {
             try
             {
-                // törli az időszak főmérnökségi adatait
+                // törli az időszak Főmérnökségi adatait
                 KézFőmérnök.Törlés(dátumtól.Value.Year, dátumtól.Value, dátumig.Value);
                 MessageBox.Show("Az adatok törlése befejeződött!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -123,7 +121,7 @@ namespace Villamos.Villamos_Ablakok
             try
             {  // telephelyek adatait összemásoljuk
 
-                // a telepek adataival frisíti a főmérnökségi adatbázis adatait.
+                // a telepek adataival frisíti a Főmérnökségi adatbázis adatait.
                 főholtart.Be(Lstüzemek.Count + 1);
                 alholtart.Be(100);
                 List<Adat_Menetkimaradás_Főmérnökség> AdatokGy = new List<Adat_Menetkimaradás_Főmérnökség>();
@@ -319,7 +317,7 @@ namespace Villamos.Villamos_Ablakok
                     MyX.Kiir(rekord.Típus, "C" + i.ToString());
                     MyX.Kiir(rekord.Eseményjele, "d" + i.ToString());
                     MyX.Kiir(rekord.Bekövetkezés.ToString(), "e" + i.ToString());
-                    MyX.Kiir(rekord.Kimaradtmenet.ToString(), "F" + i.ToString());
+                    MyX.Kiir($"#SZÁME#{rekord.Kimaradtmenet}", "F" + i.ToString());
                     MyX.Kiir(rekord.Jvbeírás, "g" + i.ToString());
                     MyX.Kiir(rekord.Vmbeírás, "h" + i.ToString());
                     MyX.Kiir(rekord.Javítás, "i" + i.ToString());

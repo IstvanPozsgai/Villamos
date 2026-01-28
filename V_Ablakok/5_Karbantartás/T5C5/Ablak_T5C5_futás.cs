@@ -9,8 +9,6 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos
@@ -181,7 +179,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\T5C5_futás.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1149,7 +1147,7 @@ namespace Villamos
             try
             {
                 // a havi táblába kitöröljük az adatokat és visszaírjuk a futásnapot
-                string helyhonnan = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\adatok\főkönyv\futás\{Dátum.Value.Year}";
+                string helyhonnan = $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\Adatok\főkönyv\futás\{Dátum.Value.Year}";
                 helyhonnan += $@"\Villamos3-{Dátum.Value.AddDays(-1):yyyyMMdd}.mdb";
 
                 List<Adat_T5C5_Göngyöl> Áll_Adatok = Kéz_Göngyöl.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.AddDays(-1));

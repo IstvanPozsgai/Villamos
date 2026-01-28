@@ -11,7 +11,7 @@ public static partial class Függvénygyűjtemény
         bool válasz = false;
         try
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\TTP\PDF\";
+            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\TTP\PDF\";
             DirectoryInfo Directories = new DirectoryInfo(hely);
             string mialapján = $@"{Pályaszám}_{Dátum:yyyy}*.pdf";
             FileInfo[] fileInfo = Directories.GetFiles(mialapján, SearchOption.TopDirectoryOnly);
@@ -40,7 +40,7 @@ public static partial class Függvénygyűjtemény
         int válasz = 0;
         try
         {
-            string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\TTP\PDF\";
+            string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\TTP\PDF\";
             DirectoryInfo Directories = new DirectoryInfo(hely);
             string mialapján = $@"{Pályaszám}_{Dátum:yyyy}*.pdf";
 

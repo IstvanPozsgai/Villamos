@@ -2288,11 +2288,7 @@ namespace Villamos
                     return;
                 TW6000_Excel_Kimutatas excel_Kimutatas = new TW6000_Excel_Kimutatas();
                 string[] VizsgalatLista_Kivalasztott = VizsgálatLista.CheckedItems.OfType<string>().ToArray();
-<<<<<<< HEAD
-                excel_Kimutatas.Kimutatast_Keszit(fájlexc,VizsgalatLista_Kivalasztott, KézElőterv);
-=======
                 excel_Kimutatas.Kimutatast_Keszit(fájlexc, VizsgalatLista_Kivalasztott, KézElőterv);
->>>>>>> master
 
             }
             catch (HibásBevittAdat ex)
@@ -2309,11 +2305,7 @@ namespace Villamos
         /// <summary>
         /// Kiírja a vizsgálati adatokat
         /// </summary>
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> master
         #endregion
 
 

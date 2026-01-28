@@ -36,7 +36,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Year}\Képek\";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum.Year}\Képek\";
                 ListBox1.Items.Clear();
                 FolderBrowserDialog FolderBrowserDialog1 = new FolderBrowserDialog();
                 using (FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog())
@@ -68,7 +68,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés
             try
             {
                 if (ListBox1.SelectedItems.Count < 1) throw new HibásBevittAdat("Nincs kiválasztva kép!");
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{Dátum.Year}\Képek\";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Dátum.Year}\Képek\";
                 string hova, honnan;
                 int sorszám;
 

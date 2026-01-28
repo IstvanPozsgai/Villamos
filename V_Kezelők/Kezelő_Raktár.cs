@@ -4,10 +4,10 @@ using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.V_Adatbázis;
-using Villamos.V_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
-namespace Villamos.V_Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Raktár
     {
@@ -17,7 +17,7 @@ namespace Villamos.V_Kezelők
 
         public Kezelő_Raktár()
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\rezsi\RaktárKészlet.mdb".KönyvSzerk();
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\rezsi\RaktárKészlet.mdb".KönyvSzerk();
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Raktárkészlet(hely);
         }
 

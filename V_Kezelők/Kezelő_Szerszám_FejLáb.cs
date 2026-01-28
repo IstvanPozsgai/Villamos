@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.V_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
@@ -11,7 +11,7 @@ namespace Villamos.Kezelők
 {
     public class Kezelő_Szerszám_FejLáb
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő.mdb".KönyvSzerk();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő.mdb".KönyvSzerk();
         readonly string jelszó = "Mocó";
 
         public Kezelő_Szerszám_FejLáb()

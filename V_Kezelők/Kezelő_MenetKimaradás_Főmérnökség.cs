@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -75,7 +75,7 @@ namespace Villamos.Kezelők
                 List<string> szövegGy = new List<string>();
                 foreach (Adat_Menetkimaradás_Főmérnökség rekord in Adatok)
                 {
-                    // ha nincs a főmérnökségi táblába akkor rögzítjük
+                    // ha nincs a Főmérnökségi táblába akkor rögzítjük
                     string szöveg = $"INSERT INTO {táblanév} ";
                     // rekord nevek
                     szöveg += "(viszonylat, azonosító, típus, Eseményjele, Bekövetkezés, kimaradtmenet, jvbeírás, javítás, jelentés, tétel, ";
@@ -120,7 +120,7 @@ namespace Villamos.Kezelők
                 List<string> szövegGy = new List<string>();
                 foreach (Adat_Menetkimaradás_Főmérnökség rekord in Adatok)
                 {
-                    // ha nincs a főmérnökségi táblába akkor rögzítjük
+                    // ha nincs a Főmérnökségi táblába akkor rögzítjük
                     string szöveg = $"UPDATE {táblanév}  SET ";
                     szöveg += $"viszonylat='{rekord.Viszonylat}', ";
                     szöveg += $"azonosító='{rekord.Azonosító}', ";

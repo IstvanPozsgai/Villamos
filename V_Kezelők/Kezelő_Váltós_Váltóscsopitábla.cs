@@ -4,14 +4,14 @@ using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_Váltós_Váltóscsopitábla
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Váltóscsoportvezetők.mdb".KönyvSzerk();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Váltóscsoportvezetők.mdb".KönyvSzerk();
         readonly string jelszó = "Gábor";
 
         public Kezelő_Váltós_Váltóscsopitábla()

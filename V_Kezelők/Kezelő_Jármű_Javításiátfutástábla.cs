@@ -18,13 +18,13 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\hibanapló\Napi.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\hibanapló\Napi.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Javításiátfutástábla(hely.KönyvSzerk());
         }
 
         private void FájlBeállítás(string Telephely, int Év)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\hibanapló\Elkészült{Év}.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\hibanapló\Elkészült{Év}.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Javításiátfutástábla(hely.KönyvSzerk());
         }
 

@@ -9,11 +9,10 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
-using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
 using MyF = Függvénygyűjtemény;
-using MyX = Villamos.MyClosedXML_Excel;
 using MyO = Microsoft.Office.Interop.Outlook;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos
 {
@@ -574,9 +573,10 @@ namespace Villamos
                 Html_szöveg = "<html><body>";
                 // ha létezik, akkor benyitjuk az excel táblát.
                 Holtart.Be(10);
-                munkalap = EgyTerjesztés.Szöveg;
-
-                MyX.ExcelMegnyitás(munkalap);
+                munkalap = "Munka1";
+                string fájlnév = EgyTerjesztés.Szöveg;
+                MyX.ExcelMegnyitás(fájlnév);
+                MyX.Munkalap_aktív(munkalap);
 
                 int vége = 0;
 
@@ -587,7 +587,7 @@ namespace Villamos
                 while (vége == 0)
                 {
                     i++;
-                    if (MyX.Beolvas(munkalap,MyF.Oszlopnév(i) + "1") == "_")
+                    if (MyX.Beolvas(munkalap, MyF.Oszlopnév(i) + "1") == "_")
                     {
                         vége = 1;
                         oszlopmax = i - 1;
@@ -602,7 +602,7 @@ namespace Villamos
                 while (vége == 0)
                 {
                     i++;
-                    if (MyX.Beolvas(munkalap,$"a{i}").ToUpper() == "X")
+                    if (MyX.Beolvas(munkalap, $"a{i}").ToUpper() == "X")
                     {
                         vége = 1;
                         szám = i;
@@ -628,7 +628,7 @@ namespace Villamos
                     for (int j = 4; j <= oszlopmax; j++)
                     {
                         Holtart.Lép();
-                        string telep = MyX.Beolvas(munkalap,MyF.Oszlopnév(j) + "1").Trim();
+                        string telep = MyX.Beolvas(munkalap, MyF.Oszlopnév(j) + "1").Trim();
                         //Megvizsgáljuk, hogy telephelynév-e
                         if (Lstüzemek.Items.Contains(telep))
                         {
@@ -681,7 +681,7 @@ namespace Villamos
                             szöveg_html += "</table>";
                             Html_szöveg += szöveg_html;
 
-                            szöveg2 = MyX.Beolvas(munkalap,MyF.Oszlopnév(j) + $"{szám}");
+                            szöveg2 = MyX.Beolvas(munkalap, MyF.Oszlopnév(j) + $"{szám}");
                             if (szöveg2.Trim() != "_")
                                 szöveg1 = szöveg2 + "\n" + szöveg1;
                             MyX.Kiir(szöveg1, MyF.Oszlopnév(j) + szám.ToString());
@@ -689,14 +689,15 @@ namespace Villamos
                         }
                     }
                 }
-                MyX.Kiir("X", "a" + szám.ToString());
-                MyX.Kiir(szám.ToString(), "aa1");
-                MyX.ExcelMentés(munkalap);
+                MyX.Kiir("X", $"a{szám}");
+                MyX.Kiir($"#SZÁME#{szám}", "aa1");
+                MyX.Aktív_Cella(munkalap, $"a{szám}");
+                MyX.ExcelMentés(fájlnév);
                 MyX.ExcelBezárás();
                 Html_szöveg += "</body></html>";
 
                 Holtart.Ki();
-                MyF.Megnyitás(EgyTerjesztés.Szöveg);
+                MyF.Megnyitás(fájlnév);
             }
             catch (HibásBevittAdat ex)
             {

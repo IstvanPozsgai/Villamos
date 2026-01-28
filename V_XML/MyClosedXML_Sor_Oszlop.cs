@@ -438,17 +438,6 @@ namespace Villamos
         }
 
 
-        public static void Oszlopszélesség_Csoportos(string munkalapNév, Dictionary<string, double> beállítások)
-        {
-            try
-            {
-                foreach (KeyValuePair<string,double> tétel in beállítások)
-                    Oszlopszélesség(munkalapNév, tétel.Key, tétel.Value);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, $"Oszlopszélesség_Csoportos ({munkalapNév})", ex.StackTrace, ex.Source, ex.HResult);
-            }
-        }
+
     }
 }

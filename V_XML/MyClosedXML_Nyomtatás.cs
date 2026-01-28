@@ -85,10 +85,7 @@ namespace Villamos
                     {
                         worksheetPart.KépBeállítás(beállítás);
                     }
-<<<<<<< HEAD
-=======
 
->>>>>>> master
 
                     //       4.PrintOptions
                     PrintOptions printOptions = worksheet.GetFirstChild<PrintOptions>();
@@ -104,7 +101,7 @@ namespace Villamos
 
                     workbookPart.SorOszlopIsmétlődés(beállítás, lapNév, i);
                     workbookPart.NyomtatásiTerület(beállítás, lapNév, i);
-                    
+
                     worksheet.Save();
 
                 }
@@ -282,8 +279,10 @@ namespace Villamos
                     Text = $"&L{beállítás.LáblécBal}&C{beállítás.LáblécKözép}&R{beállítás.LáblécJobb}"
                 };
 
-                if (!string.IsNullOrWhiteSpace(beállítás.Képútvonal) && !beállítás.FejlécBal.Contains("&G"))
+                if (beállítás.Képútvonal.Trim() != "" || !beállítás.Képútvonal.Contains("&G"))
+                {
                     beállítás.FejlécBal += "&G";
+                }
 
                 headerFooter.OddHeader = new OddHeader
                 {
@@ -388,69 +387,6 @@ namespace Villamos
             }
         }
 
-<<<<<<< HEAD
-        // JAVÍTANDÓ:
-
-        //private static void KépBeállítás(this WorksheetPart worksheetPart, Beállítás_Nyomtatás beállítás)
-        //{
-        //    // 1. DrawingsPart létrehozása
-        //    DrawingsPart drawingsPart = worksheetPart.DrawingsPart;
-        //    if (drawingsPart == null)
-        //        drawingsPart = worksheetPart.AddNewPart<DrawingsPart>();
-
-        //    // 2. Kép hozzáadása
-        //    ImagePart imagePart = drawingsPart.AddImagePart(ImagePartType.Png);
-        //    using (var stream = File.OpenRead(beállítás.Képútvonal))
-        //        imagePart.FeedData(stream);
-
-        //    string imageRelId = drawingsPart.GetIdOfPart(imagePart);
-
-        //    // 3. Érvényes WorksheetDrawing létrehozása
-        //    var worksheetDrawing = new Xdr.WorksheetDrawing();
-
-        //    var anchor = new Xdr.TwoCellAnchor(
-        //        new Xdr.FromMarker(
-        //            new Xdr.ColumnId("0"),
-        //            new Xdr.RowId("0")
-        //        ),
-        //        new Xdr.ToMarker(
-        //            new Xdr.ColumnId("1"),
-        //            new Xdr.RowId("1")
-        //        ),
-        //        new Xdr.Picture(
-        //            new Xdr.NonVisualPictureProperties(
-        //                new Xdr.NonVisualDrawingProperties() { Id = (UInt32Value)1024U, Name = "Image" },
-        //                new Xdr.NonVisualPictureDrawingProperties()
-        //            ),
-        //            new Xdr.BlipFill(
-        //                new A.Blip { Embed = imageRelId },
-        //                new A.SourceRectangle(),
-        //                new A.Stretch(new A.FillRectangle())
-        //            ),
-        //            new Xdr.ShapeProperties(
-        //                new A.Transform2D(
-        //                    new A.Offset() { X = 0L, Y = 0L },
-        //                    new A.Extents() { Cx = 100000L, Cy = 100000L }
-        //                )
-        //            )
-        //        )
-        //        { Macro = "" }
-        //    )
-        //    { EditAs = Xdr.EditAsValues.TwoCell };
-
-        //    worksheetDrawing.Append(anchor);
-        //    drawingsPart.WorksheetDrawing = worksheetDrawing;
-
-        //    // 4. Drawing hivatkozás a munkalapon
-        //    if (worksheetPart.Worksheet.Descendants<Drawing>().FirstOrDefault() == null)
-        //    {
-        //        string drawingRelId = worksheetPart.GetIdOfPart(drawingsPart);
-        //        worksheetPart.Worksheet.Append(new Drawing { Id = drawingRelId });
-        //    }
-        //}
-        // Ezt a metódust cseréld le teljesen a MyClosedXML_Excel osztályban
-=======
->>>>>>> master
         private static void KépBeállítás(this WorksheetPart worksheetPart, Beállítás_Nyomtatás beállítás)
         {
             try
@@ -528,8 +464,6 @@ namespace Villamos
 
                 legacyDrawingHF.Id = vmlPartId;
                 worksheet.Save(); // Biztosítjuk, hogy a változások mentésre kerüljenek
-<<<<<<< HEAD
-=======
             }
             catch (HibásBevittAdat ex)
             {
@@ -539,57 +473,7 @@ namespace Villamos
             {
                 HibaNapló.Log(ex.Message, "KépBeállítás_Javított", ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
->>>>>>> master
             }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "KépBeállítás_Javított", ex.StackTrace, ex.Source, ex.HResult);
-                // Opcionális: Dobhatsz hibát is, ha látni akarod teszteléskor
-                // throw; 
-            }
-        }
-        private static string GetVmlXmlContent(string imageRelId, string shapeId)
-        {
-            // shapeId: "LH" = Bal fejléc, "CH" = Közép, "RH" = Jobb
-            // A méretek (width, height) pontban (pt) vannak megadva. Állítsd be a logódnak megfelelően!
-            string width = "125pt";  // Kb 4.4 cm
-            string height = "55pt";  // Kb 2 cm
-
-            return
-            "<xml xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\">" +
-              "<o:shapelayout v:ext=\"edit\">" +
-                "<o:idmap v:ext=\"edit\" data=\"1\"/>" +
-              "</o:shapelayout>" +
-              "<v:shapetype id=\"_x0000_t75\" coordsize=\"21600,21600\" o:spt=\"75\" o:preferrelative=\"t\" path=\"m@4@5l@4@11@9@11@9@5xe\" filled=\"f\" stroked=\"f\">" +
-                "<v:stroke joinstyle=\"miter\"/>" +
-                "<v:formulas>" +
-                  "<v:f eqn=\"if lineDrawn pixelLineWidth 0\"/>" +
-                  "<v:f eqn=\"sum @0 1 0\"/>" +
-                  "<v:f eqn=\"sum 0 0 @1\"/>" +
-                  "<v:f eqn=\"prod @2 1 2\"/>" +
-                  "<v:f eqn=\"prod @3 21600 pixelWidth\"/>" +
-                  "<v:f eqn=\"prod @3 21600 pixelHeight\"/>" +
-                  "<v:f eqn=\"sum @0 0 1\"/>" +
-                  "<v:f eqn=\"prod @6 1 2\"/>" +
-                  "<v:f eqn=\"prod @7 21600 pixelWidth\"/>" +
-                  "<v:f eqn=\"sum @8 21600 0\"/>" +
-                  "<v:f eqn=\"prod @7 21600 pixelHeight\"/>" +
-                  "<v:f eqn=\"sum @10 21600 0\"/>" +
-                "</v:formulas>" +
-                "<v:path o:extrusionok=\"f\" gradientshapeok=\"t\" o:connecttype=\"rect\"/>" +
-                "<o:lock v:ext=\"edit\" aspectratio=\"t\"/>" +
-              "</v:shapetype>" +
-              // Az adott kép definíciója
-              $"<v:shape id=\"{shapeId}\" o:spid=\"_x0000_s1025\" type=\"#_x0000_t75\" " +
-              $"style=\"position:absolute;margin-left:0;margin-top:0;width:{width};height:{height};z-index:1\">" +
-                $"<v:imagedata o:relid=\"{imageRelId}\" o:title=\"Logo\"/>" +
-                // ClientData fontos lehet az Excelnek, hogy tudja, ez egy kép
-                "<x:ClientData ObjectType=\"Pict\">" +
-                    "<x:SizeWithCells/>" +
-                // "<x:CF>Bitmap</x:CF>" + // Opcionális
-                "</x:ClientData>" +
-              "</v:shape>" +
-            "</xml>";
         }
 
         private static string GetVmlXmlContent(string imageRelId, string shapeId)

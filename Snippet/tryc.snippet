@@ -20,10 +20,10 @@
 				</Literal>
 			</Declarations>
 			<Code Language="csharp">
-				<![CDATA[          try
-            {
+				<![CDATA[ 
+		  try
+          {
 
-  
           }
           catch (HibásBevittAdat ex)
           {
@@ -33,7 +33,8 @@
           {
               HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
               MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-          }]]>
+          }
+		  ]]>
 			</Code>
 		</Snippet>
 	</CodeSnippet>

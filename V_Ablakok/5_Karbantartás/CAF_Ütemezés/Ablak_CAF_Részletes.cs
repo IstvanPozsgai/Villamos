@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
 using MyCaf = Villamos.Villamos_Ablakok.CAF_Ütemezés.CAF_Közös_Eljárások;
 using MyF = Függvénygyűjtemény;
 
@@ -87,7 +87,7 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
                 // ide kell az összes gombot tenni amit szabályozni akarunk false
                 Ütem_Rögzít.Enabled = false;
 
-                // csak főmérnökségi belépéssel módosítható
+                // csak Főmérnökségi belépéssel módosítható
 
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
@@ -127,8 +127,6 @@ namespace Villamos.Villamos_Ablakok.CAF_Ütemezés
             }
         }
 
-
-        // JAVÍTANDÓ:ez lehetne enum
         private void Státus_feltöltés()
         {
             Ütem_státus.Items.Clear();

@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using MyE = Villamos.Module_Excel;
+using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.Ablakok
@@ -38,7 +38,7 @@ namespace Villamos.Ablakok
             Alap_tábla_író();
             //Csak globaladmin tud módosítani
             Alap_Rögzít.Visible = Program.Postás_Felhasználó.GlobalAdmin;
-          
+
         }
 
         private void Ablak_Anyagok_Load(object sender, System.EventArgs e)
@@ -273,7 +273,7 @@ namespace Villamos.Ablakok
 
                 MyX.DataGridViewToXML(fájlexc, Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

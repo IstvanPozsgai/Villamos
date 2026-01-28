@@ -5,14 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
-namespace Villamos.V_Kezelők
+namespace Villamos.Kezelők
 {
     public class Kezelő_Ciklus_Sorrend
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\ciklus.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ciklus.mdb";
         readonly string jelszó = "pocsaierzsi";
         readonly string táblanév = "CiklusSorrendtábla";
 

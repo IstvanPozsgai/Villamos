@@ -3,7 +3,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -11,7 +11,7 @@ namespace Villamos.Kezelők
     public class Kezelő_MEO_Naptábla
     {
         readonly string jelszó = "rudolfg";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\kerékmérés.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\kerékmérés.mdb";
         readonly string táblanév = "naptábla";
 
         public Kezelő_MEO_Naptábla()

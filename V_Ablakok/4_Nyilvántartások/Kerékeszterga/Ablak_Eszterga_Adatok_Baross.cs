@@ -6,9 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
-using MyA = Adatbázis;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -20,6 +18,9 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
         readonly Kezelő_Baross_Mérési_Adatok KézMérés = new Kezelő_Baross_Mérési_Adatok();
         readonly Kezelő_Kerék_Tábla KézKerék = new Kezelő_Kerék_Tábla();
         readonly Kezelő_Jármű Kéz_Jármű = new Kezelő_Jármű();
+        readonly Kezelő_Kerék_Eszterga KézEszt = new Kezelő_Kerék_Eszterga();
+        readonly Kezelő_Kerék_Mérés KézKerékMérés = new Kezelő_Kerék_Mérés();
+        readonly Kezelő_Kerék_Eszterga_Igény KézIgény = new Kezelő_Kerék_Eszterga_Igény();
 
         List<Adat_Baross_Mérési_Adatok> AdatokMérés = new List<Adat_Baross_Mérési_Adatok>();
 
@@ -52,7 +53,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\MérésBarossKerék.html";
-                Module_Excel.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -648,7 +649,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                Module_Excel.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -780,7 +781,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             }
         }
 
-        //itt tartok
         private void Villamos_programba_Click(object sender, EventArgs e)
         {
             try
@@ -794,19 +794,15 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                           orderby a.Pozíció
                           select a).ToList();
 
-                string jelszó = "szabólászló";
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{dátumig.Value.Year}\telepikerék.mdb";
-                string szöveg = $"SELECT * FROM esztergatábla order by mikor desc";
-                Kezelő_Kerék_Eszterga KézEszt = new Kezelő_Kerék_Eszterga();
-                List<Adat_Kerék_Eszterga> AdatokEszt = KézEszt.Lista_Adatok(hely, jelszó, szöveg);
+                List<Adat_Kerék_Eszterga> AdatokEszt = KézEszt.Lista_Adatok(dátumig.Value.Year);
                 if (Dátumtól.Value.Year != dátumig.Value.Year)
                 {
-                    hely = $@"{Application.StartupPath}\Főmérnökség\adatok\{dátumig.Value.Year - 1}\telepikerék.mdb";
-                    List<Adat_Kerék_Eszterga> AdatokEszt1 = KézEszt.Lista_Adatok(hely, jelszó, szöveg);
+                    List<Adat_Kerék_Eszterga> AdatokEszt1 = KézEszt.Lista_Adatok(dátumig.Value.Year - 1);
                     if (AdatokEszt1 != null) AdatokEszt.AddRange(AdatokEszt1);
                 }
 
-                List<string> szövegGy = new List<string>();
+                List<Adat_Kerék_Eszterga> AdatokEGY = new List<Adat_Kerék_Eszterga>();
+                List<Adat_Kerék_Mérés> AdatokMérEGY = new List<Adat_Kerék_Mérés>();
                 List<Adat_Baross_Mérési_Adatok> AdatokSGy = new List<Adat_Baross_Mérési_Adatok>();
                 foreach (DataGridViewRow Elem in Tábla.Rows)
                 {
@@ -827,13 +823,13 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                     if (EgyikElem < D_Mikor)
                     {
                         //Esztergálás tényének rögzítése
-                        szöveg = "INSERT INTO esztergatábla (eszterga, mikor, módosító, azonosító, kmu)  VALUES (";
-                        szöveg += $"'{D_Mikor:yyyy.MM.dd}', ";
-                        szöveg += $"'{DateTime.Now}', ";
-                        szöveg += $"'{Program.PostásNév.Trim()}', ";
-                        szöveg += $"'{azonosító}', ";
-                        szöveg += $"{kmu} )";
-                        szövegGy.Add(szöveg);
+                        Adat_Kerék_Eszterga AdatEGY = new Adat_Kerék_Eszterga(
+                            azonosító,
+                            D_Mikor,
+                            Program.PostásNév.Trim(),
+                            DateTime.Now,
+                            kmu);
+                        AdatokEGY.Add(AdatEGY);
 
                         //Kerék méret adatok rögzítése
                         Adat_Kerék_Tábla Kerék = (from a in Adatok
@@ -842,24 +838,25 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
                         if (!double.TryParse(Elem.Cells[39].Value.ToString().Replace('.', ','), out double Átmérő))
                             Átmérő = 0;
-                        Átmérő = Math.Floor(Átmérő);
+                        int átmérő = (int)Math.Floor(Átmérő);
                         if (Kerék != null)
                         {
-                            szöveg = "INSERT INTO keréktábla  (Azonosító, pozíció, kerékberendezés, kerékgyártásiszám, állapot, méret, mikor, Módosító, Oka, SAP) VALUES (";
-                            szöveg += $"'{azonosító}', ";
-                            szöveg += $"'{Kerék.Pozíció}', ";
-                            szöveg += $"'{Kerék.Kerékberendezés}', ";
-                            szöveg += $"'{Kerék.Kerékgyártásiszám}', ";
-                            szöveg += "'1', ";
-                            szöveg += Átmérő.ToString() + ", ";
-                            szöveg += $"'{D_Mikor}', ";
-                            szöveg += $"'{Program.PostásNév.Trim()}', ";
-                            szöveg += "'Esztergálás Aut', 0 )";
-                            szövegGy.Add(szöveg);
+                            Adat_Kerék_Mérés ADATMér = new Adat_Kerék_Mérés(
+                                azonosító,
+                                Kerék.Pozíció,
+                                Kerék.Kerékberendezés,
+                                Kerék.Kerékgyártásiszám,
+                                "1",
+                                átmérő,
+                                Program.PostásNév.Trim(),
+                                D_Mikor,
+                                "Esztergálás Aut",
+                                0);
+                            AdatokMérEGY.Add(ADATMér);
                         }
                     }
 
-                    Státus_állítás_Baross(Elem.Cells[1].Value.ToStrTrim(), 7, DateTime.Now);
+                    KézIgény.Módosítás_Státus(DateTime.Now.Year, Elem.Cells[1].Value.ToStrTrim(), 2, 7);
 
                     Adat_Baross_Mérési_Adatok ADATS = new Adat_Baross_Mérési_Adatok(
                              Elem.Cells[57].Value.ToÉrt_Long(),
@@ -868,7 +865,8 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
 
                     Holtart.Lép();
                 }
-                MyA.ABMódosítás(hely, jelszó, szövegGy);
+                if (AdatokEGY.Count > 0) KézEszt.Rögzítés(dátumig.Value.Year, AdatokEGY);
+                if (AdatokMérEGY.Count > 0) KézKerékMérés.Rögzítés(dátumig.Value.Year, AdatokMérEGY);
                 if (AdatokSGy.Count > 0) KézMérés.Módosítás(AdatokSGy);
 
                 Holtart.Ki();
@@ -885,26 +883,6 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
             }
         }
 
-        private void Státus_állítás_Baross(string Pályaszám, int Státus_Lesz, DateTime Dátum)
-        {
-            try
-            {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kerékeszterga\{Dátum.Year}_Igény.mdb";
-                string jelszó = "RónaiSándor";
-                string szöveg = $"UPDATE igény SET státus={Státus_Lesz}";
-                szöveg += $"   WHERE státus=2 AND pályaszám Like '%{Pályaszám.Trim()}%'";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         Ablak_Eszterga_Adatok_Javítás Új_Ablak_Eszterga_Adatok_Javítás;
         private void Adat_Javítás_Click(object sender, EventArgs e)

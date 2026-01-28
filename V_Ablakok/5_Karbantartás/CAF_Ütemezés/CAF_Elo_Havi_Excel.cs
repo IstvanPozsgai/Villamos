@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
-using Villamos.V_Adatszerkezet;
+
 
 namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
 {
     public class CAF_Elo_Havi_Excel
     {
-        Beállítás_Betű BeBetű = new Beállítás_Betű() { Név = "Calibri", Méret = 11 };
-        public void elo_havi_excel_keszit(string fájlexc, Kezelő_CAF_Szinezés KézSzín, DataGridView Tábla_elő, Action eloterveListazasExcelhezNegat)
+        readonly Beállítás_Betű BeBetű = new Beállítás_Betű { Név = "Calibri", Méret = 11 };
+        public void Elo_havi_excel_keszit(string fájlexc, Kezelő_CAF_Szinezés KézSzín, DataGridView Tábla_elő, Action eloterveListazasExcelhezNegat)
         {
             // megnyitjuk az excelt
             string munkalap = "Munka1";
@@ -45,17 +43,17 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
             for (int i = 0; i <= Tábla_elő.Rows.Count - 6; i++)
             {
                 ideigdátum = DateTime.Parse(Tábla_elő.Rows[i].Cells[0].Value.ToString());
-                MyX.Kiir($"#SZÁME#{ideigdátum.ToString("dd")}", MyF.Oszlopnév(i + 2) + "2");
+                MyX.Kiir($"#SZÁME#{ideigdátum:dd}", MyF.Oszlopnév(i + 2) + "2");
                 MyX.Oszlopszélesség(munkalap, MyF.Oszlopnév(i + 2) + ":" + MyF.Oszlopnév(i + 2), 3);
 
                 if (Tábla_elő.Rows[i].DefaultCellStyle.BackColor == Color.Beige) // Pihenőnap
-                     MyX.Háttérszín(munkalap,MyF.Oszlopnév(i + 2) + "2:" + MyF.Oszlopnév(i + 2) + Tábla_elő.ColumnCount.ToString(), Color.FromArgb(szombat));
+                    MyX.Háttérszín(munkalap, MyF.Oszlopnév(i + 2) + "2:" + MyF.Oszlopnév(i + 2) + Tábla_elő.ColumnCount.ToString(), Color.FromArgb(szombat));
 
                 if (Tábla_elő.Rows[i].DefaultCellStyle.BackColor == Color.BurlyWood)                    // vasárnap
-                     MyX.Háttérszín(munkalap,MyF.Oszlopnév(i + 2) + "2:" + MyF.Oszlopnév(i + 2) + Tábla_elő.ColumnCount.ToString(), Color.FromArgb(vasárnap));
+                    MyX.Háttérszín(munkalap, MyF.Oszlopnév(i + 2) + "2:" + MyF.Oszlopnév(i + 2) + Tábla_elő.ColumnCount.ToString(), Color.FromArgb(vasárnap));
 
                 if (Tábla_elő.Rows[i].DefaultCellStyle.BackColor == Color.IndianRed)                  // ünnep
-                     MyX.Háttérszín(munkalap,MyF.Oszlopnév(i + 2) + "2:" + MyF.Oszlopnév(i + 2) + Tábla_elő.ColumnCount.ToString(), Color.FromArgb(vasárnap));
+                    MyX.Háttérszín(munkalap, MyF.Oszlopnév(i + 2) + "2:" + MyF.Oszlopnév(i + 2) + Tábla_elő.ColumnCount.ToString(), Color.FromArgb(vasárnap));
 
                 //Holtart.Lép();
             }
@@ -106,9 +104,9 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
                 }
 
                 if (Tábla_elő.Rows[Tábla_elő.RowCount - 4].Cells[ii].Value.ToString().Trim() == "1")
-                     MyX.Háttérszín(munkalap,"a" + sor.ToString(), Color.FromArgb(PSZgarszín));
+                    MyX.Háttérszín(munkalap, "a" + sor.ToString(), Color.FromArgb(PSZgarszín));
                 else
-                     MyX.Háttérszín(munkalap,"a" + sor.ToString(), Color.FromArgb(PSZszín));
+                    MyX.Háttérszín(munkalap, "a" + sor.ToString(), Color.FromArgb(PSZszín));
 
                 sor += 1;
                 //Holtart.Lép();
@@ -120,7 +118,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
 
             for (k = 3; k <= sormax; k++)
             {
-                pályaszám = MyX.Beolvas(munkalap,"a" + k.ToString()).Trim();
+                pályaszám = MyX.Beolvas(munkalap, "a" + k.ToString()).Trim();
                 for (int j = 1; j < Tábla_elő.Columns.Count; j++)
                 {
                     // ha a két pályaszám egyezik
@@ -150,13 +148,13 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
                                     // IS előterv 
                                     // ************
                                     if (szöveg == "/")
-                                         MyX.Háttérszín(munkalap,MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(istűrésszín));
+                                        MyX.Háttérszín(munkalap, MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(istűrésszín));
 
                                     if (szöveg.Contains("IS") == true)
-                                         MyX.Háttérszín(munkalap,MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(isszín));
+                                        MyX.Háttérszín(munkalap, MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(isszín));
 
                                     if (szöveg.Contains("P") == true)
-                                         MyX.Háttérszín(munkalap,MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(Pszín));
+                                        MyX.Háttérszín(munkalap, MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(Pszín));
                                 }
 
                                 if (szöveg != "/")
@@ -173,7 +171,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
 
             for (k = 3; k <= sormax; k++)
             {
-                pályaszám = MyX.Beolvas(munkalap,"a" + k.ToString()).Trim();
+                pályaszám = MyX.Beolvas(munkalap, "a" + k.ToString()).Trim();
                 if (pályaszám.Trim() == "_")
                 {
                     for (int i = 0; i <= Tábla_elő.Rows.Count - 6; i++)
@@ -184,8 +182,8 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
                 //Holtart.Lép();
             }
             // Berácsozzuk
-            MyX.Vastagkeret(munkalap,"a1:" + MyF.Oszlopnév(Tábla_elő.Rows.Count - 4) + k.ToString());
-            MyX.Rácsoz(munkalap,"a1:" + MyF.Oszlopnév(Tábla_elő.Rows.Count - 4) + k.ToString());
+            MyX.Vastagkeret(munkalap, "a1:" + MyF.Oszlopnév(Tábla_elő.Rows.Count - 4) + k.ToString());
+            MyX.Rácsoz(munkalap, "a1:" + MyF.Oszlopnév(Tábla_elő.Rows.Count - 4) + k.ToString());
 
             // *********************************
             // * Tartalom vége                 *
@@ -193,7 +191,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
 
             // * Kiegészítő adatok eleje       *
             // *********************************
-            eloterveListazasExcelhezNegat?.Invoke();      
+            eloterveListazasExcelhezNegat?.Invoke();
 
 
             // feltöltjük a vizsgálatokat
@@ -203,7 +201,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
 
                 for (int j = 1; j < Tábla_elő.Columns.Count; j++)
                 {
-                    pályaszám = MyX.Beolvas(munkalap,"a" + k.ToString()).Trim();
+                    pályaszám = MyX.Beolvas(munkalap, "a" + k.ToString()).Trim();
                     // ha a két pályaszám egyezik
                     if (pályaszám.Trim() == Tábla_elő.Columns[j].HeaderText.Trim())
                     {
@@ -238,41 +236,41 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
                                     {
                                         case "E":
                                             {
-                                                 MyX.Háttérszín(munkalap,MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(Szín_E_v));
+                                                MyX.Háttérszín(munkalap, MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(Szín_E_v));
                                                 break;
                                             }
                                         case "e":
                                             {
-                                                 MyX.Háttérszín(munkalap,MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(Szín_E_v));
+                                                MyX.Háttérszín(munkalap, MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(Szín_E_v));
                                                 break;
                                             }
                                         case "$":
                                             {
-                                                 MyX.Háttérszín(munkalap,MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(Szín_dollár_v));
+                                                MyX.Háttérszín(munkalap, MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(Szín_dollár_v));
                                                 break;
                                             }
 
                                         case "@":
                                             {
-                                                 MyX.Háttérszín(munkalap,MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(Szín_Kukac_v));
+                                                MyX.Háttérszín(munkalap, MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(Szín_Kukac_v));
                                                 break;
                                             }
 
                                         case "#":
                                             {
-                                                 MyX.Háttérszín(munkalap,MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(Szín_Hasteg_v));
+                                                MyX.Háttérszín(munkalap, MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(Szín_Hasteg_v));
                                                 break;
                                             }
 
                                         case "§":
                                             {
-                                                 MyX.Háttérszín(munkalap,MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(Szín_jog_v));
+                                                MyX.Háttérszín(munkalap, MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(Szín_jog_v));
                                                 break;
                                             }
 
                                         case ">":
                                             {
-                                                 MyX.Háttérszín(munkalap,MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(Szín_nagyobb_v));
+                                                MyX.Háttérszín(munkalap, MyF.Oszlopnév(i + 2) + k.ToString(), Color.FromArgb(Szín_nagyobb_v));
                                                 break;
                                             }
 

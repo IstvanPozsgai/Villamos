@@ -5,8 +5,8 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Kezelők;
-using Villamos.Villamos_Adatszerkezet;
+
+
 
 namespace Villamos.V_Ablakok._1_Beállítások
 {

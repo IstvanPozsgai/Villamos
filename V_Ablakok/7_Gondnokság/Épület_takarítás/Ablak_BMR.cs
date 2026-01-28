@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.V_Kezelők;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Kezelők;
+using Villamos.Adatszerkezet;
 
 namespace Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás
 {

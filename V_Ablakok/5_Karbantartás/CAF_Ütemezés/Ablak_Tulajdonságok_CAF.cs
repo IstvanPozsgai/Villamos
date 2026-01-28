@@ -1078,11 +1078,7 @@ namespace Villamos
                 Elő_pályaszám.Height = 25;
                 Előterv_listázás_excelhez();
 
-<<<<<<< HEAD
-                
-=======
 
->>>>>>> master
 
                 // kimeneti fájl helye és neve
                 string fájlexc;
@@ -1100,13 +1096,8 @@ namespace Villamos
                     return;
 
                 CAF_Elo_Havi_Excel elo_Havi_Excel = new CAF_Elo_Havi_Excel();
-<<<<<<< HEAD
-                elo_Havi_Excel.elo_havi_excel_keszit(fájlexc, KézSzín, Tábla_elő, Előterv_listázás_excelhez_negát);
-                
-=======
                 elo_Havi_Excel.Elo_havi_excel_keszit(fájlexc, KézSzín, Tábla_elő, Előterv_listázás_excelhez_negát);
 
->>>>>>> master
 
                 Holtart.Ki();
                 MyF.Megnyitás(fájlexc);

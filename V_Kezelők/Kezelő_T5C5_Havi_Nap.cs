@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
-namespace Villamos.Villamos_Adatszerkezet
+namespace Villamos.Adatszerkezet
 {
     public class Kezelő_T5C5_Havi_Nap
     {
@@ -15,7 +15,7 @@ namespace Villamos.Villamos_Adatszerkezet
 
         private void FájlBeállítás(DateTime Dátum)
         {
-            hely = $@"{Application.StartupPath}\Főmérnökség\adatok\T5C5\{Dátum.Year}\havi{Dátum:yyyyMM}.mdb";
+            hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\T5C5\{Dátum.Year}\havi{Dátum:yyyyMM}.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Havifutástábla_Létrehozás(hely.KönyvSzerk());
         }
 

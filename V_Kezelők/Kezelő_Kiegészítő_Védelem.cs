@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 namespace Villamos.Kezelők
 {
     public class Kezelő_Kiegészítő_Védelem
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Kiegészítő2.mdb".KönyvSzerk();
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Kiegészítő2.mdb".KönyvSzerk();
         readonly string jelszó = "Mocó";
         readonly string táblanév = "védelem";
 

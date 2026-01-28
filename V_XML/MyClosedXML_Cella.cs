@@ -142,7 +142,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        // JAVÍTANDÓ:
         /// <summary>
         /// Beállítja az aktív cellát és munkalapot a fájlban.
         /// (Amikor a felhasználó megnyitja az Excelt, ez lesz kijelölve).

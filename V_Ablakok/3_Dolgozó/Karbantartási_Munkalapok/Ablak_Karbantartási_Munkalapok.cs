@@ -10,9 +10,7 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.MindenEgyéb;
-using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok;
-using Villamos.Villamos_Adatszerkezet;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
 using MyF = Függvénygyűjtemény;
 using MyLista = Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok.Karbantartási_ListaFeltöltés;
@@ -1387,7 +1385,7 @@ namespace Villamos.Villamos_Ablakok
         private void Minden_kiírása(int sor, string Utasítás_Cím, string Utasítás_leírás, string Paraméter)
         {
             //Minden kiírás
-            string szöveg = "";
+            string szöveg;
             if (Paraméter.Trim() != "_")
                 szöveg = $"{Utasítás_Cím.Trim()} \n{Utasítás_leírás.Trim()} \n{Paraméter} ";
             else

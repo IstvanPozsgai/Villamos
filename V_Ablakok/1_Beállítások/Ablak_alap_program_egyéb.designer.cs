@@ -156,6 +156,7 @@ namespace Villamos
             this.Button13 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Takarítócég = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -761,7 +762,7 @@ namespace Villamos
             this.GroupBox3.Controls.Add(this.Mátrix_fajta);
             this.GroupBox3.Location = new System.Drawing.Point(1126, 5);
             this.GroupBox3.Name = "GroupBox3";
-            this.GroupBox3.Size = new System.Drawing.Size(350, 345);
+            this.GroupBox3.Size = new System.Drawing.Size(350, 478);
             this.GroupBox3.TabIndex = 115;
             this.GroupBox3.TabStop = false;
             this.GroupBox3.Text = "Járműtakarítás együtt takarítás";
@@ -814,7 +815,7 @@ namespace Villamos
             this.Mátrix_tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.Mátrix_tábla.RowHeadersVisible = false;
             this.Mátrix_tábla.RowHeadersWidth = 20;
-            this.Mátrix_tábla.Size = new System.Drawing.Size(337, 158);
+            this.Mátrix_tábla.Size = new System.Drawing.Size(337, 291);
             this.Mátrix_tábla.TabIndex = 113;
             this.Mátrix_tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Mátrix_tábla_CellClick);
             // 
@@ -897,7 +898,7 @@ namespace Villamos
             this.GroupBox2.Controls.Add(this.Kötbér_takarítási_fajta);
             this.GroupBox2.Location = new System.Drawing.Point(795, 5);
             this.GroupBox2.Name = "GroupBox2";
-            this.GroupBox2.Size = new System.Drawing.Size(324, 345);
+            this.GroupBox2.Size = new System.Drawing.Size(324, 478);
             this.GroupBox2.TabIndex = 1;
             this.GroupBox2.TabStop = false;
             this.GroupBox2.Text = "Járműtakarítás Kötbér";
@@ -935,7 +936,7 @@ namespace Villamos
             this.Kötbér_tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
             this.Kötbér_tábla.RowHeadersVisible = false;
             this.Kötbér_tábla.RowHeadersWidth = 20;
-            this.Kötbér_tábla.Size = new System.Drawing.Size(314, 158);
+            this.Kötbér_tábla.Size = new System.Drawing.Size(314, 291);
             this.Kötbér_tábla.TabIndex = 113;
             this.Kötbér_tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Kötbér_tábla_CellClick);
             // 
@@ -1019,6 +1020,7 @@ namespace Villamos
             this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.GroupBox1.BackColor = System.Drawing.SystemColors.Highlight;
+            this.GroupBox1.Controls.Add(this.Takarítócég);
             this.GroupBox1.Controls.Add(this.Tak_Ár_frissít);
             this.GroupBox1.Controls.Add(this.tableLayoutPanel3);
             this.GroupBox1.Controls.Add(this.tableLayoutPanel2);
@@ -1026,7 +1028,7 @@ namespace Villamos
             this.GroupBox1.Controls.Add(this.Tak_Ár_Tábla);
             this.GroupBox1.Location = new System.Drawing.Point(2, 5);
             this.GroupBox1.Name = "GroupBox1";
-            this.GroupBox1.Size = new System.Drawing.Size(787, 345);
+            this.GroupBox1.Size = new System.Drawing.Size(787, 478);
             this.GroupBox1.TabIndex = 0;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Takarítási árak";
@@ -1276,7 +1278,7 @@ namespace Villamos
             // Tak_id
             // 
             this.Tak_id.Enabled = false;
-            this.Tak_id.Location = new System.Drawing.Point(3, 30);
+            this.Tak_id.Location = new System.Drawing.Point(3, 37);
             this.Tak_id.Name = "Tak_id";
             this.Tak_id.Size = new System.Drawing.Size(121, 26);
             this.Tak_id.TabIndex = 113;
@@ -1284,7 +1286,7 @@ namespace Villamos
             // Label10
             // 
             this.Label10.AutoSize = true;
-            this.Label10.Location = new System.Drawing.Point(130, 27);
+            this.Label10.Location = new System.Drawing.Point(130, 34);
             this.Label10.Name = "Label10";
             this.Label10.Size = new System.Drawing.Size(75, 20);
             this.Label10.TabIndex = 4;
@@ -1293,7 +1295,7 @@ namespace Villamos
             // Label6
             // 
             this.Label6.AutoSize = true;
-            this.Label6.Location = new System.Drawing.Point(130, 59);
+            this.Label6.Location = new System.Drawing.Point(130, 68);
             this.Label6.Name = "Label6";
             this.Label6.Size = new System.Drawing.Size(139, 20);
             this.Label6.TabIndex = 2;
@@ -1310,7 +1312,7 @@ namespace Villamos
             // Tak_Napszak
             // 
             this.Tak_Napszak.FormattingEnabled = true;
-            this.Tak_Napszak.Location = new System.Drawing.Point(275, 30);
+            this.Tak_Napszak.Location = new System.Drawing.Point(275, 37);
             this.Tak_Napszak.Name = "Tak_Napszak";
             this.Tak_Napszak.Size = new System.Drawing.Size(121, 28);
             this.Tak_Napszak.TabIndex = 10;
@@ -1318,7 +1320,7 @@ namespace Villamos
             // Tak_Érv_k
             // 
             this.Tak_Érv_k.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Tak_Érv_k.Location = new System.Drawing.Point(275, 62);
+            this.Tak_Érv_k.Location = new System.Drawing.Point(275, 71);
             this.Tak_Érv_k.Name = "Tak_Érv_k";
             this.Tak_Érv_k.Size = new System.Drawing.Size(121, 26);
             this.Tak_Érv_k.TabIndex = 7;
@@ -1326,14 +1328,14 @@ namespace Villamos
             // Tak_érv_V
             // 
             this.Tak_érv_V.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Tak_érv_V.Location = new System.Drawing.Point(524, 62);
+            this.Tak_érv_V.Location = new System.Drawing.Point(524, 71);
             this.Tak_érv_V.Name = "Tak_érv_V";
             this.Tak_érv_V.Size = new System.Drawing.Size(121, 26);
             this.Tak_érv_V.TabIndex = 8;
             // 
             // Tak_Ár
             // 
-            this.Tak_Ár.Location = new System.Drawing.Point(524, 30);
+            this.Tak_Ár.Location = new System.Drawing.Point(524, 37);
             this.Tak_Ár.Name = "Tak_Ár";
             this.Tak_Ár.Size = new System.Drawing.Size(121, 26);
             this.Tak_Ár.TabIndex = 9;
@@ -1350,7 +1352,7 @@ namespace Villamos
             // Label9
             // 
             this.Label9.AutoSize = true;
-            this.Label9.Location = new System.Drawing.Point(402, 27);
+            this.Label9.Location = new System.Drawing.Point(402, 34);
             this.Label9.Name = "Label9";
             this.Label9.Size = new System.Drawing.Size(29, 20);
             this.Label9.TabIndex = 3;
@@ -1367,7 +1369,7 @@ namespace Villamos
             // Label12
             // 
             this.Label12.AutoSize = true;
-            this.Label12.Location = new System.Drawing.Point(402, 59);
+            this.Label12.Location = new System.Drawing.Point(402, 68);
             this.Label12.Name = "Label12";
             this.Label12.Size = new System.Drawing.Size(116, 20);
             this.Label12.TabIndex = 6;
@@ -1417,7 +1419,7 @@ namespace Villamos
             dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.Tak_Ár_Tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle15;
             this.Tak_Ár_Tábla.RowHeadersWidth = 30;
-            this.Tak_Ár_Tábla.Size = new System.Drawing.Size(777, 103);
+            this.Tak_Ár_Tábla.Size = new System.Drawing.Size(777, 236);
             this.Tak_Ár_Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tak_Ár_Tábla.TabIndex = 112;
             this.Tak_Ár_Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tak_Ár_Tábla_CellClick);
@@ -1462,9 +1464,9 @@ namespace Villamos
             this.email_tabla.Size = new System.Drawing.Size(1472, 477);
             this.email_tabla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.email_tabla.TabIndex = 0;
-            this.email_tabla.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.email_tabla_CellBeginEdit);
-            this.email_tabla.RowValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.email_tabla_RowValidated);
-            this.email_tabla.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.email_tabla_UserDeletingRow);
+            this.email_tabla.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.Email_tabla_CellBeginEdit);
+            this.email_tabla.RowValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.Email_tabla_RowValidated);
+            this.email_tabla.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.Email_tabla_UserDeletingRow);
             // 
             // Button13
             // 
@@ -1492,6 +1494,19 @@ namespace Villamos
             this.Holtart.Size = new System.Drawing.Size(1040, 25);
             this.Holtart.TabIndex = 1;
             this.Holtart.Visible = false;
+            // 
+            // Takarítócég
+            // 
+            this.Takarítócég.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.Takarítócég.BackgroundImage = global::Villamos.Properties.Resources.Document_preferences;
+            this.Takarítócég.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Takarítócég.Location = new System.Drawing.Point(670, 20);
+            this.Takarítócég.Name = "Takarítócég";
+            this.Takarítócég.Size = new System.Drawing.Size(45, 45);
+            this.Takarítócég.TabIndex = 207;
+            this.toolTip1.SetToolTip(this.Takarítócég, "Takatítási cégadatok rögzítései/módosítása az adatokat");
+            this.Takarítócég.UseVisualStyleBackColor = true;
+            this.Takarítócég.Click += new System.EventHandler(this.Takarítócég_Click);
             // 
             // Ablak_alap_program_egyéb
             // 
@@ -1647,5 +1662,6 @@ namespace Villamos
         internal TabPage tabPage5;
         private TableLayoutPanel tableLayoutPanel5;
         private Zuby.ADGV.AdvancedDataGridView email_tabla;
+        internal Button Takarítócég;
     }                    
 }

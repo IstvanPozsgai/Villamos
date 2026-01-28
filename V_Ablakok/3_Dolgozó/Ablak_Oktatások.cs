@@ -7,9 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -1345,8 +1343,8 @@ namespace Villamos
                 MyX.Rácsoz(munkalap, "a12:g12");
                 MyX.Rácsoz(munkalap, $"a13:g{sor}");
 
-                string fénykép = $@"{Application.StartupPath}\Főmérnökség\adatok\Ábrák\BKV.png";
-         
+                string fénykép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\BKV.png";
+
                 // '**********************************************
                 // '**Nyomtatási beállítások                    **
                 // '**********************************************
@@ -1360,22 +1358,23 @@ namespace Villamos
                     LáblécKözép = "&P/&N",
                     BalMargó = 15,
                     JobbMargó = 15,
-                    FelsőMargó = 21,
+                    FelsőMargó = 19,
                     AlsóMargó = 19,
                     FejlécMéret = 10,
                     LáblécMéret = 13,
                     VízKözép = true,
                     Álló = true,
                     LapSzéles = 1,
-                    Képútvonal= fénykép
+                    Képútvonal = fénykép
                 };
                 MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
                 MyX.ExcelMentés(fájlexc);
                 MyX.ExcelBezárás();
+                MyF.Megnyitás(fájlexc);
+
                 Holtart.Ki();
                 MessageBox.Show("A nyomtatvány elkészült. ", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {

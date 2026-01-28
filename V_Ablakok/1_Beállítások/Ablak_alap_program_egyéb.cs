@@ -7,13 +7,11 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Adatszerkezet;
 using static System.IO.File;
-using MyE = Villamos.Module_Excel;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
+
 
 namespace Villamos
 {
@@ -28,6 +26,7 @@ namespace Villamos
         readonly Kezelő_Jármű_Takarítás_Mátrix KétJárműtakMátr = new Kezelő_Jármű_Takarítás_Mátrix();
         readonly Kezelő_Kiegészítő_Sérülés KézSérülés = new Kezelő_Kiegészítő_Sérülés();
         readonly Kezelő_Kiegészítő_Email KézEmail = new Kezelő_Kiegészítő_Email();
+
         #endregion
 
 
@@ -46,7 +45,6 @@ namespace Villamos
 
         private void AblakProgramegyéb_Load(object sender, EventArgs e)
         {
-            new Kezelő_Osztály_Adat();
         }
 
         #region Alap
@@ -271,7 +269,7 @@ namespace Villamos
             try
             {
                 string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\alapegyéb.html";
-                MyE.Megnyitás(hely);
+                MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
             {
@@ -361,7 +359,7 @@ namespace Villamos
                 MyX.DataGridViewToXML(fájlexc, SAPTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -698,7 +696,7 @@ namespace Villamos
 
                 MyX.DataGridViewToXML(fájlexc, TáblaOsztály);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1391,7 +1389,7 @@ namespace Villamos
                 MyX.DataGridViewToXML(fájlexc, Tak_Ár_Tábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1485,7 +1483,7 @@ namespace Villamos
                 MyX.ExcelBezárás();
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1935,6 +1933,7 @@ namespace Villamos
 
         #endregion
 
+
         #region E-mail cím lapfül
         private void Start_Email()
         {
@@ -1981,7 +1980,7 @@ namespace Villamos
         }
 
         // Új cím vagy módosítás kezelése
-        private void email_tabla_RowValidated(object sender, DataGridViewCellEventArgs e)
+        private void Email_tabla_RowValidated(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
 
@@ -2036,7 +2035,7 @@ namespace Villamos
             email_tabla.Refresh();
         }
 
-        private void email_tabla_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        private void Email_tabla_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
             var row = e.Row;
             string cim = row.Cells["E-mail cím"].Value?.ToString();
@@ -2059,13 +2058,14 @@ namespace Villamos
         }
 
         // Eredeti érték mentése szerkesztés előtt
-        private void email_tabla_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        private void Email_tabla_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
             var sor = email_tabla.Rows[e.RowIndex];
             sor.Tag = sor.Cells["E-mail cím"].Value?.ToString();
         }
 
         #endregion
+
         private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
         {
             try
@@ -2091,5 +2091,30 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+        #region Takarítócég
+
+        private void Takarítócég_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Takarítás_Szolgáltató Ablak = new Takarítás_Szolgáltató();
+                Ablak.SzolgálatatóMódosítás();
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
+
+
     }
 }

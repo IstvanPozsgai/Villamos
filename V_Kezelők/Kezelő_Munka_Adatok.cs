@@ -4,7 +4,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -16,7 +16,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string Telephely, int Év)
         {
-            hely = $@"{Application.StartupPath}\{Telephely}\adatok\Munkalap\munkalapelszámoló_{Év}.mdb";
+            hely = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalapelszámoló_{Év}.mdb";
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Munkalapévestábla(hely.KönyvSzerk());
         }
 

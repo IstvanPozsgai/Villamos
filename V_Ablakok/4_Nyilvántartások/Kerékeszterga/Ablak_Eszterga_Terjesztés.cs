@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Villamos.Kezelők;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 
 namespace Villamos.Villamos_Ablakok.Kerékeszterga
 {
@@ -118,8 +118,9 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                     }
                 }
                 Tábla.Refresh();
-                Tábla.ClearSelection();
+               
                 Tábla.Visible = true;
+                Tábla.ClearSelection();
             }
             catch (HibásBevittAdat ex)
             {

@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
+using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Munkakör
     {
         readonly string jelszó = "ladányis";
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\Főmérnökség_munkakör.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Főmérnökség_munkakör.mdb";
 
         public Kezelő_Munkakör()
         {

@@ -6,9 +6,9 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés;
-using MyE = Villamos.Module_Excel;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
+using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
 {
@@ -161,7 +161,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                 Btn_TTP_Rögz.Visible = false;
                 BtnPDFFel.Visible = false;
 
-                // csak főmérnökségi belépéssel törölhető
+                // csak Főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
 
@@ -419,7 +419,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             {
                 Új_Ablak_PDF_Feltöltés?.Close();
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\TTP\PDF\";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\TTP\PDF\";
                 Új_Ablak_PDF_Feltöltés = new Ablak_PDF_Feltöltés(hely, DtTTPDátum.Value, 0, 0, CmbAzonosító.Text.Trim(), null, "TTP", false)
                 {
                     StartPosition = FormStartPosition.CenterScreen
@@ -452,7 +452,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             {
                 Új_Ablak_PDF_Feltöltés?.Close();
 
-                string hely = $@"{Application.StartupPath}\Főmérnökség\adatok\TTP\PDF\";
+                string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\TTP\PDF\";
                 Új_Ablak_PDF_Feltöltés = new Ablak_PDF_Feltöltés(hely, DtTTPDátum.Value, 0, 0, CmbAzonosító.Text.Trim(), null, "TTP", true)
                 {
                     StartPosition = FormStartPosition.CenterScreen
@@ -498,10 +498,10 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
 
                 DataTable ValamiTábla;
                 ValamiTábla = AdatTábla_TTP_TáblaFeltölt(AdatokTeljes);
-                MyE.DataTableToExcel(fájlexc, ValamiTábla);
+                MyX.DataTableToXML(fájlexc, ValamiTábla);
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                MyE.Megnyitás(fájlexc);
+                MyF.Megnyitás(fájlexc);
                 BtnExcel.Visible = true;
             }
             catch (HibásBevittAdat ex)

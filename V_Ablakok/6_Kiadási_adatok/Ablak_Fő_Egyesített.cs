@@ -6,11 +6,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-<<<<<<< HEAD
-using Villamos.V_Adatszerkezet;
-using Villamos.Villamos_Adatszerkezet;
-=======
->>>>>>> master
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -1069,11 +1064,7 @@ namespace Villamos
                 for (int i = 1; i <= 15; i++)
                 {
                     MyX.Link_beillesztés(munkalap, "a" + (i + 1).ToString(), Cím[i]);
-<<<<<<< HEAD
-                    MyX.Kiir(Cím[i], "b" + (i + 1).ToString());
-=======
                     MyX.Kiir(Leírás[i], "b" + (i + 1).ToString());
->>>>>>> master
                 }
                 MyX.Oszlopszélesség(munkalap, "A:B");
 
@@ -2853,17 +2844,6 @@ namespace Villamos
                 {
 
                     MyX.Kiir(DateTime.Parse(rekord.Dátum.ToString()).ToString("yyyy.MM.dd"), "A" + i.ToString());
-<<<<<<< HEAD
-                    MyX.Kiir("#SZÁME#" + rekord.Napszak, "B" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Telephely, "C" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Szolgálat, "D" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Típuselőírt, "E" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Típuskiadott, "f" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Viszonylat, "g" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Forgalmiszám, "h" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Tervindulás.ToString(), "i" + i.ToString());
-                    MyX.Kiir("#SZÁME#" + rekord.Azonosító, "j" + i.ToString());
-=======
                     MyX.Kiir(rekord.Napszak, "B" + i.ToString());
                     MyX.Kiir(rekord.Telephely, "C" + i.ToString());
                     MyX.Kiir(rekord.Szolgálat, "D" + i.ToString());
@@ -2873,7 +2853,6 @@ namespace Villamos
                     MyX.Kiir(rekord.Forgalmiszám, "h" + i.ToString());
                     MyX.Kiir(rekord.Tervindulás.ToString("HH:mm:ss"), "i" + i.ToString());
                     MyX.Kiir(rekord.Azonosító, "j" + i.ToString());
->>>>>>> master
                     Holtart.Lép();
                     i += 1;
                 }
@@ -3082,31 +3061,12 @@ namespace Villamos
                     Összesítés_módja = Összesít_módja,
                     SorNév = sorNév,
                     OszlopNév = oszlopNév,
-<<<<<<< HEAD
-                    SzűrőNév = SzűrőNév
-                };
-
-                MyX.Kimutatás_Fő(Bekimutat);
-
-                Dictionary<string, double> oszlopMeretek = new Dictionary<string, double>
-                {
-                    { "A:A", 16 },
-                    { "B:B", 9 },
-                    { "C:C", 15 },
-                    { "D:F", 13 },
-                    { "G:H", 12 },
-                    { "I:J", 19 }
-                };
-
-                MyX.Oszlopszélesség_Csoportos(munkalap, oszlopMeretek);
-=======
                     SzűrőNév = SzűrőNév,
                     Többszintű = true
                 };
 
                 MyX.Kimutatás_Fő(Bekimutat);
                 MyX.Oszlopszélesség(munkalap, "A:J", 20);
->>>>>>> master
             }
             catch (Exception ex)
             {
@@ -3189,10 +3149,6 @@ namespace Villamos
                 // A-B Oszlop formázása
                 MyX.Oszlopszélesség(munkalap, "B:B", 2);
                 MyX.Oszlopszélesség(munkalap, "A:A");
-<<<<<<< HEAD
-                //  MyX.Vastagkeret(munkalap, "A4:B" + (hónapnap + 5).ToString());
-=======
->>>>>>> master
                 MyX.Rácsoz(munkalap, "A4:B" + (hónapnap + 5).ToString());
                 // állomány felirat
                 MyX.Egyesít(munkalap, MyF.Oszlopnév(3) + "3:" + MyF.Oszlopnév(oszlopmax) + "3");
@@ -3242,15 +3198,8 @@ namespace Villamos
                     Holtart.Lép();
                 }
                 // megformázzuk
-<<<<<<< HEAD
-                // MyX.Vastagkeret(munkalap, "c4:" + MyF.Oszlopnév(oszlopmax) + (hónapnap + 5).ToString());
                 MyX.Rácsoz(munkalap, "c4:" + MyF.Oszlopnév(oszlopmax) + (hónapnap + 5).ToString());
                 MyX.Rácsoz(munkalap, "c4:" + MyF.Oszlopnév(oszlopmax) + "5");
-                // MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlopmax) + "4:" + MyF.Oszlopnév(oszlopmax) + (hónapnap + 5).ToString());
-=======
-                MyX.Rácsoz(munkalap, "c4:" + MyF.Oszlopnév(oszlopmax) + (hónapnap + 5).ToString());
-                MyX.Rácsoz(munkalap, "c4:" + MyF.Oszlopnév(oszlopmax) + "5");
->>>>>>> master
                 MyX.Betű(munkalap, MyF.Oszlopnév(oszlopmax) + "4:" + MyF.Oszlopnév(oszlopmax) + (hónapnap + 5).ToString(), BeBetűVD);
                 // Oszlop szélesség beállítás
                 MyX.Oszlopszélesség(munkalap, "C:" + MyF.Oszlopnév(oszlopmax));

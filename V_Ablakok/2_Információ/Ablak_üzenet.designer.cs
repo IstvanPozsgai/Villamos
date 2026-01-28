@@ -177,6 +177,7 @@ namespace Villamos
             this.Dátumtól.Name = "Dátumtól";
             this.Dátumtól.Size = new System.Drawing.Size(107, 26);
             this.Dátumtól.TabIndex = 3;
+            this.Dátumtól.ValueChanged += new System.EventHandler(this.Dátumtól_ValueChanged);
             // 
             // Dátumig
             // 
@@ -185,6 +186,7 @@ namespace Villamos
             this.Dátumig.Name = "Dátumig";
             this.Dátumig.Size = new System.Drawing.Size(107, 26);
             this.Dátumig.TabIndex = 4;
+            this.Dátumig.ValueChanged += new System.EventHandler(this.Dátumig_ValueChanged);
             // 
             // cmbNév
             // 

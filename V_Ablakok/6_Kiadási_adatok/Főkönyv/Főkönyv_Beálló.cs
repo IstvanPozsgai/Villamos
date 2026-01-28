@@ -4,8 +4,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Adatszerkezet;
-using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -182,9 +180,9 @@ namespace Villamos.Villamos_Nyomtatványok
                     JobbMargó = 6,
                     LáblécMéret = 8,
                     FejlécMéret = 8,
-                    Papírméret= papírméret  ,
-                    VízKözép=true ,
-                    FüggKözép=true 
+                    Papírméret = papírméret,
+                    VízKözép = true,
+                    FüggKözép = true
                 };
                 MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 

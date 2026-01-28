@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
-using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
@@ -463,7 +461,7 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 JJavítás.Enabled = false;
                 Vezényel.Enabled = false;
 
-                // csak főmérnökségi belépéssel törölhető
+                // csak Főmérnökségi belépéssel törölhető
                 if (Program.PostásTelephely.Trim() == "Főmérnökség")
                 {
                     MezőEngedélyezés(true);
@@ -570,13 +568,13 @@ namespace Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös
                 if (CiklusrendCombo.SelectedIndex == CiklusrendCombo.Items.Count - 1) throw new HibásBevittAdat("Nincs több választható cillus rend.");
                 if (CiklusrendCombo.Items.Count <= index + 1) throw new HibásBevittAdat("A kiválasztott Ciklus rend az utolós így nem lehet tovább léptetni.");
                 if (!Adat.KövV.Contains("V3")) throw new HibásBevittAdat($"A következő sorszámú {Adat.KövV_sorszám} vizsgálata {Adat.KövV}, \nmely esetén nem lehet ciklus rendet változtatni.");
-                string VizsgfokEzőlző= Vizsgfok.Text.Trim ();
+                string VizsgfokEzőlző = Vizsgfok.Text.Trim();
 
                 //Megnézzük, hogy mi volt az utolsó rögzített
                 Adat_T5C5_Kmadatok UtolsóKM = (from a in AdatokKmAdatok
                                                where a.Azonosító == Adat.Azonosító
                                                && a.Vizsgdátumk < Adat.Vizsgdátumk
-                                               && a .Törölt == false
+                                               && a.Törölt == false
                                                orderby a.Vizsgdátumk descending
                                                select a).FirstOrDefault();
                 if (UtolsóKM == null) return;

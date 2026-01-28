@@ -6,9 +6,7 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Adatbázis_Funkció;
-using Villamos.Villamos_Adatszerkezet;
-using MyE = Villamos.Module_Excel;
-using MyF = Függvénygyűjtemény;
+
 
 namespace Villamos
 {
@@ -194,7 +192,7 @@ namespace Villamos
             try
             {   // az új megálló kocsikat rögzíti az MyAba és frissíti a hiba leírás szöveget
                 // xnapos tábla
-                string helyelk = $@"{Application.StartupPath}\{Telephely.Trim()}\adatok\hibanapló\Elkészült{Dátum.Year}.mdb";
+                string helyelk = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\hibanapló\Elkészült{Dátum.Year}.mdb";
                 if (!File.Exists(helyelk)) Adatbázis_Létrehozás.Javításiátfutástábla(helyelk);
 
                 List<Adat_Jármű_Javításiátfutástábla> AdatokXnapos = KézXnapos.Lista_Adatok(Telephely.Trim());

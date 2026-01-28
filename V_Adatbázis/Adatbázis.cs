@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
-using System.IO;
 using Villamos;
 
 internal static partial class Adatbázis
@@ -197,61 +196,5 @@ internal static partial class Adatbázis
             return válasz;
         }
     }
-    /// <summary>
-    /// Adatbázis karbantartása (Tömörítés).
-    /// </summary>
-    public static void AdatbazisTomorites(string forrasFajl, string jelszo)
-    {
-        string ideiglenesFajl = Path.Combine(Path.GetDirectoryName(forrasFajl), "temp_compact.mdb");
 
-        // Minden kapcsolat elengedése a memóriából
-        System.Data.OleDb.OleDbConnection.ReleaseObjectPool();
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-
-        // Takarítás előző futásból
-        if (File.Exists(ideiglenesFajl)) File.Delete(ideiglenesFajl);
-
-        object dbEngine = null;
-
-        try
-        {
-            Type dbEngineType = Type.GetTypeFromProgID("DAO.DBEngine.36");
-
-            if (dbEngineType == null)
-                // Ha mégis hiányozna, megpróbáljuk az újabbat
-                dbEngineType = Type.GetTypeFromProgID("DAO.DBEngine.120");
-
-            if (dbEngineType != null)
-            {
-                dbEngine = Activator.CreateInstance(dbEngineType);
-
-                // Tömörítés végrehajtása
-                // Paraméterek: Source, Dest, Locale, Options, Password
-                dbEngine.GetType().InvokeMember("CompactDatabase",
-                    System.Reflection.BindingFlags.InvokeMethod,
-                    null,
-                    dbEngine,
-                    new object[] { forrasFajl, ideiglenesFajl, null, null, ";pwd=" + jelszo });
-
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(dbEngine);
-                dbEngine = null;
-
-                // Fájlok cseréje
-                File.Delete(forrasFajl);
-                File.Move(ideiglenesFajl, forrasFajl);
-            }
-        }
-        catch (Exception ex)
-        {
-            // Ha hiba van nem állítjuk meg a programot,
-            // csak naplózzuk, és megyünk tovább az eredeti fájllal.
-            HibaNapló.Log($"Karbantartás hiba (nem kritikus): {ex.Message}", "Adatbázis.AdatbazisTomorites", "", "", 0);
-        }
-        finally
-        {
-            if (dbEngine != null) System.Runtime.InteropServices.Marshal.ReleaseComObject(dbEngine);
-            if (File.Exists(ideiglenesFajl)) File.Delete(ideiglenesFajl);
-        }
-    }
 }

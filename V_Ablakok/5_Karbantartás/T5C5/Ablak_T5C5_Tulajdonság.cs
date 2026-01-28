@@ -9,13 +9,8 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Ablakok._5_Karbantartás.Karbantartás_Közös;
-using Villamos.V_Adatszerkezet;
 using Villamos.V_MindenEgyéb;
-<<<<<<< HEAD
-using Villamos.Villamos_Adatszerkezet;
-=======
 using DataTable = System.Data.DataTable;
->>>>>>> master
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -63,17 +58,17 @@ namespace Villamos
         {
             try
             {
-                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
-                //ha nem akkor a régit használjuk
-                if (Program.PostásJogkör.Substring(0, 1) == "R")
-                {
-                    TelephelyekFeltöltéseÚj();
-                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
-                }
-                else
+                //Ha van 0-tól különböző akkor a régi jogosultságkiosztást használjuk
+                //ha mind 0 akkor a GombLathatosagKezelo-t használjuk
+                if (Program.PostásJogkör.Substring(0, 1) != "R")
                 {
                     Telephelyekfeltöltése();
                     Jogosultságkiosztás();
+                }
+                else
+                {
+                    TelephelyekFeltöltéseÚj();
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 }
                 AdatokCiklus = KézCiklus.Lista_Adatok();
                 Pályaszám_feltöltés();
@@ -209,11 +204,7 @@ namespace Villamos
             try
             {
                 string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Tulajdonság_T5C5.html";
-<<<<<<< HEAD
-                Module_Excel.Megnyitás(hely);
-=======
                 MyF.Megnyitás(hely);
->>>>>>> master
             }
             catch (HibásBevittAdat ex)
             {
@@ -881,11 +872,7 @@ namespace Villamos
                 DateTime Kezdet = DateTime.Now;
                 MyX.DataGridViewToXML(fájlexc, Tábla_lekérdezés);
                 MessageBox.Show($"Elkészült az Excel tábla: {fájlexc}\n idő alatt:{DateTime.Now - Kezdet}", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-<<<<<<< HEAD
-                MyX.ExcelMegnyitás(fájlexc);
-=======
                 MyF.Megnyitás(fájlexc);
->>>>>>> master
             }
             catch (HibásBevittAdat ex)
             {
@@ -926,11 +913,7 @@ namespace Villamos
             timer1.Enabled = false;
             Holtart.Ki();
             MessageBox.Show($"Az Excel tábla elkészült !\n Futási idő{DateTime.Now - Kezdet}", "Tájékoztató", MessageBoxButtons.OK, MessageBoxIcon.Information);
-<<<<<<< HEAD
-            MyX.ExcelMegnyitás(_fájlexc);
-=======
             MyF.Megnyitás(_fájlexc);
->>>>>>> master
 
         }
 
@@ -1161,11 +1144,7 @@ namespace Villamos
                 MyX.DataTableToXML(fájlexc, TáblaAdat);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-<<<<<<< HEAD
-                MyX.ExcelMegnyitás(fájlexc);
-=======
                 MyF.Megnyitás(fájlexc);
->>>>>>> master
             }
             catch (HibásBevittAdat ex)
             {
@@ -1866,26 +1845,6 @@ namespace Villamos
                 for (int i = 1; i < cím.Length; i++)
                     MyX.Munkalap_Új(cím[i].Trim());
 
-<<<<<<< HEAD
-                FőHoltart.Be(5);
-
-                // megnyitjuk az adatbázist   
-                //Részletes adatokat a Adatok lapon készítjük el 
-                string hely = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Kmadatok.mdb";
-                DataTable dataTable = MyF.ToDataTable(KézElőterv.Lista_Adatok(hely));
-                utolsósor = dataTable.Rows.Count;
-
-                munkalap = "Adatok";
-                MyX.Munkalap_betű(munkalap, BeBetű);
-                MyX.Munkalap_Adattábla(munkalap, dataTable);
-
-                munkalap = "Tartalom";
-                // ****************************************************
-                // Elkészítjük a tartalom jegyzéket
-                // ****************************************************
-                MyX.Munkalap_aktív(munkalap);
-
-=======
                 Holtart.Be(5);
 
                 // megnyitjuk az adatbázist   
@@ -1904,7 +1863,6 @@ namespace Villamos
                 // ****************************************************
                 MyX.Munkalap_aktív(munkalap);
 
->>>>>>> master
                 MyX.Kiir("Munkalapfül", "a1");
                 MyX.Kiir("Leírás", "b1");
                 for (int i = 1; i <= 4; i++)
@@ -1919,15 +1877,6 @@ namespace Villamos
                 // ****************************************************
                 // Elkészítjük a munkalapokat
                 // ****************************************************
-<<<<<<< HEAD
-                FőHoltart.Lép();
-                AdatokFormázása(utolsósor);
-                FőHoltart.Lép();
-                Kimutatás();
-                FőHoltart.Lép();
-                Kimutatás1();
-                FőHoltart.Lép();
-=======
                 Holtart.Lép();
                 AdatokFormázása(utolsósor);
                 Holtart.Lép();
@@ -1935,7 +1884,6 @@ namespace Villamos
                 Holtart.Lép();
                 Kimutatás1();
                 Holtart.Lép();
->>>>>>> master
                 Kimutatás2();
                 munkalap = "Tartalom";
                 MyX.Munkalap_aktív(munkalap);
@@ -1966,15 +1914,9 @@ namespace Villamos
                 MyX.SorBeszúrás(munkalap, 1, 2);  //beszúrunk két sort előre
                 MyX.Háttérszín(munkalap, $"A3:AG3", Color.White); //Visszaállítjuk a háttér színt
                 MyX.Betű(munkalap, $"A3:AG3", BeBetűF);
-<<<<<<< HEAD
-
-                MyX.Link_beillesztés(munkalap, "A1", "Tartalom");
-                MyX.Munkalap_aktív(munkalap);
-=======
 
                 MyX.Link_beillesztés(munkalap, "A1", "Tartalom");
 
->>>>>>> master
                 //// fejlécet kiírjuk
                 MyX.Kiir("ID", "a3");
                 MyX.Kiir("Pályaszám", "b3");
@@ -2292,10 +2234,6 @@ namespace Villamos
                 MyX.Szűrés("Adatok", "A", "X", 1);
 
                 //Nyomtatási terület kijelülése
-<<<<<<< HEAD
-                // MyX.NyomtatásiTerület_részletes("Adatok", "A1:X" + utolsósor, "$1:$1", "", true);
-=======
->>>>>>> master
                 Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
                 {
                     NyomtatásiTerület = "A1:X" + utolsósor,
@@ -2331,12 +2269,6 @@ namespace Villamos
 
                 MyX.ExcelMentés(_fájlexc);
                 MyX.ExcelBezárás();
-<<<<<<< HEAD
-
-                MyF.Megnyitás(_fájlexc);
-                FőHoltart.Ki();
-=======
->>>>>>> master
 
                 MyF.Megnyitás(_fájlexc);
             }
@@ -2438,11 +2370,7 @@ namespace Villamos
                 MyX.DataGridViewToXML(fájlexc, Tábla1);
 
                 MessageBox.Show("Elkészült az Excel tábla: " + fájlexc, "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
-<<<<<<< HEAD
-                MyX.ExcelMegnyitás(fájlexc);
-=======
                 MyF.Megnyitás(fájlexc);
->>>>>>> master
             }
             catch (HibásBevittAdat ex)
             {
@@ -2490,13 +2418,13 @@ namespace Villamos
             {
                 Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
                 if (Cmbtelephely.Text.Trim() == "") return;
-                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
-                //ha nem akkor a régit használjuk
-                if (Program.PostásJogkör.Substring(0, 1) == "R")
-                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
-                else
+                if (Program.PostásJogkör.Any(c => c != '0'))
                 {
 
+                }
+                else
+                {
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
                 }
 
             }

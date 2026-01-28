@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_Adatszerkezet;
-using Villamos.Villamos_Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -159,7 +157,7 @@ namespace Villamos.Villamos_Nyomtatványok
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1 + j * 8) + "5:" + MyF.Oszlopnév(7 + j * 8) + "46");
                     MyX.Rácsoz(munkalap, MyF.Oszlopnév(1 + j * 8) + "46:" + MyF.Oszlopnév(7 + j * 8) + "46");
 
-                    MyX.Kiir("#KÉPLET#=COUNTA(R[-40]C:R[-1]C)", MyF.Oszlopnév(2 + j * 8) + "46");
+                    MyX.Kiir("#KÉPLET#=COUNTIF(R[-40]C:R[-1]C,\"X\")", MyF.Oszlopnév(2 + j * 8) + "46");
                 }
                 MyX.Sormagasság(munkalap, "46:47", 30);
                 MyX.Vastagkeret(munkalap, MyF.Oszlopnév(1 + (oszlopismét - 1) * 8) + "47:" + MyF.Oszlopnév(7 + (oszlopismét - 1) * 8) + "47");
@@ -652,7 +650,7 @@ namespace Villamos.Villamos_Nyomtatványok
                     {
                         if (Cmbtelephely.Trim() != VendégAdat.KiadóTelephely)
                         {
-                           MyX.Kiir("", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
+                            MyX.Kiir("", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
                             MyX.Egyesít(munkalap, MyF.Oszlopnév(oszlop + 2) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop + 6) + $"{sor}");
                             MyX.Kiir(VendégAdat.KiadóTelephely, MyF.Oszlopnév(oszlop + 2) + $"{sor}");
                         }
@@ -662,7 +660,6 @@ namespace Villamos.Villamos_Nyomtatványok
                     if (sor >= 46)
                     {
                         MyX.Kiir("Össz", MyF.Oszlopnév(oszlop) + $"{sor}");
-                        //"=COUNTIF(R[-29]C:R[-4]C,""X"")"
                         MyX.Kiir("#KÉPLET#=COUNTIF(R[-" + Math.Abs(sor - blokkeleje).ToString() + "]C:R[-1]C,\"X\")", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
                         MyX.Rácsoz(munkalap, MyF.Oszlopnév(oszlop) + blokkeleje.ToString() + ":" + MyF.Oszlopnév(oszlop + 6) + $"{sor}");
                         MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop + 6) + $"{sor}");

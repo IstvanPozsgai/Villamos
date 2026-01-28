@@ -9,10 +9,7 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Ablakok._4_Nyilvántartások.Takarítás;
 using Villamos.V_Ablakok._7_Gondnokság.Épület_takarítás;
-using Villamos.V_Adatszerkezet;
 using Villamos.Villamos_Ablakok._4_Nyilvántartások.Jármű_Takarítás;
-using Villamos.Villamos_Adatszerkezet;
-
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -353,10 +350,10 @@ namespace Villamos
         private void Gombok()
         {
             // színek alaphelyzetbe
-            J1Mentés.BackColor = Color.Silver;
-            LétszámMentés.BackColor = Color.Silver;
-            JK_Mentés.BackColor = Color.Silver;
-            Opció_mentés.BackColor = Color.Silver;
+            J1Mentés.BackColor = Color.WhiteSmoke;
+            LétszámMentés.BackColor = Color.WhiteSmoke;
+            JK_Mentés.BackColor = Color.WhiteSmoke;
+            Opció_mentés.BackColor = Color.WhiteSmoke;
 
             GroupBox1.BackColor = Color.Blue;
             GroupBox2.BackColor = Color.Blue;
@@ -1131,7 +1128,7 @@ namespace Villamos
                                                                      orderby a.Szerelvényszám, a.Azonosító ascending
                                                                      select a).ToList();
 
-
+                Ütemezés_lista.Items.Add(fajta);
                 foreach (Adat_Jármű_Takarítás_Vezénylés rekord in EgyVezénylés)
                 {
                     if (szerelvény == 0) szerelvény = rekord.Szerelvényszám;
@@ -1713,6 +1710,7 @@ namespace Villamos
                 Takarítottkocsik();
 
                 AcceptButton = JK_Mentés;
+                Gombok();
                 JK_Mentés.BackColor = Color.LimeGreen;
                 GroupBox4.BackColor = Color.SaddleBrown;
             }
@@ -1967,8 +1965,10 @@ namespace Villamos
                 MessageBox.Show("Az adatok rögzítése megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 AcceptButton = J1Mentés;
+                Gombok();
                 J1Mentés.BackColor = Color.LimeGreen;
                 GroupBox1.BackColor = Color.SaddleBrown;
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -2059,6 +2059,7 @@ namespace Villamos
                 Lét_Viselt.Text = "";
 
                 AcceptButton = LétszámMentés;
+                Gombok();
                 LétszámMentés.BackColor = Color.LimeGreen;
                 GroupBox2.BackColor = Color.SaddleBrown;
                 MessageBox.Show("Az adatok rögzítése megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2167,6 +2168,7 @@ namespace Villamos
                                                                     && a.Napszak == napsz
                                                                     && a.Státus == 1
                                                                     && a.Takarítási_fajta == Opció_lista.Text.Trim()
+                                                                    orderby a.Azonosító descending
                                                                     select a).ToList();
 
                 foreach (Adat_Jármű_Takarítás_Teljesítés rekord in Teljesítés)
@@ -2252,7 +2254,7 @@ namespace Villamos
                 Opció_psz.Focus();
 
                 OpciósKocsik();
-
+                Gombok();
                 AcceptButton = Opció_mentés;
                 Opció_mentés.BackColor = Color.LimeGreen;
                 GroupBox3.BackColor = Color.SaddleBrown;
@@ -2300,8 +2302,41 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void Opció_psz_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Right)
+            {
+                Opció_terület.Focus(); // Átvált a cél szövegdobozra
+                e.Handled = true;    // Megakadályozza a további feldolgozást
+            }
+        }
+
+        private void Opció_psz_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Right)
+            {
+                e.IsInputKey = true; // Fontos: így a KeyDown esemény is meghívódik
+            }
+        }
         #endregion
 
+        private void Opció_terület_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Left)
+            {
+                e.IsInputKey = true; // Fontos: így a KeyDown esemény is meghívódik
+            }
+        }
+
+        private void Opció_terület_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Left)
+            {
+                Opció_psz.Focus(); // Átvált a cél szövegdobozra
+                e.Handled = true;    // Megakadályozza a további feldolgozást
+            }
+        }
 
         #region Alapadatok Takarítások
         private void Előzmény_lista_takarítás()
@@ -4542,7 +4577,7 @@ namespace Villamos
                                 MyX.Munkalap_aktív("Összesítő_minden");
                                 // kiírjuk a hivatkozást
                                 MyX.Kiir($"#SZÁME#{megfelelő}", MyF.Oszlopnév(oszlop) + sorb);
-                                MyX.Kiir("#SZÁME#{kötbér}", MyF.Oszlopnév(oszlop + 3) + sorb);
+                                MyX.Kiir($"#SZÁME#{kötbér}", MyF.Oszlopnév(oszlop + 3) + sorb);
                                 // szorzások
                                 MyX.Kiir("#KÉPLET#=RC[-2]*RC[-1]", MyF.Oszlopnév(oszlop + 2) + sorb);
                                 MyX.Betű(munkalap, MyF.Oszlopnév(oszlop + 2) + sorb, beBetű);
@@ -5007,7 +5042,7 @@ namespace Villamos
                 }
                 Holtart.Lép();
 
-                MyX.Kép_beillesztés("Munka1", "A1", $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\képek\Villamos.png", 50, 30, 0.75d, 0.75d);
+                MyX.Kép_beillesztés("Munka1", "A1", $@"{Application.StartupPath}\{Cmbtelephely.Text.Trim()}\képek\Villamos.png", 60, 45, 0.7d, 0.7d);
 
                 sor = 8;
                 MyX.Kiir("Takarítási terv", $"B{sor}");
@@ -5077,7 +5112,9 @@ namespace Villamos
                 Beállítás_Nyomtatás benyom = new Beállítás_Nyomtatás
                 {
                     Munkalap = "Munka1",
-                    NyomtatásiTerület = $"A1:C{sor}"
+                    NyomtatásiTerület = $"A1:C{sor}",
+                    LapMagas = 1,
+                    LapSzéles = 1
                 };
                 MyX.NyomtatásiTerület_részletes("Munka1", benyom);
 
@@ -5672,5 +5709,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
     }
 }
