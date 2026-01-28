@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -107,6 +107,40 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public void Szolgálat_Átír(string Telephely, int Év)
+        {
+            try
+            {
+
+                List<Adat_Munka_Szolgálat> Adatok = Lista_Adatok(Telephely, Év - 1);
+
+                FájlBeállítás(Telephely, Év);
+
+
+                List<string> SzövegGy = new List<string>();
+                foreach (Adat_Munka_Szolgálat rekord in Adatok)
+                {
+                    string szöveg = $"INSERT INTO {táblanév} (költséghely, szolgálat, üzem, A1, A2, A3, A4, A5, A6, A7)  VALUES (";
+                    szöveg += $"'{rekord.Költséghely}',";
+                    szöveg += $"'{rekord.Szolgálat}',";
+                    szöveg += $"'{rekord.Üzem}',";
+                    szöveg += " '0', '0', '0', '0', '0', '0', '0' )";
+                    SzövegGy.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 
 }

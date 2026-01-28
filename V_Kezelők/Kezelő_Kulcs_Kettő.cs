@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
-using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Kezelők
 {
@@ -14,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Villamos10.mdb";
         readonly string jelszó = "fütyülősbarack";
+        readonly string táblanév = "Adattábla";
 
         public Kezelő_Kulcs_Kettő()
         {
@@ -25,7 +25,7 @@ namespace Villamos.Kezelők
             List<Adat_Kulcs> Adatok = new List<Adat_Kulcs>();
             Adat_Kulcs Adat;
 
-            string szöveg = $"SELECT * FROM Adattábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -60,7 +60,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Kulcs Adat in Adatok)
                 {
-                    string szöveg = $"INSERT INTO adattábla ";
+                    string szöveg = $"INSERT INTO {táblanév} ";
                     szöveg += "(adat1, adat2) VALUES ";
                     szöveg += $"('{Adat.Adat1}', ";
                     szöveg += $" '{Adat.Adat2}')";
@@ -83,7 +83,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO adattábla ";
+                string szöveg = $"INSERT INTO {táblanév} ";
                 szöveg += "(adat1, adat2) VALUES ";
                 szöveg += $"('{Adat.Adat1}', ";
                 szöveg += $" '{Adat.Adat2}')";
@@ -108,7 +108,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Kulcs Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE Adattábla SET ";
+                    string szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $" Adat2='{Adat.Adat2}'";
                     szöveg += $" WHERE Adat1 like '%{Adat.Adat1}%'";
                     SzövegGy.Add(szöveg);
@@ -130,7 +130,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE Adattábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" Adat2='{Adat.Adat2}'";
                 szöveg += $" WHERE Adat1 like '%{Adat.Adat1}%'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -146,86 +146,4 @@ namespace Villamos.Kezelők
             }
         }
     }
-
-    public class Kezelő_Kulcs_Három
-    {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Villamos9.mdb";
-        readonly string jelszó = "Tóth_Katalin";
-
-
-        public List<Adat_Kulcs> Lista_Adatok()
-        {
-
-            List<Adat_Kulcs> Adatok = new List<Adat_Kulcs>();
-            Adat_Kulcs Adat;
-            string szöveg = $"SELECT * FROM Adattábla";
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kulcs(
-                                    rekord["adat1"].ToStrTrim(),
-                                    rekord["adat2"].ToStrTrim(),
-                                    rekord["adat3"].ToStrTrim()
-                                    );
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
-            }
-            return Adatok;
-        }
-
-
-
-        public bool ABKULCSvan(List<Adat_Kulcs> AdatokKulcs, string adat1, string adat2, string adat3)
-        {
-            bool válasz = false;
-            foreach (Adat_Kulcs rekord in AdatokKulcs)
-            {
-                string adat1Kód = MyF.MÁSDekódolja(rekord.Adat1.ToString());
-                string adat2Kód = MyF.MÁSDekódolja(rekord.Adat2.ToString());
-                string adat3Kód = MyF.MÁSDekódolja(rekord.Adat3.ToString());
-                if ((adat1.Trim() == adat1Kód.Trim()) && (adat2.Trim() == adat2Kód.Trim()) && (adat3.Trim() == adat3Kód.Trim()))
-                {
-                    válasz = true;
-                    break;
-                }
-            }
-            return válasz;
-        }
-
-        public void Rögzít(string hely, Adat_Kulcs Adat)
-        {
-            try
-            {
-
-                string szöveg = $"INSERT INTO adat ";
-                szöveg += "(adat1, adat2, adat3 ) VALUES ";
-                szöveg += $"('{Adat.Adat1}', ";
-                szöveg += $" '{Adat.Adat2}', ";
-                szöveg += $" '{Adat.Adat3}' )";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, "Kulcs rögzítés", ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-    }
-
 }

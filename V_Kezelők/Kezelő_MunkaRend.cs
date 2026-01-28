@@ -4,8 +4,8 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -139,5 +139,32 @@ namespace Villamos.Kezelők
             }
             return Válasz;
         }
+
+        public void Munkarend_Átír(string Telephely, int Év)
+        {
+
+            FájlBeállítás(Telephely, Év);
+            List<Adat_MunkaRend> AdatokÖ = Lista_Adatok(Telephely, Év - 1);
+            List<Adat_MunkaRend> Adatok = (from a in AdatokÖ
+                                           where a.Látszódik == true
+                                           select a).ToList();
+
+            string helyi = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év}.mdb";
+            int id = 0;
+
+            List<string> SzövegGy = new List<string>();
+            foreach (Adat_MunkaRend rekord in Adatok)
+            {
+                // új adat rögzítése
+                id++;
+                string szöveg = $"INSERT INTO {táblanév} (id, munkarend, látszódik)  VALUES (";
+                szöveg += id + ", ";
+                szöveg += "'" + rekord.Munkarend.Trim() + "', ";
+                szöveg += " true ) ";
+                SzövegGy.Add(szöveg);
+            }
+            MyA.ABMódosítás(helyi, jelszó, SzövegGy);
+        }
+
     }
 }
