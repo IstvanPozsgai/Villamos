@@ -80,7 +80,6 @@
             this.btn_AddData.TabIndex = 1;
             this.btn_AddData.Text = "Rögzít";
             this.btn_AddData.UseVisualStyleBackColor = true;
-            this.btn_AddData.Click += new System.EventHandler(this.btn_AddData_Click);
             // 
             // tblP_ShowUserData
             // 

@@ -12,12 +12,15 @@ namespace Villamos.V_Adatszerkezet
         {
             Username = username;
             Date = date;
+            Age = age;
             TrueOrFalse = trueOrFalse;
         }
 
         public string Username { get; set; }
 
         public DateTime Date { get; set; }
+
+        public int Age { get; set; }
 
         public bool TrueOrFalse { get; set; }
 

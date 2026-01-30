@@ -2150,9 +2150,6 @@
     <PackageReference Include="iTextSharp">
       <Version>5.5.13.4</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.Data.Sqlite">
-      <Version>10.0.2</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.Office.Interop.Excel">
       <Version>15.0.4795.1001</Version>
     </PackageReference>
@@ -2173,9 +2170,6 @@
     </PackageReference>
     <PackageReference Include="PdfiumViewer.Native.x86_64.v8-xfa">
       <Version>2018.4.8.256</Version>
-    </PackageReference>
-    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlcipher">
-      <Version>2.1.11</Version>
     </PackageReference>
     <PackageReference Include="System.Data.OleDb">
       <Version>10.0.0-preview.5.25277.114</Version>
