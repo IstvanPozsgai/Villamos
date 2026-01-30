@@ -210,12 +210,6 @@
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_Ciklus_Sorrend.Designer.cs">
       <DependentUpon>Ablak_Ciklus_Sorrend.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\1_Beállítások\Ablak_SQLite.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="V_Ablakok\1_Beállítások\Ablak_SQLite.Designer.cs">
-      <DependentUpon>Ablak_SQLite.cs</DependentUpon>
-    </Compile>
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_technológia.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -382,7 +376,6 @@
     <Compile Include="V_Adatszerkezet\Adat_Nosztagia_Futás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztalgia_Állomány.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Raktár.cs" />
-    <Compile Include="V_Adatszerkezet\Adat_SQLite.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_AFT.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Beteg.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Csúsztatás.cs" />
@@ -913,7 +906,6 @@
     <Compile Include="V_Kezelők\Kezelő_Nosztalgia_Állomány.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oldalok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Raktár.cs" />
-    <Compile Include="V_Kezelők\Kezelő_SQLite.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szatube_Aft.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szatube_Beteg.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szatube_Csúsztatás.cs" />
@@ -1492,9 +1484,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_Ciklus_Sorrend.resx">
       <DependentUpon>Ablak_Ciklus_Sorrend.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_SQLite.resx">
-      <DependentUpon>Ablak_SQLite.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_technológia.resx">
       <DependentUpon>Ablak_technológia.cs</DependentUpon>
