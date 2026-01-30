@@ -268,7 +268,7 @@ namespace Villamos
             Elutasít_gomb.Enabled = false;
 
             // Kérelem
-            BtnOktatásÚj.Enabled = false;
+            BtnÚjEngedély.Enabled = false;
             BtnKérelemPDF.Enabled = false;
             BtnkérelemRögzítés.Enabled = false;
 
@@ -342,7 +342,7 @@ namespace Villamos
             // módosítás 1 új létrehozás
             if (MyF.Vanjoga(melyikelem, 1))
             {
-                BtnOktatásÚj.Enabled = true;
+                BtnÚjEngedély.Enabled = true;
             }
             // módosítás 2 pdf feltöltés
             if (MyF.Vanjoga(melyikelem, 2))
@@ -538,7 +538,7 @@ namespace Villamos
             FrissítésGombEseménye();
             AutókSzámaLekérdezés();
             AutókRendszámaLekérdezés();
-     
+
         }
 
         private void AutókSzámaLekérdezés()
@@ -603,15 +603,13 @@ namespace Villamos
 
         private void TxtkérelemHR_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            if (e.KeyCode == Keys.Tab )
+            if (e.KeyCode == Keys.Tab)
             {
                 NévFrszFrissítés();
             }
         }
 
-
-
-        private void FrissítésGombEseménye()
+           private void FrissítésGombEseménye()
         {
             try
             {
@@ -739,6 +737,10 @@ namespace Villamos
                 if (CmbkérelemOka.Text == "") throw new HibásBevittAdat("Töltse ki a Kérelem oka mezőt!");
                 if (KérelemDátuma.Value.Year > DatÉrvényes.Value.Year) throw new HibásBevittAdat("Nem lehet az igénylés dátuma nagyobb mint az érvényességi ideje!");
                 if (!int.TryParse(TxtKérelemautó.Text.Trim(), out int autókszáma)) autókszáma = 1;
+
+                string betű = TxtadminBetű.Text.Trim();
+                if (TxtKérelemID.Text == betű + Bővít("0", 0, 4)) ÚjEngedélyszám();
+
 
                 // HA nincs még feltöltve kérelem, akkor 
                 if (TxtKérrelemPDF.Text.Trim() == "") TxtKérrelemPDF.Text = "_";
@@ -982,12 +984,31 @@ namespace Villamos
             }
         }
 
-        private void BtnOktatásÚj_Click(object sender, EventArgs e)
+        private void BtnÚjEngedély_Click(object sender, EventArgs e)
         {
             try
             {
+                //Az új kérelem száma betű + 0000 lesz
                 Kérelemürítés();
+                string betű = TxtadminBetű.Text.Trim();
+                TxtKérelemID.Text = betű + Bővít("0", 0, 4);
+                CMBkérelemStátus.Text = CMBkérelemStátus.Items[0].ToString();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
+        private void ÚjEngedélyszám()
+        {
+            try
+            {
                 long szám;
                 string betű = TxtadminBetű.Text.Trim();
 
@@ -1018,7 +1039,7 @@ namespace Villamos
         {
             int HiányzóKarakterekSzáma = darab - b.ToString().Length;
             string c = "";
-            if (HiányzóKarakterekSzáma > 1)
+            if (HiányzóKarakterekSzáma >0)
             {
                 for (int i = 0; i < HiányzóKarakterekSzáma; i++)
                     c += a;
@@ -3366,6 +3387,6 @@ namespace Villamos
             }
         }
 
-  
+
     }
 }
