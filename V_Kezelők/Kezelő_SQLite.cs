@@ -51,8 +51,8 @@ namespace Villamos.Kezelők
 
         public void CreateTable()
         {
-            var sql = $@"CREATE TABLE {TableName}(
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+            var sql = @"CREATE TABLE authors(
+                        id INTEGER PRIMARY KEY,
                         username TEXT NOT NULL,
                         date INTEGER NOT NULL,
                         trueorfalse INTEGER NOT NULL
@@ -75,27 +75,6 @@ namespace Villamos.Kezelők
         }
 
         // Read
-
-        public void InsertData(string username, int date, int trueorfalse)
-        {
-            var sql = $@"INSERT INTO {TableName} (username, date, trueorfalse)
-                         VALUES ('{username}', {date}, {trueorfalse})";
-            try
-            {
-                SqliteConnection connection = new SqliteConnection(ConnectionString);
-                connection.Open();
-
-                var command = new SqliteCommand(sql, connection);
-                command.ExecuteNonQuery();
-
-                connection.Close();
-
-            }
-            catch (SqliteException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
 
         // Update
 

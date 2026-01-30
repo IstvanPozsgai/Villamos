@@ -30,6 +30,7 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.dgv_ShowData = new System.Windows.Forms.DataGridView();
+            this.btn_AddData = new System.Windows.Forms.Button();
             this.tblP_ShowUserData = new System.Windows.Forms.TableLayoutPanel();
             this.lb_username = new System.Windows.Forms.Label();
             this.lb_datetime = new System.Windows.Forms.Label();
@@ -37,13 +38,9 @@
             this.tb_username = new System.Windows.Forms.TextBox();
             this.tb_datetime = new System.Windows.Forms.TextBox();
             this.tb_tf = new System.Windows.Forms.TextBox();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.btn_create = new System.Windows.Forms.Button();
-            this.btn_AddData = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_ShowData)).BeginInit();
             this.tblP_ShowUserData.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -52,15 +49,14 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70.5F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.5F));
             this.tableLayoutPanel1.Controls.Add(this.dgv_ShowData, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.btn_AddData, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.tblP_ShowUserData, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 450);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -75,6 +71,16 @@
             this.dgv_ShowData.Name = "dgv_ShowData";
             this.dgv_ShowData.Size = new System.Drawing.Size(794, 219);
             this.dgv_ShowData.TabIndex = 0;
+            // 
+            // btn_AddData
+            // 
+            this.btn_AddData.Location = new System.Drawing.Point(567, 3);
+            this.btn_AddData.Name = "btn_AddData";
+            this.btn_AddData.Size = new System.Drawing.Size(75, 23);
+            this.btn_AddData.TabIndex = 1;
+            this.btn_AddData.Text = "Rögzít";
+            this.btn_AddData.UseVisualStyleBackColor = true;
+            this.btn_AddData.Click += new System.EventHandler(this.btn_AddData_Click);
             // 
             // tblP_ShowUserData
             // 
@@ -149,42 +155,6 @@
             this.tb_tf.Size = new System.Drawing.Size(100, 20);
             this.tb_tf.TabIndex = 5;
             // 
-            // tableLayoutPanel2
-            // 
-            this.tableLayoutPanel2.ColumnCount = 1;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Controls.Add(this.btn_create, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.btn_AddData, 0, 0);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(567, 3);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 2;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 13.24201F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 86.75799F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(230, 219);
-            this.tableLayoutPanel2.TabIndex = 3;
-            // 
-            // btn_create
-            // 
-            this.btn_create.Location = new System.Drawing.Point(3, 32);
-            this.btn_create.Name = "btn_create";
-            this.btn_create.Size = new System.Drawing.Size(75, 23);
-            this.btn_create.TabIndex = 3;
-            this.btn_create.Text = "Létrehoz";
-            this.btn_create.UseVisualStyleBackColor = true;
-            this.btn_create.Click += new System.EventHandler(this.btn_create_Click);
-            // 
-            // btn_AddData
-            // 
-            this.btn_AddData.Location = new System.Drawing.Point(3, 3);
-            this.btn_AddData.Name = "btn_AddData";
-            this.btn_AddData.Size = new System.Drawing.Size(75, 23);
-            this.btn_AddData.TabIndex = 2;
-            this.btn_AddData.Text = "Rögzít";
-            this.btn_AddData.UseVisualStyleBackColor = true;
-            this.btn_AddData.Click += new System.EventHandler(this.btn_AddData_Click);
-            // 
             // Ablak_SQLite
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -193,12 +163,10 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Ablak_SQLite";
             this.Text = "Ablak_SQLite";
-            this.Load += new System.EventHandler(this.Ablak_SQLite_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_ShowData)).EndInit();
             this.tblP_ShowUserData.ResumeLayout(false);
             this.tblP_ShowUserData.PerformLayout();
-            this.tableLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -207,6 +175,7 @@
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.DataGridView dgv_ShowData;
+        private System.Windows.Forms.Button btn_AddData;
         private System.Windows.Forms.TableLayoutPanel tblP_ShowUserData;
         private System.Windows.Forms.Label lb_username;
         private System.Windows.Forms.Label lb_datetime;
@@ -214,8 +183,5 @@
         private System.Windows.Forms.TextBox tb_username;
         private System.Windows.Forms.TextBox tb_datetime;
         private System.Windows.Forms.TextBox tb_tf;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.Button btn_create;
-        private System.Windows.Forms.Button btn_AddData;
     }
 }
