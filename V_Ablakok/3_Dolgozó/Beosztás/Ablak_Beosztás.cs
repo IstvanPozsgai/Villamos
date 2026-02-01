@@ -2037,14 +2037,15 @@ namespace Villamos
             try
             {
                 if (Dolgozónév.CheckedItems.Count < 1) throw new HibásBevittAdat("Nincs kijelölve egy dolgozó sem, így nem készül Excel tábla.");
-
+                string CsoportNevek = "";
+                if (Csoport.CheckedItems.Count > 0) CsoportNevek = string.Join(", ", Csoport.CheckedItems.Cast<string>());
                 string fájlexc;
                 // kimeneti fájl helye és neve
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
                 {
                     InitialDirectory = "MyDocuments",
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = $"Beosztás_{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
+                    FileName = $"Beosztás_{Dátum.Value:yyyy}_{Dátum.Value:MMMM}_{CsoportNevek}_{Program.PostásNév.Trim()}_{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
