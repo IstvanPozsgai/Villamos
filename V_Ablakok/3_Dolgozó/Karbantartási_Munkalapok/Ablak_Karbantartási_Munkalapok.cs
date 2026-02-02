@@ -1545,7 +1545,7 @@ namespace Villamos.Villamos_Ablakok
 
                 sor++;
                 Kép = $@"{Application.StartupPath}\Főmérnökség\Adatok\Ábrák\Villamos_{Járműtípus.Text.Trim()}.png";
-                if (File.Exists(Kép)) MyX.Kép_beillesztés(munkalap, "F5", Kép, 300, 100, 0.4, 0.4);
+                if (File.Exists(Kép)) MyX.Kép_beillesztés(munkalap, "F5", Kép, 290, 85, 0.5, 0.5);
 
             }
             catch (HibásBevittAdat ex)

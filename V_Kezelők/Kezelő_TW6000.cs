@@ -13,7 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos4TW.mdb";
         readonly string jelszó = "czapmiklós";
-
+        readonly string táblanév = "alap";
 
         public Kezelő_TW6000_Alap()
         {
@@ -24,7 +24,7 @@ namespace Villamos.Kezelők
         {
             List<Adat_TW6000_Alap> Adatok = new List<Adat_TW6000_Alap>();
             Adat_TW6000_Alap Adat;
-            string szöveg = $"SELECT * FROM alap";
+            string szöveg = $"SELECT * FROM {táblanév}";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -60,7 +60,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO alap (azonosító, start, ciklusrend, megállítás, kötöttstart, vizsgsorszám, vizsgnév, vizsgdátum) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (azonosító, start, ciklusrend, megállítás, kötöttstart, vizsgsorszám, vizsgnév, vizsgdátum) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Start:yyyy.MM.dd}', ";
                 szöveg += $"'{Adat.Ciklusrend}', ";
@@ -86,7 +86,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE alap SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" Start='{Adat.Start:yyyy.MM.dd}', ";
                 szöveg += $" ciklusrend='{Adat.Ciklusrend}', ";
                 szöveg += $" megállítás={Adat.Megállítás}, ";

@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Főmérnökség_oktatás.mdb";
         readonly string jelszó = "pázmányt";
+        readonly string táblanév = "Oktatástábla";
 
         public Kezelő_OktatásTábla()
         {
@@ -22,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_OktatásTábla> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM Oktatástábla ";
+            string szöveg = $"SELECT * FROM {táblanév} ";
             List<Adat_OktatásTábla> Adatok = new List<Adat_OktatásTábla>();
             Adat_OktatásTábla Adat;
 
@@ -63,7 +64,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO Oktatástábla ( IDoktatás, Téma, Kategória, gyakoriság, ismétlődés, státus, dátum, telephely,listázásisorrend, pdffájl )";
+                string szöveg = $"INSERT INTO {táblanév} ( IDoktatás, Téma, Kategória, gyakoriság, ismétlődés, státus, dátum, telephely,listázásisorrend, pdffájl )";
                 szöveg += $" VALUES ( {Sorszám()}, ";       //IDoktatás
                 szöveg += $"'{Adat.Téma}', ";                   //    Téma
                 szöveg += $"'{Adat.Kategória}', ";    //    Kategória
@@ -92,7 +93,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE Oktatástábla SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" téma='{Adat.Téma}', ";
                 szöveg += $" kategória='{Adat.Kategória}', ";
                 szöveg += $" gyakoriság='{Adat.Gyakoriság}', ";
@@ -145,11 +146,11 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
 
                 // előrébb visszük
-                string szöveg = $"UPDATE Oktatástábla SET listázásisorrend={Adat2.Listázásisorrend} where idoktatás={Sorszám1}";
+                string szöveg = $"UPDATE {táblanév} SET listázásisorrend={Adat2.Listázásisorrend} where idoktatás={Sorszám1}";
                 SzövegGy.Add(szöveg);
 
                 // hátrább visszük
-                szöveg = $"UPDATE Oktatástábla SET listázásisorrend={Adat1.Listázásisorrend} where idoktatás={Sorszám2}";
+                szöveg = $"UPDATE {táblanév} SET listázásisorrend={Adat1.Listázásisorrend} where idoktatás={Sorszám2}";
                 SzövegGy.Add(szöveg);
 
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);

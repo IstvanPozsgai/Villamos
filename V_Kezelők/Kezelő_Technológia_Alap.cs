@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Bezzegh";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\technológia\technológia.mdb";
+        readonly string táblanév = "Típus_tábla";
 
         public Kezelő_Technológia_Alap()
         {
@@ -22,7 +23,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Technológia_Alap> Lista_Adatok()
         {
-            string szöveg = $"SELECT *  FROM Típus_tábla ORDER BY típus";
+            string szöveg = $"SELECT *  FROM {táblanév} ORDER BY típus";
             List<Adat_Technológia_Alap> Adatok = new List<Adat_Technológia_Alap>();
             Adat_Technológia_Alap Adat;
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -54,7 +55,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO Típus_tábla (id, Típus) VALUES ({Sorszám()}, '{adat.Típus.Trim()}' )";
+                string szöveg = $"INSERT INTO {táblanév} (id, Típus) VALUES ({Sorszám()}, '{adat.Típus.Trim()}' )";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

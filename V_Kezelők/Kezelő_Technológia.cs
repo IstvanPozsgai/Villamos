@@ -15,7 +15,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "Bezzegh";
         string hely;
-
+        readonly string táblanév = "Technológia";
 
         private void FájlBeállítás(string Típus)
         {
@@ -26,7 +26,7 @@ namespace Villamos.Kezelők
         public List<Adat_Technológia_Új> Lista_Adatok(string Típus)
         {
             FájlBeállítás(Típus);
-            string szöveg = $"SELECT * FROM Technológia ";
+            string szöveg = $"SELECT * FROM {táblanév} ";
             List<Adat_Technológia_Új> Adatok = new List<Adat_Technológia_Új>();
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -75,7 +75,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Technológia_Új Adat in BeAdatok)
                 {
-                    string szöveg = $"INSERT INTO technológia ( iD,  részegység,  munka_utasítás_szám,  utasítás_Cím,  utasítás_leírás,  paraméter, " +
+                    string szöveg = $"INSERT INTO {táblanév} ( iD,  részegység,  munka_utasítás_szám,  utasítás_Cím,  utasítás_leírás,  paraméter, " +
                                 " karb_ciklus_eleje,  karb_ciklus_vége,  érv_kezdete,  érv_vége,  szakmai_bontás,  munkaterületi_bontás,  altípus,  kenés ) VALUES (";
                     szöveg += $"{id}, "; //id
                     szöveg += $"'{Adat.Részegység.Trim()}', "; // részegység
@@ -127,7 +127,7 @@ namespace Villamos.Kezelők
                 if (Adat.ID == 0 || Adatok.Where(a => a.ID == Adat.ID).FirstOrDefault() == null)
                 {
 
-                    szöveg = $"INSERT INTO technológia ( iD,  részegység,  munka_utasítás_szám,  utasítás_Cím,  utasítás_leírás,  paraméter, " +
+                    szöveg = $"INSERT INTO {táblanév} ( iD,  részegység,  munka_utasítás_szám,  utasítás_Cím,  utasítás_leírás,  paraméter, " +
                              " karb_ciklus_eleje,  karb_ciklus_vége,  érv_kezdete,  érv_vége,  szakmai_bontás,  munkaterületi_bontás,  altípus,  kenés ) VALUES (";
                     szöveg += $"{id}, "; //id
                     szöveg += $"'{Adat.Részegység.Trim()}', "; // részegység
@@ -146,7 +146,7 @@ namespace Villamos.Kezelők
                 }
                 else
                 {
-                    szöveg = $"UPDATE technológia SET ";
+                    szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $"részegység='{Adat.Részegység.Trim()}', ";
                     szöveg += $"munka_utasítás_szám='{Adat.Munka_utasítás_szám.Trim()}', ";
                     szöveg += $"utasítás_Cím='{Adat.Utasítás_Cím.Trim()}', ";
@@ -184,9 +184,9 @@ namespace Villamos.Kezelők
                 FájlBeállítás(Típus);
                 string szöveg;
                 if (végig)
-                    szöveg = $"DELETE FROM technológia WHERE id>={sorszám}";
+                    szöveg = $"DELETE FROM {táblanév} WHERE id>={sorszám}";
                 else
-                    szöveg = $"DELETE FROM technológia WHERE id={sorszám}";
+                    szöveg = $"DELETE FROM {táblanév} WHERE id={sorszám}";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -244,7 +244,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (long elem in Sorszámok)
                 {
-                    string szöveg = $"UPDATE technológia SET ";
+                    string szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $"érv_vége='{Dátum:yyyy.MM.dd}' ";
                     szöveg += $" WHERE id={elem}";
                     SzövegGy.Add(szöveg);
@@ -270,7 +270,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (long elem in Sorszámok)
                 {
-                    string szöveg = $"UPDATE technológia SET ";
+                    string szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $"érv_kezdete='{Dátum:yyyy.MM.dd}' ";
                     szöveg += $" WHERE id={elem}";
                     SzövegGy.Add(szöveg);

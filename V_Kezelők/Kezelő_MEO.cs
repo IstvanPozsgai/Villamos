@@ -49,7 +49,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO naptábla (id) VALUES ({HatárNap})";
+                string szöveg = $"INSERT INTO {táblanév} (id) VALUES ({HatárNap})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -67,7 +67,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE naptábla SET id={HatárNap} WHERE id={előző}";
+                string szöveg = $"UPDATE {táblanév} SET id={HatárNap} WHERE id={előző}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

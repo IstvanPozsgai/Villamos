@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "csavarhúzó";
         string hely;
+        readonly string táblanév = "lista";
 
         private void FájlBeállítás(string Telephely)
         {
@@ -25,7 +26,7 @@ namespace Villamos.Kezelők
             FájlBeállítás(Telephely);
             List<Adat_Védő_Cikktörzs> Adatok = new List<Adat_Védő_Cikktörzs>();
             Adat_Védő_Cikktörzs Adat;
-            string szöveg = $"SELECT * FROM lista ORDER BY azonosító";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY azonosító";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -65,7 +66,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"INSERT INTO lista  (azonosító, megnevezés, méret,  státus, költséghely, Védelem, Kockázat, Szabvány, Szint, Munk_megnevezés ) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév}  (azonosító, megnevezés, méret,  státus, költséghely, Védelem, Kockázat, Szabvány, Szint, Munk_megnevezés ) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', "; //azonosító
                 szöveg += $"'{Adat.Megnevezés}', ";  //megnevezés
                 szöveg += $"'{Adat.Méret}', "; //méret
@@ -94,7 +95,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"UPDATE lista  SET ";
+                string szöveg = $"UPDATE {táblanév}  SET ";
                 szöveg += $"megnevezés='{Adat.Megnevezés}', ";
                 szöveg += $"méret='{Adat.Méret}', ";
                 szöveg += $"költséghely='{Adat.Költséghely}', ";

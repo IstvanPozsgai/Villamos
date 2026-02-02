@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}/Főmérnökség/adatok/TTP/TTP_Adatbázis.mdb";
         readonly string jelszó = "rudolfg";
+        readonly string táblanév = "TTP_Alapadat";
 
         public Kezelő_TTP_Alapadat()
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         {
             List<Adat_TTP_Alapadat> Adatok = new List<Adat_TTP_Alapadat>();
             Adat_TTP_Alapadat Adat;
-            string szöveg = $"SELECT * FROM TTP_Alapadat";
+            string szöveg = $"SELECT * FROM {táblanév}";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -56,7 +57,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO TTP_Alapadat (Azonosító, Gyártási_Év, TTP, Megjegyzés)";
+                string szöveg = $"INSERT INTO {táblanév} (Azonosító, Gyártási_Év, TTP, Megjegyzés)";
                 szöveg += $"VALUES (";
                 szöveg += $"'{Adat.Azonosító}',";
                 szöveg += $"'{Adat.Gyártási_Év:yyyy.MM.dd}',";
@@ -80,7 +81,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE TTP_Alapadat SET Gyártási_Év='{Adat.Gyártási_Év:yyyy.MM.dd}', ";
+                string szöveg = $"UPDATE {táblanév} SET Gyártási_Év='{Adat.Gyártási_Év:yyyy.MM.dd}', ";
                 szöveg += $"TTP={Adat.TTP}, ";
                 szöveg += $"Megjegyzés='{Adat.Megjegyzés}' ";
                 szöveg += $"WHERE Azonosító='{Adat.Azonosító}'";

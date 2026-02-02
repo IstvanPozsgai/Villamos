@@ -29,7 +29,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_Külső_Dolgozók> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM Dolgozók";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Külső_Dolgozók> Adatok = new List<Adat_Külső_Dolgozók>();
             Adat_Külső_Dolgozók Adat;
 

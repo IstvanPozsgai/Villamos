@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "ladányis";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Főmérnökség_munkakör.mdb";
+        readonly string táblanév = "munkakörtábla";
 
         public Kezelő_Munkakör()
         {
@@ -25,7 +26,7 @@ namespace Villamos.Kezelők
             List<Adat_Munkakör> Adatok = new List<Adat_Munkakör>();
             Adat_Munkakör Adat;
 
-            string szöveg = $"SELECT * FROM munkakörtábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -61,7 +62,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO munkakörtábla ";
+                string szöveg = $"INSERT INTO {táblanév} ";
                 szöveg += "(ID,  Megnevezés, PDFfájlnév, státus, telephely,  Hrazonosító, dátum,  rögzítő)";
                 szöveg += " VALUES (";
                 szöveg += $"{Sorszám()}, ";
@@ -89,7 +90,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE munkakörtábla SET státus=1 WHERE Id={Adat.ID}";
+                string szöveg = $"UPDATE {táblanév} SET státus=1 WHERE Id={Adat.ID}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

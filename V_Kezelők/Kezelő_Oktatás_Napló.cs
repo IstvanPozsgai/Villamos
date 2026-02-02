@@ -15,6 +15,7 @@ namespace Villamos.Kezelők
     {
         string hely;
         readonly string jelszó = "pázmányt";
+        readonly string táblanév = "oktatásnapló";
 
         private void FájlBeállítás(string Telephely, int Év)
         {
@@ -25,7 +26,7 @@ namespace Villamos.Kezelők
         public List<Adat_Oktatás_Napló> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = $"SELECT * FROM oktatásnapló ";
+            string szöveg = $"SELECT * FROM {táblanév} ";
             List<Adat_Oktatás_Napló> Adatok = new List<Adat_Oktatás_Napló>();
             Adat_Oktatás_Napló Adat;
 
@@ -69,7 +70,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"INSERT INTO Oktatásnapló";
+                string szöveg = $"INSERT INTO {táblanév}";
                 szöveg += "( Id, Hrazonosító, IDoktatás, oktatásdátuma, kioktatta, rögzítésdátuma, telephely, PDFfájlneve, Számonkérés, státus, rögzítő, megjegyzés)";
                 szöveg += " VALUES (";
                 szöveg += $"{Sorszám(Telephely, Év)}, "; //id
@@ -106,7 +107,7 @@ namespace Villamos.Kezelők
 
                 foreach (Adat_Oktatás_Napló Adat in Adatok)
                 {
-                    string szöveg = $"INSERT INTO Oktatásnapló";
+                    string szöveg = $"INSERT INTO {táblanév}";
                     szöveg += "( Id, Hrazonosító, IDoktatás, oktatásdátuma, kioktatta, rögzítésdátuma, telephely, PDFfájlneve, Számonkérés, státus, rögzítő, megjegyzés)";
                     szöveg += " VALUES (";
                     szöveg += $"{sorszám}, "; //id
@@ -166,7 +167,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Oktatás_Napló Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE oktatásnapló SET státus={Adat.Státus}, ";
+                    string szöveg = $"UPDATE {táblanév} SET státus={Adat.Státus}, ";
                     szöveg += $" rögzítő='{Adat.Rögzítő}', ";
                     szöveg += $" rögzítésdátuma='{Adat.Rögzítésdátuma}'";
                     szöveg += $" Where id={Adat.ID}";

@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "csavarhúzó";
         string hely;
+        readonly string táblanév = "lista";
 
         private void FájlBeállítás(string Telephely, int Év)
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Védő_Napló> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = $"SELECT * FROM lista order by azonosító";
+            string szöveg = $"SELECT * FROM {táblanév} order by azonosító";
             List<Adat_Védő_Napló> Adatok = new List<Adat_Védő_Napló>();
             Adat_Védő_Napló Adat;
 
@@ -64,7 +65,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"INSERT INTO lista (Azonosító, honnan, hova, Mennyiség, gyáriszám, státus, módosította, módosításidátum ) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (Azonosító, honnan, hova, Mennyiség, gyáriszám, státus, módosította, módosításidátum ) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Honnan}', ";
                 szöveg += $"'{Adat.Hova}', ";

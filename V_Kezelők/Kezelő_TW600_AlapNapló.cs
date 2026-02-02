@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "czapmiklós";
         string hely;
+        readonly string táblanév = "alapnapló";
 
         private void FájlBeállítás(int Év)
         {
@@ -25,7 +26,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Év);
-                string szöveg = $"INSERT INTO alapnapló (azonosító, start, ciklusrend, megállítás, kötöttstart, vizsgsorszám, vizsgnév, vizsgdátum, oka, rögzítő, rögzítésiidő) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (azonosító, start, ciklusrend, megállítás, kötöttstart, vizsgsorszám, vizsgnév, vizsgdátum, oka, rögzítő, rögzítésiidő) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"'{Adat.Start:yyyy.MM.dd}', ";
                 szöveg += $"'{Adat.Ciklusrend}', ";
@@ -53,7 +54,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_TW6000_AlapNapló> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM alapnapló";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_TW6000_AlapNapló> Adatok = new List<Adat_TW6000_AlapNapló>();
             Adat_TW6000_AlapNapló Adat;
 

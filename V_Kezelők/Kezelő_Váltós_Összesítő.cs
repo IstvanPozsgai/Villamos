@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "katalin";
         string hely;
+        readonly string táblanév = "összesítő";
 
         private void FájlBeállítás(int Év)
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Váltós_Összesítő> Lista_Adatok(int Év, string Tábla)
         {
             FájlBeállítás(Év);
-            string szöveg = $"SELECT * FROM összesítő{Tábla}";
+            string szöveg = $"SELECT * FROM {táblanév}{Tábla}";
             List<Adat_Váltós_Összesítő> Adatok = new List<Adat_Váltós_Összesítő>();
             Adat_Váltós_Összesítő Adat;
 
@@ -59,7 +60,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Év);
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
-                string szöveg = $"INSERT INTO összesítő{Tábla} (perc, dátum) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév}{Tábla} (perc, dátum) VALUES (";
                 szöveg += $"{Adat.Perc}, ";
                 szöveg += $"'{Adat.Dátum:yyyy.MM.dd}' )";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -81,7 +82,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Év);
                 string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Év}\munkaidőnaptár.mdb".KönyvSzerk();
-                string szöveg = $"UPDATE összesítő{Tábla} SET ";
+                string szöveg = $"UPDATE {táblanév}{Tábla} SET ";
                 szöveg += $" perc={Adat.Perc} ";
                 szöveg += $" WHERE dátum='{Adat.Dátum:M-d-yy}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -105,7 +106,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Váltós_Összesítő Adat in Adatok)
                 {
-                    string szöveg = $"INSERT INTO összesítő{Tábla} (perc, dátum) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév}{Tábla} (perc, dátum) VALUES (";
                     szöveg += $"{Adat.Perc}, ";
                     szöveg += $"'{Adat.Dátum:yyyy.MM.dd}' )";
                     SzövegGy.Add(szöveg);
@@ -131,7 +132,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_Váltós_Összesítő Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE  összesítő{Tábla} SET ";
+                    string szöveg = $"UPDATE  {táblanév}{Tábla} SET ";
                     szöveg += $" perc={Adat.Perc} ";
                     szöveg += $" WHERE dátum=#{Adat.Dátum:M-d-yy}#";
                 }

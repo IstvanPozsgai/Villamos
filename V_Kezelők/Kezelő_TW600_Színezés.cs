@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\villamos4TW.mdb";
         readonly string jelszó = "czapmiklós";
+        readonly string táblanév = "szinezés";
 
         public Kezelő_TW600_Színezés()
         {
@@ -21,7 +22,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_TW6000_Színezés> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM szinezés ORDER BY vizsgálatnév";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY vizsgálatnév";
             List<Adat_TW6000_Színezés> Adatok = new List<Adat_TW6000_Színezés>();
             Adat_TW6000_Színezés Adat;
 
@@ -53,7 +54,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO szinezés (vizsgálatnév, szín) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (vizsgálatnév, szín) VALUES (";
                 szöveg += $"'{Adat.Vizsgálatnév}', ";
                 szöveg += $"{Adat.Szín})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -73,7 +74,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE  szinezés SET szín={Adat.Szín}";
+                string szöveg = $"UPDATE  {táblanév} SET szín={Adat.Szín}";
                 szöveg += $" WHERE  vizsgálatnév ='{Adat.Vizsgálatnév}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
@@ -92,7 +93,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"DELETE FROM szinezés where vizsgálatnév ='{Vonal}'";
+                string szöveg = $"DELETE FROM {táblanév} where vizsgálatnév ='{Vonal}'";
                 MyA.ABtörlés(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)

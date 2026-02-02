@@ -16,6 +16,7 @@ namespace Villamos.Kezelők
         public string Típus { get; private set; }
         private string hely;
         readonly string jelszó = "pocsaierzsi";
+        readonly string táblanév = "kmtábla";
 
         public Kezelő_T5C5_Kmadatok(string típus)
         {
@@ -29,7 +30,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_T5C5_Kmadatok> Lista_Adatok()
         {
-            string szöveg = $"SELECT * FROM kmtábla";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_T5C5_Kmadatok> Adatok = new List<Adat_T5C5_Kmadatok>();
             Adat_T5C5_Kmadatok Adat;
 
@@ -85,7 +86,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO kmtábla  (ID, azonosító, jjavszám, KMUkm, KMUdátum, ";
+                string szöveg = $"INSERT INTO {táblanév}  (ID, azonosító, jjavszám, KMUkm, KMUdátum, ";
                 szöveg += " vizsgfok,  vizsgdátumk, vizsgdátumv,";
                 szöveg += " vizsgkm, havikm, vizsgsorszám, fudátum, ";
                 szöveg += " Teljeskm, Ciklusrend, V2végezte, KövV2_Sorszám, KövV2, ";
@@ -130,7 +131,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = " UPDATE kmtábla SET ";
+                string szöveg = $" UPDATE {táblanév} SET ";
                 szöveg += $" KMUkm={korrekció}";
                 szöveg += $" WHERE id={Id}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -148,7 +149,7 @@ namespace Villamos.Kezelők
 
         public void Módosítás(Adat_T5C5_Kmadatok Adat)
         {
-            string szöveg = " UPDATE kmtábla SET ";
+            string szöveg = $" UPDATE {táblanév} SET ";
             szöveg += $" Jjavszám={Adat.Jjavszám}, ";
             szöveg += $" KMUkm={Adat.KMUkm}, ";
             szöveg += $" KMUdátum='{Adat.KMUdátum:yyyy.MM.dd}', ";
@@ -180,7 +181,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_T5C5_Kmadatok Adat in Adatok)
                 {
-                    string szöveg = " UPDATE kmtábla SET ";
+                    string szöveg = $" UPDATE {táblanév} SET ";
                     szöveg += $" Jjavszám={Adat.Jjavszám}, ";
                     szöveg += $" KMUkm={Adat.KMUkm}, ";
                     szöveg += $" KMUdátum='{Adat.KMUdátum:yyyy.MM.dd}', ";
@@ -214,7 +215,7 @@ namespace Villamos.Kezelők
                     MessageBox.Show("A kiválasztott adat nem található!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
-                string szöveg = $"UPDATE kmtábla SET törölt=true WHERE id={Sorszám}";
+                string szöveg = $"UPDATE {táblanév} SET törölt=true WHERE id={Sorszám}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
                 KézT5C5Napló.Rögzítés(DateTime.Today.Year, Adat);
             }

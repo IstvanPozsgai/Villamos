@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Főmérnökség_oktatás.mdb";
         readonly string jelszó = "pázmányt";
+        readonly string táblanév = "Oktatásisegéd";
 
         public Kezelő_OktatásiSegéd()
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         {
             List<Adat_OktatásiSegéd> Adatok = new List<Adat_OktatásiSegéd>();
             Adat_OktatásiSegéd Adat;
-            string szöveg = $"SELECT * FROM Oktatásisegéd";
+            string szöveg = $"SELECT * FROM {táblanév}";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
@@ -62,7 +63,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE oktatásisegéd SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"oktatásoka='{Adat.Oktatásoka}', ";
                 szöveg += $"oktatástárgya='{Adat.Oktatástárgya}', ";
                 szöveg += $"oktatáshelye='{Adat.Oktatáshelye}', ";
@@ -91,7 +92,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO oktatásisegéd (IDoktatás,  telephely, oktatásoka, oktatástárgya, oktatáshelye, oktatásidőtartama, oktató, oktatóbeosztása, egyébszöveg, email )";
+                string szöveg = $"INSERT INTO {táblanév} (IDoktatás,  telephely, oktatásoka, oktatástárgya, oktatáshelye, oktatásidőtartama, oktató, oktatóbeosztása, egyébszöveg, email )";
                 szöveg += $" VALUES ({Adat.IDoktatás}, ";
                 szöveg += $"'{Adat.Telephely}', ";
                 szöveg += $"'{Adat.Oktatásoka}', ";

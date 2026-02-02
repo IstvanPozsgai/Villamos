@@ -367,6 +367,8 @@
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\Főkönyv_Takarítás.cs" />
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Főkönyv\list.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Anyagtörzs.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Akkumulátor_Mérés.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Akkumulátor_Napló.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Anyagok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Beallitas_Diagram.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Ciklus_Sorrend.cs" />
@@ -1369,8 +1371,6 @@
     <Compile Include="V_Kezelők\Kezelő_T5C5_Havi_Nap.cs" />
     <Compile Include="V_Adatszerkezet\Adat_T5C5_Havi_Nap.cs" />
     <Compile Include="V_Adatbázis\Adatbázis.cs" />
-    <Compile Include="V_Adatszerkezet\Adat_Alap_Beolvasás.cs" />
-    <Compile Include="V_Adatszerkezet\Adat_Alap_Egyéb.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Alap_kiadás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Főkönyv_Nap.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nap_Hiba.cs" />

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -12,6 +12,8 @@ namespace Villamos.Kezelők
     public class Kezelő_TW6000_Előterv
     {
         readonly string jelszó = "czapmiklós";
+        readonly string táblanév = "alap";
+        readonly string táblanévÜtem = "ütemezés";
 
         private void FájlBeállítás(string hely)
         {
@@ -27,7 +29,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_TW6000_Alap Adat in Adatok)
                 {
-                    string szöveg = $"INSERT INTO alap (azonosító, start, ciklusrend, megállítás, kötöttstart, vizsgsorszám, vizsgnév, vizsgdátum) VALUES (";
+                    string szöveg = $"INSERT INTO {táblanév} (azonosító, start, ciklusrend, megállítás, kötöttstart, vizsgsorszám, vizsgnév, vizsgdátum) VALUES (";
                     szöveg += $"'{Adat.Azonosító}', ";
                     szöveg += $"'{Adat.Start:yyyy.MM.dd}', ";
                     szöveg += $"'{Adat.Ciklusrend}', ";
@@ -56,7 +58,7 @@ namespace Villamos.Kezelők
             FájlBeállítás(hely);
             List<Adat_TW6000_Alap> Adatok = new List<Adat_TW6000_Alap>();
             Adat_TW6000_Alap Adat;
-            string szöveg = $"SELECT * FROM alap";
+            string szöveg = $"SELECT * FROM {táblanév}";
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
@@ -90,7 +92,7 @@ namespace Villamos.Kezelők
 
         public List<Adat_TW6000_Ütemezés> Lista_AdatokÜtem(string hely)
         {
-            string szöveg = $"SELECT * FROM ütemezés";
+            string szöveg = $"SELECT * FROM {táblanévÜtem}";
             List<Adat_TW6000_Ütemezés> Adatok = new List<Adat_TW6000_Ütemezés>();
             Adat_TW6000_Ütemezés Adat;
 
@@ -136,7 +138,7 @@ namespace Villamos.Kezelők
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_TW6000_Ütemezés Adat in Adatok)
                 {
-                    string szöveg = $"INSERT INTO ütemezés (azonosító, ciklusrend, elkészült, megjegyzés, ";
+                    string szöveg = $"INSERT INTO {táblanévÜtem} (azonosító, ciklusrend, elkészült, megjegyzés, ";
                     szöveg += " státus, velkészülés, vesedékesség, vizsgfoka, ";
                     szöveg += " vsorszám, vütemezés, vvégezte) VALUES (";
                     szöveg += $"'{Adat.Azonosító}', ";

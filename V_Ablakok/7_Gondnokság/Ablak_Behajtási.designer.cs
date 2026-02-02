@@ -100,7 +100,7 @@ namespace Villamos
             this.Btn1szak = new System.Windows.Forms.Button();
             this.BtnKérelemPDF = new System.Windows.Forms.Button();
             this.BtnNévFrszFrissítés = new System.Windows.Forms.Button();
-            this.BtnOktatásÚj = new System.Windows.Forms.Button();
+            this.BtnÚjEngedély = new System.Windows.Forms.Button();
             this.BtnkérelemRögzítés = new System.Windows.Forms.Button();
             this.PDF = new System.Windows.Forms.TabPage();
             this.PDF_néző = new PdfiumViewer.PdfViewer();
@@ -483,7 +483,7 @@ namespace Villamos
             this.Kérelem.Controls.Add(this.Btn1szak);
             this.Kérelem.Controls.Add(this.BtnKérelemPDF);
             this.Kérelem.Controls.Add(this.BtnNévFrszFrissítés);
-            this.Kérelem.Controls.Add(this.BtnOktatásÚj);
+            this.Kérelem.Controls.Add(this.BtnÚjEngedély);
             this.Kérelem.Controls.Add(this.BtnkérelemRögzítés);
             this.Kérelem.Location = new System.Drawing.Point(4, 29);
             this.Kérelem.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -856,17 +856,17 @@ namespace Villamos
             this.BtnNévFrszFrissítés.UseVisualStyleBackColor = true;
             this.BtnNévFrszFrissítés.Click += new System.EventHandler(this.BtnNévFrszFrissítés_Click);
             // 
-            // BtnOktatásÚj
+            // BtnÚjEngedély
             // 
-            this.BtnOktatásÚj.BackgroundImage = global::Villamos.Properties.Resources.New_gyűjtemény;
-            this.BtnOktatásÚj.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnOktatásÚj.Location = new System.Drawing.Point(390, 12);
-            this.BtnOktatásÚj.Name = "BtnOktatásÚj";
-            this.BtnOktatásÚj.Size = new System.Drawing.Size(45, 45);
-            this.BtnOktatásÚj.TabIndex = 78;
-            this.ToolTip1.SetToolTip(this.BtnOktatásÚj, "Új engedély készítés");
-            this.BtnOktatásÚj.UseVisualStyleBackColor = true;
-            this.BtnOktatásÚj.Click += new System.EventHandler(this.BtnOktatásÚj_Click);
+            this.BtnÚjEngedély.BackgroundImage = global::Villamos.Properties.Resources.New_gyűjtemény;
+            this.BtnÚjEngedély.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnÚjEngedély.Location = new System.Drawing.Point(390, 12);
+            this.BtnÚjEngedély.Name = "BtnÚjEngedély";
+            this.BtnÚjEngedély.Size = new System.Drawing.Size(45, 45);
+            this.BtnÚjEngedély.TabIndex = 78;
+            this.ToolTip1.SetToolTip(this.BtnÚjEngedély, "Új engedély készítés");
+            this.BtnÚjEngedély.UseVisualStyleBackColor = true;
+            this.BtnÚjEngedély.Click += new System.EventHandler(this.BtnÚjEngedély_Click);
             // 
             // BtnkérelemRögzítés
             // 
@@ -1586,7 +1586,7 @@ namespace Villamos
         internal ToolTip ToolTip1;
         internal TextBox TxtKérelemID;
         internal Label LblKérelemEngedélySzám;
-        internal Button BtnOktatásÚj;
+        internal Button BtnÚjEngedély;
         internal TabPage Adminisztátor;
         internal TextBox TxtAdminSorszám;
         internal Label LblAdminSorszKezdete;

@@ -13,6 +13,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "pozsgaii";
         string hely;
+        readonly string táblanév = "szerelvénytáblanapló";
 
         private void FájlBeállítás(string Telephely, DateTime Dátum)
         {
@@ -23,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Szerelvény_Napló> Lista_Adatok(string Telephely, DateTime Dátum)
         {
             FájlBeállítás(Telephely, Dátum);
-            string szöveg = $"SELECT * FROM szerelvénytáblanapló ORDER BY mikor desc";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY mikor desc";
             List<Adat_Szerelvény_Napló> Adatok = new List<Adat_Szerelvény_Napló>();
 
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
@@ -63,7 +64,7 @@ namespace Villamos.Kezelők
         public void Rögzítés(string Telephely, DateTime Dátum, Adat_Szerelvény Adat)
         {
             FájlBeállítás(Telephely, Dátum);
-            string szöveg = $"INSERT INTO szerelvénytáblanapló (id, kocsi1, kocsi2, kocsi3, kocsi4, kocsi5, kocsi6, szerelvényhossz, módosító, mikor) VALUES (";
+            string szöveg = $"INSERT INTO {táblanév} (id, kocsi1, kocsi2, kocsi3, kocsi4, kocsi5, kocsi6, szerelvényhossz, módosító, mikor) VALUES (";
             szöveg += $"{Adat.Szerelvény_ID}, ";
             szöveg += $"'{Adat.Kocsi1}', ";
             szöveg += $"'{Adat.Kocsi2}', ";

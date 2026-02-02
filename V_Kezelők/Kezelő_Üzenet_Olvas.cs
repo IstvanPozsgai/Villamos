@@ -15,6 +15,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "katalin";
         string hely;
+        readonly string táblanév = "olvasás";
 
         private void FájlBeállítás(string Telephely, int Év)
         {
@@ -25,7 +26,7 @@ namespace Villamos.Kezelők
         public List<Adat_Üzenet_Olvasás> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = $"SELECT * FROM olvasás ";
+            string szöveg = $"SELECT * FROM {táblanév} ";
             List<Adat_Üzenet_Olvasás> Adatok = new List<Adat_Üzenet_Olvasás>();
             Adat_Üzenet_Olvasás Adat;
 
@@ -73,7 +74,7 @@ namespace Villamos.Kezelők
                     double i = 1;
                     if (Adatok.Count > 0) i = Adatok.Max(a => a.Sorszám) + 1;
 
-                    string szöveg = $"INSERT INTO olvasás ";
+                    string szöveg = $"INSERT INTO {táblanév} ";
                     szöveg += "(sorszám, ki, üzenetid, mikor, olvasva)";
                     szöveg += " VALUES ";
                     szöveg += $"({i}, '{Program.PostásNév.Trim()}', {Adat.Üzenetid}, '{DateTime.Now}', -1)";
@@ -110,7 +111,7 @@ namespace Villamos.Kezelők
                     if (vane == null)
                     {
                         i++;
-                        string szöveg = $"INSERT INTO olvasás ";
+                        string szöveg = $"INSERT INTO {táblanév} ";
                         szöveg += "(sorszám, ki, üzenetid, mikor, olvasva)";
                         szöveg += " VALUES ";
                         szöveg += $"({i}, '{Program.PostásNév.Trim()}', {item.Üzenetid}, '{DateTime.Now}', -1)";

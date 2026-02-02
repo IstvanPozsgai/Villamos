@@ -12,6 +12,7 @@ namespace Villamos.Adatszerkezet
     {
         readonly string jelszó = "pozsgaii";
         string hely;
+        readonly string táblanév = "állománytábla";
 
         private void FájlBeállítás(DateTime Dátum)
         {
@@ -22,7 +23,7 @@ namespace Villamos.Adatszerkezet
         public List<Adat_T5C5_Havi_Nap> Lista_Adatok(DateTime Dátum)
         {
             FájlBeállítás(Dátum);
-            string szöveg = $"SELECT * FROM állománytábla ORDER BY azonosító";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY azonosító";
             List<Adat_T5C5_Havi_Nap> Adatok = new List<Adat_T5C5_Havi_Nap>();
             Adat_T5C5_Havi_Nap Adat;
 
@@ -91,7 +92,7 @@ namespace Villamos.Adatszerkezet
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_T5C5_Havi_Nap Adat in Adatok)
                 {
-                    string szöveg = $"INSERT INTO állománytábla (Azonosító, N1, N2, N3, N4, N5, N6, N7, N8, N9, N10,";
+                    string szöveg = $"INSERT INTO {táblanév} (Azonosító, N1, N2, N3, N4, N5, N6, N7, N8, N9, N10,";
                     szöveg += "N11,N12,N13,N14,N15,N16,N17,N18,N19,N20,";
                     szöveg += "N21,N22,N23,N24,N25,N26,N27,N28,N29,N30,N31,Futásnap,Telephely ) VALUES (";
                     szöveg += $"'{Adat.Azonosító}',";
@@ -151,7 +152,7 @@ namespace Villamos.Adatszerkezet
                 List<string> SzövegGy = new List<string>();
                 foreach (Adat_T5C5_Havi_Nap Adat in Adatok)
                 {
-                    string szöveg = $"UPDATE állománytábla SET ";
+                    string szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $" N{Dátum.Day}='{Adat.N1}', ";    //Megfelelő napra rögzítjük
                     szöveg += $" futásnap={Adat.Futásnap}, ";
                     szöveg += $" telephely='{Adat.Telephely}' ";

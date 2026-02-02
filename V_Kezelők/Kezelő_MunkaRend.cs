@@ -4,8 +4,8 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -14,6 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "kismalac";
         string hely;
+        readonly string táblanév = "munkarendtábla";
 
         private void FájlBeállítás(string Telephely, int Év)
         {
@@ -25,7 +26,7 @@ namespace Villamos.Kezelők
         public List<Adat_MunkaRend> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = $"SELECT * FROM munkarendtábla ORDER BY id";
+            string szöveg = $"SELECT * FROM {táblanév} ORDER BY id";
             List<Adat_MunkaRend> Adatok = new List<Adat_MunkaRend>();
             Adat_MunkaRend Adat;
 
@@ -60,7 +61,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"INSERT INTO munkarendtábla (id, munkarend, látszódik)  VALUES (";
+                string szöveg = $"INSERT INTO {táblanév} (id, munkarend, látszódik)  VALUES (";
                 szöveg += $"{Sorszám(Telephely, Év)}, ";
                 szöveg += $"'{Adat.Munkarend}', ";
                 szöveg += $" {Adat.Látszódik} ) ";
@@ -82,7 +83,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = " UPDATE  munkarendtábla SET ";
+                string szöveg = $" UPDATE  {táblanév} SET ";
                 szöveg += $" munkarend='{Adat.Munkarend}' ";
                 szöveg += $" WHERE id={Adat.ID}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -104,7 +105,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely, Év);
                 string jelszó = "kismalac";
-                string szöveg = $"UPDATE munkarendtábla SET látszódik={Látszódik} WHERE id={sorszám}";
+                string szöveg = $"UPDATE {táblanév} SET látszódik={Látszódik} WHERE id={sorszám}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -138,5 +139,32 @@ namespace Villamos.Kezelők
             }
             return Válasz;
         }
+
+        public void Munkarend_Átír(string Telephely, int Év)
+        {
+
+            FájlBeállítás(Telephely, Év);
+            List<Adat_MunkaRend> AdatokÖ = Lista_Adatok(Telephely, Év - 1);
+            List<Adat_MunkaRend> Adatok = (from a in AdatokÖ
+                                           where a.Látszódik == true
+                                           select a).ToList();
+
+            string helyi = $@"{Application.StartupPath}\{Telephely}\Adatok\Munkalap\munkalap{Év}.mdb";
+            int id = 0;
+
+            List<string> SzövegGy = new List<string>();
+            foreach (Adat_MunkaRend rekord in Adatok)
+            {
+                // új adat rögzítése
+                id++;
+                string szöveg = $"INSERT INTO {táblanév} (id, munkarend, látszódik)  VALUES (";
+                szöveg += id + ", ";
+                szöveg += "'" + rekord.Munkarend.Trim() + "', ";
+                szöveg += " true ) ";
+                SzövegGy.Add(szöveg);
+            }
+            MyA.ABMódosítás(helyi, jelszó, SzövegGy);
+        }
+
     }
 }

@@ -149,7 +149,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely, Év);
 
-                string szöveg = $"INSERT INTO csúsztatás ";
+                string szöveg = $"INSERT INTO {táblanév} ";
                 szöveg += "(Sorszám, törzsszám, dolgozónév, kezdődátum, befejeződátum, kivettnap, Szabiok, Státus, rögzítette, rögzítésdátum, kezdőidő, befejezőidő) VALUES (";
                 szöveg += $"{Adat.Sorszám}, ";   //Sorszám
                 szöveg += $"'{Adat.Törzsszám.Trim()}', "; //törzsszám

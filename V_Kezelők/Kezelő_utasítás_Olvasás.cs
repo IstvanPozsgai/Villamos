@@ -15,6 +15,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "katalin";
         string hely;
+        readonly string táblanév = "olvasás";
 
         private void FájlBeállítás(string Telephely, int Év)
         {
@@ -25,7 +26,7 @@ namespace Villamos.Kezelők
         public List<Adat_utasítás_olvasás> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = $"SELECT * From olvasás order by sorszám desc";
+            string szöveg = $"SELECT * From {táblanév} order by sorszám desc";
             List<Adat_utasítás_olvasás> Adatok = new List<Adat_utasítás_olvasás>();
             Adat_utasítás_olvasás Adat;
 
@@ -84,7 +85,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"INSERT INTO olvasás (sorszám, ki, üzenetid, mikor, olvasva) VALUES ";
+                string szöveg = $"INSERT INTO {táblanév} (sorszám, ki, üzenetid, mikor, olvasva) VALUES ";
                 szöveg += $"({Sorszám(Telephely, Év)}, '{Adat.Ki}', {Adat.Üzenetid}, '{Adat.Mikor}', {Adat.Olvasva})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }

@@ -24,7 +24,7 @@ namespace Villamos.Kezelők
         public List<Adat_Sérülés_Tarifa> Lista_Adatok(string Telephely, int Év)
         {
             FájlBeállítás(Telephely, Év);
-            string szöveg = $"SELECT * FROM tarifa";
+            string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_Sérülés_Tarifa> Adatok = new List<Adat_Sérülés_Tarifa>();
             Adat_Sérülés_Tarifa Adat;
 
@@ -58,7 +58,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"INSERT INTO tarifa  (id, d60tarifa, d03tarifa ) VALUES (";
+                string szöveg = $"INSERT INTO {táblanév}  (id, d60tarifa, d03tarifa ) VALUES (";
                 szöveg += $"{Adat.Id}, ";
                 szöveg += $"{Adat.D60tarifa}, ";
                 szöveg += $"{Adat.D03tarifa}) ";
