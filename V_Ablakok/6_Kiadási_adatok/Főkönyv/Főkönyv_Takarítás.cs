@@ -83,6 +83,20 @@ namespace Villamos.Villamos_Nyomtatványok
                                                      where a.Típus == rekordkieg
                                                      orderby a.Azonosító ascending
                                                      select a).ToList();
+                //Ha nincs kocsi állományban akkor is kiírja a fejlécet
+                if (sor == 5)
+                {
+                    // elkészítjük a fejlécet
+                    MyX.Kiir("Psz", MyF.Oszlopnév(oszlop) + $"{sor}");
+                    MyX.Kiir("Kijelölve", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
+                    MyX.Kiir("Megfelelő", MyF.Oszlopnév(oszlop + 2) + $"{sor}");
+                    MyX.Kiir("Nem Megfelelő", MyF.Oszlopnév(oszlop + 3) + $"{sor}");
+                    MyX.Kiir("Graffiti (m2)", MyF.Oszlopnév(oszlop + 4) + $"{sor}");
+                    MyX.Kiir("Eseti (m2)", MyF.Oszlopnév(oszlop + 5) + $"{sor}");
+                    MyX.Kiir("Fertőtlenítés (m2)", MyF.Oszlopnév(oszlop + 6) + $"{sor}");
+                    sor += 1;
+                }
+
 
                 foreach (Adat_Jármű rekord in AdatokJárműSzűrt)
                 {
@@ -239,6 +253,20 @@ namespace Villamos.Villamos_Nyomtatványok
                                                      where a.Típus == rekordkieg
                                                      orderby a.Azonosító ascending
                                                      select a).ToList();
+
+                //Ha nincs a típusban jármű akkor is írunk fejlécet
+                if (sor == 5)
+                {
+                    // elkészítjük a fejlécet
+                    MyX.Kiir("Psz", MyF.Oszlopnév(oszlop) + $"{sor}");
+                    MyX.Kiir("Kijelölve", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
+                    MyX.Kiir("Megfelelő", MyF.Oszlopnév(oszlop + 2) + $"{sor}");
+                    MyX.Kiir("Nem Megfelelő", MyF.Oszlopnév(oszlop + 3) + $"{sor}");
+                    MyX.Kiir("Graffiti (m2)", MyF.Oszlopnév(oszlop + 4) + $"{sor}");
+                    MyX.Kiir("Eseti (m2)", MyF.Oszlopnév(oszlop + 5) + $"{sor}");
+                    MyX.Kiir("Fertőtlenítés (m2)", MyF.Oszlopnév(oszlop + 6) + $"{sor}");
+                    sor += 1;
+                }
 
                 foreach (Adat_Jármű rekord in AdatokJárműSzűrt)
                 {
