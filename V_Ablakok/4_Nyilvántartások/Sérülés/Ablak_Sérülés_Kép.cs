@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.V_MindenEgyéb;
 using static System.IO.File;
@@ -45,8 +46,11 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.Sérülés
                     {
                         DirectoryInfo di = new DirectoryInfo(folderBrowserDialog1.SelectedPath);
                         utvonal = folderBrowserDialog1.SelectedPath;
-                        FileInfo[] aryFi = di.GetFiles("*.jpg");
-                        foreach (FileInfo fi in aryFi)
+
+                        FileInfo[] jpgFiles = di.GetFiles("*.jpg");
+                        FileInfo[] jpegFiles = di.GetFiles("*.jpeg");
+                        FileInfo[] allImages = jpgFiles.Concat(jpegFiles).ToArray();
+                        foreach (FileInfo fi in allImages)
                             ListBox1.Items.Add(fi.Name);
                     }
                 }
