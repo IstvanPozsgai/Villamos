@@ -91,7 +91,7 @@
             this.Kalkulál.Name = "Kalkulál";
             this.Kalkulál.Size = new System.Drawing.Size(50, 52);
             this.Kalkulál.TabIndex = 114;
-            this.toolTip1.SetToolTip(this.Kalkulál, "SAP km frissítési adatok betöltése");
+            this.toolTip1.SetToolTip(this.Kalkulál, "Napi kiadási adatok km adatainak göngyölése");
             this.Kalkulál.UseVisualStyleBackColor = true;
             this.Kalkulál.Click += new System.EventHandler(this.Kalkulál_Click);
             // 
