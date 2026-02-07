@@ -1216,11 +1216,17 @@ namespace Villamos
                         // rácsozás
                         if (baloldal == 1)
                         {
-                            MyX.Rácsoz(munkalap, $"a{blokkeleje}:g{sor}");
+                            if (blokkeleje < sor)
+                                MyX.Rácsoz(munkalap, $"a{blokkeleje}:g{sor}");
+                            else
+                                MyX.Rácsoz(munkalap, $"a{sor}:g{blokkeleje}");
                         }
                         else
                         {
-                            MyX.Rácsoz(munkalap, $"h{blokkeleje}:o{sor}");
+                            if (blokkeleje < sor)
+                                MyX.Rácsoz(munkalap, $"h{blokkeleje}:o{sor}");
+                            else
+                                MyX.Rácsoz(munkalap, $"h{sor}:o{blokkeleje}");
                         }
 
                         // típus darabszámok
@@ -1245,7 +1251,10 @@ namespace Villamos
                         if (sor == 38)
                         {
                             // az eddigi rácsozása
-                            MyX.Rácsoz(munkalap, $"a{blokkeleje}:g{sor - 1}");
+                            if (blokkeleje < sor - 1)
+                                MyX.Rácsoz(munkalap, $"a{blokkeleje}:g{sor - 1}");
+                            else
+                                MyX.Rácsoz(munkalap, $"a{sor - 1}:g{blokkeleje}");
 
                             sor = 3;
                             baloldal = 2;
@@ -1302,7 +1311,10 @@ namespace Villamos
                     if (sor == 38)
                     {
                         // az eddigi rácsozása
-                        MyX.Rácsoz(munkalap, $"a{blokkeleje}:g{sor - 1}");
+                        if (blokkeleje < sor - 1)
+                            MyX.Rácsoz(munkalap, $"a{blokkeleje}:g{sor - 1}");
+                        else
+                            MyX.Rácsoz(munkalap, $"a{sor - 1}:g{blokkeleje}");
                         sor = 3;
                         baloldal = 2;
                         blokkeleje = 3;
@@ -1398,12 +1410,18 @@ namespace Villamos
                 // utolsó felvonás
                 if (baloldal == 1)
                 {
-                    MyX.Rácsoz(munkalap, $"a{blokkeleje}:g{sor}");
+                    if (blokkeleje < sor)
+                        MyX.Rácsoz(munkalap, $"a{blokkeleje}:g{sor}");
+                    else
+                        MyX.Rácsoz(munkalap, $"a{sor}:g{blokkeleje}");
 
                 }
                 else
                 {
-                    MyX.Rácsoz(munkalap, $"h{blokkeleje}:o{sor}");
+                    if (blokkeleje < sor)
+                        MyX.Rácsoz(munkalap, $"h{blokkeleje}:o{sor}");
+                    else
+                        MyX.Rácsoz(munkalap, $"h{sor}:o{blokkeleje}");
 
                 }
 
