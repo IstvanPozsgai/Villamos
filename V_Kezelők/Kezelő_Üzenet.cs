@@ -21,7 +21,7 @@ namespace Villamos.Kezelők
         private void FájlBeállítás(string Telephely, int Év)
         {
             hely = $@"{Application.StartupPath}\{Telephely.Trim()}\Adatok\üzenetek\{Év}üzenet.mdb";
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.ALÜzenetadatok(hely.KönyvSzerk());
+            if (Telephely.Trim() != "" && !File.Exists(hely)) Adatbázis_Létrehozás.ALÜzenetadatok(hely.KönyvSzerk());
         }
 
         public List<Adat_Üzenet> Lista_Adatok(string Telephely, int Év)
