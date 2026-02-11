@@ -609,7 +609,7 @@ namespace Villamos
             }
         }
 
-           private void FrissítésGombEseménye()
+        private void FrissítésGombEseménye()
         {
             try
             {
@@ -1039,7 +1039,7 @@ namespace Villamos
         {
             int HiányzóKarakterekSzáma = darab - b.ToString().Length;
             string c = "";
-            if (HiányzóKarakterekSzáma >0)
+            if (HiányzóKarakterekSzáma > 0)
             {
                 for (int i = 0; i < HiányzóKarakterekSzáma; i++)
                     c += a;
@@ -1559,7 +1559,7 @@ namespace Villamos
 
                 int j = 1;
                 // megnyitjuk az excel táblát
-                MyX.ExcelMegnyitás(helyexcel);
+
                 List<string> Fájlok = new List<string>();
                 string könyvtár = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + $@"\BehajtásiNyomtatás\";
                 if (!Directory.Exists(könyvtár)) Directory.CreateDirectory(könyvtár);
@@ -1567,10 +1567,15 @@ namespace Villamos
                 int l = 0;
                 string eredmény;
 
+                //Előbb mentjük a munkalapot, hogy ne vesszen el a beszúrt kép.
+                string fájl = $@"{könyvtár}Behajtási_{TáblaLista.SelectedRows[0].Cells[0].Value.ToStrTrim()}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+                Dictionary<string, string> AdatokTáblához = new Dictionary<string, string>();
+                Fájlok.Add(fájl);
+
+
                 for (int i = 0; i < TáblaLista.SelectedRows.Count; i++)
                 {
                     Holtart.Lép();
-                    MyX.Munkalap_aktív("Adatok");
 
                     j++;
                     k = 0;
@@ -1579,27 +1584,38 @@ namespace Villamos
                                                     where a.Sorszám == TáblaLista.SelectedRows[i].Cells[0].Value.ToStrTrim()
                                                     select a).FirstOrDefault();
 
+
                     if (Elem != null)
                     {
-                        MyX.Kiir($"{TáblaLista.SelectedRows[i].Cells[0].Value}".Trim(), $"b{j}");
+                        AdatokTáblához.Add($"B{j}", $"{TáblaLista.SelectedRows[i].Cells[0].Value}".Trim());
+                        //MyX.Kiir($"{TáblaLista.SelectedRows[i].Cells[0].Value}".Trim(), $"b{j}");
                         if (Elem.Korlátlan == "Vezetői")
                         {
-                            MyX.Kiir("Vezetői behajtási engedély".ToUpper(), $"c{j}");
-                            MyX.Kiir("    ", $"e{j}");
+                            AdatokTáblához.Add($"C{j}", "Vezetői behajtási engedély".ToUpper());
+                            AdatokTáblához.Add($"E{j}", "    ");
+                            //MyX.Kiir("Vezetői behajtási engedély".ToUpper(), $"c{j}");
+                            //MyX.Kiir("    ", $"e{j}");
                         }
                         else if (Elem.Korlátlan == "Normál")
                         {
-                            MyX.Kiir("behajtási engedély".ToUpper(), $"c{j}");
-                            MyX.Kiir("Szabad parkoló esetén", $"e{j}");
+                            AdatokTáblához.Add($"C{j}", "Behajtási engedély".ToUpper());
+                            AdatokTáblához.Add($"E{j}", "Szabad parkoló esetén");
+                            //MyX.Kiir("behajtási engedély".ToUpper(), $"c{j}");
+                            //MyX.Kiir("Szabad parkoló esetén", $"e{j}");
                         }
                         else
                         {
-                            MyX.Kiir("Parkolási engedély".ToUpper(), $"c{j}");
-                            MyX.Kiir(Elem.Korlátlan, $"e{j}");
+                            AdatokTáblához.Add($"C{j}", "Parkolási engedély".ToUpper());
+                            AdatokTáblához.Add($"E{j}", Elem.Korlátlan);
+                            //MyX.Kiir("Parkolási engedély".ToUpper(), $"c{j}");
+                            //MyX.Kiir(Elem.Korlátlan, $"e{j}");
                         }
-                        MyX.Kiir(Elem.Név, $"f{j}");
-                        MyX.Kiir(Elem.Rendszám, $"g{j}");
-                        MyX.Kiir($"Érvényes: {Elem.Érvényes:yyyy.MM.dd}", $"h{j}");
+                        AdatokTáblához.Add($"F{j}", Elem.Név);
+                        AdatokTáblához.Add($"G{j}", Elem.Rendszám);
+                        AdatokTáblához.Add($"H{j}", $"Érvényes: {Elem.Érvényes:yyyy.MM.dd}");
+                        //MyX.Kiir(Elem.Név, $"f{j}");
+                        //MyX.Kiir(Elem.Rendszám, $"g{j}");
+                        //MyX.Kiir($"Érvényes: {Elem.Érvényes:yyyy.MM.dd}", $"h{j}");
                         eredmény = "";
 
                         for (l = 6; l <= 17; l++)
@@ -1621,17 +1637,20 @@ namespace Villamos
                             k = 0;
                             eredmény = "Összes";
                         }
-
-                        MyX.Kiir(eredmény, $"d{j}");
+                        AdatokTáblához.Add($"D{j}", eredmény);
+                        //MyX.Kiir(eredmény, $"d{j}");
 
                         if (k == 0)
-                            MyX.Kiir("üzem területére", $"i{j}");
+                            AdatokTáblához.Add($"I{j}", "üzem területére");
+                        //MyX.Kiir("üzem területére", $"i{j}");
 
                         else if (k == 1)
-                            MyX.Kiir("üzem területére", $"i{j}");
+                            AdatokTáblához.Add($"I{j}", "üzem területére");
+                        //MyX.Kiir("üzem területére", $"i{j}");
 
                         else
-                            MyX.Kiir("üzemek területére", $"i{j}");
+                            AdatokTáblához.Add($"I{j}", "üzemek területére");
+                        //MyX.Kiir("üzemek területére", $"i{j}");
 
 
                         // Módosítjuk a kérelem státusát
@@ -1644,27 +1663,21 @@ namespace Villamos
                         // ha a hatodikhoz érünk akkor nyomtatunk egyet.
                         if (j == 7)
                         {
-                            MyX.Munkalap_aktív(munkalapnév);
-                            string fájl = $@"{könyvtár}\Behajtási_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
-                            Fájlok.Add(fájl);
-                            MyX.ExcelMentésMásként(fájl);
+                            MyOpenXML.GenerateFromTemplate(helyexcel, fájl, AdatokTáblához);
+                            AdatokTáblához.Clear();
 
                             j = 1;
-                            MyX.Munkalap_aktív("Adatok");
+                            fájl = $@"{könyvtár}Behajtási_{i}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+                            Fájlok.Add(fájl);
                         }
                     }
                 }
                 if (j != 1)
                 {
-                    MyX.Munkalap_aktív(munkalapnév);
-                    string fájl = $@"{könyvtár}\Behajtási_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
-                    Fájlok.Add(fájl);
-                    MyX.ExcelMentésMásként(fájl);
-
-                    MyX.Munkalap_aktív("Adatok");
+                    MyOpenXML.GenerateFromTemplate(helyexcel, fájl, AdatokTáblához);
                 }
-                // az excel tábla bezárása
-                MyX.ExcelBezárás();
+
+
                 if (Fájlok.Count > 0) MyF.ExcelNyomtatás(Fájlok, munkalapnév, FájlTöröl.Checked);
                 LISTAlista();
                 MessageBox.Show("Az engedélyek nyomtatása megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1965,7 +1978,7 @@ namespace Villamos
                     if (j == 7)
                     {
                         MyX.Munkalap_aktív(munkalapnév);
-                        string fájl = $@"{könyvtár}\Átvétel_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+                        string fájl = $@"{könyvtár}\Átvétel_{i}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
                         Fájlok.Add(fájl);
                         MyX.Munkalap_aktív("Adatok");
                         MyX.ExcelMentésMásként(fájl);
@@ -1976,7 +1989,7 @@ namespace Villamos
                 if (j != 1)
                 {
                     MyX.Munkalap_aktív(munkalapnév);
-                    string fájl = $@"{könyvtár}\Behajtási_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+                    string fájl = $@"{könyvtár}\Behajtási_{TáblaLista.SelectedRows.Count + 1}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
                     Fájlok.Add(fájl);
                     MyX.Munkalap_aktív("Adatok");
                     MyX.ExcelMentésMásként(fájl);
