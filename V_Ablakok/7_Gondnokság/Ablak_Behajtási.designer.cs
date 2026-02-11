@@ -225,8 +225,6 @@ namespace Villamos
             // FájlTöröl
             // 
             this.FájlTöröl.AutoSize = true;
-            this.FájlTöröl.Checked = true;
-            this.FájlTöröl.CheckState = System.Windows.Forms.CheckState.Checked;
             this.FájlTöröl.Location = new System.Drawing.Point(639, 37);
             this.FájlTöröl.Name = "FájlTöröl";
             this.FájlTöröl.Size = new System.Drawing.Size(96, 24);
