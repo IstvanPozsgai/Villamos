@@ -64,7 +64,7 @@ namespace Villamos
             // 
             this.Panel2.Controls.Add(this.Cmbtelephely);
             this.Panel2.Controls.Add(this.Label13);
-            this.Panel2.Location = new System.Drawing.Point(4, 9);
+            this.Panel2.Location = new System.Drawing.Point(7, 9);
             this.Panel2.Name = "Panel2";
             this.Panel2.Size = new System.Drawing.Size(335, 33);
             this.Panel2.TabIndex = 57;
@@ -257,11 +257,11 @@ namespace Villamos
             this.tableLayoutPanel1.Controls.Add(this.Vonalak, 10, 0);
             this.tableLayoutPanel1.Controls.Add(this.Felmentés, 12, 0);
             this.tableLayoutPanel1.Controls.Add(this.BtnSúgó, 14, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(4, 45);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(7, 45);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(839, 48);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(838, 48);
             this.tableLayoutPanel1.TabIndex = 68;
             // 
             // Tábla
@@ -275,7 +275,7 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Tábla.BackgroundColor = System.Drawing.Color.Silver;
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Tábla.Location = new System.Drawing.Point(4, 99);
+            this.Tábla.Location = new System.Drawing.Point(7, 99);
             this.Tábla.Name = "Tábla";
             this.Tábla.Size = new System.Drawing.Size(839, 142);
             this.Tábla.TabIndex = 70;

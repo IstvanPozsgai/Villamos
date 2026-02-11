@@ -147,17 +147,45 @@ namespace Villamos.Kezelők
             try
             {
                 List<Adat_Kerék_Tábla> Adatok = Lista_Adatok();
+                if (Adatok == null)
+                {   //Ha nincs adat akkor mindent rögzíteni kell
+                    Rögzítés(AdatokBe);
+                    return;
+                }
                 List<Adat_Kerék_Tábla> AdatokGy = new List<Adat_Kerék_Tábla>();
                 List<Adat_Kerék_Tábla> AdatokGyR = new List<Adat_Kerék_Tábla>();
-                if (Adatok != null)
+
+                for (int i = 0; i < AdatokBe.Count; i++)
                 {
-                    foreach (Adat_Kerék_Tábla Elem in AdatokBe)
+                    //Ha nincs változás, akkor nem kell semmit csinálni
+                    if (Adatok.Any(a => a.Kerékberendezés.Trim() == AdatokBe[i].Kerékberendezés.Trim() &&
+                                    a.Kerékmegnevezés.Trim() == AdatokBe[i].Kerékmegnevezés.Trim() &&
+                                    a.Kerékgyártásiszám.Trim() == AdatokBe[i].Kerékgyártásiszám.Trim() &&
+                                    a.Föléberendezés.Trim() == AdatokBe[i].Föléberendezés.Trim() &&
+                                    a.Azonosító.Trim() == AdatokBe[i].Azonosító.Trim() &&
+                                    a.Pozíció.Trim() == AdatokBe[i].Pozíció.Trim() &&
+                                    a.Objektumfajta.Trim() == AdatokBe[i].Objektumfajta.Trim()))
+                        continue;
+
+                    //Ha nincs benne, akkor rögzíteni kell, különben módosítani kell
+                    Adat_Kerék_Tábla Rekord_berendezés = (from a in Adatok
+                                                          where (a.Kerékberendezés.Trim() == AdatokBe[i].Kerékberendezés.Trim())
+                                                          select a).FirstOrDefault();
+                    if (Rekord_berendezés == null)
+                        AdatokGyR.Add(AdatokBe[i]);
+                    else
+                        AdatokGy.Add(AdatokBe[i]);
+
+                    // a pozícióban eddig volt berendezést felszabadítja
+                    if (AdatokBe[i].Pozíció.Trim() != "_")
                     {
-                        // a pozícióban eddig volt berendezést felszabadítja
-                        Adat_Kerék_Tábla RégiBerszám = (from a in Adatok
-                                                        where a.Pozíció == Elem.Pozíció && a.Azonosító == Elem.Azonosító && a.Kerékberendezés != Elem.Kerékberendezés
-                                                        select a).FirstOrDefault();
-                        if (RégiBerszám != null)
+                        List<Adat_Kerék_Tábla> RégiBerszámok = (from a in Adatok
+                                                                where a.Pozíció == AdatokBe[i].Pozíció &&
+                                                                a.Azonosító == AdatokBe[i].Azonosító &&
+                                                                a.Kerékberendezés != AdatokBe[i].Kerékberendezés
+                                                                select a).ToList();
+
+                        foreach (Adat_Kerék_Tábla RégiBerszám in RégiBerszámok)
                         {
                             Adat_Kerék_Tábla Adat = new Adat_Kerék_Tábla(
                                   RégiBerszám.Kerékberendezés,
@@ -170,26 +198,7 @@ namespace Villamos.Kezelők
                                   RégiBerszám.Objektumfajta);
                             AdatokGy.Add(Adat);
                         }
-                        //Ha benne van, de rossz helyen
-                        Adat_Kerék_Tábla Rekord_berendezés = (from a in Adatok
-                                                              where (a.Kerékberendezés == Elem.Kerékberendezés && a.Azonosító != Elem.Azonosító)
-                                                                 || (a.Kerékberendezés == Elem.Kerékberendezés && a.Pozíció != Elem.Pozíció)
-                                                              select a).FirstOrDefault();
-                        if (Rekord_berendezés != null)
-                            AdatokGy.Add(Elem);
-
-                        //Ha nincs benne
-                        Rekord_berendezés = (from a in Adatok
-                                             where (a.Kerékberendezés == Elem.Kerékberendezés)
-                                             select a).FirstOrDefault();
-                        if (Rekord_berendezés == null)
-                            AdatokGyR.Add(Elem);
-
-                        //Ha benne van, de nincs kitöltve a megnevezés, gyártási szám
-                        if (Rekord_berendezés.Kerékmegnevezés.Trim() == "" || Rekord_berendezés.Kerékgyártásiszám.Trim() == "")
-                            AdatokGy.Add(Elem);
                     }
-
                 }
 
                 if (AdatokGy.Count > 0) Módosítás(AdatokGy);
