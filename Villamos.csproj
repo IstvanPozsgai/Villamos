@@ -541,6 +541,7 @@
     <Compile Include="V_Adatszerkezet\Adat_ÉpJár_Takarítás_TIG.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Épület_Naptár.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Épület_Takarításrakijelölt.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Üzenet_Olvasás.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_CellaSzöveg.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Ferde.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Betű.cs" />
