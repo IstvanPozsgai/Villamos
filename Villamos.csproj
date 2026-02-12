@@ -393,6 +393,8 @@
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Beosztás_Új.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Személyes.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Telephely.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Eszterga_Muveletek_Naplo.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Eszterga_Uzemora.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hiba.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hiba_Elrendezés.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztagia_Futás.cs" />
