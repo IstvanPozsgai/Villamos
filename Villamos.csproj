@@ -473,6 +473,8 @@
     <Compile Include="V_Adatszerkezet\Adat_Külső_Gépjárművek.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Külső_Telephelyek.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Menetkimaradás_Főmérnökség.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_MEO_KerékMérés.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_MEO_Tábla.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztagia_Futás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztalgia_Állomány.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Raktár.cs" />
