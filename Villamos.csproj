@@ -468,6 +468,10 @@
     <Compile Include="V_Adatszerkezet\Adat_Kiegészítő_Telephely_Igen_Nem.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Kiegészítő_Telephely_Jelenlétiív.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Kiegészítő_Telephely_Szabadságok.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Külső_Dolgozók.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Külső_Email.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Külső_Gépjárművek.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Külső_Telephelyek.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztagia_Futás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztalgia_Állomány.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Raktár.cs" />
