@@ -537,6 +537,7 @@
     <Compile Include="V_Adatszerkezet\Adat_TW6000_Ütemezés_Plusz.cs" />
     <Compile Include="V_Adatszerkezet\Adat_TW6000_ÜtemNapló.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Típuscsere_Adatok.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_utasítás_olvasás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_ÉpJár_Takarítás_TIG.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Épület_Naptár.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Épület_Takarításrakijelölt.cs" />
