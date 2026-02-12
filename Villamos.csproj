@@ -402,6 +402,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Főkönyv_Zser_Km.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hiba.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hiba_Elrendezés.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Hétvége_Beosztás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztagia_Futás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztalgia_Állomány.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Raktár.cs" />
