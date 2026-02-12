@@ -499,6 +499,9 @@
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Túlóra.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Személyzet_Adatok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szerelvény_Napló.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Szerszám_Cikktörzs.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Szerszám_Könyvelés.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Szerszám_Könyvtörzs.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szolgáltató.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Sérülés_Anyag.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Sérülés_Ideig.cs" />
