@@ -389,7 +389,10 @@
     <Compile Include="V_Adatszerkezet\Adat_Ciklus_Sorrend.cs" />
     <Compile Include="V_Adatszerkezet\Adat_DigitálisMunkalap_Dolgozó.cs" />
     <Compile Include="V_Adatszerkezet\Adat_DigitálisMunkalap_Kocsik.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Beosztás_Napló.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Beosztás_Új.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Személyes.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Telephely.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hiba.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hiba_Elrendezés.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztagia_Futás.cs" />
@@ -720,7 +723,6 @@
     <Compile Include="V_Adatbázis\Adatbázis_Bejelentkezés.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Excel_Beolvasás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Belépés_Verzió.cs" />
-    <Compile Include="V_Adatszerkezet\Adat_Dolgozó.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Excel_Beolvasás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Gombok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_ICS_előterv.cs" />
