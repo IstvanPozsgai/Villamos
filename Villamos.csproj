@@ -420,6 +420,12 @@
     <Compile Include="V_Adatszerkezet\Adat_Jármű_Vendég.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű_Xnapos.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű_Állomány_Típus.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Kerék_Eszterga_Automata.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Kerék_Eszterga_Esztergályos.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Kerék_Eszterga_Naptár.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Kerék_Eszterga_Tengely.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Kerék_Eszterga_Terjesztés.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Kerék_Eszterga_Tevékenység.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztagia_Futás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztalgia_Állomány.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Raktár.cs" />
