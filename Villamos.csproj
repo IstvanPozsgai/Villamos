@@ -387,6 +387,8 @@
     <Compile Include="V_Adatszerkezet\Adat_CAF_KM_Attekintes.cs" />
     <Compile Include="V_Adatszerkezet\Adat_CAF_Szinezés.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Ciklus_Sorrend.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_DigitálisMunkalap_Dolgozó.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_DigitálisMunkalap_Kocsik.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Beosztás_Új.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hiba.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hiba_Elrendezés.cs" />
