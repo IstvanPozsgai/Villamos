@@ -404,6 +404,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Szabadság.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Túlóra.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szolgáltató.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_ÉpJár_Takarítás_TIG.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Épület_Naptár.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Épület_Takarításrakijelölt.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_CellaSzöveg.cs" />
