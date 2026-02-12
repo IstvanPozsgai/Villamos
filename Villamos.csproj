@@ -542,6 +542,9 @@
     <Compile Include="V_Adatszerkezet\Adat_Váltós_Váltóscsopitábla.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Váltós_Váltóstábla.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Váltós_Összesítő.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Védő_Cikktörzs.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Védő_Könyvelés.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Védő_Napló.cs" />
     <Compile Include="V_Adatszerkezet\Adat_ÉpJár_Takarítás_TIG.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Épület_Naptár.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Épület_Takarításrakijelölt.cs" />
