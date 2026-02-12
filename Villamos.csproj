@@ -382,6 +382,10 @@
     <Compile Include="V_Adatszerkezet\Adat_Behajtás_Telephelystátusz.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Belépés_Jogosultságtábla.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Belépés_WinTábla.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_CAF_Adatok.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_CAF_Adatok_Pót.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_CAF_KM_Attekintes.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_CAF_Szinezés.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Ciklus_Sorrend.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Beosztás_Új.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hiba.cs" />
