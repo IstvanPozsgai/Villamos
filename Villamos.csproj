@@ -371,6 +371,15 @@
     <Compile Include="V_Adatszerkezet\Adat_Akkumulátor_Napló.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Anyagok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Beallitas_Diagram.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Behajtási_Engedélyek.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Behajtás_Behajtási.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Behajtás_Behajtási_Napló.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Behajtás_Dolgozótábla.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Behajtás_Engedélyezés.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Behajtás_Jogosultság.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Behajtás_Kérelemoka.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Behajtás_Kérelemsátus.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Behajtás_Telephelystátusz.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Ciklus_Sorrend.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Beosztás_Új.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hiba.cs" />
