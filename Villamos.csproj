@@ -517,6 +517,7 @@
     <Compile Include="V_Adatszerkezet\Adat_T5C5_Kmadatok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_T5C5_Kmadatok_Napló.cs" />
     <Compile Include="V_Adatszerkezet\Adat_T5C5_Posta.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Takarítás_Telep_Opció.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Telep_Kieg_Fortetípus.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Telep_Kiegészítő_E3típus.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Telep_Kiegészítő_Kidobó.cs" />
