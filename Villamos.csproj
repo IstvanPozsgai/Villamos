@@ -403,6 +403,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Hiba.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hiba_Elrendezés.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hétvége_Beosztás.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Jármű_2ICS.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű_hiba.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű_Javításiátfutástábla.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű_Napló.cs" />
