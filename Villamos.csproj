@@ -407,6 +407,15 @@
     <Compile Include="V_Adatszerkezet\Adat_Jármű_hiba.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű_Javításiátfutástábla.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű_Napló.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Jármű_Takarítás_J1.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Jármű_Takarítás_Kötbér.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Jármű_Takarítás_Létszám.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Jármű_Takarítás_Mátrix.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Jármű_Takarítás_Napló.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Jármű_Takarítás_Takarítások.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Jármű_Takarítás_Teljesítés.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Jármű_Takarítás_Árak.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Jármű_Takarítás_Ütemező.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű_Vendég.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű_Xnapos.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű_Állomány_Típus.cs" />
