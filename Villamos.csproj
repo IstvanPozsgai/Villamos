@@ -486,6 +486,7 @@
     <Compile Include="V_Adatszerkezet\Adat_OktatásiSegéd.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Oktatásrajelöltek.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Oktatás_Napló.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Osztály_Név.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Raktár.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_AFT.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Beteg.cs" />
