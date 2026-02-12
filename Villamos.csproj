@@ -421,6 +421,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Jármű_Xnapos.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű_Állomány_Típus.cs" />
     <Compile Include="V_Adatszerkezet\Adat_KerékEszterga.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_KerékmérőTengely.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Kerék_Erő.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Kerék_Eszterga_Automata.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Kerék_Eszterga_Esztergályos.cs" />
