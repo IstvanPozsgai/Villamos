@@ -482,6 +482,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Munka_Szolgálat.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztagia_Futás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztalgia_Állomány.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Nóta_SAP.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Raktár.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_AFT.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Beteg.cs" />
