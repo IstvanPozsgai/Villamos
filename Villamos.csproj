@@ -1371,7 +1371,6 @@
     <Compile Include="V_Kezelők\Kezelő_T5C5_Havi_Nap.cs" />
     <Compile Include="V_Adatszerkezet\Adat_T5C5_Havi_Nap.cs" />
     <Compile Include="V_Adatbázis\Adatbázis.cs" />
-    <Compile Include="V_Adatszerkezet\Adat_Alap_kiadás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Főkönyv_Nap.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nap_Hiba.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű.cs" />
