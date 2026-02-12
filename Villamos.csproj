@@ -395,6 +395,11 @@
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Telephely.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Eszterga_Muveletek_Naplo.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Eszterga_Uzemora.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Főkönyv_SegédTábla.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Főkönyv_Személyzet.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_FőKönyv_Típuscsere.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Főkönyv_ZSER.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Főkönyv_Zser_Km.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hiba.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Hiba_Elrendezés.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nosztagia_Futás.cs" />
