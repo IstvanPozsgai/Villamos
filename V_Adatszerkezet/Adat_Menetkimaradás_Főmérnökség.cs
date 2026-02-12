@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Villamos.Adatszerkezet
 {
-    public class Adat_Menetkimaradás
+    public class Adat_Menetkimaradás_Főmérnökség
     {
 
         public string Viszonylat { get; private set; }
@@ -19,7 +23,10 @@ namespace Villamos.Adatszerkezet
         public string Jelentés { get; private set; }
         public long Tétel { get; private set; }
 
-        public Adat_Menetkimaradás(string viszonylat, string azonosító, string típus, string eseményjele, DateTime bekövetkezés, long kimaradtmenet, string jvbeírás, string vmbeírás, string javítás, long id, bool törölt, string jelentés, long tétel)
+        public string Telephely { get; private set; }
+        public string Szolgálat { get; private set; }
+
+        public Adat_Menetkimaradás_Főmérnökség(string viszonylat, string azonosító, string típus, string eseményjele, DateTime bekövetkezés, long kimaradtmenet, string jvbeírás, string vmbeírás, string javítás, long id, bool törölt, string jelentés, long tétel, string telephely, string szolgálat)
         {
             Viszonylat = viszonylat;
             Azonosító = azonosító;
@@ -34,7 +41,8 @@ namespace Villamos.Adatszerkezet
             Törölt = törölt;
             Jelentés = jelentés;
             Tétel = tétel;
+            Telephely = telephely;
+            Szolgálat = szolgálat;
         }
     }
-
 }
