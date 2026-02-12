@@ -509,6 +509,14 @@
     <Compile Include="V_Adatszerkezet\Adat_Sérülés_Költség.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Sérülés_Művelet.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Sérülés_Visszajelentés.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_T5C5_Előterv.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_T5C5_Futás.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_T5C5_Futás1.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_T5C5_Göngyöl.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_T5C5_Göngyöl_DátumTábla.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_T5C5_Kmadatok.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_T5C5_Kmadatok_Napló.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_T5C5_Posta.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Telep_Kieg_Fortetípus.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Telep_Kiegészítő_E3típus.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Telep_Kiegészítő_Kidobó.cs" />
