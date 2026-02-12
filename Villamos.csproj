@@ -395,6 +395,8 @@
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Telephely.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Eszterga_Muveletek_Naplo.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Eszterga_Uzemora.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Forte_Kiadási_Adatok.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_FőKiadási_adatok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Főkönyv_SegédTábla.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Főkönyv_Személyzet.cs" />
     <Compile Include="V_Adatszerkezet\Adat_FőKönyv_Típuscsere.cs" />
@@ -438,7 +440,9 @@
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Csúsztatás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Szabadság.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szatube_Túlóra.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Személyzet_Adatok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szolgáltató.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Típuscsere_Adatok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_ÉpJár_Takarítás_TIG.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Épület_Naptár.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Épület_Takarításrakijelölt.cs" />
