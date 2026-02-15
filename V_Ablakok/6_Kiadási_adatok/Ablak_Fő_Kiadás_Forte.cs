@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -35,7 +35,7 @@ namespace Villamos
             //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
             //ha nem akkor a régit használjuk
             if (Program.PostásJogkör.Substring(0, 1) == "R")
-                GombLathatosagKezelo.Beallit(this);
+                GombLathatosagKezelo.Beallit(this, "Főmérnökség");
             else
                 Jogosultságkiosztás();
             Adatok_Forte = Kéz_Forte.Lista_Adatok(Dátum.Value.Year);
