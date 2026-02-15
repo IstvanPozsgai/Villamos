@@ -61,13 +61,14 @@ namespace Villamos
                 Kategóriák();
                 Listák_Feltöltés();
 
-                if (Program.PostásJogkör.Substring(0, 1) != "R")
+                if (Program.PostásJogkör.Substring(0, 1) == "R")
                 {
-                    Jogosultságkiosztás();
+                    GombLathatosagKezelo.Beallit(this, "Főmérnökség");
+
                 }
                 else
                 {
-                    GombLathatosagKezelo.Beallit(this);
+                    Jogosultságkiosztás();
                 }
             }
 
