@@ -144,30 +144,16 @@ namespace Villamos
                 Verzióellenőrzés();
         }
 
-        // JAVÍTANDÓ:
         private void WinVan()
         {
             try
             {
-                //List<Adat_Belépés_WinTábla> Adatok = KézWin.Lista_Adatok();
+                Adat_Users Elem = (from a in Adatok
+                                   where a.WinUserName.ToUpper() == Environment.UserName.ToUpper()
+                                   select a).FirstOrDefault();
 
-                //if (Adatok != null)
-                //{
-                //    Adat_Belépés_WinTábla Elem = (from a in Adatok
-                //                                  where a.WinUser.ToUpper() == Environment.UserName.ToUpper()
-                //                                  select a).FirstOrDefault();
-
-                //    //Ha van ilyen dolgozó, akkor beléptetjük
-                //    if (Elem != null)
-                //    {
-                //        AdatokBelépésTelephely = Kéz_Bejelentkezés.Lista_Adatok(Elem.Telephely);
-                //        Adat_Belépés_Bejelentkezés Kiaz = (from a in AdatokBelépésTelephely
-                //                                           where a.Név.ToUpper() == Elem.Név.ToUpper()
-                //                                           select a).FirstOrDefault();
-
-                //        Belépés(Elem.Telephely, Elem.Név.ToUpper(), Kiaz.Jelszó.ToUpper());
-                //    }
-                //}
+                //Ha van ilyen dolgozó, akkor beléptetjük
+                if (Elem != null) Belépés(Elem);
             }
             catch (HibásBevittAdat ex)
             {
