@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Kezelők;
 using Villamos.Adatszerkezet;
+using Villamos.Kezelők;
 using MyEn = Villamos.V_MindenEgyéb.Enumok;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
 {
@@ -149,7 +150,7 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
         private void ValidateKeyPress(object sender, KeyPressEventArgs e)
         {
             //Kerék állapot
-            if (!(((char)(e.KeyChar) >= 48 && (char)(e.KeyChar) <= 59) || (char)(e.KeyChar) == 8 ))
+            if (!(((char)(e.KeyChar) >= 48 && (char)(e.KeyChar) <= 59) || (char)(e.KeyChar) == 8))
             {
                 MessageBox.Show("Csak 0-9 közötti számot lehet beírni!");
                 e.Handled = true;
@@ -194,7 +195,7 @@ namespace Villamos.Villamos_Ablakok.Kerék_nyilvántartás
                             int.Parse(Tábla.Rows[i].Cells[7].Value.ToString()),
                             Program.PostásNév.Trim(),
                             DateTime.Now,
-                            RögzítOka.Text.Trim(),
+                            MyF.Szöveg_Tisztítás(RögzítOka.Text.Trim()),
                             0);
                         AdatokGy.Add(Adat);
                     }
