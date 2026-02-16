@@ -55,6 +55,7 @@ namespace Villamos
         readonly Beállítás_Betű BeBetűV = new Beállítás_Betű { Vastag = true };
         readonly Beállítás_Betű BeBetűD = new Beállítás_Betű { Dőlt = true };
         readonly Beállítás_Betű BeBetű10 = new Beállítás_Betű { Méret = 10 };
+        readonly Beállítás_Betű BeBetű10V = new Beállítás_Betű { Méret = 10, Vastag = true };
         readonly Beállítás_Betű BeBetű11 = new Beállítás_Betű { Méret = 11 };
         readonly Beállítás_Betű BeBetű11V = new Beállítás_Betű { Méret = 11, Vastag = true };
         readonly Beállítás_Betű BeBetű14 = new Beállítás_Betű { Méret = 14 };
@@ -2662,8 +2663,8 @@ namespace Villamos
                 else
                     return;
                 string munkalap = "Munka1";
-                MyX.DataGridViewToXML(fájlexc, Tábla2);
 
+                MyX.DataGridViewToXML(fájlexc, Tábla2);
                 MyX.ExcelMegnyitás(fájlexc);
 
                 int utolsóoszlop = MyX.Utolsóoszlop(munkalap);
@@ -2671,25 +2672,28 @@ namespace Villamos
                 // oszlopszélesség
                 MyX.Munkalap_betű(munkalap, BeBetű10);
                 MyX.Oszlopszélesség(munkalap, "A:D", 10);
-                MyX.Oszlopszélesség(munkalap, "e:e", 9);
-                MyX.Oszlopszélesség(munkalap, "f:f", 33);
-                MyX.Oszlopszélesség(munkalap, "g:g", 20);
-                MyX.Oszlopszélesség(munkalap, "h:h", 15);
-                MyX.Sormagasság(munkalap, "1:1", 25);
-                MyX.Sormagasság(munkalap, $"2:{utolsósor}", 18);
-                MyX.Betű(munkalap, "1:1", BeBetűV);
+                MyX.Oszlopszélesség(munkalap, "B:B", 13);
+                MyX.Oszlopszélesség(munkalap, "C:C", 17);
+                MyX.Oszlopszélesség(munkalap, "D:D", 17);
+                MyX.Oszlopszélesség(munkalap, "E:E", 12);
+                MyX.Oszlopszélesség(munkalap, "F:F", 50);
+                MyX.Oszlopszélesség(munkalap, "G:G", 30);
 
-                MyX.Igazít_vízszintes(munkalap, "A:G", "közép");
+                MyX.Sormagasság(munkalap, "A1:G1", 25);
+                MyX.Sormagasság(munkalap, $"A2:G{utolsósor}", 18);
+                MyX.Betű(munkalap, "A1:G1", BeBetű10V);
+
+                MyX.Igazít_vízszintes(munkalap, $"A1:G{utolsósor}", "közép");
 
                 // egész rácsoz és vastagkeret
-                MyX.Rácsoz(munkalap, "B1:" + MyF.Oszlopnév(utolsóoszlop) + utolsósor.ToStrTrim());
-                MyX.Vastagkeret(munkalap, $"B1:G{utolsósor}");
+                MyX.Rácsoz(munkalap, $"B1:{MyF.Oszlopnév(utolsóoszlop)}{utolsósor}");
+            
 
                 // nyomtatási terület
                 Beállítás_Nyomtatás BeNyom = new Beállítás_Nyomtatás
                 {
                     Munkalap = munkalap,
-                    NyomtatásiTerület = $"B1:{MyF.Oszlopnév(utolsóoszlop)}{utolsósor}",
+                    NyomtatásiTerület = $"A1:{MyF.Oszlopnév(utolsóoszlop)}{utolsósor}",
                     LapSzéles = 1,
                     FejlécKözép = Program.PostásNév,
                     FejlécJobb = DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss"),

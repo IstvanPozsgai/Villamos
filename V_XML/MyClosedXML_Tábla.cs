@@ -94,7 +94,7 @@ namespace Villamos
                 {
                     if (oszlop.Visible)
                     {
-                        ÚjTábla.Columns.Add(oszlop.HeaderText);
+                        ÚjTábla.Columns.Add(oszlop.HeaderText.Trim ());
                     }
                 }
                 foreach (DataGridViewRow sor in Tábla.Rows)
