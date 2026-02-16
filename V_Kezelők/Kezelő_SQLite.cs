@@ -106,13 +106,16 @@ namespace Villamos.Kezelők
                         int Date = reader.GetInt32(2);
                         int TrueOrFalse = reader.GetInt32(3);
 
-                        TestList.Add(new Adat_SQLite(id, Username, DateTimeOffset.FromUnixTimeSeconds(Date).DateTime, TrueOrFalse == 1));
+                        // Figyelni kell arra, hogy megjelenítéskor használjuk a ToLocalTime beépített metódust!
+                        // Alapból UNIX timestamp-ben tárolom/tárolja az adatokat, ami a 1970/01/01 00:00:00 óta eltelt másodperceket számolja UTC időzónában.
+                        // Mi UTC+1 időzónában vagyunk, így korrigálni kell megjelenítéskor, mivel UTC-ben tároljuk az adatbázisban.
+                        TestList.Add(new Adat_SQLite(id, Username, DateTimeOffset.FromUnixTimeSeconds(Date).ToLocalTime().DateTime, TrueOrFalse == 1));
                     }
                     return TestList;
                 }
                 else
                 {
-                    Console.WriteLine("No authors found.");
+                    
                 }
 
                 connection.Close();
