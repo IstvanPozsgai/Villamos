@@ -61,7 +61,7 @@ namespace Villamos.Kezelők
             }
             catch (SqliteException ex)
             {
-                Console.WriteLine(ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
         public void InsertData(string username, int date, int trueorfalse)
@@ -81,7 +81,7 @@ namespace Villamos.Kezelők
             }
             catch (SqliteException ex)
             {
-                Console.WriteLine(ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
         // Read
@@ -124,7 +124,7 @@ namespace Villamos.Kezelők
             }
             catch (SqliteException ex)
             {
-                Console.WriteLine(ex.Message);
+                MessageBox.Show(ex.Message);
                 return TestList;
             }
         }
@@ -145,7 +145,7 @@ namespace Villamos.Kezelők
             }
             catch (SqliteException ex)
             {
-                Console.WriteLine(ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
         // Delete
@@ -165,7 +165,7 @@ namespace Villamos.Kezelők
             }
             catch (SqliteException ex)
             {
-                Console.WriteLine(ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
     }
