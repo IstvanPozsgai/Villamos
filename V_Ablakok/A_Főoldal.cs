@@ -2786,7 +2786,7 @@ namespace Villamos
         {
             if (Új_Ablak_SQLite == null)
             {
-                Új_Ablak_SQLite = new Ablak_SQLite();
+                Új_Ablak_SQLite = new Ablak_SQLite(Program.PostásNév);
                 Új_Ablak_SQLite.FormClosed += Ablak_SQLiteTeszt_FormClosed;
                 Új_Ablak_SQLite.Show();
             }

@@ -1,31 +1,24 @@
 ﻿using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.OleDb;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
-using Villamos.Adatszerkezet;
-using Villamos.Villamos_Adatbázis_Funkció;
-using MyA = Adatbázis;
+using Villamos.V_Adatszerkezet;
 
 namespace Villamos.Kezelők
 {
     public class Kezelő_SQLite
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\SQLite\Test.db";
-        readonly string Password = "CzabalayL";
+        readonly string Password = "VivaTV";
         readonly string TableName = "TestTable";
         string ConnectionString;
 
-
-        public Kezelő_SQLite()           
+        public Kezelő_SQLite()
         {
             EnsureDirectory();
-            ConnectionString = BuildConnectionString();            
+            ConnectionString = BuildConnectionString();
         }
-
 
         private void EnsureDirectory()
         {
@@ -35,7 +28,6 @@ namespace Villamos.Kezelők
                 Directory.CreateDirectory(dir);
             }
         }
-
 
         string BuildConnectionString()
         {
@@ -48,7 +40,6 @@ namespace Villamos.Kezelők
         }
 
         // Create
-
         public void CreateTable()
         {
             var sql = $@"CREATE TABLE {TableName}(
@@ -63,7 +54,7 @@ namespace Villamos.Kezelők
                 connection.Open();
 
                 var command = new SqliteCommand(sql, connection);
-                command.ExecuteNonQuery();               
+                command.ExecuteNonQuery();
 
                 connection.Close();
 
@@ -73,9 +64,6 @@ namespace Villamos.Kezelők
                 Console.WriteLine(ex.Message);
             }
         }
-
-        // Read
-
         public void InsertData(string username, int date, int trueorfalse)
         {
             var sql = $@"INSERT INTO {TableName} (username, date, trueorfalse)
@@ -96,11 +84,89 @@ namespace Villamos.Kezelők
                 Console.WriteLine(ex.Message);
             }
         }
+        // Read
+        public List<Adat_SQLite> ReadAllData()
+        {
+            List<Adat_SQLite> TestList = new List<Adat_SQLite>();
+            var sql = $@"SELECT * FROM {TableName}";
+            try
+            {
+                SqliteConnection connection = new SqliteConnection(ConnectionString);
+                connection.Open();
 
+                var command = new SqliteCommand(sql, connection);
+                var reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        int id = reader.GetInt32(0);
+                        string Username = reader.GetString(1);
+                        int Date = reader.GetInt32(2);
+                        int TrueOrFalse = reader.GetInt32(3);
+
+                        TestList.Add(new Adat_SQLite(id, Username, DateTimeOffset.FromUnixTimeSeconds(Date).DateTime, TrueOrFalse == 1));
+                    }
+                    return TestList;
+                }
+                else
+                {
+                    Console.WriteLine("No authors found.");
+                }
+
+                connection.Close();
+                return TestList;
+
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return TestList;
+            }
+        }
         // Update
+        public void UpdateData(Adat_SQLite Data, int ID)
+        {
+            int trueOrFalse = Data.TrueOrFalse ? 0 : 1;
+            var sql = $@"UPDATE {TableName} SET trueorfalse = {trueOrFalse}, date = {DateTimeOffset.Now.ToUnixTimeSeconds()} WHERE id = {ID}";
+            try
+            {
+                SqliteConnection connection = new SqliteConnection(ConnectionString);
+                connection.Open();
 
+                var command = new SqliteCommand(sql, connection);
+                command.ExecuteNonQuery();
+
+                connection.Close();
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
         // Delete
+        public void DeleteData(int ID)
+        {
+            var sql = $@"DELETE FROM {TableName} WHERE id ={ID}";
+            try
+            {
+                SqliteConnection connection = new SqliteConnection(ConnectionString);
+                connection.Open();
 
+                var command = new SqliteCommand(sql, connection);
+                command.ExecuteNonQuery();
+
+                connection.Close();
+
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
     }
+
 }
+
 
