@@ -323,7 +323,7 @@ namespace Villamos
                 for (int i = 5; i < lines.Length; i++)  // lines
                 {
                     Soradatok = lines[i].ToString().Split('\t');
-
+                    if (Soradatok.Length == 1 && Soradatok[0].Trim() == "") continue;
                     List<string> Értékek = new List<string>();
                     List<string> Mezők = new List<string>();
                     // Feldaraboljuk a sort elemekre és beletesszük a megfelelő helyre
@@ -338,7 +338,10 @@ namespace Villamos
                             Mezők.Add(Fejléc[j].ToStrTrim());
                         }
                     }
-                    pályaszám = MyF.Szöveg_Tisztítás(Soradatok[Sorszám[0]], 1, -1).Trim();
+                    pályaszám = Soradatok[Sorszám[0]].Trim();
+                    if (pályaszám.Trim() == "") continue;
+
+                    pályaszám = MyF.Szöveg_Tisztítás(pályaszám, 1, -1);
 
                     // az új azonosító
                     Adat_Osztály_Adat Elem = (from a in AdatokAdat
