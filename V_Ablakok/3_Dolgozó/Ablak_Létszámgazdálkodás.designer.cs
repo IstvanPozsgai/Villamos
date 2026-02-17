@@ -953,10 +953,9 @@ namespace Villamos
             // 
             // label30
             // 
-            this.label30.AutoSize = true;
             this.label30.Location = new System.Drawing.Point(8, 159);
             this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(711, 100);
+            this.label30.Size = new System.Drawing.Size(618, 155);
             this.label30.TabIndex = 99;
             this.label30.Text = resources.GetString("label30.Text");
             // 
