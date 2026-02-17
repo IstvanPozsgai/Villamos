@@ -386,7 +386,7 @@ namespace Villamos
                 Program.PostásOldalak = KézOldal.Lista_Adatok();
                 foreach (ToolStripMenuItem item in Program.PostásMenü)
                 {
-                    Adat_Oldalak Adat = Program.PostásOldalak.FirstOrDefault(a => a.MenuName == item.Name);
+                    Adat_Bejelentkezés_Oldalak Adat = Program.PostásOldalak.FirstOrDefault(a => a.MenuName == item.Name);
                     if (Adat != null) item.Enabled = Adat.Látható;
                 }
 
@@ -398,7 +398,7 @@ namespace Villamos
                 List<int> JogIDék = Program.PostásJogosultságok.Select(a => a.OldalId).Distinct().ToList();
                 foreach (ToolStripMenuItem item in Program.PostásMenü)
                 {
-                    Adat_Oldalak OldalAdat = Program.PostásOldalak.FirstOrDefault(a => a.MenuName == item.Name);
+                    Adat_Bejelentkezés_Oldalak OldalAdat = Program.PostásOldalak.FirstOrDefault(a => a.MenuName == item.Name);
                     if (OldalAdat != null)
                     {
                         if (JogIDék.Contains(OldalAdat.OldalId)) item.Enabled = true;

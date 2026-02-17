@@ -21,7 +21,7 @@ namespace Villamos
         readonly Kezelő_Jogosultságok KézJogosultságok = new Kezelő_Jogosultságok();
 
         List<Adat_Users> AdatokUsers = new List<Adat_Users>();
-        List<Adat_Oldalak> AdatokOldal = new List<Adat_Oldalak>();
+        List<Adat_Bejelentkezés_Oldalak> AdatokOldal = new List<Adat_Bejelentkezés_Oldalak>();
         List<Adat_Gombok> AdatokGombok = new List<Adat_Gombok>();
         List<Adat_Kiegészítő_Könyvtár> AdatokSzervezet = new List<Adat_Kiegészítő_Könyvtár>();
         List<Adat_Behajtás_Dolgozótábla> AdatokDolgozó = new List<Adat_Behajtás_Dolgozótábla>();
@@ -75,7 +75,7 @@ namespace Villamos
         {
             try
             {
-                foreach (Adat_Oldalak Elem in AdatokOldal)
+                foreach (Adat_Bejelentkezés_Oldalak Elem in AdatokOldal)
                 {
                     CmbAblak.Items.Add(Elem.MenuFelirat);
                     CmbAblakId.Items.Add(Elem.OldalId.ToString());
@@ -100,7 +100,7 @@ namespace Villamos
             if (CmbAblak.Text.Trim() == "") return;
             CmbGombok.Items.Clear();
             CmbGombId.Items.Clear();
-            Adat_Oldalak oldal = (from a in AdatokOldal
+            Adat_Bejelentkezés_Oldalak oldal = (from a in AdatokOldal
                                   where a.Törölt == false
                                   && a.MenuFelirat == CmbAblak.Text.Trim()
                                   orderby a.MenuFelirat
@@ -155,7 +155,7 @@ namespace Villamos
             try
             {
                 CmbAblak.Text = CmbAblak.Items[CmbAblak.SelectedIndex].ToString();
-                Adat_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
+                Adat_Bejelentkezés_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
                 AblakFormName = Ablak.FromName;
                 AblakFőID = Ablak.OldalId;
                 CmbAblakId.Text = Ablak.OldalId.ToString();
@@ -468,7 +468,7 @@ namespace Villamos
             CmbGombId.Text = Tábla.Rows[e.RowIndex].Cells[5].Value.ToStrTrim();
             CmbAblak.Text = Tábla.Rows[e.RowIndex].Cells[1].Value.ToStrTrim();
             CmbAblakId.Text = Tábla.Rows[e.RowIndex].Cells[4].Value.ToStrTrim();
-            Adat_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
+            Adat_Bejelentkezés_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
             AblakFormName = Ablak.FromName;
             AblakFőID = Ablak.OldalId;
 
@@ -583,7 +583,7 @@ namespace Villamos
         private void CmbAblakId_SelectionChangeCommitted(object sender, EventArgs e)
         {
             CmbAblakId.Text = CmbAblakId.Items[CmbAblakId.SelectedIndex].ToString();
-            Adat_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.OldalId == CmbAblakId.Text.ToÉrt_Int());
+            Adat_Bejelentkezés_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.OldalId == CmbAblakId.Text.ToÉrt_Int());
             AblakFormName = Ablak.FromName;
             CmbAblak.Text = Ablak.MenuFelirat;
             AblakFőID = Ablak.OldalId;

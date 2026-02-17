@@ -36,7 +36,7 @@ namespace Villamos
         public static List<ToolStripMenuItem> PostásMenü = new List<ToolStripMenuItem>();
         public static int PostásNévId = 1;  //Vendég bejelentkezés
         public static List<Adat_Jogosultságok> PostásJogosultságok = new List<Adat_Jogosultságok>();
-        public static List<Adat_Oldalak> PostásOldalak = new List<Adat_Oldalak>();
+        public static List<Adat_Bejelentkezés_Oldalak> PostásOldalak = new List<Adat_Bejelentkezés_Oldalak>();
         public static List<Adat_Gombok> PostásGombok = new List<Adat_Gombok>();
         public static List<Adat_Kiegészítő_Könyvtár> PostásKönyvtár = new List<Adat_Kiegészítő_Könyvtár>();
         public static Adat_Users Postás_Felhasználó = null;

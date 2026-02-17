@@ -18,7 +18,7 @@ namespace Villamos.Ablakok
         DataTable AdatTáblaALap = new DataTable();
 #pragma warning restore IDE0044
 
-        List<Adat_Oldalak> Adatok = new List<Adat_Oldalak>();
+        List<Adat_Bejelentkezés_Oldalak> Adatok = new List<Adat_Bejelentkezés_Oldalak>();
 
 
         public Ablak_Formok()
@@ -125,7 +125,7 @@ namespace Villamos.Ablakok
             {
                 if (string.IsNullOrEmpty(MenüNév.Text.Trim())) throw new HibásBevittAdat("Kérem adja meg a Menü nevét!");
 
-                Adat_Oldalak adat = new Adat_Oldalak(
+                Adat_Bejelentkezés_Oldalak adat = new Adat_Bejelentkezés_Oldalak(
                         TxtId.Text.ToÉrt_Int(),
                         Ablaknév.Text.ToStrTrim(),
                         MenüNév.Text.ToStrTrim(),
@@ -191,7 +191,7 @@ namespace Villamos.Ablakok
         private void AlapTáblaTartalom()
         {
             AdatTáblaALap.Clear();
-            foreach (Adat_Oldalak rekord in Adatok)
+            foreach (Adat_Bejelentkezés_Oldalak rekord in Adatok)
             {
                 DataRow Soradat = AdatTáblaALap.NewRow();
 
@@ -306,7 +306,7 @@ namespace Villamos.Ablakok
         {
             try
             {
-                Adat_Oldalak adat = (from a in Adatok
+                Adat_Bejelentkezés_Oldalak adat = (from a in Adatok
                                      where a.OldalId == ID
                                      select a).FirstOrDefault();
                 if (adat == null) return;
