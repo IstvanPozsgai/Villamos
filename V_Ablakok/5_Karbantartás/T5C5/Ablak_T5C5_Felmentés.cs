@@ -383,7 +383,14 @@ namespace Villamos.V_Ablakok._5_Karbantartás.T5C5
             }
             else
             {
-                MessageBox.Show("Ehhez a Ciklus típushoz nincsenek még beállítva adatok!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Címzett.Text = "";
+                Másolat.Text = "";
+                Tárgy.Text = "";
+                Kért_vizsgálat.Text = "";
+                Bevezetés.Text = "";
+                Tárgyalás.Text = "";
+                Befejezés.Text = "";
+                        Felmentés_Id.Text = ""; 
             }
         }
 
