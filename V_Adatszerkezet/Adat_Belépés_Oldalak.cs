@@ -5,7 +5,7 @@ using System.Data.Entity;
 
 namespace Villamos.Adatszerkezet
 {
-    public class Adat_Bejelentkezés_Oldalak
+    public class Adat_Belépés_Oldalak
     {
         [Key]
         public int OldalId { get; private set; }
@@ -21,12 +21,12 @@ namespace Villamos.Adatszerkezet
         public bool Látható { get; private set; }
         public bool Törölt { get; private set; }
 
-        public Adat_Bejelentkezés_Oldalak()
+        public Adat_Belépés_Oldalak()
         {
 
         }
 
-        public Adat_Bejelentkezés_Oldalak(int oldalId, string fromName, string menuName, string menuFelirat, bool látható, bool törölt)
+        public Adat_Belépés_Oldalak(int oldalId, string fromName, string menuName, string menuFelirat, bool látható, bool törölt)
         {
             OldalId = oldalId;
             FromName = fromName;
@@ -42,7 +42,7 @@ namespace Villamos.Adatszerkezet
         // A konstruktorban megadjuk a kapcsolat nevét az App.config-ból
         public Context_Bejelentkezés_Oldalak() : base("SajátSqliteKapcsolat") { }
 
-        public DbSet<Adat_Bejelentkezés_Oldalak> Oldalak { get; set; }
+        public DbSet<Adat_Belépés_Oldalak> Oldalak { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -52,18 +52,6 @@ namespace Villamos.Adatszerkezet
         }
 
 
-        //Használati példa:
-        public void valami()
-        {
-            using (Context_Bejelentkezés_Oldalak db = new Context_Bejelentkezés_Oldalak())
-            {
-                Adat_Bejelentkezés_Oldalak ujOldal = new Adat_Bejelentkezés_Oldalak(1, "Home", "Főmenü", "Kezdőlap", true, false);
-                db.Oldalak.Add(ujOldal);
-                db.SaveChanges(); // Itt jön létre az adatbázis és a tábla, ha még nem létezik
-            }
-
-
-        }
 
 
     }

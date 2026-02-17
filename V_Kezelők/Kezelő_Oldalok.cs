@@ -22,9 +22,9 @@ namespace Villamos.Kezelők
             if (!AdatBázis_kezelés.TáblaEllenőrzés(hely, jelszó, táblanév)) Adatbázis_Létrehozás.Adatbázis_Oldalak(hely);
         }
 
-        public List<Adat_Bejelentkezés_Oldalak> Lista_Adatok()
+        public List<Adat_Belépés_Oldalak> Lista_Adatok()
         {
-            List<Adat_Bejelentkezés_Oldalak> Adatok = new List<Adat_Bejelentkezés_Oldalak>();
+            List<Adat_Belépés_Oldalak> Adatok = new List<Adat_Belépés_Oldalak>();
             string szöveg = $"SELECT * FROM {táblanév}";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
 
@@ -39,7 +39,7 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat_Bejelentkezés_Oldalak Adat = new Adat_Bejelentkezés_Oldalak(
+                                Adat_Belépés_Oldalak Adat = new Adat_Belépés_Oldalak(
                                         rekord["OldalId"].ToÉrt_Int(),
                                         rekord["FromName"].ToStrTrim(),
                                         rekord["MenuName"].ToStrTrim(),
@@ -55,11 +55,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Döntés(Adat_Bejelentkezés_Oldalak Adat)
+        public void Döntés(Adat_Belépés_Oldalak Adat)
         {
             try
             {
-                List<Adat_Bejelentkezés_Oldalak> Adatok = Lista_Adatok();
+                List<Adat_Belépés_Oldalak> Adatok = Lista_Adatok();
                 if (!Adatok.Any(a => a.OldalId == Adat.OldalId))
                     Rögzítés(Adat);
                 else
@@ -77,7 +77,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Rögzítés(Adat_Bejelentkezés_Oldalak Adat)
+        public void Rögzítés(Adat_Belépés_Oldalak Adat)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(Adat_Bejelentkezés_Oldalak Adat)
+        public void Módosítás(Adat_Belépés_Oldalak Adat)
         {
             try
             {

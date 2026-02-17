@@ -1035,7 +1035,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Munkakör.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nóta.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Oktatás.cs" />
-    <Compile Include="V_Adatszerkezet\Adat_Bejelentkezés_Oldalak.cs" />
+    <Compile Include="V_Adatszerkezet\Adat_Belépés_Oldalak.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Reklám.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Rezsi.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szerszám_FejLáb.cs" />
