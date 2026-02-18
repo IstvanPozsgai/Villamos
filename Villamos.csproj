@@ -1069,7 +1069,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szabadságok.cs" />
     <Compile Include="V_Kezelők\Kezelő_MEO_KerékMérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Nosztalgia_Állomány.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Oldalok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Belépés_Oldalok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Raktár.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szatube_Aft.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szatube_Beteg.cs" />
