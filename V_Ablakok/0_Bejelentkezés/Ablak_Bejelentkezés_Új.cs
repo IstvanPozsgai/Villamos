@@ -16,7 +16,7 @@ namespace Villamos
     {
         readonly Kezelő_Users Kéz = new Kezelő_Users();
         readonly Kezelő_Belépés_Verzió KézVerzió = new Kezelő_Belépés_Verzió();
-        readonly Kezelő_Gombok KézGombok = new Kezelő_Gombok();
+        readonly Kezelő_Belépés_Gombok KézGombok = new Kezelő_Belépés_Gombok();
         readonly Kezelő_Belépés_Oldalok KézOldal = new Kezelő_Belépés_Oldalok();
         readonly Kezelő_Kiegészítő_Könyvtár KézKönyvtár = new Kezelő_Kiegészítő_Könyvtár();
 
