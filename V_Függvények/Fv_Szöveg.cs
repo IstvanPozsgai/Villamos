@@ -43,7 +43,7 @@ public static partial class Függvénygyűjtemény
     /// <param name="kezdő">Kezdő pozíció</param>
     /// <param name="hossz">Szöveg hossza, ha -1 akkor nem veszi figyelembe</param>
     /// <returns></returns>
-    public static string Szöveg_Tisztítás(string szöveg, int kezdő, int hossz=-1)
+    public static string Szöveg_Tisztítás(string szöveg, int kezdő, int hossz = -1)
     {
         string válasz = szöveg.Trim() == "" ? "_" : szöveg.Trim();
         if (hossz != -1)
@@ -96,12 +96,12 @@ public static partial class Függvénygyűjtemény
     /// </summary>
     /// <param name="szöveg"></param>
     /// <returns></returns>
-    public static string Szöveg_Tisztítás(string szöveg, bool sortörés = false)
+    public static string Szöveg_Tisztítás(string szöveg, bool sortörés = false, bool vessző = false)
     {
         string válasz = szöveg.Replace("'", "`");    // ' cseréli ki ''
         válasz = válasz.Replace("\"", "``");  // " cseréli ki üres mezőre
         válasz = válasz.Replace("/", "");
-        válasz = válasz.Replace(",", "");
+        if (!vessző) válasz = válasz.Replace(",", "");   //ha igen akkor vesszőt is hagyunk a szövegben, ha nem akkor azt is eltávolítjuk
         válasz = válasz.Replace(@"\", "");
         if (sortörés)
         {
