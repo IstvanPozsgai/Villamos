@@ -8,6 +8,7 @@ namespace Villamos
 {
     public static class Hely_Ellenőr
     {
+        // JAVÍTANDÓ: Db re ki kell terjeszteni
         public static string KönyvSzerk(this string fájl)
         {
             string Válasz = fájl;
@@ -37,6 +38,7 @@ namespace Villamos
                 string alap = Könyvtár[0];
                 for (int i = 1; i < Könyvtár.Length; i++)
                 {
+                    
                     if (!Könyvtár[i].Contains(".mdb"))
                     {
                         alap += $@"\{Könyvtár[i]}";
