@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
-using Zuby.ADGV;
+using Villamos.V_SqLite;
 
 namespace Villamos
 {
@@ -48,12 +48,16 @@ namespace Villamos
         public static void Main()
         {
             //Magyarosítás
-            AdvancedDataGridView.SetTranslations(AdvancedDataGridView.LoadTranslationsFromFile("lang_hu-HU.json"));
-            AdvancedDataGridViewSearchToolBar.SetTranslations(AdvancedDataGridViewSearchToolBar.LoadTranslationsFromFile("lang_hu-HU.json"));
+            //AdvancedDataGridView.SetTranslations(AdvancedDataGridView.LoadTranslationsFromFile("lang_hu-HU.json"));
+            //AdvancedDataGridViewSearchToolBar.SetTranslations(AdvancedDataGridViewSearchToolBar.LoadTranslationsFromFile("lang_hu-HU.json"));
+
+            //Application.EnableVisualStyles();
+            //Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new AblakBejelentkezés());
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AblakBejelentkezés());
+            Application.Run(Tesztelés.Tesztelés());
         }
     }
 }

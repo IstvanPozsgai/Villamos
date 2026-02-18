@@ -1,23 +1,24 @@
 ﻿using Microsoft.Data.Sqlite;
-using System.IO;
 using System.Windows.Forms;
-using Villamos.Adatszerkezet;
 
 namespace Villamos
 {
-    public static  class SqLite_Adatbázis
+    public static class SqLite_Adatbázis
     {
-        static string ConnectionString;
-
-
-
         static SqLite_Adatbázis()
         {
-            //ConnectionString = BuildConnectionString();
         }
 
-
-        public static  string BuildConnectionString(string Hely, string Jelszó)
+        /// <summary>
+        /// Kapcsolati karakterláncot hoz létre egy SQLite adatbázishoz a megadott fájlútvonal és jelszó használatával.
+        /// </summary>
+        /// <remarks>A létrehozott kapcsolati karakterlánc írási-olvasási hozzáférést biztosít, és létrehozza az
+        /// adatbázisfájlt, ha az még nem létezik.</remarks>
+        /// <param name="Hely">Az SQLite adatbázis fájlútvonala vagy helye. Ez a paraméter nem lehet null vagy üres.</param>
+        /// <param name="Jelszó">Az adatbázis-kapcsolat titkosításához használt jelszó. Ez a paraméter nem lehet null.</param>
+        /// <returns>A megadott SQLite adatbázisfájlhoz és jelszóhoz konfigurált kapcsolati karakterlánc, írási-olvasási hozzáféréssel
+        /// és automatikus létrehozással, ha az adatbázis nem létezik.</returns>
+        public static string BuildConnectionString(string Hely, string Jelszó)
         {
             return new SqliteConnectionStringBuilder
             {
@@ -28,7 +29,7 @@ namespace Villamos
         }
 
 
-        public static  void CreateTable(string sql)
+        public static void CreateTable(string sql)
         {
             try
             {
@@ -39,25 +40,19 @@ namespace Villamos
                 command.ExecuteNonQuery();
 
                 connection.Close();
-
             }
-            catch (SqliteException ex)
+            catch (HibásBevittAdat ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
 
-        //Használati példa:
-        public static 
-            void valami()
-        {
-            using (Context_Bejelentkezés_Oldalak db = new Context_Bejelentkezés_Oldalak())
-            {
-                SAdat_Belépés_Oldalak ujOldal = new SAdat_Belépés_Oldalak(1, "Home", "Főmenü", "Kezdőlap", true, false);
-                db.Oldalak.Add(ujOldal);
-                db.SaveChanges(); // Itt jön létre az adatbázis és a tábla, ha még nem létezik
-            }
-        }
+
     }
 }
