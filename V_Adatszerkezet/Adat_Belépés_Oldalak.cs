@@ -50,12 +50,5 @@ namespace Villamos.Adatszerkezet
             var sqliteConnectionInitializer = new SqliteCreateDatabaseIfNotExists<Context_Bejelentkezés_Oldalak>(modelBuilder);
             Database.SetInitializer(sqliteConnectionInitializer);
         }
-
-
-
-
     }
-
-
-
 }
