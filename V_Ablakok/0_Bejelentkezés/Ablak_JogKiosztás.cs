@@ -13,7 +13,7 @@ namespace Villamos
 
     public partial class Ablak_JogKiosztás : Form
     {
-        readonly Kezelő_Belépés_Oldalok KézOldal = new Kezelő_Belépés_Oldalok();
+        readonly Kezelő_Oldalok KézOldal = new Kezelő_Oldalok();
         readonly Kezelő_Gombok KézGombok = new Kezelő_Gombok();
         readonly Kezelő_Kiegészítő_Könyvtár KézSzervezet = new Kezelő_Kiegészítő_Könyvtár();
         readonly Kezelő_Users KézUsers = new Kezelő_Users();
@@ -21,7 +21,7 @@ namespace Villamos
         readonly Kezelő_Jogosultságok KézJogosultságok = new Kezelő_Jogosultságok();
 
         List<Adat_Users> AdatokUsers = new List<Adat_Users>();
-        List<SAdat_Belépés_Oldalak> AdatokOldal = new List<SAdat_Belépés_Oldalak>();
+        List<Adat_Belépés_Oldalak> AdatokOldal = new List<Adat_Belépés_Oldalak>();
         List<Adat_Gombok> AdatokGombok = new List<Adat_Gombok>();
         List<Adat_Kiegészítő_Könyvtár> AdatokSzervezet = new List<Adat_Kiegészítő_Könyvtár>();
         List<Adat_Behajtás_Dolgozótábla> AdatokDolgozó = new List<Adat_Behajtás_Dolgozótábla>();
@@ -75,7 +75,7 @@ namespace Villamos
         {
             try
             {
-                foreach (SAdat_Belépés_Oldalak Elem in AdatokOldal)
+                foreach (Adat_Belépés_Oldalak Elem in AdatokOldal)
                 {
                     CmbAblak.Items.Add(Elem.MenuFelirat);
                     CmbAblakId.Items.Add(Elem.OldalId.ToString());
@@ -100,7 +100,7 @@ namespace Villamos
             if (CmbAblak.Text.Trim() == "") return;
             CmbGombok.Items.Clear();
             CmbGombId.Items.Clear();
-            SAdat_Belépés_Oldalak oldal = (from a in AdatokOldal
+            Adat_Belépés_Oldalak oldal = (from a in AdatokOldal
                                   where a.Törölt == false
                                   && a.MenuFelirat == CmbAblak.Text.Trim()
                                   orderby a.MenuFelirat
@@ -155,7 +155,7 @@ namespace Villamos
             try
             {
                 CmbAblak.Text = CmbAblak.Items[CmbAblak.SelectedIndex].ToString();
-                SAdat_Belépés_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
+                Adat_Belépés_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
                 AblakFormName = Ablak.FromName;
                 AblakFőID = Ablak.OldalId;
                 CmbAblakId.Text = Ablak.OldalId.ToString();
@@ -468,7 +468,7 @@ namespace Villamos
             CmbGombId.Text = Tábla.Rows[e.RowIndex].Cells[5].Value.ToStrTrim();
             CmbAblak.Text = Tábla.Rows[e.RowIndex].Cells[1].Value.ToStrTrim();
             CmbAblakId.Text = Tábla.Rows[e.RowIndex].Cells[4].Value.ToStrTrim();
-            SAdat_Belépés_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
+            Adat_Belépés_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
             AblakFormName = Ablak.FromName;
             AblakFőID = Ablak.OldalId;
 
@@ -583,7 +583,7 @@ namespace Villamos
         private void CmbAblakId_SelectionChangeCommitted(object sender, EventArgs e)
         {
             CmbAblakId.Text = CmbAblakId.Items[CmbAblakId.SelectedIndex].ToString();
-            SAdat_Belépés_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.OldalId == CmbAblakId.Text.ToÉrt_Int());
+            Adat_Belépés_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.OldalId == CmbAblakId.Text.ToÉrt_Int());
             AblakFormName = Ablak.FromName;
             CmbAblak.Text = Ablak.MenuFelirat;
             AblakFőID = Ablak.OldalId;

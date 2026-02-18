@@ -22,7 +22,7 @@ namespace Villamos
 {
     public partial class A_Főoldal
     {
-        readonly Kezelő_Belépés_Oldalok KézOldal = new Kezelő_Belépés_Oldalok();
+        readonly Kezelő_Oldalok KézOldal = new Kezelő_Oldalok();
         readonly Kezelő_Jogosultságok KézJog = new Kezelő_Jogosultságok();
         private static PerformanceCounter myCounter;
         public delegate void VoidDelegate(string data);
@@ -386,7 +386,7 @@ namespace Villamos
                 Program.PostásOldalak = KézOldal.Lista_Adatok();
                 foreach (ToolStripMenuItem item in Program.PostásMenü)
                 {
-                    SAdat_Belépés_Oldalak Adat = Program.PostásOldalak.FirstOrDefault(a => a.MenuName == item.Name);
+                    Adat_Belépés_Oldalak Adat = Program.PostásOldalak.FirstOrDefault(a => a.MenuName == item.Name);
                     if (Adat != null) item.Enabled = Adat.Látható;
                 }
 
@@ -398,7 +398,7 @@ namespace Villamos
                 List<int> JogIDék = Program.PostásJogosultságok.Select(a => a.OldalId).Distinct().ToList();
                 foreach (ToolStripMenuItem item in Program.PostásMenü)
                 {
-                    SAdat_Belépés_Oldalak OldalAdat = Program.PostásOldalak.FirstOrDefault(a => a.MenuName == item.Name);
+                    Adat_Belépés_Oldalak OldalAdat = Program.PostásOldalak.FirstOrDefault(a => a.MenuName == item.Name);
                     if (OldalAdat != null)
                     {
                         if (JogIDék.Contains(OldalAdat.OldalId)) item.Enabled = true;

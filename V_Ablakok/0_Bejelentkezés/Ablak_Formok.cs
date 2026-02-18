@@ -13,12 +13,12 @@ namespace Villamos.Ablakok
 {
     public partial class Ablak_Formok : Form
     {
-        readonly Kezelő_Belépés_Oldalok Kéz = new Kezelő_Belépés_Oldalok();
+        readonly Kezelő_Oldalok Kéz = new Kezelő_Oldalok();
 #pragma warning disable IDE0044
         DataTable AdatTáblaALap = new DataTable();
 #pragma warning restore IDE0044
 
-        List<SAdat_Belépés_Oldalak> Adatok = new List<SAdat_Belépés_Oldalak>();
+        List<Adat_Belépés_Oldalak> Adatok = new List<Adat_Belépés_Oldalak>();
 
 
         public Ablak_Formok()
@@ -125,7 +125,7 @@ namespace Villamos.Ablakok
             {
                 if (string.IsNullOrEmpty(MenüNév.Text.Trim())) throw new HibásBevittAdat("Kérem adja meg a Menü nevét!");
 
-                SAdat_Belépés_Oldalak adat = new SAdat_Belépés_Oldalak(
+                Adat_Belépés_Oldalak adat = new Adat_Belépés_Oldalak(
                         TxtId.Text.ToÉrt_Int(),
                         Ablaknév.Text.ToStrTrim(),
                         MenüNév.Text.ToStrTrim(),
@@ -191,7 +191,7 @@ namespace Villamos.Ablakok
         private void AlapTáblaTartalom()
         {
             AdatTáblaALap.Clear();
-            foreach (SAdat_Belépés_Oldalak rekord in Adatok)
+            foreach (Adat_Belépés_Oldalak rekord in Adatok)
             {
                 DataRow Soradat = AdatTáblaALap.NewRow();
 
@@ -306,7 +306,7 @@ namespace Villamos.Ablakok
         {
             try
             {
-                SAdat_Belépés_Oldalak adat = (from a in Adatok
+                Adat_Belépés_Oldalak adat = (from a in Adatok
                                      where a.OldalId == ID
                                      select a).FirstOrDefault();
                 if (adat == null) return;

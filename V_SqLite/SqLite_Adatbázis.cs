@@ -5,19 +5,33 @@ using Villamos.Adatszerkezet;
 
 namespace Villamos
 {
-    public static  class SqLite_Adatbázis
+    public class SqLite_Adatbázis
     {
-        static string ConnectionString;
+        string Hely { get; set; }
+        string Jelszó { get; set; }
+
+        readonly string TableName = "TestTable";
+
+        string ConnectionString;
 
 
 
-        static SqLite_Adatbázis()
+        public SqLite_Adatbázis()
         {
-            //ConnectionString = BuildConnectionString();
+            Könyvtár();
+            ConnectionString = BuildConnectionString();
         }
 
+        private void Könyvtár()
+        {
+            string dir = Path.GetDirectoryName(Hely);
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+        }
 
-        public static  string BuildConnectionString(string Hely, string Jelszó)
+        private string BuildConnectionString()
         {
             return new SqliteConnectionStringBuilder
             {
@@ -28,7 +42,7 @@ namespace Villamos
         }
 
 
-        public static  void CreateTable(string sql)
+        public void CreateTable(string sql)
         {
             try
             {
@@ -49,15 +63,16 @@ namespace Villamos
 
 
         //Használati példa:
-        public static 
-            void valami()
+        public void valami()
         {
             using (Context_Bejelentkezés_Oldalak db = new Context_Bejelentkezés_Oldalak())
             {
-                SAdat_Belépés_Oldalak ujOldal = new SAdat_Belépés_Oldalak(1, "Home", "Főmenü", "Kezdőlap", true, false);
+                Adat_Belépés_Oldalak ujOldal = new Adat_Belépés_Oldalak(1, "Home", "Főmenü", "Kezdőlap", true, false);
                 db.Oldalak.Add(ujOldal);
                 db.SaveChanges(); // Itt jön létre az adatbázis és a tábla, ha még nem létezik
             }
+
+
         }
     }
 }

@@ -69,7 +69,7 @@ public static class GombLathatosagKezelo
             if (TelephelyAdat != null) TelephelyID = TelephelyAdat.ID;
 
             // Lekérjük az aktuális oldal ID-ját
-            SAdat_Belépés_Oldalak AdatOldal = Program.PostásOldalak.Where(o => o.FromName == form.Name).FirstOrDefault();
+            Adat_Belépés_Oldalak AdatOldal = Program.PostásOldalak.Where(o => o.FromName == form.Name).FirstOrDefault();
             if (AdatOldal == null) return;
 
             // Lekérjük az adott felhasználóhoz tartozó gombokat az adatbázisból
@@ -119,7 +119,7 @@ public static class GombLathatosagKezelo
             if (TelephelyAdat != null) TelephelyID = TelephelyAdat.ID;
 
             // Lekérjük az aktuális oldal ID-ját
-            SAdat_Belépés_Oldalak AdatOldal = Program.PostásOldalak.Where(o => o.FromName == form.Name).FirstOrDefault();
+            Adat_Belépés_Oldalak AdatOldal = Program.PostásOldalak.Where(o => o.FromName == form.Name).FirstOrDefault();
             if (AdatOldal == null) return válasz;
 
             // Lekérjük az adott ablakhoz tartozó gombokat az adatbázisból
@@ -162,7 +162,7 @@ public static class GombLathatosagKezelo
         try
         {
             //Mi az oldal Id-je
-            SAdat_Belépés_Oldalak Oldal = (from a in Program.PostásOldalak
+            Adat_Belépés_Oldalak Oldal = (from a in Program.PostásOldalak
                                   where a.FromName == AblakNév
                                   select a).FirstOrDefault();
             int OldalId = 0;
