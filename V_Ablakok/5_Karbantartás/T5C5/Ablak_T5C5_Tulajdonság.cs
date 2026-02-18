@@ -887,6 +887,7 @@ namespace Villamos
 
         private async void Teljes_adatbázis_excel_Click(object sender, EventArgs e)
         {
+            // JAVÍTANDÓ:
             SaveFileDialog SaveFileDialog1 = new SaveFileDialog
             {
                 // kimeneti fájl helye és neve
