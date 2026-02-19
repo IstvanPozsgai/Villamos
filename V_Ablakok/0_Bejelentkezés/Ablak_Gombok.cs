@@ -13,7 +13,7 @@ namespace Villamos.Ablakok
 {
     public partial class Ablak_Gombok : Form
     {
-        readonly Kezelő_Gombok Kéz = new Kezelő_Gombok();
+        readonly Kezelő_Belépés_Gombok Kéz = new Kezelő_Belépés_Gombok();
 #pragma warning disable IDE0044
         DataTable AdatTáblaALap = new DataTable();
 #pragma warning restore IDE0044

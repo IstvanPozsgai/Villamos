@@ -1055,7 +1055,7 @@
     <Compile Include="V_Függvények\ListToDataTable.cs" />
     <Compile Include="V_Függvények\Számkonverter.cs" />
     <Compile Include="V_Kezelők\Kezelő_Baross_Mérési_Adatok.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Gombok.cs" />
+    <Compile Include="V_Kezelők\Kezelő_Belépés_Gombok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jogosultságok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Erő.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Eszterga.cs" />

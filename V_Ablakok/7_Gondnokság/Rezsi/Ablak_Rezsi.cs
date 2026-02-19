@@ -5,10 +5,10 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.Közös;
-using Villamos.Adatszerkezet;
 using static System.IO.File;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -358,7 +358,7 @@ namespace Villamos
                 if (Méret.Text.Trim() == "") Méret.Text = "-";
                 if (CsoportCombo.Text.Trim() == "") CsoportCombo.Text = "-";
                 Megnevezés.Text = MyF.Szöveg_Tisztítás(Megnevezés.Text);
-                Méret.Text = MyF.Szöveg_Tisztítás(Méret.Text);
+                Méret.Text = MyF.Szöveg_Tisztítás(Méret.Text, false, true);
                 Azonosító.Text = MyF.Szöveg_Tisztítás(Azonosító.Text).ToUpper();
 
                 List<Adat_Rezsi_Törzs> AdatokTörzs = KézTörzs.Lista_Adatok();

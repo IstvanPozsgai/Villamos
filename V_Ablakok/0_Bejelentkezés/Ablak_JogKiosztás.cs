@@ -14,7 +14,7 @@ namespace Villamos
     public partial class Ablak_JogKiosztás : Form
     {
         readonly Kezelő_Belépés_Oldalok KézOldal = new Kezelő_Belépés_Oldalok();
-        readonly Kezelő_Gombok KézGombok = new Kezelő_Gombok();
+        readonly Kezelő_Belépés_Gombok KézGombok = new Kezelő_Belépés_Gombok();
         readonly Kezelő_Kiegészítő_Könyvtár KézSzervezet = new Kezelő_Kiegészítő_Könyvtár();
         readonly Kezelő_Users KézUsers = new Kezelő_Users();
         readonly Kezelő_Behajtás_Dolgozótábla KézDolgozó = new Kezelő_Behajtás_Dolgozótábla();
