@@ -3566,7 +3566,7 @@ namespace Villamos
         private void Elvont_Generált_Click(object sender, EventArgs e)
         {
             //Ha üres akkor alapértelemzés szerint _ a terület.
-            if (ElvontTelephely.Text.Trim() == "") ElvontTelephely.Text.Trim() = "_";
+            if (ElvontTelephely.Text.Trim() == "") ElvontTelephely.Text = "_";
             Ált_Elvont_Generált(ElvontTelephely.Text.Trim());
             Tábla_Elvont_kiirás();
         }
