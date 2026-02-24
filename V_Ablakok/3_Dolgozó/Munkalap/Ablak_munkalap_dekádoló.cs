@@ -79,6 +79,7 @@ namespace Villamos
                 int melyikelem;
                 // ide kell az összes gombot tenni amit szabályozni akarunk
                 Rögzítés.Enabled = false;
+                Rögítéstakaró.Visible = true;
                 Button2.Enabled = false;
                 Command14.Enabled = false;
 
@@ -452,6 +453,8 @@ namespace Villamos
             Táblakitöltés2();
             Napiidőkbetöltése();
             Rögzítés.Enabled = false;
+            Rögítéstakaró.Visible = true;
+
         }
 
         private void Command6_Click(object sender, EventArgs e)
@@ -468,6 +471,8 @@ namespace Villamos
             Napiidőkbetöltése();
 
             Rögzítés.Enabled = false;
+            Rögítéstakaró.Visible = true;
+
         }
 
         private void Command11_Click(object sender, EventArgs e)
@@ -549,6 +554,7 @@ namespace Villamos
                     FelhasználtText.BackColor = Color.Red;
                     Rögítéstakaró.Visible = true;
                     Rögzítés.Enabled = false;
+                    Rögítéstakaró.Visible = true;
                 }
             }
             catch (HibásBevittAdat ex)
