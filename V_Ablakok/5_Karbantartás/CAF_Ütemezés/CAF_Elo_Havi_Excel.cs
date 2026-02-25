@@ -15,8 +15,6 @@ namespace Villamos.V_Ablakok._5_Karbantartás.CAF_Ütemezés
 {
     public class CAF_Elo_Havi_Excel
     {
-        Szín_kódolás Szín;
-
         readonly Beállítás_Betű BeBetű = new Beállítás_Betű { Név = "Calibri", Méret = 11 };
         public void Elo_havi_excel_keszit(string fájlexc, Kezelő_CAF_Szinezés KézSzín, DataGridView Tábla_elő, Action eloterveListazasExcelhezNegat)
         {

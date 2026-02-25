@@ -1078,8 +1078,6 @@ namespace Villamos
                 Elő_pályaszám.Height = 25;
                 Előterv_listázás_excelhez();
 
-
-
                 // kimeneti fájl helye és neve
                 string fájlexc;
                 SaveFileDialog SaveFileDialog1 = new SaveFileDialog
