@@ -265,5 +265,28 @@ namespace InputForms
 
             return this;
         }
+
+        public DataGridViewHelper<T> SetItems(List<T> újLista)
+        {
+            if (újLista == null) return this;
+
+            GridView_Data.SuspendLayout();
+            try
+            {
+                List_binding.Clear();
+
+                foreach (var elem in újLista)
+                    List_binding.Add(elem);
+
+                Source_binding.ResetBindings(false);
+            }
+            finally
+            {
+                GridView_Data.ResumeLayout();
+                GridView_Data.Refresh();
+            }
+
+            return this;
+        }
     }
 }
