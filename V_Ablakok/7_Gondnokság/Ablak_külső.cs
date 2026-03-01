@@ -60,7 +60,7 @@ namespace Villamos
                 if (Program.PostásJogkör.Substring(0, 1) == "R")
                 {
                     TelephelyekFeltöltéseÚj();
-                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                    GombLathatosagKezelo.Beallit(this);
                 }
                 else
                 {
