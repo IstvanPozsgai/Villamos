@@ -977,6 +977,7 @@ namespace Villamos
             this.Táblagondnok.RowHeadersWidth = 20;
             this.Táblagondnok.Size = new System.Drawing.Size(1255, 487);
             this.Táblagondnok.TabIndex = 1;
+            this.Táblagondnok.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Táblagondnok_CellDoubleClick);
             this.Táblagondnok.SelectionChanged += new System.EventHandler(this.Táblagondnok_SelectionChanged);
             // 
             // BtnGondnokFrissít
@@ -1072,6 +1073,7 @@ namespace Villamos
             this.Táblaszaksz.Size = new System.Drawing.Size(1255, 482);
             this.Táblaszaksz.TabIndex = 116;
             this.Táblaszaksz.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.Táblaszaksz_CellBeginEdit);
+            this.Táblaszaksz.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Táblaszaksz_CellDoubleClick);
             this.Táblaszaksz.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.Táblaszaksz_CellEndEdit);
             this.Táblaszaksz.SelectionChanged += new System.EventHandler(this.Táblaszaksz_SelectionChanged);
             // 

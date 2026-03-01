@@ -2450,6 +2450,36 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void Táblagondnok_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (e.RowIndex < 0) return;
+                if (Táblagondnok.Rows.Count > 1)
+                {
+                    TxtKérelemID.Text = Táblagondnok.Rows[e.RowIndex].Cells[0].Value.ToStrTrim();
+                    TextNaplósorszám.Text = Táblagondnok.Rows[e.RowIndex].Cells[0].Value.ToStrTrim();
+                    Kérelemújraírás();
+
+                    if (TxtKérrelemPDF.Text.Trim() != "_")
+                    {
+                        string helypdf = TxtKérrelemPDF.Text.Trim();
+
+                        PDF_Megjelenítés(helypdf);
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         #endregion
 
 
@@ -2684,9 +2714,6 @@ namespace Villamos
                     string[] darabol = Cmbtelephely.Text.Trim().Split(' ');
                     string sorszám = Táblaszaksz.Rows[i].Cells[0].Value.ToStrTrim();
 
-                    Kéz_Behajtás.Módosítás_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), $"{darabol[0].Trim()}_engedély", int.Parse(CmbSzakszlista.Text.Substring(0, 1)), sorszám);
-                    KézNapló.Rögzítés_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), $"{darabol[0].Trim()}_engedély", int.Parse(CmbSzakszlista.Text.Substring(0, 1)), sorszám);
-
                     List<Adat_Behajtás_Behajtási> AdatokÖ = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
                     Adat_Behajtás_Behajtási rekord = (from a in AdatokÖ
                                                       where a.Sorszám == sorszám
@@ -2705,12 +2732,38 @@ namespace Villamos
                         KEE = rekord.Kelenföld_engedély;
                         BUE = rekord.Budafok_engedély;
                         FEE = rekord.Ferencváros_engedély;
+                    }
+
+                    //Ha nincs engedélyezendő, vagy mindenütt elutasították, akkor nem csinál semmit
+                    if ((HUE == 0 || HUE == 3) && (SZÁE == 0 || SZÁE == 3) && (ZUE == 0 || ZUE == 3) &&
+                        (AFE == 0 || AFE == 3) && (BAE == 0 || BAE == 3) && (FOE == 0 || FOE == 3) && (SZIE == 0 || SZIE == 3) &&
+                        (KEE == 0 || KEE == 3) && (BUE == 0 || BUE == 3) && (FEE == 0 || FEE == 3)) continue;
+
+                    Kéz_Behajtás.Módosítás_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), $"{darabol[0].Trim()}_engedély", int.Parse(CmbSzakszlista.Text.Substring(0, 1)), sorszám);
+                    KézNapló.Rögzítés_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), $"{darabol[0].Trim()}_engedély", int.Parse(CmbSzakszlista.Text.Substring(0, 1)), sorszám);
+
+                    AdatokÖ = Kéz_Behajtás.Lista_Adatok(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim());
+                    rekord = (from a in AdatokÖ
+                              where a.Sorszám == sorszám
+                              select a).FirstOrDefault();
+                    if (rekord != null)
+                    {
+                        HUE = rekord.Hungária_engedély;
+                        SZÁE = rekord.Száva_engedély;
+                        ZUE = rekord.Zugló_engedély;
+
+                        AFE = rekord.Angyalföld_engedély;
+                        BAE = rekord.Baross_engedély;
+                        FOE = rekord.Fogaskerekű_engedély;
+                        SZIE = rekord.Szépilona_engedély;
+
+                        KEE = rekord.Kelenföld_engedély;
+                        BUE = rekord.Budafok_engedély;
+                        FEE = rekord.Ferencváros_engedély;
 
                         IE = rekord.I_engedély;
                         IIE = rekord.II_engedély;
                         IIIE = rekord.III_engedély;
-
-
 
                         if (HUE == 1 || SZÁE == 1 || ZUE == 1 || AFE == 1 || BAE == 1 || FOE == 1 || SZIE == 1 || KEE == 1 || BUE == 1 || FEE == 1)
                         {
@@ -2830,6 +2883,36 @@ namespace Villamos
                         }
                     }
                     Szakszlista();
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Táblaszaksz_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (e.RowIndex < 0) return;
+                if (Táblaszaksz.Rows.Count > 1)
+                {
+                    TxtKérelemID.Text = Táblaszaksz.Rows[e.RowIndex].Cells[0].Value.ToStrTrim();
+                    TextNaplósorszám.Text = Táblaszaksz.Rows[e.RowIndex].Cells[0].Value.ToStrTrim();
+                    Kérelemújraírás();
+
+                    if (TxtKérrelemPDF.Text.Trim() != "_")
+                    {
+                        string helypdf = TxtKérrelemPDF.Text.Trim();
+
+                        PDF_Megjelenítés(helypdf);
+                    }
                 }
             }
             catch (HibásBevittAdat ex)
