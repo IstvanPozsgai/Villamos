@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Zuby.ADGV;
@@ -22,6 +24,7 @@ namespace InputForms
         public List<T> GetData() => new List<T>(List_binding); // ha szükséged van a teljes listára
         public DataGridView GetDataGridView() => GridView_Data;
 
+        //Konstruktor: létrehozza a DataGridView-t és hozzáadja a megadott formhoz
         public DataGridViewHelper(Form parentForm)
         {
             Form_parent = parentForm ?? throw new ArgumentNullException(nameof(parentForm));
@@ -29,8 +32,7 @@ namespace InputForms
             Form_parent.Controls.Add(GridView_Data);
 
             List_binding = new BindingList<T>();
-            Source_binding = new BindingSource { DataSource = List_binding };
-            GridView_Data.DataSource = Source_binding;
+            Source_binding = new BindingSource();
 
             GridView_Data.Font = Form_parent.Font;
 
@@ -40,8 +42,17 @@ namespace InputForms
             GridView_Data.ColumnHeadersDefaultCellStyle.Font = new Font(GridView_Data.Font, FontStyle.Bold);
 
             GridView_Data.SelectionMode = DataGridViewSelectionMode.FullRowSelect; // ← egész sor kijelölése
-        }
+                                                                                   // ESEMÉNYEK bekötése a szűréshez és rendezéshez
+            GridView_Data.FilterStringChanged += (s, e) =>
+            {
+                Source_binding.Filter = GridView_Data.FilterString;
+            };
 
+            GridView_Data.SortStringChanged += (s, e) =>
+            {
+                Source_binding.Sort = GridView_Data.SortString;
+            };
+        }
 
         /// <summary>
         ///        sorfejléc (row header) láthatóság
@@ -110,31 +121,6 @@ namespace InputForms
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="Elemek"></param>
-        /// <returns></returns>
-        public DataGridViewHelper<T> AddItems(List<T> Elemek)
-        {
-            if (Elemek == null) return this;
-
-            GridView_Data.SuspendLayout();
-            try
-            {
-                foreach (var elem in Elemek)
-                {
-                    List_binding.Add(elem);
-                }
-            }
-            finally
-            {
-                GridView_Data.ResumeLayout();
-            }
-
-            return this;
-        }
-
-        /// <summary>
         /// A kiválasztás változásakor meghívja a megadott callback függvényt a kiválasztott T típusú elemmel.
         /// </summary>
         /// <param name="callback"></param>
@@ -169,6 +155,71 @@ namespace InputForms
         }
 
         /// <summary>
+        /// Beállítja az Anchor tulajdonságot.
+        /// </summary>
+        public DataGridViewHelper<T> SetAnchor(AnchorStyles anchor)
+        {
+            GridView_Data.Anchor = anchor;
+            return this;
+        }
+
+        // Lista konvertálása DataTable-re
+        public DataGridViewHelper<T> AddItems(List<T> Elemek)
+        {
+            if (Elemek == null) return this;
+
+            // 1. Ideiglenesen lekapcsoljuk a kötést a hiba elkerülése végett
+            GridView_Data.DataSource = null;
+
+            // 2. Konvertálás
+            DataTable dt = ToDataTable(Elemek);
+
+            // 3. Fontos: engedélyezzük az automata oszlopgenerálást
+            GridView_Data.AutoGenerateColumns = true;
+
+            // 4. Újrakötés
+            Source_binding.DataSource = dt;
+            GridView_Data.DataSource = Source_binding;
+
+            // 5. Oszlopok testreszabása (mivel már léteznek a DT alapján)
+            ApplyColumnSettings();
+            return this;
+        }
+
+        private DataTable ToDataTable(List<T> items)
+        {
+            DataTable dt = new DataTable(typeof(T).Name);
+            PropertyInfo[] props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var prop in props)
+            {
+                // Kezelni kell a nullable típusokat a DataTable-nél
+                Type propType = prop.PropertyType;
+                if (propType.IsGenericType && propType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    propType = Nullable.GetUnderlyingType(propType);
+
+                dt.Columns.Add(prop.Name, propType);
+            }
+
+            foreach (var item in items)
+            {
+                var values = new object[props.Length];
+                for (int i = 0; i < props.Length; i++)
+                    values[i] = props[i].GetValue(item, null) ?? DBNull.Value;
+
+                dt.Rows.Add(values);
+            }
+            return dt;
+        }
+
+
+
+
+        //Tesztelni kell !
+
+        // Új metódus: fejléc háttérszínének testreszabása
+
+        /// <summary>
         /// Több kijelölt elem esetén meghívja a megadott callback függvényt a kiválasztott T típusú elemek listájával.
         /// </summary>
         /// <param name="callback"></param>
@@ -183,32 +234,6 @@ namespace InputForms
             return this;
         }
 
-        /// <summary>
-        /// Beállítja az Anchor tulajdonságot.
-        /// </summary>
-        public DataGridViewHelper<T> SetAnchor(AnchorStyles anchor)
-        {
-            GridView_Data.Anchor = anchor;
-            return this;
-        }
-
-        /// <summary>
-        /// Ki-/bekapcsolja a többtöbbszörös kijelölést.
-        /// </summary>
-        /// <param name="enable"></param>
-        /// <returns></returns>
-        public DataGridViewHelper<T> EnableMultiSelect(bool enable = true)
-        {
-            GridView_Data.MultiSelect = enable;
-            return this;
-        }
-
-
-
-
-        //Tesztelni kell !
-
-        // Új metódus: fejléc háttérszínének testreszabása
         public DataGridViewHelper<T> SetHeaderBackColor(Color color)
         {
             GridView_Data.ColumnHeadersDefaultCellStyle.BackColor = color;
@@ -235,6 +260,17 @@ namespace InputForms
         public DataGridViewHelper<T> AddItem(T Elem)
         {
             List_binding.Add(Elem);
+            return this;
+        }
+
+        /// <summary>
+        /// Ki-/bekapcsolja a többtöbbszörös kijelölést.
+        /// </summary>
+        /// <param name="enable"></param>
+        /// <returns></returns>
+        public DataGridViewHelper<T> EnableMultiSelect(bool enable = true)
+        {
+            GridView_Data.MultiSelect = enable;
             return this;
         }
 
