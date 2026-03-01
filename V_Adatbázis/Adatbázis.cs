@@ -17,15 +17,15 @@ internal static partial class Adatbázis
     {
         if (holvan.Contains(".mdb"))
         {
-            MdbMódosítás(holvan, ABjelszó, SQLszöveg);
+            Mdb_Módosítás(holvan, ABjelszó, SQLszöveg);
         }
         else
         {
-            SqLiteMódosítás(holvan, ABjelszó, SQLszöveg);
+            SqLite_Módosítás(holvan, ABjelszó, SQLszöveg);
         }
     }
 
-    private static void MdbMódosítás(string holvan, string ABjelszó, string SQLszöveg)
+    private static void Mdb_Módosítás(string holvan, string ABjelszó, string SQLszöveg)
     {
         try
         {
@@ -47,7 +47,7 @@ internal static partial class Adatbázis
         }
     }
 
-    private static void SqLiteMódosítás(string holvan, string ABjelszó, string SQLszöveg)
+    private static void SqLite_Módosítás(string holvan, string ABjelszó, string SQLszöveg)
     {
         string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
         try
@@ -78,15 +78,15 @@ internal static partial class Adatbázis
     {
         if (holvan.Contains(".mdb"))
         {
-            MdbMódosítás(holvan, ABjelszó, SQLszöveg);
+            Mdb_Módosítás(holvan, ABjelszó, SQLszöveg);
         }
         else
         {
-            SqLiteMódosítás(holvan, ABjelszó, SQLszöveg);
+            SqLite_Módosítás(holvan, ABjelszó, SQLszöveg);
         }
     }
 
-    private static void MdbMódosítás(string holvan, string ABjelszó, List<string> SQLszöveg)
+    private static void Mdb_Módosítás(string holvan, string ABjelszó, List<string> SQLszöveg)
     {
         bool hiba = false;
         string szöveg = "";
@@ -125,7 +125,7 @@ internal static partial class Adatbázis
         if (hiba) throw new Exception(" Mdb Adatbázis rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
     }
 
-    private static void SqLiteMódosítás(string holvan, string ABjelszó, List<string> SQLszöveg)
+    private static void SqLite_Módosítás(string holvan, string ABjelszó, List<string> SQLszöveg)
     {
         string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
 
@@ -168,15 +168,15 @@ internal static partial class Adatbázis
     {
         if (holvan.Contains(".mdb"))
         {
-            MdbABtörlés(holvan, ABjelszó, SQLszöveg);
+            Mdb_ABtörlés(holvan, ABjelszó, SQLszöveg);
         }
         else
         {
-            SqLiteABtörlés(holvan, ABjelszó, SQLszöveg);
+            SqLite_ABtörlés(holvan, ABjelszó, SQLszöveg);
         }
     }
 
-    public static void MdbABtörlés(string holvan, string ABjelszó, string SQLszöveg)
+    public static void Mdb_ABtörlés(string holvan, string ABjelszó, string SQLszöveg)
     {
         try
         {
@@ -198,7 +198,7 @@ internal static partial class Adatbázis
         }
     }
 
-    public static void SqLiteABtörlés(string holvan, string ABjelszó, string SQLszöveg)
+    public static void SqLite_ABtörlés(string holvan, string ABjelszó, string SQLszöveg)
     {
         try
         {
@@ -232,15 +232,15 @@ internal static partial class Adatbázis
     {
         if (holvan.Contains(".mdb"))
         {
-            MdbABtörlés(holvan, ABjelszó, SQLszöveg);
+            Mdb_ABtörlés(holvan, ABjelszó, SQLszöveg);
         }
         else
         {
-            SqLiteABtörlés(holvan, ABjelszó, SQLszöveg);
+            SqLite_ABtörlés(holvan, ABjelszó, SQLszöveg);
         }
     }
 
-    public static void MdbABtörlés(string holvan, string ABjelszó, List<string> SQLszöveg)
+    public static void Mdb_ABtörlés(string holvan, string ABjelszó, List<string> SQLszöveg)
     {
         try
         {
@@ -274,7 +274,7 @@ internal static partial class Adatbázis
         }
     }
 
-    public static void SqLiteABtörlés(string holvan, string ABjelszó, List<string> SQLszöveg)
+    public static void SqLite_ABtörlés(string holvan, string ABjelszó, List<string> SQLszöveg)
     {
         string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
 
@@ -313,17 +313,17 @@ internal static partial class Adatbázis
         bool válasz;
         if (holvan.Contains(".mdb"))
         {
-            válasz = MdbABvanTábla(holvan, ABjelszó, SQLszöveg);
+            válasz = Mdb_ABvanTábla(holvan, ABjelszó, SQLszöveg);
         }
         else
         {
             // Csak a táblanév kell, ezért levágjuk a "SELECT * FROM" részt, és megmaradó szöveget trim-eljük
-            válasz = SqLiteABvanTábla(holvan, ABjelszó, SQLszöveg.Replace("SELECT * FROM", "").Trim());
+            válasz = SqLite_ABvanTábla(holvan, ABjelszó, SQLszöveg.Replace("SELECT * FROM", "").Trim());
         }
         return válasz;
     }
 
-    public static bool MdbABvanTábla(string holvan, string ABjelszó, string SQLszöveg)
+    public static bool Mdb_ABvanTábla(string holvan, string ABjelszó, string SQLszöveg)
     {
         bool válasz = false;
         try
@@ -350,7 +350,7 @@ internal static partial class Adatbázis
         }
     }
 
-    public static bool SqLiteABvanTábla(string holvan, string ABjelszó, string táblanév)
+    public static bool SqLite_ABvanTábla(string holvan, string ABjelszó, string táblanév)
     {
         bool válasz = false;
         try
@@ -376,14 +376,12 @@ internal static partial class Adatbázis
         catch (Exception ex)
         {
             HibaNapló.Log(ex.Message, "SqLite ABvanTábla", ex.StackTrace, ex.Source, ex.HResult, "_", false);
-
         }
         return válasz;
     }
 
 
 
-    #region SqLite
 
     private static string BuildConnectionString(string hely, string jelszó)
     {
@@ -394,6 +392,28 @@ internal static partial class Adatbázis
             Password = jelszó
         }.ToString();
     }
-    #endregion
+
+
+    public static void SqLite_TáblaLétrehozás(string hely, string jelszó, string sql)
+    {
+        try
+        {
+            string connectionString = BuildConnectionString(hely, jelszó);
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+            } // Itt a kapcsolat automatikusan lezárul, akkor is, ha hiba történt.
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, $"SqLite_TáblaLétrehozás hiba: {sql}", ex.StackTrace, ex.Source, ex.HResult);
+            throw new Exception("Adatbázis tábla létrehozási hiba.", ex);
+        }
+    }
+
 
 }
