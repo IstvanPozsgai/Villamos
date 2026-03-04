@@ -1640,9 +1640,14 @@ namespace Villamos
             try
             {
                 AdatTáblaNapló.Clear();
-
-                AdatokNapló = KézNapló.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year);
-
+                int Kezdőév = Dátumtól.Value.Year;
+                while (Kezdőév <=  Dátumig.Value.Year)
+                {
+                    List<Adat_Rezsi_Listanapló> Ideig= KézNapló.Lista_Adatok(Cmbtelephely.Text.Trim(), Kezdőév);
+                    AdatokNapló.AddRange(Ideig );
+                    Kezdőév++;
+                }
+          
                 List<Adat_Rezsi_Listanapló> Adatok;
                 if (Azonosító_napló.Text.Trim() != "")
                     Adatok = (from a in AdatokNapló
