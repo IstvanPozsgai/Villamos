@@ -416,4 +416,36 @@ internal static partial class Adatbázis
     }
 
 
+    public static List<T> Lista_Adatok<T>(string hely, string jelszó, string táblanév, Func<SqliteDataReader, T> mapFüggvény)
+    {
+        List<T> VálaszAdatok = new List<T>();
+        try
+        {
+            string sql = $@"SELECT * FROM {táblanév}";
+            string kapcsolatiszöveg = BuildConnectionString(hely, jelszó);
+
+            using (SqliteConnection connection = new SqliteConnection(kapcsolatiszöveg))
+            {
+                connection.Open();
+                using (SqliteCommand command = new SqliteCommand(sql, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            // Itt hívjuk meg a kívülről átadott leképezést
+                            VálaszAdatok.Add(mapFüggvény(reader));
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, $"Mdb Adat módosítás:\n{hely}\n{táblanév}", ex.StackTrace, ex.Source, ex.HResult);
+            throw new Exception("Adatbázis rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
+        }
+        return VálaszAdatok;
+    }
+
 }
