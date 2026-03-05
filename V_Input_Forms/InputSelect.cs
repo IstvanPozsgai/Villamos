@@ -6,7 +6,7 @@ namespace InputForms
 {
     class InputSelect : InputField
     {
-        readonly List<string>? Options;
+        readonly List<string> Options;
         readonly Label label;
         readonly string Tartalom;
         readonly int MaxLength;
@@ -50,7 +50,7 @@ namespace InputForms
 
         protected override Control CreateField()
         {
-            ComboBox combobox = new()
+            ComboBox combobox = new ComboBox()
             {
                 Font = new Font("sans-serif", 12f),
                 Width = Szélesség(),
@@ -104,9 +104,9 @@ namespace InputForms
         public int Szélesség()
         {
             int válasz = 10;
-            using (Font font = new("Microsoft Sans Serif", 12f))
+            using (Font font = new Font  ("Microsoft Sans Serif", 12f))
             {
-                string worstCase = new('W', MaxLength);
+                string worstCase = new string ('W', MaxLength);
                 Size textSize = TextRenderer.MeasureText(
                     worstCase,
                     font,
