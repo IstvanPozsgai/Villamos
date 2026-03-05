@@ -480,6 +480,11 @@ namespace Villamos
 
         private void Button1_Click(object sender, EventArgs e)
         {
+            Frissít();
+        }
+
+        private void Frissít()
+        {
             Y = 1;
             X = 1;
             Kocsikiirása_gombok();
@@ -601,7 +606,7 @@ namespace Villamos
             }
         }
 
- 
+
         private void BtnVendég_Click(object sender, EventArgs e)
         {
             //Idegen telephely adatok 
@@ -610,7 +615,15 @@ namespace Villamos
             Adatok = KézJármű.Lista_Adatok("Főmérnökség");
 
             Vendég_Járművek_Karbantartása Új_Vendég_Járművek_Karbantartása = new Vendég_Járművek_Karbantartása();
-            Új_Vendég_Járművek_Karbantartása.Módosítás(Adatok, AdatokTelep);
+            // Feliratkozol: ha ott rögzítés történik, fusson le itt a táblázat frissítése
+            Új_Vendég_Járművek_Karbantartása.AdatokFrissültek += () =>
+            {
+                Frissít();  // Vagy ahogy hívják nálad a betöltő függvényt
+            };
+
+
+
+            Új_Vendég_Járművek_Karbantartása.Beviteli_Ablak(Adatok, AdatokTelep);
         }
 
         private void Ablak_állomány_KeyDown(object sender, KeyEventArgs e)

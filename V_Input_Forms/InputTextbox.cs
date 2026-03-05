@@ -175,6 +175,11 @@ namespace InputForms
             return this;
         }
 
-
+        public InputTextbox Enabled(bool engedély)
+        {
+            var tb = (TextBox)input;
+            tb.Enabled = engedély;
+            return this;
+        }
     }
 }

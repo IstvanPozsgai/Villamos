@@ -62,7 +62,6 @@ namespace Villamos.Kezelők
                 {
                     string szöveg = $"DELETE FROM {táblanév} WHERE azonosító='{Adat.Azonosító.Trim()}'";
                     MyA.ABtörlés(hely, jelszó, szöveg);
-                    throw new HibásBevittAdat("Az adat törlése megtörtént.");
                 }
             }
             catch (HibásBevittAdat ex)
@@ -93,7 +92,6 @@ namespace Villamos.Kezelők
                     szöveg += $"KiadóTelephely='{Adat.KiadóTelephely.Trim()}' "; // KiadóTelephely
                     szöveg += $" WHERE azonosító='{Adat.Azonosító.Trim()}'";
                     MyA.ABMódosítás(hely, jelszó, szöveg);
-                    throw new HibásBevittAdat("Az adat módosítása megtörtént.");
                 }
                 else
                 {
@@ -105,7 +103,7 @@ namespace Villamos.Kezelők
                     szöveg += $"'{Adat.KiadóTelephely.Trim()}')";
 
                     MyA.ABMódosítás(hely, jelszó, szöveg);
-                    throw new HibásBevittAdat("Az adat rögzítése megtörtént.");
+
                 }
 
             }
