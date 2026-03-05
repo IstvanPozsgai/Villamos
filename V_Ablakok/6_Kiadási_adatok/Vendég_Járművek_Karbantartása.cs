@@ -79,6 +79,8 @@ namespace Villamos.V_Ablakok._6_Kiadási_adatok
                     if ((KiadóTelephely == null || KiadóTelephely.Trim() == "") || (BázisTelephely.Trim() == KiadóTelephely.Trim()))
                         Kéz.Törlés(Adat);
                     else
+                        // JAVÍTANDÓ:
+
                         Kéz.Rögzítés(Adat);
                     MessageBox.Show("Az adatok rögzítése befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Ablak.Close();
