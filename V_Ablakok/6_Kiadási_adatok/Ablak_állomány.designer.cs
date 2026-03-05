@@ -50,6 +50,7 @@ namespace Villamos
             this.Alap_excel = new System.Windows.Forms.Button();
             this.Button1 = new System.Windows.Forms.Button();
             this.BtnSúgó = new System.Windows.Forms.Button();
+            this.BtnVendég = new System.Windows.Forms.Button();
             this.Panel2.SuspendLayout();
             this.Bevitelilap.SuspendLayout();
             this.SuspendLayout();
@@ -58,9 +59,9 @@ namespace Villamos
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(451, 10);
+            this.Holtart.Location = new System.Drawing.Point(500, 10);
             this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(591, 28);
+            this.Holtart.Size = new System.Drawing.Size(542, 28);
             this.Holtart.TabIndex = 175;
             this.Holtart.Visible = false;
             // 
@@ -193,11 +194,24 @@ namespace Villamos
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
+            // BtnVendég
+            // 
+            this.BtnVendég.BackgroundImage = global::Villamos.Properties.Resources.Action_configure;
+            this.BtnVendég.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnVendég.Location = new System.Drawing.Point(448, 5);
+            this.BtnVendég.Name = "BtnVendég";
+            this.BtnVendég.Size = new System.Drawing.Size(45, 45);
+            this.BtnVendég.TabIndex = 212;
+            this.ToolTip1.SetToolTip(this.BtnVendég, "Állományon kívüli járművek szerkesztése");
+            this.BtnVendég.UseVisualStyleBackColor = true;
+            this.BtnVendég.Click += new System.EventHandler(this.BtnVendég_Click);
+            // 
             // Ablak_állomány
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1098, 358);
+            this.Controls.Add(this.BtnVendég);
             this.Controls.Add(this.Bevitelilap);
             this.Controls.Add(this.Button1);
             this.Controls.Add(this.Alap_excel);
@@ -239,5 +253,6 @@ namespace Villamos
         internal ComboBox Telephely;
         internal Button Rögzít;
         internal Button Button1;
+        internal Button BtnVendég;
     }
 }

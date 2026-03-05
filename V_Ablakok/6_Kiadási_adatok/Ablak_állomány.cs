@@ -20,10 +20,16 @@ namespace Villamos
         readonly Kezelő_Jármű_Vendég KézJárműVendég = new Kezelő_Jármű_Vendég();
         readonly Kezelő_Kiegészítő_Típuszínektábla KézSzínek = new Kezelő_Kiegészítő_Típuszínektábla();
         readonly Kezelő_kiegészítő_telephely KézTelephely = new Kezelő_kiegészítő_telephely();
+        List<Adat_Kiegészítő_Típuszínektábla> AdatokSzín = new List<Adat_Kiegészítő_Típuszínektábla>();
+        List<Adat_Jármű_Vendég> AdatokTelep = new List<Adat_Jármű_Vendég>();
+        List<Adat_Jármű> Adatok = new List<Adat_Jármű>();
 
         Adat_Jármű_Vendég Adat;
         string GombNév = "";
         string pályaszám, típus;
+
+        int Y = 1;
+        int X = 1;
 
 
         #region Alap
@@ -172,70 +178,91 @@ namespace Villamos
                     PanelKocsik.Controls.Clear();
                 }
                 //Színadatok
-                List<Adat_Kiegészítő_Típuszínektábla> AdatokSzín = KézSzínek.Lista_Adatok(Cmbtelephely.Text.Trim());
+                AdatokSzín = KézSzínek.Lista_Adatok(Cmbtelephely.Text.Trim());
                 //Idegen telephely adatok 
-                List<Adat_Jármű_Vendég> AdatokTelep = KézJárműVendég.Lista_Adatok();
+                AdatokTelep = KézJárműVendég.Lista_Adatok();
                 // Adatok betöltése
-                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adatok = (from a in Adatok
                           orderby a.Típus, a.Azonosító
                           select a).ToList();
-                int i = 1;
-                int j = 1;
-                int k = 1;
 
-                if (Adatok != null)
+                //Telephelyi állományban lévő kocsik
+                foreach (Adat_Jármű A in Adatok)
                 {
-                    foreach (Adat_Jármű A in Adatok)
-                    {
-                        Telephelygomb = new Button
-                        {
-                            Location = new Point(10 + 85 * (k - 1), 10 + 60 * (j - 1)),
-                            Size = new Size(80, 50),
-                            Name = "Kocsi_" + (gombokszáma + 1),
-                            Text = A.Azonosító.Trim() + "-\n" + A.Típus.Trim()
-                        };
-
-                        Adat_Kiegészítő_Típuszínektábla AdatSzín = AdatokSzín.FirstOrDefault(a => a.Típus == A.Típus);
-                        if (AdatSzín != null)
-                        {
-                            Szín_kódolás Szín = MyColor.Szín_váltó(AdatSzín.Színszám);
-                            Telephelygomb.BackColor = Color.FromArgb(Szín.Piros, Szín.Zöld, Szín.Kék);
-                        }
-                        // ha a telephely ki van töltve, akkor más formájú a szöveg
-                        Adat_Jármű_Vendég AdatTelep = AdatokTelep.FirstOrDefault(a => a.Azonosító == A.Azonosító);
-                        if (AdatTelep != null) Telephelygomb.Visible = true;
-
-                        if (AdatTelep == null)
-                            ToolTip1.SetToolTip(Telephelygomb, A.Azonosító.Trim());
-                        else
-                        {
-                            ToolTip1.SetToolTip(Telephelygomb, $"{A.Azonosító.Trim()}-{AdatTelep.KiadóTelephely}");
-                            Telephelygomb.Text += $"\n-{AdatTelep.KiadóTelephely}";
-                            Telephelygomb.Font = new Font("Arial Narrow", 11, FontStyle.Bold);
-
-                            AdatSzín = AdatokSzín.FirstOrDefault(a => a.Típus == AdatTelep.KiadóTelephely);
-                            if (AdatSzín != null)
-                            {
-                                Szín_kódolás Szín = MyColor.Szín_váltó(AdatSzín.Színszám);
-                                Telephelygomb.BackColor = Color.FromArgb(Szín.Piros, Szín.Zöld, Szín.Kék);
-                            }
-                        }
-
-                        Telephelygomb.MouseDown += Telephelygomb_MouseDown;
-                        PanelKocsik.Controls.Add(Telephelygomb);
-
-                        k += 1;
-                        if (k == 16)
-                        {
-                            k = 1;
-                            j += 1;
-                        }
-                        i += 1;
-                        gombokszáma += 1;
-                    }
-
+                    GombokFelrakása(A.Azonosító, A.Típus);
                 }
+
+                //Vendég járművek
+                List<Adat_Jármű_Vendég> AdatokTelepHelyen = AdatokTelep.Where(a => a.KiadóTelephely == Cmbtelephely.Text.Trim()).ToList();
+                Y += 2;
+                X = 1;
+                foreach (Adat_Jármű_Vendég A in AdatokTelepHelyen)
+                {
+                    GombokFelrakása(A.Azonosító, A.Típus);
+                }
+            }
+
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void GombokFelrakása(string Azonosító, string Típus)
+        {
+            try
+            {
+                Telephelygomb = new Button
+                {
+                    Location = new Point(10 + 85 * (X - 1), 10 + 60 * (Y - 1)),
+                    Size = new Size(80, 50),
+                    Name = "Kocsi_" + (gombokszáma + 1),
+                    Text = Azonosító.Trim() + "-\n" + Típus.Trim()
+                };
+
+                Adat_Kiegészítő_Típuszínektábla AdatSzín = AdatokSzín.FirstOrDefault(a => a.Típus == Típus);
+                if (AdatSzín != null)
+                {
+                    Szín_kódolás Szín = MyColor.Szín_váltó(AdatSzín.Színszám);
+                    Telephelygomb.BackColor = Color.FromArgb(Szín.Piros, Szín.Zöld, Szín.Kék);
+                }
+                // ha a telephely ki van töltve, akkor más formájú a szöveg
+                Adat_Jármű_Vendég AdatTelep = AdatokTelep.FirstOrDefault(a => a.Azonosító == Azonosító);
+                if (AdatTelep != null) Telephelygomb.Visible = true;
+
+                if (AdatTelep == null)
+                    ToolTip1.SetToolTip(Telephelygomb, Azonosító.Trim());
+                else
+                {
+                    ToolTip1.SetToolTip(Telephelygomb, $"{Azonosító.Trim()}-{AdatTelep.KiadóTelephely}");
+                    Telephelygomb.Text += $"\n-{AdatTelep.KiadóTelephely}";
+                    Telephelygomb.Font = new Font("Arial Narrow", 11, FontStyle.Bold);
+
+                    AdatSzín = AdatokSzín.FirstOrDefault(a => a.Típus == AdatTelep.KiadóTelephely);
+                    if (AdatSzín != null)
+                    {
+                        Szín_kódolás Szín = MyColor.Szín_váltó(AdatSzín.Színszám);
+                        Telephelygomb.BackColor = Color.FromArgb(Szín.Piros, Szín.Zöld, Szín.Kék);
+                    }
+                }
+
+                Telephelygomb.MouseDown += Telephelygomb_MouseDown;
+                PanelKocsik.Controls.Add(Telephelygomb);
+
+                X += 1;
+                if (X == 16)
+                {
+                    X = 1;
+                    Y += 1;
+                }
+
+                gombokszáma += 1;
             }
             catch (HibásBevittAdat ex)
             {
@@ -451,6 +478,8 @@ namespace Villamos
 
         private void Button1_Click(object sender, EventArgs e)
         {
+            Y = 1;
+            X = 1;
             Kocsikiirása_gombok();
         }
         #endregion
@@ -568,6 +597,12 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+
+        private void BtnVendég_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void Ablak_állomány_KeyDown(object sender, KeyEventArgs e)
