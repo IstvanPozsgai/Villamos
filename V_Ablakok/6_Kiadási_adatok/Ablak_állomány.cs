@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Ablakok._6_Kiadási_adatok;
 using Villamos.V_MindenEgyéb;
 using MyColor = Villamos.V_MindenEgyéb.Kezelő_Szín;
 using MyF = Függvénygyűjtemény;
@@ -182,8 +183,9 @@ namespace Villamos
                 //Idegen telephely adatok 
                 AdatokTelep = KézJárműVendég.Lista_Adatok();
                 // Adatok betöltése
-                Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Adatok = KézJármű.Lista_Adatok("Főmérnökség");
                 Adatok = (from a in Adatok
+                          where a.Üzem == Cmbtelephely.Text.Trim()
                           orderby a.Típus, a.Azonosító
                           select a).ToList();
 
@@ -599,10 +601,16 @@ namespace Villamos
             }
         }
 
-
+ 
         private void BtnVendég_Click(object sender, EventArgs e)
         {
+            //Idegen telephely adatok 
+            AdatokTelep = KézJárműVendég.Lista_Adatok();
+            // Adatok betöltése
+            Adatok = KézJármű.Lista_Adatok("Főmérnökség");
 
+            Vendég_Járművek_Karbantartása Új_Vendég_Járművek_Karbantartása = new Vendég_Járművek_Karbantartása();
+            Új_Vendég_Járművek_Karbantartása.Módosítás(Adatok, AdatokTelep);
         }
 
         private void Ablak_állomány_KeyDown(object sender, KeyEventArgs e)

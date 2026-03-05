@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -6,6 +7,10 @@ namespace InputForms
 {
     class InputSelect : InputField
     {
+
+        // Esemény, amire a hívó feliratkozhat
+        public event EventHandler SelectedIndexChanged;
+        
         readonly List<string> Options;
         readonly Label label;
         readonly string Tartalom;
@@ -56,7 +61,7 @@ namespace InputForms
                 Width = Szélesség(),
                 MaxLength = MaxLength
             };
-
+            combobox.SelectedIndexChanged += (s, e) => SelectedIndexChanged?.Invoke(this, e);
             return combobox;
         }
 
@@ -137,5 +142,22 @@ namespace InputForms
             input.Width = széles;
             return this;
         }
+
+ 
+
+        // Új metódus a lista frissítésére
+        public void UpdateOptions(List<string> newOptions)
+        {
+            var combo = (ComboBox)input;
+            combo.Items.Clear();
+            foreach (var option in newOptions)
+            {
+                combo.Items.Add(option);
+            }
+            if (combo.Items.Count > 0) combo.SelectedIndex = 0;
+        }
+
+
+
     }
 }
