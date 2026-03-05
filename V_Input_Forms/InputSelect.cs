@@ -1,17 +1,19 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
-
 
 namespace InputForms
 {
     class InputSelect : InputField
     {
-        readonly string[] Options;
+        readonly List<string>? Options;
         readonly Label label;
+        readonly string Tartalom;
         readonly int MaxLength;
+        string rule;
         public int Height => input.Height;
 
-        public InputSelect(string LabelSzöveg, string[] options, int maxLength = 15, Control parent = null) : base(parent)
+        public InputSelect(string LabelSzöveg, List<string> options, int maxLength = 15, Control parent = null) : base(parent)
         {
             label = new Label
             {
@@ -23,12 +25,17 @@ namespace InputForms
             Options = options;
             MaxLength = maxLength;
 
+
             ComboBox comboBox = (ComboBox)input;
             comboBox.MaxLength = maxLength;
             comboBox.Width = Szélesség();
             comboBox.Items.Clear();
-            comboBox.Items.AddRange(Options);
-            if (Options.Length > 0)
+            foreach (string option in Options)
+            {
+                comboBox.Items.Add(option);
+            }
+
+            if (Options.Count > 0)
                 comboBox.SelectedIndex = 0;
 
             if (parent != null) Add(parent);
@@ -43,12 +50,13 @@ namespace InputForms
 
         protected override Control CreateField()
         {
-            ComboBox combobox = new ComboBox
+            ComboBox combobox = new()
             {
                 Font = new Font("sans-serif", 12f),
                 Width = Szélesség(),
                 MaxLength = MaxLength
             };
+
             return combobox;
         }
 
@@ -61,27 +69,44 @@ namespace InputForms
             return this;
         }
 
+
+        public InputSelect WithValue(object v)
+        {
+            this.Value = v;
+            return this;
+        }
+
+
         public override object Value
         {
             get => ((ComboBox)input).Text;
             set
             {
                 var combo = (ComboBox)input;
-                string textValue = value?.ToString() ?? "";
-                if (combo.Items.Contains(textValue))
+                var textValue = value?.ToString() ?? string.Empty;
+
+                // pontos egyezést keresünk
+                int idx = combo.FindStringExact(textValue);
+                if (idx >= 0)
                 {
-                    combo.Text = textValue;
+                    combo.SelectedIndex = idx;
                 }
-                // Ha nem szerepel a listában, nem változik (DropDownList miatt)
+                else
+                {
+                    // csak akkor írjuk a Text-et, ha nem DropDownList
+                    if (combo.DropDownStyle != ComboBoxStyle.DropDownList)
+                        combo.Text = textValue;
+                    // ha DropDownList és nincs benne, nem állítjuk
+                }
             }
         }
 
         public int Szélesség()
         {
             int válasz = 10;
-            using (Font font = new Font("Microsoft Sans Serif", 12f))
+            using (Font font = new("Microsoft Sans Serif", 12f))
             {
-                string worstCase = new string('W', MaxLength);
+                string worstCase = new('W', MaxLength);
                 Size textSize = TextRenderer.MeasureText(
                     worstCase,
                     font,
@@ -93,6 +118,24 @@ namespace InputForms
                 válasz = textSize.Width + 8;
             }
             return válasz;
+        }
+
+        public InputSelect AddRule(string rule)
+        {
+            this.rule = rule;
+            return this;
+        }
+
+        public InputSelect SetHeight(int magas)
+        {
+            input.Height = magas;
+            return this;
+        }
+
+        public InputSelect SetWidth(int széles)
+        {
+            input.Width = széles;
+            return this;
         }
     }
 }
