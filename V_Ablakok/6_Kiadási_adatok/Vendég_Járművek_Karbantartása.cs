@@ -37,8 +37,8 @@ namespace Villamos.V_Ablakok._6_Kiadási_adatok
             Ablak = new Form();
 
             // Változók a metóduson belül
-            var tipusMezo = new InputSelect("Járműtípus : ", Típusok).SetWidth(200).SetHeight(26);
-            var azonositoMezo = new InputSelect("Pályaszám: ", Azonosítók).SetWidth(200).SetHeight(26);
+            var tipusMezo = new InputSelect("Járműtípus : ", Típusok).SetWidth(200).SetHeight(26).SetMaxDropDownItems();
+            var azonositoMezo = new InputSelect("Pályaszám: ", Azonosítók).SetWidth(200).SetHeight(26).SetMaxDropDownItems();
 
             // Eseménykezelés: Ha változik a típus, szűrjük az azonosítókat
             tipusMezo.SelectedIndexChanged += (s, e) => {

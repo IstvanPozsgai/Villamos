@@ -74,6 +74,19 @@ namespace InputForms
             return this;
         }
 
+        public InputSelect SetMaxDropDownItems(int darab=10)
+        {
+            var combo = (ComboBox)input;
+            // Ez a kulcs: ki kell kapcsolni az IntegralHeight-et, 
+            // hogy a MaxDropDownItems érvényesüljön
+            combo.IntegralHeight = false;
+            combo.MaxDropDownItems = darab;
+
+            // Opcionális: Kiszámolhatod a pontos pixelmagasságot is a sorok alapján
+            // combo.DropDownHeight = combo.ItemHeight * darab;
+
+            return this;
+        }
 
         public InputSelect WithValue(object v)
         {
