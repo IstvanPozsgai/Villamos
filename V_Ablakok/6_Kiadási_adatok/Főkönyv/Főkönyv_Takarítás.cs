@@ -768,8 +768,7 @@ namespace Villamos.Villamos_Nyomtatványok
             }
             else
             {
-                blokkeleje = sor + 1;
-                sor += 1;
+                blokkeleje = sor;
             }
             string előzőtípus = "";
 
@@ -788,8 +787,20 @@ namespace Villamos.Villamos_Nyomtatványok
                     MyX.Kiir("Fertőtlenítés (m2)", MyF.Oszlopnév(oszlop + 6) + 5.ToString());
                     sor += 1;
                 }
+
                 if (előzőtípus.Trim() != rekord.Típus.Trim())
                 {
+                    if (előzőtípus.Trim() == "")
+                    {
+                        előzőtípus = rekord.Típus.Trim();
+                    }
+                    else
+                    {
+                        sor += 3;
+                        MyX.Kiir("Össz", MyF.Oszlopnév(oszlop) + $"{sor}");
+                        MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{blokkeleje}:{MyF.Oszlopnév(oszlop + 6)}{sor}");
+                        sor++;
+                    }
 
                     MyX.Egyesít(munkalap, MyF.Oszlopnév(oszlop) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop + 6) + $"{sor}");
                     MyX.Kiir(rekord.Típus.Trim(), MyF.Oszlopnév(oszlop) + $"{sor}");
@@ -805,7 +816,7 @@ namespace Villamos.Villamos_Nyomtatványok
                 if (sor == 46)
                 {
                     MyX.Kiir("Össz", MyF.Oszlopnév(oszlop) + $"{sor}");
-                    MyX.Kiir("#KÉPLET#=COUNTIF(R[-" + Math.Abs(sor - blokkeleje).ToString() + "]C:R[-1]C,\"X\")", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
+
                     if (blokkeleje < sor)
                         MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{blokkeleje}:{MyF.Oszlopnév(oszlop + 6)}{sor}");
                     else
@@ -820,7 +831,7 @@ namespace Villamos.Villamos_Nyomtatványok
             if (sor > 45)
             {
                 MyX.Kiir("Össz", MyF.Oszlopnév(oszlop) + $"{sor}");
-                MyX.Kiir("#KÉPLET#=COUNTIF(R[-" + Math.Abs(sor - blokkeleje).ToString() + "]C:R[-1]C,\"X\")", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
+
                 if (blokkeleje < sor)
                     MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{blokkeleje}:{MyF.Oszlopnév(oszlop + 6)}{sor}");
                 else
@@ -836,7 +847,7 @@ namespace Villamos.Villamos_Nyomtatványok
             }
 
             MyX.Kiir("Össz", MyF.Oszlopnév(oszlop) + $"{sor}");
-            MyX.Kiir("#KÉPLET#=COUNTIF(R[-" + Math.Abs(sor - blokkeleje).ToString() + "]C:R[-1]C,\"X\")", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
+
             if (blokkeleje < sor)
                 MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{blokkeleje}:{MyF.Oszlopnév(oszlop + 6)}{sor}");
             else
