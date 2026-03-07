@@ -35,6 +35,7 @@ namespace InputForms
             Source_binding = new BindingSource();
 
             GridView_Data.Font = Form_parent.Font;
+            GridView_Data.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
             GridView_Data.EnableHeadersVisualStyles = false; // ← fontos! különben a szín nem érvényesül
             GridView_Data.ColumnHeadersDefaultCellStyle.BackColor = SystemColors.Control; // szürke alap
@@ -121,23 +122,6 @@ namespace InputForms
         }
 
         /// <summary>
-        /// A kiválasztás változásakor meghívja a megadott callback függvényt a kiválasztott T típusú elemmel.
-        /// </summary>
-        /// <param name="callback"></param>
-        /// <returns></returns>
-        public DataGridViewHelper<T> OnSelectionChanged(Action<T> callback)
-        {
-            GridView_Data.SelectionChanged += (sender, e) =>
-            {
-                if (Source_binding.Current is T item)
-                {
-                    callback?.Invoke(item);
-                }
-            };
-            return this;
-        }
-
-        /// <summary>
         /// Kijelölt elemek listájának lekérése.
         /// </summary>
         /// <returns></returns>
@@ -152,6 +136,22 @@ namespace InputForms
                 }
             }
             return selected;
+        }
+
+        /// <summary>
+        /// Az elsőként kijelölt elem lekérése.
+        /// </summary>
+        /// <returns>A kijelölt objektum, vagy null, ha nincs kijelölés.</returns>
+        public T GetSelectedItem()
+        {
+            if (GridView_Data.SelectedRows.Count > 0)
+            {
+                if (GridView_Data.SelectedRows[0].DataBoundItem is T item)
+                {
+                    return item;
+                }
+            }
+            return default; // Referencia típusnál ez null-t ad vissza
         }
 
         /// <summary>
@@ -212,6 +212,44 @@ namespace InputForms
             return dt;
         }
 
+        /// <summary>
+        /// Ki-/bekapcsolja a többtöbbszörös kijelölést.
+        /// </summary>
+        /// <param name="enable"></param>
+        /// <returns></returns>
+        public DataGridViewHelper<T> EnableMultiSelect(bool enable = true)
+        {
+            GridView_Data.MultiSelect = enable;
+            return this;
+        }
+
+        /// <summary>
+        /// Visszaadja az aktuálisan kiválasztott sor adatait T objektumként.
+        /// </summary>
+        public T GetSelectedRowData()
+        {
+            if (GridView_Data.CurrentRow != null && GridView_Data.CurrentRow.DataBoundItem is DataRowView drv)
+            {
+                // Új példány létrehozása a T típusból
+                T item = Activator.CreateInstance<T>();
+                PropertyInfo[] props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+                foreach (var prop in props)
+                {
+                    // Ellenőrizzük, hogy a DataTable tartalmazza-e az adott oszlopot és írható-e a property
+                    if (drv.Row.Table.Columns.Contains(prop.Name) && prop.CanWrite)
+                    {
+                        object val = drv.Row[prop.Name];
+                        if (val != DBNull.Value)
+                        {
+                            prop.SetValue(item, val);
+                        }
+                    }
+                }
+                return item;
+            }
+            return default;
+        }
 
 
 
@@ -263,17 +301,6 @@ namespace InputForms
             return this;
         }
 
-        /// <summary>
-        /// Ki-/bekapcsolja a többtöbbszörös kijelölést.
-        /// </summary>
-        /// <param name="enable"></param>
-        /// <returns></returns>
-        public DataGridViewHelper<T> EnableMultiSelect(bool enable = true)
-        {
-            GridView_Data.MultiSelect = enable;
-            return this;
-        }
-
         public DataGridViewHelper<T> ClearData()
         {
             List_binding.Clear();
@@ -322,6 +349,23 @@ namespace InputForms
                 GridView_Data.Refresh();
             }
 
+            return this;
+        }
+
+        /// <summary>
+        /// A kiválasztás változásakor meghívja a megadott callback függvényt a kiválasztott T típusú elemmel.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public DataGridViewHelper<T> OnSelectionChanged(Action<T> callback)
+        {
+            GridView_Data.SelectionChanged += (sender, e) =>
+            {
+                if (Source_binding.Current is T item)
+                {
+                    callback?.Invoke(item);
+                }
+            };
             return this;
         }
     }

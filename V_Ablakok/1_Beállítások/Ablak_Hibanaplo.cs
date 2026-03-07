@@ -14,7 +14,7 @@ namespace Villamos
         private DataGridViewHelper<Adat_Hiba> Tábla;
         List<Adat_Hiba> Adatok = new List<Adat_Hiba>();
         Hibanapló_Részletes Ablak;
-        Adat_Hiba EgyAdat = new Adat_Hiba();
+        Adat_Hiba kijelöltAdat = new Adat_Hiba();
 
         public Ablak_Hibanaplo()
         {
@@ -49,10 +49,8 @@ namespace Villamos
                .SetAnchor(AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom)
                .AddItems(Adatok)
                .ConfigureColumns(Beállítás)
-               .ShowRowHeaders(false)
-               .OnSelectionChanged(p => EgyAdat = p)
-
-                   ;
+               .ShowRowHeaders(true)
+               .EnableMultiSelect(false);
         }
 
         private void AdatokFeltöltése()
@@ -133,10 +131,19 @@ namespace Villamos
         {
             try
             {
-                if (Adatok.Count < 1) throw new HibásBevittAdat("Nincs kiválasztva érvényes sor.");
-                Ablak?.Close();
-                Ablak = new Hibanapló_Részletes();
-                Ablak.RészletesAdatok(EgyAdat);
+                // Meghívjuk a helper metódusát
+                kijelöltAdat = Tábla.GetSelectedRowData();
+
+                if (kijelöltAdat != null)
+                {
+                    Ablak?.Close();
+                    Ablak = new Hibanapló_Részletes();
+                    Ablak.RészletesAdatok(kijelöltAdat);
+                }
+                else
+                {
+                    MessageBox.Show("Nincs kijelölt sor!");
+                }
             }
             catch (HibásBevittAdat ex)
             {
