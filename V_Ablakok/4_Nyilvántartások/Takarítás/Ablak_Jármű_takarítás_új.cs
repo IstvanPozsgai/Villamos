@@ -1588,6 +1588,7 @@ namespace Villamos
                                                             AdatTelj.Típus);
                         KézTakarításTelj.Módosítás(Cmbtelephely.Text.Trim(), JDátum.Value.Year, ADAT);
                         Átrögzít(AdatTelj.Takarítási_fajta, 1);
+                        UtolsóTakarításVisszaÍrása(AdatTelj.Takarítási_fajta);
                         MessageBox.Show("Az adatok rögzítése megtörtént !", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
@@ -1795,6 +1796,78 @@ namespace Villamos
                                             DateTime.Now,
                                             Program.PostásNév,
                                             Státus);
+                KézTakNapló.Rögzítés(DateTime.Today.Year, ADATN);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void UtolsóTakarításVisszaÍrása(string Tak_fajta)
+        {
+            try
+            {
+                //Utolsó 3 év adatát betöltjük
+                List<Adat_Jármű_Takarítás_Napló> AdatokNapló = new List<Adat_Jármű_Takarítás_Napló>();
+                for (int i = JDátum.Value.Year - 2; i < JDátum.Value.Year; i++)
+                {
+                    List<Adat_Jármű_Takarítás_Napló> Ideig = KézTakNapló.Lista_Adatok(i);
+                    AdatokNapló.AddRange(Ideig);
+                }
+                //Szűrjük a naplóban az adott pályaszámra és takarítási fajtára
+                AdatokNapló = (from a in AdatokNapló
+                               where a.Azonosító == JK_Azonosító.Text.Trim()
+                               && a.Takarítási_fajta == Tak_fajta
+                               select a).ToList();
+
+                //Megkeressük a legutolsó takarítást a naplóban
+                List<Adat_Jármű_Takarítás_Napló> utolsoAktivTakaritasok = AdatokNapló
+                     .GroupBy(n => new { n.Dátum, n.Takarítási_fajta, n.Telephely })        // Csoportosítás több mező alapján egy névtelen objektummal
+                     .Select(csoport => csoport       // Minden csoporton belül a 'Mikor' alapján a legfrissebbet keressük
+                                       .OrderByDescending(x => x.Mikor)
+                                       .FirstOrDefault())  // Csak azokat hagyjuk meg, ahol a legutolsó bejegyzés nem törlés (0 = aktív)
+                                       .Where(x => x != null && x.Státus == 0)
+                                       .ToList();
+
+
+                // Az egyetlen legutolsó bejegyzés kell az egész listából, ami nincs törölve:
+                Adat_Jármű_Takarítás_Napló UtolsóRögzítés = utolsoAktivTakaritasok
+                                                        .OrderByDescending(x => x.Mikor)
+                                                        .FirstOrDefault();
+                if (UtolsóRögzítés == null) return; //Ha nincs egyetlen aktív bejegyzés sem, akkor nincs mit visszaírni, így kilépünk
+
+                Adat_Jármű_Takarítás_Takarítások ADAT = new Adat_Jármű_Takarítás_Takarítások(
+                                       UtolsóRögzítés.Azonosító,
+                                       UtolsóRögzítés.Dátum,
+                                       UtolsóRögzítés.Takarítási_fajta,
+                                       UtolsóRögzítés.Telephely,
+                                       0);
+
+                AdatokTak = KézTak.Lista_Adatok();
+                Adat_Jármű_Takarítás_Takarítások AdatTak = (from a in AdatokTak
+                                                            where a.Azonosító == JK_Azonosító.Text.Trim()
+                                                            && a.Takarítási_fajta == Tak_fajta.Trim()
+                                                            && a.Telephely == Cmbtelephely.Text.Trim()
+                                                            select a).FirstOrDefault();
+                if (AdatTak != null)
+                    KézTak.Módosítás_Dátum(ADAT);
+                else
+                    KézTak.Rögzítés(ADAT);
+                // naplózás
+                Adat_Jármű_Takarítás_Napló ADATN = new Adat_Jármű_Takarítás_Napló(
+                                            ADAT.Azonosító,
+                                            ADAT.Dátum,
+                                            ADAT.Takarítási_fajta,
+                                            ADAT.Telephely,
+                                            DateTime.Now,
+                                            Program.PostásNév,
+                                            0);
                 KézTakNapló.Rögzítés(DateTime.Today.Year, ADATN);
             }
             catch (HibásBevittAdat ex)
