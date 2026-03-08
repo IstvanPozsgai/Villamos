@@ -704,18 +704,15 @@ namespace Villamos.Villamos_Nyomtatványok
                 // ha vége a típusnak akkor összesítünk
                 if (sor >= 43)
                 {
+                    //Ha elértünk a végére akkor összesítünk
                     sor = 46;
                     MyX.Kiir("Össz", MyF.Oszlopnév(oszlop) + $"{sor}");
                     MyX.Kiir("#KÉPLET#=COUNTIF(R[-" + Math.Abs(sor - blokkeleje).ToString() + "]C:R[-1]C,\"X\")", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
 
-                    if (képlet.Trim() != "=")
-                        képlet += "+";
-
+                    if (képlet.Trim() != "=") képlet += "+";
+                    //hozzáadjuk az összesítő sort a képlethez
                     képlet += $"{MyF.Oszlopnév(oszlop + 1)}{sor}";
 
-                    sor++;
-                    MyX.Kiir("Össz", MyF.Oszlopnév(oszlop) + $"{sor}");
-                    MyX.Kiir($"#KÉPLET#{képlet}", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
                     if (blokkeleje < sor)
                         MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{blokkeleje}:{MyF.Oszlopnév(oszlop + 6)}{sor}");
                     else
@@ -725,6 +722,7 @@ namespace Villamos.Villamos_Nyomtatványok
                     blokkeleje = 6;
                     oszlop += 7;
                     oszlopismét += 1;
+                    képlet = "=";
                 }
                 else
                 {
@@ -732,19 +730,22 @@ namespace Villamos.Villamos_Nyomtatványok
                     MyX.Kiir("Össz:", MyF.Oszlopnév(oszlop) + $"{sor}");
                     MyX.Kiir("#KÉPLET#=COUNTIF(R[-" + Math.Abs(sor - blokkeleje).ToString() + "]C:R[-1]C,\"X\")", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
 
-                    if (képlet.Trim() != "=")
-                        képlet += "+";
+                    if (képlet.Trim() != "=") képlet += "+";
 
                     képlet += $"{MyF.Oszlopnév(oszlop + 1)}{sor}";
+                    if (képlet.Contains("+"))
+                    {
+                        sor++;
+                        MyX.Kiir("Össz:", MyF.Oszlopnév(oszlop) + $"{sor}");
+                        MyX.Kiir($"#KÉPLET#{képlet}", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
+                    }
 
-                    sor++;
-                    MyX.Kiir("Össz:", MyF.Oszlopnév(oszlop) + $"{sor}");
-                    MyX.Kiir($"#KÉPLET#{képlet}", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
                     if (blokkeleje < sor)
-                        MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{blokkeleje}:{MyF.Oszlopnév(oszlop + 6)}{sor}");
+                        MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{blokkeleje}:{MyF.Oszlopnév(oszlop + 6)}46");
                     else
-                        MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{sor}:{MyF.Oszlopnév(oszlop + 6)}{blokkeleje}");
+                        MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{sor}:{MyF.Oszlopnév(oszlop + 6)}46");
                     sor += 1;
+                    képlet = "=";
                 }
             }
 
