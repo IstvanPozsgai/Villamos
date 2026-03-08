@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 public partial class Függvénygyűjtemény
 {
@@ -145,6 +146,36 @@ public static class FVGyűjtemény
         if (!bool.TryParse(str, out bool válasz))
             válasz = false;
         return válasz;
+    }
+
+    /// <summary>
+    /// A double értékeket alakítja át szöveggé úgy, hogy a tizedesvessző helyett pontot használjon, így biztosítva a helyes formátumot például adatbázisba vagy fájlba íráskor.
+    /// </summary>
+    /// <param name="szám"></param>
+    /// <returns></returns>
+    public static string ToStringCult(this double szám)
+    {
+        return szám.ToString(CultureInfo.InvariantCulture);
+    }
+
+    /// <summary>
+    /// a decimal értékeket alakítja át szöveggé úgy, hogy a tizedesvessző helyett pontot használjon, így biztosítva a helyes formátumot például adatbázisba vagy fájlba íráskor.
+    /// </summary>
+    /// <param name="szám"></param>
+    /// <returns></returns>
+    public static string ToStringCult(this decimal szám)
+    {
+        return szám.ToString(CultureInfo.InvariantCulture);
+    }
+
+    /// <summary>
+    /// A float értékeket alakítja át szöveggé úgy, hogy a tizedesvessző helyett pontot használjon, így biztosítva a helyes formátumot például adatbázisba vagy fájlba íráskor.
+    /// </summary>
+    /// <param name="szám"></param>
+    /// <returns></returns>
+    public static string ToStringCult(this float szám)
+    {
+        return szám.ToString(CultureInfo.InvariantCulture);
     }
 
 }
