@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -99,7 +99,7 @@ namespace Villamos.Kezelők
                 FájlBeállítás(Telephely);
                 string szöveg = $"INSERT INTO {Táblanév} (azonosító, Mennyiség, dátum, státus ) VALUES (";
                 szöveg += $"'{Adat.Azonosító}', ";
-                szöveg += $"{Adat.Mennyiség.ToString().Replace(',', '.')}, ";
+                szöveg += $"{Adat.Mennyiség.ToStringCult()}, ";
                 szöveg += $"'{Adat.Dátum}', ";
                 szöveg += $"{Adat.Státus})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

@@ -77,11 +77,11 @@ namespace Villamos.Kezelők
                 string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $"megnevezés='{Adat.Megnevezés}', ";
                 szöveg += $"Osztály='{Adat.Osztály}', ";
-                szöveg += $"Méret={Adat.Méret}, ";
+                szöveg += $"Méret={Adat.Méret.ToStringCult()}, ";
                 szöveg += $"helységkód='E{Adat.Helységkód}', ";
-                szöveg += $"E1évdb='{Adat.E1évdb}', ";
-                szöveg += $"E2évdb='{Adat.E2évdb}', ";
-                szöveg += $"E3évdb='{Adat.E3évdb}', ";
+                szöveg += $"E1évdb={Adat.E1évdb}, ";
+                szöveg += $"E2évdb={Adat.E2évdb}, ";
+                szöveg += $"E3évdb={Adat.E3évdb}, ";
                 szöveg += $"kezd='{Adat.Kezd}', ";
                 szöveg += $"végez='{Adat.Végez}', ";
                 szöveg += $"ellenőremail='{Adat.Ellenőremail}', ";
@@ -155,7 +155,7 @@ namespace Villamos.Kezelők
                 szöveg += $"{Sorszám(Telephely)}, ";
                 szöveg += $"'{Adat.Megnevezés}', ";
                 szöveg += $"'{Adat.Osztály}', ";
-                szöveg += Adat.Méret.ToString().Replace(',', '.') + ", ";
+                szöveg += $"{Adat.Méret.ToStringCult()}, ";
                 szöveg += $"'E{Adat.Helységkód}', ";
                 szöveg += "false, ";
                 szöveg += $"{Adat.E1évdb}, ";
