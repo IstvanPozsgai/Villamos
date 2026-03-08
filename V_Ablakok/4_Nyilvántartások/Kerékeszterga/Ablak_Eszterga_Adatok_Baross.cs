@@ -264,7 +264,7 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                                     }
                                     else
                                     {
-                                        szövegvált += $"{Math.Round(double.Parse(ideig), 4).ToString().Replace(',', '.')}, ";
+                                        szövegvált += $"{Math.Round(double.Parse(ideig), 4).ToStringCult()}, ";
                                     }
                                     break;
                             }
@@ -502,52 +502,52 @@ namespace Villamos.Villamos_Ablakok.Kerékeszterga
                     Tábla.Rows[i].Cells[13].Value = rekord.Tengely_Aznosító.Trim();
                     Tábla.Rows[i].Cells[14].Value = rekord.Adat_4.ToString();
                     Tábla.Rows[i].Cells[15].Value = rekord.Dátum_2.ToString();
-                    Tábla.Rows[i].Cells[16].Value = rekord.Táv_Belső_Futó_K.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[17].Value = rekord.Táv_Nyom_K.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[18].Value = rekord.Delta_K.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[19].Value = rekord.B_Átmérő_K.ToString().Replace(',', '.');
+                    Tábla.Rows[i].Cells[16].Value = rekord.Táv_Belső_Futó_K.ToStringCult();
+                    Tábla.Rows[i].Cells[17].Value = rekord.Táv_Nyom_K.ToStringCult();
+                    Tábla.Rows[i].Cells[18].Value = rekord.Delta_K.ToStringCult();
+                    Tábla.Rows[i].Cells[19].Value = rekord.B_Átmérő_K.ToStringCult();
 
-                    Tábla.Rows[i].Cells[20].Value = rekord.J_Átmérő_K.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[21].Value = rekord.B_Axiális_K.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[22].Value = rekord.J_Axiális_K.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[23].Value = rekord.B_Radiális_K.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[24].Value = rekord.J_Radiális_K.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[25].Value = rekord.B_Nyom_Mag_K.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[26].Value = rekord.J_Nyom_Mag_K.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[27].Value = rekord.B_Nyom_Vast_K.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[28].Value = rekord.J_nyom_Vast_K.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[29].Value = rekord.B_Nyom_Vast_B_K.ToString().Replace(',', '.');
+                    Tábla.Rows[i].Cells[20].Value = rekord.J_Átmérő_K.ToStringCult();
+                    Tábla.Rows[i].Cells[21].Value = rekord.B_Axiális_K.ToStringCult();
+                    Tábla.Rows[i].Cells[22].Value = rekord.J_Axiális_K.ToStringCult();
+                    Tábla.Rows[i].Cells[23].Value = rekord.B_Radiális_K.ToStringCult();
+                    Tábla.Rows[i].Cells[24].Value = rekord.J_Radiális_K.ToStringCult();
+                    Tábla.Rows[i].Cells[25].Value = rekord.B_Nyom_Mag_K.ToStringCult();
+                    Tábla.Rows[i].Cells[26].Value = rekord.J_Nyom_Mag_K.ToStringCult();
+                    Tábla.Rows[i].Cells[27].Value = rekord.B_Nyom_Vast_K.ToStringCult();
+                    Tábla.Rows[i].Cells[28].Value = rekord.J_nyom_Vast_K.ToStringCult();
+                    Tábla.Rows[i].Cells[29].Value = rekord.B_Nyom_Vast_B_K.ToStringCult();
 
-                    Tábla.Rows[i].Cells[30].Value = rekord.J_nyom_Vast_B_K.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[31].Value = rekord.B_QR_K.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[32].Value = rekord.J_QR_K.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[33].Value = rekord.B_Profilhossz_K.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[34].Value = rekord.J_Profilhossz_K.ToString().Replace(',', '.');
+                    Tábla.Rows[i].Cells[30].Value = rekord.J_nyom_Vast_B_K.ToStringCult();
+                    Tábla.Rows[i].Cells[31].Value = rekord.B_QR_K.ToStringCult();
+                    Tábla.Rows[i].Cells[32].Value = rekord.J_QR_K.ToStringCult();
+                    Tábla.Rows[i].Cells[33].Value = rekord.B_Profilhossz_K.ToStringCult();
+                    Tábla.Rows[i].Cells[34].Value = rekord.J_Profilhossz_K.ToStringCult();
                     Tábla.Rows[i].Cells[35].Value = rekord.Dátum_3.ToString();
-                    Tábla.Rows[i].Cells[36].Value = rekord.Táv_Belső_Futó_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[37].Value = rekord.Táv_Nyom_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[38].Value = rekord.Delta_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[39].Value = rekord.B_Átmérő_Ú.ToString().Replace(',', '.');
+                    Tábla.Rows[i].Cells[36].Value = rekord.Táv_Belső_Futó_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[37].Value = rekord.Táv_Nyom_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[38].Value = rekord.Delta_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[39].Value = rekord.B_Átmérő_Ú.ToStringCult();
 
 
-                    Tábla.Rows[i].Cells[40].Value = rekord.J_Átmérő_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[41].Value = rekord.B_Axiális_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[42].Value = rekord.J_Axiális_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[43].Value = rekord.B_Radiális_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[44].Value = rekord.J_Radiális_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[45].Value = rekord.B_Nyom_Mag_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[46].Value = rekord.J_Nyom_Mag_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[47].Value = rekord.B_Nyom_Vast_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[48].Value = rekord.J_nyom_Vast_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[49].Value = rekord.B_Nyom_Vast_B_Ú.ToString().Replace(',', '.');
+                    Tábla.Rows[i].Cells[40].Value = rekord.J_Átmérő_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[41].Value = rekord.B_Axiális_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[42].Value = rekord.J_Axiális_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[43].Value = rekord.B_Radiális_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[44].Value = rekord.J_Radiális_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[45].Value = rekord.B_Nyom_Mag_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[46].Value = rekord.J_Nyom_Mag_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[47].Value = rekord.B_Nyom_Vast_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[48].Value = rekord.J_nyom_Vast_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[49].Value = rekord.B_Nyom_Vast_B_Ú.ToStringCult();
 
-                    Tábla.Rows[i].Cells[50].Value = rekord.J_nyom_Vast_B_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[51].Value = rekord.B_QR_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[52].Value = rekord.J_QR_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[53].Value = rekord.B_Szög_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[54].Value = rekord.J_Szög_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[55].Value = rekord.B_Profilhossz_Ú.ToString().Replace(',', '.');
-                    Tábla.Rows[i].Cells[56].Value = rekord.J_Profilhossz_Ú.ToString().Replace(',', '.');
+                    Tábla.Rows[i].Cells[50].Value = rekord.J_nyom_Vast_B_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[51].Value = rekord.B_QR_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[52].Value = rekord.J_QR_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[53].Value = rekord.B_Szög_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[54].Value = rekord.J_Szög_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[55].Value = rekord.B_Profilhossz_Ú.ToStringCult();
+                    Tábla.Rows[i].Cells[56].Value = rekord.J_Profilhossz_Ú.ToStringCult();
                     Tábla.Rows[i].Cells[57].Value = rekord.Eszterga_Id.ToString();
                     Tábla.Rows[i].Cells[58].Value = rekord.Megjegyzés.Trim();
                     Tábla.Rows[i].Cells[59].Value = Enum.GetName(typeof(MyEn.Eszterga_Állapot_Státus), rekord.Státus);
