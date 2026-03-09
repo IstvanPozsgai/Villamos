@@ -1838,7 +1838,7 @@ namespace Villamos
 
                 // Az egyetlen legutolsó bejegyzés kell az egész listából, ami nincs törölve:
                 Adat_Jármű_Takarítás_Napló UtolsóRögzítés = utolsoAktivTakaritasok
-                                                        .OrderByDescending(x => x.Mikor)
+                                                        .OrderByDescending(x => x.Dátum)
                                                         .FirstOrDefault();
                 if (UtolsóRögzítés == null) return; //Ha nincs egyetlen aktív bejegyzés sem, akkor nincs mit visszaírni, így kilépünk
 
