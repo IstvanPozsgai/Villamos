@@ -64,7 +64,7 @@ namespace Villamos.Kezelők
                     szöveg += $"'{Adat.Cikkszám}', ";
                     szöveg += $"'{Adat.Sarzs}', ";
                     szöveg += $"'{Adat.Raktárhely}', ";
-                    szöveg += $"{Adat.Mennyiség.ToString().Replace(",", ".")})";
+                    szöveg += $"{Adat.Mennyiség.ToStringCult()}, ";
                     SzövegGy.Add(szöveg);
                 }
                 MyA.ABMódosítás(hely, jelszó, SzövegGy);

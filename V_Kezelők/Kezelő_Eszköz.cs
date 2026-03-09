@@ -132,7 +132,7 @@ namespace Villamos.Kezelők
                     szöveg += "Felelős_költséghely, Régi_leltárszám, Vonalkódozható, Rendszám_pályaszám,";
                     szöveg += " Épület_Szerszám, Épület_van, Szerszám_van, státus) VALUES ( ";
                     szöveg += $"'{Adat.Eszköz}', '{Adat.Alszám}', '{Adat.Megnevezés}', '{Adat.Megnevezés_folyt}', '{Adat.Gyártási_szám}', ";
-                    szöveg += $"'{Adat.Leltárszám}', '{Adat.Leltár_dátuma}', {Adat.Mennyiség.ToString().Replace(',', '.')}, '{Adat.Bázis_menny_egység}', '{Adat.Aktiválás_dátuma}', ";
+                    szöveg += $"'{Adat.Leltárszám}', '{Adat.Leltár_dátuma}', {Adat.Mennyiség.ToStringCult()}, '{Adat.Bázis_menny_egység}', '{Adat.Aktiválás_dátuma}', ";
                     szöveg += $"'{Adat.Telephely}', '{Adat.Telephely_megnevezése}', '{Adat.Helyiség}', '{Adat.Helyiség_megnevezés}', '{Adat.Gyár}', ";
                     szöveg += $"'{Adat.Leltári_költséghely}', '{Adat.Vonalkód}', '{Adat.Leltár_forduló_nap}', '{Adat.Szemügyi_törzsszám}', '{Adat.Dolgozó_neve}', ";
                     szöveg += $"'{Adat.Deaktiválás_dátuma}', '{Adat.Eszközosztály}', '{Adat.Üzletág}', '{Adat.Cím}', '{Adat.Költséghely}', ";
