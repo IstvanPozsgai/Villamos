@@ -707,6 +707,7 @@ namespace Villamos.Villamos_Nyomtatványok
                     //Ha elértünk a végére akkor összesítünk
                     sor = 46;
                     MyX.Kiir("Össz", MyF.Oszlopnév(oszlop) + $"{sor}");
+                    if(sor > blokkeleje)
                     MyX.Kiir("#KÉPLET#=COUNTIF(R[-" + Math.Abs(sor - blokkeleje).ToString() + "]C:R[-1]C,\"X\")", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
 
                     if (képlet.Trim() != "=") képlet += "+";
@@ -726,7 +727,7 @@ namespace Villamos.Villamos_Nyomtatványok
                 }
                 else
                 {
-                    sor += 3;
+                    sor += 2;
                     MyX.Kiir("Össz:", MyF.Oszlopnév(oszlop) + $"{sor}");
                     MyX.Kiir("#KÉPLET#=COUNTIF(R[-" + Math.Abs(sor - blokkeleje).ToString() + "]C:R[-1]C,\"X\")", MyF.Oszlopnév(oszlop + 1) + $"{sor}");
 
@@ -759,62 +760,78 @@ namespace Villamos.Villamos_Nyomtatványok
                                                where a.KiadóTelephely == Cmbtelephely.Trim()
                                                orderby a.Típus, a.Azonosító
                                                select a).ToList();
-
-            if (sor >= 43)
+            if (VAdatok != null &&VAdatok.Count >0)
             {
-                sor = 6;
-                blokkeleje = 6;
-                oszlop += 7;
-                oszlopismét += 1;
-            }
-            else
-            {
-                blokkeleje = sor;
-            }
-            string előzőtípus = "";
-
-
-            foreach (Adat_Jármű_Vendég rekord in VAdatok)
-            {
-                if (sor == 5)
+                if (sor >= 43)
                 {
-                    // elkészítjük a fejlécet
-                    MyX.Kiir("Psz", MyF.Oszlopnév(oszlop) + 5.ToString());
-                    MyX.Kiir("Kijelölve", MyF.Oszlopnév(oszlop + 1) + 5.ToString());
-                    MyX.Kiir("Megfelelő", MyF.Oszlopnév(oszlop + 2) + 5.ToString());
-                    MyX.Kiir("Nem Megfelelő", MyF.Oszlopnév(oszlop + 3) + 5.ToString());
-                    MyX.Kiir("Graffiti (m2)", MyF.Oszlopnév(oszlop + 4) + 5.ToString());
-                    MyX.Kiir("Eseti (m2)", MyF.Oszlopnév(oszlop + 5) + 5.ToString());
-                    MyX.Kiir("Fertőtlenítés (m2)", MyF.Oszlopnév(oszlop + 6) + 5.ToString());
-                    sor += 1;
+                    sor = 6;
+                    blokkeleje = 6;
+                    oszlop += 7;
+                    oszlopismét += 1;
                 }
-
-                if (előzőtípus.Trim() != rekord.Típus.Trim())
+                else
                 {
-                    if (előzőtípus.Trim() == "")
+                    blokkeleje = sor;
+                }
+                string előzőtípus = "";
+
+
+                foreach (Adat_Jármű_Vendég rekord in VAdatok)
+                {
+                    if (sor == 5)
                     {
+                        // elkészítjük a fejlécet
+                        MyX.Kiir("Psz", MyF.Oszlopnév(oszlop) + 5.ToString());
+                        MyX.Kiir("Kijelölve", MyF.Oszlopnév(oszlop + 1) + 5.ToString());
+                        MyX.Kiir("Megfelelő", MyF.Oszlopnév(oszlop + 2) + 5.ToString());
+                        MyX.Kiir("Nem Megfelelő", MyF.Oszlopnév(oszlop + 3) + 5.ToString());
+                        MyX.Kiir("Graffiti (m2)", MyF.Oszlopnév(oszlop + 4) + 5.ToString());
+                        MyX.Kiir("Eseti (m2)", MyF.Oszlopnév(oszlop + 5) + 5.ToString());
+                        MyX.Kiir("Fertőtlenítés (m2)", MyF.Oszlopnév(oszlop + 6) + 5.ToString());
+                        sor += 1;
+                    }
+
+                    if (előzőtípus.Trim() != rekord.Típus.Trim())
+                    {
+                        if (előzőtípus.Trim() == "")
+                        {
+                            előzőtípus = rekord.Típus.Trim();
+                        }
+                        else
+                        {
+                            sor += 3;
+                            MyX.Kiir("Össz", MyF.Oszlopnév(oszlop) + $"{sor}");
+                            MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{blokkeleje}:{MyF.Oszlopnév(oszlop + 6)}{sor}");
+                            sor++;
+                        }
+
+                        MyX.Egyesít(munkalap, MyF.Oszlopnév(oszlop) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop + 6) + $"{sor}");
+                        MyX.Kiir(rekord.Típus.Trim(), MyF.Oszlopnév(oszlop) + $"{sor}");
+                        MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop + 6) + $"{sor}");
                         előzőtípus = rekord.Típus.Trim();
+                        blokkeleje = sor + 1;
+                        sor += 1;
                     }
-                    else
-                    {
-                        sor += 3;
-                        MyX.Kiir("Össz", MyF.Oszlopnév(oszlop) + $"{sor}");
-                        MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{blokkeleje}:{MyF.Oszlopnév(oszlop + 6)}{sor}");
-                        sor++;
-                    }
+                    MyX.Kiir(rekord.Azonosító.Trim(), MyF.Oszlopnév(oszlop) + $"{sor}");
 
-                    MyX.Egyesít(munkalap, MyF.Oszlopnév(oszlop) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop + 6) + $"{sor}");
-                    MyX.Kiir(rekord.Típus.Trim(), MyF.Oszlopnév(oszlop) + $"{sor}");
-                    MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop + 6) + $"{sor}");
-                    előzőtípus = rekord.Típus.Trim();
-                    blokkeleje = sor + 1;
                     sor += 1;
+
+                    if (sor == 46)
+                    {
+                        MyX.Kiir("Össz", MyF.Oszlopnév(oszlop) + $"{sor}");
+
+                        if (blokkeleje < sor)
+                            MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{blokkeleje}:{MyF.Oszlopnév(oszlop + 6)}{sor}");
+                        else
+                            MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{sor}:{MyF.Oszlopnév(oszlop + 6)}{blokkeleje}");
+                        sor = 6;
+                        blokkeleje = 6;
+                        oszlop += 7;
+                        oszlopismét += 1;
+                    }
                 }
-                MyX.Kiir(rekord.Azonosító.Trim(), MyF.Oszlopnév(oszlop) + $"{sor}");
 
-                sor += 1;
-
-                if (sor == 46)
+                if (sor > 45)
                 {
                     MyX.Kiir("Össz", MyF.Oszlopnév(oszlop) + $"{sor}");
 
@@ -822,38 +839,24 @@ namespace Villamos.Villamos_Nyomtatványok
                         MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{blokkeleje}:{MyF.Oszlopnév(oszlop + 6)}{sor}");
                     else
                         MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{sor}:{MyF.Oszlopnév(oszlop + 6)}{blokkeleje}");
-                    sor = 6;
+                    sor = 5;
                     blokkeleje = 6;
                     oszlop += 7;
                     oszlopismét += 1;
                 }
-            }
-
-            if (sor > 45)
-            {
-                MyX.Kiir("Össz", MyF.Oszlopnév(oszlop) + $"{sor}");
-
-                if (blokkeleje < sor)
-                    MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{blokkeleje}:{MyF.Oszlopnév(oszlop + 6)}{sor}");
                 else
-                    MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{sor}:{MyF.Oszlopnév(oszlop + 6)}{blokkeleje}");
-                sor = 5;
-                blokkeleje = 6;
-                oszlop += 7;
-                oszlopismét += 1;
-            }
-            else
-            {
-                sor += 3;
+                {
+                    sor += 2;
+                }
             }
 
-            MyX.Kiir("Össz", MyF.Oszlopnév(oszlop) + $"{sor}");
+            //MyX.Kiir("Össz", MyF.Oszlopnév(oszlop) + $"{sor}");
 
-            if (blokkeleje < sor)
-                MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{blokkeleje}:{MyF.Oszlopnév(oszlop + 6)}{sor}");
-            else
-                MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{sor}:{MyF.Oszlopnév(oszlop + 6)}{blokkeleje}");
-            MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop + 6) + $"{sor}");
+            //if (blokkeleje < sor)
+            //    MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{blokkeleje}:{MyF.Oszlopnév(oszlop + 6)}{sor}");
+            //else
+            //    MyX.Rácsoz(munkalap, $"{MyF.Oszlopnév(oszlop)}{sor}:{MyF.Oszlopnév(oszlop + 6)}{blokkeleje}");
+            //MyX.Vastagkeret(munkalap, MyF.Oszlopnév(oszlop) + $"{sor}" + ":" + MyF.Oszlopnév(oszlop + 6) + $"{sor}");
 
             // **************************************************************
             // ha van olyan jármű ami másik telephelyről jött, akkor kiírjuk vége
@@ -883,8 +886,7 @@ namespace Villamos.Villamos_Nyomtatványok
                 MyX.Rácsoz(munkalap, MyF.Oszlopnév(1 + j * 7) + "5:" + MyF.Oszlopnév(7 + j * 7) + "5");
             }
 
-            if (oszlopismét < 3)
-                oszlopismét = 3;
+            if (oszlopismét < 3)                oszlopismét = 3;
             Beállítás_Nyomtatás BeNYom = new Beállítás_Nyomtatás
             {
                 Munkalap = munkalap,
