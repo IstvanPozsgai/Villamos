@@ -1815,7 +1815,7 @@ namespace Villamos
             {
                 //Utolsó 3 év adatát betöltjük
                 List<Adat_Jármű_Takarítás_Napló> AdatokNapló = new List<Adat_Jármű_Takarítás_Napló>();
-                for (int i = JDátum.Value.Year - 2; i < JDátum.Value.Year; i++)
+                for (int i = JDátum.Value.Year - 2; i <= JDátum.Value.Year; i++)
                 {
                     List<Adat_Jármű_Takarítás_Napló> Ideig = KézTakNapló.Lista_Adatok(i);
                     AdatokNapló.AddRange(Ideig);
