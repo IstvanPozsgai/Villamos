@@ -22,6 +22,8 @@ namespace Villamos.Villamos_Ablakok
             InitializeComponent();
             Dátum = dátum;
             Cmbtelephely = cmbtelephely;
+
+            this.Text += $" {dátum:yyyy.MM.dd}";
         }
 
         public Ablak_munkalap_dekádoló_csoport()
