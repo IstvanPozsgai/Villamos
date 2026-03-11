@@ -81,8 +81,7 @@ namespace Villamos.Kezelők
                         Módosítás(Adat);
                     else
                     {
-                        // JAVÍTANDÓ:
-                        throw new HibásBevittAdat($"Ez a {gomb1.GombokId} szám alatt már szerepel!");
+                        throw new HibásBevittAdat($"Ez a {Adat.GombokId} szám alatt már szerepel, csak a láthatóságot lehet módosítani, vagy törölni lehet.!");
                     }
                 }
 
