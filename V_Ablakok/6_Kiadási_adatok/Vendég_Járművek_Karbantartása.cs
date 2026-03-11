@@ -164,8 +164,8 @@ namespace Villamos.V_Ablakok._6_Kiadási_adatok
         {
             List<string> Típusok = (from a in Adatok
                                     where a.Törölt == false
-                                    orderby a.Valóstípus
-                                    select a.Valóstípus).Distinct().ToList();
+                                    orderby a.Valóstípus2
+                                    select a.Valóstípus2).Distinct().ToList();
             Típusok.Insert(0, "");
             return Típusok;
         }
