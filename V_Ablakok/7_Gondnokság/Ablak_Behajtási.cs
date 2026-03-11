@@ -51,6 +51,18 @@ namespace Villamos
         {
             InitializeComponent();
             Start();
+            //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
+            //ha nem akkor a régit használjuk
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
+            {
+                TelephelyekFeltöltéseÚj();
+                GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+            }
+            else
+            {
+                Telephelyekfeltöltése();
+                Jogosultságkiosztás();
+            }
         }
 
         #region Alap
@@ -58,18 +70,7 @@ namespace Villamos
         {
             try
             {
-                //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
-                //ha nem akkor a régit használjuk
-                if (Program.PostásJogkör.Substring(0, 1) == "R")
-                {
-                    TelephelyekFeltöltéseÚj();
-                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
-                }
-                else
-                {
-                    Telephelyekfeltöltése();
-                    Jogosultságkiosztás();
-                }
+
                 Szereplők_lista();
                 Alapadatokfeltöltése();
 

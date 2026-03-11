@@ -122,7 +122,7 @@ namespace Villamos.Kezelők
                 FájlBeállítás(Telephely);
 
                 string szöveg = $"UPDATE {Táblanév}  SET ";
-                szöveg += $"{Adat.Mennyiség.ToStringCult()}, ";
+                szöveg += $"Mennyiség={Adat.Mennyiség.ToStringCult()}, ";
                 szöveg += $"státus={Adat.Státus}, ";
                 szöveg += $"dátum ='{Adat.Dátum}' ";
                 szöveg += $" WHERE [azonosító]='{Adat.Azonosító}'";
