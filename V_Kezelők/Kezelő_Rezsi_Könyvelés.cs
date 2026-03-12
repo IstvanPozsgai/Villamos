@@ -98,7 +98,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely);
                 string szöveg = $"INSERT INTO {Táblanév} (azonosító, Mennyiség, dátum, státus ) VALUES (";
-                szöveg += $"Mennyiség='{Adat.Azonosító}', ";
+                szöveg += $"'{Adat.Azonosító}', ";
                 szöveg += $"{Adat.Mennyiség.ToStringCult()}, ";
                 szöveg += $"'{Adat.Dátum}', ";
                 szöveg += $"{Adat.Státus})";
