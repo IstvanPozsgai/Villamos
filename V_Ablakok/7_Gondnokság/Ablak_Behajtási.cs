@@ -32,6 +32,13 @@ namespace Villamos
 
         string Cellaelőzmény = "";
 
+        bool EngedélyListaGondnokEmail = false;
+        bool EngedélyListaSzakEmail = false;
+        bool EngedélyListaEngedélyNyomtat = false;
+        bool EngedélyListaÁtvételNyomtat = false;
+        bool EngedélyListaÁtvételKüld = false;
+        bool EngedélyListaÁtvételMegtörtént = false;
+        bool EngedélyListaTörlés = false;
 
         #region Kezelők def
         readonly Kezelő_Behajtás_Alap Kéz_BehajtásAlap = new Kezelő_Behajtás_Alap();
@@ -53,16 +60,25 @@ namespace Villamos
             Start();
             //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
             //ha nem akkor a régit használjuk
-            if (Program.PostásJogkör.Substring(0, 1) == "R")
+            if (Program.PostásJogkör.Substring(0, 1) == "R") 
             {
                 TelephelyekFeltöltéseÚj();
                 GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
             }
             else
             {
+
                 Telephelyekfeltöltése();
                 Jogosultságkiosztás();
             }
+            //Beállítjuk, hogy mihez van jogosultsága
+            EngedélyListaGondnokEmail = BtnEngedélyListaGondnokEmail.Visible;
+            EngedélyListaSzakEmail = BtnEngedélyListaSzakEmail.Visible;
+            EngedélyListaEngedélyNyomtat = BtnEngedélyListaEngedélyNyomtat.Visible;
+            EngedélyListaÁtvételNyomtat = BtnEngedélyListaÁtvételNyomtat.Visible;
+            EngedélyListaÁtvételKüld = BtnEngedélyListaÁtvételKüld.Visible;
+            EngedélyListaÁtvételMegtörtént = BtnEngedélyListaÁtvételMegtörtént.Visible;
+            EngedélyListaTörlés = BtnEngedélyListaTörlés.Visible;
         }
 
         #region Alap
@@ -123,7 +139,7 @@ namespace Villamos
 
                 Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
                 Engedélyek_Listázása();
-
+                if (Program.PostásJogkör.Substring(0, 1) == "R") PanelEngedély.Visible = true; //Hogy látszódjanak a gombok a panelen.
             }
             catch (HibásBevittAdat ex)
             {
@@ -1503,36 +1519,36 @@ namespace Villamos
                     break;
                 case 1:
                     // engedélyezésre vár
-                    BtnEngedélyListaGondnokEmail.Visible = true;
-                    BtnEngedélyListaSzakEmail.Visible = true;
-                    BtnEngedélyListaTörlés.Visible = true;
+                    BtnEngedélyListaGondnokEmail.Visible = EngedélyListaGondnokEmail;
+                    BtnEngedélyListaSzakEmail.Visible = EngedélyListaSzakEmail;
+                    BtnEngedélyListaTörlés.Visible = EngedélyListaTörlés;
                     break;
 
                 case 2:
                     // nyomtatás engedélyezve
-                    BtnEngedélyListaEngedélyNyomtat.Visible = true;
-                    BtnEngedélyListaTörlés.Visible = true;
+                    BtnEngedélyListaEngedélyNyomtat.Visible = EngedélyListaEngedélyNyomtat;
+                    BtnEngedélyListaTörlés.Visible = EngedélyListaTörlés;
                     break;
 
                 case 3:
                     // feldolgozás alatt
-                    BtnEngedélyListaEngedélyNyomtat.Visible = true;
-                    BtnEngedélyListaÁtvételNyomtat.Visible = true;
-                    BtnEngedélyListaÁtvételKüld.Visible = true;
-                    BtnEngedélyListaTörlés.Visible = true;
+                    BtnEngedélyListaEngedélyNyomtat.Visible = EngedélyListaEngedélyNyomtat;
+                    BtnEngedélyListaÁtvételNyomtat.Visible = EngedélyListaÁtvételNyomtat;
+                    BtnEngedélyListaÁtvételKüld.Visible = EngedélyListaÁtvételKüld;
+                    BtnEngedélyListaTörlés.Visible = EngedélyListaTörlés;
                     break;
 
                 case 4:
                     // elküldött
-                    BtnEngedélyListaEngedélyNyomtat.Visible = true;
-                    BtnEngedélyListaÁtvételMegtörtént.Visible = true;
-                    BtnEngedélyListaTörlés.Visible = true;
+                    BtnEngedélyListaEngedélyNyomtat.Visible = EngedélyListaEngedélyNyomtat;
+                    BtnEngedélyListaÁtvételMegtörtént.Visible = EngedélyListaÁtvételMegtörtént;
+                    BtnEngedélyListaTörlés.Visible = EngedélyListaTörlés;
                     break;
 
                 case 5:
                     // kész
-                    BtnEngedélyListaEngedélyNyomtat.Visible = true;
-                    BtnEngedélyListaTörlés.Visible = true;
+                    BtnEngedélyListaEngedélyNyomtat.Visible = EngedélyListaEngedélyNyomtat;
+                    BtnEngedélyListaTörlés.Visible = EngedélyListaTörlés;
                     break;
             }
 
