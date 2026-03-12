@@ -103,6 +103,8 @@ namespace Villamos
             this.SaveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
+            this.Különbözet = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.Panel1.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -155,7 +157,7 @@ namespace Villamos
             this.Fülek.Name = "Fülek";
             this.Fülek.Padding = new System.Drawing.Point(16, 3);
             this.Fülek.SelectedIndex = 0;
-            this.Fülek.Size = new System.Drawing.Size(1190, 565);
+            this.Fülek.Size = new System.Drawing.Size(1190, 592);
             this.Fülek.TabIndex = 60;
             this.Fülek.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.Fülek_DrawItem);
             this.Fülek.SelectedIndexChanged += new System.EventHandler(this.Fülek_SelectedIndexChanged);
@@ -163,6 +165,8 @@ namespace Villamos
             // TabPage1
             // 
             this.TabPage1.BackColor = System.Drawing.Color.Thistle;
+            this.TabPage1.Controls.Add(this.Különbözet);
+            this.TabPage1.Controls.Add(this.label2);
             this.TabPage1.Controls.Add(this.Rögítéstakaró);
             this.TabPage1.Controls.Add(this.FelhasználtText);
             this.TabPage1.Controls.Add(this.RendelkezésText);
@@ -181,7 +185,7 @@ namespace Villamos
             this.TabPage1.Location = new System.Drawing.Point(4, 29);
             this.TabPage1.Name = "TabPage1";
             this.TabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage1.Size = new System.Drawing.Size(1182, 532);
+            this.TabPage1.Size = new System.Drawing.Size(1182, 559);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Napi Összesítés";
             // 
@@ -198,7 +202,7 @@ namespace Villamos
             this.FelhasználtText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.FelhasználtText.AutoSize = true;
             this.FelhasználtText.BackColor = System.Drawing.Color.MediumOrchid;
-            this.FelhasználtText.Location = new System.Drawing.Point(957, 489);
+            this.FelhasználtText.Location = new System.Drawing.Point(957, 469);
             this.FelhasználtText.Name = "FelhasználtText";
             this.FelhasználtText.Size = new System.Drawing.Size(13, 20);
             this.FelhasználtText.TabIndex = 101;
@@ -246,7 +250,7 @@ namespace Villamos
             this.Label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Label9.AutoSize = true;
             this.Label9.BackColor = System.Drawing.Color.MediumOrchid;
-            this.Label9.Location = new System.Drawing.Point(957, 465);
+            this.Label9.Location = new System.Drawing.Point(957, 442);
             this.Label9.Name = "Label9";
             this.Label9.Size = new System.Drawing.Size(120, 20);
             this.Label9.TabIndex = 96;
@@ -368,7 +372,7 @@ namespace Villamos
             this.Tábla1.Location = new System.Drawing.Point(5, 5);
             this.Tábla1.Name = "Tábla1";
             this.Tábla1.RowHeadersVisible = false;
-            this.Tábla1.Size = new System.Drawing.Size(920, 517);
+            this.Tábla1.Size = new System.Drawing.Size(920, 544);
             this.Tábla1.TabIndex = 0;
             this.Tábla1.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Tábla1_CellFormatting);
             // 
@@ -824,11 +828,33 @@ namespace Villamos
             this.BtnSúgó.UseVisualStyleBackColor = true;
             this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
             // 
+            // Különbözet
+            // 
+            this.Különbözet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Különbözet.AutoSize = true;
+            this.Különbözet.BackColor = System.Drawing.Color.MediumOrchid;
+            this.Különbözet.Location = new System.Drawing.Point(957, 529);
+            this.Különbözet.Name = "Különbözet";
+            this.Különbözet.Size = new System.Drawing.Size(13, 20);
+            this.Különbözet.TabIndex = 104;
+            this.Különbözet.Text = " ";
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.MediumOrchid;
+            this.label2.Location = new System.Drawing.Point(957, 502);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(93, 20);
+            this.label2.TabIndex = 103;
+            this.label2.Text = "Különbözet:";
+            // 
             // Ablak_munkalap_dekádoló
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 616);
+            this.ClientSize = new System.Drawing.Size(1200, 643);
             this.Controls.Add(this.BtnSúgó);
             this.Controls.Add(this.Panel1);
             this.Controls.Add(this.Holtart);
@@ -918,5 +944,7 @@ namespace Villamos
         internal ToolTip ToolTip1;
         internal TextBox Napi_id;
         private Panel Rögítéstakaró;
+        internal Label Különbözet;
+        internal Label label2;
     }
 }

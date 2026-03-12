@@ -539,10 +539,13 @@ namespace Villamos
             {
                 if (FelhasználtText.Text.Trim() == "" || RendelkezésText.Text.Trim() == "") return;
                 if (FelhasználtText.Text.Trim() == "0" | RendelkezésText.Text.Trim() == "0") return;
+                Különbözet.ForeColor = Color.White;
                 RendelkezésText.ForeColor = Color.White;
                 FelhasználtText.ForeColor = Color.White;
                 if (RendelkezésText.Text.Trim() == FelhasználtText.Text.Trim())
                 {
+                    Különbözet.Text = "0";
+                    Különbözet.BackColor = Color.Green;
                     RendelkezésText.BackColor = Color.Green;
                     FelhasználtText.BackColor = Color.Green;
                     Rögzítés.Enabled = true;
@@ -550,6 +553,8 @@ namespace Villamos
                 }
                 else
                 {
+                    Különbözet.Text = (RendelkezésText.Text.ToÉrt_Int ()- FelhasználtText.Text.ToÉrt_Int()).ToString();
+                    Különbözet.BackColor = Color.Red ;
                     RendelkezésText.BackColor = Color.Red;
                     FelhasználtText.BackColor = Color.Red;
                     Rögítéstakaró.Visible = true;
@@ -602,6 +607,7 @@ namespace Villamos
                 Tábla1.Rows[19].ReadOnly = true;
                 Tábla1.Visible = true;
                 Tábla1.Refresh();
+                Tábla1.ClearSelection();
             }
             catch (HibásBevittAdat ex)
             {
