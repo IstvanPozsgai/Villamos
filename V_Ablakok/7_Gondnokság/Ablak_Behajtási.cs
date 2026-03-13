@@ -64,21 +64,32 @@ namespace Villamos
             {
                 TelephelyekFeltöltéseÚj();
                 GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+
+                //Beállítjuk, hogy mihez van jogosultsága
+                EngedélyListaGondnokEmail = BtnEngedélyListaGondnokEmail.Visible;
+                EngedélyListaSzakEmail = BtnEngedélyListaSzakEmail.Visible;
+                EngedélyListaEngedélyNyomtat = BtnEngedélyListaEngedélyNyomtat.Visible;
+                EngedélyListaÁtvételNyomtat = BtnEngedélyListaÁtvételNyomtat.Visible;
+                EngedélyListaÁtvételKüld = BtnEngedélyListaÁtvételKüld.Visible;
+                EngedélyListaÁtvételMegtörtént = BtnEngedélyListaÁtvételMegtörtént.Visible;
+                EngedélyListaTörlés = BtnEngedélyListaTörlés.Visible;
             }
             else
             {
 
                 Telephelyekfeltöltése();
                 Jogosultságkiosztás();
+
+                //Beállítjuk, hogy mihez van jogosultsága
+                EngedélyListaGondnokEmail = true ;
+                EngedélyListaSzakEmail       = true ;
+                EngedélyListaEngedélyNyomtat = true ;
+                EngedélyListaÁtvételNyomtat  = true ;
+                EngedélyListaÁtvételKüld = true;
+                EngedélyListaÁtvételMegtörtént = true;
+                EngedélyListaTörlés = true;
             }
-            //Beállítjuk, hogy mihez van jogosultsága
-            EngedélyListaGondnokEmail = BtnEngedélyListaGondnokEmail.Visible;
-            EngedélyListaSzakEmail = BtnEngedélyListaSzakEmail.Visible;
-            EngedélyListaEngedélyNyomtat = BtnEngedélyListaEngedélyNyomtat.Visible;
-            EngedélyListaÁtvételNyomtat = BtnEngedélyListaÁtvételNyomtat.Visible;
-            EngedélyListaÁtvételKüld = BtnEngedélyListaÁtvételKüld.Visible;
-            EngedélyListaÁtvételMegtörtént = BtnEngedélyListaÁtvételMegtörtént.Visible;
-            EngedélyListaTörlés = BtnEngedélyListaTörlés.Visible;
+
         }
 
         #region Alap
@@ -154,6 +165,7 @@ namespace Villamos
 
         private void AblakBehajtási_Load(object sender, EventArgs e)
         {
+
         }
 
         private void Fülek_SelectedIndexChanged(object sender, EventArgs e)
