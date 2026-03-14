@@ -39,16 +39,52 @@ namespace Villamos
         readonly Beállítás_Betű BeBetű = new Beállítás_Betű();
         readonly Beállítás_Betű BeBetűV = new Beállítás_Betű { Vastag = true };
 
+        bool AlapRögzít = false;
+        bool CégekEng = false;
+        bool DolgRögzít = false;
+        bool DolgTöröl = false;
+        bool DolgBeo = false;
+        bool AutóOk = false;
+        bool AutóTöröl = false;
+        bool AutóBeo = false;
+        bool TelephelyRögzít = false;
+
         #region alap
         public Ablak_külső()
         {
             InitializeComponent();
-            Start();
+
         }
 
         private void Ablak_külső_Load(object sender, EventArgs e)
         {
+            Start();
+        }
 
+        private void GombokJog()
+        {
+            AlapRögzít = Alap_Rögzít.Visible;
+            CégekEng = Cégek_engedélyezésre.Visible;
+            DolgRögzít = Dolg_Rögzít.Visible;
+            DolgTöröl = Dolgozó_töröl.Visible;
+            DolgBeo = Dolgozó_beolvas.Visible;
+            AutóOk = Autó_ok.Visible;
+            AutóTöröl = Autó_töröl.Visible;
+            AutóBeo = Autó_beolvas.Visible;
+            TelephelyRögzít = Telephely_rögzít.Visible;
+        }
+
+        private void GombokIgen()
+        {
+            AlapRögzít = true;
+            CégekEng = true;
+            DolgRögzít = true;
+            DolgTöröl = true;
+            DolgBeo = true;
+            AutóOk = true;
+            AutóTöröl = true;
+            AutóBeo = true;
+            TelephelyRögzít = true;
         }
 
         private void Start()
@@ -60,12 +96,14 @@ namespace Villamos
                 if (Program.PostásJogkör.Substring(0, 1) == "R")
                 {
                     TelephelyekFeltöltéseÚj();
-                    GombLathatosagKezelo.Beallit(this);
+                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                    GombokJog();
                 }
                 else
                 {
                     Telephelyekfeltöltése();
                     Jogosultságkiosztás();
+                    GombokIgen();
                 }
                 string helyi = $@"{Application.StartupPath}\Főmérnökség\Adatok\Behajtási\";
                 if (!Directory.Exists(helyi)) Directory.CreateDirectory(helyi);
@@ -318,7 +356,7 @@ namespace Villamos
             TabPage SelectedTab = LapFülek.TabPages[e.Index];
 
             // Szerezze be a lap fejlécének területét
-            Rectangle HeaderRect = LapFülek.GetTabRect(e.Index);
+            System.Drawing.Rectangle HeaderRect = LapFülek.GetTabRect(e.Index);
 
             // Hozzon létreecsetet a szöveg megfestéséhez
             SolidBrush BlackTextBrush = new SolidBrush(Color.Black);
@@ -336,7 +374,7 @@ namespace Villamos
                 Font BoldFont = new Font(LapFülek.Font.Name, LapFülek.Font.Size, FontStyle.Bold);
                 // háttér szín beállítása
                 e.Graphics.FillRectangle(new SolidBrush(Color.DarkGray), e.Bounds);
-                Rectangle paddedBounds = e.Bounds;
+                System.Drawing.Rectangle paddedBounds = e.Bounds;
                 paddedBounds.Inflate(0, 0);
                 e.Graphics.DrawString(SelectedTab.Text, BoldFont, BlackTextBrush, paddedBounds, sf);
             }
@@ -732,15 +770,15 @@ namespace Villamos
 
             if (Cmbtelephely.Enabled == true || Cmbtelephely.Enabled == false && Rádió_főmérnök == false && (Telephely_választott.Trim() == Cmbtelephely.Text.Trim()))
             {
-                Telephely_rögzít.Visible = true;
-                Alap_Rögzít.Visible = true;
-                Cégek_engedélyezésre.Visible = true;
-                Autó_ok.Visible = true;
-                Dolg_Rögzít.Visible = true;
-                Dolgozó_töröl.Visible = true;
-                Autó_töröl.Visible = true;
-                Dolgozó_beolvas.Visible = true;
-                Autó_beolvas.Visible = true;
+                Telephely_rögzít.Visible = TelephelyRögzít;
+                Alap_Rögzít.Visible = AlapRögzít;
+                Cégek_engedélyezésre.Visible = CégekEng;
+                Autó_ok.Visible = AutóOk;
+                Dolg_Rögzít.Visible = DolgRögzít;
+                Dolgozó_töröl.Visible = DolgTöröl;
+                Autó_töröl.Visible = AutóTöröl;
+                Dolgozó_beolvas.Visible = DolgBeo;
+                Autó_beolvas.Visible = AutóBeo;
             }
         }
 
@@ -3505,7 +3543,10 @@ namespace Villamos
                 //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
                 //ha nem akkor a régit használjuk
                 if (Program.PostásJogkör.Substring(0, 1) == "R")
+                {
                     GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                    GombokJog();
+                }
                 else
                 {
 
