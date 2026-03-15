@@ -16,8 +16,9 @@ namespace Villamos
 
     public partial class Ablak_Szerszám
     {
-        public Ablak_Szerszám()
+        public Ablak_Szerszám(int menüid)
         {
+            MenüId = menüid;
             InitializeComponent();
 
         }
@@ -53,6 +54,8 @@ namespace Villamos
         readonly Beállítás_Betű BeBetűC12V = new Beállítás_Betű { Név = "Calibri", Méret = 12, Vastag = true };
         readonly Beállítás_Betű BeBetűC10V = new Beállítás_Betű { Név = "Calibri", Méret = 10, Vastag = true };
 
+        int MenüId { get; set; }
+
         //szerszámot ad át ha szerszámnyilvántartás
         //... ad át ha épületnyilvántartás
         private string Könyvtár_adat;
@@ -86,7 +89,7 @@ namespace Villamos
                 if (Program.PostásJogkör.Substring(0, 1) == "R")
                 {
                     TelephelyekFeltöltéseÚj();
-                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                    GombLathatosagKezelo.Beallit(this, MenüId, Cmbtelephely.Text.Trim());
                 }
                 else
                 {
@@ -167,7 +170,7 @@ namespace Villamos
             try
             {
                 Cmbtelephely.Items.Clear();
-                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name))
+                foreach (string Adat in GombLathatosagKezelo.Telephelyek(this.Name, MenüId))
                     Cmbtelephely.Items.Add(Adat.Trim());
                 //Alapkönyvtárat beállítjuk 
                 if (Cmbtelephely.Items.Cast<string>().Contains(Program.PostásTelephely))
@@ -409,7 +412,7 @@ namespace Villamos
                 //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
                 //ha nem akkor a régit használjuk
                 if (Program.PostásJogkör.Substring(0, 1) == "R")
-                    GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
+                    GombLathatosagKezelo.Beallit(this, MenüId, Cmbtelephely.Text.Trim());
                 else
                 {
 

@@ -28,6 +28,10 @@ namespace Villamos
         public delegate void VoidDelegate(string data);
         public event VoidDelegate MyEvent;
 
+        // JAVÍTANDÓ:Felül kell írni amikor beolvasunk egy új jogosultságot, hogy a menüben is megjelenjen, most csak a belépéskor van beállítva.
+        private int Szerszámid = 65;
+        private int Tartozékid = 64;
+
         bool CTRL_le = false;
         bool Shift_le = false;
         bool Alt_le = false;
@@ -2374,7 +2378,7 @@ namespace Villamos
         {
             if (Új_Ablak_Szerszám_ép == null)
             {
-                Új_Ablak_Szerszám_ép = new Ablak_Szerszám();
+                Új_Ablak_Szerszám_ép = new Ablak_Szerszám(Tartozékid);
                 Új_Ablak_Szerszám_ép.FormClosed += Ablak_Szerszám_ép_FormClosed;
                 MyEvent += Új_Ablak_Szerszám_ép.SetData;
                 MyEvent("Helység");
@@ -2398,7 +2402,7 @@ namespace Villamos
         {
             if (Új_Ablak_Szerszám == null)
             {
-                Új_Ablak_Szerszám = new Ablak_Szerszám();
+                Új_Ablak_Szerszám = new Ablak_Szerszám(Szerszámid);
                 Új_Ablak_Szerszám.FormClosed += Ablak_Szerszám_FormClosed;
                 MyEvent += Új_Ablak_Szerszám.SetData;
                 MyEvent("Szerszám");

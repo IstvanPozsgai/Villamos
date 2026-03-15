@@ -49,12 +49,13 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.SzervezetMinden = new System.Windows.Forms.Button();
             this.SzervezetSemmi = new System.Windows.Forms.Button();
+            this.BtnSugó = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblSzervezet = new System.Windows.Forms.Label();
             this.ChkSzervezet = new System.Windows.Forms.CheckedListBox();
-            this.BtnSugó = new System.Windows.Forms.Button();
+            this.BtnIdTörlés = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -283,6 +284,18 @@
             this.SzervezetSemmi.UseVisualStyleBackColor = true;
             this.SzervezetSemmi.Click += new System.EventHandler(this.SzervezetSemmi_Click);
             // 
+            // BtnSugó
+            // 
+            this.BtnSugó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnSugó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
+            this.BtnSugó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnSugó.Location = new System.Drawing.Point(162, 3);
+            this.BtnSugó.Name = "BtnSugó";
+            this.BtnSugó.Size = new System.Drawing.Size(45, 44);
+            this.BtnSugó.TabIndex = 219;
+            this.toolTip1.SetToolTip(this.BtnSugó, "Online sugó megjelenítése");
+            this.BtnSugó.UseVisualStyleBackColor = true;
+            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.BackColor = System.Drawing.Color.Transparent;
@@ -296,6 +309,7 @@
             this.tableLayoutPanel2.Controls.Add(this.Alap_Rögzít, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.BtnExcel, 3, 1);
             this.tableLayoutPanel2.Controls.Add(this.BtnSugó, 3, 0);
+            this.tableLayoutPanel2.Controls.Add(this.BtnIdTörlés, 0, 0);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(1288, 12);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 4;
@@ -348,17 +362,17 @@
             this.ChkSzervezet.Size = new System.Drawing.Size(265, 172);
             this.ChkSzervezet.TabIndex = 226;
             // 
-            // BtnSugó
+            // BtnIdTörlés
             // 
-            this.BtnSugó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnSugó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
-            this.BtnSugó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSugó.Location = new System.Drawing.Point(162, 3);
-            this.BtnSugó.Name = "BtnSugó";
-            this.BtnSugó.Size = new System.Drawing.Size(45, 44);
-            this.BtnSugó.TabIndex = 219;
-            this.toolTip1.SetToolTip(this.BtnSugó, "Online sugó megjelenítése");
-            this.BtnSugó.UseVisualStyleBackColor = true;
+            this.BtnIdTörlés.BackgroundImage = global::Villamos.Properties.Resources.Iconarchive_Red_Orb_Alphabet_Exclamation_mark;
+            this.BtnIdTörlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnIdTörlés.Location = new System.Drawing.Point(3, 3);
+            this.BtnIdTörlés.Name = "BtnIdTörlés";
+            this.BtnIdTörlés.Size = new System.Drawing.Size(44, 44);
+            this.BtnIdTörlés.TabIndex = 220;
+            this.toolTip1.SetToolTip(this.BtnIdTörlés, "Lehetővé teszi az ablakok újrafelhasználását\r\naz Id szám törléssel");
+            this.BtnIdTörlés.UseVisualStyleBackColor = true;
+            this.BtnIdTörlés.Click += new System.EventHandler(this.BtnIdTörlés_Click);
             // 
             // Ablak_Gombok
             // 
@@ -415,5 +429,6 @@
         internal System.Windows.Forms.Button SzervezetMinden;
         internal System.Windows.Forms.Button SzervezetSemmi;
         internal System.Windows.Forms.Button BtnSugó;
+        internal System.Windows.Forms.Button BtnIdTörlés;
     }
 }

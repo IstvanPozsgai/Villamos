@@ -61,30 +61,29 @@ namespace Villamos.Kezelők
             try
             {
                 List<Adat_Gombok> Adatok = Lista_Adatok();
-                // Ha van ilyen gomb már a lapon akkor nem engedjük rögzíteni
-                Adat_Gombok gomb = (from a in Adatok
-                                    where a.GombName == Adat.GombName
-                                    && a.FromName == Adat.FromName
-                                    && a.Törölt == false
-                                    select a).FirstOrDefault();
-                if (gomb == null && Adat.GombokId == 0)
+                //Ha 0 id-vel érkezik akkor rögzíjük
+                if (Adat.GombokId == 0)
+                {
+                    // Ha van ilyen gomb már a lapon akkor csak akkor engedjük rögzíteni, ha többször akarjuk felhasználni a gombot.
+                    Adat_Gombok gomb = (from a in Adatok
+                                        where a.GombName == Adat.GombName
+                                        && a.FromName == Adat.FromName
+                                        && a.Törölt == false
+                                        select a).FirstOrDefault();
+                    if (gomb != null)
+                    {
+                        DialogResult valasz = MessageBox.Show($"Ez a {gomb.GombokId} szám alatt már szerepel, létre akarsz hozni egy új elemet?",
+                                   "Megerősítés",
+                                   MessageBoxButtons.OKCancel,
+                                   MessageBoxIcon.Question);
+                        if (valasz != DialogResult.OK) return;
+                    }
                     Rögzítés(Adat);
+                }
                 else
                 {
-                    // csak törölni és láthatóságot és szöveget engedjük módosítani
-                    Adat_Gombok gomb1 = (from a in Adatok
-                                         where a.GombName == Adat.GombName
-                                         && a.FromName == Adat.FromName
-                                          && a.GombokId == Adat.GombokId
-                                         select a).FirstOrDefault();
-                    if (gomb1 != null)
-                        Módosítás(Adat);
-                    else
-                    {
-                        throw new HibásBevittAdat($"Ez a {Adat.GombokId} szám alatt már szerepel, csak a láthatóságot lehet módosítani, vagy törölni lehet.!");
-                    }
+                    Módosítás(Adat);
                 }
-
             }
             catch (HibásBevittAdat ex)
             {

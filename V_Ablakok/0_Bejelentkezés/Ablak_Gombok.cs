@@ -434,5 +434,9 @@ namespace Villamos.Ablakok
             }
         }
 
+        private void BtnIdTörlés_Click(object sender, EventArgs e)
+        {
+            TxtId.Text = "";
+        }
     }
 }
