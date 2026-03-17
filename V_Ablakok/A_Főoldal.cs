@@ -2603,17 +2603,7 @@ namespace Villamos
         #endregion
 
 
-        #region Ablakok beállítása
-
-        private void Ablakok_Click(object sender, EventArgs e)
-        {
-
-
-        }
-
-
-        #endregion
-
+        #region MyRegion
 
 
         Ablak_Formok Új_Ablak_Formok;
@@ -2763,6 +2753,7 @@ namespace Villamos
             }
         }
 
+
         Ablak_Hibanaplo Új_Ablak_Hibanaplo;
         private void HibanaploMenu_Click(object sender, EventArgs e)
         {
@@ -2805,5 +2796,7 @@ namespace Villamos
         {
             Új_Ablak_AdatbázisRendezés = null;
         }
+
+        #endregion
     }
 }
