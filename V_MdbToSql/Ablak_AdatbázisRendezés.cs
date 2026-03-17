@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using MyA = Adatbázis;
 
 namespace Villamos
 {
@@ -103,10 +104,24 @@ namespace Villamos
 
         private void FájlAdatTáblái()
         {
-            ChkTáblák.Items.Clear();
-            if (DvgFájlok.SelectedRows.Count < 1) return;
+            try
+            {
+                ChkTáblák.Items.Clear();
+                if (DvgFájlok.SelectedRows.Count < 1) return;
 
-
+                string fájl = DvgFájlok.SelectedRows[0].Cells[0].Value?.ToString() ?? "";
+                string jelszó = DvgFájlok.SelectedRows[0].Cells[1].Value?.ToString() ?? "";
+                ChkTáblák.Items.AddRange(MyA.Mdb_ABTáblák(fájl, jelszó).ToArray());
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 

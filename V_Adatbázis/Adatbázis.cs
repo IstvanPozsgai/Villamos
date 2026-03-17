@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.OleDb;
 using Villamos;
 
@@ -348,6 +349,37 @@ internal static partial class Adatbázis
             HibaNapló.Log(ex.Message, "Mdb ABvanTábla", ex.StackTrace, ex.Source, ex.HResult, "_", false);
             return válasz;
         }
+    }
+
+    public static List<string> Mdb_ABTáblák(string holvan, string ABjelszó)
+    {
+        List<string> válasz = new List<string>();
+        try
+        {
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OleDb.4.0;Data Source='{holvan}'; Jet Oledb:Database Password={ABjelszó}";
+
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                // A GetSchema("Tables") lekéri az összes tábla metaadatát
+                DataTable schemaTable = Kapcsolat.GetSchema("Tables");
+                foreach (DataRow row in schemaTable.Rows)
+                {
+                    string tipus = row["TABLE_TYPE"].ToString();
+
+                    // Csak a tényleges felhasználói táblákat adjuk hozzá (kiszűrjük a rendszertáblákat)
+                    if (tipus == "TABLE")
+                    {
+                        válasz.Add(row["TABLE_NAME"].ToString());
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, "Mdb Mdb_ABTáblák", ex.StackTrace, ex.Source, ex.HResult, "_", false);
+        }
+        return válasz;
     }
 
     public static bool SqLite_ABvanTábla(string holvan, string ABjelszó, string táblanév)
