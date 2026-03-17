@@ -1566,6 +1566,14 @@
     <Compile Include="V_Kezelők\Kezelő_Üzenet.cs" />
     <Compile Include="V_Kezelők\Kezelő_Üzenet_Olvas.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF_Szinezés.cs" />
+    <Compile Include="V_MdbToSql\Ablak_AdatbázisRendezés.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_MdbToSql\Ablak_AdatbázisRendezés.Designer.cs">
+      <DependentUpon>Ablak_AdatbázisRendezés.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V_MdbToSql\MdbJelszóKiolvasó.cs" />
+    <Compile Include="V_MdbToSql\MdbToSqlCipherMigrator.cs" />
     <Compile Include="V_MindenEgyéb\AblakokGombok.cs" />
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_Hibanaplo.cs">
       <SubType>Form</SubType>
@@ -2035,6 +2043,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_Hibanaplo.resx">
       <DependentUpon>Ablak_Hibanaplo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_MdbToSql\Ablak_AdatbázisRendezés.resx">
+      <DependentUpon>Ablak_AdatbázisRendezés.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <Compile Include="V_MindenEgyéb\NyomtatasHelper.cs" />
