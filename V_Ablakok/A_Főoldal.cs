@@ -2783,5 +2783,27 @@ namespace Villamos
         {
             Új_Ablak_Hibanaplo = null;
         }
+
+        Ablak_AdatbázisRendezés Új_Ablak_AdatbázisRendezés;
+
+        private void AdatbázisVáltásToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_AdatbázisRendezés == null)
+            {
+                Új_Ablak_AdatbázisRendezés = new Ablak_AdatbázisRendezés();
+                Új_Ablak_AdatbázisRendezés.FormClosed += Ablak_AdatbázisRendezés_FormClosed;
+                Új_Ablak_AdatbázisRendezés.Show();
+            }
+            else
+            {
+                Új_Ablak_AdatbázisRendezés.Activate();
+                Új_Ablak_AdatbázisRendezés.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        private void Ablak_AdatbázisRendezés_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_AdatbázisRendezés = null;
+        }
     }
 }
