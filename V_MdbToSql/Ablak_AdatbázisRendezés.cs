@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using MyA = Adatbázis;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos
 {
@@ -10,7 +11,38 @@ namespace Villamos
         public Ablak_AdatbázisRendezés()
         {
             InitializeComponent();
+            Start();
         }
+
+        #region Alap
+        private void Ablak_AdatbázisRendezés_Load(object sender, EventArgs e)
+        {
+            // kapcsoljuk a gombokat      Program.Postás_Felhasználó.GlobalAdmin;
+        }
+
+        private void Start()
+        {
+
+        }
+
+        private void Btn_Súgó_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\alapegyéb.html";
+                MyF.Megnyitás(hely);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
 
         private void btnHozzaad_Click(object sender, EventArgs e)
         {
@@ -132,9 +164,8 @@ namespace Villamos
 
         #endregion
 
-        private void Ablak_AdatbázisRendezés_Load(object sender, EventArgs e)
-        {
 
-        }
+
+
     }
 }

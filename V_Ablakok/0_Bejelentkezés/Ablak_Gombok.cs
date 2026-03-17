@@ -37,6 +37,7 @@ namespace Villamos.Ablakok
             SzervezetFeltöltésChk();
             //Csak globaladmin tud módosítani
             Alap_Rögzít.Visible = Program.Postás_Felhasználó.GlobalAdmin;
+            BtnIdTörlés.Visible = Program.Postás_Felhasználó.GlobalAdmin;
         }
 
         private void Ablak_Anyagok_Load(object sender, System.EventArgs e)

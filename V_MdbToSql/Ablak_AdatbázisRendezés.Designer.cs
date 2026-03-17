@@ -41,13 +41,14 @@ namespace Villamos
             this.ChkTáblák = new System.Windows.Forms.CheckedListBox();
             this.TxtMdbJelszó = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.Btn_Súgó = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DvgFájlok)).BeginInit();
             this.SuspendLayout();
             // 
             // DvgFájlok
             // 
             this.DvgFájlok.AllowUserToAddRows = false;
-            this.DvgFájlok.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.DvgFájlok.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.DvgFájlok.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DvgFájlok.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -107,7 +108,7 @@ namespace Villamos
             // 
             // btnIndit
             // 
-            this.btnIndit.Location = new System.Drawing.Point(824, 40);
+            this.btnIndit.Location = new System.Drawing.Point(823, 113);
             this.btnIndit.Name = "btnIndit";
             this.btnIndit.Size = new System.Drawing.Size(200, 40);
             this.btnIndit.TabIndex = 6;
@@ -154,7 +155,7 @@ namespace Villamos
             // 
             // ChkTáblák
             // 
-            this.ChkTáblák.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.ChkTáblák.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.ChkTáblák.FormattingEnabled = true;
             this.ChkTáblák.Location = new System.Drawing.Point(705, 188);
@@ -177,9 +178,23 @@ namespace Villamos
             this.label1.TabIndex = 13;
             this.label1.Text = "Jelszó:";
             // 
+            // Btn_Súgó
+            // 
+            this.Btn_Súgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Btn_Súgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
+            this.Btn_Súgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Súgó.Location = new System.Drawing.Point(988, 2);
+            this.Btn_Súgó.Name = "Btn_Súgó";
+            this.Btn_Súgó.Size = new System.Drawing.Size(45, 45);
+            this.Btn_Súgó.TabIndex = 54;
+            this.toolTip1.SetToolTip(this.Btn_Súgó, "Súgó");
+            this.Btn_Súgó.UseVisualStyleBackColor = true;
+            this.Btn_Súgó.Click += new System.EventHandler(this.Btn_Súgó_Click);
+            // 
             // Ablak_AdatbázisRendezés
             // 
             this.ClientSize = new System.Drawing.Size(1035, 462);
+            this.Controls.Add(this.Btn_Súgó);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.TxtMdbJelszó);
             this.Controls.Add(this.ChkTáblák);
@@ -210,5 +225,6 @@ namespace Villamos
         private CheckedListBox ChkTáblák;
         private TextBox TxtMdbJelszó;
         private Label label1;
+        internal Button Btn_Súgó;
     }
 }
