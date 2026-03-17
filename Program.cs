@@ -54,6 +54,7 @@ namespace Villamos
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new AblakBejelentkezés());
+            //Application.Run(new Ablak_AdatbázisRendezés());
         }
     }
 }

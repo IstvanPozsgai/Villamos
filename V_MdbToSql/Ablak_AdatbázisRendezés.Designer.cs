@@ -38,10 +38,11 @@ namespace Villamos
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnTáblák = new System.Windows.Forms.Button();
             this.BtnHozzaad = new System.Windows.Forms.Button();
+            this.Btn_Súgó = new System.Windows.Forms.Button();
             this.ChkTáblák = new System.Windows.Forms.CheckedListBox();
             this.TxtMdbJelszó = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.Btn_Súgó = new System.Windows.Forms.Button();
+            this.ChkMezők = new System.Windows.Forms.CheckedListBox();
             ((System.ComponentModel.ISupportInitialize)(this.DvgFájlok)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,7 +58,7 @@ namespace Villamos
             this.DvgFájlok.Location = new System.Drawing.Point(12, 188);
             this.DvgFájlok.Name = "DvgFájlok";
             this.DvgFájlok.RowHeadersWidth = 30;
-            this.DvgFájlok.Size = new System.Drawing.Size(687, 256);
+            this.DvgFájlok.Size = new System.Drawing.Size(534, 256);
             this.DvgFájlok.TabIndex = 0;
             this.DvgFájlok.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DvgFájlok_CellClick);
             // 
@@ -65,13 +66,13 @@ namespace Villamos
             // 
             this.dataGridViewTextBoxColumn1.HeaderText = "MDB fájl";
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.Width = 400;
+            this.dataGridViewTextBoxColumn1.Width = 350;
             // 
             // dataGridViewTextBoxColumn2
             // 
             this.dataGridViewTextBoxColumn2.HeaderText = "Jelszó";
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.Width = 250;
+            this.dataGridViewTextBoxColumn2.Width = 150;
             // 
             // btnTorol
             // 
@@ -80,20 +81,20 @@ namespace Villamos
             this.btnTorol.Size = new System.Drawing.Size(75, 23);
             this.btnTorol.TabIndex = 2;
             this.btnTorol.Text = "Kijelölt törlése";
-            this.btnTorol.Click += new System.EventHandler(this.btnTorol_Click);
+            this.btnTorol.Click += new System.EventHandler(this.BtnTorol_Click);
             // 
             // txtCelFajl
             // 
             this.txtCelFajl.Location = new System.Drawing.Point(120, 59);
             this.txtCelFajl.Name = "txtCelFajl";
-            this.txtCelFajl.Size = new System.Drawing.Size(550, 26);
+            this.txtCelFajl.Size = new System.Drawing.Size(550, 22);
             this.txtCelFajl.TabIndex = 3;
             // 
             // txtCelJelszo
             // 
             this.txtCelJelszo.Location = new System.Drawing.Point(120, 99);
             this.txtCelJelszo.Name = "txtCelJelszo";
-            this.txtCelJelszo.Size = new System.Drawing.Size(300, 26);
+            this.txtCelJelszo.Size = new System.Drawing.Size(300, 22);
             this.txtCelJelszo.TabIndex = 4;
             this.txtCelJelszo.UseSystemPasswordChar = true;
             // 
@@ -108,7 +109,7 @@ namespace Villamos
             // 
             // btnIndit
             // 
-            this.btnIndit.Location = new System.Drawing.Point(823, 113);
+            this.btnIndit.Location = new System.Drawing.Point(841, 12);
             this.btnIndit.Name = "btnIndit";
             this.btnIndit.Size = new System.Drawing.Size(200, 40);
             this.btnIndit.TabIndex = 6;
@@ -135,7 +136,7 @@ namespace Villamos
             // 
             this.BtnTáblák.BackgroundImage = global::Villamos.Properties.Resources.Nagyító;
             this.BtnTáblák.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnTáblák.Location = new System.Drawing.Point(654, 137);
+            this.BtnTáblák.Location = new System.Drawing.Point(501, 137);
             this.BtnTáblák.Name = "BtnTáblák";
             this.BtnTáblák.Size = new System.Drawing.Size(45, 45);
             this.BtnTáblák.TabIndex = 10;
@@ -153,21 +154,36 @@ namespace Villamos
             this.toolTip1.SetToolTip(this.BtnHozzaad, "mdb fájlok tallózása");
             this.BtnHozzaad.Click += new System.EventHandler(this.BtnHozzaad_Click);
             // 
+            // Btn_Súgó
+            // 
+            this.Btn_Súgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Btn_Súgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
+            this.Btn_Súgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Súgó.Location = new System.Drawing.Point(1540, 2);
+            this.Btn_Súgó.Name = "Btn_Súgó";
+            this.Btn_Súgó.Size = new System.Drawing.Size(45, 45);
+            this.Btn_Súgó.TabIndex = 54;
+            this.toolTip1.SetToolTip(this.Btn_Súgó, "Súgó");
+            this.Btn_Súgó.UseVisualStyleBackColor = true;
+            this.Btn_Súgó.Click += new System.EventHandler(this.Btn_Súgó_Click);
+            // 
             // ChkTáblák
             // 
             this.ChkTáblák.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.ChkTáblák.CheckOnClick = true;
             this.ChkTáblák.FormattingEnabled = true;
-            this.ChkTáblák.Location = new System.Drawing.Point(705, 188);
+            this.ChkTáblák.Location = new System.Drawing.Point(552, 188);
             this.ChkTáblák.Name = "ChkTáblák";
-            this.ChkTáblák.Size = new System.Drawing.Size(319, 256);
+            this.ChkTáblák.Size = new System.Drawing.Size(179, 256);
             this.ChkTáblák.TabIndex = 11;
+            this.ChkTáblák.SelectedIndexChanged += new System.EventHandler(this.ChkTáblák_SelectedIndexChanged);
             // 
             // TxtMdbJelszó
             // 
             this.TxtMdbJelszó.Location = new System.Drawing.Point(89, 156);
             this.TxtMdbJelszó.Name = "TxtMdbJelszó";
-            this.TxtMdbJelszó.Size = new System.Drawing.Size(300, 26);
+            this.TxtMdbJelszó.Size = new System.Drawing.Size(300, 22);
             this.TxtMdbJelszó.TabIndex = 12;
             // 
             // label1
@@ -178,22 +194,20 @@ namespace Villamos
             this.label1.TabIndex = 13;
             this.label1.Text = "Jelszó:";
             // 
-            // Btn_Súgó
+            // ChkMezők
             // 
-            this.Btn_Súgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Btn_Súgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
-            this.Btn_Súgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_Súgó.Location = new System.Drawing.Point(988, 2);
-            this.Btn_Súgó.Name = "Btn_Súgó";
-            this.Btn_Súgó.Size = new System.Drawing.Size(45, 45);
-            this.Btn_Súgó.TabIndex = 54;
-            this.toolTip1.SetToolTip(this.Btn_Súgó, "Súgó");
-            this.Btn_Súgó.UseVisualStyleBackColor = true;
-            this.Btn_Súgó.Click += new System.EventHandler(this.Btn_Súgó_Click);
+            this.ChkMezők.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.ChkMezők.FormattingEnabled = true;
+            this.ChkMezők.Location = new System.Drawing.Point(737, 188);
+            this.ChkMezők.Name = "ChkMezők";
+            this.ChkMezők.Size = new System.Drawing.Size(179, 256);
+            this.ChkMezők.TabIndex = 55;
             // 
             // Ablak_AdatbázisRendezés
             // 
-            this.ClientSize = new System.Drawing.Size(1035, 462);
+            this.ClientSize = new System.Drawing.Size(1587, 462);
+            this.Controls.Add(this.ChkMezők);
             this.Controls.Add(this.Btn_Súgó);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.TxtMdbJelszó);
@@ -208,7 +222,7 @@ namespace Villamos
             this.Controls.Add(this.btnIndit);
             this.Controls.Add(this.lblCelFajl);
             this.Controls.Add(this.lblCelJelszo);
-            this.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Name = "Ablak_AdatbázisRendezés";
             this.Text = "MDB → SQLCipher migrátor";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -219,12 +233,13 @@ namespace Villamos
 
         }
         private ToolTip toolTip1;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private Button BtnTáblák;
         private CheckedListBox ChkTáblák;
         private TextBox TxtMdbJelszó;
         private Label label1;
         internal Button Btn_Súgó;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private CheckedListBox ChkMezők;
     }
 }

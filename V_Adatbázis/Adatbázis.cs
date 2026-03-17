@@ -351,36 +351,7 @@ internal static partial class Adatbázis
         }
     }
 
-    public static List<string> Mdb_ABTáblák(string holvan, string ABjelszó)
-    {
-        List<string> válasz = new List<string>();
-        try
-        {
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OleDb.4.0;Data Source='{holvan}'; Jet Oledb:Database Password={ABjelszó}";
 
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                // A GetSchema("Tables") lekéri az összes tábla metaadatát
-                DataTable schemaTable = Kapcsolat.GetSchema("Tables");
-                foreach (DataRow row in schemaTable.Rows)
-                {
-                    string tipus = row["TABLE_TYPE"].ToString();
-
-                    // Csak a tényleges felhasználói táblákat adjuk hozzá (kiszűrjük a rendszertáblákat)
-                    if (tipus == "TABLE")
-                    {
-                        válasz.Add(row["TABLE_NAME"].ToString());
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            HibaNapló.Log(ex.Message, "Mdb Mdb_ABTáblák", ex.StackTrace, ex.Source, ex.HResult, "_", false);
-        }
-        return válasz;
-    }
 
     public static bool SqLite_ABvanTábla(string holvan, string ABjelszó, string táblanév)
     {
@@ -412,8 +383,83 @@ internal static partial class Adatbázis
         return válasz;
     }
 
+    /// <summary>
+    /// Adattáblanevek listája egy adott adatbázisban
+    /// </summary>
+    /// <param name="holvan"></param>
+    /// <param name="ABjelszó"></param>
+    /// <returns></returns>
+    public static List<string> Mdb_ABTáblák(string holvan, string ABjelszó)
+    {
+        List<string> válasz = new List<string>();
+        try
+        {
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OleDb.4.0;Data Source='{holvan}'; Jet Oledb:Database Password={ABjelszó}";
+
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                // A GetSchema("Tables") lekéri az összes tábla metaadatát
+                DataTable schemaTable = Kapcsolat.GetSchema("Tables");
+                foreach (DataRow row in schemaTable.Rows)
+                {
+                    string tipus = row["TABLE_TYPE"].ToString();
+
+                    // Csak a tényleges felhasználói táblákat adjuk hozzá (kiszűrjük a rendszertáblákat)
+                    if (tipus == "TABLE")
+                    {
+                        válasz.Add(row["TABLE_NAME"].ToString());
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, "Mdb Mdb_ABTáblák", ex.StackTrace, ex.Source, ex.HResult, "_", false);
+        }
+        return válasz;
+    }
 
 
+    /// <summary>
+    /// Adott Adattábla mezőinek listája egy adott adatbázisban
+    /// </summary>
+    /// <param name="hely"></param>
+    /// <param name="jelszó"></param>
+    /// <returns></returns>
+    public static List<string> Mdb_ABMezők(string holvan, string ABjelszó, string táblaNeve)
+    {
+        List<string> válasz = new List<string>();
+        try
+        {
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OleDb.4.0;Data Source='{holvan}';Jet Oledb:Database Password={ABjelszó}";
+
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+
+                // A GetSchema("Columns") szűrői: [Adatbázis, Séma, Táblanév, Oszlopnév]
+                // Mi csak a táblanévre szűrünk (a 3. paraméter)
+                DataTable schemaTable = Kapcsolat.GetSchema("Columns", new string[] { null, null, táblaNeve, null });
+
+                foreach (DataRow row in schemaTable.Rows)
+                {
+                    string mezoNev = row["COLUMN_NAME"].ToString();
+                    int tipusKod = Convert.ToInt32(row["DATA_TYPE"]);
+                    // A számkód átalakítása olvasható OleDbType névvé
+                    string tipusNev = ((OleDbType)tipusKod).ToString();
+
+                    // Példa: "ID (Integer)" vagy "Nev (VarWChar)"
+                    válasz.Add($"{mezoNev}-{tipusNev}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, "Mdb Mdb_ABMezők", ex.StackTrace, ex.Source, ex.HResult, "_", false);
+        }
+        return válasz;
+    }
 
     private static string BuildConnectionString(string hely, string jelszó)
     {
