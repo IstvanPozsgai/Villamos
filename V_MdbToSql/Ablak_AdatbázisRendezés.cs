@@ -11,6 +11,7 @@ namespace Villamos
         string fájl = "";
         string jelszó = "";
         string tábla = "";
+        string könyvtár = "";
 
 
         public Ablak_AdatbázisRendezés()
@@ -62,7 +63,9 @@ namespace Villamos
                 {
                     foreach (var file in ofd.FileNames)
                     {
-                        DvgFájlok.Rows.Add(file, MyF.GetPassword(file));
+                        string Könyvtár = System.IO.Path.GetDirectoryName(file);
+                        string Fájlnév = System.IO.Path.GetFileName(file);
+                        DvgFájlok.Rows.Add(Könyvtár, Fájlnév, MyF.GetPassword(file));
                     }
                 }
             }
@@ -86,10 +89,11 @@ namespace Villamos
                 ChkMezők.Items.Clear();
                 if (DvgFájlok.SelectedRows.Count < 1) return;
 
-                fájl = DvgFájlok.SelectedRows[0].Cells[0].Value?.ToString() ?? "";
-                jelszó = DvgFájlok.SelectedRows[0].Cells[1].Value?.ToString() ?? "";
-                if (fájl == string.Empty || jelszó == string.Empty) return;
-                ChkTáblák.Items.AddRange(MyA.Mdb_ABTáblák(fájl, jelszó).ToArray());
+                könyvtár = DvgFájlok.SelectedRows[0].Cells[0].Value?.ToString() ?? "";
+                fájl = DvgFájlok.SelectedRows[0].Cells[1].Value?.ToString() ?? "";
+                jelszó = DvgFájlok.SelectedRows[0].Cells[2].Value?.ToString() ?? "";
+                if (könyvtár == string.Empty || fájl == string.Empty || jelszó == string.Empty) return;
+                ChkTáblák.Items.AddRange(MyA.Mdb_ABTáblák($@"{könyvtár}\{fájl}", jelszó).ToArray());
             }
             catch (HibásBevittAdat ex)
             {
@@ -119,8 +123,8 @@ namespace Villamos
                 ChkMezők.Items.Clear();
                 if (ChkTáblák.CheckedItems.Count < 1) return;
                 tábla = ChkTáblák.CheckedItems[0].ToString();
-                if (fájl == string.Empty || jelszó == string.Empty || tábla == string.Empty) return;
-                ChkMezők.Items.AddRange(MyA.Mdb_ABMezők(fájl, jelszó, tábla).ToArray());
+                if (könyvtár == string.Empty || fájl == string.Empty || jelszó == string.Empty || tábla == string.Empty) return;
+                ChkMezők.Items.AddRange(MyA.Mdb_ABMezők($@"{könyvtár}\{fájl}", jelszó, tábla).ToArray());
             }
             catch (HibásBevittAdat ex)
             {

@@ -26,8 +26,6 @@ namespace Villamos
         {
             this.components = new System.ComponentModel.Container();
             this.DvgFájlok = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnTorol = new System.Windows.Forms.Button();
             this.txtCelFajl = new System.Windows.Forms.TextBox();
             this.txtCelJelszo = new System.Windows.Forms.TextBox();
@@ -43,6 +41,9 @@ namespace Villamos
             this.TxtMdbJelszó = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.ChkMezők = new System.Windows.Forms.CheckedListBox();
+            this.Könyvtár = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.DvgFájlok)).BeginInit();
             this.SuspendLayout();
             // 
@@ -53,6 +54,7 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Left)));
             this.DvgFájlok.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DvgFájlok.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Könyvtár,
             this.dataGridViewTextBoxColumn1,
             this.dataGridViewTextBoxColumn2});
             this.DvgFájlok.Location = new System.Drawing.Point(12, 188);
@@ -61,18 +63,6 @@ namespace Villamos
             this.DvgFájlok.Size = new System.Drawing.Size(534, 256);
             this.DvgFájlok.TabIndex = 0;
             this.DvgFájlok.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DvgFájlok_CellClick);
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.HeaderText = "MDB fájl";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.Width = 350;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.HeaderText = "Jelszó";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.Width = 150;
             // 
             // btnTorol
             // 
@@ -175,7 +165,7 @@ namespace Villamos
             this.ChkTáblák.FormattingEnabled = true;
             this.ChkTáblák.Location = new System.Drawing.Point(552, 188);
             this.ChkTáblák.Name = "ChkTáblák";
-            this.ChkTáblák.Size = new System.Drawing.Size(179, 256);
+            this.ChkTáblák.Size = new System.Drawing.Size(179, 242);
             this.ChkTáblák.TabIndex = 11;
             this.ChkTáblák.SelectedIndexChanged += new System.EventHandler(this.ChkTáblák_SelectedIndexChanged);
             // 
@@ -201,8 +191,26 @@ namespace Villamos
             this.ChkMezők.FormattingEnabled = true;
             this.ChkMezők.Location = new System.Drawing.Point(737, 188);
             this.ChkMezők.Name = "ChkMezők";
-            this.ChkMezők.Size = new System.Drawing.Size(179, 256);
+            this.ChkMezők.Size = new System.Drawing.Size(179, 242);
             this.ChkMezők.TabIndex = 55;
+            // 
+            // Könyvtár
+            // 
+            this.Könyvtár.HeaderText = "Könyvtár";
+            this.Könyvtár.Name = "Könyvtár";
+            this.Könyvtár.Width = 200;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "MDB fájl";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.Width = 150;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "Jelszó";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.Width = 150;
             // 
             // Ablak_AdatbázisRendezés
             // 
@@ -238,8 +246,9 @@ namespace Villamos
         private TextBox TxtMdbJelszó;
         private Label label1;
         internal Button Btn_Súgó;
+        private CheckedListBox ChkMezők;
+        private DataGridViewTextBoxColumn Könyvtár;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private CheckedListBox ChkMezők;
     }
 }
