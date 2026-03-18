@@ -3,23 +3,23 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
-using System.IO;
 namespace Villamos
 {
     public class MdbToSqliteMigrator
     {
         public class MdbForras
         {
-            public string Fajl { get; set; }
-            public string Jelszo { get; set; }
+            public string Fájl { get; set; }
+            public string Jelszó { get; set; }
+            public string Tábla { get; set; }
         }
 
         public static void Migracio(List<MdbForras> forrasok, string celSqliteFajl, string celJelszo)
         {
-            if (File.Exists(celSqliteFajl)) File.Delete(celSqliteFajl);
+
 
             string connStr = $"Data Source={celSqliteFajl};Password={celJelszo};";
-            using (var sqlite = new SqliteConnection(connStr))
+            using (SqliteConnection sqlite = new SqliteConnection(connStr))
             {
                 sqlite.Open();
 
@@ -28,7 +28,7 @@ namespace Villamos
                     pragmaCmd.ExecuteNonQuery();
                 }
 
-                foreach (var forras in forrasok)
+                foreach (MdbForras forras in forrasok)
                 {
                     FeldolgozMdb(forras, sqlite);
                 }
@@ -39,8 +39,8 @@ namespace Villamos
 
         private static void FeldolgozMdb(MdbForras forras, SqliteConnection sqlite)
         {
-            string connStr = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{forras.Fajl}';Jet OLEDB:Database Password={forras.Jelszo};";
-            using (var mdb = new OleDbConnection(connStr))
+            string connStr = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{forras.Fájl}';Jet OLEDB:Database Password={forras.Jelszó};";
+            using (OleDbConnection mdb = new OleDbConnection(connStr))
             {
                 mdb.Open();
                 DataTable schema = mdb.GetSchema("Tables");

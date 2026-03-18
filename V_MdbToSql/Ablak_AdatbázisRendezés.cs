@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
@@ -54,20 +55,32 @@ namespace Villamos
         #region Fájlok
         private void BtnHozzaad_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog ofd = new OpenFileDialog())
+            try
             {
-                ofd.Filter = "MDB fájl (*.mdb)|*.mdb";
-                ofd.Multiselect = true;
-
-                if (ofd.ShowDialog() == DialogResult.OK)
+                using (OpenFileDialog ofd = new OpenFileDialog())
                 {
-                    foreach (var file in ofd.FileNames)
+                    ofd.Filter = "MDB fájl (*.mdb)|*.mdb";
+                    ofd.Multiselect = true;
+
+                    if (ofd.ShowDialog() == DialogResult.OK)
                     {
-                        string Könyvtár = System.IO.Path.GetDirectoryName(file);
-                        string Fájlnév = System.IO.Path.GetFileName(file);
-                        DvgFájlok.Rows.Add(Könyvtár, Fájlnév, MyF.GetPassword(file));
+                        foreach (string file in ofd.FileNames)
+                        {
+                            string Könyvtár = System.IO.Path.GetDirectoryName(file);
+                            string Fájlnév = System.IO.Path.GetFileName(file);
+                            DvgFájlok.Rows.Add(Könyvtár, Fájlnév, MyF.GetPassword(file));
+                        }
                     }
                 }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -138,6 +151,39 @@ namespace Villamos
         }
         #endregion
 
+        private void BtnIndit_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(txtCelFajl.Text) || string.IsNullOrWhiteSpace(txtCelJelszo.Text) || string.IsNullOrWhiteSpace(txtCélKönyvtár.Text))
+                    throw new HibásBevittAdat("Add meg a cél adatbázist és jelszót!");
+                if (DvgFájlok.SelectedRows.Count < 1) return;
+
+                List<MdbToSqliteMigrator.MdbForras> lista = new List<MdbToSqliteMigrator.MdbForras>();
+                foreach (DataGridViewRow row in DvgFájlok.SelectedRows)
+                {
+                    if (row.Cells[0].Value == null) continue;
+                    fájl = $@"{row.Cells[0].Value}\{row.Cells[1].Value}";
+                    jelszó = row.Cells[1].Value?.ToString() ?? "";
+                    tábla = ChkTáblák.CheckedItems.Count > 0 ? ChkTáblák.CheckedItems[0].ToString() : "";
+                    if (!string.IsNullOrWhiteSpace(jelszó)) lista.Add(new MdbToSqliteMigrator.MdbForras { Fájl = fájl, Jelszó = jelszó, Tábla = tábla });
+                }
+
+                Cursor = Cursors.WaitCursor;
+                MdbToSqliteMigrator.Migracio(lista, $@"{txtCelFajl.Text.Trim()}\{txtCélKönyvtár.Text.Trim()}", txtCelJelszo.Text);
+                Cursor = Cursors.Default;
+                MessageBox.Show("Migráció kész!");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
 
 
@@ -170,48 +216,132 @@ namespace Villamos
             }
         }
 
-        private void btnIndit_Click(object sender, EventArgs e)
+
+        #endregion
+
+        private void BtnCélTallózás_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtCelFajl.Text) || string.IsNullOrWhiteSpace(txtCelJelszo.Text))
-            {
-                MessageBox.Show("Add meg a cél adatbázist és jelszót!");
-                return;
-            }
-
-            var lista = new List<MdbToSqliteMigrator.MdbForras>();
-            foreach (DataGridViewRow row in DvgFájlok.Rows)
-            {
-                if (row.Cells[0].Value == null) continue;
-                string fajl = row.Cells[0].Value.ToString();
-                string jelszo = row.Cells[1].Value?.ToString() ?? "";
-                if (string.IsNullOrWhiteSpace(jelszo))
-                {
-                    MessageBox.Show("Minden MDB-hez kell jelszó!");
-                    return;
-                }
-                lista.Add(new MdbToSqliteMigrator.MdbForras { Fajl = fajl, Jelszo = jelszo });
-            }
-
-            if (lista.Count == 0)
-            {
-                MessageBox.Show("Nincs kiválasztott MDB!");
-                return;
-            }
-
             try
             {
-                Cursor = Cursors.WaitCursor;
-                MdbToSqliteMigrator.Migracio(lista, txtCelFajl.Text, txtCelJelszo.Text);
-                Cursor = Cursors.Default;
-                MessageBox.Show("Migráció kész!");
+                using (OpenFileDialog ofd = new OpenFileDialog())
+                {
+                    ofd.Filter = "DB fájl (*.db)|*.db";
+                    ofd.Multiselect = true;
+
+                    if (ofd.ShowDialog() == DialogResult.OK)
+                    {
+                        string Könyvtár = System.IO.Path.GetDirectoryName(ofd.FileName);
+                        string Fájlnév = System.IO.Path.GetFileName(ofd.FileName);
+                        txtCélKönyvtár.Text = Könyvtár;
+                        txtCelFajl.Text = Fájlnév;
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                Cursor = Cursors.Default;
-                MessageBox.Show("Hiba: " + ex.Message);
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion
 
+
+        #region Mintafájlok
+        private void BtnMintaKiválasztás_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (OpenFileDialog ofd = new OpenFileDialog())
+                {
+                    ofd.Filter = "MDB fájl (*.mdb)|*.mdb";
+                    ofd.Multiselect = true;
+
+                    if (ofd.ShowDialog() == DialogResult.OK)
+                    {
+                        könyvtár = System.IO.Path.GetDirectoryName(ofd.FileName);
+                        fájl = System.IO.Path.GetFileName(ofd.FileName);
+                        jelszó = MyF.GetPassword(ofd.FileName);
+
+                        MintaKönyvtár.Text = könyvtár;
+                        MintaFájl.Text = fájl;
+                        MintaJelszó.Text = jelszó;
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void MintaListázása_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DvgFájlok.Rows.Clear();
+                string induloUtvonal = $@"{Application.StartupPath}";
+                string kiterjesztes = "*.mdb";
+
+                List<string> talaltKonyvtarok = new List<string>();
+                List<string> szurtFajlok = new List<string>();
+
+                Bejáró(induloUtvonal, kiterjesztes, talaltKonyvtarok, szurtFajlok);
+
+                foreach (string file in szurtFajlok)
+                {
+                    if (MyF.GetPassword(file) == jelszó)
+                    {
+                        string Könyvtár = System.IO.Path.GetDirectoryName(file);
+                        string Fájlnév = System.IO.Path.GetFileName(file);
+                        DvgFájlok.Rows.Add(Könyvtár, Fájlnév, MyF.GetPassword(file));
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Bejáró(string utvonal, string minta, List<string> konyvtarLista, List<string> fajlLista)
+        {
+            try
+            {
+                // Csak a megadott mintának megfelelő fájlokat adjuk hozzá
+                foreach (string fajl in Directory.GetFiles(utvonal, minta))
+                {
+                    fajlLista.Add(fajl);
+                }
+
+                // Almappák bejárása
+                foreach (string konyvtar in Directory.GetDirectories(utvonal))
+                {
+                    konyvtarLista.Add(konyvtar);
+                    Bejáró(konyvtar, minta, konyvtarLista, fajlLista);
+                }
+            }
+            catch (UnauthorizedAccessException) { /* Jogosultsági hiba esetén átugorjuk */ }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Bejaro", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        #endregion
     }
 }
