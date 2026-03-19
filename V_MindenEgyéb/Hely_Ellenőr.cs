@@ -37,7 +37,7 @@ namespace Villamos
                 string alap = Könyvtár[0];
                 for (int i = 1; i < Könyvtár.Length; i++)
                 {
-                    if (!Könyvtár[i].Contains(".mdb"))
+                    if (!(Könyvtár[i].Contains(".mdb") || Könyvtár[i].Contains(".db")))
                     {
                         alap += $@"\{Könyvtár[i]}";
                         if (!Directory.Exists(alap)) Directory.CreateDirectory(alap);

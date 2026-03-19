@@ -183,12 +183,12 @@ namespace Villamos
                 //    tábla = ChkTáblák.CheckedItems.Count > 0 ? ChkTáblák.CheckedItems[0].ToString() : "";
                 //    if (!string.IsNullOrWhiteSpace(jelszó)) lista.Add(new MdbForrás { Fájl = fájl, Jelszó = jelszó, Tábla = tábla });
                 //}
-                SqLitefájl = $@"{txtCelFajl.Text.Trim()}\{txtCélKönyvtár.Text.Trim()}";
+                SqLitefájl = $@"{txtCélKönyvtár.Text.Trim()}\{txtCelFajl.Text.Trim()}".KönyvSzerk();
                 SqLitejelszó = TxtCélJelszó.Text.Trim();
                 if (TxtCélTábla.Text == string.Empty) TxtCélTábla.Text = Mdbtábla; //Ha üresen van akkor meghagyjuk a tábla eredeti nevét.
                 SqLitetábla = TxtCélTábla.Text.Trim();
 
-                MdbForrás MdbAdat = new MdbForrás { Fájl = Mdbfájl, Jelszó = Mdbjelszó, Tábla = Mdbtábla };
+                MdbForrás MdbAdat = new MdbForrás { Fájl = $@"{Mdbkönyvtár}\{Mdbfájl}", Jelszó = Mdbjelszó, Tábla = Mdbtábla };
                 MdbForrás SqLiteAdat = new MdbForrás { Fájl = SqLitefájl, Jelszó = SqLitejelszó, Tábla = SqLitetábla };
 
 

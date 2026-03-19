@@ -31,7 +31,7 @@ namespace Villamos
 
                 foreach (MdbForrás forras in forrasok)
                 {
-                  //  EgyTáblaMigrálása(forras, sqlite);
+                    //  EgyTáblaMigrálása(forras, sqlite);
                 }
 
                 sqlite.Close();
@@ -44,23 +44,35 @@ namespace Villamos
         /// </summary>
         /// <param name="forras"></param>
         /// <param name="sqlite"></param>
-        public  static void EgyTáblaMigrálása(MdbForrás MdbAdat, MdbForrás SqLiteAdat)
+        public static void EgyTáblaMigrálása(MdbForrás MdbAdat, MdbForrás SqLiteAdat)
         {
-            connStrMdb = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{MdbAdat.Fájl}';Jet OLEDB:Database Password={MdbAdat.Jelszó};";
-            connStrSqLite = $"Data Source={SqLiteAdat.Fájl};Password={SqLiteAdat.Jelszó};";
-            using (OleDbConnection mdb = new OleDbConnection(connStrMdb))
+            try
             {
-                //megnyitjuk az Mdb fájlt 
-                mdb.Open();
-
-                using (SqliteConnection sqlite = new SqliteConnection(connStrSqLite))
+                connStrMdb = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{MdbAdat.Fájl}';Jet OLEDB:Database Password={MdbAdat.Jelszó};";
+                connStrSqLite = $"Data Source={SqLiteAdat.Fájl};Password={SqLiteAdat.Jelszó};";
+                using (OleDbConnection mdb = new OleDbConnection(connStrMdb))
                 {
-                    sqlite.Open();
-                    MásolTábla(mdb, sqlite, MdbAdat.Tábla, SqLiteAdat.Tábla);
+                    //megnyitjuk az Mdb fájlt 
+                    mdb.Open();
 
-                    sqlite.Close();
+                    using (SqliteConnection sqlite = new SqliteConnection(connStrSqLite))
+                    {
+                        sqlite.Open();
+                        MásolTábla(mdb, sqlite, MdbAdat.Tábla, SqLiteAdat.Tábla);
+
+                        sqlite.Close();
+                    }
+                    mdb.Close();
                 }
-                mdb.Close();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "EgyTáblaMigrálása", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
