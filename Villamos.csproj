@@ -555,6 +555,7 @@
     <Compile Include="V_Adatszerkezet\Beállítás_Betű.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Kimutatás.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Nyomtatás.cs" />
+    <Compile Include="V_Adatszerkezet\MdbForrás.cs" />
     <Compile Include="V_Függvények\HtmlToDataTable.cs" />
     <Compile Include="V_Függvények\Oszlopneve.cs" />
     <Compile Include="V_Input_Forms\DataGridViewHelper.cs" />

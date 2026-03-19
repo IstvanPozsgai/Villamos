@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
 
@@ -9,10 +10,14 @@ namespace Villamos
 {
     public partial class Ablak_AdatbázisRendezés : Form
     {
-        string fájl = "";
-        string jelszó = "";
-        string tábla = "";
-        string könyvtár = "";
+        string Mdbfájl = "";
+        string Mdbjelszó = "";
+        string Mdbtábla = "";
+        string Mdbkönyvtár = "";
+        string SqLitefájl = "";
+        string SqLitejelszó = "";
+        string SqLitetábla = "";
+        string SqLitekönyvtár = "";
 
 
         public Ablak_AdatbázisRendezés()
@@ -102,11 +107,11 @@ namespace Villamos
                 ChkMezők.Items.Clear();
                 if (DvgFájlok.SelectedRows.Count < 1) return;
 
-                könyvtár = DvgFájlok.SelectedRows[0].Cells[0].Value?.ToString() ?? "";
-                fájl = DvgFájlok.SelectedRows[0].Cells[1].Value?.ToString() ?? "";
-                jelszó = DvgFájlok.SelectedRows[0].Cells[2].Value?.ToString() ?? "";
-                if (könyvtár == string.Empty || fájl == string.Empty || jelszó == string.Empty) return;
-                ChkTáblák.Items.AddRange(MyA.Mdb_ABTáblák($@"{könyvtár}\{fájl}", jelszó).ToArray());
+                Mdbkönyvtár = DvgFájlok.SelectedRows[0].Cells[0].Value?.ToString() ?? "";
+                Mdbfájl = DvgFájlok.SelectedRows[0].Cells[1].Value?.ToString() ?? "";
+                Mdbjelszó = DvgFájlok.SelectedRows[0].Cells[2].Value?.ToString() ?? "";
+                if (Mdbkönyvtár == string.Empty || Mdbfájl == string.Empty || Mdbjelszó == string.Empty) return;
+                ChkTáblák.Items.AddRange(MyA.Mdb_ABTáblák($@"{Mdbkönyvtár}\{Mdbfájl}", Mdbjelszó).ToArray());
             }
             catch (HibásBevittAdat ex)
             {
@@ -135,9 +140,9 @@ namespace Villamos
             {
                 ChkMezők.Items.Clear();
                 if (ChkTáblák.CheckedItems.Count < 1) return;
-                tábla = ChkTáblák.CheckedItems[0].ToString();
-                if (könyvtár == string.Empty || fájl == string.Empty || jelszó == string.Empty || tábla == string.Empty) return;
-                ChkMezők.Items.AddRange(MyA.Mdb_ABMezők($@"{könyvtár}\{fájl}", jelszó, tábla).ToArray());
+                Mdbtábla = ChkTáblák.CheckedItems[0].ToString();
+                if (Mdbkönyvtár == string.Empty || Mdbfájl == string.Empty || Mdbjelszó == string.Empty || Mdbtábla == string.Empty) return;
+                ChkMezők.Items.AddRange(MyA.Mdb_ABMezők($@"{Mdbkönyvtár}\{Mdbfájl}", Mdbjelszó, Mdbtábla).ToArray());
             }
             catch (HibásBevittAdat ex)
             {
@@ -155,22 +160,40 @@ namespace Villamos
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(txtCelFajl.Text) || string.IsNullOrWhiteSpace(txtCelJelszo.Text) || string.IsNullOrWhiteSpace(txtCélKönyvtár.Text))
+                if (string.IsNullOrWhiteSpace(txtCelFajl.Text) || string.IsNullOrWhiteSpace(TxtCélJelszó.Text) || string.IsNullOrWhiteSpace(txtCélKönyvtár.Text))
                     throw new HibásBevittAdat("Add meg a cél adatbázist és jelszót!");
+
+                if (txtCélKönyvtár.Text.Contains(@"\Főmérnökség\SQL\"))
+                    txtCélKönyvtár.Text += txtCélKönyvtár.Text;
+                else
+                    txtCélKönyvtár.Text = $@"{Application.StartupPath}\Főmérnökség\SQL\" + txtCélKönyvtár.Text;
+
+                if (!txtCelFajl.Text.Contains(".db"))
+                    txtCelFajl.Text += ".db";
+
                 if (DvgFájlok.SelectedRows.Count < 1) return;
 
-                List<MdbToSqliteMigrator.MdbForras> lista = new List<MdbToSqliteMigrator.MdbForras>();
-                foreach (DataGridViewRow row in DvgFájlok.SelectedRows)
-                {
-                    if (row.Cells[0].Value == null) continue;
-                    fájl = $@"{row.Cells[0].Value}\{row.Cells[1].Value}";
-                    jelszó = row.Cells[1].Value?.ToString() ?? "";
-                    tábla = ChkTáblák.CheckedItems.Count > 0 ? ChkTáblák.CheckedItems[0].ToString() : "";
-                    if (!string.IsNullOrWhiteSpace(jelszó)) lista.Add(new MdbToSqliteMigrator.MdbForras { Fájl = fájl, Jelszó = jelszó, Tábla = tábla });
-                }
+                //List<MdbForrás> lista = new List<MdbForrás>();
+                ////Ha több tábla van kijelölve akkor minden tábláját migráljuk, ha csak egy akkor táblánként migrálunk
+                //foreach (DataGridViewRow row in DvgFájlok.SelectedRows)
+                //{
+                //    if (row.Cells[0].Value == null) continue;
+                //    fájl = $@"{row.Cells[0].Value}\{row.Cells[1].Value}";
+                //    jelszó = row.Cells[2].Value?.ToString() ?? "";
+                //    tábla = ChkTáblák.CheckedItems.Count > 0 ? ChkTáblák.CheckedItems[0].ToString() : "";
+                //    if (!string.IsNullOrWhiteSpace(jelszó)) lista.Add(new MdbForrás { Fájl = fájl, Jelszó = jelszó, Tábla = tábla });
+                //}
+                SqLitefájl = $@"{txtCelFajl.Text.Trim()}\{txtCélKönyvtár.Text.Trim()}";
+                SqLitejelszó = TxtCélJelszó.Text.Trim();
+                if (TxtCélTábla.Text == string.Empty) TxtCélTábla.Text = Mdbtábla; //Ha üresen van akkor meghagyjuk a tábla eredeti nevét.
+                SqLitetábla = TxtCélTábla.Text.Trim();
+
+                MdbForrás MdbAdat = new MdbForrás { Fájl = Mdbfájl, Jelszó = Mdbjelszó, Tábla = Mdbtábla };
+                MdbForrás SqLiteAdat = new MdbForrás { Fájl = SqLitefájl, Jelszó = SqLitejelszó, Tábla = SqLitetábla };
+
 
                 Cursor = Cursors.WaitCursor;
-                MdbToSqliteMigrator.Migracio(lista, $@"{txtCelFajl.Text.Trim()}\{txtCélKönyvtár.Text.Trim()}", txtCelJelszo.Text);
+                MdbToSqliteMigrator.EgyTáblaMigrálása(MdbAdat, SqLiteAdat);
                 Cursor = Cursors.Default;
                 MessageBox.Show("Migráció kész!");
             }
@@ -261,13 +284,13 @@ namespace Villamos
 
                     if (ofd.ShowDialog() == DialogResult.OK)
                     {
-                        könyvtár = System.IO.Path.GetDirectoryName(ofd.FileName);
-                        fájl = System.IO.Path.GetFileName(ofd.FileName);
-                        jelszó = MyF.GetPassword(ofd.FileName);
+                        Mdbkönyvtár = System.IO.Path.GetDirectoryName(ofd.FileName);
+                        Mdbfájl = System.IO.Path.GetFileName(ofd.FileName);
+                        Mdbjelszó = MyF.GetPassword(ofd.FileName);
 
-                        MintaKönyvtár.Text = könyvtár;
-                        MintaFájl.Text = fájl;
-                        MintaJelszó.Text = jelszó;
+                        MintaKönyvtár.Text = Mdbkönyvtár;
+                        MintaFájl.Text = Mdbfájl;
+                        MintaJelszó.Text = Mdbjelszó;
                     }
                 }
             }
@@ -297,7 +320,7 @@ namespace Villamos
 
                 foreach (string file in szurtFajlok)
                 {
-                    if (MyF.GetPassword(file) == jelszó)
+                    if (MyF.GetPassword(file) == Mdbjelszó)
                     {
                         string Könyvtár = System.IO.Path.GetDirectoryName(file);
                         string Fájlnév = System.IO.Path.GetFileName(file);

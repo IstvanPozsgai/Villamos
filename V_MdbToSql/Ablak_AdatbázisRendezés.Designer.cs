@@ -9,7 +9,7 @@ namespace Villamos
         private System.Windows.Forms.Button BtnHozzaad;
         private System.Windows.Forms.Button btnTorol;
         private System.Windows.Forms.TextBox txtCelFajl;
-        private System.Windows.Forms.TextBox txtCelJelszo;
+        private System.Windows.Forms.TextBox TxtCélJelszó;
         private System.Windows.Forms.Button btnTallozCel;
         private System.Windows.Forms.Button BtnIndit;
         private System.Windows.Forms.Label lblCelFajl;
@@ -31,7 +31,7 @@ namespace Villamos
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnTorol = new System.Windows.Forms.Button();
             this.txtCelFajl = new System.Windows.Forms.TextBox();
-            this.txtCelJelszo = new System.Windows.Forms.TextBox();
+            this.TxtCélJelszó = new System.Windows.Forms.TextBox();
             this.btnTallozCel = new System.Windows.Forms.Button();
             this.BtnIndit = new System.Windows.Forms.Button();
             this.lblCelFajl = new System.Windows.Forms.Label();
@@ -55,6 +55,8 @@ namespace Villamos
             this.MintaFájl = new System.Windows.Forms.TextBox();
             this.MintaJelszó = new System.Windows.Forms.TextBox();
             this.MintaKönyvtár = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.TxtCélTábla = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.DvgFájlok)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -63,7 +65,7 @@ namespace Villamos
             // DvgFájlok
             // 
             this.DvgFájlok.AllowUserToAddRows = false;
-            this.DvgFájlok.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.DvgFájlok.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.DvgFájlok.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DvgFájlok.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -110,13 +112,15 @@ namespace Villamos
             this.txtCelFajl.Name = "txtCelFajl";
             this.txtCelFajl.Size = new System.Drawing.Size(387, 22);
             this.txtCelFajl.TabIndex = 3;
+            this.txtCelFajl.Text = "Próba";
             // 
-            // txtCelJelszo
+            // TxtCélJelszó
             // 
-            this.txtCelJelszo.Location = new System.Drawing.Point(148, 63);
-            this.txtCelJelszo.Name = "txtCelJelszo";
-            this.txtCelJelszo.Size = new System.Drawing.Size(387, 22);
-            this.txtCelJelszo.TabIndex = 4;
+            this.TxtCélJelszó.Location = new System.Drawing.Point(148, 63);
+            this.TxtCélJelszó.Name = "TxtCélJelszó";
+            this.TxtCélJelszó.Size = new System.Drawing.Size(387, 22);
+            this.TxtCélJelszó.TabIndex = 4;
+            this.TxtCélJelszó.Text = "Próba";
             // 
             // btnTallozCel
             // 
@@ -224,7 +228,7 @@ namespace Villamos
             // 
             // ChkTáblák
             // 
-            this.ChkTáblák.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.ChkTáblák.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.ChkTáblák.CheckOnClick = true;
             this.ChkTáblák.FormattingEnabled = true;
@@ -236,7 +240,7 @@ namespace Villamos
             // 
             // ChkMezők
             // 
-            this.ChkMezők.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.ChkMezők.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.ChkMezők.FormattingEnabled = true;
             this.ChkMezők.Location = new System.Drawing.Point(737, 188);
@@ -258,17 +262,20 @@ namespace Villamos
             this.txtCélKönyvtár.Name = "txtCélKönyvtár";
             this.txtCélKönyvtár.Size = new System.Drawing.Size(387, 22);
             this.txtCélKönyvtár.TabIndex = 57;
+            this.txtCélKönyvtár.Text = "Próba";
             // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.88652F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 74.11347F));
+            this.tableLayoutPanel1.Controls.Add(this.TxtCélTábla, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.label5, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblCelFajl, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.lblCelJelszo, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.txtCelFajl, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.txtCelJelszo, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.TxtCélJelszó, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.txtCélKönyvtár, 1, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(764, 21);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -277,7 +284,7 @@ namespace Villamos
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(564, 96);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(564, 133);
             this.tableLayoutPanel1.TabIndex = 59;
             // 
             // tableLayoutPanel2
@@ -345,6 +352,22 @@ namespace Villamos
             this.MintaKönyvtár.Size = new System.Drawing.Size(387, 22);
             this.MintaKönyvtár.TabIndex = 57;
             // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(3, 90);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(114, 23);
+            this.label5.TabIndex = 58;
+            this.label5.Text = "SQLite táblanév :";
+            // 
+            // TxtCélTábla
+            // 
+            this.TxtCélTábla.Location = new System.Drawing.Point(148, 93);
+            this.TxtCélTábla.Name = "TxtCélTábla";
+            this.TxtCélTábla.Size = new System.Drawing.Size(387, 22);
+            this.TxtCélTábla.TabIndex = 59;
+            this.TxtCélTábla.Text = "Próba";
+            // 
             // Ablak_AdatbázisRendezés
             // 
             this.ClientSize = new System.Drawing.Size(1587, 462);
@@ -396,5 +419,7 @@ namespace Villamos
         private TextBox MintaKönyvtár;
         private Button BtnMintaKiválasztás;
         private Button MintaListázása;
+        private TextBox TxtCélTábla;
+        private Label label5;
     }
 }

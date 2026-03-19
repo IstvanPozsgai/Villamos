@@ -351,8 +351,6 @@ internal static partial class Adatbázis
         }
     }
 
-
-
     public static bool SqLite_ABvanTábla(string holvan, string ABjelszó, string táblanév)
     {
         bool válasz = false;
@@ -362,18 +360,7 @@ internal static partial class Adatbázis
             using (var connection = new SqliteConnection(kapcsolatiszöveg))
             {
                 connection.Open();
-
-                string sql = $@"SELECT COUNT(*) 
-                   FROM sqlite_master
-                   WHERE type='table' AND name=@name;";
-
-                using (var cmd = new SqliteCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue("@name", táblanév);
-
-                    long count = cmd.ExecuteScalar().ToÉrt_Long();
-                    if (count > 0) válasz = true;
-                }
+                válasz = TáblaVanSqLite(connection,táblanév );
             }
         }
         catch (Exception ex)
@@ -381,6 +368,15 @@ internal static partial class Adatbázis
             HibaNapló.Log(ex.Message, "SqLite ABvanTábla", ex.StackTrace, ex.Source, ex.HResult, "_", false);
         }
         return válasz;
+    }
+
+    public  static bool TáblaVanSqLite(SqliteConnection sqlite, string tablaNev)
+    {
+        using (var cmd = new SqliteCommand("SELECT name FROM sqlite_master WHERE type='table' AND name=@nev;", sqlite))
+        {
+            cmd.Parameters.AddWithValue("@nev", tablaNev);
+            return cmd.ExecuteScalar() != null;
+        }
     }
 
     /// <summary>
