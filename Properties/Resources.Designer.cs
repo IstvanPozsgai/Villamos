@@ -19,7 +19,7 @@ namespace Villamos.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -583,6 +583,16 @@ namespace Villamos.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap comment_edit {
+            get {
+                object obj = ResourceManager.GetObject("comment_edit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Control_Panel_32 {
             get {
                 object obj = ResourceManager.GetObject("Control_Panel 32", resourceCulture);
@@ -606,6 +616,16 @@ namespace Villamos.Properties {
         internal static System.Drawing.Bitmap Custom_Icon_Design_Flatastic_1_Import {
             get {
                 object obj = ResourceManager.GetObject("Custom-Icon-Design-Flatastic-1-Import", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap database_search {
+            get {
+                object obj = ResourceManager.GetObject("database_search", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

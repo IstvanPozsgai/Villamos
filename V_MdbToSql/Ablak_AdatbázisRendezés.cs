@@ -104,7 +104,7 @@ namespace Villamos
             try
             {
                 ChkTáblák.Items.Clear();
-                ChkMezők.Items.Clear();
+                LstMezők.Items.Clear();
                 if (DvgFájlok.SelectedRows.Count < 1) return;
 
                 Mdbkönyvtár = DvgFájlok.SelectedRows[0].Cells[0].Value?.ToString() ?? "";
@@ -138,11 +138,11 @@ namespace Villamos
         {
             try
             {
-                ChkMezők.Items.Clear();
+                LstMezők.Items.Clear();
                 if (ChkTáblák.CheckedItems.Count < 1) return;
                 Mdbtábla = ChkTáblák.CheckedItems[0].ToString();
                 if (Mdbkönyvtár == string.Empty || Mdbfájl == string.Empty || Mdbjelszó == string.Empty || Mdbtábla == string.Empty) return;
-                ChkMezők.Items.AddRange(MyA.Mdb_ABMezők($@"{Mdbkönyvtár}\{Mdbfájl}", Mdbjelszó, Mdbtábla).ToArray());
+                LstMezők.Items.AddRange(MyA.Mdb_ABMezők($@"{Mdbkönyvtár}\{Mdbfájl}", Mdbjelszó, Mdbtábla).ToArray());
             }
             catch (HibásBevittAdat ex)
             {
@@ -366,5 +366,141 @@ namespace Villamos
 
 
         #endregion
+
+
+
+        #region Gombok
+        /// <summary>
+        ///         táblanév másolása a listboxba, hogy onnan könnyen át lehessen másolni a cél adatbázisba, ha szükséges, akkor
+        ///  lehet szerkeszteni is a név mezőben, de ha üresen hagyjuk akkor meghagyja az eredeti tábla nevét.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TáblanevekMásolása_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ÚjTáblanevek.Items.Clear();
+                if (ChkTáblák.CheckedItems.Count < 1) return;
+                for (int i = 0; i < ChkTáblák.CheckedItems.Count; i++)
+                {
+                    ÚjTáblanevek.Items.Add(ChkTáblák.CheckedItems[i].ToString());
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Minde beviteli lista tartalmát törli, hogy újra lehessen kezdeni a fájlok és táblák kiválasztását.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnAlaphelyzet_Click(object sender, EventArgs e)
+        {
+            DvgFájlok.Rows.Clear();
+            ChkTáblák.Items.Clear();
+            LstMezők.Items.Clear();
+            ÚjTáblanevek.Items.Clear();
+            ÚjTáblaNév.Text = "";
+        }
+
+
+
+
+        #endregion
+
+        #region Újtáblanevek
+        /// <summary>
+        /// A kijelölt táblaneveket kiegészíti újtáblanevekben rögzített értékkel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TáblaNévKieg_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (ÚjTáblaNév.Text.Trim() == string.Empty) return;
+                if (ÚjTáblanevek.CheckedItems.Count < 1) return;
+                // A CheckedIndices használata biztonságosabb, mert pontosan tudjuk, melyik sorszámú elemet kell átírni
+                for (int i = 0; i < ÚjTáblanevek.CheckedIndices.Count; i++)
+                {
+                    int index = ÚjTáblanevek.CheckedIndices[i];
+                    string regiSzoveg = ÚjTáblanevek.Items[index].ToString();
+                    string ujSzoveg = ÚjTáblaNév.Text.Trim() + regiSzoveg;
+
+                    // Itt frissítjük a tényleges elemet a listában
+                    ÚjTáblanevek.Items[index] = ujSzoveg;
+
+                    // Frissítés után újra be kell pipálni, mert az elem cseréje alaphelyzetbe állíthatja a pipát
+                    ÚjTáblanevek.SetItemChecked(index, true);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        /// <summary>
+        /// A kijelölt táblaneveket kiegészíti újtáblanevekben rögzített értékkel, de a név végére teszi, nem elejére, mint a TáblaNévKieg gomb.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TáblaNévMód_Click(object sender, EventArgs e)
+        {
+            try
+            {     // Ellenőrizzük, hogy van-e kijelölt elem és a szövegmező nem üres-e
+                if (ÚjTáblanevek.SelectedIndex != -1 && !string.IsNullOrWhiteSpace(ÚjTáblaNév.Text))
+                {
+                    int index = ÚjTáblanevek.SelectedIndex;
+
+                    // Megjegyezzük a jelenlegi pipa állapotát (opcionális, ha meg akarod tartani)
+                    bool isChecked = ÚjTáblanevek.GetItemChecked(index);
+
+                    // Az elem frissítése:
+                    ÚjTáblanevek.Items[index] = ÚjTáblaNév.Text.Trim();
+
+                    // Ha be volt pipálva, a csere után újra be kell pipálni
+                    ÚjTáblanevek.SetItemChecked(index, isChecked);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void ÚjTáblanevek_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Ellenőrizzük, hogy valóban van-e kijelölt elem
+            if (ÚjTáblanevek.SelectedIndex != -1)
+            {
+                // A kijelölt elem szövegét a TextBoxba írjuk
+                ÚjTáblaNév.Text = ÚjTáblanevek.SelectedItem.ToString();
+            }
+        }
+        #endregion
+
+
     }
 }
