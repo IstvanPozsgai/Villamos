@@ -48,6 +48,8 @@ namespace Villamos
             this.label2 = new System.Windows.Forms.Label();
             this.txtCélKönyvtár = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.TxtCélTábla = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -55,8 +57,6 @@ namespace Villamos
             this.MintaFájl = new System.Windows.Forms.TextBox();
             this.MintaJelszó = new System.Windows.Forms.TextBox();
             this.MintaKönyvtár = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.TxtCélTábla = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.DvgFájlok)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -112,7 +112,7 @@ namespace Villamos
             this.txtCelFajl.Name = "txtCelFajl";
             this.txtCelFajl.Size = new System.Drawing.Size(387, 22);
             this.txtCelFajl.TabIndex = 3;
-            this.txtCelFajl.Text = "Próba";
+            this.txtCelFajl.Text = "PróbaAdatBázis";
             // 
             // TxtCélJelszó
             // 
@@ -120,7 +120,7 @@ namespace Villamos
             this.TxtCélJelszó.Name = "TxtCélJelszó";
             this.TxtCélJelszó.Size = new System.Drawing.Size(387, 22);
             this.TxtCélJelszó.TabIndex = 4;
-            this.TxtCélJelszó.Text = "Próba";
+            this.TxtCélJelszó.Text = "PróbaJelszó";
             // 
             // btnTallozCel
             // 
@@ -287,6 +287,22 @@ namespace Villamos
             this.tableLayoutPanel1.Size = new System.Drawing.Size(564, 133);
             this.tableLayoutPanel1.TabIndex = 59;
             // 
+            // TxtCélTábla
+            // 
+            this.TxtCélTábla.Location = new System.Drawing.Point(148, 93);
+            this.TxtCélTábla.Name = "TxtCélTábla";
+            this.TxtCélTábla.Size = new System.Drawing.Size(387, 22);
+            this.TxtCélTábla.TabIndex = 59;
+            this.TxtCélTábla.Text = "Próba";
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(3, 90);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(114, 23);
+            this.label5.TabIndex = 58;
+            this.label5.Text = "SQLite táblanév :";
+            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 2;
@@ -351,22 +367,6 @@ namespace Villamos
             this.MintaKönyvtár.Name = "MintaKönyvtár";
             this.MintaKönyvtár.Size = new System.Drawing.Size(387, 22);
             this.MintaKönyvtár.TabIndex = 57;
-            // 
-            // label5
-            // 
-            this.label5.Location = new System.Drawing.Point(3, 90);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(114, 23);
-            this.label5.TabIndex = 58;
-            this.label5.Text = "SQLite táblanév :";
-            // 
-            // TxtCélTábla
-            // 
-            this.TxtCélTábla.Location = new System.Drawing.Point(148, 93);
-            this.TxtCélTábla.Name = "TxtCélTábla";
-            this.TxtCélTábla.Size = new System.Drawing.Size(387, 22);
-            this.TxtCélTábla.TabIndex = 59;
-            this.TxtCélTábla.Text = "Próba";
             // 
             // Ablak_AdatbázisRendezés
             // 
