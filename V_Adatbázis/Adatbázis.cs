@@ -1,8 +1,10 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using DocumentFormat.OpenXml.Office.Word;
+using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Windows.Forms;
 using Villamos;
 
 internal static partial class Adatbázis
@@ -564,6 +566,37 @@ internal static partial class Adatbázis
                 {
                     // Az adapter feltölti a DataTable-t az eredményekkel
                     adapter.Fill(dt);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Továbbdobjuk a hibát, hogy a hívó oldalon (a Form-ban) naplózni lehessen
+                throw new Exception($"Hiba az adatok lekérésekor a(z) {tablaNev} táblából.", ex);
+            }
+        }
+        return dt;
+    }
+
+    public static DataTable SqLite_TáblaLekérése(string hely, string jelszó, string tablaNev)
+    {
+        DataTable dt = new DataTable();
+        string connectionString = BuildConnectionString(hely, jelszó);
+
+        using (var conn = new SqliteConnection(connectionString))
+        {
+            try
+            {
+                conn.Open();
+                // A tábla nevét szögletes zárójelbe tesszük a biztonság kedvéért (pl. szóközök miatt)
+                string query = $"SELECT * FROM [{tablaNev}]";
+
+                using (var cmd = new SqliteCommand(query, conn))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        // A DataTable-t fel kell töltenünk a readerből
+                        dt.Load(reader);
+                    }
                 }
             }
             catch (Exception ex)

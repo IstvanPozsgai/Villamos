@@ -1,6 +1,8 @@
 ﻿using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
@@ -15,7 +17,26 @@ namespace Villamos.Kezelők
 
         public Sql_Kezelő_Működés()
         {
+            if (!File.Exists(hely)) Tábla_Létrehozás();
+        }
 
+        public void Tábla_Létrehozás()
+        {
+            try
+            {
+                //A sqlite adatbázisban a következő táblát hoztuk létre, hogy a mdb fájlok adatait tároljuk:
+                string szöveg = $"CREATE TABLE IF NOT EXISTS {táblanév} (Id INTEGER PRIMARY KEY AUTOINCREMENT, Fájl TEXT, Jelszó TEXT, Tábla TEXT);";
+                MyA.SqLite_TáblaLétrehozás(hely.KönyvSzerk(), jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public List<Sql_Működés> Lista_Adatok()
@@ -76,8 +97,8 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT  INTO {táblanév} (id, Fájl, Jelszó, Tábla) VALUES ";
-                szöveg += @"(@id, @Fájl, @Jelszó, @Tábla)";
+                string szöveg = $"INSERT  INTO {táblanév} ( Fájl, Jelszó, Tábla) VALUES ";
+                szöveg += @"( @Fájl, @Jelszó, @Tábla)";
 
                 SqliteCommand cmd = new SqliteCommand(szöveg);
 
@@ -86,6 +107,37 @@ namespace Villamos.Kezelők
                 cmd.Parameters.AddWithValue("@Jelszó", Adat.Jelszó);
                 cmd.Parameters.AddWithValue("@Tábla", Adat.Tábla);
                 MyA.SqLite_Módosítás(hely, jelszó, cmd);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Döntés(Sql_Működés Adat)
+        {
+            try
+            {
+                List<Sql_Működés> Adatok = Lista_Adatok();
+                Sql_Működés Elem = (from a in Adatok
+                                    where a.Fájl == Adat.Fájl
+                                    && a.Tábla == Adat.Fájl
+                                    select a).FirstOrDefault();
+                if (Elem == null)
+                {
+                    Rögzítés(Adat);
+                }
+                else
+                {
+                    //Nincs értelme a módosításnak, hiszen a fájl és a tábla értékek alapján már létezik egy ilyen rekord, de a jelszó értékét meg akarjuk
+                    //megváltoztatni.
+                    //  Módosítás(Adat);
+                }
             }
             catch (HibásBevittAdat ex)
             {

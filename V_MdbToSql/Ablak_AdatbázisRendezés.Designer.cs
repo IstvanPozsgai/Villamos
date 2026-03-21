@@ -35,12 +35,12 @@ namespace Villamos
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnHozzaad = new System.Windows.Forms.Button();
             this.Btn_Súgó = new System.Windows.Forms.Button();
-            this.BtnCélTallózás = new System.Windows.Forms.Button();
             this.TáblaNévMód = new System.Windows.Forms.Button();
             this.TáblaNévKieg = new System.Windows.Forms.Button();
             this.TáblanevekMásolása = new System.Windows.Forms.Button();
             this.BtnAlaphelyzet = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.BtnFrissít = new System.Windows.Forms.Button();
             this.ChkTáblák = new System.Windows.Forms.CheckedListBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtCélKönyvtár = new System.Windows.Forms.TextBox();
@@ -50,17 +50,15 @@ namespace Villamos
             this.ÚjTáblanevek = new System.Windows.Forms.CheckedListBox();
             this.ÚjTáblaNév = new System.Windows.Forms.TextBox();
             this.LstMezők = new System.Windows.Forms.ListBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SqlTábla = new System.Windows.Forms.DataGridView();
             this.DgvAdatok = new System.Windows.Forms.DataGridView();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.SqlTáblaAdatok = new System.Windows.Forms.DataGridView();
+            this.BtnSqlTáblaLista = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DvgFájlok)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SqlTábla)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DgvAdatok)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SqlTáblaAdatok)).BeginInit();
             this.SuspendLayout();
             // 
             // DvgFájlok
@@ -102,7 +100,6 @@ namespace Villamos
             this.txtCelFajl.Name = "txtCelFajl";
             this.txtCelFajl.Size = new System.Drawing.Size(387, 22);
             this.txtCelFajl.TabIndex = 3;
-            this.txtCelFajl.Text = "PróbaAdatBázis";
             // 
             // TxtCélJelszó
             // 
@@ -110,13 +107,12 @@ namespace Villamos
             this.TxtCélJelszó.Name = "TxtCélJelszó";
             this.TxtCélJelszó.Size = new System.Drawing.Size(387, 22);
             this.TxtCélJelszó.TabIndex = 4;
-            this.TxtCélJelszó.Text = "PróbaJelszó";
             // 
             // BtnIndit
             // 
             this.BtnIndit.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.BtnIndit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnIndit.Location = new System.Drawing.Point(650, 401);
+            this.BtnIndit.Location = new System.Drawing.Point(731, 423);
             this.BtnIndit.Name = "BtnIndit";
             this.BtnIndit.Size = new System.Drawing.Size(45, 45);
             this.BtnIndit.TabIndex = 6;
@@ -162,17 +158,6 @@ namespace Villamos
             this.toolTip1.SetToolTip(this.Btn_Súgó, "Súgó");
             this.Btn_Súgó.UseVisualStyleBackColor = true;
             this.Btn_Súgó.Click += new System.EventHandler(this.Btn_Súgó_Click);
-            // 
-            // BtnCélTallózás
-            // 
-            this.BtnCélTallózás.BackgroundImage = global::Villamos.Properties.Resources.Folder_;
-            this.BtnCélTallózás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnCélTallózás.Location = new System.Drawing.Point(599, 401);
-            this.BtnCélTallózás.Name = "BtnCélTallózás";
-            this.BtnCélTallózás.Size = new System.Drawing.Size(45, 45);
-            this.BtnCélTallózás.TabIndex = 58;
-            this.toolTip1.SetToolTip(this.BtnCélTallózás, "SqLite fájlok tallózása");
-            this.BtnCélTallózás.Click += new System.EventHandler(this.BtnCélTallózás_Click);
             // 
             // TáblaNévMód
             // 
@@ -228,6 +213,17 @@ namespace Villamos
             this.button1.TabIndex = 70;
             this.toolTip1.SetToolTip(this.button1, "mdb fájlok tallózása");
             // 
+            // BtnFrissít
+            // 
+            this.BtnFrissít.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.BtnFrissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnFrissít.Location = new System.Drawing.Point(782, 423);
+            this.BtnFrissít.Name = "BtnFrissít";
+            this.BtnFrissít.Size = new System.Drawing.Size(45, 45);
+            this.BtnFrissít.TabIndex = 74;
+            this.toolTip1.SetToolTip(this.BtnFrissít, "SqLite fájlok tallózása");
+            this.BtnFrissít.Click += new System.EventHandler(this.BtnFrissít_Click);
+            // 
             // ChkTáblák
             // 
             this.ChkTáblák.CheckOnClick = true;
@@ -252,7 +248,6 @@ namespace Villamos
             this.txtCélKönyvtár.Name = "txtCélKönyvtár";
             this.txtCélKönyvtár.Size = new System.Drawing.Size(387, 22);
             this.txtCélKönyvtár.TabIndex = 57;
-            this.txtCélKönyvtár.Text = "Próba";
             // 
             // tableLayoutPanel1
             // 
@@ -283,7 +278,6 @@ namespace Villamos
             this.TxtCélTábla.Name = "TxtCélTábla";
             this.TxtCélTábla.Size = new System.Drawing.Size(387, 22);
             this.TxtCélTábla.TabIndex = 59;
-            this.TxtCélTábla.Text = "Próba";
             // 
             // label5
             // 
@@ -321,39 +315,18 @@ namespace Villamos
             this.LstMezők.Size = new System.Drawing.Size(226, 292);
             this.LstMezők.TabIndex = 68;
             // 
-            // dataGridView1
+            // SqlTábla
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.SqlTábla.AllowUserToAddRows = false;
+            this.SqlTábla.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn3,
-            this.dataGridViewTextBoxColumn4,
-            this.dataGridViewTextBoxColumn5});
-            this.dataGridView1.Location = new System.Drawing.Point(4, 473);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersWidth = 30;
-            this.dataGridView1.Size = new System.Drawing.Size(536, 190);
-            this.dataGridView1.TabIndex = 69;
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.HeaderText = "Könyvtár";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.Width = 200;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            this.dataGridViewTextBoxColumn4.HeaderText = "MDB fájl";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.Width = 150;
-            // 
-            // dataGridViewTextBoxColumn5
-            // 
-            this.dataGridViewTextBoxColumn5.HeaderText = "Jelszó";
-            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            this.dataGridViewTextBoxColumn5.Width = 150;
+            this.SqlTábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.SqlTábla.Location = new System.Drawing.Point(4, 473);
+            this.SqlTábla.Name = "SqlTábla";
+            this.SqlTábla.RowHeadersWidth = 30;
+            this.SqlTábla.Size = new System.Drawing.Size(536, 190);
+            this.SqlTábla.TabIndex = 69;
+            this.SqlTábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SqlTábla_CellClick);
             // 
             // DgvAdatok
             // 
@@ -367,26 +340,39 @@ namespace Villamos
             this.DgvAdatok.Size = new System.Drawing.Size(641, 293);
             this.DgvAdatok.TabIndex = 72;
             // 
-            // dataGridView2
+            // SqlTáblaAdatok
             // 
-            this.dataGridView2.AllowUserToAddRows = false;
-            this.dataGridView2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.SqlTáblaAdatok.AllowUserToAddRows = false;
+            this.SqlTáblaAdatok.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(782, 473);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.RowHeadersWidth = 30;
-            this.dataGridView2.Size = new System.Drawing.Size(822, 190);
-            this.dataGridView2.TabIndex = 73;
+            this.SqlTáblaAdatok.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.SqlTáblaAdatok.Location = new System.Drawing.Point(782, 473);
+            this.SqlTáblaAdatok.Name = "SqlTáblaAdatok";
+            this.SqlTáblaAdatok.RowHeadersWidth = 30;
+            this.SqlTáblaAdatok.Size = new System.Drawing.Size(822, 190);
+            this.SqlTáblaAdatok.TabIndex = 73;
+            // 
+            // BtnSqlTáblaLista
+            // 
+            this.BtnSqlTáblaLista.BackgroundImage = global::Villamos.Properties.Resources.App_spreadsheet;
+            this.BtnSqlTáblaLista.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnSqlTáblaLista.Location = new System.Drawing.Point(833, 422);
+            this.BtnSqlTáblaLista.Name = "BtnSqlTáblaLista";
+            this.BtnSqlTáblaLista.Size = new System.Drawing.Size(45, 45);
+            this.BtnSqlTáblaLista.TabIndex = 75;
+            this.toolTip1.SetToolTip(this.BtnSqlTáblaLista, "A kiválasztott sorban szereplő adatok listázása");
+            this.BtnSqlTáblaLista.Click += new System.EventHandler(this.BtnSqlTáblaLista_Click);
             // 
             // Ablak_AdatbázisRendezés
             // 
             this.ClientSize = new System.Drawing.Size(1616, 671);
-            this.Controls.Add(this.dataGridView2);
+            this.Controls.Add(this.BtnSqlTáblaLista);
+            this.Controls.Add(this.BtnFrissít);
+            this.Controls.Add(this.SqlTáblaAdatok);
             this.Controls.Add(this.DgvAdatok);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.SqlTábla);
             this.Controls.Add(this.LstMezők);
             this.Controls.Add(this.BtnAlaphelyzet);
             this.Controls.Add(this.TáblanevekMásolása);
@@ -395,7 +381,6 @@ namespace Villamos
             this.Controls.Add(this.ÚjTáblaNév);
             this.Controls.Add(this.ÚjTáblanevek);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Controls.Add(this.BtnCélTallózás);
             this.Controls.Add(this.Btn_Súgó);
             this.Controls.Add(this.ChkTáblák);
             this.Controls.Add(this.DvgFájlok);
@@ -409,9 +394,9 @@ namespace Villamos
             ((System.ComponentModel.ISupportInitialize)(this.DvgFájlok)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SqlTábla)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DgvAdatok)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SqlTáblaAdatok)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -424,7 +409,6 @@ namespace Villamos
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private Label label2;
         private TextBox txtCélKönyvtár;
-        private Button BtnCélTallózás;
         private TableLayoutPanel tableLayoutPanel1;
         private TextBox TxtCélTábla;
         private Label label5;
@@ -435,12 +419,11 @@ namespace Villamos
         private Button TáblanevekMásolása;
         private Button BtnAlaphelyzet;
         private ListBox LstMezők;
-        private DataGridView dataGridView1;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private DataGridView SqlTábla;
         private Button button1;
         private DataGridView DgvAdatok;
-        private DataGridView dataGridView2;
+        private DataGridView SqlTáblaAdatok;
+        private Button BtnFrissít;
+        private Button BtnSqlTáblaLista;
     }
 }

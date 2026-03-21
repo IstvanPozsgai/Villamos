@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
+using Villamos.Kezelők;
 using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
 
@@ -16,11 +17,12 @@ namespace Villamos
         string Mdbtábla = "";
         string Mdbkönyvtár = "";
 
+        string SqLitekönyvtár = "";
         string SqLitefájl = "";
         string SqLitejelszó = "";
         string SqLitetábla = "";
 
-
+        Sql_Kezelő_Működés Kéz = new Sql_Kezelő_Működés();
         public Ablak_AdatbázisRendezés()
         {
             InitializeComponent();
@@ -31,11 +33,13 @@ namespace Villamos
         private void Ablak_AdatbázisRendezés_Load(object sender, EventArgs e)
         {
             // kapcsoljuk a gombokat      Program.Postás_Felhasználó.GlobalAdmin;
+
         }
 
         private void Start()
         {
-
+            SqlTáblaFrissítés();
+            txtCélKönyvtár.Text = $@"{Application.StartupPath}\Főmérnökség\SQL\";
         }
 
         private void Btn_Súgó_Click(object sender, EventArgs e)
@@ -191,39 +195,23 @@ namespace Villamos
                 if (string.IsNullOrWhiteSpace(txtCelFajl.Text) || string.IsNullOrWhiteSpace(TxtCélJelszó.Text) || string.IsNullOrWhiteSpace(txtCélKönyvtár.Text))
                     throw new HibásBevittAdat("Add meg a cél adatbázist és jelszót!");
 
-                if (txtCélKönyvtár.Text.Contains(@"\Főmérnökség\SQL\"))
-                    txtCélKönyvtár.Text += txtCélKönyvtár.Text;
-                else
-                    txtCélKönyvtár.Text = $@"{Application.StartupPath}\Főmérnökség\SQL\" + txtCélKönyvtár.Text;
-
                 if (!txtCelFajl.Text.Contains(".db"))
                     txtCelFajl.Text += ".db";
 
                 if (DvgFájlok.SelectedRows.Count < 1) return;
 
-                //List<MdbForrás> lista = new List<MdbForrás>();
-                ////Ha több tábla van kijelölve akkor minden tábláját migráljuk, ha csak egy akkor táblánként migrálunk
-                //foreach (DataGridViewRow row in DvgFájlok.SelectedRows)
-                //{
-                //    if (row.Cells[0].Value == null) continue;
-                //    fájl = $@"{row.Cells[0].Value}\{row.Cells[1].Value}";
-                //    jelszó = row.Cells[2].Value?.ToString() ?? "";
-                //    tábla = ChkTáblák.CheckedItems.Count > 0 ? ChkTáblák.CheckedItems[0].ToString() : "";
-                //    if (!string.IsNullOrWhiteSpace(jelszó)) lista.Add(new MdbForrás { Fájl = fájl, Jelszó = jelszó, Tábla = tábla });
-                //}
                 SqLitefájl = $@"{txtCélKönyvtár.Text.Trim()}\{txtCelFajl.Text.Trim()}".KönyvSzerk();
                 SqLitejelszó = TxtCélJelszó.Text.Trim();
-                if (TxtCélTábla.Text == string.Empty) TxtCélTábla.Text = Mdbtábla; //Ha üresen van akkor meghagyjuk a tábla eredeti nevét.
                 SqLitetábla = TxtCélTábla.Text.Trim();
 
-                S_Működés MdbAdat = new S_Működés { Fájl = $@"{Mdbkönyvtár}\{Mdbfájl}", Jelszó = Mdbjelszó, Tábla = Mdbtábla };
-                S_Működés SqLiteAdat = new S_Működés { Fájl = SqLitefájl, Jelszó = SqLitejelszó, Tábla = SqLitetábla };
+                Sql_Működés MdbAdat = new Sql_Működés { Fájl = $@"{Mdbkönyvtár}\{Mdbfájl}", Jelszó = Mdbjelszó, Tábla = Mdbtábla };
+                Sql_Működés SqLiteAdat = new Sql_Működés { Fájl = SqLitefájl, Jelszó = SqLitejelszó, Tábla = SqLitetábla };
 
 
                 Cursor = Cursors.WaitCursor;
                 MdbToSqliteMigrator.EgyTáblaMigrálása(MdbAdat, SqLiteAdat);
                 Cursor = Cursors.Default;
-                MessageBox.Show("Migráció kész!");
+                MessageBox.Show("A tábla és az adatok másolása megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
@@ -239,65 +227,6 @@ namespace Villamos
 
 
 
-
-        #region Nem használt
-        private void BtnTáblák_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void BtnTorol_Click(object sender, EventArgs e)
-        {
-            foreach (DataGridViewRow row in DvgFájlok.SelectedRows)
-            {
-                DvgFájlok.Rows.Remove(row);
-            }
-        }
-
-        private void btnTallozCel_Click(object sender, EventArgs e)
-        {
-            using (SaveFileDialog sfd = new SaveFileDialog())
-            {
-                sfd.Filter = "SQLite DB (*.db)|*.db";
-
-                if (sfd.ShowDialog() == DialogResult.OK)
-                {
-                    txtCelFajl.Text = sfd.FileName;
-                }
-            }
-        }
-
-
-        #endregion
-
-        private void BtnCélTallózás_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                using (OpenFileDialog ofd = new OpenFileDialog())
-                {
-                    ofd.Filter = "DB fájl (*.db)|*.db";
-                    ofd.Multiselect = true;
-
-                    if (ofd.ShowDialog() == DialogResult.OK)
-                    {
-                        string Könyvtár = System.IO.Path.GetDirectoryName(ofd.FileName);
-                        string Fájlnév = System.IO.Path.GetFileName(ofd.FileName);
-                        txtCélKönyvtár.Text = Könyvtár;
-                        txtCelFajl.Text = Fájlnév;
-                    }
-                }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
 
         #region Mintafájlok
@@ -435,7 +364,10 @@ namespace Villamos
             ÚjTáblanevek.Items.Clear();
             ÚjTáblaNév.Text = "";
         }
+
+
         #endregion
+
 
 
         #region Újtáblanevek
@@ -518,6 +450,160 @@ namespace Villamos
             {
                 // A kijelölt elem szövegét a TextBoxba írjuk
                 ÚjTáblaNév.Text = ÚjTáblanevek.SelectedItem.ToString();
+            }
+        }
+
+
+        #endregion
+
+
+        #region SqlTábla
+        private void BtnFrissít_Click(object sender, EventArgs e)
+        {
+            SqlTáblaFrissítés();
+        }
+
+        private void SqlTáblaFrissítés()
+        {
+            try
+            {
+                //  Lekéred a listát
+                List<Sql_Működés> Adatok = Kéz.Lista_Adatok();
+
+                // 3. Hozzárendeled a DataGridView-hoz
+                SqlTábla.DataSource = null; // Kényszerített frissítéshez néha kell
+                SqlTábla.DataSource = Adatok;
+
+                // --- 1. MINDENT ELREJTÜNK ELŐSZÖR ---
+                foreach (DataGridViewColumn col in SqlTábla.Columns)
+                {
+                    col.Visible = false;
+                }
+                // Könyvtár (ez legyen a leghosszabb, kitöltve a maradék helyet)
+                if (SqlTábla.Columns["Könyvtár"] != null)
+                {
+                    SqlTábla.Columns["Könyvtár"].Visible = true;
+                    SqlTábla.Columns["Könyvtár"].HeaderText = "Mappa elérési útja";
+                    SqlTábla.Columns["Könyvtár"].DisplayIndex = 0; // Első helyen
+                    SqlTábla.Columns["Könyvtár"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                }
+
+                // Fájlnév (fix vagy tartalom szerinti szélesség)
+                if (SqlTábla.Columns["Fájlnév"] != null)
+                {
+                    SqlTábla.Columns["Fájlnév"].Visible = true;
+                    SqlTábla.Columns["Fájlnév"].HeaderText = "Adatbázis fájl";
+                    SqlTábla.Columns["Fájlnév"].DisplayIndex = 1;
+                    SqlTábla.Columns["Fájlnév"].Width = 150;
+                }
+                // Tábla (az osztályodban "Tábla" néven szerepel)
+                if (SqlTábla.Columns["Tábla"] != null)
+                {
+                    SqlTábla.Columns["Tábla"].Visible = true;
+                    SqlTábla.Columns["Tábla"].HeaderText = "Tábla név";
+                    SqlTábla.Columns["Tábla"].Width = 120;
+                    SqlTábla.Columns["Tábla"].DisplayIndex = 2;
+                }
+
+                // Jelszó
+                if (SqlTábla.Columns["Jelszó"] != null)
+                {
+                    SqlTábla.Columns["Jelszó"].Visible = true;
+                    SqlTábla.Columns["Jelszó"].HeaderText = "Jelszó";
+                    SqlTábla.Columns["Jelszó"].Width = 100;
+                    SqlTábla.Columns["Jelszó"].DisplayIndex = 3;
+
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SqlTábla_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (e.RowIndex < 0) return;
+                SqlTábla.Rows[e.RowIndex].Selected = true;
+                SqlTáblaAdatai();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SqlTáblaAdatai()
+        {
+            try
+            {
+                if (SqlTábla.SelectedRows.Count < 1) return;
+
+                txtCélKönyvtár.Text = "";
+                txtCelFajl.Text = "";
+                TxtCélJelszó.Text = "";
+                TxtCélTábla.Text = "";
+
+                SqLitekönyvtár = SqlTábla.SelectedRows[0].Cells[5].Value?.ToString() ?? "";
+                SqLitefájl = SqlTábla.SelectedRows[0].Cells[6].Value?.ToString() ?? "";
+                SqLitejelszó = SqlTábla.SelectedRows[0].Cells[2].Value?.ToString() ?? "";
+                SqLitetábla = SqlTábla.SelectedRows[0].Cells[3].Value?.ToString() ?? "";
+
+                txtCélKönyvtár.Text = SqLitekönyvtár;
+                txtCelFajl.Text = SqLitefájl;
+                TxtCélJelszó.Text = SqLitejelszó;
+                TxtCélTábla.Text = SqLitetábla;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnSqlTáblaLista_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Ellenőrizzük az alapvető adatokat, mielőtt nekifutunk
+                if (string.IsNullOrEmpty(SqLitekönyvtár) || string.IsNullOrEmpty(SqLitefájl) || string.IsNullOrEmpty(SqLitetábla)) return;
+
+                string elérésiÚt = Path.Combine(SqLitekönyvtár, SqLitefájl);
+
+                // Itt hívjuk meg az adatbázis-kezelő osztályodat
+                // Feltételezve, hogy van egy Mdb_TáblaLekérése metódusod, ami DataTable-t ad vissza
+                DataTable dt = MyA.SqLite_TáblaLekérése(elérésiÚt, SqLitejelszó, SqLitetábla);
+
+                if (dt != null)
+                {
+                    SqlTáblaAdatok.DataSource = dt;
+                    SqlTáblaAdatok.AutoGenerateColumns = true; // Automatikusan létrehozza az oszlopokat
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         #endregion

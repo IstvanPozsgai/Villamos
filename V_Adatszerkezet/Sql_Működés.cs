@@ -1,4 +1,6 @@
-﻿namespace Villamos.Adatszerkezet
+﻿using System.IO;
+
+namespace Villamos.Adatszerkezet
 {
     public class Sql_Működés
     {
@@ -7,12 +9,22 @@
         public string Jelszó { get; set; }
         public string Tábla { get; set; }
 
-        public Sql_Működés(int id,string fájl, string jelszó, string tábla)
+        public bool Törölt { get; set; } = false;
+
+        public string Könyvtár => Path.GetDirectoryName(Fájl);
+        public string Fájlnév => Path.GetFileName(Fájl);
+
+        public Sql_Működés(int id, string fájl, string jelszó, string tábla)
         {
-            Id=id;
+            Id = id;
             Fájl = fájl;
             Jelszó = jelszó;
             Tábla = tábla;
+        }
+
+        public Sql_Működés(int id, string fájl, string jelszó, string tábla, bool törölt) : this(id, fájl, jelszó, tábla)
+        {
+            Törölt = törölt;
         }
 
         public Sql_Működés()
@@ -20,12 +32,6 @@
         }
     }
 
-    //A sqlite adatbázisban a következő táblát hoztuk létre, hogy a mdb fájlok adatait tároljuk:
-    //CREATE TABLE "Tbl_Muk" (
-    //"Fájl"	TEXT NOT NULL,
-    //"Jelszó"	TEXT NOT NULL,
-    //"Tábla"	TEXT NOT NULL,
-    //"Id"	INTEGER NOT NULL,
-    //PRIMARY KEY("Id" AUTOINCREMENT)
+
 
 }

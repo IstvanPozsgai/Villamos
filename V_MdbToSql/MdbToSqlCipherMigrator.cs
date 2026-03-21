@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
+using Villamos.Kezelők;
 using MyA = Adatbázis;
 
 namespace Villamos
@@ -14,37 +15,13 @@ namespace Villamos
         static string connStrMdb = null;
         static string connStrSqLite = null;
 
-
-        public static void Migracio(List<S_Működés> forrasok, string celSqliteFajl, string celJelszo)
-        {
-
-
-            connStrSqLite = $"Data Source={celSqliteFajl};Password={celJelszo};";
-            using (SqliteConnection sqlite = new SqliteConnection(connStrSqLite))
-            {
-                sqlite.Open();
-
-                using (var pragmaCmd = new SqliteCommand("PRAGMA synchronous = OFF; PRAGMA journal_mode = WAL; PRAGMA temp_store = MEMORY;", sqlite))
-                {
-                    pragmaCmd.ExecuteNonQuery();
-                }
-
-                foreach (S_Működés forras in forrasok)
-                {
-                    //  EgyTáblaMigrálása(forras, sqlite);
-                }
-
-                sqlite.Close();
-            }
-        }
-
         /// <summary>
         /// A kapott adatok alapján elvégzi a tábla Migrálását mdb - - >sqlite
         /// Feltételezzük, hogy az mdb fájlban lévő tábla létezik
         /// </summary>
         /// <param name="forras"></param>
         /// <param name="sqlite"></param>
-        public static void EgyTáblaMigrálása(S_Működés MdbAdat, S_Működés SqLiteAdat)
+        public static void EgyTáblaMigrálása(Sql_Működés MdbAdat, Sql_Működés SqLiteAdat)
         {
             try
             {
@@ -58,7 +35,7 @@ namespace Villamos
                     using (SqliteConnection sqlite = new SqliteConnection(connStrSqLite))
                     {
                         sqlite.Open();
-                        MásolTábla(mdb, sqlite, MdbAdat.Tábla, SqLiteAdat.Tábla);
+                        MásolTábla(mdb, sqlite, MdbAdat, SqLiteAdat);
 
                         sqlite.Close();
                     }
@@ -77,47 +54,6 @@ namespace Villamos
         }
 
 
-        private static void FeldolgozMdb(S_Működés forras, SqliteConnection sqlite)
-        {
-            connStrMdb = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{forras.Fájl}';Jet OLEDB:Database Password={forras.Jelszó};";
-            using (OleDbConnection mdb = new OleDbConnection(connStrMdb))
-            {
-                //megnyitjuk az Mdb fájlt kiolvassuk a táblaneveket
-                mdb.Open();
-                DataTable schema = mdb.GetSchema("Tables");
-
-                foreach (DataRow row in schema.Rows)
-                {
-                    if (row["TABLE_TYPE"].ToString() != "TABLE") continue;
-                    string tableName = row["TABLE_NAME"].ToString();
-                    string ujTablaNev = tableName;
-                    int i = 2;
-                    while (MyA.TáblaVanSqLite(sqlite, ujTablaNev))
-                    {
-                        ujTablaNev = tableName + "_" + i;
-                        i++;
-                    }
-                    MásolTábla(mdb, sqlite, tableName, ujTablaNev);
-                }
-
-                mdb.Close();
-            }
-        }
-
-
-
-        private static void MasolTabla_(OleDbConnection mdb, SqliteConnection sqlite, string forrasTabla, string celTabla)
-        {
-            using (var adapter = new OleDbDataAdapter($"SELECT * FROM [{forrasTabla}]", mdb))
-            {
-                DataTable dt = new DataTable();
-                adapter.Fill(dt);
-                CreateSqliteTable(sqlite, celTabla, dt);
-                InsertData(sqlite, celTabla, dt);
-            }
-        }
-
-
         /// <summary>
         ///  Mi történik most?
         ///    Szituáció → Eredmény
@@ -129,39 +65,40 @@ namespace Villamos
         /// <param name="sqlite"></param>
         /// <param name="forrasTabla"></param>
         /// <param name="celTabla"></param>
-        private static void MásolTábla(OleDbConnection mdb, SqliteConnection sqlite, string forrasTabla, string celTabla)
+        private static void MásolTábla(OleDbConnection mdb, SqliteConnection sqlite, Sql_Működés Forrás, Sql_Működés Cél)
         {
             try
             {
-                using (var adapter = new OleDbDataAdapter($"SELECT * FROM [{forrasTabla}]", mdb))
+                using (var adapter = new OleDbDataAdapter($"SELECT * FROM [{Forrás.Tábla}]", mdb))
                 {
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
 
                     var mdbSchema = GetDataTableSchema(dt);
 
-                    bool letezik = MyA.TáblaVanSqLite(sqlite, celTabla);
+                    bool letezik = MyA.TáblaVanSqLite(sqlite, Cél.Tábla);
 
                     if (letezik)
                     {
-                        Dictionary<string, string> sqliteSchema = GetSqliteSchema(sqlite, celTabla);
+                        Dictionary<string, string> sqliteSchema = GetSqliteSchema(sqlite, Cél.Tábla);
 
                         if (SchemaEgyezik(sqliteSchema, mdbSchema))
                         {
                             // ---- CSAK HOZZÁFŰZÜNK ----
-                            InsertData(sqlite, celTabla, dt);
+                            InsertData(sqlite, Cél.Tábla, dt);
                             return;
                         }
                         else
                         {
-                            throw new HibásBevittAdat($"A(z) '{celTabla}' SQLite tábla létezik, de az adatszerkezete nem egyezik az MDB '{forrasTabla}' táblával. " +
+                            throw new HibásBevittAdat($"A(z) '{Cél.Tábla}' SQLite tábla létezik, de az adatszerkezete nem egyezik az MDB '{Forrás.Tábla}' táblával. " +
                                    "A migrálás nem történt meg.");
                         }
                     }
 
                     // Ha idáig eljutunk, létre kell hozni a táblát
-                    CreateSqliteTable(sqlite, celTabla, dt);
-                    InsertData(sqlite, celTabla, dt);
+                    CreateSqliteTable(sqlite, Cél, dt);
+                    InsertData(sqlite, Cél.Tábla, dt);
+
                 }
             }
             catch (HibásBevittAdat ex)
@@ -174,6 +111,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         /// <summary>
         /// Struktúra-összehasonlító függvény
@@ -198,6 +136,7 @@ namespace Villamos
             return true;
         }
 
+
         private static Dictionary<string, string> GetSqliteSchema(SqliteConnection sqlite, string tableName)
         {
             var result = new Dictionary<string, string>();
@@ -214,6 +153,7 @@ namespace Villamos
             return result;
         }
 
+
         private static Dictionary<string, string> GetDataTableSchema(DataTable dt)
         {
             var dict = new Dictionary<string, string>();
@@ -225,7 +165,7 @@ namespace Villamos
         }
 
 
-        private static void CreateSqliteTable(SqliteConnection sqlite, string tablaNev, DataTable dt)
+        private static void CreateSqliteTable(SqliteConnection sqlite, Sql_Működés Cél, DataTable dt)
         {
             List<string> oszlopok = new List<string>();
             foreach (DataColumn col in dt.Columns)
@@ -234,12 +174,16 @@ namespace Villamos
                 oszlopok.Add($"[{col.ColumnName}] {tipus}");
             }
 
-            string sql = $"CREATE TABLE [{tablaNev}] ({string.Join(",", oszlopok)});";
+            string sql = $"CREATE TABLE [{Cél.Tábla}] ({string.Join(",", oszlopok)});";
             using (var cmd = new SqliteCommand(sql, sqlite))
             {
                 cmd.ExecuteNonQuery();
             }
+
+            Sql_Kezelő_Működés Kéz = new Sql_Kezelő_Működés();
+            Kéz.Döntés(Cél);
         }
+
 
         private static string ConvertType(Type type)
         {
@@ -250,6 +194,7 @@ namespace Villamos
             if (type == typeof(byte[])) return "BLOB";
             return "TEXT";
         }
+
 
         private static void InsertData(SqliteConnection sqlite, string tablaNev, DataTable dt)
         {
