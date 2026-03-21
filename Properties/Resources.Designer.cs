@@ -133,6 +133,16 @@ namespace Villamos.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Action_arrow_blue_double_down {
+            get {
+                object obj = ResourceManager.GetObject("Action-arrow-blue-double-down", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Action_configure {
             get {
                 object obj = ResourceManager.GetObject("Action-configure", resourceCulture);

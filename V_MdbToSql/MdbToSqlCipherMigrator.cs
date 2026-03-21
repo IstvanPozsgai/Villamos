@@ -15,7 +15,7 @@ namespace Villamos
         static string connStrSqLite = null;
 
 
-        public static void Migracio(List<MdbForrás> forrasok, string celSqliteFajl, string celJelszo)
+        public static void Migracio(List<S_Működés> forrasok, string celSqliteFajl, string celJelszo)
         {
 
 
@@ -29,7 +29,7 @@ namespace Villamos
                     pragmaCmd.ExecuteNonQuery();
                 }
 
-                foreach (MdbForrás forras in forrasok)
+                foreach (S_Működés forras in forrasok)
                 {
                     //  EgyTáblaMigrálása(forras, sqlite);
                 }
@@ -44,7 +44,7 @@ namespace Villamos
         /// </summary>
         /// <param name="forras"></param>
         /// <param name="sqlite"></param>
-        public static void EgyTáblaMigrálása(MdbForrás MdbAdat, MdbForrás SqLiteAdat)
+        public static void EgyTáblaMigrálása(S_Működés MdbAdat, S_Működés SqLiteAdat)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace Villamos
         }
 
 
-        private static void FeldolgozMdb(MdbForrás forras, SqliteConnection sqlite)
+        private static void FeldolgozMdb(S_Működés forras, SqliteConnection sqlite)
         {
             connStrMdb = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{forras.Fájl}';Jet OLEDB:Database Password={forras.Jelszó};";
             using (OleDbConnection mdb = new OleDbConnection(connStrMdb))

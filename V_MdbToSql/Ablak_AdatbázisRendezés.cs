@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
@@ -14,10 +15,10 @@ namespace Villamos
         string Mdbjelszó = "";
         string Mdbtábla = "";
         string Mdbkönyvtár = "";
+
         string SqLitefájl = "";
         string SqLitejelszó = "";
         string SqLitetábla = "";
-        string SqLitekönyvtár = "";
 
 
         public Ablak_AdatbázisRendezés()
@@ -127,7 +128,9 @@ namespace Villamos
         private void ChkTáblák_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (ChkTáblák.SelectedItem == null) return;
+            Mdbtábla = ChkTáblák.SelectedItem.ToString();
             MezőkFeltöltése();
+            AdatokMegjelenítése();
         }
         #endregion
 
@@ -139,10 +142,9 @@ namespace Villamos
             try
             {
                 LstMezők.Items.Clear();
-                if (ChkTáblák.CheckedItems.Count < 1) return;
-                Mdbtábla = ChkTáblák.CheckedItems[0].ToString();
                 if (Mdbkönyvtár == string.Empty || Mdbfájl == string.Empty || Mdbjelszó == string.Empty || Mdbtábla == string.Empty) return;
                 LstMezők.Items.AddRange(MyA.Mdb_ABMezők($@"{Mdbkönyvtár}\{Mdbfájl}", Mdbjelszó, Mdbtábla).ToArray());
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -152,6 +154,32 @@ namespace Villamos
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void AdatokMegjelenítése()
+        {
+            try
+            {
+                // Ellenőrizzük az alapvető adatokat, mielőtt nekifutunk
+                if (string.IsNullOrEmpty(Mdbkönyvtár) || string.IsNullOrEmpty(Mdbfájl) || string.IsNullOrEmpty(Mdbtábla)) return;
+
+                string elérésiÚt = Path.Combine(Mdbkönyvtár, Mdbfájl);
+
+                // Itt hívjuk meg az adatbázis-kezelő osztályodat
+                // Feltételezve, hogy van egy Mdb_TáblaLekérése metódusod, ami DataTable-t ad vissza
+                DataTable dt = MyA.Mdb_TáblaLekérése(elérésiÚt, Mdbjelszó, Mdbtábla);
+
+                if (dt != null)
+                {
+                    DgvAdatok.DataSource = dt;
+                    DgvAdatok.AutoGenerateColumns = true; // Automatikusan létrehozza az oszlopokat
+                }
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show("Nem sikerült betölteni az adatokat: " + ex.Message, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         #endregion
@@ -188,8 +216,8 @@ namespace Villamos
                 if (TxtCélTábla.Text == string.Empty) TxtCélTábla.Text = Mdbtábla; //Ha üresen van akkor meghagyjuk a tábla eredeti nevét.
                 SqLitetábla = TxtCélTábla.Text.Trim();
 
-                MdbForrás MdbAdat = new MdbForrás { Fájl = $@"{Mdbkönyvtár}\{Mdbfájl}", Jelszó = Mdbjelszó, Tábla = Mdbtábla };
-                MdbForrás SqLiteAdat = new MdbForrás { Fájl = SqLitefájl, Jelszó = SqLitejelszó, Tábla = SqLitetábla };
+                S_Működés MdbAdat = new S_Működés { Fájl = $@"{Mdbkönyvtár}\{Mdbfájl}", Jelszó = Mdbjelszó, Tábla = Mdbtábla };
+                S_Működés SqLiteAdat = new S_Működés { Fájl = SqLitefájl, Jelszó = SqLitejelszó, Tábla = SqLitetábla };
 
 
                 Cursor = Cursors.WaitCursor;
@@ -287,10 +315,6 @@ namespace Villamos
                         Mdbkönyvtár = System.IO.Path.GetDirectoryName(ofd.FileName);
                         Mdbfájl = System.IO.Path.GetFileName(ofd.FileName);
                         Mdbjelszó = MyF.GetPassword(ofd.FileName);
-
-                        MintaKönyvtár.Text = Mdbkönyvtár;
-                        MintaFájl.Text = Mdbfájl;
-                        MintaJelszó.Text = Mdbjelszó;
                     }
                 }
             }
@@ -411,11 +435,8 @@ namespace Villamos
             ÚjTáblanevek.Items.Clear();
             ÚjTáblaNév.Text = "";
         }
-
-
-
-
         #endregion
+
 
         #region Újtáblanevek
         /// <summary>

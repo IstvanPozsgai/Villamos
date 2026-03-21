@@ -67,6 +67,26 @@ internal static partial class Adatbázis
         }
     }
 
+    public static void SqLite_Módosítás(string holvan, string ABjelszó, SqliteCommand cmd)
+    {
+        string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
+        try
+        {
+            using (var connection = new SqliteConnection(kapcsolatiszöveg))
+            {
+                connection.Open();
+                // Fontos: a kapott cmd-t hozzárendeljük a nyitott kapcsolathoz
+                cmd.Connection = connection;
+                cmd.ExecuteNonQuery();
+            }
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, $"SqLite Adat módosítás:\n{holvan}", ex.StackTrace, ex.Source, ex.HResult);
+            throw new Exception("Adatbázis rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
+        }
+    }
+
 
 
     /// <summary>
@@ -360,7 +380,7 @@ internal static partial class Adatbázis
             using (var connection = new SqliteConnection(kapcsolatiszöveg))
             {
                 connection.Open();
-                válasz = TáblaVanSqLite(connection,táblanév );
+                válasz = TáblaVanSqLite(connection, táblanév);
             }
         }
         catch (Exception ex)
@@ -370,7 +390,7 @@ internal static partial class Adatbázis
         return válasz;
     }
 
-    public  static bool TáblaVanSqLite(SqliteConnection sqlite, string tablaNev)
+    public static bool TáblaVanSqLite(SqliteConnection sqlite, string tablaNev)
     {
         using (var cmd = new SqliteCommand("SELECT name FROM sqlite_master WHERE type='table' AND name=@nev;", sqlite))
         {
@@ -521,5 +541,39 @@ internal static partial class Adatbázis
         }
         return VálaszAdatok;
     }
+
+
+
+
+    public static DataTable Mdb_TáblaLekérése(string eleresiUt, string jelszo, string tablaNev)
+    {
+        DataTable dt = new DataTable();
+
+        // Kapcsolati karakterlánc (.mdb fájl esetén Jet.OLEDB.4.0, .accdb esetén ACE.OLEDB.12.0 kell)
+        string connectionString = $@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source={eleresiUt};Jet OLEDB:Database Password={jelszo};";
+
+        using (OleDbConnection conn = new OleDbConnection(connectionString))
+        {
+            try
+            {
+                conn.Open();
+                // A tábla nevét szögletes zárójelbe tesszük a biztonság kedvéért (pl. szóközök miatt)
+                string query = $"SELECT * FROM [{tablaNev}]";
+
+                using (OleDbDataAdapter adapter = new OleDbDataAdapter(query, conn))
+                {
+                    // Az adapter feltölti a DataTable-t az eredményekkel
+                    adapter.Fill(dt);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Továbbdobjuk a hibát, hogy a hívó oldalon (a Form-ban) naplózni lehessen
+                throw new Exception($"Hiba az adatok lekérésekor a(z) {tablaNev} táblából.", ex);
+            }
+        }
+        return dt;
+    }
+
 
 }
