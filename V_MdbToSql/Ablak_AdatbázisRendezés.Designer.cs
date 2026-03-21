@@ -41,6 +41,7 @@ namespace Villamos
             this.BtnAlaphelyzet = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.BtnFrissít = new System.Windows.Forms.Button();
+            this.BtnSqlTáblaLista = new System.Windows.Forms.Button();
             this.ChkTáblák = new System.Windows.Forms.CheckedListBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtCélKönyvtár = new System.Windows.Forms.TextBox();
@@ -53,7 +54,6 @@ namespace Villamos
             this.SqlTábla = new System.Windows.Forms.DataGridView();
             this.DgvAdatok = new System.Windows.Forms.DataGridView();
             this.SqlTáblaAdatok = new System.Windows.Forms.DataGridView();
-            this.BtnSqlTáblaLista = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DvgFájlok)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SqlTábla)).BeginInit();
@@ -99,14 +99,14 @@ namespace Villamos
             this.txtCelFajl.Location = new System.Drawing.Point(135, 31);
             this.txtCelFajl.Name = "txtCelFajl";
             this.txtCelFajl.Size = new System.Drawing.Size(387, 22);
-            this.txtCelFajl.TabIndex = 3;
+            this.txtCelFajl.TabIndex = 58;
             // 
             // TxtCélJelszó
             // 
             this.TxtCélJelszó.Location = new System.Drawing.Point(135, 59);
             this.TxtCélJelszó.Name = "TxtCélJelszó";
             this.TxtCélJelszó.Size = new System.Drawing.Size(387, 22);
-            this.TxtCélJelszó.TabIndex = 4;
+            this.TxtCélJelszó.TabIndex = 59;
             // 
             // BtnIndit
             // 
@@ -224,6 +224,17 @@ namespace Villamos
             this.toolTip1.SetToolTip(this.BtnFrissít, "SqLite fájlok tallózása");
             this.BtnFrissít.Click += new System.EventHandler(this.BtnFrissít_Click);
             // 
+            // BtnSqlTáblaLista
+            // 
+            this.BtnSqlTáblaLista.BackgroundImage = global::Villamos.Properties.Resources.App_spreadsheet;
+            this.BtnSqlTáblaLista.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnSqlTáblaLista.Location = new System.Drawing.Point(833, 422);
+            this.BtnSqlTáblaLista.Name = "BtnSqlTáblaLista";
+            this.BtnSqlTáblaLista.Size = new System.Drawing.Size(45, 45);
+            this.BtnSqlTáblaLista.TabIndex = 75;
+            this.toolTip1.SetToolTip(this.BtnSqlTáblaLista, "A kiválasztott sorban szereplő adatok listázása");
+            this.BtnSqlTáblaLista.Click += new System.EventHandler(this.BtnSqlTáblaLista_Click);
+            // 
             // ChkTáblák
             // 
             this.ChkTáblák.CheckOnClick = true;
@@ -277,7 +288,7 @@ namespace Villamos
             this.TxtCélTábla.Location = new System.Drawing.Point(135, 87);
             this.TxtCélTábla.Name = "TxtCélTábla";
             this.TxtCélTábla.Size = new System.Drawing.Size(387, 22);
-            this.TxtCélTábla.TabIndex = 59;
+            this.TxtCélTábla.TabIndex = 60;
             // 
             // label5
             // 
@@ -352,17 +363,6 @@ namespace Villamos
             this.SqlTáblaAdatok.RowHeadersWidth = 30;
             this.SqlTáblaAdatok.Size = new System.Drawing.Size(822, 190);
             this.SqlTáblaAdatok.TabIndex = 73;
-            // 
-            // BtnSqlTáblaLista
-            // 
-            this.BtnSqlTáblaLista.BackgroundImage = global::Villamos.Properties.Resources.App_spreadsheet;
-            this.BtnSqlTáblaLista.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSqlTáblaLista.Location = new System.Drawing.Point(833, 422);
-            this.BtnSqlTáblaLista.Name = "BtnSqlTáblaLista";
-            this.BtnSqlTáblaLista.Size = new System.Drawing.Size(45, 45);
-            this.BtnSqlTáblaLista.TabIndex = 75;
-            this.toolTip1.SetToolTip(this.BtnSqlTáblaLista, "A kiválasztott sorban szereplő adatok listázása");
-            this.BtnSqlTáblaLista.Click += new System.EventHandler(this.BtnSqlTáblaLista_Click);
             // 
             // Ablak_AdatbázisRendezés
             // 

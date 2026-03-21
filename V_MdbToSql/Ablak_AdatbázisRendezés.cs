@@ -40,6 +40,7 @@ namespace Villamos
         {
             SqlTáblaFrissítés();
             txtCélKönyvtár.Text = $@"{Application.StartupPath}\Főmérnökség\SQL\";
+            TxtCélTábla.Text = "Tbl_";
         }
 
         private void Btn_Súgó_Click(object sender, EventArgs e)
@@ -211,6 +212,7 @@ namespace Villamos
                 Cursor = Cursors.WaitCursor;
                 MdbToSqliteMigrator.EgyTáblaMigrálása(MdbAdat, SqLiteAdat);
                 Cursor = Cursors.Default;
+                SqlTáblaFrissítés();
                 MessageBox.Show("A tábla és az adatok másolása megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)

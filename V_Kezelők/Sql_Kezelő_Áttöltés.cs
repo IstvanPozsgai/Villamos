@@ -18,6 +18,7 @@ namespace Villamos.Kezelők
         public Sql_Kezelő_Átöltés()
         {
             if (!File.Exists(hely)) Tábla_Létrehozás();
+            if(!MyA.SqLite_ABvanTábla(hely,jelszó,táblanév )) Tábla_Létrehozás();
         }
 
         public void Tábla_Létrehozás()

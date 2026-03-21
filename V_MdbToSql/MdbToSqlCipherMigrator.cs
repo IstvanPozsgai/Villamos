@@ -98,7 +98,8 @@ namespace Villamos
                     // Ha idáig eljutunk, létre kell hozni a táblát
                     CreateSqliteTable(sqlite, Cél, dt);
                     InsertData(sqlite, Cél.Tábla, dt);
-
+                    Sql_Kezelő_Átöltés Kéz = new Sql_Kezelő_Átöltés();
+                    Kéz.Rögzítés(Forrás);
                 }
             }
             catch (HibásBevittAdat ex)
