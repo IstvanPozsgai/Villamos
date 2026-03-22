@@ -93,15 +93,28 @@ namespace Villamos
                         }
                         else
                         {
-                            throw new HibásBevittAdat($"A(z) '{Cél.Tábla}' SQLite tábla létezik, de az adatszerkezete nem egyezik az MDB '{Forrás.Tábla}' táblával. " +
-                                   "A migrálás nem történt meg.");
+
+                            DialogResult válasz = MessageBox.Show(
+                                $@"A(z) '{Cél.Tábla}' SQLite tábla létezik, de az adatszerkezete nem egyezik az MDB '{Forrás.Tábla}' táblával.\n Kényszerítjük az adatok betöltését? ",
+                                "A migrálás kérdéses sikerű.", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                            if (válasz == DialogResult.Yes)
+                            {
+                                InsertData(sqlite, Cél.Tábla, dt);
+                                Kéz.Rögzítés(Forrás);
+                                MessageBox.Show("A tábla és az adatok másolása megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                return;
+                            }
+                            else
+                            {
+                                MessageBox.Show("A migrálás megszakítva.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                return;
+                            }
                         }
                     }
 
                     // Ha idáig eljutunk, létre kell hozni a táblát
                     CreateSqliteTable(sqlite, Cél, dt);
                     InsertData(sqlite, Cél.Tábla, dt);
-
                     Kéz.Rögzítés(Forrás);
                     MessageBox.Show("A tábla és az adatok másolása megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -164,7 +177,7 @@ namespace Villamos
             var dict = new Dictionary<string, string>();
             foreach (DataColumn col in dt.Columns)
             {
-                dict[col.ColumnName.ToString().ToUpper()] = ConvertType(col.DataType).ToString ().ToUpper();
+                dict[col.ColumnName.ToString().ToUpper()] = ConvertType(col.DataType).ToString().ToUpper();
             }
             return dict;
         }
@@ -192,12 +205,27 @@ namespace Villamos
 
         private static string ConvertType(Type type)
         {
-            if (type == typeof(string)) return "TEXT";
-            if (type == typeof(int) || type == typeof(long) || type == typeof(bool)) return "INTEGER";
-            if (type == typeof(double) || type == typeof(decimal)) return "REAL";
-            if (type == typeof(DateTime)) return "TEXT";
-            if (type == typeof(byte[])) return "BLOB";
-            return "TEXT";
+            try
+            {
+                if (type == typeof(string)) return "TEXT";
+                if (type == typeof(int) || type == typeof(long) || type == typeof(bool)) return "INTEGER";
+                if (type == typeof(double) || type == typeof(decimal)) return "REAL";
+                if (type == typeof(DateTime)) return "TEXT";
+                if (type == typeof(byte[])) return "BLOB";
+                if (type.Name == "Int16") return "INTEGER";
+
+                throw new HibásBevittAdat($"A {type.Name} nincs még beazonosítva, hogy mire legyen konvertálva.");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "ConvertType", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return "HIBA";
         }
 
 

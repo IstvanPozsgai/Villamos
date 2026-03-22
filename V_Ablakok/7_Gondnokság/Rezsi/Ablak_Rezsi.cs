@@ -20,6 +20,7 @@ namespace Villamos
         readonly Kezelő_Rezsi_Könyvelés KézRezsi = new Kezelő_Rezsi_Könyvelés();
         readonly Kezelő_Rezsi_Törzs KézTörzs = new Kezelő_Rezsi_Törzs();
         readonly Kezelő_Rezsi_Hely KézHely = new Kezelő_Rezsi_Hely();
+        //  readonly SQL_Kezelő_Rezsi_Napló KézNapló = new SQL_Kezelő_Rezsi_Napló();
         readonly Kezelő_Rezsi_Napló KézNapló = new Kezelő_Rezsi_Napló();
 
         List<Adat_Rezsi_Törzs> AdatokTörzs = new List<Adat_Rezsi_Törzs>();
