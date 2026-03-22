@@ -3,31 +3,37 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Controls.Primitives;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
-    public class SQL_Kezelő_Rezsi_Napló
+    public class SQL_Kezelő_Rezsi_Napló : IKezelőAlap<Adat_Rezsi_Listanapló>
     {
-        readonly string jelszó = "CsavarHúzó";
-        readonly string táblanév = "Tbl_Rezsi_Napló";
         string hely;
 
-        private void FájlBeállítás(string Telephely, int Év)
+        public string Jelszó { get; } = "CsavarHúzó";
+
+        public string Táblanév { get; } = "Tbl_Rezsi_Napló";
+
+        public string Hely { get; set; }
+
+        public void FájlBeállítás(string Telephely, int Év)
         {
             hely = $@"{Application.StartupPath}\Főmérnökség\SQL\Rezsi\{Telephely}\Rezsinapló{Év}.db";
             if (!File.Exists(hely.KönyvSzerk())) Tábla_Létrehozás();
+            Hely = hely;
         }
 
-        private void Tábla_Létrehozás()
+        public void Tábla_Létrehozás()
         {
             try
             {
                 //A sqlite adatbázisban a következő táblát hoztuk létre
                 //
-                string szöveg = $@"CREATE TABLE {táblanév} (
+                string szöveg = $@"CREATE TABLE {Táblanév} (
                                 Azonosító TEXT,
                             	Honnan TEXT,
                             	Hova  TEXT,
@@ -36,7 +42,7 @@ namespace Villamos.Kezelők
                             	Módosította   TEXT,
                             	Módosításidátum   TEXT,
                             	Státus    INTEGER);";
-                MyA.SqLite_TáblaLétrehozás(hely.KönyvSzerk(), jelszó, szöveg);
+                MyA.SqLite_TáblaLétrehozás(hely.KönyvSzerk(), Jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
             {
@@ -55,7 +61,7 @@ namespace Villamos.Kezelők
             List<Adat_Rezsi_Listanapló> Adatok = new List<Adat_Rezsi_Listanapló>();
             try
             {
-                Adatok = MyA.Lista_Adatok(hely, jelszó, táblanév, rekord => new Adat_Rezsi_Listanapló(
+                Adatok = MyA.Lista_Adatok(hely, Jelszó, Táblanév, rekord => new Adat_Rezsi_Listanapló(
                          rekord["Azonosító"].ToStrTrim(),
                          rekord["Honnan"].ToStrTrim(),
                          rekord["Hova"].ToStrTrim(),
@@ -83,21 +89,23 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely, Év);
-                string szöveg = $"INSERT INTO {táblanév} (Azonosító, honnan, hova, mennyiség, státus, módosította, mirehasznál, módosításidátum) VALUES ";
+                string szöveg = $"INSERT INTO {Táblanév} (Azonosító, honnan, hova, mennyiség, státus, módosította, mirehasznál, módosításidátum) VALUES ";
                 szöveg += $@"(@Azonosító, @honnan, @hova, @mennyiség, @státus, @módosította, @mirehasznál, @módosításidátum)";
 
-                SqliteCommand cmd = new SqliteCommand(szöveg);
+                string oszlopok = string.Join(", ", tulajdonsagok.Select(p => p.Name));
+                // Pl: @Azonosító, @Honnan, @Hova...
+                string parameterek = string.Join(", ", tulajdonsagok.Select(p => "@" + p.Name));
 
-                cmd.Parameters.AddWithValue("@Azonosító", Adat.Azonosító);
-                cmd.Parameters.AddWithValue("@honnan", Adat.Honnan);
-                cmd.Parameters.AddWithValue("@hova", Adat.Hova);
-                cmd.Parameters.AddWithValue("@mennyiség", Adat.Mennyiség);
-                cmd.Parameters.AddWithValue("@státus", Adat.Státus);
-                cmd.Parameters.AddWithValue("@módosította", Adat.Módosította);
-                cmd.Parameters.AddWithValue("@mirehasznál", Adat.Mirehasznál);
-                cmd.Parameters.AddWithValue("@módosításidátum", Adat.Módosításidátum);
+                string sql = $"INSERT INTO {Táblanév} ({oszlopok}) VALUES ({parameterek});";
 
-                MyA.SqLite_Módosítás(hely, jelszó, cmd);
+
+                using (SqliteCommand cmd = new SqliteCommand(szöveg))
+                {
+                    // EGYETLEN SOR az összes paraméter helyett:
+                    Kisegítő. ParaméterekHozzáadása(cmd, Adat);
+
+                    MyA.SqLite_Módosítás(hely, Jelszó, cmd);
+                }
             }
             catch (HibásBevittAdat ex)
             {

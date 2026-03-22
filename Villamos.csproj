@@ -150,6 +150,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="SqL_Kezelők\IKezelő.cs" />
+    <Compile Include="SqL_Kezelők\Kisegítő.cs" />
     <Compile Include="SqL_Kezelők\Rezsi\SQL_Kezelő_Rezsi_Hely.cs" />
     <Compile Include="SqL_Kezelők\Rezsi\SQL_Kezelő_Rezsi_Könyvelés.cs" />
     <Compile Include="SqL_Kezelők\Rezsi\SQL_Kezelő_Rezsi_Törzs.cs" />
