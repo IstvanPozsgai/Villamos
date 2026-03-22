@@ -9,16 +9,16 @@ using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
-    public class Sql_Kezelő_Átöltés
+    public class Sql_Kezelő_Áttöltés
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\SQL\MűködésiTáblák.db";
         readonly string jelszó = "VivaTv";
         readonly string táblanév = "Tbl_MdbKész";
 
-        public Sql_Kezelő_Átöltés()
+        public Sql_Kezelő_Áttöltés()
         {
             if (!File.Exists(hely)) Tábla_Létrehozás();
-            if(!MyA.SqLite_ABvanTábla(hely,jelszó,táblanév )) Tábla_Létrehozás();
+            if (!MyA.SqLite_ABvanTábla(hely, jelszó, táblanév)) Tábla_Létrehozás();
         }
 
         public void Tábla_Létrehozás()

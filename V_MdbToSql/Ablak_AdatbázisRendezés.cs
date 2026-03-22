@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
@@ -23,6 +25,10 @@ namespace Villamos
         string SqLitetábla = "";
 
         readonly Sql_Kezelő_Működés Kéz = new Sql_Kezelő_Működés();
+        readonly Sql_Kezelő_Áttöltés KézFile = new Sql_Kezelő_Áttöltés();
+        List<Sql_Működés> FileLista = new List<Sql_Működés>();
+
+
         public Ablak_AdatbázisRendezés()
         {
             InitializeComponent();
@@ -41,6 +47,7 @@ namespace Villamos
             SqlTáblaFrissítés();
             txtCélKönyvtár.Text = $@"{Application.StartupPath}\Főmérnökség\SQL\";
             TxtCélTábla.Text = "Tbl_";
+            FileLista = KézFile.Lista_Adatok();
         }
 
         private void Btn_Súgó_Click(object sender, EventArgs e)
@@ -79,7 +86,20 @@ namespace Villamos
                         {
                             string Könyvtár = System.IO.Path.GetDirectoryName(file);
                             string Fájlnév = System.IO.Path.GetFileName(file);
-                            DvgFájlok.Rows.Add(Könyvtár, Fájlnév, MyF.GetPassword(file));
+                            string jelszo = MyF.GetPassword(file);
+
+                            // 1. Sor hozzáadása és az index eltárolása
+                            int rowIndex = DvgFájlok.Rows.Add(Könyvtár, Fájlnév, jelszo);
+
+                            // 2. Ellenőrzés: benne van-e a FileLista-ban?
+
+                            bool marLetezik = FileLista.Any(x => x.Fájl == file);
+
+                            if (marLetezik)
+                            {
+                                // 3. Színezés (pl. világospiros vagy sárga)
+                                DvgFájlok.Rows[rowIndex].DefaultCellStyle.BackColor = Color.LightCoral;
+                            }
                         }
                     }
                 }
@@ -111,6 +131,9 @@ namespace Villamos
             {
                 ChkTáblák.Items.Clear();
                 LstMezők.Items.Clear();
+                DgvAdatok.DataSource = null; // Kapcsolat bontása az adatforrással
+                DgvAdatok.Rows.Clear();
+                DgvAdatok.Columns.Clear();
                 if (DvgFájlok.SelectedRows.Count < 1) return;
 
                 Mdbkönyvtár = DvgFájlok.SelectedRows[0].Cells[0].Value?.ToString() ?? "";
@@ -263,6 +286,16 @@ namespace Villamos
             DvgFájlok.Rows.Clear();
             ChkTáblák.Items.Clear();
             LstMezők.Items.Clear();
+            DgvAdatok.DataSource = null; // Kapcsolat bontása az adatforrással
+            DgvAdatok.Rows.Clear();
+            DgvAdatok.Columns.Clear();
+            SqlTábla.DataSource = null;
+            SqlTábla.Rows.Clear();
+            SqlTábla.Columns.Clear();
+
+            SqlTáblaAdatok.DataSource = null;
+            SqlTáblaAdatok.Rows.Clear();
+            SqlTáblaAdatok.Columns.Clear();
         }
 
 
