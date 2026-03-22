@@ -11,17 +11,17 @@ namespace Villamos.Kezelők
 {
     public class SQL_Kezelő_Rezsi_Napló
     {
-        readonly string jelszó = "CsavarHúzó";
-        readonly string táblanév = "Tbl_Rezsi_Napló";
-        string hely;
+        readonly public string jelszó = "CsavarHúzó";
+        readonly public string táblanév = "Tbl_Rezsi_Napló";
+        public string hely;
 
-        private void FájlBeállítás(string Telephely, int Év)
+        public void FájlBeállítás(string Telephely, int Év)
         {
             hely = $@"{Application.StartupPath}\Főmérnökség\SQL\Rezsi\{Telephely}\Rezsinapló{Év}.db";
-            if (!File.Exists(hely.KönyvSzerk())) Tábla();
+            if (!File.Exists(hely.KönyvSzerk())) Tábla_Létrehozás();
         }
 
-        private void Tábla()
+        private void Tábla_Létrehozás()
         {
             try
             {
@@ -109,52 +109,5 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        // JAVÍTANDÓ:
-        public void Nagybetűs(string Telephely, int Év)
-        {
-            try
-            {
-                FájlBeállítás(Telephely, Év);
-                List<Adat_Rezsi_Listanapló> Adatok = Lista_Adatok(Telephely, Év);
-                foreach (Adat_Rezsi_Listanapló rekord in Adatok)
-                {
-                    if (rekord.Azonosító != rekord.Azonosító.ToUpper())
-                    {
-                        Adat_Rezsi_Listanapló Adat = new Adat_Rezsi_Listanapló(
-                                                rekord.Azonosító.ToUpper(),
-                                                rekord.Honnan,
-                                                rekord.Hova,
-                                                rekord.Mennyiség,
-                                                rekord.Mirehasznál == null || rekord.Mirehasznál == "" ? "_" : rekord.Mirehasznál,
-                                                rekord.Módosította,
-                                                rekord.Módosításidátum,
-                                                rekord.Státus);
-                        Rögzítés(Telephely, Év, Adat);
-                    }
-                }
-
-                List<string> Lista = Adatok.Select(a => a.Azonosító).Distinct().ToList();
-                foreach (string rekord in Lista)
-                {
-                    if (rekord != rekord.ToUpper())
-                    {
-                        string szöveg = $"DELETE FROM {táblanév} WHERE Azonosító='{rekord}'";
-                        MyA.ABtörlés(hely, jelszó, szöveg);
-                    }
-                }
-
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
     }
 }

@@ -4,6 +4,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
@@ -48,6 +49,9 @@ namespace Villamos
             txtCélKönyvtár.Text = $@"{Application.StartupPath}\Főmérnökség\SQL\";
             TxtCélTábla.Text = "Tbl_";
             FileLista = KézFile.Lista_Adatok();
+
+            GetKezeloOsztalyok();
+            Telephelyekfeltöltése();
         }
 
         private void Btn_Súgó_Click(object sender, EventArgs e)
@@ -75,6 +79,8 @@ namespace Villamos
         {
             try
             {
+                FileLista = KézFile.Lista_Adatok();
+                DvgFájlok.Rows.Clear();
                 using (OpenFileDialog ofd = new OpenFileDialog())
                 {
                     ofd.Filter = "MDB fájl (*.mdb)|*.mdb";
@@ -405,26 +411,29 @@ namespace Villamos
             }
         }
 
+        private void SqlAdatokMezőbeírása()
+        {
+            txtCélKönyvtár.Text = "";
+            txtCelFajl.Text = "";
+            TxtCélJelszó.Text = "";
+            TxtCélTábla.Text = "";
+
+            txtCélKönyvtár.Text = SqLitekönyvtár;
+            txtCelFajl.Text = SqLitefájl;
+            TxtCélJelszó.Text = SqLitejelszó;
+            TxtCélTábla.Text = SqLitetábla;
+        }
+
         private void SqlTáblaAdatai()
         {
             try
             {
                 if (SqlTábla.SelectedRows.Count < 1) return;
-
-                txtCélKönyvtár.Text = "";
-                txtCelFajl.Text = "";
-                TxtCélJelszó.Text = "";
-                TxtCélTábla.Text = "";
-
                 SqLitekönyvtár = SqlTábla.SelectedRows[0].Cells[5].Value?.ToString() ?? "";
                 SqLitefájl = SqlTábla.SelectedRows[0].Cells[6].Value?.ToString() ?? "";
                 SqLitejelszó = SqlTábla.SelectedRows[0].Cells[2].Value?.ToString() ?? "";
                 SqLitetábla = SqlTábla.SelectedRows[0].Cells[3].Value?.ToString() ?? "";
-
-                txtCélKönyvtár.Text = SqLitekönyvtár;
-                txtCelFajl.Text = SqLitefájl;
-                TxtCélJelszó.Text = SqLitejelszó;
-                TxtCélTábla.Text = SqLitetábla;
+                SqlAdatokMezőbeírása();
             }
             catch (HibásBevittAdat ex)
             {
@@ -470,5 +479,158 @@ namespace Villamos
         #endregion
 
 
+        #region Osztálykezelés
+        public void GetKezeloOsztalyok()
+        {
+            string nevter = "Villamos.Kezelők";
+
+            // Lekérjük az aktuális futó programban lévő összes típust
+            List<string> tipusok = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => t.IsClass && t.Namespace == nevter && t.Name.StartsWith("SQL_Kezelő")) // Csak azokat gyűjtsd ki, amik "SQL_Kezelő"-vel kezdődnek
+                .Select(t => t.Name) // Csak a nevük kell
+               .OrderBy(t => t)
+                .ToList();
+            foreach (string tipus in tipusok)
+            {
+                CmbOsztályok.Items.Add(tipus);
+            }
+
+        }
+
+        public void MetodusokListazasa(string osztalyNev)
+        {
+            List<string> metodusLista = new List<string>();
+
+            // Teljes név a névtérrel
+            string teljesNev = "Villamos.Kezelők." + osztalyNev;
+            Type tipus = Type.GetType(teljesNev);
+
+            if (tipus != null)
+            {
+                // Csak a saját (nem örökölt) és publikus metódusokat kérjük le
+                var metodusok = tipus.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+
+                foreach (var m in metodusok)
+                {
+                    // Paraméterek összegyűjtése (típus és név)
+                    var parancs = m.GetParameters();
+                    string paramString = string.Join(", ", parancs.Select(p => $"{p.ParameterType.Name} {p.Name}"));
+
+                    metodusLista.Add($"{m.Name}({paramString})");
+                }
+            }
+            foreach (string metodus in metodusLista)
+            {
+                CmbMetódusok.Items.Add(metodus);
+            }
+
+        }
+
+        private void CmbOsztályok_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            CmbMetódusok.Items.Clear();
+            CmbOsztályok.Text = CmbOsztályok.Items[CmbOsztályok.SelectedIndex].ToStrTrim();
+            MetodusokListazasa(CmbOsztályok.Text);
+        }
+
+        private void CmbMetódusok_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            CmbMetódusok.Text = CmbMetódusok.Items[CmbMetódusok.SelectedIndex].ToStrTrim();
+            TxtMetódus.Text = CmbMetódusok.Text.Split('(')[0]; // Csak a metódus neve, paraméterek nélkül
+        }
+
+        private void Telephelyekfeltöltése()
+        {
+            try
+            {
+                Cmbtelephely.Items.Clear();
+                Cmbtelephely.Items.Add("");
+                foreach (string Elem in Listák.TelephelyLista_Személy(true))
+                    Cmbtelephely.Items.Add(Elem);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
+        }
+
+        private void BtnAdatbázis_Click(object sender, EventArgs e)
+        {
+            object[] paraméterek = new object[2];
+
+            if (CmbMetódusok.Text.Contains("Telephely")) paraméterek[0] = Cmbtelephely.Text.Trim();
+            if (CmbMetódusok.Text.Contains("Év")) paraméterek[1] = Évek.Value.ToÉrt_Int();
+
+            DinamikusMetódusHívás(CmbOsztályok.Text.Trim(), TxtMetódus.Text.Trim(), paraméterek);
+        }
+
+        public void DinamikusMetódusHívás(string osztályNév, string metódusNév, object[] paraméterek)
+        {
+            try
+            {
+                // 1. Osztály megkeresése (Namespace-szel együtt!)
+                string teljesNév = $"Villamos.Kezelők.{osztályNév}";
+                Type típus = Type.GetType(teljesNév);
+
+                if (típus == null) return; // Ha nincs ilyen osztály, csendben kilépünk
+
+                // 2. Példányosítás
+                object példány = Activator.CreateInstance(típus);
+
+                // 3. Metódus megkeresése név alapján
+                MethodInfo metódus = típus.GetMethod(metódusNév);
+
+                if (metódus != null)
+                {
+                    // 4. Ellenőrizzük, hogy a paraméterek száma egyezik-e
+                    var vártParaméterek = metódus.GetParameters();
+                    if (vártParaméterek.Length == paraméterek.Length)
+                    {
+                        metódus.Invoke(példány, paraméterek);
+
+                        // Feltételezve, hogy a 'példány' az Activator.CreateInstance-szel készült objektum
+
+                        FieldInfo FájlHelye = példány.GetType().GetField("hely", BindingFlags.Public | BindingFlags.Instance);
+                        FieldInfo FájlJelszó = példány.GetType().GetField("jelszó", BindingFlags.Public | BindingFlags.Instance);
+                        FieldInfo Fájltábla = példány.GetType().GetField("táblanév", BindingFlags.Public | BindingFlags.Instance);
+                        string elérésiÚt = "";
+                        if (FájlHelye != null)
+                        {
+                            elérésiÚt = FájlHelye.GetValue(példány)?.ToString();
+                            SqLitekönyvtár = System.IO.Path.GetDirectoryName(elérésiÚt);
+                            SqLitefájl = System.IO.Path.GetFileName(elérésiÚt);
+                        }
+                        TxtHely.Text = elérésiÚt;
+                        if (FájlJelszó != null) SqLitejelszó = FájlJelszó.GetValue(példány)?.ToString();
+                        if (Fájltábla != null) SqLitetábla = Fájltábla.GetValue(példány)?.ToString();
+                        SqlAdatokMezőbeírása();
+                        Sql_Működés SqLiteAdat = new Sql_Működés { Fájl = elérésiÚt, Jelszó = SqLitejelszó, Tábla = SqLitetábla };
+                        Kéz.Döntés(SqLiteAdat);
+                        SqlTáblaFrissítés();
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+        #endregion
     }
 }

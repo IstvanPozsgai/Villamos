@@ -1074,7 +1074,7 @@
     <Compile Include="V_Kezelők\Kezelő_Nosztalgia_Állomány.cs" />
     <Compile Include="V_Kezelők\Kezelő_Belépés_Oldalok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Raktár.cs" />
-    <Compile Include="SqL_Kezelők\Sql_Kezelő_Rezsi_Napló.cs" />
+    <Compile Include="SqL_Kezelők\SQL_Kezelő_Rezsi_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szatube_Aft.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szatube_Beteg.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szatube_Csúsztatás.cs" />
