@@ -35,11 +35,7 @@ namespace Villamos
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnHozzaad = new System.Windows.Forms.Button();
             this.Btn_Súgó = new System.Windows.Forms.Button();
-            this.TáblaNévMód = new System.Windows.Forms.Button();
-            this.TáblaNévKieg = new System.Windows.Forms.Button();
-            this.TáblanevekMásolása = new System.Windows.Forms.Button();
             this.BtnAlaphelyzet = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.BtnFrissít = new System.Windows.Forms.Button();
             this.BtnSqlTáblaLista = new System.Windows.Forms.Button();
             this.ChkTáblák = new System.Windows.Forms.CheckedListBox();
@@ -48,8 +44,6 @@ namespace Villamos
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.TxtCélTábla = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.ÚjTáblanevek = new System.Windows.Forms.CheckedListBox();
-            this.ÚjTáblaNév = new System.Windows.Forms.TextBox();
             this.LstMezők = new System.Windows.Forms.ListBox();
             this.SqlTábla = new System.Windows.Forms.DataGridView();
             this.DgvAdatok = new System.Windows.Forms.DataGridView();
@@ -112,7 +106,7 @@ namespace Villamos
             // 
             this.BtnIndit.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.BtnIndit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnIndit.Location = new System.Drawing.Point(731, 423);
+            this.BtnIndit.Location = new System.Drawing.Point(618, 473);
             this.BtnIndit.Name = "BtnIndit";
             this.BtnIndit.Size = new System.Drawing.Size(45, 45);
             this.BtnIndit.TabIndex = 6;
@@ -159,39 +153,6 @@ namespace Villamos
             this.Btn_Súgó.UseVisualStyleBackColor = true;
             this.Btn_Súgó.Click += new System.EventHandler(this.Btn_Súgó_Click);
             // 
-            // TáblaNévMód
-            // 
-            this.TáblaNévMód.BackgroundImage = global::Villamos.Properties.Resources.Document_write;
-            this.TáblaNévMód.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.TáblaNévMód.Location = new System.Drawing.Point(731, 473);
-            this.TáblaNévMód.Name = "TáblaNévMód";
-            this.TáblaNévMód.Size = new System.Drawing.Size(45, 45);
-            this.TáblaNévMód.TabIndex = 64;
-            this.toolTip1.SetToolTip(this.TáblaNévMód, "Táblanév módosítása ki kell jelölni a listában majd átírni.");
-            this.TáblaNévMód.Click += new System.EventHandler(this.TáblaNévMód_Click);
-            // 
-            // TáblaNévKieg
-            // 
-            this.TáblaNévKieg.BackgroundImage = global::Villamos.Properties.Resources.comment_edit;
-            this.TáblaNévKieg.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.TáblaNévKieg.Location = new System.Drawing.Point(731, 524);
-            this.TáblaNévKieg.Name = "TáblaNévKieg";
-            this.TáblaNévKieg.Size = new System.Drawing.Size(45, 45);
-            this.TáblaNévKieg.TabIndex = 65;
-            this.toolTip1.SetToolTip(this.TáblaNévKieg, "Táblanév kiegészítése");
-            this.TáblaNévKieg.Click += new System.EventHandler(this.TáblaNévKieg_Click);
-            // 
-            // TáblanevekMásolása
-            // 
-            this.TáblanevekMásolása.BackgroundImage = global::Villamos.Properties.Resources.Action_arrow_blue_double_down;
-            this.TáblanevekMásolása.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.TáblanevekMásolása.Location = new System.Drawing.Point(680, 354);
-            this.TáblanevekMásolása.Name = "TáblanevekMásolása";
-            this.TáblanevekMásolása.Size = new System.Drawing.Size(45, 45);
-            this.TáblanevekMásolása.TabIndex = 66;
-            this.toolTip1.SetToolTip(this.TáblanevekMásolása, "A kijelölt táblanévek másolása");
-            this.TáblanevekMásolása.Click += new System.EventHandler(this.TáblanevekMásolása_Click);
-            // 
             // BtnAlaphelyzet
             // 
             this.BtnAlaphelyzet.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
@@ -203,21 +164,11 @@ namespace Villamos
             this.toolTip1.SetToolTip(this.BtnAlaphelyzet, "Minden mezőt kiürít");
             this.BtnAlaphelyzet.Click += new System.EventHandler(this.BtnAlaphelyzet_Click);
             // 
-            // button1
-            // 
-            this.button1.BackgroundImage = global::Villamos.Properties.Resources.database_search;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.Location = new System.Drawing.Point(548, 354);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(45, 45);
-            this.button1.TabIndex = 70;
-            this.toolTip1.SetToolTip(this.button1, "mdb fájlok tallózása");
-            // 
             // BtnFrissít
             // 
             this.BtnFrissít.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.BtnFrissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnFrissít.Location = new System.Drawing.Point(782, 423);
+            this.BtnFrissít.Location = new System.Drawing.Point(546, 473);
             this.BtnFrissít.Name = "BtnFrissít";
             this.BtnFrissít.Size = new System.Drawing.Size(45, 45);
             this.BtnFrissít.TabIndex = 74;
@@ -228,7 +179,7 @@ namespace Villamos
             // 
             this.BtnSqlTáblaLista.BackgroundImage = global::Villamos.Properties.Resources.App_spreadsheet;
             this.BtnSqlTáblaLista.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSqlTáblaLista.Location = new System.Drawing.Point(833, 422);
+            this.BtnSqlTáblaLista.Location = new System.Drawing.Point(733, 473);
             this.BtnSqlTáblaLista.Name = "BtnSqlTáblaLista";
             this.BtnSqlTáblaLista.Size = new System.Drawing.Size(45, 45);
             this.BtnSqlTáblaLista.TabIndex = 75;
@@ -298,25 +249,6 @@ namespace Villamos
             this.label5.TabIndex = 58;
             this.label5.Text = "SQLite táblanév :";
             // 
-            // ÚjTáblanevek
-            // 
-            this.ÚjTáblanevek.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.ÚjTáblanevek.CheckOnClick = true;
-            this.ÚjTáblanevek.FormattingEnabled = true;
-            this.ÚjTáblanevek.Location = new System.Drawing.Point(548, 473);
-            this.ÚjTáblanevek.Name = "ÚjTáblanevek";
-            this.ÚjTáblanevek.Size = new System.Drawing.Size(179, 191);
-            this.ÚjTáblanevek.TabIndex = 63;
-            this.ÚjTáblanevek.SelectedIndexChanged += new System.EventHandler(this.ÚjTáblanevek_SelectedIndexChanged);
-            // 
-            // ÚjTáblaNév
-            // 
-            this.ÚjTáblaNév.Location = new System.Drawing.Point(548, 445);
-            this.ÚjTáblaNév.Name = "ÚjTáblaNév";
-            this.ÚjTáblaNév.Size = new System.Drawing.Size(179, 22);
-            this.ÚjTáblaNév.TabIndex = 60;
-            // 
             // LstMezők
             // 
             this.LstMezők.FormattingEnabled = true;
@@ -371,15 +303,9 @@ namespace Villamos
             this.Controls.Add(this.BtnFrissít);
             this.Controls.Add(this.SqlTáblaAdatok);
             this.Controls.Add(this.DgvAdatok);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.SqlTábla);
             this.Controls.Add(this.LstMezők);
             this.Controls.Add(this.BtnAlaphelyzet);
-            this.Controls.Add(this.TáblanevekMásolása);
-            this.Controls.Add(this.TáblaNévKieg);
-            this.Controls.Add(this.TáblaNévMód);
-            this.Controls.Add(this.ÚjTáblaNév);
-            this.Controls.Add(this.ÚjTáblanevek);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.Btn_Súgó);
             this.Controls.Add(this.ChkTáblák);
@@ -398,7 +324,6 @@ namespace Villamos
             ((System.ComponentModel.ISupportInitialize)(this.DgvAdatok)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SqlTáblaAdatok)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
         private ToolTip toolTip1;
@@ -412,15 +337,9 @@ namespace Villamos
         private TableLayoutPanel tableLayoutPanel1;
         private TextBox TxtCélTábla;
         private Label label5;
-        private CheckedListBox ÚjTáblanevek;
-        private TextBox ÚjTáblaNév;
-        private Button TáblaNévMód;
-        private Button TáblaNévKieg;
-        private Button TáblanevekMásolása;
         private Button BtnAlaphelyzet;
         private ListBox LstMezők;
         private DataGridView SqlTábla;
-        private Button button1;
         private DataGridView DgvAdatok;
         private DataGridView SqlTáblaAdatok;
         private Button BtnFrissít;

@@ -10,8 +10,6 @@ namespace Villamos
         string Hely { get; set; }
         string Jelszó { get; set; }
 
-        readonly string TableName = "TestTable";
-
         string ConnectionString;
 
 

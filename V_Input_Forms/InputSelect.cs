@@ -10,10 +10,9 @@ namespace InputForms
 
         // Esemény, amire a hívó feliratkozhat
         public event EventHandler SelectedIndexChanged;
-        
+
         readonly List<string> Options;
         readonly Label label;
-        readonly string Tartalom;
         readonly int MaxLength;
         string rule;
         public int Height => input.Height;
@@ -74,7 +73,7 @@ namespace InputForms
             return this;
         }
 
-        public InputSelect SetMaxDropDownItems(int darab=10)
+        public InputSelect SetMaxDropDownItems(int darab = 10)
         {
             var combo = (ComboBox)input;
             // Ez a kulcs: ki kell kapcsolni az IntegralHeight-et, 
@@ -122,9 +121,9 @@ namespace InputForms
         public int Szélesség()
         {
             int válasz = 10;
-            using (Font font = new Font  ("Microsoft Sans Serif", 12f))
+            using (Font font = new Font("Microsoft Sans Serif", 12f))
             {
-                string worstCase = new string ('W', MaxLength);
+                string worstCase = new string('W', MaxLength);
                 Size textSize = TextRenderer.MeasureText(
                     worstCase,
                     font,
@@ -156,7 +155,7 @@ namespace InputForms
             return this;
         }
 
- 
+
 
         // Új metódus a lista frissítésére
         public void UpdateOptions(List<string> newOptions)
