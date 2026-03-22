@@ -199,9 +199,8 @@ namespace Villamos
 
         private static void InsertData(SqliteConnection sqlite, string tablaNev, DataTable dt)
         {
-            if (dt.Rows.Count == 0) return; // Ha üres a tábla, nincs mit beszúrni
+            if (dt.Rows.Count == 0) return;
 
-            // Oszlopok és SQL parancs előkészítése a cikluson kívül
             List<string> columns = new List<string>();
             List<string> values = new List<string>();
             foreach (DataColumn col in dt.Columns)
@@ -212,12 +211,11 @@ namespace Villamos
 
             string sql = $"INSERT INTO [{tablaNev}] ({string.Join(",", columns)}) VALUES ({string.Join(",", values)});";
 
-            // Tranzakció megnyitása
             using (var tran = sqlite.BeginTransaction())
             {
                 using (var cmd = new SqliteCommand(sql, sqlite, tran))
                 {
-                    // Paraméterek struktúrájának létrehozása (értékadás nélkül)
+                    // Paraméterek előkészítése
                     foreach (DataColumn col in dt.Columns)
                     {
                         var param = cmd.CreateParameter();
@@ -225,19 +223,38 @@ namespace Villamos
                         cmd.Parameters.Add(param);
                     }
 
-                    // Adatsorok bejárása: csak a paraméterek értékeit frissítjük
                     foreach (DataRow row in dt.Rows)
                     {
                         foreach (DataColumn col in dt.Columns)
                         {
-                            cmd.Parameters["@" + col.ColumnName].Value = row[col] ?? DBNull.Value;
+                            object value = row[col];
+
+                            // --- DÁTUM KEZELÉS FINOMÍTÁSA ---
+                            if (value is DateTime dtValue)
+                            {
+                                // Ha az időrész pontosan éjfél (00:00:00), akkor csak dátumot mentünk
+                                if (dtValue.TimeOfDay.TotalSeconds == 0)
+                                {
+                                    cmd.Parameters["@" + col.ColumnName].Value = dtValue.ToString("yyyy-MM-dd");
+                                }
+                                else
+                                {
+                                    // Ha van benne időinformáció, akkor másodperc pontossággal mentjük
+                                    cmd.Parameters["@" + col.ColumnName].Value = dtValue.ToString("yyyy-MM-dd HH:mm:ss");
+                                }
+                            }
+                            else
+                            {
+                                // Minden más típus marad az eredeti
+                                cmd.Parameters["@" + col.ColumnName].Value = value ?? DBNull.Value;
+                            }
                         }
                         cmd.ExecuteNonQuery();
                     }
                 }
-                // Tranzakció véglegesítése
                 tran.Commit();
             }
         }
+
     }
 }
