@@ -1,10 +1,8 @@
-﻿using DocumentFormat.OpenXml.Office.Word;
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
-using System.Windows.Forms;
 using Villamos;
 
 internal static partial class Adatbázis
@@ -469,6 +467,39 @@ internal static partial class Adatbázis
 
                     // Példa: "ID (Integer)" vagy "Nev (VarWChar)"
                     válasz.Add($"{mezoNev}-{tipusNev}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, "Mdb Mdb_ABMezők", ex.StackTrace, ex.Source, ex.HResult, "_", false);
+        }
+        return válasz;
+    }
+
+    public static List<string> SqLite_ABMezők(string holvan, string ABjelszó, string táblaNeve)
+    {
+        List<string> válasz = new List<string>();
+        try
+        {
+            string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
+
+            using (var Kapcsolat = new SqliteConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                // A PRAGMA lekérdezi az oszlopnevet (name) és a típust (type)
+                using (var cmd = new SqliteCommand($"PRAGMA table_info([{táblaNeve}])", Kapcsolat))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string mezoNev = reader["name"].ToString();
+                            string tipusNev = reader["type"].ToString(); // Pl. TEXT, INTEGER, DATE
+
+                            válasz.Add($"{mezoNev}-{tipusNev}");
+                        }
+                    }
                 }
             }
         }

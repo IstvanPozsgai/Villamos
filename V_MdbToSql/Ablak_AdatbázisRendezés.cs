@@ -160,9 +160,6 @@ namespace Villamos
             MezőkFeltöltése();
             AdatokMegjelenítése();
         }
-        #endregion
-
-
 
         private void MezőkFeltöltése()
         {
@@ -210,7 +207,6 @@ namespace Villamos
             }
         }
 
-
         private void BtnIndit_Click(object sender, EventArgs e)
         {
             try
@@ -235,7 +231,7 @@ namespace Villamos
                 MdbToSqliteMigrator.EgyTáblaMigrálása(MdbAdat, SqLiteAdat);
                 Cursor = Cursors.Default;
                 SqlTáblaFrissítés();
-                MessageBox.Show("A tábla és az adatok másolása megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -247,7 +243,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Bejáró(string utvonal, string minta, List<string> konyvtarLista, List<string> fajlLista)
         {
@@ -274,7 +269,7 @@ namespace Villamos
             }
         }
 
-
+        #endregion
 
         /// <summary>
         /// Minde beviteli lista tartalmát törli, hogy újra lehessen kezdeni a fájlok és táblák kiválasztását.
@@ -296,12 +291,9 @@ namespace Villamos
             SqlTáblaAdatok.DataSource = null;
             SqlTáblaAdatok.Rows.Clear();
             SqlTáblaAdatok.Columns.Clear();
+
+            LstSqlMezők.Items.Clear();
         }
-
-
-
-
-
 
 
         #region SqlTábla
@@ -380,6 +372,27 @@ namespace Villamos
                 if (e.RowIndex < 0) return;
                 SqlTábla.Rows[e.RowIndex].Selected = true;
                 SqlTáblaAdatai();
+                SqlTáblaSzerkezet();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SqlTáblaSzerkezet()
+        {
+            try
+            {
+                LstSqlMezők.Items.Clear();
+                if (SqLitekönyvtár == string.Empty || SqLitefájl == string.Empty || SqLitejelszó == string.Empty || SqLitetábla == string.Empty) return;
+                LstSqlMezők.Items.AddRange(MyA.SqLite_ABMezők($@"{SqLitekönyvtár}\{SqLitefájl}", SqLitejelszó, SqLitetábla).ToArray());
+
             }
             catch (HibásBevittAdat ex)
             {

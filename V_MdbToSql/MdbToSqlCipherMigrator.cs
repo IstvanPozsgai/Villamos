@@ -69,6 +69,7 @@ namespace Villamos
         {
             try
             {
+                Sql_Kezelő_Áttöltés Kéz = new Sql_Kezelő_Áttöltés();
                 using (var adapter = new OleDbDataAdapter($"SELECT * FROM [{Forrás.Tábla}]", mdb))
                 {
                     DataTable dt = new DataTable();
@@ -86,6 +87,8 @@ namespace Villamos
                         {
                             // ---- CSAK HOZZÁFŰZÜNK ----
                             InsertData(sqlite, Cél.Tábla, dt);
+                            Kéz.Rögzítés(Forrás);
+                            MessageBox.Show("A tábla és az adatok másolása megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             return;
                         }
                         else
@@ -98,8 +101,9 @@ namespace Villamos
                     // Ha idáig eljutunk, létre kell hozni a táblát
                     CreateSqliteTable(sqlite, Cél, dt);
                     InsertData(sqlite, Cél.Tábla, dt);
-                    Sql_Kezelő_Áttöltés Kéz = new Sql_Kezelő_Áttöltés();
+
                     Kéz.Rögzítés(Forrás);
+                    MessageBox.Show("A tábla és az adatok másolása megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (HibásBevittAdat ex)
@@ -146,7 +150,7 @@ namespace Villamos
             {
                 while (rdr.Read())
                 {
-                    string name = rdr["name"].ToString();
+                    string name = rdr["name"].ToString().ToUpper();
                     string type = rdr["type"].ToString().ToUpper();
                     result[name] = type;
                 }
@@ -160,7 +164,7 @@ namespace Villamos
             var dict = new Dictionary<string, string>();
             foreach (DataColumn col in dt.Columns)
             {
-                dict[col.ColumnName] = ConvertType(col.DataType);
+                dict[col.ColumnName.ToString().ToUpper()] = ConvertType(col.DataType).ToString ().ToUpper();
             }
             return dict;
         }

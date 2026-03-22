@@ -48,6 +48,7 @@ namespace Villamos
             this.SqlTábla = new System.Windows.Forms.DataGridView();
             this.DgvAdatok = new System.Windows.Forms.DataGridView();
             this.SqlTáblaAdatok = new System.Windows.Forms.DataGridView();
+            this.LstSqlMezők = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.DvgFájlok)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SqlTábla)).BeginInit();
@@ -296,9 +297,21 @@ namespace Villamos
             this.SqlTáblaAdatok.Size = new System.Drawing.Size(822, 190);
             this.SqlTáblaAdatok.TabIndex = 73;
             // 
+            // LstSqlMezők
+            // 
+            this.LstSqlMezők.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.LstSqlMezők.FormattingEnabled = true;
+            this.LstSqlMezők.ItemHeight = 16;
+            this.LstSqlMezők.Location = new System.Drawing.Point(546, 531);
+            this.LstSqlMezők.Name = "LstSqlMezők";
+            this.LstSqlMezők.Size = new System.Drawing.Size(226, 132);
+            this.LstSqlMezők.TabIndex = 76;
+            // 
             // Ablak_AdatbázisRendezés
             // 
             this.ClientSize = new System.Drawing.Size(1616, 671);
+            this.Controls.Add(this.LstSqlMezők);
             this.Controls.Add(this.BtnSqlTáblaLista);
             this.Controls.Add(this.BtnFrissít);
             this.Controls.Add(this.SqlTáblaAdatok);
@@ -344,5 +357,6 @@ namespace Villamos
         private DataGridView SqlTáblaAdatok;
         private Button BtnFrissít;
         private Button BtnSqlTáblaLista;
+        private ListBox LstSqlMezők;
     }
 }
