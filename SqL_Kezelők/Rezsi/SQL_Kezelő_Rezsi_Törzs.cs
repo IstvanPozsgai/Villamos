@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "csavarhúzó";
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\SQL\Rezsi\rezsitörzs.db";
-        readonly string Táblanév = "törzs";
+        readonly string táblanév = "törzs";
 
         public SQL_Kezelő_Rezsi_Törzs()
         {
@@ -76,7 +76,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"INSERT INTO {Táblanév} (azonosító, megnevezés, Méret, státus, csoport ) VALUES ";
+                string szöveg = $"INSERT INTO {táblanév} (azonosító, megnevezés, Méret, státus, csoport ) VALUES ";
                 szöveg += "(@Azonosító, @Megnevezés, @Méret, @Státusz, @Csoport)";
 
                 SqliteCommand cmd = new SqliteCommand(szöveg);
@@ -104,7 +104,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = $"UPDATE {Táblanév} SET ";
+                string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $@"Megnevezés =@Megnevezés, ";
                 szöveg += $@"Méret =@Méret, ";
                 szöveg += $@"Státusz =@Státusz, ";
