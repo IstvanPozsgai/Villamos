@@ -600,9 +600,9 @@ namespace Villamos
 
                         // Feltételezve, hogy a 'példány' az Activator.CreateInstance-szel készült objektum
 
-                        FieldInfo FájlHelye = példány.GetType().GetField("hely", BindingFlags.Public | BindingFlags.Instance);
-                        FieldInfo FájlJelszó = példány.GetType().GetField("jelszó", BindingFlags.Public | BindingFlags.Instance);
-                        FieldInfo Fájltábla = példány.GetType().GetField("táblanév", BindingFlags.Public | BindingFlags.Instance);
+                        FieldInfo FájlHelye = példány.GetType().GetField("hely", BindingFlags.NonPublic | BindingFlags.Instance);
+                        FieldInfo FájlJelszó = példány.GetType().GetField("jelszó", BindingFlags.NonPublic | BindingFlags.Instance);
+                        FieldInfo Fájltábla = példány.GetType().GetField("táblanév", BindingFlags.NonPublic | BindingFlags.Instance);
                         string elérésiÚt = "";
                         if (FájlHelye != null)
                         {

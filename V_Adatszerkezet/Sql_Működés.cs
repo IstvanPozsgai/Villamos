@@ -11,8 +11,8 @@ namespace Villamos.Adatszerkezet
 
         public bool Törölt { get; set; } = false;
 
-        public string Könyvtár => Path.GetDirectoryName(Fájl);
-        public string Fájlnév => Path.GetFileName(Fájl);
+        //public string Könyvtár => Path.GetDirectoryName(Fájl);
+        //public string Fájlnév => Path.GetFileName(Fájl);
 
         public Sql_Működés(int id, string fájl, string jelszó, string tábla)
         {
