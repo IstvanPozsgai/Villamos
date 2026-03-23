@@ -199,7 +199,7 @@ public static class FVGyűjtemény
         }
         catch (Exception ex)
         {
-            HibaNapló.Log(ex.Message, "ConvertType", ex.StackTrace, ex.Source, ex.HResult);
+            HibaNapló.Log(ex.Message, "ToTypeString", ex.StackTrace, ex.Source, ex.HResult);
             MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         return "HIBA";
