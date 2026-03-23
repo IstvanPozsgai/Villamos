@@ -18,7 +18,7 @@ namespace Villamos
 
         public void OsztályKészítés()
         {
-
+            Lista_Adatok();
             Rögzítés();
             Módosítás();
 
@@ -50,7 +50,7 @@ namespace Villamos
             }
             szöveg += "\n           MyA.SqLite_Módosítás(hely, jelszó, cmd);";
             szöveg += "\n       }\r\n       catch (HibásBevittAdat ex)\r\n       {\r\n           MessageBox.Show(ex.Message, \"Információ\", MessageBoxButtons.OK, MessageBoxIcon.Information);\r\n       }\r\n       catch (Exception ex)\r\n       {\r\n           HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);\r\n           MessageBox.Show(ex.Message + \"\\n\\n a hiba naplózásra került.\", \"A program hibára futott\", MessageBoxButtons.OK, MessageBoxIcon.Error);\r\n       }\r\n   }";
-
+            szöveg += "\r\n\r\n\r\n\r\n\r\n";
             File.AppendAllText(Fájlnév, szöveg);
         }
 
@@ -89,10 +89,27 @@ namespace Villamos
 
             szöveg += "\n           MyA.SqLite_Módosítás(hely, jelszó, cmd);";
             szöveg += "\n       }\r\n       catch (HibásBevittAdat ex)\r\n       {\r\n           MessageBox.Show(ex.Message, \"Információ\", MessageBoxButtons.OK, MessageBoxIcon.Information);\r\n       }\r\n       catch (Exception ex)\r\n       {\r\n           HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);\r\n           MessageBox.Show(ex.Message + \"\\n\\n a hiba naplózásra került.\", \"A program hibára futott\", MessageBoxButtons.OK, MessageBoxIcon.Error);\r\n       }\r\n   }";
+            szöveg += "\r\n\r\n\r\n\r\n\r\n";
             File.AppendAllText(Fájlnév, szöveg);
         }
 
+        public void Lista_Adatok()
+        {         // Típus lekérése név alapján
+            Type tipus = Type.GetType($"Villamos.Adatszerkezet.{Osztály}");
 
+            // Innen már ugyanúgy megy, mint eddig
+            List<string> propertyk = tipus.GetProperties().Select(p => p.Name).ToList();
 
+            string szöveg = $"        public List<{Osztály}> Lista_Adatok()\r\n";
+            szöveg += "        {\n";
+            szöveg += $"            List<{Osztály}> Adatok = new List<{Osztály}>();\n";
+            szöveg += "            try\r\n            {\n";
+            szöveg += $"                Adatok = MyA.Lista_Adatok(hely, jelszó, táblanév, rekord => new {Osztály}(";
+            szöveg += "\r\n\r\n\r\n\r\n\r\n";
+            szöveg += "                          ));";
+            szöveg += "            }\r\n            catch (HibásBevittAdat ex)\r\n            {\r\n                MessageBox.Show(ex.Message, \"Információ\", MessageBoxButtons.OK, MessageBoxIcon.Information);\r\n            }\r\n            catch (Exception ex)\r\n            {\r\n                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);\r\n                MessageBox.Show(ex.Message + \"\\n\\n a hiba naplózásra került.\", \"A program hibára futott\", MessageBoxButtons.OK, MessageBoxIcon.Error);\r\n            }\r\n            return Adatok;\r\n        }";
+            szöveg += "\r\n\r\n\r\n\r\n\r\n";
+            File.AppendAllText(Fájlnév, szöveg);
+        }
     }
 }
