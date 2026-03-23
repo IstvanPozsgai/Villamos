@@ -1581,6 +1581,7 @@
     <Compile Include="V_MdbToSql\MdbJelszóKiolvasó.cs" />
     <Compile Include="V_MdbToSql\MdbToSqlCipherMigrator.cs" />
     <Compile Include="SqL_Kezelők\Sql_Kezelő_Működés.cs" />
+    <Compile Include="V_MdbToSql\OsztályKészítő.cs" />
     <Compile Include="V_MindenEgyéb\AblakokGombok.cs" />
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_Hibanaplo.cs">
       <SubType>Form</SubType>

@@ -686,47 +686,11 @@ namespace Villamos
             {
                 return;
             }
+            OsztályKészítő OV = new OsztályKészítő(fájlexc, CmBAdatszerkezetek.Text.Trim());
 
-            // Típus lekérése név alapján
             Type tipus = Type.GetType($"Villamos.Adatszerkezet.{CmBAdatszerkezetek.Text.Trim()}");
-            if (tipus != null)
-            {
-                // Innen már ugyanúgy megy, mint eddig
-                List<string> propertyk = tipus.GetProperties().Select(p => p.Name).ToList();
+            if (tipus != null) OV.OsztályKészítés();
 
-                string szöveg = $"public void Rögzítés(string Telephely, int Év, {CmBAdatszerkezetek.Text.Trim()} Adat)";
-                szöveg += "\r\n{\r\ntry\r\n{";
-                szöveg += "FájlBeállítás(Telephely, Év);\n";
-                szöveg += $"string szöveg = $\"INSERT INTO {{táblanév}} (";
-
-                for (int i = 0; i < propertyk.Count; i++)
-                {
-                    if (i != 0) szöveg += ", ";
-                    szöveg += $"{propertyk[i]}";
-                }
-                szöveg += ") VALUES \";\n";
-                szöveg += "szöveg += $@\"(";
-                for (int i = 0; i < propertyk.Count; i++)
-                {
-                    if (i != 0) szöveg += ", ";
-                    szöveg += $"@{propertyk[i]}";
-                }
-                szöveg += ")\"; \n\n\n";
-                szöveg += "SqliteCommand cmd = new SqliteCommand(szöveg);\n";
-
-                for (int i = 0; i < propertyk.Count; i++)
-                {
-                    szöveg += $"cmd.Parameters.AddWithValue(\"@{propertyk[i]}\", Adat.{propertyk[i]});\n";
-                }
-
-                szöveg += "\n\nMyA.SqLite_Módosítás(hely, jelszó, cmd);";
-
-                szöveg += "}\r\ncatch (HibásBevittAdat ex)\r\n{\r\n";
-                szöveg += "MessageBox.Show(ex.Message, \"Információ\", MessageBoxButtons.OK, MessageBoxIcon.Information);\r\n}\r\n";
-                szöveg += "catch (Exception ex)\r\n{\r\nHibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);\r\n";
-                szöveg += "MessageBox.Show(ex.Message + \"\\n\\n a hiba naplózásra került.\", \"A program hibára futott\", MessageBoxButtons.OK, MessageBoxIcon.Error);\r\n}\r\n}";
-                File.WriteAllText(fájlexc, szöveg);
-            }
 
         }
 
