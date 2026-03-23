@@ -324,13 +324,14 @@ namespace Villamos
                 {
                     col.Visible = false;
                 }
-                // Könyvtár (ez legyen a leghosszabb, kitöltve a maradék helyet)
+
+                // Fájlnév (fix vagy tartalom szerinti szélesség)
                 if (SqlTábla.Columns["Könyvtár"] != null)
                 {
                     SqlTábla.Columns["Könyvtár"].Visible = true;
-                    SqlTábla.Columns["Könyvtár"].HeaderText = "Mappa elérési útja";
-                    SqlTábla.Columns["Könyvtár"].DisplayIndex = 0; // Első helyen
-                    SqlTábla.Columns["Könyvtár"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    SqlTábla.Columns["Könyvtár"].HeaderText = "Könyvtár";
+                    SqlTábla.Columns["Könyvtár"].DisplayIndex = 0;
+                    SqlTábla.Columns["Könyvtár"].Width = 150;
                 }
 
                 // Fájlnév (fix vagy tartalom szerinti szélesség)
@@ -429,6 +430,7 @@ namespace Villamos
             try
             {
                 if (SqlTábla.SelectedRows.Count < 1) return;
+
                 SqLitekönyvtár = SqlTábla.SelectedRows[0].Cells[5].Value?.ToString() ?? "";
                 SqLitefájl = SqlTábla.SelectedRows[0].Cells[6].Value?.ToString() ?? "";
                 SqLitejelszó = SqlTábla.SelectedRows[0].Cells[2].Value?.ToString() ?? "";
