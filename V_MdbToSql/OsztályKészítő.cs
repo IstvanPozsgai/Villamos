@@ -21,7 +21,7 @@ namespace Villamos
             Lista_Adatok();
             Rögzítés();
             Módosítás();
-
+            Táblalétrehozás();
 
 
         }
@@ -93,7 +93,7 @@ namespace Villamos
             File.AppendAllText(Fájlnév, szöveg);
         }
 
-        public void Lista_Adatok()
+        private void Lista_Adatok()
         {         // Típus lekérése név alapján
             Type tipus = Type.GetType($"Villamos.Adatszerkezet.{Osztály}");
 
@@ -108,6 +108,23 @@ namespace Villamos
             szöveg += "\r\n\r\n\r\n\r\n\r\n";
             szöveg += "                          ));";
             szöveg += "            }\r\n            catch (HibásBevittAdat ex)\r\n            {\r\n                MessageBox.Show(ex.Message, \"Információ\", MessageBoxButtons.OK, MessageBoxIcon.Information);\r\n            }\r\n            catch (Exception ex)\r\n            {\r\n                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);\r\n                MessageBox.Show(ex.Message + \"\\n\\n a hiba naplózásra került.\", \"A program hibára futott\", MessageBoxButtons.OK, MessageBoxIcon.Error);\r\n            }\r\n            return Adatok;\r\n        }";
+            szöveg += "\r\n\r\n\r\n\r\n\r\n";
+            File.AppendAllText(Fájlnév, szöveg);
+        }
+
+        private void Táblalétrehozás()
+        {
+
+            string szöveg = "        public void Tábla_Létrehozás()\n";
+            szöveg += "        {\r\n            try\r\n            {\n";
+            szöveg += "                string szöveg = $@\"CREATE TABLE {táblanév} (";
+            szöveg += "";
+            szöveg += "";
+            szöveg += "";
+            szöveg += "";
+            szöveg += "                                );\";\n";
+            szöveg += "                MyA.SqLite_TáblaLétrehozás(hely.KönyvSzerk(), jelszó, szöveg);\n";
+            szöveg += "            }\r\n            catch (HibásBevittAdat ex)\r\n            {\r\n                MessageBox.Show(ex.Message, \"Információ\", MessageBoxButtons.OK, MessageBoxIcon.Information);\r\n            }\r\n            catch (Exception ex)\r\n            {\r\n                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);\r\n                MessageBox.Show(ex.Message + \"\\n\\n a hiba naplózásra került.\", \"A program hibára futott\", MessageBoxButtons.OK, MessageBoxIcon.Error);\r\n            }\r\n        }";
             szöveg += "\r\n\r\n\r\n\r\n\r\n";
             File.AppendAllText(Fájlnév, szöveg);
         }

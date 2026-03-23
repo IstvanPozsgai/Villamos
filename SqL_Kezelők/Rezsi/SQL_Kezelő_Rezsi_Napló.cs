@@ -35,7 +35,8 @@ namespace Villamos.Kezelők
                             	Mirehasznál   TEXT,
                             	Módosította   TEXT,
                             	Módosításidátum   TEXT,
-                            	Státus    INTEGER);";
+                            	Státus    INTEGER
+                                );";
                 MyA.SqLite_TáblaLétrehozás(hely.KönyvSzerk(), jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
