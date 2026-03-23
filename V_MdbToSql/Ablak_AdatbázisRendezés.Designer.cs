@@ -39,6 +39,7 @@ namespace Villamos
             this.BtnFrissít = new System.Windows.Forms.Button();
             this.BtnSqlTáblaLista = new System.Windows.Forms.Button();
             this.BtnAdatbázis = new System.Windows.Forms.Button();
+            this.BtnKódol = new System.Windows.Forms.Button();
             this.ChkTáblák = new System.Windows.Forms.CheckedListBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtCélKönyvtár = new System.Windows.Forms.TextBox();
@@ -52,10 +53,12 @@ namespace Villamos
             this.LstSqlMezők = new System.Windows.Forms.ListBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.CmbMetódusok = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.CmbOsztályok = new System.Windows.Forms.ComboBox();
             this.TxtMetódus = new System.Windows.Forms.TextBox();
+            this.TxtHely = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -63,8 +66,7 @@ namespace Villamos
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.Évek = new System.Windows.Forms.NumericUpDown();
-            this.TxtHely = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
+            this.CmBAdatszerkezetek = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.DvgFájlok)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SqlTábla)).BeginInit();
@@ -216,6 +218,17 @@ namespace Villamos
             this.BtnAdatbázis.TabIndex = 79;
             this.toolTip1.SetToolTip(this.BtnAdatbázis, "Adatbázis létrehozás Kezelő segítségével.");
             this.BtnAdatbázis.Click += new System.EventHandler(this.BtnAdatbázis_Click);
+            // 
+            // BtnKódol
+            // 
+            this.BtnKódol.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.BtnKódol.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnKódol.Location = new System.Drawing.Point(1070, 4);
+            this.BtnKódol.Name = "BtnKódol";
+            this.BtnKódol.Size = new System.Drawing.Size(45, 45);
+            this.BtnKódol.TabIndex = 81;
+            this.toolTip1.SetToolTip(this.BtnKódol, "Osztálynak megfelelő fájl-t generál.");
+            this.BtnKódol.Click += new System.EventHandler(this.BtnKódol_Click);
             // 
             // ChkTáblák
             // 
@@ -369,14 +382,6 @@ namespace Villamos
             this.CmbMetódusok.TabIndex = 60;
             this.CmbMetódusok.SelectionChangeCommitted += new System.EventHandler(this.CmbMetódusok_SelectionChangeCommitted);
             // 
-            // label1
-            // 
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(106, 23);
-            this.label1.TabIndex = 57;
-            this.label1.Text = "Osztályok:";
-            // 
             // label3
             // 
             this.label3.Location = new System.Drawing.Point(3, 28);
@@ -400,6 +405,29 @@ namespace Villamos
             this.TxtMetódus.Name = "TxtMetódus";
             this.TxtMetódus.Size = new System.Drawing.Size(331, 22);
             this.TxtMetódus.TabIndex = 61;
+            // 
+            // TxtHely
+            // 
+            this.TxtHely.Location = new System.Drawing.Point(115, 87);
+            this.TxtHely.Name = "TxtHely";
+            this.TxtHely.Size = new System.Drawing.Size(331, 22);
+            this.TxtHely.TabIndex = 62;
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(106, 23);
+            this.label1.TabIndex = 57;
+            this.label1.Text = "Osztályok:";
+            // 
+            // label9
+            // 
+            this.label9.Location = new System.Drawing.Point(3, 84);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(106, 23);
+            this.label9.TabIndex = 63;
+            this.label9.Text = "hely:";
             // 
             // tableLayoutPanel3
             // 
@@ -475,24 +503,20 @@ namespace Villamos
             this.Évek.Size = new System.Drawing.Size(120, 22);
             this.Évek.TabIndex = 63;
             // 
-            // TxtHely
+            // CmBAdatszerkezetek
             // 
-            this.TxtHely.Location = new System.Drawing.Point(115, 87);
-            this.TxtHely.Name = "TxtHely";
-            this.TxtHely.Size = new System.Drawing.Size(331, 22);
-            this.TxtHely.TabIndex = 62;
-            // 
-            // label9
-            // 
-            this.label9.Location = new System.Drawing.Point(3, 84);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(106, 23);
-            this.label9.TabIndex = 63;
-            this.label9.Text = "hely:";
+            this.CmBAdatszerkezetek.FormattingEnabled = true;
+            this.CmBAdatszerkezetek.Location = new System.Drawing.Point(733, 12);
+            this.CmBAdatszerkezetek.Name = "CmBAdatszerkezetek";
+            this.CmBAdatszerkezetek.Size = new System.Drawing.Size(331, 24);
+            this.CmBAdatszerkezetek.TabIndex = 80;
+            this.CmBAdatszerkezetek.SelectionChangeCommitted += new System.EventHandler(this.CmBAdatszerkezetek_SelectionChangeCommitted);
             // 
             // Ablak_AdatbázisRendezés
             // 
             this.ClientSize = new System.Drawing.Size(1616, 671);
+            this.Controls.Add(this.BtnKódol);
+            this.Controls.Add(this.CmBAdatszerkezetek);
             this.Controls.Add(this.BtnAdatbázis);
             this.Controls.Add(this.tableLayoutPanel3);
             this.Controls.Add(this.tableLayoutPanel2);
@@ -563,5 +587,7 @@ namespace Villamos
         private TextBox TxtMetódus;
         private TextBox TxtHely;
         private Label label9;
+        private ComboBox CmBAdatszerkezetek;
+        private Button BtnKódol;
     }
 }
