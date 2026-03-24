@@ -104,7 +104,7 @@ namespace Villamos
             szöveg += "            try\r\n            {\n";
             szöveg += $"                Adatok = MyA.Lista_Adatok(hely, jelszó, táblanév, rekord => new {Osztály}(";
             szöveg += "\r\n\r\n\r\n\r\n\r\n";
-            szöveg += "                          ));";
+            szöveg += "                          ));\n";
             szöveg += "            }\r\n            catch (HibásBevittAdat ex)\r\n            {\r\n                MessageBox.Show(ex.Message, \"Információ\", MessageBoxButtons.OK, MessageBoxIcon.Information);\r\n            }\r\n            catch (Exception ex)\r\n            {\r\n                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);\r\n                MessageBox.Show(ex.Message + \"\\n\\n a hiba naplózásra került.\", \"A program hibára futott\", MessageBoxButtons.OK, MessageBoxIcon.Error);\r\n            }\r\n            return Adatok;\r\n        }";
             szöveg += "\r\n\r\n\r\n\r\n\r\n";
             File.AppendAllText(Fájlnév, szöveg);
