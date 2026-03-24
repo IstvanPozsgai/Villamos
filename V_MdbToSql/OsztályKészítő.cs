@@ -18,12 +18,10 @@ namespace Villamos
 
         public void OsztályKészítés()
         {
+            Táblalétrehozás();
             Lista_Adatok();
             Rögzítés();
             Módosítás();
-            Táblalétrehozás();
-
-
         }
 
         private void Módosítás()
@@ -114,14 +112,31 @@ namespace Villamos
 
         private void Táblalétrehozás()
         {
+            // Típus lekérése név alapján
+            Type tipus = Type.GetType($"Villamos.Adatszerkezet.{Osztály}");
+
+            //  Név és Típus lekérdezése egyszerre
+            var propertyInfoLista = tipus.GetProperties()
+                .Select(p => new
+                {
+                    Nev = p.Name,
+                    Tipus = p.PropertyType.ToTypeString() // Vagy p.PropertyType a teljes típusobjektumhoz
+                })
+                .ToList();
+
+            //  Készítünk egy listát a formázott SQL sorokból
+            List<string> sqlSorok = propertyInfoLista
+                .Select(p => $"                                {p.Nev} {p.Tipus}")
+                .ToList();
+
+            //  Összefűzzük őket vesszővel és soremeléssel
+            string mezokSzovege = string.Join(", \n", sqlSorok);
+
 
             string szöveg = "        public void Tábla_Létrehozás()\n";
             szöveg += "        {\r\n            try\r\n            {\n";
-            szöveg += "                string szöveg = $@\"CREATE TABLE {táblanév} (";
-            szöveg += "";
-            szöveg += "";
-            szöveg += "";
-            szöveg += "";
+            szöveg += "                string szöveg = $@\"CREATE TABLE {táblanév} (\n";
+            szöveg += mezokSzovege + "\n"; // Itt adjuk hozzá az összes mezőt egyszerre
             szöveg += "                                );\";\n";
             szöveg += "                MyA.SqLite_TáblaLétrehozás(hely.KönyvSzerk(), jelszó, szöveg);\n";
             szöveg += "            }\r\n            catch (HibásBevittAdat ex)\r\n            {\r\n                MessageBox.Show(ex.Message, \"Információ\", MessageBoxButtons.OK, MessageBoxIcon.Information);\r\n            }\r\n            catch (Exception ex)\r\n            {\r\n                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);\r\n                MessageBox.Show(ex.Message + \"\\n\\n a hiba naplózásra került.\", \"A program hibára futott\", MessageBoxButtons.OK, MessageBoxIcon.Error);\r\n            }\r\n        }";
