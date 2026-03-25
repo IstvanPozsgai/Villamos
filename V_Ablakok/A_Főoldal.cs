@@ -671,7 +671,7 @@ namespace Villamos
         {
             try
             {
-                string hely = $@"{Application.StartupPath}\\VillamosLapok\Főoldal.html";
+                string hely = $@"{Application.StartupPath}\Súgó\VillamosLapok\Főoldal.html";
                 MyF.Megnyitás(hely);
             }
             catch (HibásBevittAdat ex)
