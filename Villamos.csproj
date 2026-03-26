@@ -1335,10 +1335,10 @@
     <Compile Include="V_Kezelők\Kezelő_Védő_Cikktörzs.cs" />
     <Compile Include="V_Kezelők\Kezelő_Védő_Könyvelés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Védő_Napló.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Épület.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Épület_Adattábla.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Épület_Naptár.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Épület_Osztály.cs" />
+    <Compile Include="V_Kezelők\8_Gondnokság\Épület_takarítás\Kezelő_Épület.cs" />
+    <Compile Include="V_Kezelők\8_Gondnokság\Épület_takarítás\Kezelő_Épület_Adattábla.cs" />
+    <Compile Include="V_Kezelők\8_Gondnokság\Épület_takarítás\Kezelő_Épület_Naptár.cs" />
+    <Compile Include="V_Kezelők\8_Gondnokság\Épület_takarítás\Kezelő_Épület_Osztály.cs" />
     <Compile Include="V_Ablakok\5_Nyilvántartások\Ablak_Akkumulátor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2377,7 +2377,6 @@
     <Folder Include="V_Ablakok\NewFolder1\" />
     <Folder Include="V_Kezelők\1_Bejelentkezés\" />
     <Folder Include="V_Kezelők\2_Beállítások\" />
-    <Folder Include="V_Kezelők\8_Gondnokság\Épület_takarítás\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
