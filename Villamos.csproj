@@ -1345,10 +1345,10 @@
     <Compile Include="V_Ablakok\4_Nyilvántartások\Ablak_Akkumulátor.designer.cs">
       <DependentUpon>Ablak_Akkumulátor.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\Ablak_Bejelentkezés.cs">
+    <Compile Include="V_Ablakok\Közös\Ablak_Bejelentkezés.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\Ablak_Bejelentkezés.designer.cs">
+    <Compile Include="V_Ablakok\Közös\Ablak_Bejelentkezés.designer.cs">
       <DependentUpon>Ablak_Bejelentkezés.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_Ciklus.cs">
@@ -1357,10 +1357,10 @@
     <Compile Include="V_Ablakok\1_Beállítások\Ablak_Ciklus.designer.cs">
       <DependentUpon>Ablak_Ciklus.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\Ablak_Jelszóváltoztatás.cs">
+    <Compile Include="V_Ablakok\Közös\Ablak_Jelszóváltoztatás.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\Ablak_Jelszóváltoztatás.designer.cs">
+    <Compile Include="V_Ablakok\Közös\Ablak_Jelszóváltoztatás.designer.cs">
       <DependentUpon>Ablak_Jelszóváltoztatás.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\6_Kiadási_adatok\Ablak_Jármű.cs">
@@ -1953,13 +1953,13 @@
       <DependentUpon>Ablak_Akkumulátor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\Ablak_Bejelentkezés.resx">
+    <EmbeddedResource Include="V_Ablakok\Közös\Ablak_Bejelentkezés.resx">
       <DependentUpon>Ablak_Bejelentkezés.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Beállítások\Ablak_Ciklus.resx">
       <DependentUpon>Ablak_Ciklus.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\Ablak_Jelszóváltoztatás.resx">
+    <EmbeddedResource Include="V_Ablakok\Közös\Ablak_Jelszóváltoztatás.resx">
       <DependentUpon>Ablak_Jelszóváltoztatás.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\6_Kiadási_adatok\Ablak_Jármű.resx">
@@ -2373,7 +2373,11 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="V_Kezelők\0_Bejelentkezés\" />
+    <Folder Include="V_Kezelők\1_Beállítások\" />
+    <Folder Include="V_Kezelők\7_Gondnokság\Épület_takarítás\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
