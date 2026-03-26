@@ -2374,7 +2374,6 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="V_Ablakok\NewFolder1\" />
     <Folder Include="V_Kezelők\1_Bejelentkezés\" />
     <Folder Include="V_Kezelők\2_Beállítások\" />
   </ItemGroup>
