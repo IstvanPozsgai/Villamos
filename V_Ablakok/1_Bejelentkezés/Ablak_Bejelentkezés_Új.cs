@@ -29,13 +29,20 @@ namespace Villamos
         public AblakBejelentkezés_Új()
         {
             InitializeComponent();
-            Start();
+
         }
 
         private void AblakBejelentkezés_Load(object sender, EventArgs e)
         {
+            Start();
             CmbUserName.Focus();
             AcceptButton = BtnBelépés;
+
+        }
+
+        private void AblakBejelentkezés_Új_Shown(object sender, EventArgs e)
+        {
+            if (Beléphet) WinVan();
         }
 
         private void Súgó_Click(object sender, EventArgs e)
@@ -67,8 +74,6 @@ namespace Villamos
             FelhasználókLista();
             TelephelyekLista();
             FelhasználókFeltöltése();
-            if (Beléphet) WinVan();
-
         }
 
         private void Hálózat()
@@ -153,7 +158,10 @@ namespace Villamos
                                    select a).FirstOrDefault();
 
                 //Ha van ilyen dolgozó, akkor beléptetjük
-                if (Elem != null) Belépés(Elem);
+                if (Elem != null)
+                {
+                    Belépés(Elem);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -413,5 +421,7 @@ namespace Villamos
 
         }
         #endregion
+
+
     }
 }
