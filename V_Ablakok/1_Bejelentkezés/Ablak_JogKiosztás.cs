@@ -272,7 +272,7 @@ namespace Villamos
                     );
                     Adatok.Add(adat);
                 }
-                if (Adatok.Count > 0) KézJogosultságok.Rögzítés(Adatok);
+                if (Adatok.Count > 0) KézJogosultságok.Döntés(Adatok);
                 TáblázatListázás();
             }
             catch (HibásBevittAdat ex)
@@ -310,7 +310,7 @@ namespace Villamos
                         Adatok.Add(adat);
                     }
                 }
-                if (Adatok.Count > 0) KézJogosultságok.Rögzítés(Adatok);
+                if (Adatok.Count > 0) KézJogosultságok.Döntés(Adatok);
                 TáblázatListázás();
             }
             catch (HibásBevittAdat ex)
@@ -565,7 +565,21 @@ namespace Villamos
                                                 select a).FirstOrDefault();
                 List<Adat_Bejelentkezés_Jogosultságok> Adatok = AdatokJogosultságok.Where(a => a.UserId == Egy.UserId).ToList();
 
-                KézJogosultságok.Törlés(Adatok);
+                List<Adat_Bejelentkezés_Jogosultságok> AdatokKüldés = new List<Adat_Bejelentkezés_Jogosultságok>();
+                foreach (Adat_Bejelentkezés_Jogosultságok adat in Adatok)
+                {
+                    Adat_Bejelentkezés_Jogosultságok Törlés = new Adat_Bejelentkezés_Jogosultságok
+                    (
+                        adat.UserId,
+                        adat.OldalId,
+                        adat.GombokId,
+                        adat.SzervezetId,
+                        true
+                    );
+                    AdatokKüldés.Add(Törlés);
+                }
+
+                KézJogosultságok.Döntés(AdatokKüldés);
                 TáblázatListázás();
                 MessageBox.Show("Jogosultságok törlése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

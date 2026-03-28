@@ -85,7 +85,7 @@ namespace Villamos.Kezelők
                         }
                     }
                 }
-                KézJog.Rögzítés(AdatokGy);
+                KézJog.Döntés(AdatokGy);
             }
             catch (HibásBevittAdat ex)
             {
