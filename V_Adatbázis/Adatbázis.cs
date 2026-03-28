@@ -87,6 +87,33 @@ internal static partial class Adatbázis
         }
     }
 
+    public static void SqLite_Módosítások(string holvan, string ABjelszó, List<SqliteCommand> parancsok)
+    {
+        string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
+        using (var connection = new SqliteConnection(kapcsolatiszöveg))
+        {
+            connection.Open();
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    foreach (var cmd in parancsok)
+                    {
+                        cmd.Connection = connection;
+                        cmd.Transaction = transaction;
+                        cmd.ExecuteNonQuery();
+                    }
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    HibaNapló.Log(ex.Message, $"SqLite Tranzakciós hiba:\n{holvan}", ex.StackTrace, ex.Source, ex.HResult);
+                    throw new Exception("Hiba történt a csoportos művelet során. Semmi nem került rögzítésre.");
+                }
+            }
+        }
+    }
 
 
     /// <summary>

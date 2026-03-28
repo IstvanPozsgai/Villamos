@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.Data.Sqlite;
+using System;
 using System.Collections.Generic;
-using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -22,64 +22,72 @@ namespace Villamos.Kezelők
             if (!MyA.SqLite_ABvanTábla(hely, jelszó, táblanév)) Tábla_Létrehozás();
         }
 
-        private void Tábla_Létrehozás()
+        public void Tábla_Létrehozás()
         {
-            throw new NotImplementedException();
+            try
+            {
+                string szöveg = $@"CREATE TABLE {táblanév} (
+                                UserId INTEGER, 
+                                OldalId INTEGER, 
+                                GombokId INTEGER, 
+                                SzervezetId INTEGER, 
+                                Törölt INTEGER
+                                );";
+                MyA.SqLite_TáblaLétrehozás(hely.KönyvSzerk(), jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        public List<Adat_Bejelentkezés_Jogosultságok> Lista_Adatok(bool Minden = false)
+
+        public List<Adat_Bejelentkezés_Jogosultságok> Lista_Adatok()
         {
             List<Adat_Bejelentkezés_Jogosultságok> Adatok = new List<Adat_Bejelentkezés_Jogosultságok>();
-
-            string szöveg = $"SELECT * FROM {táblanév} WHERE Törölt={false}";
-            if (Minden) szöveg = $"SELECT * FROM {táblanév} ";
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
-
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            try
             {
-                using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
-                {
-                    Kapcsolat.Open();
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
-                    {
-                        if (rekord.HasRows)
-                        {
-                            while (rekord.Read())
-                            {
-                                Adat_Bejelentkezés_Jogosultságok Adat = new Adat_Bejelentkezés_Jogosultságok(
+                Adatok = MyA.Lista_Adatok(hely, jelszó, táblanév, rekord => new Adat_Bejelentkezés_Jogosultságok(
                                         rekord["UserId"].ToÉrt_Int(),
                                         rekord["OldalId"].ToÉrt_Int(),
                                         rekord["GombokId"].ToÉrt_Int(),
                                         rekord["SzervezetId"].ToÉrt_Int(),
-                                        rekord["Törölt"].ToÉrt_Bool());
-                                Adatok.Add(Adat);
-                            }
-                        }
-                    }
-                }
+                                        rekord["Törölt"].ToÉrt_Bool()));
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return Adatok;
         }
 
         /// <summary>
-        /// Megnézzük, hogy volt-e rögzítve ha volt és ha nem kell akkor töröljük a régi adatokat és rögzítjük az újakat.
+        /// Eldöntük az új adatok alapján, hogy melyeket kell rögzíteni és melyeket módosítani, majd ezeket külön-külön továbbítjuk a megfelelő metódusoknak
         /// </summary>
         /// <param name="Adatok"></param>
-        public void Rögzítés(List<Adat_Bejelentkezés_Jogosultságok> Adatok)
+        public void Döntés(List<Adat_Bejelentkezés_Jogosultságok> Adatok)
         {
             try
             {
-                List<Adat_Bejelentkezés_Jogosultságok> AdatokRégi = Lista_Adatok(true);
-                List<string> SzövegGyR = new List<string>();
-                List<string> SzövegGyM = new List<string>();
+                List<Adat_Bejelentkezés_Jogosultságok> AdatokRégi = Lista_Adatok();
+                List<Adat_Bejelentkezés_Jogosultságok> AdatokR = new List<Adat_Bejelentkezés_Jogosultságok>();
+                List<Adat_Bejelentkezés_Jogosultságok> AdatokM = new List<Adat_Bejelentkezés_Jogosultságok>();
                 foreach (Adat_Bejelentkezés_Jogosultságok Adat in Adatok)
                 {
                     // Ha a régi adatok között nincs benne akkor rögzítjük az újakat.
                     if (!AdatokRégi.Any(a => a.SzervezetId == Adat.SzervezetId && a.UserId == Adat.UserId && a.OldalId == Adat.OldalId && a.GombokId == Adat.GombokId))
                     {
-                        string szöveg = $"INSERT INTO {táblanév} ( UserId, OldalId, GombokId, SzervezetId, Törölt) VALUES (";
-                        szöveg += $"{Adat.UserId}, {Adat.OldalId}, {Adat.GombokId}, {Adat.SzervezetId}, {Adat.Törölt})";
-                        SzövegGyR.Add(szöveg);
+                        AdatokR.Add(Adat);
                     }
                     else
                     {
@@ -89,11 +97,52 @@ namespace Villamos.Kezelők
                         szöveg += $"UserId ={Adat.UserId} AND ";
                         szöveg += $"OldalId ={Adat.OldalId} AND ";
                         szöveg += $"GombokId ={Adat.GombokId}";
-                        SzövegGyM.Add(szöveg);
+                        AdatokM.Add(Adat);
                     }
                 }
-                if (SzövegGyR.Count > 0) MyA.ABMódosítás(hely, jelszó, SzövegGyR);
-                if (SzövegGyM.Count > 0) MyA.ABMódosítás(hely, jelszó, SzövegGyM);
+                if (AdatokR.Count > 0) Rögzítés(AdatokR);
+                if (AdatokM.Count > 0) Módosítás(AdatokM);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
+        /// <summary>
+        /// Rögzítéshez előkészítjük a parancsokat és egyetlen hívással elküldjük az összeset
+        /// </summary>
+        /// <param name="Adatok"></param>
+        private void Rögzítés(List<Adat_Bejelentkezés_Jogosultságok> Adatok)
+        {
+            try
+            {
+                List<SqliteCommand> parancsLista = new List<SqliteCommand>();
+                string szöveg = $"INSERT INTO {táblanév} (UserId, OldalId, GombokId, SzervezetId, Törölt) VALUES ";
+                szöveg += $@"(@UserId, @OldalId, @GombokId, @SzervezetId, @Törölt)";
+
+                foreach (var adat in Adatok)
+                {
+                    SqliteCommand cmd = new SqliteCommand(szöveg);
+                    cmd.Parameters.AddWithValue("@UserId", adat.UserId);
+                    cmd.Parameters.AddWithValue("@OldalId", adat.OldalId);
+                    cmd.Parameters.AddWithValue("@GombokId", adat.GombokId);
+                    cmd.Parameters.AddWithValue("@SzervezetId", adat.SzervezetId);
+                    cmd.Parameters.AddWithValue("@Törölt", adat.Törölt);
+
+                    parancsLista.Add(cmd);
+                }
+
+                // Egyetlen hívással elküldjük az összeset
+                MyA.SqLite_Módosítások(hely, jelszó, parancsLista);
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -108,47 +157,37 @@ namespace Villamos.Kezelők
 
 
         /// <summary>
-        /// Módosítjuk az ablakhoz tartozó jogokat töröltre
+        /// Módosításhoz előkészítjük a parancsokat és egyetlen hívással elküldjük az összeset
         /// </summary>
         /// <param name="Adatok"></param>
-        public void Törlés(Adat_Bejelentkezés_Jogosultságok Adat)
+        private void Módosítás(List<Adat_Bejelentkezés_Jogosultságok> Adatok)
         {
             try
             {
+                List<SqliteCommand> parancsLista = new List<SqliteCommand>();
+
                 string szöveg = $"UPDATE {táblanév} SET ";
-                szöveg += $"Törölt ={true} ";
-                szöveg += $"WHERE UserId ={Adat.UserId} AND ";
-                szöveg += $"OldalId ={Adat.OldalId} AND ";
-                szöveg += $"GombokId ={Adat.GombokId}";
-                MyA.ABMódosítás(hely, jelszó, szöveg);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+                szöveg += $@"Törölt=@Törölt, ";
+                szöveg += $@"WHERE UserId=@UserId AND";
+                szöveg += $@"OldalId=@OldalId AND ";
+                szöveg += $@"GombokId=@GombokId AND ";
+                szöveg += $@"SzervezetId=@SzervezetId ";
 
-
-        public void Törlés(List<Adat_Bejelentkezés_Jogosultságok> Adatok)
-        {
-            try
-            {
-                List<string> SzövegGy = new List<string>();
-                foreach (Adat_Bejelentkezés_Jogosultságok Adat in Adatok)
+                foreach (var adat in Adatok)
                 {
-                    string szöveg = $"UPDATE {táblanév} SET ";
-                    szöveg += $"Törölt ={true} ";
-                    szöveg += $"WHERE UserId ={Adat.UserId} AND ";
-                    szöveg += $"OldalId ={Adat.OldalId} AND ";
-                    szöveg += $"GombokId ={Adat.GombokId}";
-                    SzövegGy.Add(szöveg);
+                    SqliteCommand cmd = new SqliteCommand(szöveg);
+                    cmd.Parameters.AddWithValue("@UserId", adat.UserId);
+                    cmd.Parameters.AddWithValue("@OldalId", adat.OldalId);
+                    cmd.Parameters.AddWithValue("@GombokId", adat.GombokId);
+                    cmd.Parameters.AddWithValue("@SzervezetId", adat.SzervezetId);
+                    cmd.Parameters.AddWithValue("@Törölt", adat.Törölt);
+
+                    parancsLista.Add(cmd);
                 }
-                MyA.ABMódosítás(hely, jelszó, SzövegGy);
+
+                // Egyetlen hívással elküldjük az összeset
+                MyA.SqLite_Módosítások(hely, jelszó, parancsLista);
+
             }
             catch (HibásBevittAdat ex)
             {
