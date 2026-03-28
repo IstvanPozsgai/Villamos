@@ -134,7 +134,15 @@ public static class FVGyűjtemény
     /// <returns></returns>
     public static bool ToÉrt_Bool(this object str)
     {
-        if (!bool.TryParse(str.ToStrTrim(), out bool válasz))
+        string szoveg = str.ToStrTrim();
+
+        // Ha "1"-est látunk, az True
+        if (szoveg == "1") return true;
+        // Ha "0"-ást látunk, az False
+        if (szoveg == "0") return false;
+
+        // Minden más esetben (True/False szöveg) marad az eredeti TryParse
+        if (!bool.TryParse(szoveg, out bool válasz))
             válasz = false;
         return válasz;
     }
