@@ -10,6 +10,7 @@ using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
+    // JAVÍTANDÓ:Nincs bekötve törölhető
     public class Kezelő_Belépés_Oldalok
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ÚJ_Belépés.mdb";
