@@ -152,7 +152,7 @@
     </Compile>
     <Compile Include="SqL_Kezelők\1_Bejelentkezés\SQL_Kezelő_Users.cs" />
     <Compile Include="SqL_Kezelők\1_Bejelentkezés\SQL_Kezelő_Belépés_Gombok.cs" />
-    <Compile Include="SqL_Kezelők\1_Bejelentkezés\SQL_Kezelő_Belépés_Oldalok.cs" />
+    <Compile Include="SqL_Kezelők\1_Bejelentkezés\SQL_Kezelő_Belépés_Oldalak.cs" />
     <Compile Include="SqL_Kezelők\Kisegítő.cs" />
     <Compile Include="SqL_Kezelők\Rezsi\SQL_Kezelő_Rezsi_Hely.cs" />
     <Compile Include="SqL_Kezelők\Rezsi\SQL_Kezelő_Rezsi_Könyvelés.cs" />

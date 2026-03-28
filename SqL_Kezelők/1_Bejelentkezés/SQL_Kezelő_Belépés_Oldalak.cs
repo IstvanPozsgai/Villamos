@@ -10,13 +10,13 @@ using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
-    public class SQL_Kezelő_Belépés_Oldalok
+    public class SQL_Kezelő_Belépés_Oldalak
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ÚJ_Belépés.mdb";
         readonly string jelszó = "ForgalmiUtasítás";
         readonly string táblanév = "Tbl_Bejelentkezés_Oldalak";
 
-        public SQL_Kezelő_Belépés_Oldalok()
+        public SQL_Kezelő_Belépés_Oldalak()
         {
             if (!File.Exists(hely)) Adatbázis_Létrehozás.Adatbázis_Oldalak(hely.KönyvSzerk());
             if (!AdatBázis_kezelés.TáblaEllenőrzés(hely, jelszó, táblanév)) Adatbázis_Létrehozás.Adatbázis_Oldalak(hely);
