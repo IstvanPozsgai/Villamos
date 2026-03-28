@@ -92,12 +92,11 @@ namespace Villamos.Kezelők
                 if (Adat.Password.Trim() == "") pword = "123456";
                 bool frissít = true; //első rögzítéskor alapból előírjuk a jelszó megváltoztatását
 
-                string szöveg = $"INSERT INTO {táblanév} (UserId, UserName, WinUserName, Dolgozószám, Password, Dátum, Frissít, Törölt, Szervezetek, Szervezet, GlobalAdmin, TelepAdmin) VALUES ";
-                szöveg += $@"(@UserId, @UserName, @WinUserName, @Dolgozószám, @Password, @Dátum, @Frissít, @Törölt, @Szervezetek, @Szervezet, @GlobalAdmin, @TelepAdmin)";
-
+                string szöveg = $"INSERT INTO {táblanév} ( UserName, WinUserName, Dolgozószám, Password, Dátum, Frissít, Törölt, Szervezetek, Szervezet, GlobalAdmin, TelepAdmin) VALUES ";
+                szöveg += $@"( @UserName, @WinUserName, @Dolgozószám, @Password, @Dátum, @Frissít, @Törölt, @Szervezetek, @Szervezet, @GlobalAdmin, @TelepAdmin)";
 
                 SqliteCommand cmd = new SqliteCommand(szöveg);
-                //     cmd.Parameters.AddWithValue("@UserId", Adat.UserId);
+
                 cmd.Parameters.AddWithValue("@UserName", Adat.UserName);
                 cmd.Parameters.AddWithValue("@WinUserName", Adat.WinUserName);
                 cmd.Parameters.AddWithValue("@Dolgozószám", Adat.Dolgozószám);
