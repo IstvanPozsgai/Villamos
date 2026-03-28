@@ -300,6 +300,7 @@ namespace Villamos
             this.LstMezők.Location = new System.Drawing.Point(733, 54);
             this.LstMezők.Name = "LstMezők";
             this.LstMezők.Size = new System.Drawing.Size(226, 292);
+            this.LstMezők.Sorted = true;
             this.LstMezők.TabIndex = 68;
             // 
             // SqlTábla
@@ -349,6 +350,7 @@ namespace Villamos
             this.LstSqlMezők.Location = new System.Drawing.Point(546, 531);
             this.LstSqlMezők.Name = "LstSqlMezők";
             this.LstSqlMezők.Size = new System.Drawing.Size(226, 132);
+            this.LstSqlMezők.Sorted = true;
             this.LstSqlMezők.TabIndex = 76;
             // 
             // tableLayoutPanel2
