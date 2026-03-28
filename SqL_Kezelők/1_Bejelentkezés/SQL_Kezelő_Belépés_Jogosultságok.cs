@@ -5,21 +5,26 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
-using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
-    public class Kezelő_Jogosultságok
+    public class SQL_Kezelő_Jogosultságok
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ÚJ_Belépés.mdb";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\SQL\Belépés.db";
         readonly string jelszó = "ForgalmiUtasítás";
-        readonly string táblanév = "Tábla_Jogosultság";
+        readonly string táblanév = "Tbl_Bejelentkezés_Jogosultság";
 
-        public Kezelő_Jogosultságok()
+
+        public SQL_Kezelő_Jogosultságok()
         {
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Adatbázis_Jogosultság(hely.KönyvSzerk());
-            if (!AdatBázis_kezelés.TáblaEllenőrzés(hely, jelszó, táblanév)) Adatbázis_Létrehozás.Adatbázis_Jogosultság(hely);
+            if (!File.Exists(hely)) Tábla_Létrehozás();
+            if (!MyA.SqLite_ABvanTábla(hely, jelszó, táblanév)) Tábla_Létrehozás();
+        }
+
+        private void Tábla_Létrehozás()
+        {
+            throw new NotImplementedException();
         }
 
         public List<Adat_Bejelentkezés_Jogosultságok> Lista_Adatok(bool Minden = false)

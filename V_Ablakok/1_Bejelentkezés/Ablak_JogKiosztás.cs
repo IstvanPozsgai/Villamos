@@ -18,7 +18,7 @@ namespace Villamos
         readonly Kezelő_Kiegészítő_Könyvtár KézSzervezet = new Kezelő_Kiegészítő_Könyvtár();
         readonly Kezelő_Users KézUsers = new Kezelő_Users();
         readonly Kezelő_Behajtás_Dolgozótábla KézDolgozó = new Kezelő_Behajtás_Dolgozótábla();
-        readonly Kezelő_Jogosultságok KézJogosultságok = new Kezelő_Jogosultságok();
+        readonly Kezelő_Belépés_Jogosultságok KézJogosultságok = new Kezelő_Belépés_Jogosultságok();
 
         List<Adat_Bejelentkezés_Users> AdatokUsers = new List<Adat_Bejelentkezés_Users>();
         List<Adat_Belépés_Oldalak> AdatokOldal = new List<Adat_Belépés_Oldalak>();

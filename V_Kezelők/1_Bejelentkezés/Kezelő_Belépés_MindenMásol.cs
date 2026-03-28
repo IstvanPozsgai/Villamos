@@ -14,7 +14,7 @@ namespace Villamos.Kezelők
         private readonly Kezelő_Belépés_Jogosultságtábla KézRégi = new Kezelő_Belépés_Jogosultságtábla();
         private readonly Kezelő_Users KézUsers = new Kezelő_Users();
         private readonly Kezelő_Kiegészítő_Könyvtár KézSzervezetek = new Kezelő_Kiegészítő_Könyvtár();
-        private readonly Kezelő_Jogosultságok KézJog = new Kezelő_Jogosultságok();
+        private readonly Kezelő_Belépés_Jogosultságok KézJog = new Kezelő_Belépés_Jogosultságok();
 
         public void Másolás(string telephely, string felhasznaloNev)
         {
