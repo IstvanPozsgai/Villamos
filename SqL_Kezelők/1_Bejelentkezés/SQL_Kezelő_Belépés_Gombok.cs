@@ -22,9 +22,9 @@ namespace Villamos.Kezelők
             if (!AdatBázis_kezelés.TáblaEllenőrzés(hely, jelszó, táblanév)) Adatbázis_Létrehozás.Adatbázis_Gombok(hely);
         }
 
-        public List<Adat_Gombok> Lista_Adatok()
+        public List<Adat_Bejelentkezés_Gombok> Lista_Adatok()
         {
-            List<Adat_Gombok> Adatok = new List<Adat_Gombok>();
+            List<Adat_Bejelentkezés_Gombok> Adatok = new List<Adat_Bejelentkezés_Gombok>();
             string szöveg = $"SELECT * FROM {táblanév}";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
 
@@ -39,7 +39,7 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat_Gombok Adat = new Adat_Gombok(
+                                Adat_Bejelentkezés_Gombok Adat = new Adat_Bejelentkezés_Gombok(
                                         rekord["GombokId"].ToÉrt_Int(),
                                         rekord["FromName"].ToStrTrim(),
                                         rekord["GombName"].ToStrTrim(),
@@ -56,16 +56,16 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Döntés(Adat_Gombok Adat)
+        public void Döntés(Adat_Bejelentkezés_Gombok Adat)
         {
             try
             {
-                List<Adat_Gombok> Adatok = Lista_Adatok();
+                List<Adat_Bejelentkezés_Gombok> Adatok = Lista_Adatok();
                 //Ha 0 id-vel érkezik akkor rögzíjük
                 if (Adat.GombokId == 0)
                 {
                     // Ha van ilyen gomb már a lapon akkor csak akkor engedjük rögzíteni, ha többször akarjuk felhasználni a gombot.
-                    Adat_Gombok gomb = (from a in Adatok
+                    Adat_Bejelentkezés_Gombok gomb = (from a in Adatok
                                         where a.GombName == Adat.GombName
                                         && a.FromName == Adat.FromName
                                         && a.Törölt == false
@@ -96,7 +96,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Rögzítés(Adat_Gombok Adat)
+        public void Rögzítés(Adat_Bejelentkezés_Gombok Adat)
         {
             try
             {
@@ -115,7 +115,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(Adat_Gombok Adat)
+        public void Módosítás(Adat_Bejelentkezés_Gombok Adat)
         {
             try
             {

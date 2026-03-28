@@ -16,7 +16,7 @@ namespace Villamos.V_Ablakok._0_Bejelentkezés
         readonly Kezelő_Behajtás_Dolgozótábla KézDolgozó = new Kezelő_Behajtás_Dolgozótábla();
 
         List<Adat_Behajtás_Dolgozótábla> AdatokDolgozó = new List<Adat_Behajtás_Dolgozótábla>();
-        List<Adat_Users> AdatokUsers = new List<Adat_Users>();
+        List<Adat_Bejelentkezés_Users> AdatokUsers = new List<Adat_Bejelentkezés_Users>();
 
         int FelhasználóFőId = -1;
 
@@ -53,7 +53,7 @@ namespace Villamos.V_Ablakok._0_Bejelentkezés
             {
                 TextNév.Items.Clear();
                 TextNév.Items.Add("");
-                foreach (Adat_Users item in AdatokUsers)
+                foreach (Adat_Bejelentkezés_Users item in AdatokUsers)
                 {
                     TextNév.Items.Add(item.UserName);
                 }
@@ -127,7 +127,7 @@ namespace Villamos.V_Ablakok._0_Bejelentkezés
             try
             {
                 TextNév.Text = TextNév.Items[TextNév.SelectedIndex].ToString();
-                Adat_Users Felhasználó = AdatokUsers.FirstOrDefault(a => a.UserName == TextNév.Text);
+                Adat_Bejelentkezés_Users Felhasználó = AdatokUsers.FirstOrDefault(a => a.UserName == TextNév.Text);
                 if (Felhasználó == null)
                 {
                     DolgozóNév.Text = $"<< - >>";

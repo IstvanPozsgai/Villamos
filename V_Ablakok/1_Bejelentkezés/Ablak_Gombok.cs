@@ -17,7 +17,7 @@ namespace Villamos.Ablakok
 #pragma warning disable IDE0044
         DataTable AdatTáblaALap = new DataTable();
 #pragma warning restore IDE0044
-        List<Adat_Gombok> Adatok = new List<Adat_Gombok>();
+        List<Adat_Bejelentkezés_Gombok> Adatok = new List<Adat_Bejelentkezés_Gombok>();
 
         public Ablak_Gombok()
         {
@@ -126,7 +126,7 @@ namespace Villamos.Ablakok
                 if (string.IsNullOrEmpty(GombNév.Text.Trim())) throw new HibásBevittAdat("Kérem adja meg a Menü nevét!");
                 //ide be kell olvasni listából a szervezeteket pontosvesszővel tagolva
                 string szervezet = string.Join(";", ChkSzervezet.CheckedItems.Cast<string>());
-                Adat_Gombok adat = new Adat_Gombok(
+                Adat_Bejelentkezés_Gombok adat = new Adat_Bejelentkezés_Gombok(
                         TxtId.Text.ToÉrt_Int(),
                         Ablaknév.Text.ToStrTrim(),
                         GombNév.Text.ToStrTrim(),
@@ -199,7 +199,7 @@ namespace Villamos.Ablakok
                       orderby a.GombokId
                       select a).ToList();
             if (Ablaknév.Text.Trim() != "") Adatok = Adatok.Where(a => a.FromName.Trim() == Ablaknév.Text.Trim()).ToList();
-            foreach (Adat_Gombok rekord in Adatok)
+            foreach (Adat_Bejelentkezés_Gombok rekord in Adatok)
             {
                 DataRow Soradat = AdatTáblaALap.NewRow();
 
@@ -317,7 +317,7 @@ namespace Villamos.Ablakok
         {
             try
             {
-                Adat_Gombok adat = (from a in Adatok
+                Adat_Bejelentkezés_Gombok adat = (from a in Adatok
                                     where a.GombokId == ID
                                     select a).FirstOrDefault();
                 if (adat == null) return;
@@ -415,7 +415,7 @@ namespace Villamos.Ablakok
                 if (GombNév.SelectedIndex < 0) return;
                 GombNév.Text = GombNév.Items[GombNév.SelectedIndex].ToString();
                 TxtId.Text = "";
-                Adat_Gombok adat = (from a in Adatok
+                Adat_Bejelentkezés_Gombok adat = (from a in Adatok
                                     where a.GombName == GombNév.Text.Trim()
                                     select a).FirstOrDefault();
                 if (adat != null)

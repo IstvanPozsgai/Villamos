@@ -20,7 +20,7 @@ namespace Villamos
         readonly Kezelő_Belépés_Oldalok KézOldal = new Kezelő_Belépés_Oldalok();
         readonly Kezelő_Kiegészítő_Könyvtár KézKönyvtár = new Kezelő_Kiegészítő_Könyvtár();
 
-        List<Adat_Users> Adatok = new List<Adat_Users>();
+        List<Adat_Bejelentkezés_Users> Adatok = new List<Adat_Bejelentkezés_Users>();
 
 
         bool Beléphet = true;
@@ -153,7 +153,7 @@ namespace Villamos
         {
             try
             {
-                Adat_Users Elem = (from a in Adatok
+                Adat_Bejelentkezés_Users Elem = (from a in Adatok
                                    where a.WinUserName.ToUpper() == Environment.UserName.ToUpper()
                                    select a).FirstOrDefault();
 
@@ -237,7 +237,7 @@ namespace Villamos
         #region Beléptetés
         private void Btnlekérdezés_Click(object sender, EventArgs e)
         {
-            Adat_Users Belép = (from a in Adatok
+            Adat_Bejelentkezés_Users Belép = (from a in Adatok
                                 where a.UserName.ToUpper() == "VENDÉG"
                                 && a.Törölt == false
                                 select a).FirstOrDefault() ?? throw new HibásBevittAdat("Hibás felhasználónév.");
@@ -253,7 +253,7 @@ namespace Villamos
         {
             try
             {
-                Adat_Users Belép = (from a in Adatok
+                Adat_Bejelentkezés_Users Belép = (from a in Adatok
                                     where a.UserName.ToUpper() == UserName.ToUpper().Trim()
                                     && a.Törölt == false
                                     select a).FirstOrDefault() ?? throw new HibásBevittAdat("Hibás felhasználónév.");
@@ -284,7 +284,7 @@ namespace Villamos
         /// <summary>
         /// Beállítjuk , hogy ki lép be, milyen joggal és a programba és beléptetjük
         /// </summary>
-        private void Belépés(Adat_Users Elem)
+        private void Belépés(Adat_Bejelentkezés_Users Elem)
         {
             //Program.PostásJogkör majd törölni kell
             Program.PostásJogkör = "R0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" +
@@ -303,7 +303,7 @@ namespace Villamos
             this.Hide();
         }
 
-        private void Subjelszómódosítás(Adat_Users Adat)
+        private void Subjelszómódosítás(Adat_Bejelentkezés_Users Adat)
         {
             Ablak_Jelszó_Változtatás jelszó_váltás = new Ablak_Jelszó_Változtatás(Adat);
             jelszó_váltás.Változás += FelhasználókLista;
@@ -334,7 +334,7 @@ namespace Villamos
         {
             if (CmbUserName.Text.Trim() == "") return;
             TxtPassword.Text = "";
-            Adat_Users Belép = (from a in Adatok
+            Adat_Bejelentkezés_Users Belép = (from a in Adatok
                                 where a.UserName.ToUpper() == CmbUserName.Text.ToUpper().Trim()
                                 && a.Törölt == false
                                 select a).FirstOrDefault() ?? throw new HibásBevittAdat("Hibás felhasználónév.");
@@ -356,10 +356,10 @@ namespace Villamos
             try
             {
                 CmbUserName.Items.Clear();
-                List<Adat_Users> AdatokSzűrt = Adatok;
+                List<Adat_Bejelentkezés_Users> AdatokSzűrt = Adatok;
                 if (CmbTelephely.Text.Trim() != "") AdatokSzűrt = Adatok.Where(a => a.Szervezet == CmbTelephely.Text.Trim()).ToList();
 
-                foreach (Adat_Users Adat in AdatokSzűrt)
+                foreach (Adat_Bejelentkezés_Users Adat in AdatokSzűrt)
                 {
                     CmbUserName.Items.Add(Adat.UserName.ToUpper());
                 }

@@ -879,7 +879,7 @@
     <Compile Include="V_Adatbázis\Adatbázis_Excel_Beolvasás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Belépés_Verzió.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Excel_Beolvasás.cs" />
-    <Compile Include="V_Adatszerkezet\Adat_Gombok.cs" />
+    <Compile Include="V_Adatszerkezet\1_Bejelentkezés\Adat_Bejelentkezés_Gombok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_ICS_előterv.cs" />
     <Compile Include="V_Adatszerkezet\Adat_ICS_Ütem.cs" />
     <Compile Include="V_Ablakok\5_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Beosztás.cs">
@@ -1045,7 +1045,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Munkakör.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Nóta.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Oktatás.cs" />
-    <Compile Include="V_Adatszerkezet\Adat_Belépés_Oldalak.cs" />
+    <Compile Include="V_Adatszerkezet\1_Bejelentkezés\Adat_Belépés_Oldalak.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Reklám.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Rezsi.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Szerszám_FejLáb.cs" />
@@ -1059,7 +1059,7 @@
     <Compile Include="V_Adatszerkezet\Adat_TTP_Év.cs" />
     <Compile Include="V_Adatszerkezet\Adat_TW6000.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Tábla_Vezénylés.cs" />
-    <Compile Include="V_Adatszerkezet\Adat_Users.cs" />
+    <Compile Include="V_Adatszerkezet\1_Bejelentkezés\Adat_Bejelentkezés_Users.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Üzenet.cs" />
     <Compile Include="V_Függvények\Fv_Szöveg.cs" />
     <Compile Include="V_Függvények\ListToDataTable.cs" />

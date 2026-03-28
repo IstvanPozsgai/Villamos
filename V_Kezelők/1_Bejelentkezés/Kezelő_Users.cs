@@ -22,9 +22,9 @@ namespace Villamos.Kezelők
             if (!AdatBázis_kezelés.TáblaEllenőrzés(hely, jelszó, táblanév)) Adatbázis_Létrehozás.Adatbázis_Users(hely);
         }
 
-        public List<Adat_Users> Lista_Adatok()
+        public List<Adat_Bejelentkezés_Users> Lista_Adatok()
         {
-            List<Adat_Users> Adatok = new List<Adat_Users>();
+            List<Adat_Bejelentkezés_Users> Adatok = new List<Adat_Bejelentkezés_Users>();
             string szöveg = $"SELECT * FROM {táblanév}";
             string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
 
@@ -39,7 +39,7 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat_Users Adat = new Adat_Users(
+                                Adat_Bejelentkezés_Users Adat = new Adat_Bejelentkezés_Users(
                                         rekord["UserId"].ToÉrt_Int(),
                                         rekord["UserName"].ToStrTrim(),
                                         rekord["WinUserName"].ToStrTrim(),
@@ -63,11 +63,11 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Döntés(Adat_Users Adat)
+        public void Döntés(Adat_Bejelentkezés_Users Adat)
         {
             try
             {
-                List<Adat_Users> Adatok = Lista_Adatok();
+                List<Adat_Bejelentkezés_Users> Adatok = Lista_Adatok();
                 if (!Adatok.Any(a => a.UserId == Adat.UserId))
                     Rögzítés(Adat);
                 else
@@ -85,7 +85,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Rögzítés(Adat_Users Adat)
+        public void Rögzítés(Adat_Bejelentkezés_Users Adat)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(Adat_Users Adat)
+        public void Módosítás(Adat_Bejelentkezés_Users Adat)
         {
             try
             {
@@ -134,7 +134,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void MódosításJeszó(Adat_Users Adat)
+        public void MódosításJeszó(Adat_Bejelentkezés_Users Adat)
         {
             try
             {

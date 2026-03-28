@@ -2,7 +2,7 @@
 
 namespace Villamos.Adatszerkezet
 {
-    public class Adat_Users
+    public class Adat_Bejelentkezés_Users
     {
         public int UserId { get; private set; }
         public string UserName { get; private set; }
@@ -17,7 +17,7 @@ namespace Villamos.Adatszerkezet
         public bool GlobalAdmin { get; private set; }
         public bool TelepAdmin { get; private set; }
 
-        public Adat_Users(
+        public Adat_Bejelentkezés_Users(
             int userId,
             string userName,
             string winUserName,
@@ -45,7 +45,7 @@ namespace Villamos.Adatszerkezet
             TelepAdmin = telepAdmin;
         }
 
-        public Adat_Users(int userId, string password, bool frissít)
+        public Adat_Bejelentkezés_Users(int userId, string password, bool frissít)
         {
             UserId = userId;
             Password = password;

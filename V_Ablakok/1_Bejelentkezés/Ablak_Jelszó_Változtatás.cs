@@ -14,9 +14,9 @@ namespace Villamos
         readonly Kezelő_Users Kéz = new Kezelő_Users();
 
 #pragma warning disable IDE0044
-        Adat_Users Adat;
+        Adat_Bejelentkezés_Users Adat;
 #pragma warning restore IDE0044
-        public Ablak_Jelszó_Változtatás(Adat_Users adat)
+        public Ablak_Jelszó_Változtatás(Adat_Bejelentkezés_Users adat)
         {
             InitializeComponent();
             Adat = adat;
@@ -58,7 +58,7 @@ namespace Villamos
                     return;
                 }
 
-                Adat_Users adat = new Adat_Users(Adat.UserId, Jelszó.HashPassword(Első.Text.Trim()), false);
+                Adat_Bejelentkezés_Users adat = new Adat_Bejelentkezés_Users(Adat.UserId, Jelszó.HashPassword(Első.Text.Trim()), false);
                 Kéz.MódosításJeszó(adat);
                 Változás?.Invoke();
                 MessageBox.Show("A jelszó módosításra került !", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);

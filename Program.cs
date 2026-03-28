@@ -37,9 +37,9 @@ namespace Villamos
         public static int PostásNévId = 1;  //Vendég bejelentkezés
         public static List<Adat_Jogosultságok> PostásJogosultságok = new List<Adat_Jogosultságok>();
         public static List<Adat_Belépés_Oldalak> PostásOldalak = new List<Adat_Belépés_Oldalak>();
-        public static List<Adat_Gombok> PostásGombok = new List<Adat_Gombok>();
+        public static List<Adat_Bejelentkezés_Gombok> PostásGombok = new List<Adat_Bejelentkezés_Gombok>();
         public static List<Adat_Kiegészítő_Könyvtár> PostásKönyvtár = new List<Adat_Kiegészítő_Könyvtár>();
-        public static Adat_Users Postás_Felhasználó = null;
+        public static Adat_Bejelentkezés_Users Postás_Felhasználó = null;
         public static List<string> Postás_Telephelyek = new List<string>();
         /// <summary>
         /// The main entry point for the application.

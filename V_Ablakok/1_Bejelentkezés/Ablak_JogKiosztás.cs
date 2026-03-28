@@ -20,9 +20,9 @@ namespace Villamos
         readonly Kezelő_Behajtás_Dolgozótábla KézDolgozó = new Kezelő_Behajtás_Dolgozótábla();
         readonly Kezelő_Jogosultságok KézJogosultságok = new Kezelő_Jogosultságok();
 
-        List<Adat_Users> AdatokUsers = new List<Adat_Users>();
+        List<Adat_Bejelentkezés_Users> AdatokUsers = new List<Adat_Bejelentkezés_Users>();
         List<Adat_Belépés_Oldalak> AdatokOldal = new List<Adat_Belépés_Oldalak>();
-        List<Adat_Gombok> AdatokGombok = new List<Adat_Gombok>();
+        List<Adat_Bejelentkezés_Gombok> AdatokGombok = new List<Adat_Bejelentkezés_Gombok>();
         List<Adat_Kiegészítő_Könyvtár> AdatokSzervezet = new List<Adat_Kiegészítő_Könyvtár>();
         List<Adat_Behajtás_Dolgozótábla> AdatokDolgozó = new List<Adat_Behajtás_Dolgozótábla>();
         List<Adat_Jogosultságok> AdatokJogosultságok = new List<Adat_Jogosultságok>();
@@ -106,14 +106,14 @@ namespace Villamos
                                           orderby a.MenuFelirat
                                           select a).FirstOrDefault();
             if (oldal == null) return;
-            List<Adat_Gombok> gombok = (from a in AdatokGombok
+            List<Adat_Bejelentkezés_Gombok> gombok = (from a in AdatokGombok
                                         where a.Törölt == false
                                         && a.FromName == oldal.FromName
                                         select a).ToList();
             if (gombok == null) return;
             for (int i = 0; i < gombok.Count; i++)
             {
-                Adat_Gombok item = gombok[i];
+                Adat_Bejelentkezés_Gombok item = gombok[i];
                 string felirat = $"{item.GombFelirat} = {item.GombName}";
                 CmbGombok.Items.Add(felirat);
                 CmbGombId.Items.Add(item.GombokId.ToString());
@@ -131,7 +131,7 @@ namespace Villamos
             {
                 Felhasználók.Items.Clear();
                 Felhasználók.Items.Add("");
-                foreach (Adat_Users item in AdatokUsers)
+                foreach (Adat_Bejelentkezés_Users item in AdatokUsers)
                 {
                     Felhasználók.Items.Add(item.UserName);
                 }
@@ -183,7 +183,7 @@ namespace Villamos
             try
             {
                 Felhasználók.Text = Felhasználók.Items[Felhasználók.SelectedIndex].ToString();
-                Adat_Users Felhasználó = AdatokUsers.FirstOrDefault(a => a.UserName == Felhasználók.Text);
+                Adat_Bejelentkezés_Users Felhasználó = AdatokUsers.FirstOrDefault(a => a.UserName == Felhasználók.Text);
                 if (Felhasználó == null)
                 {
                     DolgozóNév.Text = $"<< - >>";
@@ -410,7 +410,7 @@ namespace Villamos
                 if (Felhasználók.Text.Trim() != "")
                 {
                     //csak a kiválasztott felhasználó adatait írjuk ki
-                    Adat_Users Egy = (from a in AdatokUsers
+                    Adat_Bejelentkezés_Users Egy = (from a in AdatokUsers
                                       where a.UserName == Felhasználók.Text.Trim()
                                       select a).FirstOrDefault();
                     Adatok = AdatokJogosultságok.Where(a => a.UserId == Egy.UserId).ToList();
@@ -426,7 +426,7 @@ namespace Villamos
                     Soradat["Felhasználó név"] = AdatokUsers.FirstOrDefault(a => a.UserId == rekord.UserId)?.UserName ?? "<<Nincs felhasználó>>";
                     Soradat["Ablak név"] = AdatokOldal.FirstOrDefault(a => a.OldalId == rekord.OldalId)?.MenuFelirat ?? "<<Nincs Ablak>>";
                     string gombnév = "<<Nincs Gomb>>";
-                    Adat_Gombok EgyGomb = AdatokGombok.FirstOrDefault(a => a.GombokId == rekord.GombokId);
+                    Adat_Bejelentkezés_Gombok EgyGomb = AdatokGombok.FirstOrDefault(a => a.GombokId == rekord.GombokId);
                     if (EgyGomb != null)
                         gombnév = $"{EgyGomb.GombFelirat} = {EgyGomb.GombName}";
                     Soradat["Gomb név"] = gombnév;
@@ -494,7 +494,7 @@ namespace Villamos
                 LstChkSzervezet.Items.Clear();
                 if (CmbGombok.Text.Trim() == "") return;
                 string[] Darabol = CmbGombok.Text.Trim().Split('=');
-                Adat_Gombok Gomb = AdatokGombok.FirstOrDefault(a => a.GombName == Darabol[1].Trim() && a.FromName == AblakFormName);
+                Adat_Bejelentkezés_Gombok Gomb = AdatokGombok.FirstOrDefault(a => a.GombName == Darabol[1].Trim() && a.FromName == AblakFormName);
                 GombFőID = Gomb?.GombokId ?? -1;
                 CmbGombId.Text = GombFőID.ToString();
                 if (Gomb == null) return;
@@ -559,7 +559,7 @@ namespace Villamos
             {
                 if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon ki egy felhasználót!");
                 //csak a kiválasztott felhasználó jogain megyünk végig
-                Adat_Users Egy = (from a in AdatokUsers
+                Adat_Bejelentkezés_Users Egy = (from a in AdatokUsers
                                   where a.UserName == Felhasználók.Text.Trim()
                                   select a).FirstOrDefault();
                 List<Adat_Jogosultságok> Adatok = AdatokJogosultságok.Where(a => a.UserId == Egy.UserId).ToList();
@@ -598,7 +598,7 @@ namespace Villamos
         {
             CmbGombId.Text = CmbGombId.Items[CmbGombId.SelectedIndex].ToString();
 
-            Adat_Gombok Gomb = AdatokGombok.FirstOrDefault(a => a.GombokId == CmbGombId.Text.ToÉrt_Int() && a.FromName == AblakFormName);
+            Adat_Bejelentkezés_Gombok Gomb = AdatokGombok.FirstOrDefault(a => a.GombokId == CmbGombId.Text.ToÉrt_Int() && a.FromName == AblakFormName);
             string felirat = $"{Gomb.GombFelirat} = {Gomb.GombName}";
             int i = 0;
             while (CmbGombok.Items.Count > i && CmbGombok.Items[i].ToStrTrim() != felirat)

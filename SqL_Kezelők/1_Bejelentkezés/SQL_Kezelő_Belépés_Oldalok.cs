@@ -14,7 +14,7 @@ namespace Villamos.Kezelők
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ÚJ_Belépés.mdb";
         readonly string jelszó = "ForgalmiUtasítás";
-        readonly string táblanév = "Tábla_Oldalak";
+        readonly string táblanév = "Tbl_Bejelentkezés_Oldalak";
 
         public SQL_Kezelő_Belépés_Oldalok()
         {

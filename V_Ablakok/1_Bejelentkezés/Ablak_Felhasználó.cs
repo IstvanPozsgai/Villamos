@@ -16,7 +16,7 @@ namespace Villamos
     {
         readonly SQL_Kezelő_Users Kéz = new SQL_Kezelő_Users();
         readonly Kezelő_Behajtás_Dolgozótábla KézDolgozó = new Kezelő_Behajtás_Dolgozótábla();
-        List<Adat_Users> Adatok = new List<Adat_Users>();
+        List<Adat_Bejelentkezés_Users> Adatok = new List<Adat_Bejelentkezés_Users>();
         List<Adat_Behajtás_Dolgozótábla> AdatokDolg = new List<Adat_Behajtás_Dolgozótábla>();
 #pragma warning disable IDE0044
         DataTable AdatTáblaALap = new DataTable();
@@ -128,7 +128,7 @@ namespace Villamos
             {
                 AdatTáblaALap.Clear();
 
-                foreach (Adat_Users rekord in Adatok)
+                foreach (Adat_Bejelentkezés_Users rekord in Adatok)
                 {
                     DataRow Soradat = AdatTáblaALap.NewRow();
                     Adat_Behajtás_Dolgozótábla Elem = (from a in AdatokDolg
@@ -193,9 +193,9 @@ namespace Villamos
 
             try
             {
-                Adat_Users adat = (from a in Adatok
-                                   where a.UserId == dolgID
-                                   select a).FirstOrDefault();
+                Adat_Bejelentkezés_Users adat = (from a in Adatok
+                                                 where a.UserId == dolgID
+                                                 select a).FirstOrDefault();
                 if (adat == null) return;
                 UserId.Text = adat.UserId.ToString();
                 TextUserNév.Text = adat.UserName;
@@ -297,7 +297,7 @@ namespace Villamos
                 }
                 // ------------------------------------------------------------------------------
 
-                Adat_Users ADAT = new Adat_Users(
+                Adat_Bejelentkezés_Users ADAT = new Adat_Bejelentkezés_Users(
                     Id,
                     TextUserNév.Text.Trim(),
                     TextWinUser.Text.Trim(),
@@ -375,7 +375,7 @@ namespace Villamos
                         }
                     }
                 }
-                Adat_Users ADAT = new Adat_Users(
+                Adat_Bejelentkezés_Users ADAT = new Adat_Bejelentkezés_Users(
                     Id,
                     TextUserNév.Text.Trim(),
                     TextWinUser.Text.Trim(),
@@ -451,7 +451,7 @@ namespace Villamos
                 if (Id == 0) throw new HibásBevittAdat("Kérem válasszon ki egy felhasználót a táblázatból!");
                 if (TxtPassword.Text.Trim() == "") TxtPassword.Text = "123456";
                 string jelszó = Jelszó.HashPassword(TxtPassword.Text.Trim());
-                Adat_Users adat = new Adat_Users(Id, jelszó, true);
+                Adat_Bejelentkezés_Users adat = new Adat_Bejelentkezés_Users(Id, jelszó, true);
                 Kéz.MódosításJeszó(adat);
                 MessageBox.Show("A jeszó módosítása befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

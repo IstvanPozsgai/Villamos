@@ -15,7 +15,7 @@ public static class GombLathatosagKezelo
     public static void Beallit(Form form, string Telephely = "")
     {
         // Lekérjük az adott ablakhoz tartozó gombokat az adatbázisból
-        List<Adat_Gombok> gombok = Program.PostásGombok.Where(g => g.FromName == form.Name && !g.Törölt).ToList();
+        List<Adat_Bejelentkezés_Gombok> gombok = Program.PostásGombok.Where(g => g.FromName == form.Name && !g.Törölt).ToList();
 
         GombokÁltalános(form, gombok);
         GombokSzemélyes(form, gombok, Telephely);
@@ -29,7 +29,7 @@ public static class GombLathatosagKezelo
     public static void Beallit(Form form, int MenüId, string Telephely = "")
     {
         // Lekérjük az adott ablakhoz tartozó gombokat az adatbázisból
-        List<Adat_Gombok> gombok = Program.PostásGombok.Where(g => g.FromName == form.Name && !g.Törölt).ToList();
+        List<Adat_Bejelentkezés_Gombok> gombok = Program.PostásGombok.Where(g => g.FromName == form.Name && !g.Törölt).ToList();
 
         GombokÁltalános(form, gombok);
         GombokSzemélyes(form, gombok, MenüId, Telephely);
@@ -40,11 +40,11 @@ public static class GombLathatosagKezelo
     /// </summary>
     /// <param name="form"></param>
     /// <param name="gombok"></param>
-    private static void GombokÁltalános(Form form, List<Adat_Gombok> gombok)
+    private static void GombokÁltalános(Form form, List<Adat_Bejelentkezés_Gombok> gombok)
     {
         try
         {
-            foreach (Adat_Gombok adatGomb in gombok)
+            foreach (Adat_Bejelentkezés_Gombok adatGomb in gombok)
             {
                 // Megkeressük a gombot az ablak Controls gyûjteményében
                 Control control = form.Controls.Find(adatGomb.GombName, true).FirstOrDefault();
@@ -72,7 +72,7 @@ public static class GombLathatosagKezelo
     /// <param name=""></param>
     /// <param name="gombok"></param>
     /// <param name="Telephely"></param>
-    private static void GombokSzemélyes(Form form, List<Adat_Gombok> gombok, string Telephely = "")
+    private static void GombokSzemélyes(Form form, List<Adat_Bejelentkezés_Gombok> gombok, string Telephely = "")
     {
         try
         {
@@ -98,7 +98,7 @@ public static class GombLathatosagKezelo
             // ha a jogosultáság táblában van akkor van hozzá joga így láthatóvá tesszük a gombokat
             foreach (Adat_Jogosultságok adatGomb in jogosultságok)
             {
-                Adat_Gombok Egygomb = (from a in gombok
+                Adat_Bejelentkezés_Gombok Egygomb = (from a in gombok
                                        where a.GombokId == adatGomb.GombokId
                                        select a).FirstOrDefault();
                 if (Egygomb != null)
@@ -128,7 +128,7 @@ public static class GombLathatosagKezelo
     /// <param name=""></param>
     /// <param name="gombok"></param>
     /// <param name="Telephely"></param>
-    private static void GombokSzemélyes(Form form, List<Adat_Gombok> gombok, int OldalId, string Telephely = "")
+    private static void GombokSzemélyes(Form form, List<Adat_Bejelentkezés_Gombok> gombok, int OldalId, string Telephely = "")
     {
         try
         {
@@ -154,7 +154,7 @@ public static class GombLathatosagKezelo
             // ha a jogosultáság táblában van akkor van hozzá joga így láthatóvá tesszük a gombokat
             foreach (Adat_Jogosultságok adatGomb in jogosultságok)
             {
-                Adat_Gombok Egygomb = (from a in gombok
+                Adat_Bejelentkezés_Gombok Egygomb = (from a in gombok
                                        where a.GombokId == adatGomb.GombokId
                                        select a).FirstOrDefault();
                 if (Egygomb != null)
@@ -193,10 +193,10 @@ public static class GombLathatosagKezelo
             if (AdatOldal == null) return válasz;
 
             // Lekérjük az adott ablakhoz tartozó gombokat az adatbázisból
-            List<Adat_Gombok> gombok = Program.PostásGombok.Where(g => g.FromName == form.Name && !g.Törölt).ToList();
+            List<Adat_Bejelentkezés_Gombok> gombok = Program.PostásGombok.Where(g => g.FromName == form.Name && !g.Törölt).ToList();
 
             // ha a jogosultáság táblában van akkor van hozzá joga így láthatóvá tesszük a gombokat
-            Adat_Gombok Egygomb = (from a in gombok
+            Adat_Bejelentkezés_Gombok Egygomb = (from a in gombok
                                    where a.GombFelirat == GombFelirat
                                    && a.GombName == GombNév
                                    select a).FirstOrDefault();

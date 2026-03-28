@@ -52,12 +52,12 @@ namespace Villamos.Kezelők
             }
         }
 
-        public List<Adat_Users> Lista_Adatok()
+        public List<Adat_Bejelentkezés_Users> Lista_Adatok()
         {
-            List<Adat_Users> Adatok = new List<Adat_Users>();
+            List<Adat_Bejelentkezés_Users> Adatok = new List<Adat_Bejelentkezés_Users>();
             try
             {
-                Adatok = MyA.Lista_Adatok(hely, jelszó, táblanév, rekord => new Adat_Users(
+                Adatok = MyA.Lista_Adatok(hely, jelszó, táblanév, rekord => new Adat_Bejelentkezés_Users(
                                         rekord["UserId"].ToÉrt_Int(),
                                         rekord["UserName"].ToStrTrim(),
                                         rekord["WinUserName"].ToStrTrim(),
@@ -84,7 +84,7 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-        public void Rögzítés(Adat_Users Adat)
+        public void Rögzítés(Adat_Bejelentkezés_Users Adat)
         {
             try
             {
@@ -123,7 +123,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Módosítás(Adat_Users Adat)
+        public void Módosítás(Adat_Bejelentkezés_Users Adat)
         {
             try
             {
@@ -169,11 +169,11 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void Döntés(Adat_Users Adat)
+        public void Döntés(Adat_Bejelentkezés_Users Adat)
         {
             try
             {
-                List<Adat_Users> Adatok = Lista_Adatok();
+                List<Adat_Bejelentkezés_Users> Adatok = Lista_Adatok();
                 if (!Adatok.Any(a => a.UserId == Adat.UserId))
                     Rögzítés(Adat);
                 else
@@ -191,7 +191,7 @@ namespace Villamos.Kezelők
             }
         }
 
-        public void MódosításJeszó(Adat_Users Adat)
+        public void MódosításJeszó(Adat_Bejelentkezés_Users Adat)
         {
             try
             {

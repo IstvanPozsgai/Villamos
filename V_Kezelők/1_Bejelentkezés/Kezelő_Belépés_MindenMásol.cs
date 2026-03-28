@@ -51,8 +51,8 @@ namespace Villamos.Kezelők
                 List<Adat_Belépés_Jogosultságtábla> AdatokJogRégi = KézRégi.Lista_Adatok(telephely);
                 Adat_Belépés_Jogosultságtábla AdatFelhasználó = AdatokJogRégi.Where(a => a.Név.ToUpper() == felhasznaloNev.ToUpper()).FirstOrDefault();
 
-                List<Adat_Users> AdatokUser = KézUsers.Lista_Adatok();
-                Adat_Users Adat_Users = AdatokUser.Where(a => a.UserName == felhasznaloNev).FirstOrDefault();
+                List<Adat_Bejelentkezés_Users> AdatokUser = KézUsers.Lista_Adatok();
+                Adat_Bejelentkezés_Users Adat_Users = AdatokUser.Where(a => a.UserName == felhasznaloNev).FirstOrDefault();
 
                 List<Adat_Kiegészítő_Könyvtár> Szervezetek = KézSzervezetek.Lista_Adatok();
                 Adat_Kiegészítő_Könyvtár Telep = Szervezetek.Where(a => a.Név == telephely).FirstOrDefault();
