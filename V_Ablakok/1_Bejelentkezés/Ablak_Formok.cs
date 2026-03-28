@@ -307,8 +307,8 @@ namespace Villamos.Ablakok
             try
             {
                 Adat_Belépés_Oldalak adat = (from a in Adatok
-                                     where a.OldalId == ID
-                                     select a).FirstOrDefault();
+                                             where a.OldalId == ID
+                                             select a).FirstOrDefault();
                 if (adat == null) return;
                 TxtId.Text = adat.OldalId.ToString();
                 MenüFelirat.Text = adat.MenuFelirat;

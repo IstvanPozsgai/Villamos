@@ -101,10 +101,10 @@ namespace Villamos
             CmbGombok.Items.Clear();
             CmbGombId.Items.Clear();
             Adat_Belépés_Oldalak oldal = (from a in AdatokOldal
-                                  where a.Törölt == false
-                                  && a.MenuFelirat == CmbAblak.Text.Trim()
-                                  orderby a.MenuFelirat
-                                  select a).FirstOrDefault();
+                                          where a.Törölt == false
+                                          && a.MenuFelirat == CmbAblak.Text.Trim()
+                                          orderby a.MenuFelirat
+                                          select a).FirstOrDefault();
             if (oldal == null) return;
             List<Adat_Gombok> gombok = (from a in AdatokGombok
                                         where a.Törölt == false

@@ -150,6 +150,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="SqL_Kezelők\1_Bejelentkezés\SQL_Kezelő_Users.cs" />
+    <Compile Include="SqL_Kezelők\1_Bejelentkezés\SQL_Kezelő_Belépés_Gombok.cs" />
+    <Compile Include="SqL_Kezelők\1_Bejelentkezés\SQL_Kezelő_Belépés_Oldalok.cs" />
     <Compile Include="SqL_Kezelők\Kisegítő.cs" />
     <Compile Include="SqL_Kezelők\Rezsi\SQL_Kezelő_Rezsi_Hely.cs" />
     <Compile Include="SqL_Kezelők\Rezsi\SQL_Kezelő_Rezsi_Könyvelés.cs" />
@@ -1095,7 +1098,7 @@
     <Compile Include="V_Kezelők\Kezelő_Sérülés_Visszajelentés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Takarítás_Telep_Opció.cs" />
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_SérülésCaf.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Users.cs" />
+    <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Users.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Mérés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Napló.cs" />
     <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Belépés_Verzió Új.cs" />
@@ -1138,7 +1141,7 @@
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Akkumulátor.cs" />
     <Compile Include="V_Kezelők\Kezelő_Behajtás.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Belépés.cs" />
+    <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Belépés.cs" />
     <Compile Include="V_Kezelők\Kezelő_CAF.cs" />
     <Compile Include="V_Kezelők\2_Beállítások\Ciklus\Kezelő_Ciklus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Dolgozó_Alap.cs" />

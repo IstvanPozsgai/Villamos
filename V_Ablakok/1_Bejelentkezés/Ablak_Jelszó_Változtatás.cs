@@ -58,7 +58,7 @@ namespace Villamos
                     return;
                 }
 
-                Adat_Users adat = new Adat_Users(Adat.UserId,Jelszó.HashPassword(Első.Text.Trim()),  false);
+                Adat_Users adat = new Adat_Users(Adat.UserId, Jelszó.HashPassword(Első.Text.Trim()), false);
                 Kéz.MódosításJeszó(adat);
                 Változás?.Invoke();
                 MessageBox.Show("A jelszó módosításra került !", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
