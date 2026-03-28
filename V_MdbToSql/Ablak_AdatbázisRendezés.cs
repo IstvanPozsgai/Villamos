@@ -569,14 +569,66 @@ namespace Villamos
 
         private void BtnAdatbázis_Click(object sender, EventArgs e)
         {
-            object[] paraméterek = new object[2];
 
-            if (CmbMetódusok.Text.Contains("Telephely")) paraméterek[0] = Cmbtelephely.Text.Trim();
-            if (CmbMetódusok.Text.Contains("Év")) paraméterek[1] = Évek.Value.ToÉrt_Int();
+            if (Cmbtelephely.Text.Trim() == "" && Évek.Value.ToÉrt_Int() == 0)
+            {
+                EgyszerűMetódusHívás(CmbOsztályok.Text.Trim(), TxtMetódus.Text.Trim());
+            }
+            else
+            {
+                object[] paraméterek = new object[2];
 
-            DinamikusMetódusHívás(CmbOsztályok.Text.Trim(), TxtMetódus.Text.Trim(), paraméterek);
+                if (CmbMetódusok.Text.Contains("Telephely")) paraméterek[0] = Cmbtelephely.Text.Trim();
+                if (CmbMetódusok.Text.Contains("Év")) paraméterek[1] = Évek.Value.ToÉrt_Int();
+                DinamikusMetódusHívás(CmbOsztályok.Text.Trim(), TxtMetódus.Text.Trim(), paraméterek);
+            }
+
         }
 
+        public void EgyszerűMetódusHívás(string osztályNév, string metódusNév)
+        {
+            try
+            {
+                // 1. Osztály megkeresése (Namespace-szel együtt!)
+                string teljesNév = $"Villamos.Kezelők.{osztályNév}";
+                Type típus = Type.GetType(teljesNév);
+
+                if (típus == null) return; // Ha nincs ilyen osztály, csendben kilépünk
+
+                // 2. Példányosítás
+                object példány = Activator.CreateInstance(típus);
+
+                // Feltételezve, hogy a 'példány' az Activator.CreateInstance-szel készült objektum
+
+                FieldInfo FájlHelye = példány.GetType().GetField("hely", BindingFlags.NonPublic | BindingFlags.Instance);
+                FieldInfo FájlJelszó = példány.GetType().GetField("jelszó", BindingFlags.NonPublic | BindingFlags.Instance);
+                FieldInfo Fájltábla = példány.GetType().GetField("táblanév", BindingFlags.NonPublic | BindingFlags.Instance);
+                string elérésiÚt = "";
+                if (FájlHelye != null)
+                {
+                    elérésiÚt = FájlHelye.GetValue(példány)?.ToString();
+                    SqLitekönyvtár = System.IO.Path.GetDirectoryName(elérésiÚt);
+                    SqLitefájl = System.IO.Path.GetFileName(elérésiÚt);
+                }
+                TxtHely.Text = elérésiÚt;
+                if (FájlJelszó != null) SqLitejelszó = FájlJelszó.GetValue(példány)?.ToString();
+                if (Fájltábla != null) SqLitetábla = Fájltábla.GetValue(példány)?.ToString();
+                SqlAdatokMezőbeírása();
+                Sql_Működés SqLiteAdat = new Sql_Működés { Fájl = elérésiÚt, Jelszó = SqLitejelszó, Tábla = SqLitetábla };
+                Kéz.Döntés(SqLiteAdat);
+                SqlTáblaFrissítés();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
         public void DinamikusMetódusHívás(string osztályNév, string metódusNév, object[] paraméterek)
         {
             try
