@@ -13,7 +13,7 @@ namespace Villamos.Ablakok
 {
     public partial class Ablak_Gombok : Form
     {
-        readonly Kezelő_Belépés_Gombok Kéz = new Kezelő_Belépés_Gombok();
+        readonly SQL_Kezelő_Belépés_Gombok Kéz = new SQL_Kezelő_Belépés_Gombok();
 #pragma warning disable IDE0044
         DataTable AdatTáblaALap = new DataTable();
 #pragma warning restore IDE0044
@@ -318,8 +318,8 @@ namespace Villamos.Ablakok
             try
             {
                 Adat_Bejelentkezés_Gombok adat = (from a in Adatok
-                                    where a.GombokId == ID
-                                    select a).FirstOrDefault();
+                                                  where a.GombokId == ID
+                                                  select a).FirstOrDefault();
                 if (adat == null) return;
 
                 TxtId.Text = adat.GombokId.ToString();
@@ -416,8 +416,8 @@ namespace Villamos.Ablakok
                 GombNév.Text = GombNév.Items[GombNév.SelectedIndex].ToString();
                 TxtId.Text = "";
                 Adat_Bejelentkezés_Gombok adat = (from a in Adatok
-                                    where a.GombName == GombNév.Text.Trim()
-                                    select a).FirstOrDefault();
+                                                  where a.GombName == GombNév.Text.Trim()
+                                                  select a).FirstOrDefault();
                 if (adat != null)
                 {
                     TxtId.Text = adat.GombokId.ToString();

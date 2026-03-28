@@ -14,10 +14,11 @@ namespace Villamos
 {
     public partial class AblakBejelentkezés_Új
     {
-        readonly Kezelő_Users Kéz = new Kezelő_Users();
+        readonly SQL_Kezelő_Belépés_Users Kéz = new SQL_Kezelő_Belépés_Users();
+        readonly SQL_Kezelő_Belépés_Gombok KézGombok = new SQL_Kezelő_Belépés_Gombok();
+        readonly SQL_Kezelő_Belépés_Oldalak KézOldal = new SQL_Kezelő_Belépés_Oldalak();
+
         readonly Kezelő_Belépés_Verzió KézVerzió = new Kezelő_Belépés_Verzió();
-        readonly Kezelő_Belépés_Gombok KézGombok = new Kezelő_Belépés_Gombok();
-        readonly Kezelő_Belépés_Oldalok KézOldal = new Kezelő_Belépés_Oldalok();
         readonly Kezelő_Kiegészítő_Könyvtár KézKönyvtár = new Kezelő_Kiegészítő_Könyvtár();
 
         List<Adat_Bejelentkezés_Users> Adatok = new List<Adat_Bejelentkezés_Users>();
@@ -154,8 +155,8 @@ namespace Villamos
             try
             {
                 Adat_Bejelentkezés_Users Elem = (from a in Adatok
-                                   where a.WinUserName.ToUpper() == Environment.UserName.ToUpper()
-                                   select a).FirstOrDefault();
+                                                 where a.WinUserName.ToUpper() == Environment.UserName.ToUpper()
+                                                 select a).FirstOrDefault();
 
                 //Ha van ilyen dolgozó, akkor beléptetjük
                 if (Elem != null)
@@ -238,9 +239,9 @@ namespace Villamos
         private void Btnlekérdezés_Click(object sender, EventArgs e)
         {
             Adat_Bejelentkezés_Users Belép = (from a in Adatok
-                                where a.UserName.ToUpper() == "VENDÉG"
-                                && a.Törölt == false
-                                select a).FirstOrDefault() ?? throw new HibásBevittAdat("Hibás felhasználónév.");
+                                              where a.UserName.ToUpper() == "VENDÉG"
+                                              && a.Törölt == false
+                                              select a).FirstOrDefault() ?? throw new HibásBevittAdat("Hibás felhasználónév.");
             Belépés(Belép);
         }
 
@@ -254,9 +255,9 @@ namespace Villamos
             try
             {
                 Adat_Bejelentkezés_Users Belép = (from a in Adatok
-                                    where a.UserName.ToUpper() == UserName.ToUpper().Trim()
-                                    && a.Törölt == false
-                                    select a).FirstOrDefault() ?? throw new HibásBevittAdat("Hibás felhasználónév.");
+                                                  where a.UserName.ToUpper() == UserName.ToUpper().Trim()
+                                                  && a.Törölt == false
+                                                  select a).FirstOrDefault() ?? throw new HibásBevittAdat("Hibás felhasználónév.");
 
                 if (Begépeltjelszó != Belép.Password) throw new HibásBevittAdat("Hibás jelszó!");
                 if (Belép.Frissít)
@@ -335,9 +336,9 @@ namespace Villamos
             if (CmbUserName.Text.Trim() == "") return;
             TxtPassword.Text = "";
             Adat_Bejelentkezés_Users Belép = (from a in Adatok
-                                where a.UserName.ToUpper() == CmbUserName.Text.ToUpper().Trim()
-                                && a.Törölt == false
-                                select a).FirstOrDefault() ?? throw new HibásBevittAdat("Hibás felhasználónév.");
+                                              where a.UserName.ToUpper() == CmbUserName.Text.ToUpper().Trim()
+                                              && a.Törölt == false
+                                              select a).FirstOrDefault() ?? throw new HibásBevittAdat("Hibás felhasználónév.");
 
             Subjelszómódosítás(Belép);
         }

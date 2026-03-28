@@ -10,6 +10,7 @@ using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
+    // JAVÍTANDÓ:Nincs bekötve törölhető
     public class Kezelő_Belépés_Gombok
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ÚJ_Belépés.mdb";
@@ -66,10 +67,10 @@ namespace Villamos.Kezelők
                 {
                     // Ha van ilyen gomb már a lapon akkor csak akkor engedjük rögzíteni, ha többször akarjuk felhasználni a gombot.
                     Adat_Bejelentkezés_Gombok gomb = (from a in Adatok
-                                        where a.GombName == Adat.GombName
-                                        && a.FromName == Adat.FromName
-                                        && a.Törölt == false
-                                        select a).FirstOrDefault();
+                                                      where a.GombName == Adat.GombName
+                                                      && a.FromName == Adat.FromName
+                                                      && a.Törölt == false
+                                                      select a).FirstOrDefault();
                     if (gomb != null)
                     {
                         DialogResult valasz = MessageBox.Show($"Ez a {gomb.GombokId} szám alatt már szerepel, létre akarsz hozni egy új elemet?",

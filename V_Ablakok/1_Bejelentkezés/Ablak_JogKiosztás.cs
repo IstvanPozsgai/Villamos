@@ -13,12 +13,13 @@ namespace Villamos
 
     public partial class Ablak_JogKiosztás : Form
     {
-        readonly Kezelő_Belépés_Oldalok KézOldal = new Kezelő_Belépés_Oldalok();
-        readonly Kezelő_Belépés_Gombok KézGombok = new Kezelő_Belépés_Gombok();
+        readonly SQL_Kezelő_Belépés_Oldalak KézOldal = new SQL_Kezelő_Belépés_Oldalak();
+        readonly SQL_Kezelő_Belépés_Gombok KézGombok = new SQL_Kezelő_Belépés_Gombok();
+        readonly SQL_Kezelő_Belépés_Users KézUsers = new SQL_Kezelő_Belépés_Users();
+        readonly SQL_Kezelő_Belépés_Jogosultságok KézJogosultságok = new SQL_Kezelő_Belépés_Jogosultságok();
+
         readonly Kezelő_Kiegészítő_Könyvtár KézSzervezet = new Kezelő_Kiegészítő_Könyvtár();
-        readonly Kezelő_Users KézUsers = new Kezelő_Users();
         readonly Kezelő_Behajtás_Dolgozótábla KézDolgozó = new Kezelő_Behajtás_Dolgozótábla();
-        readonly Kezelő_Belépés_Jogosultságok KézJogosultságok = new Kezelő_Belépés_Jogosultságok();
 
         List<Adat_Bejelentkezés_Users> AdatokUsers = new List<Adat_Bejelentkezés_Users>();
         List<Adat_Belépés_Oldalak> AdatokOldal = new List<Adat_Belépés_Oldalak>();
@@ -107,9 +108,9 @@ namespace Villamos
                                           select a).FirstOrDefault();
             if (oldal == null) return;
             List<Adat_Bejelentkezés_Gombok> gombok = (from a in AdatokGombok
-                                        where a.Törölt == false
-                                        && a.FromName == oldal.FromName
-                                        select a).ToList();
+                                                      where a.Törölt == false
+                                                      && a.FromName == oldal.FromName
+                                                      select a).ToList();
             if (gombok == null) return;
             for (int i = 0; i < gombok.Count; i++)
             {
@@ -411,8 +412,8 @@ namespace Villamos
                 {
                     //csak a kiválasztott felhasználó adatait írjuk ki
                     Adat_Bejelentkezés_Users Egy = (from a in AdatokUsers
-                                      where a.UserName == Felhasználók.Text.Trim()
-                                      select a).FirstOrDefault();
+                                                    where a.UserName == Felhasználók.Text.Trim()
+                                                    select a).FirstOrDefault();
                     Adatok = AdatokJogosultságok.Where(a => a.UserId == Egy.UserId).ToList();
                     if (CmbAblak.Text.Trim() != "")
                     {
@@ -511,11 +512,11 @@ namespace Villamos
                         //Jogosoultságok kiírása a meglévő alapján
                         int UserId = FelhasználóFőId;
                         Adat_Bejelentkezés_Jogosultságok Jog = (from a in AdatokJogosultságok
-                                                  where a.UserId == FelhasználóFőId
-                                                  && a.OldalId == AblakFőID
-                                                  && a.GombokId == GombFőID
-                                                  && a.SzervezetId == AdatokSzervezet.FirstOrDefault(b => b.Név == szervezet.Trim())?.ID
-                                                  select a).FirstOrDefault();
+                                                                where a.UserId == FelhasználóFőId
+                                                                && a.OldalId == AblakFőID
+                                                                && a.GombokId == GombFőID
+                                                                && a.SzervezetId == AdatokSzervezet.FirstOrDefault(b => b.Név == szervezet.Trim())?.ID
+                                                                select a).FirstOrDefault();
                         if (Jog != null && !Jog.Törölt)
                             LstChkSzervezet.SetItemChecked(LstChkSzervezet.Items.IndexOf(szervezet.Trim()), true);
                         else
@@ -560,8 +561,8 @@ namespace Villamos
                 if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon ki egy felhasználót!");
                 //csak a kiválasztott felhasználó jogain megyünk végig
                 Adat_Bejelentkezés_Users Egy = (from a in AdatokUsers
-                                  where a.UserName == Felhasználók.Text.Trim()
-                                  select a).FirstOrDefault();
+                                                where a.UserName == Felhasználók.Text.Trim()
+                                                select a).FirstOrDefault();
                 List<Adat_Bejelentkezés_Jogosultságok> Adatok = AdatokJogosultságok.Where(a => a.UserId == Egy.UserId).ToList();
 
                 KézJogosultságok.Törlés(Adatok);
