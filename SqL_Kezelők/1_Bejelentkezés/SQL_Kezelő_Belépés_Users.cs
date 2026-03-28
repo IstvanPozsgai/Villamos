@@ -9,13 +9,13 @@ using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
-    public class SQL_Kezelő_Users
+    public class SQL_Kezelő_Belépés_Users
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\SQL\Belépés.db";
         readonly string jelszó = "ForgalmiUtasítás";
         readonly string táblanév = "Tbl_Bejelentkezés_Users";
 
-        public SQL_Kezelő_Users()
+        public SQL_Kezelő_Belépés_Users()
         {
             if (!File.Exists(hely)) Tábla_Létrehozás();
             if (!MyA.SqLite_ABvanTábla(hely, jelszó, táblanév)) Tábla_Létrehozás();

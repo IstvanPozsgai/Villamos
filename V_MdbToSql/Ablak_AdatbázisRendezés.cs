@@ -349,7 +349,7 @@ namespace Villamos
                 {
                     SqlTábla.Columns["Tábla"].Visible = true;
                     SqlTábla.Columns["Tábla"].HeaderText = "Tábla név";
-                    SqlTábla.Columns["Tábla"].Width = 120;
+                    SqlTábla.Columns["Tábla"].Width = 200;
                     SqlTábla.Columns["Tábla"].DisplayIndex = 2;
                 }
 

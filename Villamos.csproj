@@ -150,7 +150,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="SqL_Kezelők\1_Bejelentkezés\SQL_Kezelő_Users.cs" />
+    <Compile Include="SqL_Kezelők\1_Bejelentkezés\SQL_Kezelő_Belépés_Users.cs" />
     <Compile Include="SqL_Kezelők\1_Bejelentkezés\SQL_Kezelő_Belépés_Gombok.cs" />
     <Compile Include="SqL_Kezelők\1_Bejelentkezés\SQL_Kezelő_Belépés_Oldalak.cs" />
     <Compile Include="SqL_Kezelők\Kisegítő.cs" />
