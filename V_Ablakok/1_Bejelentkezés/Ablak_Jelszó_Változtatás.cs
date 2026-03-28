@@ -11,7 +11,7 @@ namespace Villamos
     {
 
         public event Event_Kidobó Változás;
-        readonly Kezelő_Users Kéz = new Kezelő_Users();
+        readonly SQL_Kezelő_Belépés_Users Kéz = new SQL_Kezelő_Belépés_Users();
 
 #pragma warning disable IDE0044
         Adat_Bejelentkezés_Users Adat;

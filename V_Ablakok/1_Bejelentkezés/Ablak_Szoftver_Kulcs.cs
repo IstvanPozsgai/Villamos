@@ -12,7 +12,7 @@ namespace Villamos.V_Ablakok._0_Bejelentkezés
     {
 
         readonly Kezelő_Kulcs_Fekete KézKulcs = new Kezelő_Kulcs_Fekete();
-        readonly Kezelő_Users KézUsers = new Kezelő_Users();
+        readonly SQL_Kezelő_Belépés_Users KézUsers = new SQL_Kezelő_Belépés_Users();
         readonly Kezelő_Behajtás_Dolgozótábla KézDolgozó = new Kezelő_Behajtás_Dolgozótábla();
 
         List<Adat_Behajtás_Dolgozótábla> AdatokDolgozó = new List<Adat_Behajtás_Dolgozótábla>();

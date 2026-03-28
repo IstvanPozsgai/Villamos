@@ -10,6 +10,7 @@ using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
+    // JAVÍTANDÓ:Törölhető
     public class Kezelő_Users
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\ÚJ_Belépés.mdb";

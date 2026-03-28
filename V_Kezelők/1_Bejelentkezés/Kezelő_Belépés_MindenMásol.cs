@@ -12,7 +12,7 @@ namespace Villamos.Kezelők
     public class Kezelő_Belépés_MindenMásol
     {
         private readonly Kezelő_Belépés_Jogosultságtábla KézRégi = new Kezelő_Belépés_Jogosultságtábla();
-        private readonly Kezelő_Users KézUsers = new Kezelő_Users();
+        private readonly SQL_Kezelő_Belépés_Users KézUsers = new SQL_Kezelő_Belépés_Users();
         private readonly Kezelő_Kiegészítő_Könyvtár KézSzervezetek = new Kezelő_Kiegészítő_Könyvtár();
         private readonly SQL_Kezelő_Belépés_Jogosultságok KézJog = new SQL_Kezelő_Belépés_Jogosultságok();
 
