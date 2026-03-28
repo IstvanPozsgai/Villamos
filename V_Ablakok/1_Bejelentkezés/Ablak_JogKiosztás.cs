@@ -25,7 +25,7 @@ namespace Villamos
         List<Adat_Bejelentkezés_Gombok> AdatokGombok = new List<Adat_Bejelentkezés_Gombok>();
         List<Adat_Kiegészítő_Könyvtár> AdatokSzervezet = new List<Adat_Kiegészítő_Könyvtár>();
         List<Adat_Behajtás_Dolgozótábla> AdatokDolgozó = new List<Adat_Behajtás_Dolgozótábla>();
-        List<Adat_Jogosultságok> AdatokJogosultságok = new List<Adat_Jogosultságok>();
+        List<Adat_Bejelentkezés_Jogosultságok> AdatokJogosultságok = new List<Adat_Bejelentkezés_Jogosultságok>();
 
 #pragma warning disable IDE0044
         DataTable AdatTáblaALap = new DataTable();
@@ -257,11 +257,11 @@ namespace Villamos
                 string[] gomb = CmbGombok.Text.Trim().Split('=');
                 int GombokID = AdatokGombok.FirstOrDefault(a => a.GombName == gomb[1].Trim() && a.FromName == AblakFormName)?.GombokId ?? -1;
 
-                List<Adat_Jogosultságok> Adatok = new List<Adat_Jogosultságok>();
+                List<Adat_Bejelentkezés_Jogosultságok> Adatok = new List<Adat_Bejelentkezés_Jogosultságok>();
                 for (int i = 0; i < LstChkSzervezet.Items.Count; i++)
                 {
                     int SzervezetId = AdatokSzervezet.FirstOrDefault(a => a.Név == LstChkSzervezet.Items[i].ToString())?.ID ?? -1;
-                    Adat_Jogosultságok adat = new Adat_Jogosultságok
+                    Adat_Bejelentkezés_Jogosultságok adat = new Adat_Bejelentkezés_Jogosultságok
                     (
                         FelhasználóFőId,
                         AblakFőID,
@@ -292,13 +292,13 @@ namespace Villamos
                 if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem adja meg a Felhasználót!");
                 if (CmbAblak.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon egy Ablakot!");
 
-                List<Adat_Jogosultságok> Adatok = new List<Adat_Jogosultságok>();
+                List<Adat_Bejelentkezés_Jogosultságok> Adatok = new List<Adat_Bejelentkezés_Jogosultságok>();
                 for (int j = 0; j < CmbGombId.Items.Count; j++)
                 {
                     for (int i = 0; i < LstChkSzervezet.Items.Count; i++)
                     {
                         int SzervezetId = AdatokSzervezet.FirstOrDefault(a => a.Név == LstChkSzervezet.Items[i].ToString())?.ID ?? -1;
-                        Adat_Jogosultságok adat = new Adat_Jogosultságok
+                        Adat_Bejelentkezés_Jogosultságok adat = new Adat_Bejelentkezés_Jogosultságok
                         (
                             FelhasználóFőId,
                             AblakFőID,
@@ -406,7 +406,7 @@ namespace Villamos
                 AdatTáblaALap.Clear();
                 AdatokJogosultságok = KézJogosultságok.Lista_Adatok();
                 //ha nincs kiválasztva akkor az összes adatot írjuk ki
-                List<Adat_Jogosultságok> Adatok = AdatokJogosultságok;
+                List<Adat_Bejelentkezés_Jogosultságok> Adatok = AdatokJogosultságok;
                 if (Felhasználók.Text.Trim() != "")
                 {
                     //csak a kiválasztott felhasználó adatait írjuk ki
@@ -420,7 +420,7 @@ namespace Villamos
                         Adatok = Adatok.Where(a => a.OldalId == oldalid).ToList();
                     }
                 }
-                foreach (Adat_Jogosultságok rekord in Adatok)
+                foreach (Adat_Bejelentkezés_Jogosultságok rekord in Adatok)
                 {
                     DataRow Soradat = AdatTáblaALap.NewRow();
                     Soradat["Felhasználó név"] = AdatokUsers.FirstOrDefault(a => a.UserId == rekord.UserId)?.UserName ?? "<<Nincs felhasználó>>";
@@ -510,7 +510,7 @@ namespace Villamos
                         LstChkSzervezet.Items.Add(szervezet.Trim());
                         //Jogosoultságok kiírása a meglévő alapján
                         int UserId = FelhasználóFőId;
-                        Adat_Jogosultságok Jog = (from a in AdatokJogosultságok
+                        Adat_Bejelentkezés_Jogosultságok Jog = (from a in AdatokJogosultságok
                                                   where a.UserId == FelhasználóFőId
                                                   && a.OldalId == AblakFőID
                                                   && a.GombokId == GombFőID
@@ -562,7 +562,7 @@ namespace Villamos
                 Adat_Bejelentkezés_Users Egy = (from a in AdatokUsers
                                   where a.UserName == Felhasználók.Text.Trim()
                                   select a).FirstOrDefault();
-                List<Adat_Jogosultságok> Adatok = AdatokJogosultságok.Where(a => a.UserId == Egy.UserId).ToList();
+                List<Adat_Bejelentkezés_Jogosultságok> Adatok = AdatokJogosultságok.Where(a => a.UserId == Egy.UserId).ToList();
 
                 KézJogosultságok.Törlés(Adatok);
                 TáblázatListázás();

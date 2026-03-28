@@ -57,7 +57,7 @@ namespace Villamos.Kezelők
                 List<Adat_Kiegészítő_Könyvtár> Szervezetek = KézSzervezetek.Lista_Adatok();
                 Adat_Kiegészítő_Könyvtár Telep = Szervezetek.Where(a => a.Név == telephely).FirstOrDefault();
 
-                List<Adat_Jogosultságok> AdatokGy = new List<Adat_Jogosultságok>();
+                List<Adat_Bejelentkezés_Jogosultságok> AdatokGy = new List<Adat_Bejelentkezés_Jogosultságok>();
                 if (AdatFelhasználó == null || Adat_Users == null || Telep == null) return;
 
                 for (int i = 0; i < AdatFelhasználó.Jogkörúj1.Length; i++)
@@ -74,7 +74,7 @@ namespace Villamos.Kezelők
                                                                  select a).ToList();
                             foreach (IdeigJogosultságok gomb in GombokId)
                             {
-                                Adat_Jogosultságok ADAT = new Adat_Jogosultságok(
+                                Adat_Bejelentkezés_Jogosultságok ADAT = new Adat_Bejelentkezés_Jogosultságok(
                                     Adat_Users.UserId,
                                     gomb.Ablakid,
                                     gomb.Gombid,

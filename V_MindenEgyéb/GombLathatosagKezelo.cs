@@ -87,7 +87,7 @@ public static class GombLathatosagKezelo
             if (AdatOldal == null) return;
 
             // Lekérjük az adott felhasználóhoz tartozó gombokat az adatbázisból
-            List<Adat_Jogosultságok> jogosultságok = Program.PostásJogosultságok;
+            List<Adat_Bejelentkezés_Jogosultságok> jogosultságok = Program.PostásJogosultságok;
             jogosultságok = (from j in jogosultságok
                              where j.UserId == Program.PostásNévId
                              && !j.Törölt
@@ -96,7 +96,7 @@ public static class GombLathatosagKezelo
                              select j).ToList();
 
             // ha a jogosultáság táblában van akkor van hozzá joga így láthatóvá tesszük a gombokat
-            foreach (Adat_Jogosultságok adatGomb in jogosultságok)
+            foreach (Adat_Bejelentkezés_Jogosultságok adatGomb in jogosultságok)
             {
                 Adat_Bejelentkezés_Gombok Egygomb = (from a in gombok
                                        where a.GombokId == adatGomb.GombokId
@@ -143,7 +143,7 @@ public static class GombLathatosagKezelo
             if (AdatOldal == null) return;
 
             // Lekérjük az adott felhasználóhoz tartozó gombokat az adatbázisból
-            List<Adat_Jogosultságok> jogosultságok = Program.PostásJogosultságok;
+            List<Adat_Bejelentkezés_Jogosultságok> jogosultságok = Program.PostásJogosultságok;
             jogosultságok = (from j in jogosultságok
                              where j.UserId == Program.PostásNévId
                              && !j.Törölt
@@ -152,7 +152,7 @@ public static class GombLathatosagKezelo
                              select j).ToList();
 
             // ha a jogosultáság táblában van akkor van hozzá joga így láthatóvá tesszük a gombokat
-            foreach (Adat_Jogosultságok adatGomb in jogosultságok)
+            foreach (Adat_Bejelentkezés_Jogosultságok adatGomb in jogosultságok)
             {
                 Adat_Bejelentkezés_Gombok Egygomb = (from a in gombok
                                        where a.GombokId == adatGomb.GombokId
@@ -205,7 +205,7 @@ public static class GombLathatosagKezelo
             {
 
                 // Lekérjük az adott felhasználóhoz tartozó gombokat az adatbázisból
-                List<Adat_Jogosultságok> jogosultságok = Program.PostásJogosultságok;
+                List<Adat_Bejelentkezés_Jogosultságok> jogosultságok = Program.PostásJogosultságok;
                 jogosultságok = (from j in jogosultságok
                                  where j.UserId == Program.PostásNévId
                                  && j.GombokId == Egygomb.GombokId
@@ -238,12 +238,12 @@ public static class GombLathatosagKezelo
             int OldalId = 0;
             if (Oldal != null) OldalId = Oldal.OldalId;
             //Azok a jogosultságok amik az adott oldalhoz tartoznak
-            List<Adat_Jogosultságok> AdatokA = (from a in Program.PostásJogosultságok
+            List<Adat_Bejelentkezés_Jogosultságok> AdatokA = (from a in Program.PostásJogosultságok
                                                 where a.OldalId == OldalId
                                                 select a).ToList();
 
             List<Adat_Kiegészítõ_Könyvtár> Ideig = new List<Adat_Kiegészítõ_Könyvtár>();
-            foreach (Adat_Jogosultságok Adat in AdatokA)
+            foreach (Adat_Bejelentkezés_Jogosultságok Adat in AdatokA)
             {
                 Adat_Kiegészítõ_Könyvtár AdatKönyv = (from a in Program.PostásKönyvtár
                                                       where a.ID == Adat.SzervezetId
@@ -276,12 +276,12 @@ public static class GombLathatosagKezelo
         try
         {
             //Azok a jogosultságok amik az adott oldalhoz tartoznak
-            List<Adat_Jogosultságok> AdatokA = (from a in Program.PostásJogosultságok
+            List<Adat_Bejelentkezés_Jogosultságok> AdatokA = (from a in Program.PostásJogosultságok
                                                 where a.OldalId == OldalId
                                                 select a).ToList();
 
             List<Adat_Kiegészítõ_Könyvtár> Ideig = new List<Adat_Kiegészítõ_Könyvtár>();
-            foreach (Adat_Jogosultságok Adat in AdatokA)
+            foreach (Adat_Bejelentkezés_Jogosultságok Adat in AdatokA)
             {
                 Adat_Kiegészítõ_Könyvtár AdatKönyv = (from a in Program.PostásKönyvtár
                                                       where a.ID == Adat.SzervezetId

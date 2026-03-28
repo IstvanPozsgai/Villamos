@@ -1031,7 +1031,7 @@
     <Compile Include="V_Adatszerkezet\Adat_Ciklus.cs" />
     <Compile Include="V_Adatszerkezet\Adat_DigitálisMunkalap.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Dolgozó_Státus.cs" />
-    <Compile Include="V_Adatszerkezet\Adat_Jogosultságok.cs" />
+    <Compile Include="V_Adatszerkezet\1_Bejelentkezés\Adat_Bejelentkezés_Jogosultságok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jogosítvány.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Jármű_Takarítás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Karbantartási.cs" />

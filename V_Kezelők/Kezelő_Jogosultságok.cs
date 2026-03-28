@@ -22,9 +22,9 @@ namespace Villamos.Kezelők
             if (!AdatBázis_kezelés.TáblaEllenőrzés(hely, jelszó, táblanév)) Adatbázis_Létrehozás.Adatbázis_Jogosultság(hely);
         }
 
-        public List<Adat_Jogosultságok> Lista_Adatok(bool Minden = false)
+        public List<Adat_Bejelentkezés_Jogosultságok> Lista_Adatok(bool Minden = false)
         {
-            List<Adat_Jogosultságok> Adatok = new List<Adat_Jogosultságok>();
+            List<Adat_Bejelentkezés_Jogosultságok> Adatok = new List<Adat_Bejelentkezés_Jogosultságok>();
 
             string szöveg = $"SELECT * FROM {táblanév} WHERE Törölt={false}";
             if (Minden) szöveg = $"SELECT * FROM {táblanév} ";
@@ -41,7 +41,7 @@ namespace Villamos.Kezelők
                         {
                             while (rekord.Read())
                             {
-                                Adat_Jogosultságok Adat = new Adat_Jogosultságok(
+                                Adat_Bejelentkezés_Jogosultságok Adat = new Adat_Bejelentkezés_Jogosultságok(
                                         rekord["UserId"].ToÉrt_Int(),
                                         rekord["OldalId"].ToÉrt_Int(),
                                         rekord["GombokId"].ToÉrt_Int(),
@@ -60,14 +60,14 @@ namespace Villamos.Kezelők
         /// Megnézzük, hogy volt-e rögzítve ha volt és ha nem kell akkor töröljük a régi adatokat és rögzítjük az újakat.
         /// </summary>
         /// <param name="Adatok"></param>
-        public void Rögzítés(List<Adat_Jogosultságok> Adatok)
+        public void Rögzítés(List<Adat_Bejelentkezés_Jogosultságok> Adatok)
         {
             try
             {
-                List<Adat_Jogosultságok> AdatokRégi = Lista_Adatok(true);
+                List<Adat_Bejelentkezés_Jogosultságok> AdatokRégi = Lista_Adatok(true);
                 List<string> SzövegGyR = new List<string>();
                 List<string> SzövegGyM = new List<string>();
-                foreach (Adat_Jogosultságok Adat in Adatok)
+                foreach (Adat_Bejelentkezés_Jogosultságok Adat in Adatok)
                 {
                     // Ha a régi adatok között nincs benne akkor rögzítjük az újakat.
                     if (!AdatokRégi.Any(a => a.SzervezetId == Adat.SzervezetId && a.UserId == Adat.UserId && a.OldalId == Adat.OldalId && a.GombokId == Adat.GombokId))
@@ -106,7 +106,7 @@ namespace Villamos.Kezelők
         /// Módosítjuk az ablakhoz tartozó jogokat töröltre
         /// </summary>
         /// <param name="Adatok"></param>
-        public void Törlés(Adat_Jogosultságok Adat)
+        public void Törlés(Adat_Bejelentkezés_Jogosultságok Adat)
         {
             try
             {
@@ -129,12 +129,12 @@ namespace Villamos.Kezelők
         }
 
 
-        public void Törlés(List<Adat_Jogosultságok> Adatok)
+        public void Törlés(List<Adat_Bejelentkezés_Jogosultságok> Adatok)
         {
             try
             {
                 List<string> SzövegGy = new List<string>();
-                foreach (Adat_Jogosultságok Adat in Adatok)
+                foreach (Adat_Bejelentkezés_Jogosultságok Adat in Adatok)
                 {
                     string szöveg = $"UPDATE {táblanév} SET ";
                     szöveg += $"Törölt ={true} ";
