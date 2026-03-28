@@ -137,7 +137,7 @@ namespace Villamos.Kezelők
                 szöveg += $@"Szervezetek=@Szervezetek, ";
                 szöveg += $@"Szervezet=@Szervezet, ";
                 szöveg += $@"GlobalAdmin=@GlobalAdmin, ";
-                szöveg += $@"TelepAdmin=@TelepAdmin, ";
+                szöveg += $@"TelepAdmin=@TelepAdmin ";
                 szöveg += $@"WHERE UserId=@UserId;";
 
                 SqliteCommand cmd = new SqliteCommand(szöveg);
@@ -197,8 +197,8 @@ namespace Villamos.Kezelők
                 string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $@"Password=@Password, ";
                 szöveg += $@"Dátum=@Dátum, ";
-                szöveg += $@"Frissít=@Frissít, ";
-                szöveg += $@"WHERE UserId=@UserId;";
+                szöveg += $@"Frissít=@Frissít ";
+                szöveg += $@"WHERE UserId=@UserId";
 
                 SqliteCommand cmd = new SqliteCommand(szöveg);
 

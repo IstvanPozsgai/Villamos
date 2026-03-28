@@ -255,7 +255,7 @@ namespace Villamos
             try
             {
                 Adat_Bejelentkezés_Users Belép = (from a in Adatok
-                                                  where a.UserName.ToUpper() == UserName.ToUpper().Trim()
+                                                  where a.UserName == UserName.Trim()
                                                   && a.Törölt == false
                                                   select a).FirstOrDefault() ?? throw new HibásBevittAdat("Hibás felhasználónév.");
 
@@ -362,7 +362,7 @@ namespace Villamos
 
                 foreach (Adat_Bejelentkezés_Users Adat in AdatokSzűrt)
                 {
-                    CmbUserName.Items.Add(Adat.UserName.ToUpper());
+                    CmbUserName.Items.Add(Adat.UserName);
                 }
             }
             catch (HibásBevittAdat ex)

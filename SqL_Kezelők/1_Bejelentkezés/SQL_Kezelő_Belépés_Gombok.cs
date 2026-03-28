@@ -154,7 +154,7 @@ namespace Villamos.Kezelők
                 szöveg += $@"GombFelirat=@GombFelirat, ";
                 szöveg += $@"Szervezet=@Szervezet, ";
                 szöveg += $@"Látható=@Látható, ";
-                szöveg += $@"Törölt=@Törölt, ";
+                szöveg += $@"Törölt=@Törölt ";
                 szöveg += $@"WHERE GombokId=@GombokId;";
 
                 SqliteCommand cmd = new SqliteCommand(szöveg);

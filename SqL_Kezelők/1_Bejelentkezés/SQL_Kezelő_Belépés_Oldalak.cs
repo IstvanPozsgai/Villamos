@@ -132,7 +132,7 @@ namespace Villamos.Kezelők
                 szöveg += $@"MenuName=@MenuName, ";
                 szöveg += $@"MenuFelirat=@MenuFelirat, ";
                 szöveg += $@"Látható=@Látható, ";
-                szöveg += $@"Törölt=@Törölt, ";
+                szöveg += $@"Törölt=@Törölt ";
 
                 szöveg += $@"WHERE OldalId=@OldalId;";
 
