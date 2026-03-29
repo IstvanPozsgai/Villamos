@@ -15,7 +15,7 @@ namespace Villamos
         {
             try
             {
-                if (disposing && components  != null)
+                if (disposing && components != null)
                 {
                     components.Dispose();
                 }
@@ -90,8 +90,8 @@ namespace Villamos
             // 
             // Fülek
             // 
-            this.Fülek.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.Fülek.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Fülek.Controls.Add(this.TabPage1);
             this.Fülek.Controls.Add(this.TabPage2);
@@ -225,7 +225,7 @@ namespace Villamos
             this.Chk_Insert.Name = "Chk_Insert";
             this.Chk_Insert.Size = new System.Drawing.Size(69, 24);
             this.Chk_Insert.TabIndex = 23;
-            this.Chk_Insert.Text = $"INSERT";
+            this.Chk_Insert.Text = "Insert";
             this.Chk_Insert.UseVisualStyleBackColor = true;
             // 
             // Chk_PageUp
@@ -330,7 +330,7 @@ namespace Villamos
             // 
             // Listtételek
             // 
-            this.Listtételek.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.Listtételek.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.Listtételek.FormattingEnabled = true;
             this.Listtételek.ItemHeight = 20;
@@ -410,8 +410,8 @@ namespace Villamos
             this.Tábla.AllowUserToDeleteRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
             this.Tábla.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Tábla.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
