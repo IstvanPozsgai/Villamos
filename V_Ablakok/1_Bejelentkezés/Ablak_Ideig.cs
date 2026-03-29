@@ -40,6 +40,7 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
             {
                 Cmbtelephely.Items.Clear();
                 Cmbtelephely.Items.Add("");
+                Cmbtelephely.Items.Add("Főmérnökség");
                 List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok();
                 foreach (Adat_Kiegészítő_Sérülés rekord in Adatok)
                     Cmbtelephely.Items.Add(rekord.Név);
@@ -60,6 +61,7 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
         {
             Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
             Neveklistája();
+
         }
 
         private void Neveklistája()
@@ -102,6 +104,7 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
                                                     where a.Név == CmbNevekOld.Text.Trim()
                                                     select a).FirstOrDefault();
             TxtJogkör.Text = rekord.Jogkörúj1;
+            Program.PostásJogkör = rekord.Jogkörúj1;
         }
 
         private void Újfelhasználóklistája()
@@ -138,8 +141,18 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
             dt.Columns.Add("Gomb Felirata", typeof(string));
             dt.Columns.Add("Gomb Kódneve", typeof(string));
 
+            // Csak ezeket az ablakokat fogja vizsgálni a program, mert ezekben van csak jogosultság beállítás
+            string[] vizsgalandoAblakok = {
+                 "Ablak_alap_program_egyéb", "Ablak_alap_program_kiadás", "Ablak_alap_program_személy", "Ablak_DolgozóiLekérdezések", "Ablak_Oktatások", "Ablak_Beosztás",
+                 };
+            //string[] vizsgalandoAblakok = {
+            //   "Ablak_reklám", "Ablak_keréknyilvántartás", "Ablak_MEO_kerék", "Ablak_sérülés", "Ablak_Jármű_takarítás_új", "Ablak_Tulajdonságok_CAF", "Ablak_IcsKcsv", "Ablak_Karbantartási_adatok", "Ablak_T5C5_fűtés", "Ablak_T5C5_napütemezés", "Ablak_T5C5_Tulajdonság", "Ablak_T5C5_Vizsgálat_ütemező", "Ablak_T5C5_futás", "Ablak_TW6000_Tulajdonság", "Ablak_Fő_Egyesített", "Ablak_Fő_Kiadás_Forte", "Ablak_Fő_Napiadatok", "Ablak_állomány", "Ablak_Főkönyv", "Ablak_kidobó", "Ablak_Behajtási", "Ablak_Szatube", "Ablak_külső", "Ablak_Rezsi", "Ablak_Épülettakarítás", "Ablak_Dolgozóialapadatok", "Ablak_Felvétel", "Ablak_Fogaskerekű_Tulajdonságok", "Ablak_Akkumulátor", "Ablak_Ciklus", "Ablak_Jármű", "Ablak_Munkalap_admin", "Ablak_munkalap_dekádoló", "Ablak_Munkalap_készítés", "Ablak_Napiadatok", "Ablak_SAP_osztály", "Ablak_Túlóra_Figyelés", "Ablak_Utasítás", "Ablak_Váltós", "Ablak_üzenet", "Ablak_technológia", "Ablak_Karbantartási_Munkalapok", "Ablak_KerékEszterga_Ütemezés", "Ablak_Nóta_Részletes", "Ablak_Nosztalgia", "Ablak_Eszterga_Segéd", "Ablak_Beosztás_kieg", "Ablak_Eszköz", "Ablak_CAF_Alapadat", "Ablak_Caf_Lista", "Ablak_CAF_Részletes", "Ablak_CAF_Segéd", "Ablak_CAF_Szín", "Ablak_ICS_KCSV_segéd", "Ablak_Főkönyv_Napi_Adatok", "Ablak_Eszterga_Adatok_Baross", "Ablak_TTP", "Ablak_TTP_Történet", "Jármű_Takarítás_Ütemezés_Segéd1", "Ablak_Karbantartási_Rendelés", "Ablak_Karbantartás_Csoport", "Karbantartás_Rögzítés", "Ablak_Fődarab", "Ablak_Vételezés", "Ablak_Üzenet_Generálás", "Ablak_Utasítás_Generálás", "Ablak_szerelvény"
+            //     };
+
             var formTipusok = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => t.IsSubclassOf(typeof(Form)) && !t.IsAbstract);
+                .Where(t => t.IsSubclassOf(typeof(Form)) && !t.IsAbstract)
+                .Where(t => vizsgalandoAblakok.Contains(t.Name)); // Csak ami a listában van
+
 
             foreach (var tipus in formTipusok)
             {
@@ -147,6 +160,19 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
                 {
                     using (Form ablak = (Form)Activator.CreateInstance(tipus))
                     {
+                        // 1. ELŐKÉSZÍTÉS A REJTETT MEGJELENÍTÉSHEZ
+                        ablak.StartPosition = FormStartPosition.CenterScreen;
+                        //  ablak.Location = new Point(-10000, -10000); // Képernyőn kívülre tesszük
+                        ablak.Opacity =1.0; // Teljesen átlátszóvá tesszük
+                        //       ablak.ShowInTaskbar = false; // Ne jelenjen meg a tálcán
+
+                        // 2. MEGJELENÍTÉS (Ez kényszeríti a WinForms-t az állapotok frissítésére)
+                        ablak.Show();
+
+                        // Hagyunk időt a Windows-nak és a Form-nak a kirajzolásra
+                        Application.DoEvents();
+
+                        // 3. JOGOSULTSÁGOK LEFUTTATÁSA
                         MethodInfo metodus = tipus.GetMethod("Jogosultságkiosztás",
                             BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 
@@ -154,11 +180,22 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
                         {
                             metodus.Invoke(ablak, null);
 
-                            var aktivGombok = MindenGombLekerese(ablak)
-                                .Where(g => g.Visible && g.Enabled);
+                            // Itt hagyunk egy pillanatot a Windows-nak az üzenetsor feldolgozására
+                            Application.DoEvents();
+
+                            var minden = MindenGombLekerese(ablak);
+
+                            var aktivGombok = MindenGombLekerese(ablak).Where(g => g.Visible && g.Enabled);
 
                             foreach (var gomb in aktivGombok)
                             {
+                                // Reflectionnel lekérjük a gomb SAJÁT láthatósági beállítását
+                                // Ez akkor is True-t ad, ha az ablak maga rejtve van!
+                                PropertyInfo pi = typeof(Control).GetProperty("Visible",
+                                    BindingFlags.Instance | BindingFlags.Public);
+                                bool beallitottLathatosag = (bool)pi.GetValue(gomb, null);
+
+
                                 // Ablak címe (ha üres, akkor az osztály neve)
                                 string ablakMegnevezes = string.IsNullOrEmpty(ablak.Text) ? ablak.Name : ablak.Text;
 
@@ -170,6 +207,7 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
                                 );
                             }
                         }
+                        ablak.Hide(); // Munka végeztével elrejtjük
                     }
                 }
                 catch (Exception ex)
@@ -181,16 +219,24 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
             return dt;
         }
 
-        // A statikus hiba elkerülése végett (CS0120 javítása)
+        // Ez a függvény megmondja, hogy a gomb Visible-re lett-e állítva, 
+        // függetlenül attól, hogy az ablak épp látszik-e.
+        private static bool IsControlVisible(Control c)
+        {
+            PropertyInfo prop = typeof(Control).GetProperty("Visible",
+                BindingFlags.Instance | BindingFlags.Public);
+            return (bool)prop.GetValue(c);
+        }
+
         private static IEnumerable<Button> MindenGombLekerese(Control szulo)
         {
-            var gombok = szulo.Controls.OfType<Button>();
+            List<Button> talaltGombok = new List<Button>();
+            talaltGombok.AddRange(szulo.Controls.OfType<Button>());
             foreach (Control gyerek in szulo.Controls)
-            {
-                gombok = gombok.Concat(MindenGombLekerese(gyerek));
-            }
-            return gombok;
+                talaltGombok.AddRange(MindenGombLekerese(gyerek));
+            return talaltGombok;
         }
+
 
         private void BtnRögzít_Click(object sender, EventArgs e)
         {

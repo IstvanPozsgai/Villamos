@@ -35,9 +35,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.TxtJogkör = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.CmbFelhasználóNew = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.CmbFelhasználóNew = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.FelhasználóId = new System.Windows.Forms.NumericUpDown();
             this.BtnRögzít = new System.Windows.Forms.Button();
             this.Tábla = new System.Windows.Forms.DataGridView();
@@ -123,18 +123,18 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(609, 301);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(609, 257);
             this.tableLayoutPanel1.TabIndex = 23;
             // 
-            // label3
+            // label4
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 187);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(109, 20);
-            this.label3.TabIndex = 23;
-            this.label3.Text = "Felhasználó new";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 221);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(96, 20);
+            this.label4.TabIndex = 25;
+            this.label4.Text = "Felhasználó id";
             // 
             // CmbFelhasználóNew
             // 
@@ -146,14 +146,14 @@
             this.CmbFelhasználóNew.TabIndex = 24;
             this.CmbFelhasználóNew.SelectionChangeCommitted += new System.EventHandler(this.CmbFelhasználóNew_SelectionChangeCommitted);
             // 
-            // label4
+            // label3
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 221);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(96, 20);
-            this.label4.TabIndex = 25;
-            this.label4.Text = "Felhasználó id";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 187);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(109, 20);
+            this.label3.TabIndex = 23;
+            this.label3.Text = "Felhasználó new";
             // 
             // FelhasználóId
             // 
@@ -166,7 +166,7 @@
             // 
             this.BtnRögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.BtnRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.BtnRögzít.Location = new System.Drawing.Point(649, 236);
+            this.BtnRögzít.Location = new System.Drawing.Point(627, 225);
             this.BtnRögzít.Name = "BtnRögzít";
             this.BtnRögzít.Size = new System.Drawing.Size(44, 44);
             this.BtnRögzít.TabIndex = 98;
@@ -175,10 +175,13 @@
             // 
             // Tábla
             // 
+            this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Tábla.Location = new System.Drawing.Point(12, 319);
+            this.Tábla.Location = new System.Drawing.Point(12, 275);
             this.Tábla.Name = "Tábla";
-            this.Tábla.Size = new System.Drawing.Size(1043, 150);
+            this.Tábla.Size = new System.Drawing.Size(1043, 194);
             this.Tábla.TabIndex = 99;
             // 
             // Ablak_Ideig
@@ -193,6 +196,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Ablak_Ideig";
             this.Text = "Ablak_Ideig";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Ablak_Ideig_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
