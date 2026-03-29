@@ -39,8 +39,11 @@
             this.CmbFelhasználóNew = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.FelhasználóId = new System.Windows.Forms.NumericUpDown();
+            this.BtnRögzít = new System.Windows.Forms.Button();
+            this.Tábla = new System.Windows.Forms.DataGridView();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FelhasználóId)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.SuspendLayout();
             // 
             // Cmbtelephely
@@ -159,11 +162,32 @@
             this.FelhasználóId.Size = new System.Drawing.Size(120, 26);
             this.FelhasználóId.TabIndex = 26;
             // 
+            // BtnRögzít
+            // 
+            this.BtnRögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.BtnRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BtnRögzít.Location = new System.Drawing.Point(649, 236);
+            this.BtnRögzít.Name = "BtnRögzít";
+            this.BtnRögzít.Size = new System.Drawing.Size(44, 44);
+            this.BtnRögzít.TabIndex = 98;
+            this.BtnRögzít.UseVisualStyleBackColor = true;
+            this.BtnRögzít.Click += new System.EventHandler(this.BtnRögzít_Click);
+            // 
+            // Tábla
+            // 
+            this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Tábla.Location = new System.Drawing.Point(12, 319);
+            this.Tábla.Name = "Tábla";
+            this.Tábla.Size = new System.Drawing.Size(1043, 150);
+            this.Tábla.TabIndex = 99;
+            // 
             // Ablak_Ideig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1067, 692);
+            this.ClientSize = new System.Drawing.Size(1067, 479);
+            this.Controls.Add(this.Tábla);
+            this.Controls.Add(this.BtnRögzít);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -173,6 +197,7 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FelhasználóId)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -189,5 +214,7 @@
         internal System.Windows.Forms.Label label3;
         internal System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown FelhasználóId;
+        internal System.Windows.Forms.Button BtnRögzít;
+        private System.Windows.Forms.DataGridView Tábla;
     }
 }

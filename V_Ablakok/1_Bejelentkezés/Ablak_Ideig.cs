@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
@@ -102,7 +104,6 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
             TxtJogkör.Text = rekord.Jogkörúj1;
         }
 
-
         private void Újfelhasználóklistája()
         {
             ÚjFelhasználók = KézUsers.Lista_Adatok().OrderBy(a => a.UserName).ToList();
@@ -125,6 +126,83 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
             if (CmbFelhasználóNew.Text.Trim() == "") return;
             string[] darabol = CmbFelhasználóNew.Text.Trim().Split('-');
             FelhasználóId.Value = darabol[1].ToÉrt_Int();
+        }
+
+
+
+        public static DataTable JogosultsagDataTableLekerese()
+        {
+            // DataTable inicializálása az oszlopokkal
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Ablak Neve", typeof(string));
+            dt.Columns.Add("Gomb Felirata", typeof(string));
+            dt.Columns.Add("Gomb Kódneve", typeof(string));
+
+            var formTipusok = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => t.IsSubclassOf(typeof(Form)) && !t.IsAbstract);
+
+            foreach (var tipus in formTipusok)
+            {
+                try
+                {
+                    using (Form ablak = (Form)Activator.CreateInstance(tipus))
+                    {
+                        MethodInfo metodus = tipus.GetMethod("Jogosultságkiosztás",
+                            BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+
+                        if (metodus != null)
+                        {
+                            metodus.Invoke(ablak, null);
+
+                            var aktivGombok = MindenGombLekerese(ablak)
+                                .Where(g => g.Visible && g.Enabled);
+
+                            foreach (var gomb in aktivGombok)
+                            {
+                                // Ablak címe (ha üres, akkor az osztály neve)
+                                string ablakMegnevezes = string.IsNullOrEmpty(ablak.Text) ? ablak.Name : ablak.Text;
+
+                                // Új sor hozzáadása a táblázathoz
+                                dt.Rows.Add(
+                                    ablakMegnevezes,
+                                    gomb.Text.Replace("&", ""),
+                                    gomb.Name
+                                );
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Hiba a(z) {tipus.Name} vizsgálatakor: {ex.Message}");
+                }
+            }
+
+            return dt;
+        }
+
+        // A statikus hiba elkerülése végett (CS0120 javítása)
+        private static IEnumerable<Button> MindenGombLekerese(Control szulo)
+        {
+            var gombok = szulo.Controls.OfType<Button>();
+            foreach (Control gyerek in szulo.Controls)
+            {
+                gombok = gombok.Concat(MindenGombLekerese(gyerek));
+            }
+            return gombok;
+        }
+
+        private void BtnRögzít_Click(object sender, EventArgs e)
+        {
+            // Lekérjük az adatokat
+            DataTable jogokTable = JogosultsagDataTableLekerese();
+
+            // Összekötjük a DataGridView-val
+            Tábla.DataSource = jogokTable;
+
+            // Opcionális: Oszlopok automatikus méretezése, hogy minden látszódjon
+            Tábla.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
         }
     }
 }
