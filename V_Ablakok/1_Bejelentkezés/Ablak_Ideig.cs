@@ -11,6 +11,9 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
     {
         readonly Kezelő_Kiegészítő_Sérülés KézSérülés = new Kezelő_Kiegészítő_Sérülés();
         readonly Kezelő_Belépés_Jogosultságtábla KézJogOld = new Kezelő_Belépés_Jogosultságtábla();
+        readonly SQL_Kezelő_Belépés_Users KézUsers = new SQL_Kezelő_Belépés_Users();
+
+        List<Adat_Bejelentkezés_Users> ÚjFelhasználók = new List<Adat_Bejelentkezés_Users>();
         public Ablak_Ideig()
         {
             InitializeComponent();
@@ -25,6 +28,7 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
         private void Start()
         {
             Telephelyekfeltöltése();
+            Újfelhasználóklistája();
         }
 
 
@@ -55,7 +59,6 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
             Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
             Neveklistája();
         }
-
 
         private void Neveklistája()
         {
@@ -100,5 +103,28 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
         }
 
 
+        private void Újfelhasználóklistája()
+        {
+            ÚjFelhasználók = KézUsers.Lista_Adatok().OrderBy(a => a.UserName).ToList();
+
+            if (ÚjFelhasználók != null)
+            {
+                CmbFelhasználóNew.Items.Clear();
+                CmbFelhasználóNew.BeginUpdate();
+                foreach (Adat_Bejelentkezés_Users Elem in ÚjFelhasználók)
+                    CmbFelhasználóNew.Items.Add($"{Elem.UserName}-{Elem.UserId}");
+
+                CmbFelhasználóNew.EndUpdate();
+                CmbFelhasználóNew.Refresh();
+            }
+        }
+
+        private void CmbFelhasználóNew_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            CmbFelhasználóNew.Text = CmbFelhasználóNew.Items[CmbFelhasználóNew.SelectedIndex].ToStrTrim();
+            if (CmbFelhasználóNew.Text.Trim() == "") return;
+            string[] darabol = CmbFelhasználóNew.Text.Trim().Split('-');
+            FelhasználóId.Value = darabol[1].ToÉrt_Int();
+        }
     }
 }

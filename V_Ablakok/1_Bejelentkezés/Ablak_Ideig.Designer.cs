@@ -35,14 +35,19 @@
             this.label2 = new System.Windows.Forms.Label();
             this.TxtJogkör = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.CmbFelhasználóNew = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.FelhasználóId = new System.Windows.Forms.NumericUpDown();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.FelhasználóId)).BeginInit();
             this.SuspendLayout();
             // 
             // Cmbtelephely
             // 
             this.Cmbtelephely.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Cmbtelephely.FormattingEnabled = true;
-            this.Cmbtelephely.Location = new System.Drawing.Point(114, 3);
+            this.Cmbtelephely.Location = new System.Drawing.Point(118, 3);
             this.Cmbtelephely.Name = "Cmbtelephely";
             this.Cmbtelephely.Size = new System.Drawing.Size(277, 28);
             this.Cmbtelephely.TabIndex = 18;
@@ -61,7 +66,7 @@
             // 
             this.CmbNevekOld.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CmbNevekOld.FormattingEnabled = true;
-            this.CmbNevekOld.Location = new System.Drawing.Point(114, 37);
+            this.CmbNevekOld.Location = new System.Drawing.Point(118, 37);
             this.CmbNevekOld.Name = "CmbNevekOld";
             this.CmbNevekOld.Size = new System.Drawing.Size(277, 28);
             this.CmbNevekOld.TabIndex = 19;
@@ -87,7 +92,7 @@
             // 
             // TxtJogkör
             // 
-            this.TxtJogkör.Location = new System.Drawing.Point(114, 71);
+            this.TxtJogkör.Location = new System.Drawing.Point(118, 71);
             this.TxtJogkör.Multiline = true;
             this.TxtJogkör.Name = "TxtJogkör";
             this.TxtJogkör.Size = new System.Drawing.Size(490, 113);
@@ -98,21 +103,61 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.label4, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.CmbFelhasználóNew, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.Label13, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.Cmbtelephely, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.CmbNevekOld, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.TxtJogkör, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.FelhasználóId, 1, 4);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 19F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(609, 227);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(609, 301);
             this.tableLayoutPanel1.TabIndex = 23;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 187);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(109, 20);
+            this.label3.TabIndex = 23;
+            this.label3.Text = "Felhasználó new";
+            // 
+            // CmbFelhasználóNew
+            // 
+            this.CmbFelhasználóNew.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CmbFelhasználóNew.FormattingEnabled = true;
+            this.CmbFelhasználóNew.Location = new System.Drawing.Point(118, 190);
+            this.CmbFelhasználóNew.Name = "CmbFelhasználóNew";
+            this.CmbFelhasználóNew.Size = new System.Drawing.Size(277, 28);
+            this.CmbFelhasználóNew.TabIndex = 24;
+            this.CmbFelhasználóNew.SelectionChangeCommitted += new System.EventHandler(this.CmbFelhasználóNew_SelectionChangeCommitted);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 221);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(96, 20);
+            this.label4.TabIndex = 25;
+            this.label4.Text = "Felhasználó id";
+            // 
+            // FelhasználóId
+            // 
+            this.FelhasználóId.Location = new System.Drawing.Point(118, 224);
+            this.FelhasználóId.Name = "FelhasználóId";
+            this.FelhasználóId.Size = new System.Drawing.Size(120, 26);
+            this.FelhasználóId.TabIndex = 26;
             // 
             // Ablak_Ideig
             // 
@@ -127,6 +172,7 @@
             this.Load += new System.EventHandler(this.Ablak_Ideig_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.FelhasználóId)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -139,5 +185,9 @@
         internal System.Windows.Forms.Label label2;
         internal System.Windows.Forms.TextBox TxtJogkör;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        internal System.Windows.Forms.ComboBox CmbFelhasználóNew;
+        internal System.Windows.Forms.Label label3;
+        internal System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown FelhasználóId;
     }
 }
