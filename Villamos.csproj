@@ -176,6 +176,12 @@
     <Compile Include="V_Ablakok\1_Bejelentkezés\Ablak_Gombok.Designer.cs">
       <DependentUpon>Ablak_Gombok.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\1_Bejelentkezés\Ablak_Ideig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Bejelentkezés\Ablak_Ideig.Designer.cs">
+      <DependentUpon>Ablak_Ideig.cs</DependentUpon>
+    </Compile>
     <Compile Include="V_Ablakok\1_Bejelentkezés\Ablak_Jelszó_Változtatás.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1648,6 +1654,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Bejelentkezés\Ablak_Gombok.resx">
       <DependentUpon>Ablak_Gombok.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\1_Bejelentkezés\Ablak_Ideig.resx">
+      <DependentUpon>Ablak_Ideig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Bejelentkezés\Ablak_Jelszó_Változtatás.resx">
       <DependentUpon>Ablak_Jelszó_Változtatás.cs</DependentUpon>
