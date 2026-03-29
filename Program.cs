@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
+using Villamos.V_Ablakok._1_Bejelentkezés;
 using Zuby.ADGV;
 
 namespace Villamos
@@ -53,7 +54,9 @@ namespace Villamos
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AblakBejelentkezés());
+            //Application.Run(new AblakBejelentkezés());
+
+            Application.Run(new Ablak_Ideig());
             //Application.Run(new Ablak_AdatbázisRendezés());
         }
     }

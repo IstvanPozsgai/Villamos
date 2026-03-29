@@ -33,16 +33,10 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
             try
             {
                 Cmbtelephely.Items.Clear();
+                Cmbtelephely.Items.Add("");
                 List<Adat_Kiegészítő_Sérülés> Adatok = KézSérülés.Lista_Adatok();
                 foreach (Adat_Kiegészítő_Sérülés rekord in Adatok)
                     Cmbtelephely.Items.Add(rekord.Név);
-
-                if (Program.PostásTelephely == "Főmérnökség" || Program.Postás_Vezér)
-                { Cmbtelephely.Text = Cmbtelephely.Items[0].ToString().Trim(); }
-                else
-                { Cmbtelephely.Text = Program.PostásTelephely; }
-
-                Cmbtelephely.Enabled = Program.Postás_Vezér;
             }
             catch (HibásBevittAdat ex)
             {
@@ -102,7 +96,7 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
             Adat_Belépés_Jogosultságtábla rekord = (from a in Adatok
                                                     where a.Név == CmbNevekOld.Text.Trim()
                                                     select a).FirstOrDefault();
-
+            TxtJogkör.Text = rekord.Jogkörúj1;
         }
 
 

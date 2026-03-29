@@ -33,7 +33,7 @@
             this.CmbNevekOld = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.panels2 = new System.Windows.Forms.TextBox();
+            this.TxtJogkör = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -85,13 +85,13 @@
             this.label2.TabIndex = 21;
             this.label2.Text = "Jogosultság old";
             // 
-            // panels2
+            // TxtJogkör
             // 
-            this.panels2.Location = new System.Drawing.Point(114, 71);
-            this.panels2.Multiline = true;
-            this.panels2.Name = "panels2";
-            this.panels2.Size = new System.Drawing.Size(490, 113);
-            this.panels2.TabIndex = 22;
+            this.TxtJogkör.Location = new System.Drawing.Point(114, 71);
+            this.TxtJogkör.Multiline = true;
+            this.TxtJogkör.Name = "TxtJogkör";
+            this.TxtJogkör.Size = new System.Drawing.Size(490, 113);
+            this.TxtJogkör.TabIndex = 22;
             // 
             // tableLayoutPanel1
             // 
@@ -103,7 +103,7 @@
             this.tableLayoutPanel1.Controls.Add(this.Cmbtelephely, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.CmbNevekOld, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.panels2, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.TxtJogkör, 1, 2);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 4;
@@ -137,7 +137,7 @@
         internal System.Windows.Forms.ComboBox CmbNevekOld;
         internal System.Windows.Forms.Label label1;
         internal System.Windows.Forms.Label label2;
-        internal System.Windows.Forms.TextBox panels2;
+        internal System.Windows.Forms.TextBox TxtJogkör;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }
