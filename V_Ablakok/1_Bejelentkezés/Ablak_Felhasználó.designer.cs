@@ -44,6 +44,7 @@ namespace Villamos
             this.BtnÚj = new System.Windows.Forms.Button();
             this.BtnRögzít = new System.Windows.Forms.Button();
             this.JelszóMódosítás = new System.Windows.Forms.Button();
+            this.BtnIdeig = new System.Windows.Forms.Button();
             this.TextWinUser = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.TextUserNév = new System.Windows.Forms.TextBox();
@@ -150,6 +151,18 @@ namespace Villamos
             this.ToolTip1.SetToolTip(this.JelszóMódosítás, "Új jelszó beállítás");
             this.JelszóMódosítás.UseVisualStyleBackColor = true;
             this.JelszóMódosítás.Click += new System.EventHandler(this.JelszóMódosítás_Click);
+            // 
+            // BtnIdeig
+            // 
+            this.BtnIdeig.BackgroundImage = global::Villamos.Properties.Resources.App_error;
+            this.BtnIdeig.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BtnIdeig.Location = new System.Drawing.Point(153, 103);
+            this.BtnIdeig.Name = "BtnIdeig";
+            this.BtnIdeig.Size = new System.Drawing.Size(44, 44);
+            this.BtnIdeig.TabIndex = 226;
+            this.ToolTip1.SetToolTip(this.BtnIdeig, "A régi jogosultságok migrálása");
+            this.BtnIdeig.UseVisualStyleBackColor = true;
+            this.BtnIdeig.Click += new System.EventHandler(this.BtnIdeig_Click);
             // 
             // TextWinUser
             // 
@@ -391,6 +404,7 @@ namespace Villamos
             this.tableLayoutPanel2.Controls.Add(this.BtnÚj, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.JelszóMódosítás, 2, 5);
             this.tableLayoutPanel2.Controls.Add(this.BtnRögzít, 0, 5);
+            this.tableLayoutPanel2.Controls.Add(this.BtnIdeig, 3, 2);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(965, 12);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 6;
@@ -499,5 +513,6 @@ namespace Villamos
         private CheckBox GlobalAdmin;
         private CheckBox TelephelyAdmin;
         internal Button JelszóMódosítás;
+        internal Button BtnIdeig;
     }
 }

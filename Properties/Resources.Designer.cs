@@ -253,6 +253,16 @@ namespace Villamos.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap App_error {
+            get {
+                object obj = ResourceManager.GetObject("App-error", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap App_network_connection_manager {
             get {
                 object obj = ResourceManager.GetObject("App-network-connection-manager", resourceCulture);

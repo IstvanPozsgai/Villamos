@@ -130,11 +130,14 @@
   <data name="BeCardStack" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BeCardStack.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Button Upload-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Button Upload-01.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="mentés32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\mentés32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Document-preferences" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Document-preferences.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="#1B" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\#1B.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="felhasználók" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\felhasználók.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -147,9 +150,6 @@
   </data>
   <data name="Designcontest-Ecommerce-Business-Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Designcontest-Ecommerce-Business-Save.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="e2_töröl" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\e2_töröl.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Custom-Icon-Design-Flatastic-1-Export" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Custom-Icon-Design-Flatastic-1-Export.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -168,9 +168,6 @@
   </data>
   <data name="#9_B" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\#9_B.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="comment_edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\comment_edit.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="user_accept_256" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\user_accept_256.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -280,20 +277,26 @@
   <data name="#3B" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\#3B.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="e2minden" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\e2minden.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Action-configure" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Action-configure.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="e3_töröl" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\e3_töröl.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="lakatnyitva32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\lakatnyitva32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="comment_edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\comment_edit.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Ok gyűjtemény" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Ok gyűjtemény.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Fatcow-Farm-Fresh-Table-row-delete.32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Fatcow-Farm-Fresh-Table-row-delete.32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lakatnyitva32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\lakatnyitva32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="üres lista" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\üres lista.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -312,6 +315,9 @@
   </data>
   <data name="App-xf-mail" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\App-xf-mail.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Button Upload-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Button Upload-01.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="CALENDR4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CALENDR4.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -385,11 +391,8 @@
   <data name="mail_next_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\mail_next_32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="mentés32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\mentés32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Yellow Glass Folders Icon 25" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Yellow Glass Folders Icon 25.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Kuka" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Orange System Icon 05.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Button Previous-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Button Previous-01.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -399,6 +402,9 @@
   </data>
   <data name="ProgramIkon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Aha-Soft-Standard-Transport-Tram.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Yellow Glass Folders Icon 25" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Yellow Glass Folders Icon 25.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Lakatzárva32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Lakatzárva32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -490,14 +496,8 @@
   <data name="Aha-Soft-Security-Modify-key" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Aha-Soft-Security-Modify-key.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Mimetype-recycled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Mimetype-recycled.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Calendar" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Calendar.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Kuka" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Orange System Icon 05.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="kerékeszterga_Beáll_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\kerékeszterga_Beáll_32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -535,8 +535,8 @@
   <data name="CARDFIL3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CARDFIL3.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="e2minden" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\e2minden.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Mimetype-recycled" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Mimetype-recycled.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Dolgozó_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Dolgozó_32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -568,8 +568,8 @@
   <data name="App-edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\App-edit.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="#1B" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\#1B.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="e2_töröl" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\e2_töröl.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="App-spreadsheet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\App-spreadsheet.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -600,5 +600,8 @@
   </data>
   <data name="Action-arrow-blue-double-down" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Action-arrow-blue-double-down.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="App-error" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\App-error.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

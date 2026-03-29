@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.MindenEgyéb;
+using Villamos.V_Ablakok._1_Bejelentkezés;
 using Villamos.V_MindenEgyéb;
 using MyF = Függvénygyűjtemény;
 
@@ -641,6 +642,7 @@ namespace Villamos
 
         #endregion
 
+
         #region Admin
         private void Admin()
         {
@@ -664,5 +666,33 @@ namespace Villamos
             }
         }
         #endregion
+
+
+        #region Ideiglenes
+        Ablak_Ideig Új_Ablak_Ideig;
+        private void BtnIdeig_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_Ideig == null)
+            {
+                Új_Ablak_Ideig = new Ablak_Ideig();
+                Új_Ablak_Ideig.FormClosed += Új_Ablak_Ideig_Closed;
+                Új_Ablak_Ideig.Show();
+            }
+            else
+            {
+                Új_Ablak_Ideig.Activate();
+                Új_Ablak_Ideig.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        private void Új_Ablak_Ideig_Closed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Ideig = null;
+        }
+
+
+        #endregion
+
+
     }
 }
