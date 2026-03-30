@@ -48,6 +48,7 @@ namespace Villamos
 
                 Fülekkitöltése();
                 Fülek.DrawMode = TabDrawMode.OwnerDrawFixed;
+                SzámológépTakaró.Visible = false;
             }
 
             catch (HibásBevittAdat ex)
@@ -455,7 +456,7 @@ namespace Villamos
             Rögzítés.Enabled = false;
             Rögítéstakaró.Visible = true;
             Új_Ablak_munkalap_dekádoló_csoport?.Close();
-
+            Command11.Visible = true;
         }
 
         private void Command6_Click(object sender, EventArgs e)
@@ -472,7 +473,7 @@ namespace Villamos
             Napiidőkbetöltése();
 
             Rögzítés.Enabled = false;
-            Rögítéstakaró.Visible = true;
+            SzámológépTakaró.Visible = false;
 
         }
 
@@ -715,7 +716,9 @@ namespace Villamos
                 KézMunkaAdatok.Rögzítés(Cmbtelephely.Text.Trim(), Dátum.Value.Year, Adatok);
 
                 Rögítéstakaró.Visible = true;
+                SzámológépTakaró.Visible = true;
                 MessageBox.Show("Az adatrögzítése megtörtént.", "Tájékoztatás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             }
             catch (HibásBevittAdat ex)
             {
