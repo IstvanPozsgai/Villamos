@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.Villamos_Ablakok;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -454,6 +454,7 @@ namespace Villamos
             Napiidőkbetöltése();
             Rögzítés.Enabled = false;
             Rögítéstakaró.Visible = true;
+            Új_Ablak_munkalap_dekádoló_csoport?.Close();
 
         }
 
@@ -553,8 +554,8 @@ namespace Villamos
                 }
                 else
                 {
-                    Különbözet.Text = (RendelkezésText.Text.ToÉrt_Int ()- FelhasználtText.Text.ToÉrt_Int()).ToString();
-                    Különbözet.BackColor = Color.Red ;
+                    Különbözet.Text = (RendelkezésText.Text.ToÉrt_Int() - FelhasználtText.Text.ToÉrt_Int()).ToString();
+                    Különbözet.BackColor = Color.Red;
                     RendelkezésText.BackColor = Color.Red;
                     FelhasználtText.BackColor = Color.Red;
                     Rögítéstakaró.Visible = true;
