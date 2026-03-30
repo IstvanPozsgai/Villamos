@@ -582,13 +582,13 @@
     <Compile Include="V_Input_Forms\InputSelect.cs" />
     <Compile Include="V_Input_Forms\InputTextbox.cs" />
     <Compile Include="V_Input_Forms\InputTime.cs" />
-    <Compile Include="V_Kezelők\Kezelő_AnyagTörzs.cs" />
+    <Compile Include="V_Kezelők\Kérdésesek\Kezelő_AnyagTörzs.cs" />
     <Compile Include="SqL_Kezelők\Sql_Kezelő_Áttöltés.cs" />
     <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Belépés_MindenMásol.cs" />
-    <Compile Include="V_Kezelők\Kezelő_CAF_KM_Attekintes.cs" />
+    <Compile Include="V_Kezelők\6_ Karbantartás\CAF_adatok\Kezelő_CAF_KM_Attekintes.cs" />
     <Compile Include="V_Kezelők\2_Beállítások\Ciklus\Kezelő_Ciklus_Sorrend.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Eszterga_Műveletek_Napló.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Eszterga_Üzemóra.cs" />
+    <Compile Include="V_Kezelők\5_Nyilvántartások\Eszterga_karbantartás\Kezelő_Eszterga_Műveletek_Napló.cs" />
+    <Compile Include="V_Kezelők\5_Nyilvántartások\Eszterga_karbantartás\Kezelő_Eszterga_Üzemóra.cs" />
     <Compile Include="V_Ablakok\6_Karbantartás\CAF_Ütemezés\Ablak_CAF_KM.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -598,7 +598,7 @@
     <Compile Include="V_Adatbázis\Adatbázis_Eszterga.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Baross_Mérési_Adatok.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Eszterga.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Eszterga_Műveletek.cs" />
+    <Compile Include="V_Kezelők\5_Nyilvántartások\Eszterga_karbantartás\Kezelő_Eszterga_Műveletek.cs" />
     <Compile Include="V_Ablakok\5_Nyilvántartások\Kerékeszterga\Ablak_Eszterga_Adatok_Baross.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1071,7 +1071,7 @@
     <Compile Include="V_Függvények\Fv_Szöveg.cs" />
     <Compile Include="V_Függvények\ListToDataTable.cs" />
     <Compile Include="V_Függvények\Számkonverter.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Baross_Mérési_Adatok.cs" />
+    <Compile Include="V_Kezelők\5_Nyilvántartások\Kerékeszterga\Kezelő_Baross_Mérési_Adatok.cs" />
     <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Belépés_Gombok.cs" />
     <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Belépés_Jogosultságok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kerék_Erő.cs" />
@@ -1106,36 +1106,36 @@
     <Compile Include="V_Kezelők\Kezelő_Takarítás_Telep_Opció.cs" />
     <Compile Include="V_Kezelők\Kezelő_Telep_Kiegészítő_SérülésCaf.cs" />
     <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Users.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Mérés.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Akkumulátor_Napló.cs" />
+    <Compile Include="V_Kezelők\5_Nyilvántartások\Akkumulátor\Kezelő_Akkumulátor_Mérés.cs" />
+    <Compile Include="V_Kezelők\5_Nyilvántartások\Akkumulátor\Kezelő_Akkumulátor_Napló.cs" />
     <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Belépés_Verzió Új.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Excel_Beolvasás.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Behajtás_Behajtási.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Behajtás_Behajtási_Napló.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Behajtás_Dolgozótábla.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Behajtás_Engedélyezés.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Behajtás_Jogosultság.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Behajtás_Kérelemoka.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Behajtás_Kérelemstátus.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Behajtás_Telephelystátusz.cs" />
+    <Compile Include="V_Kezelők\2_Beállítások\Egyéb_adatok\Kezelő_Excel_Beolvasás.cs" />
+    <Compile Include="V_Kezelők\8_Gondnokság\Behajtási\Kezelő_Behajtás_Behajtási.cs" />
+    <Compile Include="V_Kezelők\8_Gondnokság\Behajtási\Kezelő_Behajtás_Behajtási_Napló.cs" />
+    <Compile Include="V_Kezelők\Kérdésesek\Kezelő_Behajtás_Dolgozótábla.cs" />
+    <Compile Include="V_Kezelők\Kérdésesek\Kezelő_Behajtás_Engedélyezés.cs" />
+    <Compile Include="V_Kezelők\8_Gondnokság\Behajtási\Kezelő_Behajtás_Jogosultság.cs" />
+    <Compile Include="V_Kezelők\8_Gondnokság\Behajtási\Kezelő_Behajtás_Kérelemoka.cs" />
+    <Compile Include="V_Kezelők\8_Gondnokság\Behajtási\Kezelő_Behajtás_Kérelemstátus.cs" />
+    <Compile Include="V_Kezelők\8_Gondnokság\Behajtási\Kezelő_Behajtás_Telephelystátusz.cs" />
     <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Belépés_Jogosultságtábla.cs" />
     <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Belépés_Verzió.cs" />
     <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Belépés_WinTábla.cs" />
-    <Compile Include="V_Kezelők\Kezelő_CAF_Adatok.cs" />
-    <Compile Include="V_Kezelők\Kezelő_DigitálisMunkalap.cs" />
-    <Compile Include="V_Kezelők\Kezelő_DigitálisMunkalap_Dolgozó.cs" />
-    <Compile Include="V_Kezelők\Kezelő_DigitálisMunkalap_Kocsik.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Dolgozó_Beosztás_Napló.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Dolgozó_Beosztás_Új.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Dolgozó_Státus.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Dolgozó_Személyes.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Forte_Kiadási_Adatok.cs" />
-    <Compile Include="V_Kezelők\Kezelő_FőKiadási_adatok.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Főkönyv_SegédTábla.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Főkönyv_Személyzet.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Főkönyv_Típuscsere.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Főkönyv_ZSER.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Főkönyv_Zser_Km.cs" />
+    <Compile Include="V_Kezelők\6_ Karbantartás\CAF_adatok\Kezelő_CAF_Adatok.cs" />
+    <Compile Include="V_Kezelők\4_Dolgozó\Karbantartási_munkalapok\Kezelő_DigitálisMunkalap.cs" />
+    <Compile Include="V_Kezelők\4_Dolgozó\Karbantartási_munkalapok\Kezelő_DigitálisMunkalap_Dolgozó.cs" />
+    <Compile Include="V_Kezelők\4_Dolgozó\Karbantartási_munkalapok\Kezelő_DigitálisMunkalap_Kocsik.cs" />
+    <Compile Include="V_Kezelők\4_Dolgozó\Beosztás\Kezelő_Dolgozó_Beosztás_Napló.cs" />
+    <Compile Include="V_Kezelők\Kérdésesek\Kezelő_Dolgozó_Beosztás_Új.cs" />
+    <Compile Include="V_Kezelők\Kérdésesek\Kezelő_Dolgozó_Státus.cs" />
+    <Compile Include="V_Kezelők\4_Dolgozó\Dolgozói_alapadatok\Kezelő_Dolgozó_Személyes.cs" />
+    <Compile Include="V_Kezelők\7_Kiadási_adatok\Kiadási_Forte_adatok\Kezelő_Forte_Kiadási_Adatok.cs" />
+    <Compile Include="V_Kezelők\7_Kiadási_adatok\Telephelyi_adatok\Kezelő_FőKiadási_adatok.cs" />
+    <Compile Include="V_Kezelők\7_Kiadási_adatok\Főkönyv\Kezelő_Főkönyv_SegédTábla.cs" />
+    <Compile Include="V_Kezelők\7_Kiadási_adatok\Főkönyv\Kezelő_Főkönyv_Személyzet.cs" />
+    <Compile Include="V_Kezelők\7_Kiadási_adatok\Főkönyv\Kezelő_Főkönyv_Típuscsere.cs" />
+    <Compile Include="V_Kezelők\Kérdésesek\Kezelő_Főkönyv_ZSER.cs" />
+    <Compile Include="V_Kezelők\Kérdésesek\Kezelő_Főkönyv_Zser_Km.cs" />
     <Compile Include="V_Kezelők\Kezelő_FőSzemélyzet_Adatok.cs" />
     <Compile Include="V_Kezelők\Kezelő_FőTípuscsere_Adatok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Hétvége_Beosztás.cs" />
@@ -1146,13 +1146,13 @@
     <Compile Include="V_Kezelők\Kezelő_Jármű_Javításiátfutástábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Akkumulátor.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Behajtás.cs" />
+    <Compile Include="V_Kezelők\5_Nyilvántartások\Akkumulátor\Kezelő_Akkumulátor.cs" />
+    <Compile Include="V_Kezelők\8_Gondnokság\Behajtási\Kezelő_Behajtás.cs" />
     <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Belépés.cs" />
-    <Compile Include="V_Kezelők\Kezelő_CAF.cs" />
+    <Compile Include="V_Kezelők\6_ Karbantartás\CAF_adatok\Kezelő_CAF.cs" />
     <Compile Include="V_Kezelők\2_Beállítások\Ciklus\Kezelő_Ciklus.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Dolgozó_Alap.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Eszköz.cs" />
+    <Compile Include="V_Kezelők\4_Dolgozó\Dolgozó_felvétel\Kezelő_Dolgozó_Alap.cs" />
+    <Compile Include="V_Kezelők\Kérdésesek\Kezelő_Eszköz.cs" />
     <Compile Include="V_Kezelők\Kezelő_Hétvége_Előírás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jogosítvány.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Takarítás_J1.cs" />
@@ -1176,10 +1176,10 @@
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Adatok_Terjesztés.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Beosegéd.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Beosztásciklus.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Beosztáskódok.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Csoportbeosztás.cs" />
+    <Compile Include="V_Kezelők\2_Beállítások\Személy_adatok\Kezelő_Kiegészítő_Beosztáskódok.cs" />
+    <Compile Include="V_Kezelők\2_Beállítások\Személy_adatok\Kezelő_Kiegészítő_Csoportbeosztás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Felmentés.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Feorszámok.cs" />
+    <Compile Include="V_Kezelők\2_Beállítások\Személy_adatok\Kezelő_Kiegészítő_Feorszámok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Fortetípus.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Forte_Vonal.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Főkategóriatábla.cs" />
@@ -1188,13 +1188,13 @@
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Idő_Kor.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Idő_Tábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Igen_Nem.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Jelenlétiív.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Jogtípus.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_JogVonal.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Könyvtár.cs" />
+    <Compile Include="V_Kezelők\2_Beállítások\Személy_adatok\Kezelő_Kiegészítő_Jelenlétiív.cs" />
+    <Compile Include="V_Kezelők\2_Beállítások\Személy_adatok\Kezelő_Kiegészítő_Jogtípus.cs" />
+    <Compile Include="V_Kezelők\2_Beállítások\Személy_adatok\Kezelő_Kiegészítő_JogVonal.cs" />
+    <Compile Include="V_Kezelők\2_Beállítások\Személy_adatok\Kezelő_Kiegészítő_Könyvtár.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Mentésihelyek.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Munkaidő.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Munkakör.cs" />
+    <Compile Include="V_Kezelők\2_Beállítások\Személy_adatok\Kezelő_Kiegészítő_Munkakör.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Reklám.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szolgálat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Szolgálattelepei.cs" />
@@ -1206,7 +1206,7 @@
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Típuszínektábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Túlórakeret.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Váltóstábla.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Kiegészítő_Védelem.cs" />
+    <Compile Include="V_Kezelők\2_Beállítások\Személy_adatok\Kezelő_Kiegészítő_Védelem.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kulcs.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kulcs_Fekete.cs" />
     <Compile Include="V_Kezelők\Kezelő_Kulcs_Kettő.cs" />
@@ -1225,7 +1225,7 @@
     <Compile Include="V_Kezelők\Kezelő_Nóta.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oktatás.cs" />
     <Compile Include="V_Kezelők\Kezelő_OktatásiSegéd.cs" />
-    <Compile Include="V_Kezelők\Kezelő_OktatásTábla.cs" />
+    <Compile Include="V_Kezelők\2_Beállítások\Személy_adatok\Kezelő_OktatásTábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Oktatás_Napló.cs" />
     <Compile Include="V_Kezelők\Kezelő_Osztály_Adat.cs" />
     <Compile Include="V_Kezelők\Kezelő_Osztály_Név.cs" />
@@ -1237,7 +1237,7 @@
     <Compile Include="V_Kezelők\Kezelő_Rezsi_Törzs.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szatube_Túlóra.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szerelvény_Napló.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Szerszám_FejLáb.cs" />
+    <Compile Include="V_Kezelők\2_Beállítások\Személy_adatok\Kezelő_Szerszám_FejLáb.cs" />
     <Compile Include="V_Kezelők\Kezelő_Sérülés.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Előterv.cs" />
     <Compile Include="V_Kezelők\Kezelő_T5C5_Futás.cs" />
@@ -1265,20 +1265,20 @@
     <Compile Include="V_Kezelők\Kezelő_TTP_Naptár.cs" />
     <Compile Include="V_Kezelők\Kezelő_TTP_Tábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_TTP_Év.cs" />
-    <Compile Include="V_Kezelők\Kezelő_TW6000.cs" />
-    <Compile Include="V_Kezelők\Kezelő_TW6000_Előterv.cs" />
-    <Compile Include="V_Kezelők\Kezelő_TW6000_Ütemezés.cs" />
+    <Compile Include="V_Kezelők\6_ Karbantartás\TW6000\Kezelő_TW6000.cs" />
+    <Compile Include="V_Kezelők\6_ Karbantartás\TW6000\Kezelő_TW6000_Előterv.cs" />
+    <Compile Include="V_Kezelők\6_ Karbantartás\TW6000\Kezelő_TW6000_Ütemezés.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW600_AlapNapló.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW600_Színezés.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW600_Telephely.cs" />
     <Compile Include="V_Kezelők\Kezelő_TW600_ÜtemNapló.cs" />
-    <Compile Include="V_Kezelők\Kezelő_utasítás_Olvasás.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Váltós_Kijelöltnapok.cs" />
+    <Compile Include="V_Kezelők\3_Információ\Utasítások\Kezelő_utasítás_Olvasás.cs" />
+    <Compile Include="V_Kezelők\2_Beállítások\Váltós\Kezelő_Váltós_Kijelöltnapok.cs" />
     <Compile Include="V_Kezelők\Kezelő_Váltós_Naptár.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Váltós_Váltóscsopitábla.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Váltós_Váltóstábla.cs" />
+    <Compile Include="V_Kezelők\2_Beállítások\Váltós\Kezelő_Váltós_Váltóscsopitábla.cs" />
+    <Compile Include="V_Kezelők\2_Beállítások\Váltós\Kezelő_Váltós_Váltóstábla.cs" />
     <Compile Include="V_Kezelők\Kezelő_Váltós_Összesítő.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Védő.cs" />
+    <Compile Include="V_Kezelők\8_Gondnokság\Védő\Kezelő_Védő.cs" />
     <Compile Include="V_Ablakok\4_Dolgozó\Beosztás\Ablak_Beosztás_kieg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1333,7 +1333,7 @@
     <Compile Include="V_Ablakok\Közös\Ablak_Kereső.Designer.cs">
       <DependentUpon>Ablak_Kereső.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Kezelők\Kezelő_Főkönyv_Nap.cs" />
+    <Compile Include="V_Kezelők\7_Kiadási_adatok\Főkönyv\Kezelő_Főkönyv_Nap.cs" />
     <Compile Include="V_Kezelők\Kezelő_Jármű_Xnapos.cs" />
     <Compile Include="V_Kezelők\Kezelő_Menetkimaradás.cs" />
     <Compile Include="V_Kezelők\Kezelő_Nap_Hiba.cs" />
@@ -1342,9 +1342,9 @@
     <Compile Include="V_Kezelők\Kezelő_kiegészítő_telephely.cs" />
     <Compile Include="V_Kezelők\Kezelő_Technológia.cs" />
     <Compile Include="V_Kezelők\Kezelő_Vezénylés.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Védő_Cikktörzs.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Védő_Könyvelés.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Védő_Napló.cs" />
+    <Compile Include="V_Kezelők\8_Gondnokság\Védő\Kezelő_Védő_Cikktörzs.cs" />
+    <Compile Include="V_Kezelők\8_Gondnokság\Védő\Kezelő_Védő_Könyvelés.cs" />
+    <Compile Include="V_Kezelők\8_Gondnokság\Védő\Kezelő_Védő_Napló.cs" />
     <Compile Include="V_Kezelők\8_Gondnokság\Épület_takarítás\Kezelő_Épület.cs" />
     <Compile Include="V_Kezelők\8_Gondnokság\Épület_takarítás\Kezelő_Épület_Adattábla.cs" />
     <Compile Include="V_Kezelők\8_Gondnokság\Épület_takarítás\Kezelő_Épület_Naptár.cs" />
@@ -1573,15 +1573,15 @@
     <Compile Include="V_Ablakok\0_Főoldal\A_Főoldal.designer.cs">
       <DependentUpon>A_Főoldal.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Kezelők\Kezelő_jármű.cs" />
+    <Compile Include="V_Kezelők\7_Kiadási_adatok\Jármű\Kezelő_jármű.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szerelvény.cs" />
     <Compile Include="V_Kezelők\Kezelő_Szerszám_Könyvelés.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Utasítás.cs" />
+    <Compile Include="V_Kezelők\3_Információ\Utasítások\Kezelő_Utasítás.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Vezénylés.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Összevont.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Üzenet.cs" />
-    <Compile Include="V_Kezelők\Kezelő_Üzenet_Olvas.cs" />
-    <Compile Include="V_Kezelők\Kezelő_CAF_Szinezés.cs" />
+    <Compile Include="V_Kezelők\3_Információ\Üzenetek\Kezelő_Üzenet.cs" />
+    <Compile Include="V_Kezelők\3_Információ\Üzenetek\Kezelő_Üzenet_Olvas.cs" />
+    <Compile Include="V_Kezelők\6_ Karbantartás\CAF_adatok\Kezelő_CAF_Szinezés.cs" />
     <Compile Include="V_MdbToSql\Ablak_AdatbázisRendezés.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2387,7 +2387,53 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="V_Kezelők\0_Főoldal\" />
+    <Folder Include="V_Kezelők\2_Beállítások\Jármű_technológiák\" />
+    <Folder Include="V_Kezelők\2_Beállítások\Kiadási_adatok\" />
+    <Folder Include="V_Kezelők\4_Dolgozó\Beosztás_napló\" />
+    <Folder Include="V_Kezelők\4_Dolgozó\Dolgozói_lekérdezések\" />
+    <Folder Include="V_Kezelők\4_Dolgozó\Jelenléti\" />
+    <Folder Include="V_Kezelők\4_Dolgozó\Létszám_gazdálkodás\" />
+    <Folder Include="V_Kezelők\4_Dolgozó\Munkaidőkeret\" />
+    <Folder Include="V_Kezelők\4_Dolgozó\Munkalap_adatok_karbantartása\" />
+    <Folder Include="V_Kezelők\4_Dolgozó\Munkalap_elszámolás\" />
+    <Folder Include="V_Kezelők\4_Dolgozó\Munkalap_készítés\" />
+    <Folder Include="V_Kezelők\4_Dolgozó\Oktatások\" />
+    <Folder Include="V_Kezelők\4_Dolgozó\Szatube\" />
+    <Folder Include="V_Kezelők\5_Nyilvántartások\Kerék_nyilvántartás\" />
+    <Folder Include="V_Kezelők\5_Nyilvántartások\MEO\" />
+    <Folder Include="V_Kezelők\5_Nyilvántartások\Nóta\" />
+    <Folder Include="V_Kezelők\5_Nyilvántartások\Reklám\" />
+    <Folder Include="V_Kezelők\5_Nyilvántartások\SAP_osztály\" />
+    <Folder Include="V_Kezelők\5_Nyilvántartások\Sérülés\" />
+    <Folder Include="V_Kezelők\5_Nyilvántartások\Takarítás_jármű\" />
+    <Folder Include="V_Kezelők\5_Nyilvántartások\TTP_vizsgálat\" />
+    <Folder Include="V_Kezelők\5_Nyilvántartások\Vételezés\" />
+    <Folder Include="V_Kezelők\6_ Karbantartás\Fogaskerekű\" />
+    <Folder Include="V_Kezelők\6_ Karbantartás\ICS_KCSV\" />
+    <Folder Include="V_Kezelők\6_ Karbantartás\Jármű_karbantartás\" />
+    <Folder Include="V_Kezelők\6_ Karbantartás\Nosztalgia\" />
+    <Folder Include="V_Kezelők\6_ Karbantartás\T5C5_futásnap_rögzítés\" />
+    <Folder Include="V_Kezelők\6_ Karbantartás\T5C5_futásnap_ütemezés\" />
+    <Folder Include="V_Kezelők\6_ Karbantartás\T5C5_fűtés\" />
+    <Folder Include="V_Kezelők\6_ Karbantartás\T5C5_módosítás\" />
+    <Folder Include="V_Kezelők\6_ Karbantartás\T5C5_V_javítás\" />
+    <Folder Include="V_Kezelők\7_Kiadási_adatok\Digitális_főkönyv\" />
+    <Folder Include="V_Kezelők\7_Kiadási_adatok\Főmérnökségi_adatok\" />
+    <Folder Include="V_Kezelők\7_Kiadási_adatok\Kiadási_adatok\" />
+    <Folder Include="V_Kezelők\7_Kiadási_adatok\Kidobó\" />
+    <Folder Include="V_Kezelők\7_Kiadási_adatok\Menetkimaradás\" />
+    <Folder Include="V_Kezelők\7_Kiadási_adatok\Szerelvény\" />
+    <Folder Include="V_Kezelők\7_Kiadási_adatok\Állomány\" />
+    <Folder Include="V_Kezelők\8_Gondnokság\Eszköz\" />
+    <Folder Include="V_Kezelők\8_Gondnokság\Helység_tartozék\" />
+    <Folder Include="V_Kezelők\8_Gondnokság\Külsős\" />
+    <Folder Include="V_Kezelők\8_Gondnokság\Rezsi\" />
+    <Folder Include="V_Kezelők\8_Gondnokság\Szerszám\" />
+    <Folder Include="V_Kezelők\8_Gondnokság\Épület_takatítás_törzs\" />
+    <Folder Include="V_Kezelők\Közös\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
