@@ -10,6 +10,8 @@
         public int MelyikBetű { get; private set; }
         public int MelyikOszlop { get; private set; }
 
+
+
         public Adat_Bejelentkezés_Fordító(int gombid, string formname, string gombname, string szervezet, int melyikbetű, int melyikoszlop)
         {
             GombokId = gombid;

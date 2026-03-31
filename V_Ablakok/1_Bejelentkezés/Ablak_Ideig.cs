@@ -16,6 +16,7 @@ namespace Villamos.Ablakok
         readonly Kezelő_Belépés_Jogosultságtábla KézJogOld = new Kezelő_Belépés_Jogosultságtábla();
         readonly SQL_Kezelő_Belépés_Users KézUsers = new SQL_Kezelő_Belépés_Users();
         readonly SQL_Kezelő_Bejelentkezés_Fordító KézFordító = new SQL_Kezelő_Bejelentkezés_Fordító();
+        readonly SQL_Kezelő_Belépés_Gombok KézGomb = new SQL_Kezelő_Belépés_Gombok();
 
         List<Adat_Bejelentkezés_Users> ÚjFelhasználók = new List<Adat_Bejelentkezés_Users>();
         public Ablak_Ideig()
@@ -280,7 +281,28 @@ namespace Villamos.Ablakok
                 }
                 //Megnyitjuk a fájlt és feldolgozzuk
                 DataTable TáblaTulaj = MyF.CsvToDataTable(fájl);
-                ;
+                List<Adat_Bejelentkezés_Gombok> AdatokGomb = KézGomb.Lista_Adatok();
+
+
+                List<Adat_Bejelentkezés_Fordító> Adatok = new List<Adat_Bejelentkezés_Fordító>();
+
+                foreach (Adat_Bejelentkezés_Gombok adat in AdatokGomb)
+                {
+
+
+                    Adat_Bejelentkezés_Fordító ADAT = new Adat_Bejelentkezés_Fordító(
+                        adat.GombokId,
+                        adat.FromName,
+                        adat.GombName,
+                        "Szervezet",
+                        0,
+                        0
+                        );
+                    Adatok.Add(ADAT);
+                }
+
+                KézFordító.Rögzítés(Adatok);
+
             }
             catch (HibásBevittAdat ex)
             {

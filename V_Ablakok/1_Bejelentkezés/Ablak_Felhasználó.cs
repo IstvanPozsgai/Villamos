@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Ablakok;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.MindenEgyéb;
-using Villamos.V_Ablakok._1_Bejelentkezés;
 using Villamos.V_MindenEgyéb;
 using MyF = Függvénygyűjtemény;
 

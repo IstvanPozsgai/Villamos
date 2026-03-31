@@ -103,6 +103,38 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Rögzítés(List<Adat_Bejelentkezés_Fordító> Adatok)
+        {
+            try
+            {
+                List<SqliteCommand> parancsLista = new List<SqliteCommand>();
+                string szöveg = $"INSERT INTO {táblanév} (GombokId, FromName, GombName, Szervezet, MelyikBetű, MelyikOszlop) VALUES ";
+                szöveg += $@"(@GombokId, @FromName, @GombName, @Szervezet, @MelyikBetű, @MelyikOszlop)";
+
+                foreach (var Adat in Adatok)
+                {
+                    SqliteCommand cmd = new SqliteCommand(szöveg);
+                    cmd.Parameters.AddWithValue("@GombokId", Adat.GombokId);
+                    cmd.Parameters.AddWithValue("@FromName", Adat.FromName);
+                    cmd.Parameters.AddWithValue("@GombName", Adat.GombName);
+                    cmd.Parameters.AddWithValue("@Szervezet", Adat.Szervezet);
+                    cmd.Parameters.AddWithValue("@MelyikBetű", Adat.MelyikBetű);
+                    cmd.Parameters.AddWithValue("@MelyikOszlop", Adat.MelyikOszlop);
+                    parancsLista.Add(cmd);
+                }
+                MyA.SqLite_Módosítások(hely, jelszó, parancsLista);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Módosítás(Adat_Bejelentkezés_Fordító Adat)
         {
             try

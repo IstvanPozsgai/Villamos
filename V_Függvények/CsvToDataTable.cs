@@ -18,7 +18,7 @@ public static partial class Függvénygyűjtemény
             string headerLine = sr.ReadLine();
             if (string.IsNullOrEmpty(headerLine)) return dt;
 
-            string[] columns = headerLine.Split(','); // Vagy ';' a régiótól függően
+            string[] columns = headerLine.Split(';'); // Vagy ';' a régiótól függően
             foreach (string column in columns)
             {
                 dt.Columns.Add(column.Trim());
@@ -30,7 +30,7 @@ public static partial class Függvénygyűjtemény
                 string line = sr.ReadLine();
                 if (string.IsNullOrEmpty(line)) continue;
 
-                string[] rows = line.Split(',');
+                string[] rows = line.Split(';');
                 dt.Rows.Add(rows);
             }
         }

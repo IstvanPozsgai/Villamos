@@ -1,4 +1,4 @@
-﻿namespace Villamos.V_Ablakok
+﻿namespace Villamos.Ablakok
 {
     partial class Ablak_Ideig
     {
