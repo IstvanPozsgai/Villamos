@@ -1,4 +1,4 @@
-﻿namespace Villamos.V_Ablakok._1_Bejelentkezés
+﻿namespace Villamos.V_Ablakok
 {
     partial class Ablak_Ideig
     {

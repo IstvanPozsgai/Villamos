@@ -6,14 +6,16 @@ using System.Reflection;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using MyF = Függvénygyűjtemény;
 
-namespace Villamos.V_Ablakok._1_Bejelentkezés
+namespace Villamos.Ablakok
 {
     public partial class Ablak_Ideig : Form
     {
         readonly Kezelő_Kiegészítő_Sérülés KézSérülés = new Kezelő_Kiegészítő_Sérülés();
         readonly Kezelő_Belépés_Jogosultságtábla KézJogOld = new Kezelő_Belépés_Jogosultságtábla();
         readonly SQL_Kezelő_Belépés_Users KézUsers = new SQL_Kezelő_Belépés_Users();
+        readonly SQL_Kezelő_Bejelentkezés_Fordító KézFordító = new SQL_Kezelő_Bejelentkezés_Fordító();
 
         List<Adat_Bejelentkezés_Users> ÚjFelhasználók = new List<Adat_Bejelentkezés_Users>();
         public Ablak_Ideig()
@@ -253,6 +255,42 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
 
         private void FordítóTáblaKészítő_Click(object sender, EventArgs e)
         {
+            try
+            {
+                string fájl = "";
+                //bekérjük a két fájlt
+                using (OpenFileDialog ofd = new OpenFileDialog())
+                {
+                    ofd.Filter = "csv fájl (*.csv)|*.csv";
+                    ofd.Multiselect = false;
+
+                    if (ofd.ShowDialog() != DialogResult.OK) return;
+                    fájl = ofd.FileName;
+                }
+                //Megnyitjuk a fájlt és feldolgozzuk
+                DataTable TáblaJogok = MyF.CsvToDataTable(fájl);
+
+                using (OpenFileDialog ofd = new OpenFileDialog())
+                {
+                    ofd.Filter = "csv fájl (*.csv)|*.csv";
+                    ofd.Multiselect = false;
+
+                    if (ofd.ShowDialog() != DialogResult.OK) return;
+                    fájl = ofd.FileName;
+                }
+                //Megnyitjuk a fájlt és feldolgozzuk
+                DataTable TáblaTulaj = MyF.CsvToDataTable(fájl);
+                ;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
         }
     }

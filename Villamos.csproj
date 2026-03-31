@@ -571,6 +571,7 @@
     <Compile Include="V_Adatszerkezet\Beállítás_Kimutatás.cs" />
     <Compile Include="V_Adatszerkezet\Beállítás_Nyomtatás.cs" />
     <Compile Include="V_Adatszerkezet\Sql_Működés.cs" />
+    <Compile Include="V_Függvények\CsvToDataTable.cs" />
     <Compile Include="V_Függvények\HtmlToDataTable.cs" />
     <Compile Include="V_Függvények\Oszlopneve.cs" />
     <Compile Include="V_Input_Forms\DataGridViewHelper.cs" />
