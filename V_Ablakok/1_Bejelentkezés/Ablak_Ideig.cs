@@ -269,7 +269,7 @@ namespace Villamos.Ablakok
                     fájl = ofd.FileName;
                 }
                 //Megnyitjuk a fájlt és feldolgozzuk
-                DataTable TáblaJogok = MyF.CsvToDataTable(fájl);
+                List<GombAdatok> TáblaJogok = MyF.CsvToList<GombAdatok>(fájl);
 
                 using (OpenFileDialog ofd = new OpenFileDialog())
                 {
@@ -280,7 +280,7 @@ namespace Villamos.Ablakok
                     fájl = ofd.FileName;
                 }
                 //Megnyitjuk a fájlt és feldolgozzuk
-                DataTable TáblaTulaj = MyF.CsvToDataTable(fájl);
+                List<LáthatóságAdatok> TáblaTulaj = MyF.CsvToList<LáthatóságAdatok>(fájl);
                 List<Adat_Bejelentkezés_Gombok> AdatokGomb = KézGomb.Lista_Adatok();
 
 
@@ -288,6 +288,10 @@ namespace Villamos.Ablakok
 
                 foreach (Adat_Bejelentkezés_Gombok adat in AdatokGomb)
                 {
+                    GombAdatok AdatGombOld = (from a in TáblaJogok
+                                              where a.AblakNev == adat.FromName
+                                              && a.GombNev == adat.GombName
+                                              select a).FirstOrDefault();
 
 
                     Adat_Bejelentkezés_Fordító ADAT = new Adat_Bejelentkezés_Fordító(
@@ -295,8 +299,8 @@ namespace Villamos.Ablakok
                         adat.FromName,
                         adat.GombName,
                         "Szervezet",
-                        0,
-                        0
+                        AdatGombOld.MelyikElem.ToÉrt_Int(),
+                        AdatGombOld.EgyKettőHárom.ToÉrt_Int()
                         );
                     Adatok.Add(ADAT);
                 }
@@ -315,5 +319,24 @@ namespace Villamos.Ablakok
             }
 
         }
+    }
+
+    class GombAdatok
+    {
+        public string AblakNev { get; set; }
+        public string GombNev { get; set; }
+        public string Tulajdonsag { get; set; }
+        public string Ertek { get; set; }
+        public string MelyikElem { get; set; }
+        public string EgyKettőHárom { get; set; }
+    }
+
+    class LáthatóságAdatok
+    {
+        public string AblakNev { get; set; }
+        public string GombNev { get; set; }
+        public string Tulajdonsag { get; set; }
+        public string Ertek { get; set; }
+        public string Reláció { get; set; }
     }
 }
