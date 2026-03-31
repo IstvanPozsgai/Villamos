@@ -293,14 +293,18 @@ namespace Villamos.Ablakok
                                               && a.GombNev == adat.GombName
                                               select a).FirstOrDefault();
 
+                    LáthatóságAdatok AdatLáthat = (from a in TáblaTulaj
+                                                   where a.AblakNev == adat.FromName
+                                                   && a.GombNev == adat.GombName
+                                                   select a).FirstOrDefault();
 
                     Adat_Bejelentkezés_Fordító ADAT = new Adat_Bejelentkezés_Fordító(
                         adat.GombokId,
                         adat.FromName,
                         adat.GombName,
                         "Szervezet",
-                        AdatGombOld.MelyikElem.ToÉrt_Int(),
-                        AdatGombOld.EgyKettőHárom.ToÉrt_Int()
+                        AdatGombOld == null ? 0 : AdatGombOld.MelyikElem.ToÉrt_Int(),
+                        AdatGombOld == null ? 0 : AdatGombOld.EgyKettőHárom.ToÉrt_Int()
                         );
                     Adatok.Add(ADAT);
                 }
