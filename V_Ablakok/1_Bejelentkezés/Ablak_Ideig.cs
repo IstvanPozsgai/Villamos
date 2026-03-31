@@ -163,7 +163,7 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
                         // 1. ELŐKÉSZÍTÉS A REJTETT MEGJELENÍTÉSHEZ
                         ablak.StartPosition = FormStartPosition.CenterScreen;
                         //  ablak.Location = new Point(-10000, -10000); // Képernyőn kívülre tesszük
-                        ablak.Opacity =1.0; // Teljesen átlátszóvá tesszük
+                        ablak.Opacity = 1.0; // Teljesen átlátszóvá tesszük
                         //       ablak.ShowInTaskbar = false; // Ne jelenjen meg a tálcán
 
                         // 2. MEGJELENÍTÉS (Ez kényszeríti a WinForms-t az állapotok frissítésére)
@@ -248,6 +248,11 @@ namespace Villamos.V_Ablakok._1_Bejelentkezés
 
             // Opcionális: Oszlopok automatikus méretezése, hogy minden látszódjon
             Tábla.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+        }
+
+        private void FordítóTáblaKészítő_Click(object sender, EventArgs e)
+        {
 
         }
     }

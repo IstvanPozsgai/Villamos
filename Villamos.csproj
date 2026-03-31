@@ -382,6 +382,7 @@
     <Compile Include="V_Ablakok\7_Kiadási_adatok\Főkönyv\list.cs" />
     <Compile Include="V_Ablakok\7_Kiadási_adatok\Vendég_Járművek_Karbantartása.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Anyagtörzs.cs" />
+    <Compile Include="V_Adatszerkezet\1_Bejelentkezés\Adat_Bejelentkezés_Fordító.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Akkumulátor_Mérés.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Akkumulátor_Napló.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Anyagok.cs" />
@@ -582,6 +583,7 @@
     <Compile Include="V_Input_Forms\InputSelect.cs" />
     <Compile Include="V_Input_Forms\InputTextbox.cs" />
     <Compile Include="V_Input_Forms\InputTime.cs" />
+    <Compile Include="SqL_Kezelők\1_Bejelentkezés\SQL_Kezelő_Bejelentkezés_Fordító.cs" />
     <Compile Include="V_Kezelők\Kérdésesek\Kezelő_AnyagTörzs.cs" />
     <Compile Include="SqL_Kezelők\Sql_Kezelő_Áttöltés.cs" />
     <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Belépés_MindenMásol.cs" />

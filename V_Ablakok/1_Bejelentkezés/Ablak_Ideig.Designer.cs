@@ -41,6 +41,7 @@
             this.FelhasználóId = new System.Windows.Forms.NumericUpDown();
             this.BtnRögzít = new System.Windows.Forms.Button();
             this.Tábla = new System.Windows.Forms.DataGridView();
+            this.FordítóTáblaKészítő = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FelhasználóId)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -184,11 +185,23 @@
             this.Tábla.Size = new System.Drawing.Size(1043, 194);
             this.Tábla.TabIndex = 99;
             // 
+            // FordítóTáblaKészítő
+            // 
+            this.FordítóTáblaKészítő.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.FordítóTáblaKészítő.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.FordítóTáblaKészítő.Location = new System.Drawing.Point(1011, 221);
+            this.FordítóTáblaKészítő.Name = "FordítóTáblaKészítő";
+            this.FordítóTáblaKészítő.Size = new System.Drawing.Size(44, 44);
+            this.FordítóTáblaKészítő.TabIndex = 100;
+            this.FordítóTáblaKészítő.UseVisualStyleBackColor = true;
+            this.FordítóTáblaKészítő.Click += new System.EventHandler(this.FordítóTáblaKészítő_Click);
+            // 
             // Ablak_Ideig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1067, 479);
+            this.Controls.Add(this.FordítóTáblaKészítő);
             this.Controls.Add(this.Tábla);
             this.Controls.Add(this.BtnRögzít);
             this.Controls.Add(this.tableLayoutPanel1);
@@ -220,5 +233,6 @@
         private System.Windows.Forms.NumericUpDown FelhasználóId;
         internal System.Windows.Forms.Button BtnRögzít;
         private System.Windows.Forms.DataGridView Tábla;
+        internal System.Windows.Forms.Button FordítóTáblaKészítő;
     }
 }
