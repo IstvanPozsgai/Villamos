@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.Cmbtelephely = new System.Windows.Forms.ComboBox();
             this.Label13 = new System.Windows.Forms.Label();
             this.CmbNevekOld = new System.Windows.Forms.ComboBox();
@@ -43,6 +44,7 @@
             this.Tábla = new System.Windows.Forms.DataGridView();
             this.FordítóTáblaKészítő = new System.Windows.Forms.Button();
             this.BtnRégitábla = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FelhasználóId)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -172,6 +174,7 @@
             this.BtnRögzít.Name = "BtnRögzít";
             this.BtnRögzít.Size = new System.Drawing.Size(44, 44);
             this.BtnRögzít.TabIndex = 98;
+            this.toolTip1.SetToolTip(this.BtnRögzít, "Régi adatokból a kiválasztott személynek elkészíti a jogosultságait");
             this.BtnRögzít.UseVisualStyleBackColor = true;
             this.BtnRögzít.Click += new System.EventHandler(this.BtnRögzít_Click);
             // 
@@ -194,6 +197,7 @@
             this.FordítóTáblaKészítő.Name = "FordítóTáblaKészítő";
             this.FordítóTáblaKészítő.Size = new System.Drawing.Size(44, 44);
             this.FordítóTáblaKészítő.TabIndex = 100;
+            this.toolTip1.SetToolTip(this.FordítóTáblaKészítő, "Fordító tábla létrehozása");
             this.FordítóTáblaKészítő.UseVisualStyleBackColor = true;
             this.FordítóTáblaKészítő.Click += new System.EventHandler(this.FordítóTáblaKészítő_Click);
             // 
@@ -205,6 +209,7 @@
             this.BtnRégitábla.Name = "BtnRégitábla";
             this.BtnRégitábla.Size = new System.Drawing.Size(44, 44);
             this.BtnRégitábla.TabIndex = 101;
+            this.toolTip1.SetToolTip(this.BtnRégitábla, "csv fájlokba írja a program jogosultság kiosztás adatait");
             this.BtnRégitábla.UseVisualStyleBackColor = true;
             this.BtnRégitábla.Click += new System.EventHandler(this.BtnRégitábla_Click);
             // 
@@ -248,5 +253,6 @@
         private System.Windows.Forms.DataGridView Tábla;
         internal System.Windows.Forms.Button FordítóTáblaKészítő;
         internal System.Windows.Forms.Button BtnRégitábla;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

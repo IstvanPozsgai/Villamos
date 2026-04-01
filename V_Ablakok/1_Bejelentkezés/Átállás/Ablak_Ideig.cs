@@ -286,7 +286,7 @@ namespace Villamos.Ablakok
                         adat.GombokId,
                         adat.FromName,
                         adat.GombName,
-                        AdatLáthat.Ertek ,
+                        AdatLáthat.Ertek,
                         AdatGombOld == null ? 0 : AdatGombOld.MelyikElem.ToÉrt_Int(),
                         AdatGombOld == null ? 0 : AdatGombOld.EgyKettőHárom.ToÉrt_Int()
                         );
