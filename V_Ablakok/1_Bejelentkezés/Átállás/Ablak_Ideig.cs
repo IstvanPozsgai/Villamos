@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InputForms;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -17,6 +18,8 @@ namespace Villamos.Ablakok
         readonly SQL_Kezelő_Belépés_Users KézUsers = new SQL_Kezelő_Belépés_Users();
         readonly SQL_Kezelő_Bejelentkezés_Fordító KézFordító = new SQL_Kezelő_Bejelentkezés_Fordító();
         readonly SQL_Kezelő_Belépés_Gombok KézGomb = new SQL_Kezelő_Belépés_Gombok();
+
+        private DataGridViewHelper<Adat_Bejelentkezés_Fordító> Tábla;
 
         List<Adat_Bejelentkezés_Users> ÚjFelhasználók = new List<Adat_Bejelentkezés_Users>();
         public Ablak_Ideig()
@@ -243,14 +246,7 @@ namespace Villamos.Ablakok
 
         private void BtnRögzít_Click(object sender, EventArgs e)
         {
-            // Lekérjük az adatokat
-            DataTable jogokTable = JogosultsagDataTableLekerese();
 
-            // Összekötjük a DataGridView-val
-            Tábla.DataSource = jogokTable;
-
-            // Opcionális: Oszlopok automatikus méretezése, hogy minden látszódjon
-            Tábla.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
         }
 
@@ -312,6 +308,98 @@ namespace Villamos.Ablakok
         {
             RégiAdatok.TelephelyJogosultsaga();
             RégiAdatok.GombokJogosultsaga();
+        }
+
+
+        private void BtnFordító_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (TxtJogkör.Text.Trim() == "") return;
+
+                //Betöltjük a fordító táblát
+                List<Adat_Bejelentkezés_Fordító> AdatokFordító = KézFordító.Lista_Adatok();
+
+                List<Adat_Bejelentkezés_Fordító> GyűjtőAdatok = new List<Adat_Bejelentkezés_Fordító>();
+                for (int i = 0; i < TxtJogkör.Text.Length; i++)
+                {
+                    string MelyikBetű = TxtJogkör.Text.Substring(i, 1);
+                    if (MelyikBetű == "0") continue;
+                    for (int j = 1; j < 4; j++)
+                    {
+                        if (VanJogaBelső(i, j))
+                        {
+                            List<Adat_Bejelentkezés_Fordító> Elemek = (from a in AdatokFordító
+                                                                       where a.MelyikBetű == i
+                                                                       && a.MelyikOszlop == j
+                                                                       select a).ToList();
+                            if (Elemek != null)
+                            {
+                                GyűjtőAdatok.AddRange(Elemek);
+                            }
+
+                        }
+
+                    }
+
+                }
+                if (GyűjtőAdatok.Count > 0) TáblázatBeállítás(GyűjtőAdatok);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TáblázatBeállítás(List<Adat_Bejelentkezés_Fordító> Adatok)
+        {
+            Tábla = new DataGridViewHelper<Adat_Bejelentkezés_Fordító>(this)
+               .SetLocationAndSize(15, 285, 1045, 180)
+               .SetAnchor(AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom)
+               .AddItems(Adatok)
+               .ShowRowHeaders(true)
+               .EnableMultiSelect(false);
+        }
+
+        private bool VanJogaBelső(int melyikelem, int csoport)
+        {
+            bool válasz;
+            string Betű = TxtJogkör.Text.Substring(melyikelem, 1);
+            switch (csoport)
+            {
+                case 1: //1 -es csoport
+                    {
+                        if (Betű == "3" || Betű == "7" || Betű == "b" || Betű == "f")
+                        { válasz = true; }
+                        else
+                        { válasz = false; }
+                        break;
+                    }
+                case 2: // 2-es csoport
+                    {
+                        if (Betű == "5" || Betű == "7" || Betű == "d" || Betű == "f")
+                        { válasz = true; }
+                        else
+                        { válasz = false; }
+                        break;
+                    }
+                default: //3-as csoport
+                    {
+                        if (Betű == "9" || Betű == "b" || Betű == "d" || Betű == "f")
+
+                        { válasz = true; }
+                        else
+                        { válasz = false; }
+                        break;
+                    }
+            }
+            return válasz;
+
         }
     }
 

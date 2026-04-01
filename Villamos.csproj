@@ -2078,6 +2078,7 @@
   <ItemGroup>
     <Content Include="Aha-Soft-Standard-Transport-Tram.ico" />
     <Content Include="Főmérnökség\Adatok\Nosztalgia\Kép\5901_1.jpg" />
+    <None Include="Resources\Button Download-011.ico" />
     <None Include="Resources\App-error.ico" />
     <None Include="Resources\Action-arrow-blue-double-down.ico" />
     <None Include="Resources\comment_edit.ico" />

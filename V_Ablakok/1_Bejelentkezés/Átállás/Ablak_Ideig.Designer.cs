@@ -41,13 +41,12 @@
             this.label3 = new System.Windows.Forms.Label();
             this.FelhasználóId = new System.Windows.Forms.NumericUpDown();
             this.BtnRögzít = new System.Windows.Forms.Button();
-            this.Tábla = new System.Windows.Forms.DataGridView();
             this.FordítóTáblaKészítő = new System.Windows.Forms.Button();
             this.BtnRégitábla = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.BtnFordító = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FelhasználóId)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.SuspendLayout();
             // 
             // Cmbtelephely
@@ -178,17 +177,6 @@
             this.BtnRögzít.UseVisualStyleBackColor = true;
             this.BtnRögzít.Click += new System.EventHandler(this.BtnRögzít_Click);
             // 
-            // Tábla
-            // 
-            this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Tábla.Location = new System.Drawing.Point(12, 275);
-            this.Tábla.Name = "Tábla";
-            this.Tábla.Size = new System.Drawing.Size(1043, 194);
-            this.Tábla.TabIndex = 99;
-            // 
             // FordítóTáblaKészítő
             // 
             this.FordítóTáblaKészítő.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
@@ -213,14 +201,26 @@
             this.BtnRégitábla.UseVisualStyleBackColor = true;
             this.BtnRégitábla.Click += new System.EventHandler(this.BtnRégitábla_Click);
             // 
+            // BtnFordító
+            // 
+            this.BtnFordító.BackgroundImage = global::Villamos.Properties.Resources.Button_Download_01;
+            this.BtnFordító.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BtnFordító.Location = new System.Drawing.Point(627, 80);
+            this.BtnFordító.Name = "BtnFordító";
+            this.BtnFordító.Size = new System.Drawing.Size(44, 44);
+            this.BtnFordító.TabIndex = 102;
+            this.toolTip1.SetToolTip(this.BtnFordító, "Régi adatokból elkészítjük az új jogosultság táblát");
+            this.BtnFordító.UseVisualStyleBackColor = true;
+            this.BtnFordító.Click += new System.EventHandler(this.BtnFordító_Click);
+            // 
             // Ablak_Ideig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1067, 479);
+            this.Controls.Add(this.BtnFordító);
             this.Controls.Add(this.BtnRégitábla);
             this.Controls.Add(this.FordítóTáblaKészítő);
-            this.Controls.Add(this.Tábla);
             this.Controls.Add(this.BtnRögzít);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -232,7 +232,6 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FelhasználóId)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -250,9 +249,9 @@
         internal System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown FelhasználóId;
         internal System.Windows.Forms.Button BtnRögzít;
-        private System.Windows.Forms.DataGridView Tábla;
         internal System.Windows.Forms.Button FordítóTáblaKészítő;
         internal System.Windows.Forms.Button BtnRégitábla;
         private System.Windows.Forms.ToolTip toolTip1;
+        internal System.Windows.Forms.Button BtnFordító;
     }
 }
