@@ -26,7 +26,7 @@ namespace Villamos
                 if (NemHibás)
                 {
                     // kilépünk
-                    throw new HibásBevittAdat("Valamiért hiányzik a telephelyi regisztráció, ezért a program leáll.\n" +
+                    throw new HibásBevittAdat("Valamiért hiányzik a TELEPHELYI regisztráció, ezért a program leáll.\n" +
                         "Ennek több oka lehet elveszítette a program a hálózati kapcsolatot, ilyenkor elég egy újraindítás.\n" +
                         "A programra mutató parancsikon elavult, le kell cserélni a parancsikont.");
 

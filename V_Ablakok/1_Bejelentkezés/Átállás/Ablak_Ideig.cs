@@ -258,27 +258,11 @@ namespace Villamos.Ablakok
         {
             try
             {
-                string fájl = "";
-                //bekérjük a két fájlt
-                using (OpenFileDialog ofd = new OpenFileDialog())
-                {
-                    ofd.Filter = "csv fájl (*.csv)|*.csv";
-                    ofd.Multiselect = false;
-
-                    if (ofd.ShowDialog() != DialogResult.OK) return;
-                    fájl = ofd.FileName;
-                }
+                string fájl = $@"{Application.StartupPath}\Temp\AblakokGombok.csv";
                 //Megnyitjuk a fájlt és feldolgozzuk
                 List<GombAdatok> TáblaJogok = MyF.CsvToList<GombAdatok>(fájl);
 
-                using (OpenFileDialog ofd = new OpenFileDialog())
-                {
-                    ofd.Filter = "csv fájl (*.csv)|*.csv";
-                    ofd.Multiselect = false;
-
-                    if (ofd.ShowDialog() != DialogResult.OK) return;
-                    fájl = ofd.FileName;
-                }
+                fájl = $@"{Application.StartupPath}\Temp\Telephely.csv";
                 //Megnyitjuk a fájlt és feldolgozzuk
                 List<LáthatóságAdatok> TáblaTulaj = MyF.CsvToList<LáthatóságAdatok>(fájl);
                 List<Adat_Bejelentkezés_Gombok> AdatokGomb = KézGomb.Lista_Adatok();
@@ -302,7 +286,7 @@ namespace Villamos.Ablakok
                         adat.GombokId,
                         adat.FromName,
                         adat.GombName,
-                        "Szervezet",
+                        AdatLáthat.Ertek ,
                         AdatGombOld == null ? 0 : AdatGombOld.MelyikElem.ToÉrt_Int(),
                         AdatGombOld == null ? 0 : AdatGombOld.EgyKettőHárom.ToÉrt_Int()
                         );
@@ -322,6 +306,12 @@ namespace Villamos.Ablakok
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+        }
+
+        private void BtnRégitábla_Click(object sender, EventArgs e)
+        {
+            RégiAdatok.TelephelyJogosultsaga();
+            RégiAdatok.GombokJogosultsaga();
         }
     }
 

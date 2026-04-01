@@ -200,6 +200,7 @@
     <Compile Include="V_Ablakok\1_Bejelentkezés\Ablak_Szoftver_Kulcs.Designer.cs">
       <DependentUpon>Ablak_Szoftver_Kulcs.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\1_Bejelentkezés\Átállás\RégiAdatok.cs" />
     <Compile Include="V_Ablakok\2_Beállítások\Ablak_alap_program_egyéb.cs">
       <SubType>Form</SubType>
     </Compile>

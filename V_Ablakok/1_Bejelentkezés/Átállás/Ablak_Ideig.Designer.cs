@@ -42,6 +42,7 @@
             this.BtnRögzít = new System.Windows.Forms.Button();
             this.Tábla = new System.Windows.Forms.DataGridView();
             this.FordítóTáblaKészítő = new System.Windows.Forms.Button();
+            this.BtnRégitábla = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FelhasználóId)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -196,11 +197,23 @@
             this.FordítóTáblaKészítő.UseVisualStyleBackColor = true;
             this.FordítóTáblaKészítő.Click += new System.EventHandler(this.FordítóTáblaKészítő_Click);
             // 
+            // BtnRégitábla
+            // 
+            this.BtnRégitábla.BackgroundImage = global::Villamos.Properties.Resources.Document_write;
+            this.BtnRégitábla.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BtnRégitábla.Location = new System.Drawing.Point(1011, 171);
+            this.BtnRégitábla.Name = "BtnRégitábla";
+            this.BtnRégitábla.Size = new System.Drawing.Size(44, 44);
+            this.BtnRégitábla.TabIndex = 101;
+            this.BtnRégitábla.UseVisualStyleBackColor = true;
+            this.BtnRégitábla.Click += new System.EventHandler(this.BtnRégitábla_Click);
+            // 
             // Ablak_Ideig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1067, 479);
+            this.Controls.Add(this.BtnRégitábla);
             this.Controls.Add(this.FordítóTáblaKészítő);
             this.Controls.Add(this.Tábla);
             this.Controls.Add(this.BtnRögzít);
@@ -234,5 +247,6 @@
         internal System.Windows.Forms.Button BtnRögzít;
         private System.Windows.Forms.DataGridView Tábla;
         internal System.Windows.Forms.Button FordítóTáblaKészítő;
+        internal System.Windows.Forms.Button BtnRégitábla;
     }
 }
