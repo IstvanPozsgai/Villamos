@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Villamos.Ablakok;
 using Villamos.Adatszerkezet;
 using Zuby.ADGV;
 

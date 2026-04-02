@@ -359,11 +359,13 @@ namespace Villamos.Ablakok
         private void TáblázatBeállítás(List<Adat_Bejelentkezés_Fordító> Adatok)
         {
             Tábla = new DataGridViewHelper<Adat_Bejelentkezés_Fordító>(this)
-               .SetLocationAndSize(15, 285, 1045, 180)
+       // Fix számok helyett az ablak szélességéből és magasságából vonsz le margót:
+               .SetLocationAndSize(15, 285, this.ClientSize.Width - 30, this.ClientSize.Height - 300)
                .SetAnchor(AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom)
                .AddItems(Adatok)
                .ShowRowHeaders(true)
                .EnableMultiSelect(false);
+            //   Tábla.SetAnchor(AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom);
         }
 
         private bool VanJogaBelső(int melyikelem, int csoport)
