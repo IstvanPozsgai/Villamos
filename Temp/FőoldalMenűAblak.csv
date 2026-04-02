@@ -1,0 +1,68 @@
+Index;Ablak_Osztály;Leírás
+0;AblakFelhasználó;Felhasználók beállítása
+1;Ablak_alap_program_kiadás;Kiadási adatok
+4;Ablak_alap_program_személy;Személy adatok
+6;Ablak_Ciklus;Ciklusrend
+10;Ablak_Váltós;Váltós munkarend
+14;Ablak_alap_program_egyéb;Program adatok egyéb
+15;Ablak_technológia;Jármű technológiák
+17;Ablak_üzenet;Hibanapló / Üzenet
+19;AblakMenetkimaradás;Menetkimaradás
+21;Ablak_Beosztás;Beosztás
+49;Ablak_Vételezés;Vételezés
+59;Ablak_Jelenléti;Jelenléti ívek
+60;Ablak_Szatube;Szabadság/Túlóra/Beteg
+63;Ablak_Oktatások;Oktatások
+65;Ablak_Dolgozóialapadatok;Dolgozói alapadatok
+68;Ablak_Felvétel;Felvétel/Átvétel/Vezénylés
+74;AblakLétszámgazdálkodás;Létszámgazdálkodás
+76;Ablak_DolgozóiLekérdezések;Lekérdezések
+77;Ablak_Túlóra_Figyelés;Túlóra ellenőrzés
+78;Ablak_Beosztás_Napló;Beosztás napló
+79;Ablak_Munkalap_admin;Munkalap karbantartás
+84;Ablak_Munkalap_készítés;Munkalap készítés
+85;Ablak_munkalap_dekádoló;Munkalap dekádoló
+88;Ablak_reklám;Reklám nyilvántartás
+89;Ablak_Jármű;Jármű létrehozás/mozgás
+91;Ablak_sérülés;Sérülés nyilvántartás
+97;Ablak_Főkönyv;Főkönyv
+98;Ablak_Karbantartási_adatok;Jármű karbantartási adatok
+99;Ablak_szerelvény;Szerelvény
+100;Ablak_T5C5_futás;T5C5 Futásnap rögzítés
+101;Ablak_T5C5_napütemezés;T5C5 Futásnap ütemezés
+102;Ablak_T5C5_Vizsgálat_ütemező;T5C5 V-javítás ütemezés
+105;Ablak_T5C5_Tulajdonság;T5C5 Adatok módosítása
+107;Ablak_Napiadatok;Napi adatok
+108;Ablak_Fogaskerekű_Tulajdonságok;Fogaskerekű adatok
+109;Ablak_TW6000_Tulajdonság;TW6000 adatok
+112;Ablak_IcsKcsv;ICS/KCSV adatok
+114;Ablak_Tulajdonságok_CAF;CAF adatok
+129;Ablak_TTP;TTP nyilvántartás
+159;Ablak_Eszterga_Karbantartás;Eszterga karbantartás
+164;Ablak_KerékEszterga_Ütemezés;Kerékeszterga szervezés
+167;Ablak_Eszterga_Adatok_Baross;Kerékeszterga adatok
+169;Ablak_Karbantartási_Munkalapok;Karbantartási munkalapok
+176;Ablak_T5C5_fűtés;T5C5 Utastér fűtés
+177;Ablak_kidobó;Kidobó készítés
+178;Ablak_állomány;Állomány tábla
+179;Ablak_MEO_kerék;MEO kerék adatok
+180;Ablak_Jármű_takarítás_új;Takarítás adatok
+182;Ablak_Főmérnökségi_Adatok;Főmérnökségi adatok
+183;Ablak_Telephelyi_Összesítő;Telephelyi adatok összesítése
+184;Ablak_Kiadási_Forte;Kiadási Forte adatok
+185;Ablak_keréknyilvántartás;Kerékátmérő nyilvántartás
+187;Ablak_Digitális_Főkönyv;Digitális főkönyv
+188;Ablak_SAP_osztály;SAP osztály
+189;Ablak_Akkumulátor;Akkumulátor nyilvántartás
+199;Ablak_Üzenetek;Üzenetek menü
+201;Ablak_Utasítás;Utasítások menü
+209;Ablak_Fődarab;Fődarab (Nóta) nyilvántartás
+219;Ablak_RezsiRaktár;Rezsi raktár
+227;Ablak_Eszköz;Eszköz nyilvántartás
+228;Ablak_ÉpületTartozék;Épület tartozék nyilvántartás
+229;Ablak_Szerszám;Szerszám nyilvántartás
+233;Ablak_ÉpületTakarítás;Épület takarítás
+234;Ablak_ÉpületTakarításTörzs;Épület takarítás törzs
+236;Ablak_Védőeszköz;Védőeszköz
+239;Ablak_Behajtás;Behajtási engedély
+246;Ablak_Külsős;Külsősök belépése/behajtása
