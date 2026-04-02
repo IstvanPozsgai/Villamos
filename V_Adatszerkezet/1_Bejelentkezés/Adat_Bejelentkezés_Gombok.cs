@@ -13,7 +13,7 @@
 
         public bool Súgó { get; set; }
 
-        public Adat_Bejelentkezés_Gombok(int gombokId, string formName, string gombName, string gombFelirat, string szervezet, bool látható, bool törölt)
+        public Adat_Bejelentkezés_Gombok(int gombokId, string formName, string gombName, string gombFelirat, string szervezet, bool látható, bool törölt, bool súgó)
         {
             GombokId = gombokId;
             FormName = formName;
@@ -22,6 +22,7 @@
             Szervezet = szervezet;
             Látható = látható;
             Törölt = törölt;
+            Súgó = súgó;
         }
     }
 }

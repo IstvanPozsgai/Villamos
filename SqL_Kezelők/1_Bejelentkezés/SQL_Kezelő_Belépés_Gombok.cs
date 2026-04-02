@@ -32,7 +32,8 @@ namespace Villamos.Kezelők
                                 GombFelirat TEXT, 
                                 Szervezet TEXT, 
                                 Látható INTEGER, 
-                                Törölt INTEGER
+                                Törölt INTEGER,
+                                Súgó Integer    
                                 );";
                 MyA.SqLite_TáblaLétrehozás(hely.KönyvSzerk(), jelszó, szöveg);
             }
@@ -59,7 +60,8 @@ namespace Villamos.Kezelők
                                 rekord["GombFelirat"].ToStrTrim(),
                                 rekord["Szervezet"].ToStrTrim(),
                                 rekord["Látható"].ToÉrt_Bool(),
-                                rekord["Törölt"].ToÉrt_Bool()
+                                rekord["Törölt"].ToÉrt_Bool(),
+                                rekord["Súgó"].ToÉrt_Bool()
                                 ));
             }
             catch (HibásBevittAdat ex)
@@ -119,8 +121,8 @@ namespace Villamos.Kezelők
             try
             {
 
-                string szöveg = $"INSERT INTO {táblanév} ( FromName, GombName, GombFelirat, Szervezet, Látható, Törölt) VALUES ";
-                szöveg += $@"( @FromName, @GombName, @GombFelirat, @Szervezet, @Látható, @Törölt)";
+                string szöveg = $"INSERT INTO {táblanév} ( FromName, GombName, GombFelirat, Szervezet, Látható, Törölt, Súgó) VALUES ";
+                szöveg += $@"( @FromName, @GombName, @GombFelirat, @Szervezet, @Látható, @Törölt, @Súgó)";
 
                 SqliteCommand cmd = new SqliteCommand(szöveg);
 
@@ -130,6 +132,7 @@ namespace Villamos.Kezelők
                 cmd.Parameters.AddWithValue("@Szervezet", Adat.Szervezet);
                 cmd.Parameters.AddWithValue("@Látható", Adat.Látható);
                 cmd.Parameters.AddWithValue("@Törölt", Adat.Törölt);
+                cmd.Parameters.AddWithValue("@Súgó", Adat.Súgó);
 
                 MyA.SqLite_Módosítás(hely, jelszó, cmd);
             }
@@ -154,7 +157,8 @@ namespace Villamos.Kezelők
                 szöveg += $@"GombFelirat=@GombFelirat, ";
                 szöveg += $@"Szervezet=@Szervezet, ";
                 szöveg += $@"Látható=@Látható, ";
-                szöveg += $@"Törölt=@Törölt ";
+                szöveg += $@"Törölt=@Törölt, ";
+                szöveg += $@"Súgó=@Súgó ";
                 szöveg += $@"WHERE GombokId=@GombokId;";
 
                 SqliteCommand cmd = new SqliteCommand(szöveg);
@@ -166,6 +170,7 @@ namespace Villamos.Kezelők
                 cmd.Parameters.AddWithValue("@Szervezet", Adat.Szervezet);
                 cmd.Parameters.AddWithValue("@Látható", Adat.Látható);
                 cmd.Parameters.AddWithValue("@Törölt", Adat.Törölt);
+                cmd.Parameters.AddWithValue("@Súgó", Adat.Súgó);
 
                 MyA.SqLite_Módosítás(hely, jelszó, cmd);
             }
