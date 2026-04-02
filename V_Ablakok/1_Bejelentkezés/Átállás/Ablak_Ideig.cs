@@ -22,6 +22,9 @@ namespace Villamos.Ablakok
         private DataGridViewHelper<Adat_Bejelentkezés_Fordító> Tábla;
 
         List<Adat_Bejelentkezés_Users> ÚjFelhasználók = new List<Adat_Bejelentkezés_Users>();
+        List<Adat_Bejelentkezés_Gombok> AdatokGombok = new List<Adat_Bejelentkezés_Gombok>();
+        List<Adat_Bejelentkezés_Fordító> ÚjJogosultságokGyűjtőAdatok = new List<Adat_Bejelentkezés_Fordító>();
+
         public Ablak_Ideig()
         {
             InitializeComponent();
@@ -37,6 +40,7 @@ namespace Villamos.Ablakok
         {
             Telephelyekfeltöltése();
             Újfelhasználóklistája();
+            AdatokGombok = KézGomb.Lista_Adatok();
         }
 
 
@@ -320,22 +324,44 @@ namespace Villamos.Ablakok
                 //Betöltjük a fordító táblát
                 List<Adat_Bejelentkezés_Fordító> AdatokFordító = KézFordító.Lista_Adatok();
 
-                List<Adat_Bejelentkezés_Fordító> GyűjtőAdatok = new List<Adat_Bejelentkezés_Fordító>();
+                //kiürítjük a gyűjtő listát, hogy ne maradjon benne régi adat
+                ÚjJogosultságokGyűjtőAdatok.Clear();
+
+                //Végigmegyünk a jogkör karakterláncon, és minden egyes karakterre megnézzük, hogy milyen jogosultságokat ad
                 for (int i = 0; i < TxtJogkör.Text.Length; i++)
                 {
                     string MelyikBetű = TxtJogkör.Text.Substring(i, 1);
-                    if (MelyikBetű == "0") continue;
+                    if (MelyikBetű == "0") continue; // Ha a karakter '0', akkor nincs jogosultság, így kihagyjuk
+
+                    //Ha van egy joga is akkor a súgó gombnak kell adnunk, hogy a főoldal menü is megjelenjen.
+                    List<Adat_Bejelentkezés_Fordító> Elemek = (from a in AdatokFordító
+                                                               where a.MelyikBetű == i
+                                                               select a).ToList();
+                    //Összeállítjuk a súgó gomb megjelenítéséhez szükséges adatokat, ha van egy joga is a karakternek
+                    Adat_Bejelentkezés_Gombok SúgóGomb = AdatokGombok.Where(a => a.FormName == Elemek[0].FromName && a.Súgó).FirstOrDefault();
+                    if (SúgóGomb == null)
+                        continue; // Ha nincs súgó gomb, akkor nem tudjuk megjeleníteni a főoldalon a menüt, így kihagyjuk
+
+                    Adat_Bejelentkezés_Fordító Elem = new Adat_Bejelentkezés_Fordító
+                         (SúgóGomb.GombokId,
+                         Elemek[0].FromName,
+                         SúgóGomb.GombName,
+                         "Szervezet",
+                         i,
+                         0);
+
+
                     for (int j = 1; j < 4; j++)
                     {
                         if (VanJogaBelső(i, j))
                         {
-                            List<Adat_Bejelentkezés_Fordító> Elemek = (from a in AdatokFordító
-                                                                       where a.MelyikBetű == i
-                                                                       && a.MelyikOszlop == j
-                                                                       select a).ToList();
+                            Elemek = (from a in AdatokFordító
+                                      where a.MelyikBetű == i
+                                      && a.MelyikOszlop == j
+                                      select a).ToList();
                             if (Elemek != null)
                             {
-                                GyűjtőAdatok.AddRange(Elemek);
+                                ÚjJogosultságokGyűjtőAdatok.AddRange(Elemek);
                             }
 
                         }
@@ -343,7 +369,7 @@ namespace Villamos.Ablakok
                     }
 
                 }
-                if (GyűjtőAdatok.Count > 0) TáblázatBeállítás(GyűjtőAdatok);
+                if (ÚjJogosultságokGyűjtőAdatok.Count > 0) TáblázatBeállítás();
             }
             catch (HibásBevittAdat ex)
             {
@@ -356,16 +382,15 @@ namespace Villamos.Ablakok
             }
         }
 
-        private void TáblázatBeállítás(List<Adat_Bejelentkezés_Fordító> Adatok)
+        private void TáblázatBeállítás()
         {
             Tábla = new DataGridViewHelper<Adat_Bejelentkezés_Fordító>(this)
-       // Fix számok helyett az ablak szélességéből és magasságából vonsz le margót:
+               // Fix számok helyett az ablak szélességéből és magasságából vonsz le margót:
                .SetLocationAndSize(15, 285, this.ClientSize.Width - 30, this.ClientSize.Height - 300)
                .SetAnchor(AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom)
-               .AddItems(Adatok)
+               .AddItems(ÚjJogosultságokGyűjtőAdatok)
                .ShowRowHeaders(true)
                .EnableMultiSelect(false);
-            //   Tábla.SetAnchor(AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom);
         }
 
         private bool VanJogaBelső(int melyikelem, int csoport)
