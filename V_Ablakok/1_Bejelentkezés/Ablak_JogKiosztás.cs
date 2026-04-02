@@ -109,7 +109,7 @@ namespace Villamos
             if (oldal == null) return;
             List<Adat_Bejelentkezés_Gombok> gombok = (from a in AdatokGombok
                                                       where a.Törölt == false
-                                                      && a.FromName == oldal.FromName
+                                                      && a.FormName == oldal.FromName
                                                       select a).ToList();
             if (gombok == null) return;
             for (int i = 0; i < gombok.Count; i++)
@@ -256,7 +256,7 @@ namespace Villamos
                 if (CmbGombok.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon legalább egy Gombot gombot!");
                 //Ha van kiválasztott gomb akkor azt rögzítjük
                 string[] gomb = CmbGombok.Text.Trim().Split('=');
-                int GombokID = AdatokGombok.FirstOrDefault(a => a.GombName == gomb[1].Trim() && a.FromName == AblakFormName)?.GombokId ?? -1;
+                int GombokID = AdatokGombok.FirstOrDefault(a => a.GombName == gomb[1].Trim() && a.FormName == AblakFormName)?.GombokId ?? -1;
 
                 List<Adat_Bejelentkezés_Jogosultságok> Adatok = new List<Adat_Bejelentkezés_Jogosultságok>();
                 for (int i = 0; i < LstChkSzervezet.Items.Count; i++)
@@ -495,7 +495,7 @@ namespace Villamos
                 LstChkSzervezet.Items.Clear();
                 if (CmbGombok.Text.Trim() == "") return;
                 string[] Darabol = CmbGombok.Text.Trim().Split('=');
-                Adat_Bejelentkezés_Gombok Gomb = AdatokGombok.FirstOrDefault(a => a.GombName == Darabol[1].Trim() && a.FromName == AblakFormName);
+                Adat_Bejelentkezés_Gombok Gomb = AdatokGombok.FirstOrDefault(a => a.GombName == Darabol[1].Trim() && a.FormName == AblakFormName);
                 GombFőID = Gomb?.GombokId ?? -1;
                 CmbGombId.Text = GombFőID.ToString();
                 if (Gomb == null) return;
@@ -613,7 +613,7 @@ namespace Villamos
         {
             CmbGombId.Text = CmbGombId.Items[CmbGombId.SelectedIndex].ToString();
 
-            Adat_Bejelentkezés_Gombok Gomb = AdatokGombok.FirstOrDefault(a => a.GombokId == CmbGombId.Text.ToÉrt_Int() && a.FromName == AblakFormName);
+            Adat_Bejelentkezés_Gombok Gomb = AdatokGombok.FirstOrDefault(a => a.GombokId == CmbGombId.Text.ToÉrt_Int() && a.FormName == AblakFormName);
             string felirat = $"{Gomb.GombFelirat} = {Gomb.GombName}";
             int i = 0;
             while (CmbGombok.Items.Count > i && CmbGombok.Items[i].ToStrTrim() != felirat)

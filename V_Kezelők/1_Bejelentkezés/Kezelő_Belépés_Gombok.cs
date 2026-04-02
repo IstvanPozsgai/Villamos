@@ -68,7 +68,7 @@ namespace Villamos.Kezelők
                     // Ha van ilyen gomb már a lapon akkor csak akkor engedjük rögzíteni, ha többször akarjuk felhasználni a gombot.
                     Adat_Bejelentkezés_Gombok gomb = (from a in Adatok
                                                       where a.GombName == Adat.GombName
-                                                      && a.FromName == Adat.FromName
+                                                      && a.FormName == Adat.FormName
                                                       && a.Törölt == false
                                                       select a).FirstOrDefault();
                     if (gomb != null)
@@ -102,7 +102,7 @@ namespace Villamos.Kezelők
             try
             {
                 string szöveg = $"INSERT INTO {táblanév} (  FromName, GombName, GombFelirat, Szervezet, Látható, Törölt) VALUES (";
-                szöveg += $"'{Adat.FromName}', '{Adat.GombName}', '{Adat.GombFelirat}', '{Adat.Szervezet}', {Adat.Látható}, {Adat.Törölt})";
+                szöveg += $"'{Adat.FormName}', '{Adat.GombName}', '{Adat.GombFelirat}', '{Adat.Szervezet}', {Adat.Látható}, {Adat.Törölt})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
@@ -121,7 +121,7 @@ namespace Villamos.Kezelők
             try
             {
                 string szöveg = $"UPDATE {táblanév} SET ";
-                szöveg += $"FromName ='{Adat.FromName}', ";
+                szöveg += $"FromName ='{Adat.FormName}', ";
                 szöveg += $"GombName ='{Adat.GombName}', ";
                 szöveg += $"GombFelirat ='{Adat.GombFelirat}', ";
                 szöveg += $"Szervezet ='{Adat.Szervezet}', ";

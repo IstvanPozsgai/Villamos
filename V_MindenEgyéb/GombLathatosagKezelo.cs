@@ -15,7 +15,7 @@ public static class GombLathatosagKezelo
     public static void Beallit(Form form, string Telephely = "")
     {
         // Lekérjük az adott ablakhoz tartozó gombokat az adatbázisból
-        List<Adat_Bejelentkezés_Gombok> gombok = Program.PostásGombok.Where(g => g.FromName == form.Name && !g.Törölt).ToList();
+        List<Adat_Bejelentkezés_Gombok> gombok = Program.PostásGombok.Where(g => g.FormName == form.Name && !g.Törölt).ToList();
 
         GombokÁltalános(form, gombok);
         GombokSzemélyes(form, gombok, Telephely);
@@ -29,7 +29,7 @@ public static class GombLathatosagKezelo
     public static void Beallit(Form form, int MenüId, string Telephely = "")
     {
         // Lekérjük az adott ablakhoz tartozó gombokat az adatbázisból
-        List<Adat_Bejelentkezés_Gombok> gombok = Program.PostásGombok.Where(g => g.FromName == form.Name && !g.Törölt).ToList();
+        List<Adat_Bejelentkezés_Gombok> gombok = Program.PostásGombok.Where(g => g.FormName == form.Name && !g.Törölt).ToList();
 
         GombokÁltalános(form, gombok);
         GombokSzemélyes(form, gombok, MenüId, Telephely);
@@ -193,7 +193,7 @@ public static class GombLathatosagKezelo
             if (AdatOldal == null) return válasz;
 
             // Lekérjük az adott ablakhoz tartozó gombokat az adatbázisból
-            List<Adat_Bejelentkezés_Gombok> gombok = Program.PostásGombok.Where(g => g.FromName == form.Name && !g.Törölt).ToList();
+            List<Adat_Bejelentkezés_Gombok> gombok = Program.PostásGombok.Where(g => g.FormName == form.Name && !g.Törölt).ToList();
 
             // ha a jogosultáság táblában van akkor van hozzá joga így láthatóvá tesszük a gombokat
             Adat_Bejelentkezés_Gombok Egygomb = (from a in gombok

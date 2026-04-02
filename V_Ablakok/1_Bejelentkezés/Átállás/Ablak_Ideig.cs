@@ -269,18 +269,18 @@ namespace Villamos.Ablakok
                 foreach (Adat_Bejelentkezés_Gombok adat in AdatokGomb)
                 {
                     GombAdatok AdatGombOld = (from a in TáblaJogok
-                                              where a.AblakNev == adat.FromName
+                                              where a.AblakNev == adat.FormName
                                               && a.GombNev == adat.GombName
                                               select a).FirstOrDefault();
 
                     LáthatóságAdatok AdatLáthat = (from a in TáblaTulaj
-                                                   where a.AblakNev == adat.FromName
+                                                   where a.AblakNev == adat.FormName
                                                    && a.GombNev == adat.GombName
                                                    select a).FirstOrDefault();
 
                     Adat_Bejelentkezés_Fordító ADAT = new Adat_Bejelentkezés_Fordító(
                         adat.GombokId,
-                        adat.FromName,
+                        adat.FormName,
                         adat.GombName,
                         AdatLáthat.Ertek,
                         AdatGombOld == null ? 0 : AdatGombOld.MelyikElem.ToÉrt_Int(),

@@ -85,7 +85,7 @@ namespace Villamos.Kezelők
                     // Ha van ilyen gomb már a lapon akkor csak akkor engedjük rögzíteni, ha többször akarjuk felhasználni a gombot.
                     Adat_Bejelentkezés_Gombok gomb = (from a in Adatok
                                                       where a.GombName == Adat.GombName
-                                                      && a.FromName == Adat.FromName
+                                                      && a.FormName == Adat.FormName
                                                       && a.Törölt == false
                                                       select a).FirstOrDefault();
                     if (gomb != null)
@@ -124,7 +124,7 @@ namespace Villamos.Kezelők
 
                 SqliteCommand cmd = new SqliteCommand(szöveg);
 
-                cmd.Parameters.AddWithValue("@FromName", Adat.FromName);
+                cmd.Parameters.AddWithValue("@FromName", Adat.FormName);
                 cmd.Parameters.AddWithValue("@GombName", Adat.GombName);
                 cmd.Parameters.AddWithValue("@GombFelirat", Adat.GombFelirat);
                 cmd.Parameters.AddWithValue("@Szervezet", Adat.Szervezet);
@@ -160,7 +160,7 @@ namespace Villamos.Kezelők
                 SqliteCommand cmd = new SqliteCommand(szöveg);
 
                 cmd.Parameters.AddWithValue("@GombokId", Adat.GombokId);
-                cmd.Parameters.AddWithValue("@FromName", Adat.FromName);
+                cmd.Parameters.AddWithValue("@FromName", Adat.FormName);
                 cmd.Parameters.AddWithValue("@GombName", Adat.GombName);
                 cmd.Parameters.AddWithValue("@GombFelirat", Adat.GombFelirat);
                 cmd.Parameters.AddWithValue("@Szervezet", Adat.Szervezet);

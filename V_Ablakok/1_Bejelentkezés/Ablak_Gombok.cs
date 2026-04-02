@@ -198,13 +198,13 @@ namespace Villamos.Ablakok
             Adatok = (from a in Adatok
                       orderby a.GombokId
                       select a).ToList();
-            if (Ablaknév.Text.Trim() != "") Adatok = Adatok.Where(a => a.FromName.Trim() == Ablaknév.Text.Trim()).ToList();
+            if (Ablaknév.Text.Trim() != "") Adatok = Adatok.Where(a => a.FormName.Trim() == Ablaknév.Text.Trim()).ToList();
             foreach (Adat_Bejelentkezés_Gombok rekord in Adatok)
             {
                 DataRow Soradat = AdatTáblaALap.NewRow();
 
                 Soradat["Gomb Id"] = rekord.GombokId;
-                Soradat["Form Név"] = rekord.FromName;
+                Soradat["Form Név"] = rekord.FormName;
                 Soradat["Gomb Leírás"] = rekord.GombFelirat;
                 Soradat["Gomb Név"] = rekord.GombName;
                 Soradat["Szervezet korlátozás"] = rekord.Szervezet;
@@ -325,7 +325,7 @@ namespace Villamos.Ablakok
                 TxtId.Text = adat.GombokId.ToString();
                 GombFelirat.Text = adat.GombFelirat;
                 GombNév.Text = adat.GombName;
-                Ablaknév.Text = adat.FromName;
+                Ablaknév.Text = adat.FormName;
                 Láthatóság.Checked = adat.Látható;
                 Törölt.Checked = adat.Törölt;
                 // --- Szervezetek kipipálása ---
