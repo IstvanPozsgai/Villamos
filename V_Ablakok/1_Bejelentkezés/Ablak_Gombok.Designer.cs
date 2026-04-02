@@ -50,12 +50,13 @@
             this.SzervezetMinden = new System.Windows.Forms.Button();
             this.SzervezetSemmi = new System.Windows.Forms.Button();
             this.BtnSugó = new System.Windows.Forms.Button();
+            this.BtnIdTörlés = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblSzervezet = new System.Windows.Forms.Label();
             this.ChkSzervezet = new System.Windows.Forms.CheckedListBox();
-            this.BtnIdTörlés = new System.Windows.Forms.Button();
+            this.Súgó = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -73,12 +74,12 @@
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla.FilterAndSortEnabled = true;
             this.Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.Tábla.Location = new System.Drawing.Point(12, 273);
+            this.Tábla.Location = new System.Drawing.Point(12, 308);
             this.Tábla.MaxFilterButtonImageHeight = 23;
             this.Tábla.Name = "Tábla";
             this.Tábla.ReadOnly = true;
             this.Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Tábla.Size = new System.Drawing.Size(1486, 239);
+            this.Tábla.Size = new System.Drawing.Size(1486, 204);
             this.Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla.TabIndex = 220;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
@@ -99,16 +100,18 @@
             this.tableLayoutPanel1.Controls.Add(this.GombFelirat, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.Láthatóság, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.Törölt, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.Súgó, 1, 6);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 6;
+            this.tableLayoutPanel1.RowCount = 7;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 78F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(993, 255);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(993, 290);
             this.tableLayoutPanel1.TabIndex = 221;
             // 
             // label5
@@ -296,6 +299,18 @@
             this.toolTip1.SetToolTip(this.BtnSugó, "Online sugó megjelenítése");
             this.BtnSugó.UseVisualStyleBackColor = true;
             // 
+            // BtnIdTörlés
+            // 
+            this.BtnIdTörlés.BackgroundImage = global::Villamos.Properties.Resources.Iconarchive_Red_Orb_Alphabet_Exclamation_mark;
+            this.BtnIdTörlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnIdTörlés.Location = new System.Drawing.Point(3, 3);
+            this.BtnIdTörlés.Name = "BtnIdTörlés";
+            this.BtnIdTörlés.Size = new System.Drawing.Size(44, 44);
+            this.BtnIdTörlés.TabIndex = 220;
+            this.toolTip1.SetToolTip(this.BtnIdTörlés, "Lehetővé teszi az ablakok újrafelhasználását\r\naz Id szám törléssel");
+            this.BtnIdTörlés.UseVisualStyleBackColor = true;
+            this.BtnIdTörlés.Click += new System.EventHandler(this.BtnIdTörlés_Click);
+            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.BackColor = System.Drawing.Color.Transparent;
@@ -362,17 +377,16 @@
             this.ChkSzervezet.Size = new System.Drawing.Size(265, 172);
             this.ChkSzervezet.TabIndex = 226;
             // 
-            // BtnIdTörlés
+            // Súgó
             // 
-            this.BtnIdTörlés.BackgroundImage = global::Villamos.Properties.Resources.Iconarchive_Red_Orb_Alphabet_Exclamation_mark;
-            this.BtnIdTörlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnIdTörlés.Location = new System.Drawing.Point(3, 3);
-            this.BtnIdTörlés.Name = "BtnIdTörlés";
-            this.BtnIdTörlés.Size = new System.Drawing.Size(44, 44);
-            this.BtnIdTörlés.TabIndex = 220;
-            this.toolTip1.SetToolTip(this.BtnIdTörlés, "Lehetővé teszi az ablakok újrafelhasználását\r\naz Id szám törléssel");
-            this.BtnIdTörlés.UseVisualStyleBackColor = true;
-            this.BtnIdTörlés.Click += new System.EventHandler(this.BtnIdTörlés_Click);
+            this.Súgó.AutoSize = true;
+            this.Súgó.BackColor = System.Drawing.Color.Lime;
+            this.Súgó.Location = new System.Drawing.Point(173, 256);
+            this.Súgó.Name = "Súgó";
+            this.Súgó.Size = new System.Drawing.Size(110, 24);
+            this.Súgó.TabIndex = 230;
+            this.Súgó.Text = "Súgó gomb";
+            this.Súgó.UseVisualStyleBackColor = false;
             // 
             // Ablak_Gombok
             // 
@@ -430,5 +444,6 @@
         internal System.Windows.Forms.Button SzervezetSemmi;
         internal System.Windows.Forms.Button BtnSugó;
         internal System.Windows.Forms.Button BtnIdTörlés;
+        private System.Windows.Forms.CheckBox Súgó;
     }
 }

@@ -133,7 +133,8 @@ namespace Villamos.Ablakok
                         GombFelirat.Text.ToStrTrim(),
                         szervezet,
                         Láthatóság.Checked,
-                        Törölt.Checked);
+                        Törölt.Checked,
+                        Súgó.Checked);
 
                 Kéz.Döntés(adat);
                 Adatok = Kéz.Lista_Adatok();
@@ -210,6 +211,7 @@ namespace Villamos.Ablakok
                 Soradat["Szervezet korlátozás"] = rekord.Szervezet;
                 Soradat["Látható"] = rekord.Látható ? "Igen" : "Nem";
                 Soradat["Törölt"] = rekord.Törölt ? "Igen" : "Nem";
+                Soradat["Súgó"] = rekord.Súgó ? "Igen" : "Nem";
                 AdatTáblaALap.Rows.Add(Soradat);
             }
         }
@@ -229,6 +231,7 @@ namespace Villamos.Ablakok
                 AdatTáblaALap.Columns.Add("Szervezet korlátozás");
                 AdatTáblaALap.Columns.Add("Látható");
                 AdatTáblaALap.Columns.Add("Törölt");
+                AdatTáblaALap.Columns.Add("Súgó");
             }
             catch (HibásBevittAdat ex)
             {
@@ -253,7 +256,7 @@ namespace Villamos.Ablakok
             Tábla.Columns["Szervezet korlátozás"].Width = 350;
             Tábla.Columns["Látható"].Width = 100;
             Tábla.Columns["Törölt"].Width = 100;
-
+            Tábla.Columns["Súgó"].Width = 100;
         }
 
         /// <summary>
@@ -328,6 +331,7 @@ namespace Villamos.Ablakok
                 Ablaknév.Text = adat.FormName;
                 Láthatóság.Checked = adat.Látható;
                 Törölt.Checked = adat.Törölt;
+                Súgó.Checked = adat.Súgó;
                 // --- Szervezetek kipipálása ---
                 // Először minden pipát törlünk
                 SzervezetJelöl(false);

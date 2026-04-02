@@ -47,7 +47,9 @@ namespace Villamos.Kezelők
                                         rekord["GombFelirat"].ToStrTrim(),
                                         rekord["Szervezet"].ToStrTrim(),
                                         rekord["Látható"].ToÉrt_Bool(),
-                                        rekord["Törölt"].ToÉrt_Bool());
+                                        rekord["Törölt"].ToÉrt_Bool(),
+                                        rekord["Súgó"].ToÉrt_Bool()
+                                        );
                                 Adatok.Add(Adat);
                             }
                         }
