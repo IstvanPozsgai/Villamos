@@ -22,6 +22,10 @@ namespace Villamos
             InitializeComponent();
 
         }
+        public Ablak_Szerszám()
+        {
+            InitializeComponent();
+        }
         readonly Kezelő_Szerszám_Cikk KézSzerszámCikk = new Kezelő_Szerszám_Cikk();
         readonly Kezelő_Szerszám_Könyv KézKönyv = new Kezelő_Szerszám_Könyv();
         readonly Kezelő_Szerszám_könvyvelés KézKönyvelés = new Kezelő_Szerszám_könvyvelés();
