@@ -47,11 +47,13 @@ namespace Villamos
             this.BtnJelszóMódosítás = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.CmbTelephely = new System.Windows.Forms.ComboBox();
-            this.Label2 = new System.Windows.Forms.Label();
-            this.TxtPassword = new System.Windows.Forms.TextBox();
             this.Label4 = new System.Windows.Forms.Label();
             this.CmbUserName = new System.Windows.Forms.ComboBox();
             this.Label3 = new System.Windows.Forms.Label();
+            this.Label2 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.TxtPassword = new System.Windows.Forms.TextBox();
+            this.BtnLátszódik = new System.Windows.Forms.Button();
             this.Súgó = new System.Windows.Forms.Button();
             this.Timer_kilép = new System.Windows.Forms.Timer(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -59,6 +61,7 @@ namespace Villamos
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblVerzió
@@ -182,14 +185,14 @@ namespace Villamos
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.53659F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.46341F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26.0274F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 73.9726F));
             this.tableLayoutPanel1.Controls.Add(this.CmbTelephely, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.Label2, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.TxtPassword, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.Label4, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.CmbUserName, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.Label3, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.Label2, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 1, 2);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(224, 70);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
@@ -206,31 +209,12 @@ namespace Villamos
             this.CmbTelephely.FormattingEnabled = true;
             this.CmbTelephely.IntegralHeight = false;
             this.CmbTelephely.ItemHeight = 20;
-            this.CmbTelephely.Location = new System.Drawing.Point(150, 5);
+            this.CmbTelephely.Location = new System.Drawing.Point(118, 5);
             this.CmbTelephely.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.CmbTelephely.Name = "CmbTelephely";
             this.CmbTelephely.Size = new System.Drawing.Size(284, 28);
             this.CmbTelephely.TabIndex = 43;
             this.CmbTelephely.SelectionChangeCommitted += new System.EventHandler(this.CmbTelephely_SelectionChangeCommitted);
-            // 
-            // Label2
-            // 
-            this.Label2.AutoSize = true;
-            this.Label2.Location = new System.Drawing.Point(4, 0);
-            this.Label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(80, 20);
-            this.Label2.TabIndex = 44;
-            this.Label2.Text = "Telephely:";
-            // 
-            // TxtPassword
-            // 
-            this.TxtPassword.Location = new System.Drawing.Point(150, 83);
-            this.TxtPassword.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.TxtPassword.Name = "TxtPassword";
-            this.TxtPassword.Size = new System.Drawing.Size(284, 26);
-            this.TxtPassword.TabIndex = 1;
-            this.TxtPassword.UseSystemPasswordChar = true;
             // 
             // Label4
             // 
@@ -249,7 +233,7 @@ namespace Villamos
             this.CmbUserName.FormattingEnabled = true;
             this.CmbUserName.IntegralHeight = false;
             this.CmbUserName.ItemHeight = 20;
-            this.CmbUserName.Location = new System.Drawing.Point(150, 44);
+            this.CmbUserName.Location = new System.Drawing.Point(118, 44);
             this.CmbUserName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.CmbUserName.Name = "CmbUserName";
             this.CmbUserName.Size = new System.Drawing.Size(284, 28);
@@ -263,9 +247,54 @@ namespace Villamos
             this.Label3.Location = new System.Drawing.Point(4, 39);
             this.Label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(128, 20);
+            this.Label3.Size = new System.Drawing.Size(99, 39);
             this.Label3.TabIndex = 41;
             this.Label3.Text = "Felhasználó név:";
+            // 
+            // Label2
+            // 
+            this.Label2.AutoSize = true;
+            this.Label2.Location = new System.Drawing.Point(4, 0);
+            this.Label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.Label2.Name = "Label2";
+            this.Label2.Size = new System.Drawing.Size(80, 20);
+            this.Label2.TabIndex = 44;
+            this.Label2.Text = "Telephely:";
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 2;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 89.62264F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10.37736F));
+            this.tableLayoutPanel3.Controls.Add(this.TxtPassword, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.BtnLátszódik, 1, 0);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(117, 81);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 1;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(318, 33);
+            this.tableLayoutPanel3.TabIndex = 45;
+            // 
+            // TxtPassword
+            // 
+            this.TxtPassword.Location = new System.Drawing.Point(4, 5);
+            this.TxtPassword.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.TxtPassword.Name = "TxtPassword";
+            this.TxtPassword.Size = new System.Drawing.Size(277, 26);
+            this.TxtPassword.TabIndex = 1;
+            this.TxtPassword.UseSystemPasswordChar = true;
+            // 
+            // BtnLátszódik
+            // 
+            this.BtnLátszódik.BackgroundImage = global::Villamos.Properties.Resources.Szem1;
+            this.BtnLátszódik.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnLátszódik.Location = new System.Drawing.Point(288, 3);
+            this.BtnLátszódik.Name = "BtnLátszódik";
+            this.BtnLátszódik.Size = new System.Drawing.Size(27, 27);
+            this.BtnLátszódik.TabIndex = 2;
+            this.BtnLátszódik.UseVisualStyleBackColor = true;
+            this.BtnLátszódik.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnLátszódik_MouseDown);
+            this.BtnLátszódik.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnLátszódik_MouseUp);
             // 
             // Súgó
             // 
@@ -313,6 +342,8 @@ namespace Villamos
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -335,5 +366,7 @@ namespace Villamos
         private PictureBox pictureBox1;
         public ComboBox CmbTelephely;
         internal Label Label2;
+        private TableLayoutPanel tableLayoutPanel3;
+        private Button BtnLátszódik;
     }
 }

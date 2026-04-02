@@ -1483,6 +1483,16 @@ namespace Villamos.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Szem1 {
+            get {
+                object obj = ResourceManager.GetObject("Szem1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap szemetes64 {
             get {
                 object obj = ResourceManager.GetObject("szemetes64", resourceCulture);

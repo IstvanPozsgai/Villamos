@@ -421,8 +421,18 @@ namespace Villamos
             }
 
         }
+
         #endregion
 
 
+        private void BtnLátszódik_MouseDown(object sender, MouseEventArgs e)
+        {
+            TxtPassword.UseSystemPasswordChar = false;
+        }
+
+        private void BtnLátszódik_MouseUp(object sender, MouseEventArgs e)
+        {
+            TxtPassword.UseSystemPasswordChar = true;
+        }
     }
 }
