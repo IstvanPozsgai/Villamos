@@ -349,6 +349,9 @@ namespace Villamos.Ablakok
                          SúgóGomb.GombName,
                          "Szervezet",
                          i,
+                         0,
+                         0,
+                         0,
                          0);
                     ÚjJogosultságokGyűjtőAdatok.Add(Elem);
 

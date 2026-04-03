@@ -56,7 +56,10 @@ namespace Villamos.Kezelők
                                 rekord["GombName"].ToStrTrim(),
                                 rekord["Szervezet"].ToStrTrim(),
                                 rekord["MelyikBetű"].ToÉrt_Int(),
-                                rekord["MelyikOszlop"].ToÉrt_Int()
+                                rekord["MelyikOszlop"].ToÉrt_Int(),
+                                rekord["UserId"].ToÉrt_Int(),
+                                rekord["OldalId"].ToÉrt_Int(),
+                                rekord["SzervezetID"].ToÉrt_Int()
                                 ));
             }
             catch (HibásBevittAdat ex)
@@ -78,8 +81,8 @@ namespace Villamos.Kezelők
             try
             {
 
-                string szöveg = $"INSERT INTO {táblanév} (GombokId, FromName, GombName, Szervezet, MelyikBetű, MelyikOszlop) VALUES ";
-                szöveg += $@"(@GombokId, @FromName, @GombName, @Szervezet, @MelyikBetű, @MelyikOszlop)";
+                string szöveg = $"INSERT INTO {táblanév} (GombokId, FromName, GombName, Szervezet, MelyikBetű, MelyikOszlop, UserId, OldalId, SzervezetId) VALUES ";
+                szöveg += $@"(@GombokId, @FromName, @GombName, @Szervezet, @MelyikBetű, @MelyikOszlop, @UserId, @OldalId, @SzervezetId))";
 
 
                 SqliteCommand cmd = new SqliteCommand(szöveg);
@@ -89,6 +92,9 @@ namespace Villamos.Kezelők
                 cmd.Parameters.AddWithValue("@Szervezet", Adat.Szervezet);
                 cmd.Parameters.AddWithValue("@MelyikBetű", Adat.MelyikBetű);
                 cmd.Parameters.AddWithValue("@MelyikOszlop", Adat.MelyikOszlop);
+                cmd.Parameters.AddWithValue("@UserId", Adat.UserId);
+                cmd.Parameters.AddWithValue("@OldalId", Adat.OldalId);
+                cmd.Parameters.AddWithValue("@SzervezetId", Adat.SzervezetId);
 
                 MyA.SqLite_Módosítás(hely, jelszó, cmd);
             }
@@ -108,8 +114,8 @@ namespace Villamos.Kezelők
             try
             {
                 List<SqliteCommand> parancsLista = new List<SqliteCommand>();
-                string szöveg = $"INSERT INTO {táblanév} (GombokId, FromName, GombName, Szervezet, MelyikBetű, MelyikOszlop) VALUES ";
-                szöveg += $@"(@GombokId, @FromName, @GombName, @Szervezet, @MelyikBetű, @MelyikOszlop)";
+                string szöveg = $"INSERT INTO {táblanév} (GombokId, FromName, GombName, Szervezet, MelyikBetű, MelyikOszlop, UserId, OldalId, SzervezetId) VALUES ";
+                szöveg += $@"(@GombokId, @FromName, @GombName, @Szervezet, @MelyikBetű, @MelyikOszlop, @UserId, @OldalId, @SzervezetId))";
 
                 foreach (var Adat in Adatok)
                 {
@@ -120,6 +126,9 @@ namespace Villamos.Kezelők
                     cmd.Parameters.AddWithValue("@Szervezet", Adat.Szervezet);
                     cmd.Parameters.AddWithValue("@MelyikBetű", Adat.MelyikBetű);
                     cmd.Parameters.AddWithValue("@MelyikOszlop", Adat.MelyikOszlop);
+                    cmd.Parameters.AddWithValue("@UserId", Adat.UserId);
+                    cmd.Parameters.AddWithValue("@OldalId", Adat.OldalId);
+                    cmd.Parameters.AddWithValue("@SzervezetId", Adat.SzervezetId);
                     parancsLista.Add(cmd);
                 }
                 MyA.SqLite_Módosítások(hely, jelszó, parancsLista);
@@ -145,7 +154,10 @@ namespace Villamos.Kezelők
                 szöveg += $@"GombName=@GombName, ";
                 szöveg += $@"Szervezet=@Szervezet, ";
                 szöveg += $@"MelyikBetű=@MelyikBetű, ";
-                szöveg += $@"MelyikOszlop=@MelyikOszlop ";
+                szöveg += $@"MelyikOszlop=@MelyikOszlop, ";
+                szöveg += $@"UserId=@UserId, ";
+                szöveg += $@"OldalId=@OldalId, ";
+                szöveg += $@"SzervezetId=@SzervezetId ";
                 szöveg += $@"WHERE GombokId=@GombokId;";
 
                 SqliteCommand cmd = new SqliteCommand(szöveg);
@@ -156,6 +168,9 @@ namespace Villamos.Kezelők
                 cmd.Parameters.AddWithValue("@Szervezet", Adat.Szervezet);
                 cmd.Parameters.AddWithValue("@MelyikBetű", Adat.MelyikBetű);
                 cmd.Parameters.AddWithValue("@MelyikOszlop", Adat.MelyikOszlop);
+                cmd.Parameters.AddWithValue("@UserId", Adat.UserId);
+                cmd.Parameters.AddWithValue("@OldalId", Adat.OldalId);
+                cmd.Parameters.AddWithValue("@SzervezetId", Adat.SzervezetId);
 
                 MyA.SqLite_Módosítás(hely, jelszó, cmd);
             }
