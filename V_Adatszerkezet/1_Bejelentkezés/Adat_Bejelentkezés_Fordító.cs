@@ -30,6 +30,17 @@
             OldalId = oldalid;
             SzervezetId = szervezetid;
         }
+
+        public Adat_Bejelentkezés_Fordító(int gombid, string formname, string gombname, string szervezet, int melyikbetű,
+            int melyikoszlop)
+        {
+            GombokId = gombid;
+            FromName = formname;
+            GombName = gombname;
+            Szervezet = szervezet;
+            MelyikBetű = melyikbetű;
+            MelyikOszlop = melyikoszlop;
+        }
     }
 }
 
