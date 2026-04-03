@@ -20,6 +20,7 @@ namespace Villamos.Ablakok
         readonly SQL_Kezelő_Belépés_Gombok KézGomb = new SQL_Kezelő_Belépés_Gombok();
         readonly Kezelő_Kiegészítő_Könyvtár KézSzervezet = new Kezelő_Kiegészítő_Könyvtár();
         readonly SQL_Kezelő_Belépés_Oldalak KézOldal = new SQL_Kezelő_Belépés_Oldalak();
+        readonly SQL_Kezelő_Belépés_Jogosultságok KézJogosultságok = new SQL_Kezelő_Belépés_Jogosultságok();
 
         private DataGridViewHelper<Adat_Bejelentkezés_Fordító> Tábla;
 
@@ -258,8 +259,36 @@ namespace Villamos.Ablakok
 
         private void BtnRögzít_Click(object sender, EventArgs e)
         {
+            try
+            {
+                if (ÚjJogosultságokGyűjtőAdatok.Count < 1) return;
 
+                List<Adat_Bejelentkezés_Jogosultságok> Adatok = new List<Adat_Bejelentkezés_Jogosultságok>();
+                foreach (Adat_Bejelentkezés_Fordító adat in ÚjJogosultságokGyűjtőAdatok)
+                {
+                    Adat_Bejelentkezés_Jogosultságok ADAT = new Adat_Bejelentkezés_Jogosultságok
+                        (
+                        adat.UserId,
+                        adat.OldalId,
+                        adat.GombokId,
+                        adat.SzervezetId,
+                        false
+                        );
+                    Adatok.Add(ADAT);
+                }
 
+                if (Adatok.Count > 0) KézJogosultságok.Döntés(Adatok);
+                MessageBox.Show("Jogosultságok rögzítve!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void FordítóTáblaKészítő_Click(object sender, EventArgs e)
