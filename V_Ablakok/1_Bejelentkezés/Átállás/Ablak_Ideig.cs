@@ -18,12 +18,16 @@ namespace Villamos.Ablakok
         readonly SQL_Kezelő_Belépés_Users KézUsers = new SQL_Kezelő_Belépés_Users();
         readonly SQL_Kezelő_Bejelentkezés_Fordító KézFordító = new SQL_Kezelő_Bejelentkezés_Fordító();
         readonly SQL_Kezelő_Belépés_Gombok KézGomb = new SQL_Kezelő_Belépés_Gombok();
+        readonly Kezelő_Kiegészítő_Könyvtár KézSzervezet = new Kezelő_Kiegészítő_Könyvtár();
+        readonly SQL_Kezelő_Belépés_Oldalak KézOldal = new SQL_Kezelő_Belépés_Oldalak();
 
         private DataGridViewHelper<Adat_Bejelentkezés_Fordító> Tábla;
 
         List<Adat_Bejelentkezés_Users> ÚjFelhasználók = new List<Adat_Bejelentkezés_Users>();
         List<Adat_Bejelentkezés_Gombok> AdatokGombok = new List<Adat_Bejelentkezés_Gombok>();
         List<Adat_Bejelentkezés_Fordító> ÚjJogosultságokGyűjtőAdatok = new List<Adat_Bejelentkezés_Fordító>();
+        List<Adat_Kiegészítő_Könyvtár> AdatokSzervezet = new List<Adat_Kiegészítő_Könyvtár>();
+        List<Adat_Belépés_Oldalak> AdatokOldal = new List<Adat_Belépés_Oldalak>();
 
         public Ablak_Ideig()
         {
@@ -41,6 +45,8 @@ namespace Villamos.Ablakok
             Telephelyekfeltöltése();
             Újfelhasználóklistája();
             AdatokGombok = KézGomb.Lista_Adatok();
+            AdatokSzervezet = KézSzervezet.Lista_Adatok().OrderBy(a => a.Név).ToList();
+            AdatokOldal = KézOldal.Lista_Adatok().Where(a => a.Törölt == false).ToList();
         }
 
 
@@ -71,7 +77,8 @@ namespace Villamos.Ablakok
         {
             Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
             Neveklistája();
-
+            int SzervezetId = AdatokSzervezet.FirstOrDefault(a => a.Név == Cmbtelephely.Text)?.ID ?? -1;
+            TxtSzervezetID.Text = SzervezetId.ToString();
         }
 
         private void Neveklistája()
@@ -139,6 +146,7 @@ namespace Villamos.Ablakok
             if (CmbFelhasználóNew.Text.Trim() == "") return;
             string[] darabol = CmbFelhasználóNew.Text.Trim().Split('-');
             FelhasználóId.Value = darabol[1].ToÉrt_Int();
+            TxtUserid.Text = darabol[1];
         }
 
 
@@ -289,7 +297,10 @@ namespace Villamos.Ablakok
                         adat.GombName,
                         Érték,
                         AdatGombOld == null ? 0 : AdatGombOld.MelyikElem.ToÉrt_Int(),
-                        AdatGombOld == null ? 0 : AdatGombOld.EgyKettőHárom.ToÉrt_Int()
+                        AdatGombOld == null ? 0 : AdatGombOld.EgyKettőHárom.ToÉrt_Int(),
+                        0,//UserId
+                        0,//OldalId
+                        0// SzervezetId
                         );
                     Adatok.Add(ADAT);
                 }
@@ -320,6 +331,7 @@ namespace Villamos.Ablakok
             try
             {
                 if (TxtJogkör.Text.Trim() == "") return;
+                if (CmbFelhasználóNew.Text.Trim() == "") return;
 
                 //Betöltjük a fordító táblát
                 List<Adat_Bejelentkezés_Fordító> AdatokFordító = KézFordító.Lista_Adatok();
@@ -343,16 +355,19 @@ namespace Villamos.Ablakok
                     if (SúgóGomb == null)
                         continue; // Ha nincs súgó gomb, akkor nem tudjuk megjeleníteni a főoldalon a menüt, így kihagyjuk
 
+                    Adat_Belépés_Oldalak OldalADAT = AdatokOldal.Where(a => a.FromName == Elemek[0].FromName).FirstOrDefault();
+                    int oldalId = OldalADAT != null ? OldalADAT.OldalId : 0;
+
                     Adat_Bejelentkezés_Fordító Elem = new Adat_Bejelentkezés_Fordító
                          (SúgóGomb.GombokId,
                          Elemek[0].FromName,
                          SúgóGomb.GombName,
-                         "Szervezet",
-                         i,
-                         0,
-                         0,
-                         0,
-                         0);
+                         Cmbtelephely.Text,
+                         i,//MelyikBetű helye
+                         0,//MelyikOszlop helye, a súgó gombnak mindig 0 lesz, mert az adatok között nincs különbség a csoportok között
+                         TxtUserid.Text.ToÉrt_Int(),//UserId helye, a súgó gombnak mindig 0 lesz, mert az adatok között nincs különbség a csoportok között
+                         oldalId,//OldalId helye, a súgó gombnak mindig 0 lesz, mert az adatok között nincs különbség a csoportok között
+                         TxtSzervezetID.Text.ToÉrt_Int());//SzervezetId helye, a súgó gombnak mindig 0 lesz, mert az adatok között nincs különbség a csoportok között
                     ÚjJogosultságokGyűjtőAdatok.Add(Elem);
 
 
@@ -366,7 +381,22 @@ namespace Villamos.Ablakok
                                       select a).ToList();
                             if (Elemek != null)
                             {
-                                ÚjJogosultságokGyűjtőAdatok.AddRange(Elemek);
+                                List<Adat_Bejelentkezés_Fordító> ADATOK = new List<Adat_Bejelentkezés_Fordító>();
+                                foreach (var elem in Elemek)
+                                {
+                                    Adat_Bejelentkezés_Fordító adat = new Adat_Bejelentkezés_Fordító
+                                        (elem.GombokId,
+                                         elem.FromName,
+                                         elem.GombName,
+                                         Cmbtelephely.Text,
+                                         i,//MelyikBetű helye
+                                         j,//MelyikOszlop helye
+                                         TxtUserid.Text.ToÉrt_Int(),//UserId helye
+                                         oldalId,//OldalId helye
+                                         TxtSzervezetID.Text.ToÉrt_Int());//SzervezetId helye
+                                    ÚjJogosultságokGyűjtőAdatok.Add(adat);
+                                }
+
                             }
                         }
                     }

@@ -40,6 +40,8 @@
             this.CmbFelhasználóNew = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.FelhasználóId = new System.Windows.Forms.NumericUpDown();
+            this.TxtSzervezetID = new System.Windows.Forms.TextBox();
+            this.TxtUserid = new System.Windows.Forms.TextBox();
             this.BtnRögzít = new System.Windows.Forms.Button();
             this.FordítóTáblaKészítő = new System.Windows.Forms.Button();
             this.BtnRégitábla = new System.Windows.Forms.Button();
@@ -106,9 +108,11 @@
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnCount = 4;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
             this.tableLayoutPanel1.Controls.Add(this.label4, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.CmbFelhasználóNew, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.label3, 0, 3);
@@ -119,6 +123,8 @@
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.TxtJogkör, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.FelhasználóId, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.TxtSzervezetID, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.TxtUserid, 2, 3);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
@@ -127,7 +133,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(609, 257);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(733, 257);
             this.tableLayoutPanel1.TabIndex = 23;
             // 
             // label4
@@ -165,11 +171,25 @@
             this.FelhasználóId.Size = new System.Drawing.Size(120, 26);
             this.FelhasználóId.TabIndex = 26;
             // 
+            // TxtSzervezetID
+            // 
+            this.TxtSzervezetID.Location = new System.Drawing.Point(614, 3);
+            this.TxtSzervezetID.Name = "TxtSzervezetID";
+            this.TxtSzervezetID.Size = new System.Drawing.Size(94, 26);
+            this.TxtSzervezetID.TabIndex = 27;
+            // 
+            // TxtUserid
+            // 
+            this.TxtUserid.Location = new System.Drawing.Point(614, 190);
+            this.TxtUserid.Name = "TxtUserid";
+            this.TxtUserid.Size = new System.Drawing.Size(94, 26);
+            this.TxtUserid.TabIndex = 28;
+            // 
             // BtnRögzít
             // 
             this.BtnRögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.BtnRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.BtnRögzít.Location = new System.Drawing.Point(627, 225);
+            this.BtnRögzít.Location = new System.Drawing.Point(751, 225);
             this.BtnRögzít.Name = "BtnRögzít";
             this.BtnRögzít.Size = new System.Drawing.Size(44, 44);
             this.BtnRögzít.TabIndex = 98;
@@ -205,7 +225,7 @@
             // 
             this.BtnFordító.BackgroundImage = global::Villamos.Properties.Resources.Button_Download_01;
             this.BtnFordító.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.BtnFordító.Location = new System.Drawing.Point(627, 80);
+            this.BtnFordító.Location = new System.Drawing.Point(751, 83);
             this.BtnFordító.Name = "BtnFordító";
             this.BtnFordító.Size = new System.Drawing.Size(44, 44);
             this.BtnFordító.TabIndex = 102;
@@ -253,5 +273,7 @@
         internal System.Windows.Forms.Button BtnRégitábla;
         private System.Windows.Forms.ToolTip toolTip1;
         internal System.Windows.Forms.Button BtnFordító;
+        private System.Windows.Forms.TextBox TxtSzervezetID;
+        private System.Windows.Forms.TextBox TxtUserid;
     }
 }
