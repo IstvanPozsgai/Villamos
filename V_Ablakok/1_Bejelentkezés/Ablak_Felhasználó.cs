@@ -278,7 +278,7 @@ namespace Villamos
                 if (!int.TryParse(UserId.Text, out int Id)) Id = 0;
                 if (string.IsNullOrWhiteSpace(TextUserNév.Text)) throw new HibásBevittAdat("Kérem töltse ki az Felhasználó név mezőt!");
                 if (string.IsNullOrWhiteSpace(CmbDolgozószám.Text)) throw new HibásBevittAdat("Kérem töltse ki a Dolgozószám mezőt!");
-                TextUserNév.Text = TextUserNév.Text.ToLower();
+                TextUserNév.Text = TextUserNév.Text;
                 if (Adatok.Any(a => a.UserName == TextUserNév.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A felhasználónév már létezik!");
                 if (TextWinUser.Text.Trim() != "" && Adatok.Any(a => a.WinUserName == TextWinUser.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A Windows felhasználónév már létezik egy másik felhasználónál!");
                 if (Adatok.Any(a => a.Dolgozószám == CmbDolgozószám.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A Dolgozószámhoz már létezik egy másik felhasználó!");
@@ -335,7 +335,7 @@ namespace Villamos
                 if (!int.TryParse(UserId.Text, out int Id)) Id = 0;
                 if (string.IsNullOrWhiteSpace(TextUserNév.Text)) throw new HibásBevittAdat("Kérem töltse ki az Felhasználó név mezőt!");
                 if (string.IsNullOrWhiteSpace(CmbDolgozószám.Text)) throw new HibásBevittAdat("Kérem töltse ki a Dolgozószám mezőt!");
-                TextUserNév.Text = TextUserNév.Text.ToLower();
+                TextUserNév.Text = TextUserNév.Text;
                 if (Adatok.Any(a => a.UserName == TextUserNév.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A felhasználónév már létezik!");
                 if (TextWinUser.Text.Trim() != "" && Adatok.Any(a => a.WinUserName == TextWinUser.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A Windows felhasználónév már létezik egy másik felhasználónál!");
                 if (Adatok.Any(a => a.Dolgozószám == CmbDolgozószám.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A Dolgozószámhoz már létezik egy másik felhasználó!");
