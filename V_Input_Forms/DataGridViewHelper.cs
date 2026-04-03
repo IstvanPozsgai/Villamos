@@ -303,6 +303,22 @@ namespace InputForms
 
         public DataGridViewHelper<T> ClearData()
         {
+            // 1. Töröljük a szűrést és rendezést a vezérlőből
+            GridView_Data.CleanFilterAndSort();
+
+            // 2. Töröljük a BindingSource tartalmát
+            // Ha DataTable-t használsz (mint az AddItems-ben), akkor így:
+            if (Source_binding.DataSource is DataTable dt)
+            {
+                dt.Clear();
+            }
+            else
+            {
+                // Ha nem DataTable, akkor az alapértelmezett ürítés
+                Source_binding.DataSource = null;
+            }
+
+            // 3. Frissítsük a belső listát is, ha használod
             List_binding.Clear();
             return this;
         }

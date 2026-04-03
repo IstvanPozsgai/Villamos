@@ -281,12 +281,13 @@ namespace Villamos.Ablakok
                                                    where a.AblakNev == adat.FormName
                                                    && a.GombNev == adat.GombName
                                                    select a).FirstOrDefault();
+                    string Érték = AdatLáthat == null ? "0" : AdatLáthat.Ertek;
 
                     Adat_Bejelentkezés_Fordító ADAT = new Adat_Bejelentkezés_Fordító(
                         adat.GombokId,
                         adat.FormName,
                         adat.GombName,
-                        AdatLáthat.Ertek,
+                        Érték,
                         AdatGombOld == null ? 0 : AdatGombOld.MelyikElem.ToÉrt_Int(),
                         AdatGombOld == null ? 0 : AdatGombOld.EgyKettőHárom.ToÉrt_Int()
                         );
@@ -314,7 +315,6 @@ namespace Villamos.Ablakok
             RégiAdatok.GombokJogosultsaga();
         }
 
-
         private void BtnFordító_Click(object sender, EventArgs e)
         {
             try
@@ -337,6 +337,7 @@ namespace Villamos.Ablakok
                     List<Adat_Bejelentkezés_Fordító> Elemek = (from a in AdatokFordító
                                                                where a.MelyikBetű == i
                                                                select a).ToList();
+                    if (Elemek.Count <= 0) continue;
                     //Összeállítjuk a súgó gomb megjelenítéséhez szükséges adatokat, ha van egy joga is a karakternek
                     Adat_Bejelentkezés_Gombok SúgóGomb = AdatokGombok.Where(a => a.FormName == Elemek[0].FromName && a.Súgó).FirstOrDefault();
                     if (SúgóGomb == null)
@@ -349,6 +350,7 @@ namespace Villamos.Ablakok
                          "Szervezet",
                          i,
                          0);
+                    ÚjJogosultságokGyűjtőAdatok.Add(Elem);
 
 
                     for (int j = 1; j < 4; j++)
@@ -363,11 +365,8 @@ namespace Villamos.Ablakok
                             {
                                 ÚjJogosultságokGyűjtőAdatok.AddRange(Elemek);
                             }
-
                         }
-
                     }
-
                 }
                 if (ÚjJogosultságokGyűjtőAdatok.Count > 0) TáblázatBeállítás();
             }
@@ -382,12 +381,32 @@ namespace Villamos.Ablakok
             }
         }
 
+
         private void TáblázatBeállítás()
         {
+            // 1. Ha már létezik a tábla, takarítsunk fel utána!
+            if (Tábla != null)
+            {
+                var grid = Tábla.GetDataGridView();
+                this.Controls.Remove(grid); // Eltávolítjuk a Formról
+                grid.Dispose();             // Felszabadítjuk a memóriát
+            }
+
+            List<Adat_Hiba_Elrendezés> Beállítás = new List<Adat_Hiba_Elrendezés>
+            {
+                new Adat_Hiba_Elrendezés{ Változó="Gombid", Felirat="Gombid", Szélesség=100},
+                new Adat_Hiba_Elrendezés{ Változó="Formname", Felirat="Formname", Szélesség=85},
+                new Adat_Hiba_Elrendezés{ Változó="Gombname", Felirat="Telephely", Szélesség=130},
+                new Adat_Hiba_Elrendezés{ Változó="Szervezet", Felirat="Szervezet", Szélesség=115},
+                new Adat_Hiba_Elrendezés{ Változó="Melyikbetű", Felirat="Melyikbetű", Szélesség=450},
+                new Adat_Hiba_Elrendezés{ Változó="Melyikoszlop", Felirat="Melyikoszlop", Szélesség=300}
+            };
+
             Tábla = new DataGridViewHelper<Adat_Bejelentkezés_Fordító>(this)
                // Fix számok helyett az ablak szélességéből és magasságából vonsz le margót:
                .SetLocationAndSize(15, 285, this.ClientSize.Width - 30, this.ClientSize.Height - 300)
                .SetAnchor(AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom)
+               .ConfigureColumns(Beállítás)
                .AddItems(ÚjJogosultságokGyűjtőAdatok)
                .ShowRowHeaders(true)
                .EnableMultiSelect(false);
