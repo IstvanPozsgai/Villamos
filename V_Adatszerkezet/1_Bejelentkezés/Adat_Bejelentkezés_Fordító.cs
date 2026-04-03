@@ -9,10 +9,16 @@
 
         public int MelyikBetű { get; private set; }
         public int MelyikOszlop { get; private set; }
+        public int UserId { get; private set; }
+        public int OldalId { get; private set; }
+        public int SzervezetId { get; private set; }
 
 
 
-        public Adat_Bejelentkezés_Fordító(int gombid, string formname, string gombname, string szervezet, int melyikbetű, int melyikoszlop)
+
+
+        public Adat_Bejelentkezés_Fordító(int gombid, string formname, string gombname, string szervezet, int melyikbetű,
+            int melyikoszlop, int userid, int oldalid, int szervezetid)
         {
             GombokId = gombid;
             FromName = formname;
@@ -20,6 +26,9 @@
             Szervezet = szervezet;
             MelyikBetű = melyikbetű;
             MelyikOszlop = melyikoszlop;
+            UserId = userid;
+            OldalId = oldalid;
+            SzervezetId = szervezetid;
         }
     }
 }
