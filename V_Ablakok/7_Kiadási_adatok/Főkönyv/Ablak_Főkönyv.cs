@@ -94,6 +94,8 @@ namespace Villamos
                 Dátum.Value = DateTime.Today;
                 Idődátum.Value = DateTime.Today;
                 Időidő.Value = DateTime.Now;
+                KM_dátum_végez.MaxDate = DateTime.Today;
+                KM_dátum_kezd.MaxDate = DateTime.Today;
 
                 Részletes_ürítés();
                 if (DateTime.Now.Hour > 10)
@@ -3326,7 +3328,18 @@ namespace Villamos
         {
             try
             {
-                List<Adat_Főkönyv_Zser_Km> AdatokFőZserKm = KézFőZserKm.Lista_adatok(KM_dátum_kezd.Value.Year);
+                int futóév = KM_dátum_kezd.Value.Year;
+                List<Adat_Főkönyv_Zser_Km> AdatokFőZserKm = new List<Adat_Főkönyv_Zser_Km>();
+                do
+                {
+                    //leellenőrizzük, hogy van-e adat a főkönyv zser km táblában az adott évre, ha van akkor hozzáadjuk a listához
+                    if (KézFőZserKm.AdatokEllenőrzése(futóév))
+                    {
+                        List<Adat_Főkönyv_Zser_Km> Ideig = KézFőZserKm.Lista_adatok(futóév);
+                        AdatokFőZserKm.AddRange(Ideig);
+                    }
+                    futóév += 1;
+                } while (KM_dátum_végez.Value.Year >= futóév);
 
                 List<Adat_Főkönyv_Zser_Km> AdatokFőZserKmSzűrt;
                 if (KM_pályaszám.Text.Trim() != "")

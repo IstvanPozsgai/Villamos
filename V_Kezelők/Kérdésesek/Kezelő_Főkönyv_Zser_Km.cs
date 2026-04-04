@@ -119,5 +119,30 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Leellenőrizzük, hogy létezik -e fájl hogy visszamenőleg ne hozzunk létre adatot olyan évre amire nincs fájl.
+        /// </summary>
+        /// <param name="Év"></param>
+        /// <returns></returns>
+        public bool AdatokEllenőrzése(int Év)
+        {
+            bool válasz = false;
+            try
+            {
+                string helyell = $@"{Application.StartupPath}\Főmérnökség\Adatok\{Év}\Napi_km_Zser_{Év}.mdb";
+                if (File.Exists(helyell)) válasz = true;
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return válasz;
+        }
     }
 }
