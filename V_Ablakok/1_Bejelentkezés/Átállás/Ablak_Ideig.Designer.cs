@@ -207,6 +207,7 @@
             this.FordítóTáblaKészítő.TabIndex = 100;
             this.toolTip1.SetToolTip(this.FordítóTáblaKészítő, "Fordító tábla létrehozása");
             this.FordítóTáblaKészítő.UseVisualStyleBackColor = true;
+            this.FordítóTáblaKészítő.Visible = false;
             this.FordítóTáblaKészítő.Click += new System.EventHandler(this.FordítóTáblaKészítő_Click);
             // 
             // BtnRégitábla
@@ -219,6 +220,7 @@
             this.BtnRégitábla.TabIndex = 101;
             this.toolTip1.SetToolTip(this.BtnRégitábla, "csv fájlokba írja a program jogosultság kiosztás adatait");
             this.BtnRégitábla.UseVisualStyleBackColor = true;
+            this.BtnRégitábla.Visible = false;
             this.BtnRégitábla.Click += new System.EventHandler(this.BtnRégitábla_Click);
             // 
             // BtnFordító
