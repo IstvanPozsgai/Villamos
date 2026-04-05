@@ -43,30 +43,26 @@ namespace Villamos
             this.SzervezetSemmi = new System.Windows.Forms.Button();
             this.Rögzít = new System.Windows.Forms.Button();
             this.BtnSugó = new System.Windows.Forms.Button();
-            this.Btn_MindenMasol = new System.Windows.Forms.Button();
             this.JogTörlés = new System.Windows.Forms.Button();
             this.MindenGomb = new System.Windows.Forms.Button();
             this.Label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel4 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.CmbAblakId = new System.Windows.Forms.ComboBox();
             this.CmbAblak = new System.Windows.Forms.ComboBox();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
             this.LstChkSzervezet = new System.Windows.Forms.CheckedListBox();
             this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Felhasználók = new System.Windows.Forms.ComboBox();
             this.DolgozóNév = new System.Windows.Forms.Label();
-            this.ChkGombok = new System.Windows.Forms.CheckedListBox();
+            this.LstGombok = new System.Windows.Forms.ListBox();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.label3 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
-            this.panel4.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
+            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // ToolTip1
@@ -77,11 +73,11 @@ namespace Villamos
             // 
             this.Frissít.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
             this.Frissít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.Frissít.Location = new System.Drawing.Point(7, 3);
+            this.Frissít.Location = new System.Drawing.Point(3, 3);
             this.Frissít.Name = "Frissít";
-            this.Frissít.Size = new System.Drawing.Size(45, 45);
+            this.Frissít.Size = new System.Drawing.Size(44, 44);
             this.Frissít.TabIndex = 223;
-            this.ToolTip1.SetToolTip(this.Frissít, "Frissíti a táblázatot");
+            this.ToolTip1.SetToolTip(this.Frissít, "Frissíti a táblázat adatait");
             this.Frissít.UseVisualStyleBackColor = true;
             this.Frissít.Click += new System.EventHandler(this.Frissít_Click);
             // 
@@ -90,9 +86,9 @@ namespace Villamos
             this.SzervezetMinden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.SzervezetMinden.BackgroundImage = global::Villamos.Properties.Resources.mndent_kijelöl;
             this.SzervezetMinden.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.SzervezetMinden.Location = new System.Drawing.Point(398, 9);
+            this.SzervezetMinden.Location = new System.Drawing.Point(868, 3);
             this.SzervezetMinden.Name = "SzervezetMinden";
-            this.SzervezetMinden.Size = new System.Drawing.Size(45, 44);
+            this.SzervezetMinden.Size = new System.Drawing.Size(44, 44);
             this.SzervezetMinden.TabIndex = 104;
             this.ToolTip1.SetToolTip(this.SzervezetMinden, "Minden kijeölése");
             this.SzervezetMinden.UseVisualStyleBackColor = true;
@@ -103,7 +99,7 @@ namespace Villamos
             this.SzervezetSemmi.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.SzervezetSemmi.BackgroundImage = global::Villamos.Properties.Resources.üres_lista;
             this.SzervezetSemmi.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.SzervezetSemmi.Location = new System.Drawing.Point(449, 9);
+            this.SzervezetSemmi.Location = new System.Drawing.Point(817, 3);
             this.SzervezetSemmi.Name = "SzervezetSemmi";
             this.SzervezetSemmi.Size = new System.Drawing.Size(45, 44);
             this.SzervezetSemmi.TabIndex = 103;
@@ -115,9 +111,9 @@ namespace Villamos
             // 
             this.Rögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.Rögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.Rögzít.Location = new System.Drawing.Point(7, 196);
+            this.Rögzít.Location = new System.Drawing.Point(453, 3);
             this.Rögzít.Name = "Rögzít";
-            this.Rögzít.Size = new System.Drawing.Size(45, 45);
+            this.Rögzít.Size = new System.Drawing.Size(44, 44);
             this.Rögzít.TabIndex = 97;
             this.ToolTip1.SetToolTip(this.Rögzít, "Rögzíti az adatokat");
             this.Rögzít.UseVisualStyleBackColor = true;
@@ -125,34 +121,23 @@ namespace Villamos
             // 
             // BtnSugó
             // 
+            this.BtnSugó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnSugó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
             this.BtnSugó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSugó.Location = new System.Drawing.Point(1497, 3);
+            this.BtnSugó.Location = new System.Drawing.Point(954, 3);
             this.BtnSugó.Name = "BtnSugó";
-            this.BtnSugó.Size = new System.Drawing.Size(45, 45);
+            this.BtnSugó.Size = new System.Drawing.Size(45, 44);
             this.BtnSugó.TabIndex = 2;
             this.ToolTip1.SetToolTip(this.BtnSugó, "Online sugó megjelenítése");
             this.BtnSugó.UseVisualStyleBackColor = true;
-            // 
-            // Btn_MindenMasol
-            // 
-            this.Btn_MindenMasol.BackgroundImage = global::Villamos.Properties.Resources.Clipboard_Paste_01;
-            this.Btn_MindenMasol.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.Btn_MindenMasol.Location = new System.Drawing.Point(7, 54);
-            this.Btn_MindenMasol.Name = "Btn_MindenMasol";
-            this.Btn_MindenMasol.Size = new System.Drawing.Size(45, 45);
-            this.Btn_MindenMasol.TabIndex = 224;
-            this.ToolTip1.SetToolTip(this.Btn_MindenMasol, "Rögzíti az adatokat");
-            this.Btn_MindenMasol.UseVisualStyleBackColor = true;
-            this.Btn_MindenMasol.Click += new System.EventHandler(this.Btn_MindenMasol_Click);
             // 
             // JogTörlés
             // 
             this.JogTörlés.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
             this.JogTörlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.JogTörlés.Location = new System.Drawing.Point(5, 100);
+            this.JogTörlés.Location = new System.Drawing.Point(303, 3);
             this.JogTörlés.Name = "JogTörlés";
-            this.JogTörlés.Size = new System.Drawing.Size(45, 45);
+            this.JogTörlés.Size = new System.Drawing.Size(44, 44);
             this.JogTörlés.TabIndex = 225;
             this.ToolTip1.SetToolTip(this.JogTörlés, "A felhasználó összs jogosultságának törlése");
             this.JogTörlés.UseVisualStyleBackColor = true;
@@ -162,9 +147,9 @@ namespace Villamos
             // 
             this.MindenGomb.BackgroundImage = global::Villamos.Properties.Resources.Action_view_bottom;
             this.MindenGomb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.MindenGomb.Location = new System.Drawing.Point(3, 3);
+            this.MindenGomb.Location = new System.Drawing.Point(153, 3);
             this.MindenGomb.Name = "MindenGomb";
-            this.MindenGomb.Size = new System.Drawing.Size(45, 45);
+            this.MindenGomb.Size = new System.Drawing.Size(44, 44);
             this.MindenGomb.TabIndex = 226;
             this.ToolTip1.SetToolTip(this.MindenGomb, "Az ablakhoz tartozó összes gomb jogosultság beállítása");
             this.MindenGomb.UseVisualStyleBackColor = true;
@@ -188,38 +173,27 @@ namespace Villamos
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 500F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.label3, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel2, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.panel1, 3, 1);
             this.tableLayoutPanel1.Controls.Add(this.label2, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.groupBox2, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.label4, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.LstGombok, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.LstChkSzervezet, 2, 1);
-            this.tableLayoutPanel1.Controls.Add(this.BtnSugó, 3, 0);
-            this.tableLayoutPanel1.Controls.Add(this.ChkGombok, 1, 1);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 38);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 67);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1555, 315);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1555, 286);
             this.tableLayoutPanel1.TabIndex = 99;
-            // 
-            // panel4
-            // 
-            this.panel4.Controls.Add(this.MindenGomb);
-            this.panel4.Location = new System.Drawing.Point(4, 170);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(287, 65);
-            this.panel4.TabIndex = 230;
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.panel4);
             this.panel2.Controls.Add(this.CmbAblakId);
             this.panel2.Controls.Add(this.CmbAblak);
-            this.panel2.Location = new System.Drawing.Point(3, 68);
+            this.panel2.Location = new System.Drawing.Point(3, 23);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(294, 244);
+            this.panel2.Size = new System.Drawing.Size(294, 260);
             this.panel2.TabIndex = 223;
             // 
             // CmbAblakId
@@ -241,17 +215,6 @@ namespace Villamos
             this.CmbAblak.TabIndex = 101;
             this.CmbAblak.SelectionChangeCommitted += new System.EventHandler(this.CmbAblak_SelectionChangeCommitted);
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.JogTörlés);
-            this.panel1.Controls.Add(this.Btn_MindenMasol);
-            this.panel1.Controls.Add(this.Frissít);
-            this.panel1.Controls.Add(this.Rögzít);
-            this.panel1.Location = new System.Drawing.Point(1497, 68);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(55, 244);
-            this.panel1.TabIndex = 225;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -260,17 +223,6 @@ namespace Villamos
             this.label2.Size = new System.Drawing.Size(70, 20);
             this.label2.TabIndex = 228;
             this.label2.Text = "Gombok";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.SzervezetMinden);
-            this.groupBox2.Controls.Add(this.SzervezetSemmi);
-            this.groupBox2.Location = new System.Drawing.Point(997, 3);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(494, 59);
-            this.groupBox2.TabIndex = 226;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Szervezet";
             // 
             // label4
             // 
@@ -285,9 +237,10 @@ namespace Villamos
             // 
             this.LstChkSzervezet.CheckOnClick = true;
             this.LstChkSzervezet.FormattingEnabled = true;
-            this.LstChkSzervezet.Location = new System.Drawing.Point(997, 68);
+            this.LstChkSzervezet.IntegralHeight = false;
+            this.LstChkSzervezet.Location = new System.Drawing.Point(1058, 23);
             this.LstChkSzervezet.Name = "LstChkSzervezet";
-            this.LstChkSzervezet.Size = new System.Drawing.Size(494, 235);
+            this.LstChkSzervezet.Size = new System.Drawing.Size(494, 260);
             this.LstChkSzervezet.TabIndex = 98;
             // 
             // Tábla
@@ -328,17 +281,61 @@ namespace Villamos
             this.DolgozóNév.TabIndex = 222;
             this.DolgozóNév.Text = "<< >>";
             // 
-            // ChkGombok
+            // LstGombok
             // 
-            this.ChkGombok.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.LstGombok.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ChkGombok.CheckOnClick = true;
-            this.ChkGombok.FormattingEnabled = true;
-            this.ChkGombok.Location = new System.Drawing.Point(303, 68);
-            this.ChkGombok.Name = "ChkGombok";
-            this.ChkGombok.Size = new System.Drawing.Size(688, 235);
-            this.ChkGombok.TabIndex = 229;
-            this.ChkGombok.SelectedIndexChanged += new System.EventHandler(this.ChkGombok_SelectedIndexChanged);
+            this.LstGombok.FormattingEnabled = true;
+            this.LstGombok.IntegralHeight = false;
+            this.LstGombok.ItemHeight = 20;
+            this.LstGombok.Location = new System.Drawing.Point(303, 23);
+            this.LstGombok.Name = "LstGombok";
+            this.LstGombok.Size = new System.Drawing.Size(749, 260);
+            this.LstGombok.TabIndex = 229;
+            this.LstGombok.SelectedIndexChanged += new System.EventHandler(this.LstGombok_SelectedIndexChanged);
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel2.ColumnCount = 15;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 265F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel2.Controls.Add(this.MindenGomb, 3, 0);
+            this.tableLayoutPanel2.Controls.Add(this.Frissít, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.BtnSugó, 14, 0);
+            this.tableLayoutPanel2.Controls.Add(this.Rögzít, 9, 0);
+            this.tableLayoutPanel2.Controls.Add(this.JogTörlés, 6, 0);
+            this.tableLayoutPanel2.Controls.Add(this.SzervezetMinden, 13, 0);
+            this.tableLayoutPanel2.Controls.Add(this.SzervezetSemmi, 12, 0);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(565, 11);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1002, 50);
+            this.tableLayoutPanel2.TabIndex = 223;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(1058, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(80, 20);
+            this.label3.TabIndex = 230;
+            this.label3.Text = "Szervezet";
             // 
             // Ablak_JogKiosztás
             // 
@@ -346,6 +343,7 @@ namespace Villamos
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(1574, 495);
+            this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.DolgozóNév);
             this.Controls.Add(this.Felhasználók);
             this.Controls.Add(this.Tábla);
@@ -361,11 +359,9 @@ namespace Villamos
             this.Load += new System.EventHandler(this.Ablak_JogKiosztás_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.panel4.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
+            this.tableLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -380,19 +376,17 @@ namespace Villamos
         private ComboBox Felhasználók;
         internal Label DolgozóNév;
         internal Button Frissít;
-        private GroupBox groupBox2;
         internal Button SzervezetMinden;
         internal Button SzervezetSemmi;
         private ComboBox CmbAblak;
         private CheckedListBox LstChkSzervezet;
-        internal Button Btn_MindenMasol;
         internal Label label2;
-        private Panel panel1;
         internal Button JogTörlés;
         private Panel panel2;
         private ComboBox CmbAblakId;
-        private Panel panel4;
         internal Button MindenGomb;
-        private CheckedListBox ChkGombok;
+        private ListBox LstGombok;
+        private TableLayoutPanel tableLayoutPanel2;
+        internal Label label3;
     }
 }

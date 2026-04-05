@@ -99,7 +99,7 @@ namespace Villamos
         private void GombokFeltöltése()
         {
             if (CmbAblak.Text.Trim() == "") return;
-            ChkGombok.Items.Clear();
+            LstGombok.Items.Clear();
 
             Adat_Belépés_Oldalak oldal = (from a in AdatokOldal
                                           where a.Törölt == false
@@ -116,7 +116,7 @@ namespace Villamos
             {
                 Adat_Bejelentkezés_Gombok item = gombok[i];
                 string felirat = $"{item.GombokId} = {item.GombFelirat} = {item.GombName}";
-                ChkGombok.Items.Add(felirat);
+                LstGombok.Items.Add(felirat);
             }
         }
 
@@ -218,9 +218,7 @@ namespace Villamos
                 CmbAblakId.Text = "";
 
             }
-
-
-            ChkGombok.Items.Clear();
+            LstGombok.Items.Clear();
             LstChkSzervezet.Items.Clear();
         }
         #endregion
@@ -249,9 +247,9 @@ namespace Villamos
             {
                 if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem adja meg a Felhasználót!");
                 if (CmbAblak.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon egy Ablakot!");
-                if (ChkGombok.SelectedItems.Count == 0) throw new HibásBevittAdat("Kérem válasszon legalább egy Gombot gombot!");
+                if (LstGombok.SelectedItems.Count == 0) throw new HibásBevittAdat("Kérem válasszon legalább egy Gombot gombot!");
                 //Ha van kiválasztott gomb akkor azt rögzítjük
-                string[] gomb = ChkGombok.CheckedItems[0].ToStrTrim().Split('=');
+                string[] gomb = LstGombok.SelectedItems[0].ToStrTrim().Split('=');
                 int GombokID = AdatokGombok.FirstOrDefault(a => a.GombName == gomb[2].Trim() && a.FormName == AblakFormName)?.GombokId ?? -1;
 
                 List<Adat_Bejelentkezés_Jogosultságok> Adatok = new List<Adat_Bejelentkezés_Jogosultságok>();
@@ -290,9 +288,9 @@ namespace Villamos
                 if (CmbAblak.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon egy Ablakot!");
 
                 List<Adat_Bejelentkezés_Jogosultságok> Adatok = new List<Adat_Bejelentkezés_Jogosultságok>();
-                for (int j = 0; j < ChkGombok.Items.Count; j++)
+                for (int j = 0; j < LstGombok.Items.Count; j++)
                 {
-                    string[] SzámDarabol = ChkGombok.CheckedItems[0].ToStrTrim().Split('-');
+                    string[] SzámDarabol = LstGombok.SelectedItems[0].ToStrTrim().Split('-');
                     for (int i = 0; i < LstChkSzervezet.Items.Count; i++)
                     {
                         int SzervezetId = AdatokSzervezet.FirstOrDefault(a => a.Név == LstChkSzervezet.Items[i].ToString())?.ID ?? -1;
@@ -344,6 +342,11 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void LstGombok_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Szervezetek();
         }
         #endregion
 
@@ -480,11 +483,11 @@ namespace Villamos
         {
             try
             {
-                if (ChkGombok.Items.Count < 1) return;
-                for (int i = 0; i < ChkGombok.Items.Count; i++)
+                if (LstGombok.Items.Count < 1) return;
+                for (int i = 0; i < LstGombok.Items.Count; i++)
                 {
-                    string[] gomb = ChkGombok.Items[i].ToStrTrim().Split('=');
-                    if (gomb[2] == gombnév) ChkGombok.SetItemChecked(i, true);
+                    string[] gomb = LstGombok.Items[i].ToStrTrim().Split('=');
+                    if (gomb[2] == gombnév) LstGombok.SelectedIndex = i;
                 }
             }
             catch (HibásBevittAdat ex)
@@ -501,11 +504,6 @@ namespace Villamos
 
         #endregion
 
-        private void ChkGombok_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Szervezetek();
-        }
-
 
         #region Szervezet
         //A gombhoz tartozó szervezetek betöltése
@@ -514,8 +512,8 @@ namespace Villamos
             try
             {
                 LstChkSzervezet.Items.Clear();
-                if (ChkGombok.Items.Count == 0) return;
-                string[] Darabol = ChkGombok.CheckedItems[0].ToStrTrim().Split('=');
+                if (LstGombok.Items.Count == 0) return;
+                string[] Darabol = LstGombok.SelectedItems[0].ToStrTrim().Split('=');
                 Adat_Bejelentkezés_Gombok Gomb = AdatokGombok.FirstOrDefault(a => a.GombName == Darabol[2].Trim() && a.FormName == AblakFormName);
                 GombFőID = Gomb?.GombokId ?? -1;
 
@@ -537,7 +535,6 @@ namespace Villamos
                                                                 && a.OldalId == AblakFőID
                                                                 && a.GombokId == GombFőID
                                                                 && a.SzervezetId == AdatokSzervezet.FirstOrDefault(b => b.Név == szervezet.Trim())?.ID
-                                                                && !a.Törölt 
                                                                 select a).FirstOrDefault();
                         if (Jog != null && !Jog.Törölt)
                             LstChkSzervezet.SetItemChecked(LstChkSzervezet.Items.IndexOf(szervezet.Trim()), true);
