@@ -102,6 +102,8 @@ namespace Villamos.Kezelők
                 }
                 if (AdatokR.Count > 0) Rögzítés(AdatokR);
                 if (AdatokM.Count > 0) Módosítás(AdatokM);
+                //Miután átállítottuk kitöröljük a törölt elemeket
+                Törlés();
             }
             catch (HibásBevittAdat ex)
             {
@@ -167,8 +169,8 @@ namespace Villamos.Kezelők
                 List<SqliteCommand> parancsLista = new List<SqliteCommand>();
 
                 string szöveg = $"UPDATE {táblanév} SET ";
-                szöveg += $@"Törölt=@Törölt, ";
-                szöveg += $@"WHERE UserId=@UserId AND";
+                szöveg += $@"Törölt=@Törölt ";
+                szöveg += $@"WHERE UserId=@UserId AND ";
                 szöveg += $@"OldalId=@OldalId AND ";
                 szöveg += $@"GombokId=@GombokId AND ";
                 szöveg += $@"SzervezetId=@SzervezetId ";
@@ -187,6 +189,31 @@ namespace Villamos.Kezelők
 
                 // Egyetlen hívással elküldjük az összeset
                 MyA.SqLite_Módosítások(hely, jelszó, parancsLista);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        public void Törlés()
+        {
+            try
+            {
+                // SQL DELETE parancs az azonosító alapján
+                string szöveg = $"DELETE FROM {táblanév} WHERE Törölt=true";
+
+                SqliteCommand cmd = new SqliteCommand(szöveg);
+
+                // Meghívjuk a saját segédmetódusodat a végrehajtáshoz
+                MyA.SqLite_Módosítás(hely, jelszó, cmd);
 
             }
             catch (HibásBevittAdat ex)
