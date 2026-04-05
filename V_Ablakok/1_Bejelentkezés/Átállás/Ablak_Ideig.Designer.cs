@@ -72,7 +72,6 @@
             // 
             // CmbNevekOld
             // 
-            this.CmbNevekOld.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CmbNevekOld.FormattingEnabled = true;
             this.CmbNevekOld.Location = new System.Drawing.Point(118, 37);
             this.CmbNevekOld.Name = "CmbNevekOld";
