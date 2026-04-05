@@ -457,11 +457,11 @@ namespace Villamos.Ablakok
             List<Adat_Hiba_Elrendezés> Beállítás = new List<Adat_Hiba_Elrendezés>
             {
                 new Adat_Hiba_Elrendezés{ Változó="Gombid", Felirat="Gombid", Szélesség=100},
-                new Adat_Hiba_Elrendezés{ Változó="Formname", Felirat="Formname", Szélesség=85},
-                new Adat_Hiba_Elrendezés{ Változó="Gombname", Felirat="Telephely", Szélesség=130},
-                new Adat_Hiba_Elrendezés{ Változó="Szervezet", Felirat="Szervezet", Szélesség=115},
-                new Adat_Hiba_Elrendezés{ Változó="Melyikbetű", Felirat="Melyikbetű", Szélesség=450},
-                new Adat_Hiba_Elrendezés{ Változó="Melyikoszlop", Felirat="Melyikoszlop", Szélesség=300}
+                new Adat_Hiba_Elrendezés{ Változó="Fromname", Felirat="Formname", Szélesség=300},
+                new Adat_Hiba_Elrendezés{ Változó="Gombname", Felirat="Telephely", Szélesség=200},
+                new Adat_Hiba_Elrendezés{ Változó="Szervezet", Felirat="Szervezet", Szélesség=200},
+                new Adat_Hiba_Elrendezés{ Változó="Melyikbetű", Felirat="Melyikbetű", Szélesség=100},
+                new Adat_Hiba_Elrendezés{ Változó="Melyikoszlop", Felirat="Melyikoszlop", Szélesség=100}
             };
 
             Tábla = new DataGridViewHelper<Adat_Bejelentkezés_Fordító>(this)
