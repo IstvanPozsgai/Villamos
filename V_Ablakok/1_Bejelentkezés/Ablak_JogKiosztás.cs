@@ -27,6 +27,7 @@ namespace Villamos
         List<Adat_Kiegészítő_Könyvtár> AdatokSzervezet = new List<Adat_Kiegészítő_Könyvtár>();
         List<Adat_Behajtás_Dolgozótábla> AdatokDolgozó = new List<Adat_Behajtás_Dolgozótábla>();
         List<Adat_Bejelentkezés_Jogosultságok> AdatokJogosultságok = new List<Adat_Bejelentkezés_Jogosultságok>();
+        List<Adat_Bejelentkezés_Jogosultságok> MásolatAdatok = new List<Adat_Bejelentkezés_Jogosultságok>();
 
 #pragma warning disable IDE0044
         DataTable AdatTáblaALap = new DataTable();
@@ -418,7 +419,7 @@ namespace Villamos
                     if (CmbAblak.Text.Trim() != "")
                     {
                         int oldalid = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text.Trim())?.OldalId ?? -1;
-                        Adatok = Adatok.Where(a => a.OldalId == oldalid && a.Törölt).ToList();
+                        Adatok = Adatok.Where(a => a.OldalId == oldalid).ToList();
                     }
                 }
                 foreach (Adat_Bejelentkezés_Jogosultságok rekord in Adatok)
@@ -626,6 +627,73 @@ namespace Villamos
             TáblázatListázás();
         }
 
+        #region Jogosultság másolása
+        private void BtnMásol_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MásolatAdatok.Clear();
+                Másolat.Text = $"<< >>";
+
+                if (Felhasználók.Text.Trim() == "") return;
+                Másolat.Text = $"Másolás: {Felhasználók.Text}";
+
+                Adat_Bejelentkezés_Users Felhasználó = AdatokUsers.FirstOrDefault(a => a.UserName == Felhasználók.Text);
+                List<Adat_Bejelentkezés_Jogosultságok> Adatok = AdatokJogosultságok;
+
+                //csak a kiválasztott felhasználó adatait írjuk ki
+                MásolatAdatok = (from a in AdatokJogosultságok
+                                 where a.UserId == Felhasználó.UserId
+                                 select a).ToList();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnBeilleszt_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Másolat.Text.Trim() == "") throw new HibásBevittAdat("Nincs másolani kívánt felhasználó!");
+                if (MásolatAdatok.Count < 1) throw new HibásBevittAdat("Nincs másolani kívánt adat!");
+
+                Adat_Bejelentkezés_Users Felhasználó = AdatokUsers.FirstOrDefault(a => a.UserName == Felhasználók.Text);
+
+                List<Adat_Bejelentkezés_Jogosultságok> Rögzítés = new List<Adat_Bejelentkezés_Jogosultságok>();
+
+                foreach (Adat_Bejelentkezés_Jogosultságok adat in MásolatAdatok)
+                {
+                    Adat_Bejelentkezés_Jogosultságok Új = new Adat_Bejelentkezés_Jogosultságok
+                    (
+                        Felhasználó.UserId,
+                        adat.OldalId,
+                        adat.GombokId,
+                        adat.SzervezetId,
+                        adat.Törölt
+                    );
+                    Rögzítés.Add(Új);
+                }
+                if (Rögzítés.Count > 0) KézJogosultságok.Döntés(Rögzítés);
+                TáblázatListázás();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
 
     }
 }

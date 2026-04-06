@@ -276,8 +276,11 @@ namespace Villamos.Ablakok
                         );
                     Adatok.Add(ADAT);
                 }
-
-                if (Adatok.Count > 0) KézJogosultságok.Döntés(Adatok);
+                List<Adat_Bejelentkezés_Jogosultságok> EgyediAdatok = Adatok
+                   .GroupBy(x => new { x.UserId, x.OldalId, x.GombokId, x.SzervezetId, x.Törölt })
+                   .Select(g => g.First())
+                   .ToList();
+                if (EgyediAdatok.Count > 0) KézJogosultságok.Döntés(EgyediAdatok);
                 MessageBox.Show("Jogosultságok rögzítve!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
@@ -404,12 +407,20 @@ namespace Villamos.Ablakok
                     {
                         if (VanJogaBelső(i, j))
                         {
+
+
                             Elemek = (from a in AdatokFordító
                                       where a.MelyikBetű == i
                                       && a.MelyikOszlop == j
                                       select a).ToList();
-                            if (Elemek != null)
+
+
+
+                            if (Elemek != null && Elemek.Count > 0)
                             {
+                                OldalADAT = AdatokOldal.Where(a => a.FromName == Elemek[0].FromName).FirstOrDefault();
+                                oldalId = OldalADAT != null ? OldalADAT.OldalId : 0;
+
                                 List<Adat_Bejelentkezés_Fordító> ADATOK = new List<Adat_Bejelentkezés_Fordító>();
                                 foreach (var elem in Elemek)
                                 {
