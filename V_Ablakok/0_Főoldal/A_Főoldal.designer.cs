@@ -41,7 +41,10 @@ namespace Villamos
             this.ProgramAdatokMenü = new System.Windows.Forms.ToolStripMenuItem();
             this.ablakokBeállításaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gombokBeállításaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AdatbázisVáltásToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator41 = new System.Windows.Forms.ToolStripSeparator();
             this.SzoftverkulcsKészítésMenü = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator42 = new System.Windows.Forms.ToolStripSeparator();
             this.HibanaploMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator37 = new System.Windows.Forms.ToolStripSeparator();
             this.felhasználókLétrehozásaTörléseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -192,10 +195,7 @@ namespace Villamos
             this.Btnüzenetfrissítés = new System.Windows.Forms.Button();
             this.Képkeret = new System.Windows.Forms.PictureBox();
             this.Képkeret1 = new System.Windows.Forms.PictureBox();
-            this.Panels1 = new System.Windows.Forms.Label();
-            this.AdatbázisVáltásToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator41 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator42 = new System.Windows.Forms.ToolStripSeparator();
+            this.LblNév = new System.Windows.Forms.Label();
             this.Menü.SuspendLayout();
             this.Alsó.SuspendLayout();
             this.Rejtett.SuspendLayout();
@@ -270,12 +270,30 @@ namespace Villamos
             this.gombokBeállításaToolStripMenuItem.Text = "Gombok beállítása";
             this.gombokBeállításaToolStripMenuItem.Click += new System.EventHandler(this.GombokBeállításaToolStripMenuItem_Click);
             // 
+            // AdatbázisVáltásToolStripMenuItem
+            // 
+            this.AdatbázisVáltásToolStripMenuItem.Enabled = false;
+            this.AdatbázisVáltásToolStripMenuItem.Name = "AdatbázisVáltásToolStripMenuItem";
+            this.AdatbázisVáltásToolStripMenuItem.Size = new System.Drawing.Size(275, 26);
+            this.AdatbázisVáltásToolStripMenuItem.Text = "Adatbázis váltás";
+            this.AdatbázisVáltásToolStripMenuItem.Click += new System.EventHandler(this.AdatbázisVáltásToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator41
+            // 
+            this.toolStripSeparator41.Name = "toolStripSeparator41";
+            this.toolStripSeparator41.Size = new System.Drawing.Size(272, 6);
+            // 
             // SzoftverkulcsKészítésMenü
             // 
             this.SzoftverkulcsKészítésMenü.Name = "SzoftverkulcsKészítésMenü";
             this.SzoftverkulcsKészítésMenü.Size = new System.Drawing.Size(275, 26);
             this.SzoftverkulcsKészítésMenü.Text = "Szoftverkulcs készítés";
             this.SzoftverkulcsKészítésMenü.Click += new System.EventHandler(this.SzoftverkulcsKészítésMenü_Click);
+            // 
+            // toolStripSeparator42
+            // 
+            this.toolStripSeparator42.Name = "toolStripSeparator42";
+            this.toolStripSeparator42.Size = new System.Drawing.Size(272, 6);
             // 
             // HibanaploMenu
             // 
@@ -1500,36 +1518,18 @@ namespace Villamos
             this.Képkeret1.TabIndex = 27;
             this.Képkeret1.TabStop = false;
             // 
-            // Panels1
+            // LblNév
             // 
-            this.Panels1.BackColor = System.Drawing.Color.Bisque;
-            this.Panels1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Panels1.Font = new System.Drawing.Font("Monotype Corsiva", 26.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Panels1.Location = new System.Drawing.Point(206, 26);
-            this.Panels1.Name = "Panels1";
-            this.Panels1.Size = new System.Drawing.Size(200, 50);
-            this.Panels1.TabIndex = 28;
-            this.Panels1.Text = "Név";
-            this.Panels1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.Panels1.DoubleClick += new System.EventHandler(this.Panels1_DoubleClick);
-            // 
-            // AdatbázisVáltásToolStripMenuItem
-            // 
-            this.AdatbázisVáltásToolStripMenuItem.Enabled = false;
-            this.AdatbázisVáltásToolStripMenuItem.Name = "AdatbázisVáltásToolStripMenuItem";
-            this.AdatbázisVáltásToolStripMenuItem.Size = new System.Drawing.Size(275, 26);
-            this.AdatbázisVáltásToolStripMenuItem.Text = "Adatbázis váltás";
-            this.AdatbázisVáltásToolStripMenuItem.Click += new System.EventHandler(this.AdatbázisVáltásToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator41
-            // 
-            this.toolStripSeparator41.Name = "toolStripSeparator41";
-            this.toolStripSeparator41.Size = new System.Drawing.Size(272, 6);
-            // 
-            // toolStripSeparator42
-            // 
-            this.toolStripSeparator42.Name = "toolStripSeparator42";
-            this.toolStripSeparator42.Size = new System.Drawing.Size(272, 6);
+            this.LblNév.BackColor = System.Drawing.Color.Bisque;
+            this.LblNév.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.LblNév.Font = new System.Drawing.Font("Monotype Corsiva", 26.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.LblNév.Location = new System.Drawing.Point(206, 26);
+            this.LblNév.Name = "LblNév";
+            this.LblNév.Size = new System.Drawing.Size(200, 50);
+            this.LblNév.TabIndex = 28;
+            this.LblNév.Text = "Név";
+            this.LblNév.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.LblNév.DoubleClick += new System.EventHandler(this.Panels1_DoubleClick);
             // 
             // A_Főoldal
             // 
@@ -1537,7 +1537,7 @@ namespace Villamos
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tan;
             this.ClientSize = new System.Drawing.Size(890, 515);
-            this.Controls.Add(this.Panels1);
+            this.Controls.Add(this.LblNév);
             this.Controls.Add(this.Btnüzenetfrissítés);
             this.Controls.Add(this.Btnutasításfrissítés);
             this.Controls.Add(this.Figyelmeztetés);
@@ -1723,7 +1723,7 @@ namespace Villamos
         private ToolStripMenuItem gombokBeállításaToolStripMenuItem;
         private ToolStripMenuItem jogosultságKiosztásToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator36;
-        internal Label Panels1;
+        internal Label LblNév;
         private ToolStripSeparator toolStripSeparator37;
         private ToolStripSeparator toolStripSeparator38;
         private ToolStripSeparator toolStripSeparator39;

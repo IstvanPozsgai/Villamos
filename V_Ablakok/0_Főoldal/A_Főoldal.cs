@@ -429,7 +429,7 @@ namespace Villamos
             Timer2.Enabled = true;
             lbltelephely.Text = Program.PostásTelephely;
             lblVerzió.Text = $"Verzió: {Application.ProductVersion}";
-            Panels1.Text = Program.PostásNév;
+            LblNév.Text = Program.PostásNév;
             panels2.Text = Program.PostásJogkör; // új jogosultság
             panels4.Text = Program.PostásTelephely;
             Könyvtárak_Létrehozása();
@@ -440,6 +440,24 @@ namespace Villamos
             Utasításkiírása();
             Verziószám_kiírás();
             Program_változó(lbltelephely.Text.Trim());
+            HonnanLéptünk();
+        }
+
+        private void HonnanLéptünk()
+        {
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
+            {
+                //ha új bejelentkezés
+
+                LblÓra.Font = new Font("Arial", 24, FontStyle.Bold);
+                LblNév.Font = new Font("Arial", 24, FontStyle.Bold);
+                lbltelephely.Font = new Font("Arial", 24, FontStyle.Bold);
+                lblVerzió.Font = new Font("Arial", 18, FontStyle.Bold);
+            }
+            else
+            {
+                //ha régi akkor nem vátoztatunk.
+            }
         }
 
         private void AblakFőoldal_Load(object sender, EventArgs e)
@@ -706,7 +724,7 @@ namespace Villamos
                 List<Adat_Belépés_Jogosultságtábla> Adatok = Kéz_Jogosultság.Lista_Adatok(lbltelephely.Text.Trim());
 
                 Adat_Belépés_Jogosultságtábla Elem = (from a in Adatok
-                                                      where a.Név.ToUpper() == Panels1.Text.Trim().ToUpper()
+                                                      where a.Név.ToUpper() == LblNév.Text.Trim().ToUpper()
                                                       select a).FirstOrDefault();
 
                 if (Elem != null)
@@ -874,7 +892,7 @@ namespace Villamos
             try
             {
                 // A jogokat beírjuk
-                string adat1 = MyF.MÁSRövidkód(Panels1.Text.Trim());
+                string adat1 = MyF.MÁSRövidkód(LblNév.Text.Trim());
                 Kezelő_Kulcs_Fekete KézFekete = new Kezelő_Kulcs_Fekete();
                 List<Adat_Kulcs> AdatokTeljes = KézFekete.Lista_Adatok();
 
@@ -2539,7 +2557,7 @@ namespace Villamos
             string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\Villamos9.mdb";
             if (!Exists(hely)) return;
 
-            string keres = MyF.MÁSRövidkód(Panels1.Text.Trim());
+            string keres = MyF.MÁSRövidkód(LblNév.Text.Trim());
             Kezelő_Kulcs_Fekete KézFekete = new Kezelő_Kulcs_Fekete();
             List<Adat_Kulcs> Adatok = KézFekete.Lista_Adatok();
             Adat_Kulcs Elem = (from a in Adatok
@@ -2731,7 +2749,7 @@ namespace Villamos
                     List<Adat_Belépés_Jogosultságtábla> Adatok = Kéz_Jogosultság.Lista_Adatok(lbltelephely.Text.Trim());
 
                     Adat_Belépés_Jogosultságtábla Elem = (from a in Adatok
-                                                          where a.Név.ToUpper() == Panels1.Text.Trim().ToUpper()
+                                                          where a.Név.ToUpper() == LblNév.Text.Trim().ToUpper()
                                                           select a).FirstOrDefault();
 
                     if (Elem != null)

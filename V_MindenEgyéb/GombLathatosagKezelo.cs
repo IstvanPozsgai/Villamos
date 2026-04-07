@@ -99,8 +99,8 @@ public static class GombLathatosagKezelo
             foreach (Adat_Bejelentkezés_Jogosultságok adatGomb in jogosultságok)
             {
                 Adat_Bejelentkezés_Gombok Egygomb = (from a in gombok
-                                       where a.GombokId == adatGomb.GombokId
-                                       select a).FirstOrDefault();
+                                                     where a.GombokId == adatGomb.GombokId
+                                                     select a).FirstOrDefault();
                 if (Egygomb != null)
                 {
                     // Megkeressük a gombot az ablak Controls gyûjteményében
@@ -155,8 +155,8 @@ public static class GombLathatosagKezelo
             foreach (Adat_Bejelentkezés_Jogosultságok adatGomb in jogosultságok)
             {
                 Adat_Bejelentkezés_Gombok Egygomb = (from a in gombok
-                                       where a.GombokId == adatGomb.GombokId
-                                       select a).FirstOrDefault();
+                                                     where a.GombokId == adatGomb.GombokId
+                                                     select a).FirstOrDefault();
                 if (Egygomb != null)
                 {
                     // Megkeressük a gombot az ablak Controls gyûjteményében
@@ -197,9 +197,9 @@ public static class GombLathatosagKezelo
 
             // ha a jogosultáság táblában van akkor van hozzá joga így láthatóvá tesszük a gombokat
             Adat_Bejelentkezés_Gombok Egygomb = (from a in gombok
-                                   where a.GombFelirat == GombFelirat
-                                   && a.GombName == GombNév
-                                   select a).FirstOrDefault();
+                                                 where a.GombFelirat == GombFelirat
+                                                 && a.GombName == GombNév
+                                                 select a).FirstOrDefault();
 
             if (Egygomb != null)
             {
@@ -239,8 +239,8 @@ public static class GombLathatosagKezelo
             if (Oldal != null) OldalId = Oldal.OldalId;
             //Azok a jogosultságok amik az adott oldalhoz tartoznak
             List<Adat_Bejelentkezés_Jogosultságok> AdatokA = (from a in Program.PostásJogosultságok
-                                                where a.OldalId == OldalId
-                                                select a).ToList();
+                                                              where a.OldalId == OldalId
+                                                              select a).ToList();
 
             List<Adat_Kiegészítõ_Könyvtár> Ideig = new List<Adat_Kiegészítõ_Könyvtár>();
             foreach (Adat_Bejelentkezés_Jogosultságok Adat in AdatokA)
@@ -277,8 +277,8 @@ public static class GombLathatosagKezelo
         {
             //Azok a jogosultságok amik az adott oldalhoz tartoznak
             List<Adat_Bejelentkezés_Jogosultságok> AdatokA = (from a in Program.PostásJogosultságok
-                                                where a.OldalId == OldalId
-                                                select a).ToList();
+                                                              where a.OldalId == OldalId
+                                                              select a).ToList();
 
             List<Adat_Kiegészítõ_Könyvtár> Ideig = new List<Adat_Kiegészítõ_Könyvtár>();
             foreach (Adat_Bejelentkezés_Jogosultságok Adat in AdatokA)
