@@ -740,7 +740,7 @@ namespace Villamos
         {
             try
             {
-                Rögzít.Visible = !Napkinyitása.Visible;
+                Rögzít.Enabled = !Napkinyitása.Visible;
                 Bevitelilap.Visible = false;
                 GombNév = (sender as Button).Name;
                 Gombfelirat = (sender as Button).Text;

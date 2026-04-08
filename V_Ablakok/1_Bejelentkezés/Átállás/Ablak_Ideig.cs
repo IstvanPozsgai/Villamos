@@ -391,7 +391,8 @@ namespace Villamos.Ablakok
                     int oldalId = OldalADAT != null ? OldalADAT.OldalId : 0;
 
                     Adat_Bejelentkezés_Fordító Elem = new Adat_Bejelentkezés_Fordító
-                         (SúgóGomb.GombokId,
+                         (
+                         SúgóGomb.GombokId,
                          Elemek[0].FromName,
                          SúgóGomb.GombName,
                          Cmbtelephely.Text,
@@ -407,23 +408,17 @@ namespace Villamos.Ablakok
                     {
                         if (VanJogaBelső(i, j))
                         {
-
-
                             Elemek = (from a in AdatokFordító
                                       where a.MelyikBetű == i
                                       && a.MelyikOszlop == j
                                       select a).ToList();
 
-
-
                             if (Elemek != null && Elemek.Count > 0)
                             {
-                                OldalADAT = AdatokOldal.Where(a => a.FromName == Elemek[0].FromName).FirstOrDefault();
-                                oldalId = OldalADAT != null ? OldalADAT.OldalId : 0;
-
-                                List<Adat_Bejelentkezés_Fordító> ADATOK = new List<Adat_Bejelentkezés_Fordító>();
-                                foreach (var elem in Elemek)
+                                foreach (Adat_Bejelentkezés_Fordító elem in Elemek)
                                 {
+                                    OldalADAT = AdatokOldal.Where(a => a.FromName == elem.FromName).FirstOrDefault();
+                                    oldalId = OldalADAT != null ? OldalADAT.OldalId : 0;
                                     Adat_Bejelentkezés_Fordító adat = new Adat_Bejelentkezés_Fordító
                                         (elem.GombokId,
                                          elem.FromName,
@@ -436,7 +431,6 @@ namespace Villamos.Ablakok
                                          TxtSzervezetID.Text.ToÉrt_Int());//SzervezetId helye
                                     ÚjJogosultságokGyűjtőAdatok.Add(adat);
                                 }
-
                             }
                         }
                     }
