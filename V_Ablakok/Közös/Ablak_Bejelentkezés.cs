@@ -368,7 +368,10 @@ namespace Villamos
                 GroupBox2.Visible = true;
                 CmbUserName.Focus();
                 TxtPassword.Text = "";
-                Subdolgozófeltöltés();
+                if (TovábbMegyünk())
+                    MásikBejelenkezés();
+                else
+                    Subdolgozófeltöltés();
             }
         }
 
@@ -408,6 +411,21 @@ namespace Villamos
 
         private void LblVerzió_DoubleClick(object sender, EventArgs e)
         {
+            MásikBejelenkezés();
+        }
+
+        private bool TovábbMegyünk()
+        {
+            bool válasz = false;
+
+            //  if (CmbTelephely.Text == "Angyalföld") válasz = true;
+
+            return válasz;
+        }
+
+        private void MásikBejelenkezés()
+        {
+
             AblakBejelentkezés_Új Újablak = new AblakBejelentkezés_Új();
             Újablak.Show();
             this.Hide();
