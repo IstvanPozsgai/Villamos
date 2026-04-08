@@ -489,6 +489,7 @@
             this.FelExcel.TabIndex = 244;
             this.toolTip1.SetToolTip(this.FelExcel, "Munkalap készítés a beállítottaknak megfelelően.");
             this.FelExcel.UseVisualStyleBackColor = true;
+            this.FelExcel.Visible = false;
             this.FelExcel.Click += new System.EventHandler(this.FelExcel_Click);
             // 
             // Digitális
@@ -501,6 +502,7 @@
             this.Digitális.TabIndex = 243;
             this.toolTip1.SetToolTip(this.Digitális, "Munkalap készítés a beállítottaknak megfelelően.");
             this.Digitális.UseVisualStyleBackColor = true;
+            this.Digitális.Visible = false;
             this.Digitális.Click += new System.EventHandler(this.Digitális_Click);
             // 
             // BtnCsoportosítás

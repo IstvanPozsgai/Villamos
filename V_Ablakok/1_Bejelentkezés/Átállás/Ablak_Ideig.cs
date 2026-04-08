@@ -403,7 +403,7 @@ namespace Villamos.Ablakok
                     ÚjJogosultságokGyűjtőAdatok.Add(Elem);
 
 
-                    for (int j = 1; j < 4; j++)
+                    for (int j = 0; j < 4; j++)
                     {
                         if (VanJogaBelső(i, j))
                         {
