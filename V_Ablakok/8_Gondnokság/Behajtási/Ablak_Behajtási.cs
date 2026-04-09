@@ -60,7 +60,7 @@ namespace Villamos
             Start();
             //Ha az első karakter "R" akkor az új jogosultságkiosztást használjuk
             //ha nem akkor a régit használjuk
-            if (Program.PostásJogkör.Substring(0, 1) == "R") 
+            if (Program.PostásJogkör.Substring(0, 1) == "R")
             {
                 TelephelyekFeltöltéseÚj();
                 GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
@@ -81,10 +81,10 @@ namespace Villamos
                 Jogosultságkiosztás();
 
                 //Beállítjuk, hogy mihez van jogosultsága
-                EngedélyListaGondnokEmail = true ;
-                EngedélyListaSzakEmail       = true ;
-                EngedélyListaEngedélyNyomtat = true ;
-                EngedélyListaÁtvételNyomtat  = true ;
+                EngedélyListaGondnokEmail = true;
+                EngedélyListaSzakEmail = true;
+                EngedélyListaEngedélyNyomtat = true;
+                EngedélyListaÁtvételNyomtat = true;
                 EngedélyListaÁtvételKüld = true;
                 EngedélyListaÁtvételMegtörtént = true;
                 EngedélyListaTörlés = true;
@@ -2762,7 +2762,7 @@ namespace Villamos
                         BUE = rekord.Budafok_engedély;
                         FEE = rekord.Ferencváros_engedély;
                     }
-
+                    // JAVÍTANDÓ:
                     //Ha nincs engedélyezendő, vagy mindenütt elutasították, akkor nem csinál semmit
                     if ((HUE == 0 || HUE == 3) && (SZÁE == 0 || SZÁE == 3) && (ZUE == 0 || ZUE == 3) &&
                         (AFE == 0 || AFE == 3) && (BAE == 0 || BAE == 3) && (FOE == 0 || FOE == 3) && (SZIE == 0 || SZIE == 3) &&
