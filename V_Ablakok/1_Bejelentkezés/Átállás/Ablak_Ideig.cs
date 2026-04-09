@@ -485,6 +485,14 @@ namespace Villamos.Ablakok
             string Betű = TxtJogkör.Text.Substring(melyikelem, 1);
             switch (csoport)
             {
+                case 0: //0 -es csoport
+                    {
+                        if (Betű == "3")
+                        { válasz = true; }
+                        else
+                        { válasz = false; }
+                        break;
+                    }
                 case 1: //1 -es csoport
                     {
                         if (Betű == "3" || Betű == "7" || Betű == "b" || Betű == "f")
