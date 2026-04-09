@@ -381,7 +381,7 @@
     <Compile Include="V_Ablakok\7_Kiadási_adatok\Főkönyv\Főkönyv_Meghagyás.cs" />
     <Compile Include="V_Ablakok\7_Kiadási_adatok\Főkönyv\Főkönyv_Takarítás.cs" />
     <Compile Include="V_Ablakok\7_Kiadási_adatok\Főkönyv\list.cs" />
-    <Compile Include="V_Ablakok\7_Kiadási_adatok\Vendég_Járművek_Karbantartása.cs" />
+    <Compile Include="V_Ablakok\7_Kiadási_adatok\Állomány\Vendég_Járművek_Karbantartása.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Anyagtörzs.cs" />
     <Compile Include="V_Adatszerkezet\1_Bejelentkezés\Adat_Bejelentkezés_Fordító.cs" />
     <Compile Include="V_Adatszerkezet\Adat_Akkumulátor_Mérés.cs" />
@@ -782,34 +782,34 @@
     <Compile Include="V_Ablakok\6_Karbantartás\TW6000\Ablak_TW6000_Tulajdonság.designer.cs">
       <DependentUpon>Ablak_TW6000_Tulajdonság.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\7_Kiadási_adatok\Ablak_Digitális_Főkönyv.cs">
+    <Compile Include="V_Ablakok\7_Kiadási_adatok\Digitális_Főkönyv\Ablak_Digitális_Főkönyv.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\7_Kiadási_adatok\Ablak_Digitális_Főkönyv.designer.cs">
+    <Compile Include="V_Ablakok\7_Kiadási_adatok\Digitális_Főkönyv\Ablak_Digitális_Főkönyv.designer.cs">
       <DependentUpon>Ablak_Digitális_Főkönyv.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\7_Kiadási_adatok\Ablak_Fő_Egyesített.cs">
+    <Compile Include="V_Ablakok\7_Kiadási_adatok\Fő_Egyesített\Ablak_Fő_Egyesített.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\7_Kiadási_adatok\Ablak_Fő_Egyesített.designer.cs">
+    <Compile Include="V_Ablakok\7_Kiadási_adatok\Fő_Egyesített\Ablak_Fő_Egyesített.designer.cs">
       <DependentUpon>Ablak_Fő_Egyesített.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\7_Kiadási_adatok\Ablak_Fő_Kiadás_Forte.cs">
+    <Compile Include="V_Ablakok\7_Kiadási_adatok\Kiadás_Forte\Ablak_Fő_Kiadás_Forte.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\7_Kiadási_adatok\Ablak_Fő_Kiadás_Forte.designer.cs">
+    <Compile Include="V_Ablakok\7_Kiadási_adatok\Kiadás_Forte\Ablak_Fő_Kiadás_Forte.designer.cs">
       <DependentUpon>Ablak_Fő_Kiadás_Forte.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\7_Kiadási_adatok\Ablak_Fő_Napiadatok.cs">
+    <Compile Include="V_Ablakok\7_Kiadási_adatok\Fő_NapiAdatok\Ablak_Fő_Napiadatok.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\7_Kiadási_adatok\Ablak_Fő_Napiadatok.designer.cs">
+    <Compile Include="V_Ablakok\7_Kiadási_adatok\Fő_NapiAdatok\Ablak_Fő_Napiadatok.designer.cs">
       <DependentUpon>Ablak_Fő_Napiadatok.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\7_Kiadási_adatok\Ablak_szerelvény.cs">
+    <Compile Include="V_Ablakok\7_Kiadási_adatok\Szerelvény\Ablak_szerelvény.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\7_Kiadási_adatok\Ablak_szerelvény.designer.cs">
+    <Compile Include="V_Ablakok\7_Kiadási_adatok\Szerelvény\Ablak_szerelvény.designer.cs">
       <DependentUpon>Ablak_szerelvény.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\7_Kiadási_adatok\Állomány\Ablak_állomány.cs">
@@ -1377,10 +1377,10 @@
     <Compile Include="V_Ablakok\Közös\Ablak_Jelszóváltoztatás.designer.cs">
       <DependentUpon>Ablak_Jelszóváltoztatás.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\7_Kiadási_adatok\Ablak_Jármű.cs">
+    <Compile Include="V_Ablakok\7_Kiadási_adatok\Jármű\Ablak_Jármű.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\7_Kiadási_adatok\Ablak_Jármű.designer.cs">
+    <Compile Include="V_Ablakok\7_Kiadási_adatok\Jármű\Ablak_Jármű.designer.cs">
       <DependentUpon>Ablak_Jármű.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\7_Kiadási_adatok\Kidobó\Ablak_Kidobó_Ismétlődő.cs">
@@ -1449,10 +1449,10 @@
     <Compile Include="V_Ablakok\4_Dolgozó\Munkalap\Ablak_Munkalap_készítés.designer.cs">
       <DependentUpon>Ablak_Munkalap_készítés.cs</DependentUpon>
     </Compile>
-    <Compile Include="V_Ablakok\7_Kiadási_adatok\Ablak_Napiadatok.cs">
+    <Compile Include="V_Ablakok\7_Kiadási_adatok\NapiAdatok\Ablak_Napiadatok.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="V_Ablakok\7_Kiadási_adatok\Ablak_Napiadatok.designer.cs">
+    <Compile Include="V_Ablakok\7_Kiadási_adatok\NapiAdatok\Ablak_Napiadatok.designer.cs">
       <DependentUpon>Ablak_Napiadatok.cs</DependentUpon>
     </Compile>
     <Compile Include="V_Ablakok\5_Nyilvántartások\Ablak_SAP_osztály.cs">
@@ -1834,19 +1834,19 @@
     <EmbeddedResource Include="V_Ablakok\6_Karbantartás\TW6000\Ablak_TW6000_Tulajdonság.resx">
       <DependentUpon>Ablak_TW6000_Tulajdonság.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\7_Kiadási_adatok\Ablak_Digitális_Főkönyv.resx">
+    <EmbeddedResource Include="V_Ablakok\7_Kiadási_adatok\Digitális_Főkönyv\Ablak_Digitális_Főkönyv.resx">
       <DependentUpon>Ablak_Digitális_Főkönyv.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\7_Kiadási_adatok\Ablak_Fő_Egyesített.resx">
+    <EmbeddedResource Include="V_Ablakok\7_Kiadási_adatok\Fő_Egyesített\Ablak_Fő_Egyesített.resx">
       <DependentUpon>Ablak_Fő_Egyesített.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\7_Kiadási_adatok\Ablak_Fő_Kiadás_Forte.resx">
+    <EmbeddedResource Include="V_Ablakok\7_Kiadási_adatok\Kiadás_Forte\Ablak_Fő_Kiadás_Forte.resx">
       <DependentUpon>Ablak_Fő_Kiadás_Forte.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\7_Kiadási_adatok\Ablak_Fő_Napiadatok.resx">
+    <EmbeddedResource Include="V_Ablakok\7_Kiadási_adatok\Fő_NapiAdatok\Ablak_Fő_Napiadatok.resx">
       <DependentUpon>Ablak_Fő_Napiadatok.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\7_Kiadási_adatok\Ablak_szerelvény.resx">
+    <EmbeddedResource Include="V_Ablakok\7_Kiadási_adatok\Szerelvény\Ablak_szerelvény.resx">
       <DependentUpon>Ablak_szerelvény.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\7_Kiadási_adatok\Állomány\Ablak_állomány.resx">
@@ -1979,7 +1979,7 @@
     <EmbeddedResource Include="V_Ablakok\Közös\Ablak_Jelszóváltoztatás.resx">
       <DependentUpon>Ablak_Jelszóváltoztatás.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\7_Kiadási_adatok\Ablak_Jármű.resx">
+    <EmbeddedResource Include="V_Ablakok\7_Kiadási_adatok\Jármű\Ablak_Jármű.resx">
       <DependentUpon>Ablak_Jármű.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\7_Kiadási_adatok\Kidobó\Ablak_Kidobó_Ismétlődő.resx">
@@ -2018,7 +2018,7 @@
     <EmbeddedResource Include="V_Ablakok\4_Dolgozó\Munkalap\Ablak_Munkalap_készítés.resx">
       <DependentUpon>Ablak_Munkalap_készítés.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="V_Ablakok\7_Kiadási_adatok\Ablak_Napiadatok.resx">
+    <EmbeddedResource Include="V_Ablakok\7_Kiadási_adatok\NapiAdatok\Ablak_Napiadatok.resx">
       <DependentUpon>Ablak_Napiadatok.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Nyilvántartások\Ablak_SAP_osztály.resx">
