@@ -152,11 +152,11 @@ namespace Villamos
             this.Label5 = new System.Windows.Forms.Label();
             this.Tak_Ár_Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.BtnEmailRögzít = new System.Windows.Forms.Button();
             this.email_tabla = new Zuby.ADGV.AdvancedDataGridView();
             this.Button13 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
-            this.BtnEmailRögzít = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -1448,8 +1448,23 @@ namespace Villamos
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "E-mail címek";
             // 
+            // BtnEmailRögzít
+            // 
+            this.BtnEmailRögzít.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.BtnEmailRögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.BtnEmailRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnEmailRögzít.Location = new System.Drawing.Point(6, 6);
+            this.BtnEmailRögzít.Name = "BtnEmailRögzít";
+            this.BtnEmailRögzít.Size = new System.Drawing.Size(45, 45);
+            this.BtnEmailRögzít.TabIndex = 13;
+            this.toolTip1.SetToolTip(this.BtnEmailRögzít, "Rögzíti/módosítja az adatokat");
+            this.BtnEmailRögzít.UseVisualStyleBackColor = true;
+            this.BtnEmailRögzít.Click += new System.EventHandler(this.BtnEmailRögzít_Click);
+            // 
             // email_tabla
             // 
+            this.email_tabla.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.email_tabla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.email_tabla.FilterAndSortEnabled = true;
             this.email_tabla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
@@ -1459,11 +1474,10 @@ namespace Villamos
             this.email_tabla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.email_tabla.RowHeadersWidth = 51;
             this.email_tabla.RowTemplate.Height = 24;
-            this.email_tabla.Size = new System.Drawing.Size(500, 200);
+            this.email_tabla.Size = new System.Drawing.Size(500, 423);
             this.email_tabla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.email_tabla.TabIndex = 0;
             this.email_tabla.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.Email_tabla_CellBeginEdit);
-            this.email_tabla.RowValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.Email_tabla_RowValidated);
             this.email_tabla.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.Email_tabla_UserDeletingRow);
             // 
             // Button13
@@ -1492,18 +1506,6 @@ namespace Villamos
             this.Holtart.Size = new System.Drawing.Size(1040, 25);
             this.Holtart.TabIndex = 1;
             this.Holtart.Visible = false;
-            // 
-            // BtnEmailRögzít
-            // 
-            this.BtnEmailRögzít.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.BtnEmailRögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.BtnEmailRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnEmailRögzít.Location = new System.Drawing.Point(6, 6);
-            this.BtnEmailRögzít.Name = "BtnEmailRögzít";
-            this.BtnEmailRögzít.Size = new System.Drawing.Size(45, 45);
-            this.BtnEmailRögzít.TabIndex = 13;
-            this.toolTip1.SetToolTip(this.BtnEmailRögzít, "Rögzíti/módosítja az adatokat");
-            this.BtnEmailRögzít.UseVisualStyleBackColor = true;
             // 
             // Ablak_alap_program_egyéb
             // 

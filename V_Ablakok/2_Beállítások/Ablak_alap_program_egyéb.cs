@@ -1979,61 +1979,82 @@ namespace Villamos
             email_tabla.Columns["E-mail cím"].Width = 200;
         }
 
-        // Új cím vagy módosítás kezelése
-        private void Email_tabla_RowValidated(object sender, DataGridViewCellEventArgs e)
+        // Új cím hozzáadása, vagy módosítása gombbal
+        private void BtnEmailRögzít_Click(object sender, EventArgs e)
         {
-            if (e.RowIndex < 0) return;
-
-            DataGridViewRow sor = email_tabla.Rows[e.RowIndex];
-            string ujCim = sor.Cells["E-mail cím"].Value?.ToString()?.Trim();
-            if (string.IsNullOrEmpty(ujCim)) return;
-
-            string eredetiCim = sor.Tag as string;
-
-            // Force reload és lista előkészítése
-            List<string> lista = KézEmail.Email_Cimek(true)
-                .Split(';')
-                .Select(a => a.Trim())
-                .Where(a => a != eredetiCim) // saját sor értékét kihagyjuk
-                .ToList();
-
-            if (string.IsNullOrEmpty(eredetiCim))
+            try
             {
-                // Új cím hozzáadása
-                if (!lista.Contains(ujCim))
+                // 1. Friss lista lekérése a duplikációk ellenőrzéséhez
+                List<string> meglevoEmailList = KézEmail.Email_Cimek(true)
+                    .Split(';')
+                    .Select(a => a.Trim())
+                    .Where(a => !string.IsNullOrEmpty(a))
+                    .ToList();
+
+                bool tortentValtozas = false;
+
+                foreach (DataGridViewRow sor in email_tabla.Rows)
                 {
-                    KézEmail.Rögzítés(ujCim);
+                    if (sor.IsNewRow) continue; // Üres alsó sor kihagyása
+
+                    string ujCim = sor.Cells["E-mail cím"].Value?.ToString()?.Trim();
+                    string eredetiCim = sor.Tag as string; // Mentéskor a Tag-ben tároljuk az eredeti értéket
+
+                    if (string.IsNullOrEmpty(ujCim)) continue;
+
+                    // ÚJ REKORD (nincs eredeti cím)
+                    if (string.IsNullOrEmpty(eredetiCim))
+                    {
+                        if (!meglevoEmailList.Contains(ujCim))
+                        {
+                            KézEmail.Rögzítés(ujCim);
+                            meglevoEmailList.Add(ujCim); // Hozzáadjuk a listához, hogy a következő sornál már lássuk
+                            tortentValtozas = true;
+                        }
+                    }
+                    // MÓDOSÍTÁS (van eredeti cím és megváltozott)
+                    else if (eredetiCim != ujCim)
+                    {
+                        // Kivesszük a régit a listából, hogy az újjal ne ütközzön önmagával
+                        meglevoEmailList.Remove(eredetiCim);
+
+                        if (!meglevoEmailList.Contains(ujCim))
+                        {
+                            KézEmail.Módosít(eredetiCim, ujCim);
+                            meglevoEmailList.Add(ujCim);
+                            tortentValtozas = true;
+                        }
+                        else
+                        {
+                            // Ha duplikáció lenne, visszaállítjuk a listába a régit
+                            meglevoEmailList.Add(eredetiCim);
+                        }
+                    }
                 }
-                else
+
+                if (tortentValtozas)
                 {
-                    sor.Cells["E-mail cím"].Value = null;
+                    // Cache ürítése és újratöltés
+                    Kezelő_Kiegészítő_Email.ÖsszesEmailCím = string.Empty;
+                    KézEmail.Email_Cimek(true);
+
+                    // Felület frissítése
+                    ABFeltöltése();
+                    email_tabla.DataSource = EmailAdatTábla;
+                    MessageBox.Show("A változások mentése sikeresen megtörtént!", "Mentés", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
-            else
+            catch (HibásBevittAdat ex)
             {
-                // Módosítás
-                if (eredetiCim != ujCim)
-                {
-                    if (!lista.Contains(ujCim))
-                    {
-                        KézEmail.Módosít(eredetiCim, ujCim);
-                    }
-                    else
-                    {
-                        sor.Cells["E-mail cím"].Value = eredetiCim;
-                    }
-                }
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
-            // Force reload a statikus listára
-            Kezelő_Kiegészítő_Email.ÖsszesEmailCím = string.Empty;
-            KézEmail.Email_Cimek(true);
-
-            // Grid frissítése
-            ABFeltöltése();
-            email_tabla.DataSource = EmailAdatTábla;
-            email_tabla.Refresh();
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
         private void Email_tabla_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
@@ -2113,6 +2134,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         #endregion
 
 
