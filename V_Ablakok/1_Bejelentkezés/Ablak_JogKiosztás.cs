@@ -64,7 +64,7 @@ namespace Villamos
             AdatokJogosultságok = KézJogosultságok.Lista_Adatok();
             OldalFeltöltés();
             FelhasználóFeltöltés();
-            GombLathatosagKezelo.Beallit(this, "Főmérnökség");
+            GombLathatosagKezelo.Beallit(this, Program.PostásTelephely);
         }
 
 

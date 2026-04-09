@@ -418,7 +418,7 @@ namespace Villamos
         {
             bool válasz = false;
 
-            //  if (CmbTelephely.Text == "Angyalföld") válasz = true;
+            if (CmbTelephely.Text == "Angyalföld") válasz = true;
 
             return válasz;
         }
