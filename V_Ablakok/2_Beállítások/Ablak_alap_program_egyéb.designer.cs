@@ -118,6 +118,7 @@ namespace Villamos
             this.LLabel1 = new System.Windows.Forms.Label();
             this.Kötbér_takarítási_fajta = new System.Windows.Forms.ComboBox();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
+            this.Takarítócég = new System.Windows.Forms.Button();
             this.Tak_Ár_frissít = new System.Windows.Forms.Button();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.Szűr_Fajta = new System.Windows.Forms.ComboBox();
@@ -151,12 +152,11 @@ namespace Villamos
             this.Label5 = new System.Windows.Forms.Label();
             this.Tak_Ár_Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.email_tabla = new Zuby.ADGV.AdvancedDataGridView();
             this.Button13 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
-            this.Takarítócég = new System.Windows.Forms.Button();
+            this.BtnEmailRögzít = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             this.Fülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -176,7 +176,6 @@ namespace Villamos
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tak_Ár_Tábla)).BeginInit();
             this.tabPage5.SuspendLayout();
-            this.tableLayoutPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.email_tabla)).BeginInit();
             this.SuspendLayout();
             // 
@@ -1033,6 +1032,19 @@ namespace Villamos
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Takarítási árak";
             // 
+            // Takarítócég
+            // 
+            this.Takarítócég.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.Takarítócég.BackgroundImage = global::Villamos.Properties.Resources.Document_preferences;
+            this.Takarítócég.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Takarítócég.Location = new System.Drawing.Point(670, 20);
+            this.Takarítócég.Name = "Takarítócég";
+            this.Takarítócég.Size = new System.Drawing.Size(45, 45);
+            this.Takarítócég.TabIndex = 207;
+            this.toolTip1.SetToolTip(this.Takarítócég, "Takatítási cégadatok rögzítései/módosítása az adatokat");
+            this.Takarítócég.UseVisualStyleBackColor = true;
+            this.Takarítócég.Click += new System.EventHandler(this.Takarítócég_Click);
+            // 
             // Tak_Ár_frissít
             // 
             this.Tak_Ár_frissít.BackColor = System.Drawing.Color.LightSeaGreen;
@@ -1427,7 +1439,8 @@ namespace Villamos
             // tabPage5
             // 
             this.tabPage5.BackColor = System.Drawing.Color.SeaShell;
-            this.tabPage5.Controls.Add(this.tableLayoutPanel5);
+            this.tabPage5.Controls.Add(this.BtnEmailRögzít);
+            this.tabPage5.Controls.Add(this.email_tabla);
             this.tabPage5.Location = new System.Drawing.Point(4, 29);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
@@ -1435,33 +1448,18 @@ namespace Villamos
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "E-mail címek";
             // 
-            // tableLayoutPanel5
-            // 
-            this.tableLayoutPanel5.ColumnCount = 1;
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel5.Controls.Add(this.email_tabla, 0, 0);
-            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 1;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(1478, 483);
-            this.tableLayoutPanel5.TabIndex = 1;
-            // 
             // email_tabla
             // 
             this.email_tabla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.email_tabla.Dock = System.Windows.Forms.DockStyle.Fill;
             this.email_tabla.FilterAndSortEnabled = true;
             this.email_tabla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.email_tabla.Location = new System.Drawing.Point(3, 3);
+            this.email_tabla.Location = new System.Drawing.Point(6, 60);
             this.email_tabla.MaxFilterButtonImageHeight = 23;
             this.email_tabla.Name = "email_tabla";
             this.email_tabla.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.email_tabla.RowHeadersWidth = 51;
             this.email_tabla.RowTemplate.Height = 24;
-            this.email_tabla.Size = new System.Drawing.Size(1472, 477);
+            this.email_tabla.Size = new System.Drawing.Size(500, 200);
             this.email_tabla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.email_tabla.TabIndex = 0;
             this.email_tabla.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.Email_tabla_CellBeginEdit);
@@ -1495,18 +1493,17 @@ namespace Villamos
             this.Holtart.TabIndex = 1;
             this.Holtart.Visible = false;
             // 
-            // Takarítócég
+            // BtnEmailRögzít
             // 
-            this.Takarítócég.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.Takarítócég.BackgroundImage = global::Villamos.Properties.Resources.Document_preferences;
-            this.Takarítócég.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Takarítócég.Location = new System.Drawing.Point(670, 20);
-            this.Takarítócég.Name = "Takarítócég";
-            this.Takarítócég.Size = new System.Drawing.Size(45, 45);
-            this.Takarítócég.TabIndex = 207;
-            this.toolTip1.SetToolTip(this.Takarítócég, "Takatítási cégadatok rögzítései/módosítása az adatokat");
-            this.Takarítócég.UseVisualStyleBackColor = true;
-            this.Takarítócég.Click += new System.EventHandler(this.Takarítócég_Click);
+            this.BtnEmailRögzít.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.BtnEmailRögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.BtnEmailRögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnEmailRögzít.Location = new System.Drawing.Point(6, 6);
+            this.BtnEmailRögzít.Name = "BtnEmailRögzít";
+            this.BtnEmailRögzít.Size = new System.Drawing.Size(45, 45);
+            this.BtnEmailRögzít.TabIndex = 13;
+            this.toolTip1.SetToolTip(this.BtnEmailRögzít, "Rögzíti/módosítja az adatokat");
+            this.BtnEmailRögzít.UseVisualStyleBackColor = true;
             // 
             // Ablak_alap_program_egyéb
             // 
@@ -1552,7 +1549,6 @@ namespace Villamos
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tak_Ár_Tábla)).EndInit();
             this.tabPage5.ResumeLayout(false);
-            this.tableLayoutPanel5.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.email_tabla)).EndInit();
             this.ResumeLayout(false);
 
@@ -1660,8 +1656,8 @@ namespace Villamos
         internal Button SAPExcel;
         internal Button SAPFrissít;
         internal TabPage tabPage5;
-        private TableLayoutPanel tableLayoutPanel5;
         private Zuby.ADGV.AdvancedDataGridView email_tabla;
         internal Button Takarítócég;
+        internal Button BtnEmailRögzít;
     }                    
 }
