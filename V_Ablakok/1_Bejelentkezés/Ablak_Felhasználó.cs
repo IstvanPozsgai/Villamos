@@ -450,7 +450,7 @@ namespace Villamos
             {
                 if (!int.TryParse(UserId.Text, out int Id)) Id = 0;
                 if (Id == 0) throw new HibásBevittAdat("Kérem válasszon ki egy felhasználót a táblázatból!");
-                if (TxtPassword.Text.Trim() == "") TxtPassword.Text = "123456";
+                if (TxtPassword.Text.Trim() == "") TxtPassword.Text = "123456"; //Ha akarunk másfajta kezdőjelszót is be lehet állítani.
                 string jelszó = Jelszó.HashPassword(TxtPassword.Text.Trim());
                 Adat_Bejelentkezés_Users adat = new Adat_Bejelentkezés_Users(Id, jelszó, true);
                 Kéz.MódosításJeszó(adat);
