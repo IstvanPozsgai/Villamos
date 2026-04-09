@@ -454,6 +454,7 @@ namespace Villamos
                 string jelszó = Jelszó.HashPassword(TxtPassword.Text.Trim());
                 Adat_Bejelentkezés_Users adat = new Adat_Bejelentkezés_Users(Id, jelszó, true);
                 Kéz.MódosításJeszó(adat);
+                TáblázatListázás();
                 MessageBox.Show("A jeszó módosítása befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
