@@ -2762,11 +2762,23 @@ namespace Villamos
                         BUE = rekord.Budafok_engedély;
                         FEE = rekord.Ferencváros_engedély;
                     }
-                    // JAVÍTANDÓ:
-                    //Ha nincs engedélyezendő, vagy mindenütt elutasították, akkor nem csinál semmit
+
+                    //Ha nincs engedélyezendő, vagy mindenütt elutasították, akkor 
                     if ((HUE == 0 || HUE == 3) && (SZÁE == 0 || SZÁE == 3) && (ZUE == 0 || ZUE == 3) &&
                         (AFE == 0 || AFE == 3) && (BAE == 0 || BAE == 3) && (FOE == 0 || FOE == 3) && (SZIE == 0 || SZIE == 3) &&
-                        (KEE == 0 || KEE == 3) && (BUE == 0 || BUE == 3) && (FEE == 0 || FEE == 3)) continue;
+                        (KEE == 0 || KEE == 3) && (BUE == 0 || BUE == 3) && (FEE == 0 || FEE == 3))
+                    {
+                        if (CmbSzakszlista.Text.Trim() == CmbSzakszlista.Items[0].ToString())
+                        {
+                            //Nem engedjük engedélyezni mert nincs mit
+                            string név = Táblaszaksz.Rows[i].Cells[1].Value.ToStrTrim();
+                            string rendszám = Táblaszaksz.Rows[i].Cells[6].Value.ToStrTrim();
+                            MessageBox.Show($"{név} nevű dolgozó {rendszám} rendszámú engedélyét nem lehet engedélyezni.\n Vagy elutasítani kell, vagy a gondnoki elutasítást felülbírálni.",
+                                "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            continue;
+                        }
+
+                    }
 
                     Kéz_Behajtás.Módosítás_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), $"{darabol[0].Trim()}_engedély", int.Parse(CmbSzakszlista.Text.Substring(0, 1)), sorszám);
                     KézNapló.Rögzítés_Szakszolgálat(TxtAdminkönyvtár.Text.Trim(), TxtAmindFájl.Text.Trim(), $"{darabol[0].Trim()}_engedély", int.Parse(CmbSzakszlista.Text.Substring(0, 1)), sorszám);
