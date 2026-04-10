@@ -226,5 +226,34 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// A felhasználó kiválasztott ablakának törlése
+        /// </summary>
+        /// <param name="Adat"></param>
+        public void Törlés(Adat_Bejelentkezés_Jogosultságok Adat)
+        {
+            try
+            {
+                // SQL DELETE parancs az azonosító alapján
+                string szöveg = $"DELETE FROM {táblanév} WHERE UserId=@UserId AND OldalId=@OldalId";
+
+                SqliteCommand cmd = new SqliteCommand(szöveg);
+                cmd.Parameters.AddWithValue("@UserId", Adat.UserId);
+                cmd.Parameters.AddWithValue("@OldalId", Adat.OldalId);
+
+                // Meghívjuk a saját segédmetódusodat a végrehajtáshoz
+                MyA.SqLite_Módosítás(hely, jelszó, cmd);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

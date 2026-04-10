@@ -320,19 +320,23 @@ namespace Villamos
             }
         }
 
-
-
-        private void Btn_MindenMasol_Click(object sender, EventArgs e)
+        private void BtnAblakTörlés_Click(object sender, EventArgs e)
         {
-
             try
             {
                 if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon ki egy felhasználót!");
+                if (CmbAblakId.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva ablak!");
+                Adat_Bejelentkezés_Users ADAT = (from a in AdatokUsers
+                                                 where a.UserName == Felhasználók.Text.Trim()
+                                                 select a).FirstOrDefault();
+                Adat_Bejelentkezés_Jogosultságok Törlés = new Adat_Bejelentkezés_Jogosultságok(
+                             ADAT.UserId,
+                             CmbAblakId.Text.ToÉrt_Int(),
+                             0, 0, true);
+                KézJogosultságok.Törlés(Törlés);
 
-                Kezelő_Belépés_MindenMásol kezelo = new Kezelő_Belépés_MindenMásol();
-                kezelo.Másolás(Program.PostásTelephely, Felhasználók.Text);
                 TáblázatListázás();
-                MessageBox.Show("Másolás megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("A jogosultságok törlése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
             {
@@ -694,6 +698,5 @@ namespace Villamos
             }
         }
         #endregion
-
     }
 }
