@@ -102,7 +102,7 @@ namespace Villamos
             // 
             // GroupBox2
             // 
-            this.GroupBox2.BackColor = System.Drawing.Color.Coral;
+            this.GroupBox2.BackColor = System.Drawing.Color.Tan;
             this.GroupBox2.Controls.Add(this.pictureBox1);
             this.GroupBox2.Controls.Add(this.tableLayoutPanel2);
             this.GroupBox2.Controls.Add(this.tableLayoutPanel1);
