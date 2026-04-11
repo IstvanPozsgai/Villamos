@@ -52,8 +52,12 @@
             this.TxtRendelés = new System.Windows.Forms.TextBox();
             this.TxtMegjegyzés = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.Panel1 = new System.Windows.Forms.Panel();
+            this.Cmbtelephely = new System.Windows.Forms.ComboBox();
+            this.Label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
+            this.Panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Tábla
@@ -66,12 +70,12 @@
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla.FilterAndSortEnabled = true;
             this.Tábla.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
-            this.Tábla.Location = new System.Drawing.Point(12, 364);
+            this.Tábla.Location = new System.Drawing.Point(12, 402);
             this.Tábla.MaxFilterButtonImageHeight = 23;
             this.Tábla.Name = "Tábla";
             this.Tábla.ReadOnly = true;
             this.Tábla.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Tábla.Size = new System.Drawing.Size(1011, 316);
+            this.Tábla.Size = new System.Drawing.Size(1011, 331);
             this.Tábla.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.Tábla.TabIndex = 0;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
@@ -110,7 +114,7 @@
             // 
             this.CmbStátus.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.CmbStátus.FormattingEnabled = true;
-            this.CmbStátus.Location = new System.Drawing.Point(209, 236);
+            this.CmbStátus.Location = new System.Drawing.Point(209, 229);
             this.CmbStátus.Name = "CmbStátus";
             this.CmbStátus.Size = new System.Drawing.Size(187, 28);
             this.CmbStátus.TabIndex = 4;
@@ -196,7 +200,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(15, 286);
+            this.label9.Location = new System.Drawing.Point(15, 324);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(97, 20);
             this.label9.TabIndex = 13;
@@ -206,7 +210,7 @@
             // 
             this.BtnPDFFel.BackgroundImage = global::Villamos.Properties.Resources.pdf_32;
             this.BtnPDFFel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.BtnPDFFel.Location = new System.Drawing.Point(1030, 235);
+            this.BtnPDFFel.Location = new System.Drawing.Point(1030, 264);
             this.BtnPDFFel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.BtnPDFFel.Name = "BtnPDFFel";
             this.BtnPDFFel.Size = new System.Drawing.Size(45, 45);
@@ -246,7 +250,7 @@
             // 
             this.Btn_TTP_Rögz.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
             this.Btn_TTP_Rögz.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.Btn_TTP_Rögz.Location = new System.Drawing.Point(1030, 311);
+            this.Btn_TTP_Rögz.Location = new System.Drawing.Point(1030, 326);
             this.Btn_TTP_Rögz.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Btn_TTP_Rögz.Name = "Btn_TTP_Rögz";
             this.Btn_TTP_Rögz.Size = new System.Drawing.Size(45, 45);
@@ -271,7 +275,7 @@
             // 
             this.CmbAzonosító.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.CmbAzonosító.FormattingEnabled = true;
-            this.CmbAzonosító.Location = new System.Drawing.Point(209, 26);
+            this.CmbAzonosító.Location = new System.Drawing.Point(209, 19);
             this.CmbAzonosító.Name = "CmbAzonosító";
             this.CmbAzonosító.Size = new System.Drawing.Size(187, 28);
             this.CmbAzonosító.TabIndex = 14;
@@ -313,7 +317,7 @@
             // 
             // TxtMegjegyzés
             // 
-            this.TxtMegjegyzés.Location = new System.Drawing.Point(221, 288);
+            this.TxtMegjegyzés.Location = new System.Drawing.Point(221, 326);
             this.TxtMegjegyzés.MaxLength = 255;
             this.TxtMegjegyzés.Multiline = true;
             this.TxtMegjegyzés.Name = "TxtMegjegyzés";
@@ -348,7 +352,7 @@
             this.tableLayoutPanel1.Controls.Add(this.DtTTPDátum, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.ChkTTPJavítás, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.BtnExcel, 4, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 49);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 8;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
@@ -362,11 +366,38 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1011, 271);
             this.tableLayoutPanel1.TabIndex = 75;
             // 
+            // Panel1
+            // 
+            this.Panel1.Controls.Add(this.Cmbtelephely);
+            this.Panel1.Controls.Add(this.Label13);
+            this.Panel1.Location = new System.Drawing.Point(12, 12);
+            this.Panel1.Name = "Panel1";
+            this.Panel1.Size = new System.Drawing.Size(373, 33);
+            this.Panel1.TabIndex = 120;
+            // 
+            // Cmbtelephely
+            // 
+            this.Cmbtelephely.FormattingEnabled = true;
+            this.Cmbtelephely.Location = new System.Drawing.Point(175, 2);
+            this.Cmbtelephely.Name = "Cmbtelephely";
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
+            this.Cmbtelephely.TabIndex = 18;
+            // 
+            // Label13
+            // 
+            this.Label13.AutoSize = true;
+            this.Label13.Location = new System.Drawing.Point(12, 5);
+            this.Label13.Name = "Label13";
+            this.Label13.Size = new System.Drawing.Size(145, 20);
+            this.Label13.TabIndex = 17;
+            this.Label13.Text = "Telephelyi beállítás:";
+            // 
             // Ablak_TTP_Történet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1088, 692);
+            this.ClientSize = new System.Drawing.Size(1088, 745);
+            this.Controls.Add(this.Panel1);
             this.Controls.Add(this.BtnPDFFel);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.Btn_TTP_Rögz);
@@ -383,6 +414,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.Panel1.ResumeLayout(false);
+            this.Panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -418,5 +451,8 @@
         internal System.Windows.Forms.Button PDFNéz;
         internal System.Windows.Forms.Button BtnExcel;
         private System.ComponentModel.IContainer components;
+        internal System.Windows.Forms.Panel Panel1;
+        internal System.Windows.Forms.ComboBox Cmbtelephely;
+        internal System.Windows.Forms.Label Label13;
     }
 }
