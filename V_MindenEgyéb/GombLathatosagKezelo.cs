@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos;
 using Villamos.Adatszerkezet;
+using Villamos.Kezelõk;
 
 
 public static class GombLathatosagKezelo
@@ -19,6 +20,7 @@ public static class GombLathatosagKezelo
 
         GombokÁltalános(form, gombok);
         GombokSzemélyes(form, gombok, Telephely);
+        GombokSúgó(form, gombok);
     }
 
     /// <summary>
@@ -177,55 +179,6 @@ public static class GombLathatosagKezelo
     }
 
 
-    public static bool EgyGomb(Form form, string GombNév, string GombFelirat, string Telephely = "")
-    {
-        bool válasz = false;
-        try
-        {
-            int TelephelyID = 0;
-            Adat_Kiegészítõ_Könyvtár TelephelyAdat = (from a in Program.PostásKönyvtár
-                                                      where a.Név == Telephely
-                                                      select a).FirstOrDefault();
-            if (TelephelyAdat != null) TelephelyID = TelephelyAdat.ID;
-
-            // Lekérjük az aktuális oldal ID-ját
-            Adat_Belépés_Oldalak AdatOldal = Program.PostásOldalak.Where(o => o.FromName == form.Name).FirstOrDefault();
-            if (AdatOldal == null) return válasz;
-
-            // Lekérjük az adott ablakhoz tartozó gombokat az adatbázisból
-            List<Adat_Bejelentkezés_Gombok> gombok = Program.PostásGombok.Where(g => g.FormName == form.Name && !g.Törölt).ToList();
-
-            // ha a jogosultáság táblában van akkor van hozzá joga így láthatóvá tesszük a gombokat
-            Adat_Bejelentkezés_Gombok Egygomb = (from a in gombok
-                                                 where a.GombFelirat == GombFelirat
-                                                 && a.GombName == GombNév
-                                                 select a).FirstOrDefault();
-
-            if (Egygomb != null)
-            {
-
-                // Lekérjük az adott felhasználóhoz tartozó gombokat az adatbázisból
-                List<Adat_Bejelentkezés_Jogosultságok> jogosultságok = Program.PostásJogosultságok;
-                jogosultságok = (from j in jogosultságok
-                                 where j.UserId == Program.PostásNévId
-                                 && j.GombokId == Egygomb.GombokId
-                                 select j).ToList();
-
-                if (jogosultságok.Count > 0) válasz = true;
-            }
-        }
-        catch (HibásBevittAdat ex)
-        {
-            MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-        catch (Exception ex)
-        {
-            HibaNapló.Log(ex.Message, "EgyGomb", ex.StackTrace, ex.Source, ex.HResult);
-            MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-        return válasz;
-    }
-
     public static List<string> Telephelyek(string AblakNév)
     {
         List<string> Válasz = new List<string>();
@@ -301,6 +254,44 @@ public static class GombLathatosagKezelo
             MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         return Válasz;
+    }
+
+    /// <summary>
+    /// Bekapcsoljuk az oldalon a súgó gombot, ha nem lenne hozzá joga
+    /// </summary>
+    /// <param name="form"></param>
+    /// <param name="gombok"></param>
+    private static void GombokSúgó(Form form, List<Adat_Bejelentkezés_Gombok> gombok)
+    {
+        try
+        {
+
+            List<Adat_Bejelentkezés_Gombok> Adatok = new List<Adat_Bejelentkezés_Gombok>();
+            Adatok = (from a in Program.PostásGombok
+                      where a.Súgó
+                      && a.FormName == form.Name
+                      select a).ToList();
+            if (Adatok != null && Adatok.Count > 0)
+            {
+                foreach (Adat_Bejelentkezés_Gombok Elem in Adatok)
+                {
+                    // Megkeressük a gombot az ablak Controls gyûjteményében
+                    Control control = form.Controls.Find(Elem.GombName, true).FirstOrDefault();
+                    if (control is Button button) button.Visible = true;
+                }
+
+            }
+        }
+        catch (HibásBevittAdat ex)
+        {
+            MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, "GombokSúgó", ex.StackTrace, ex.Source, ex.HResult);
+            MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
     }
 
 }
