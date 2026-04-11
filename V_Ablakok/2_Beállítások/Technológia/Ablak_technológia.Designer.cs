@@ -127,6 +127,9 @@
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.Panel1 = new System.Windows.Forms.Panel();
+            this.Cmbtelephely = new System.Windows.Forms.ComboBox();
+            this.label24 = new System.Windows.Forms.Label();
             this.Fülek.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.GroupBox1.SuspendLayout();
@@ -139,6 +142,7 @@
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Ciklus_tábla)).BeginInit();
             this.groupBox2.SuspendLayout();
+            this.Panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Fülek
@@ -1177,11 +1181,38 @@
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(373, 9);
+            this.Holtart.Location = new System.Drawing.Point(373, 7);
             this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(975, 30);
+            this.Holtart.Size = new System.Drawing.Size(633, 30);
             this.Holtart.TabIndex = 193;
             this.Holtart.Visible = false;
+            // 
+            // Panel1
+            // 
+            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Panel1.Controls.Add(this.Cmbtelephely);
+            this.Panel1.Controls.Add(this.label24);
+            this.Panel1.Location = new System.Drawing.Point(1012, 9);
+            this.Panel1.Name = "Panel1";
+            this.Panel1.Size = new System.Drawing.Size(373, 33);
+            this.Panel1.TabIndex = 194;
+            // 
+            // Cmbtelephely
+            // 
+            this.Cmbtelephely.FormattingEnabled = true;
+            this.Cmbtelephely.Location = new System.Drawing.Point(175, 2);
+            this.Cmbtelephely.Name = "Cmbtelephely";
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
+            this.Cmbtelephely.TabIndex = 18;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(12, 5);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(145, 20);
+            this.label24.TabIndex = 17;
+            this.label24.Text = "Telephelyi beállítás:";
             // 
             // Ablak_technológia
             // 
@@ -1189,6 +1220,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSalmon;
             this.ClientSize = new System.Drawing.Size(1441, 508);
+            this.Controls.Add(this.Panel1);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Járműtípus);
@@ -1218,6 +1250,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.Ciklus_tábla)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.Panel1.ResumeLayout(false);
+            this.Panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1319,5 +1353,8 @@
         internal System.Windows.Forms.Label label23;
         internal System.Windows.Forms.Button CsoportosKezd;
         private System.Windows.Forms.DateTimePicker DátumKezd;
+        internal System.Windows.Forms.Panel Panel1;
+        internal System.Windows.Forms.ComboBox Cmbtelephely;
+        internal System.Windows.Forms.Label label24;
     }
 }
