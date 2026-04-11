@@ -2709,20 +2709,11 @@ namespace Villamos
             if (Chk_CTRL.Checked)
             {
                 Panel5.BackColor = Color.Green;
-                Command30.Visible = true;
                 Command30.Enabled = true;
             }
         }
 
-        private void Panel5_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (Chk_CTRL.Checked)
-            {
-                Panel5.BackColor = Color.Green;
-                Command30.Visible = true;
-                Command30.Enabled = true;
-            }
-        }
+
 
         private void Command30_Click(object sender, EventArgs e)
         {

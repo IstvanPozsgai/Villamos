@@ -1445,7 +1445,6 @@ namespace Villamos
             this.Panel5.Size = new System.Drawing.Size(50, 50);
             this.Panel5.TabIndex = 108;
             this.Panel5.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Panel5_MouseClick);
-            this.Panel5.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Panel5_MouseMove);
             // 
             // Command30
             // 
