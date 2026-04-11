@@ -37,6 +37,7 @@ public static class GombLathatosagKezelo
         GombokSzemélyes(form, gombok, MenüId, Telephely);
     }
 
+
     /// <summary>
     /// Kikapcsoljuk az ablakon található gombokat, ha a gombok adatbázisban megtalálhatóak, így nem lesznek láthatóak.
     /// </summary>
@@ -66,6 +67,7 @@ public static class GombLathatosagKezelo
             MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
+
 
     /// <summary>
     /// Visszakapcsoljuk a gombokat, ha a felhasználónak van jogosultsága az adott gombhoz, az adott telephelyen.
@@ -121,6 +123,7 @@ public static class GombLathatosagKezelo
             MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
+
 
     /// <summary>
     /// Visszakapcsoljuk a gombokat, ha a felhasználónak van jogosultsága az adott gombhoz, az adott telephelyen.
@@ -218,6 +221,7 @@ public static class GombLathatosagKezelo
         return Válasz;
     }
 
+
     /// <summary>
     ///      Szerszám/Helyiség-hez
     /// </summary>
@@ -255,6 +259,7 @@ public static class GombLathatosagKezelo
         }
         return Válasz;
     }
+
 
     /// <summary>
     /// Bekapcsoljuk az oldalon a súgó gombot, ha nem lenne hozzá joga

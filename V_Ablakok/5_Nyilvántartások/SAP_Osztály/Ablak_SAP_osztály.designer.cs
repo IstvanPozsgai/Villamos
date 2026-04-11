@@ -51,6 +51,7 @@ namespace Villamos
             this.Label1 = new System.Windows.Forms.Label();
             this.Tábla = new System.Windows.Forms.DataGridView();
             this.TabPage2 = new System.Windows.Forms.TabPage();
+            this.Értelmes = new System.Windows.Forms.CheckBox();
             this.LekérdezFajta = new System.Windows.Forms.Button();
             this.Excel = new System.Windows.Forms.Button();
             this.LekérdezRészletes = new System.Windows.Forms.Button();
@@ -60,12 +61,15 @@ namespace Villamos
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Súgó = new System.Windows.Forms.Button();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
-            this.Értelmes = new System.Windows.Forms.CheckBox();
+            this.Panel1 = new System.Windows.Forms.Panel();
+            this.Cmbtelephely = new System.Windows.Forms.ComboBox();
+            this.Label13 = new System.Windows.Forms.Label();
             this.Lapfülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.TabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).BeginInit();
+            this.Panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Lapfülek
@@ -197,6 +201,16 @@ namespace Villamos
             this.TabPage2.TabIndex = 1;
             this.TabPage2.Text = "Lekérdezések";
             // 
+            // Értelmes
+            // 
+            this.Értelmes.AutoSize = true;
+            this.Értelmes.Location = new System.Drawing.Point(5, 10);
+            this.Értelmes.Name = "Értelmes";
+            this.Értelmes.Size = new System.Drawing.Size(218, 24);
+            this.Értelmes.TabIndex = 122;
+            this.Értelmes.Text = "Minden adat megjelenítése";
+            this.Értelmes.UseVisualStyleBackColor = true;
+            // 
             // LekérdezFajta
             // 
             this.LekérdezFajta.BackColor = System.Drawing.Color.DarkCyan;
@@ -317,27 +331,45 @@ namespace Villamos
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(15, 15);
+            this.Holtart.Location = new System.Drawing.Point(479, 15);
             this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(795, 30);
+            this.Holtart.Size = new System.Drawing.Size(331, 30);
             this.Holtart.TabIndex = 118;
             this.Holtart.Visible = false;
             // 
-            // Értelmes
+            // Panel1
             // 
-            this.Értelmes.AutoSize = true;
-            this.Értelmes.Location = new System.Drawing.Point(5, 10);
-            this.Értelmes.Name = "Értelmes";
-            this.Értelmes.Size = new System.Drawing.Size(218, 24);
-            this.Értelmes.TabIndex = 122;
-            this.Értelmes.Text = "Minden adat megjelenítése";
-            this.Értelmes.UseVisualStyleBackColor = true;
+            this.Panel1.Controls.Add(this.Cmbtelephely);
+            this.Panel1.Controls.Add(this.Label13);
+            this.Panel1.Location = new System.Drawing.Point(3, 3);
+            this.Panel1.Name = "Panel1";
+            this.Panel1.Size = new System.Drawing.Size(373, 33);
+            this.Panel1.TabIndex = 119;
+            // 
+            // Cmbtelephely
+            // 
+            this.Cmbtelephely.FormattingEnabled = true;
+            this.Cmbtelephely.Location = new System.Drawing.Point(175, 2);
+            this.Cmbtelephely.Name = "Cmbtelephely";
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
+            this.Cmbtelephely.TabIndex = 18;
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
+            // 
+            // Label13
+            // 
+            this.Label13.AutoSize = true;
+            this.Label13.Location = new System.Drawing.Point(12, 5);
+            this.Label13.Name = "Label13";
+            this.Label13.Size = new System.Drawing.Size(145, 20);
+            this.Label13.TabIndex = 17;
+            this.Label13.Text = "Telephelyi beállítás:";
             // 
             // Ablak_SAP_osztály
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(867, 446);
+            this.Controls.Add(this.Panel1);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.Lapfülek);
             this.Controls.Add(this.Súgó);
@@ -356,6 +388,8 @@ namespace Villamos
             this.TabPage2.ResumeLayout(false);
             this.TabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla1)).EndInit();
+            this.Panel1.ResumeLayout(false);
+            this.Panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -378,5 +412,8 @@ namespace Villamos
         internal ToolTip ToolTip1;
         internal V_MindenEgyéb.MyProgressbar Holtart;
         private CheckBox Értelmes;
+        internal Panel Panel1;
+        internal ComboBox Cmbtelephely;
+        internal Label Label13;
     }
 }
