@@ -134,6 +134,11 @@ namespace Villamos
                 Fülekkitöltése();
 
                 Refresh();
+
+                //Beállítjuk a dátumválasztó minimum és maximum értékét, hogy feleslegesen ne hozzon létre adatokat a napló listázásnál
+                Mozg_Dátum.MinDate = new DateTime(2017, 1, 1);
+                Mozg_Dátum.MaxDate = DateTime.Today;
+
                 Visible = true;
 
             }

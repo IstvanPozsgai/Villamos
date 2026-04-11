@@ -88,7 +88,6 @@ namespace Villamos.Kezelők
             return Adatok;
         }
 
-
         public void Módosítás(int Év, List<Adat_Jármű_Napló> Adatok)
         {
             try
