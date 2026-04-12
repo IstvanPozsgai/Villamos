@@ -586,6 +586,7 @@
     <Compile Include="V_Input_Forms\InputTextbox.cs" />
     <Compile Include="V_Input_Forms\InputTime.cs" />
     <Compile Include="SqL_Kezelők\1_Bejelentkezés\SQL_Kezelő_Bejelentkezés_Fordító.cs" />
+    <Compile Include="SqL_Kezelők\1_Bejelentkezés\SQL_Kezelő_Belépés_Verzió.cs" />
     <Compile Include="V_Kezelők\Kérdésesek\Kezelő_AnyagTörzs.cs" />
     <Compile Include="SqL_Kezelők\Sql_Kezelő_Áttöltés.cs" />
     <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Belépés_MindenMásol.cs" />
