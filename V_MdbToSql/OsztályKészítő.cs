@@ -18,10 +18,25 @@ namespace Villamos
 
         public void OsztályKészítés()
         {
+            Konstruktor();
             Táblalétrehozás();
             Lista_Adatok();
             Rögzítés();
+            ListaRögzítés();
             Módosítás();
+            ListaMódosítás();
+        }
+
+        private void Konstruktor()
+        {
+            string szöveg = "public SQL_Kezelő_Belépés_Verzió()\n";
+            szöveg += "   {\n";
+            szöveg += "       if (!File.Exists(hely)) Tábla_Létrehozás();\n";
+            szöveg += "       if (!MyA.SqLite_ABvanTábla(hely, jelszó, táblanév)) Tábla_Létrehozás();\n";
+            szöveg += "   }\n\n";
+
+
+            File.AppendAllText(Fájlnév, szöveg);
         }
 
         private void Módosítás()
@@ -52,7 +67,74 @@ namespace Villamos
             File.AppendAllText(Fájlnév, szöveg);
         }
 
+        private void ListaMódosítás()
+        {
+            // Típus lekérése név alapján
+            Type tipus = Type.GetType($"Villamos.Adatszerkezet.{Osztály}");
+
+            // Innen már ugyanúgy megy, mint eddig
+            List<string> propertyk = tipus.GetProperties().Select(p => p.Name).ToList();
+
+            string szöveg = $"\n\n   public void Módosítás({Osztály} Adat)\n";
+            szöveg += "   {\r\n       try\r\n       {\r\n";
+            szöveg += "           FájlBeállítás(Telephely, Év);\n";
+            szöveg += "           string szöveg = $\"UPDATE {táblanév} SET \";\n";
+            for (int i = 0; i < propertyk.Count; i++)
+            {
+                szöveg += $"           szöveg += $@\"{propertyk[i]}=@{propertyk[i]}, \";\n";
+            }
+            szöveg += "\n           szöveg += $@\"WHERE id=@Id;\";\n\n";
+            szöveg += "           SqliteCommand cmd = new SqliteCommand(szöveg);\n\n";
+            for (int i = 0; i < propertyk.Count; i++)
+            {
+                szöveg += $"           cmd.Parameters.AddWithValue(\"@{propertyk[i]}\", Adat.{propertyk[i]});\n";
+            }
+            szöveg += "\n           MyA.SqLite_Módosítás(hely, jelszó, cmd);";
+            szöveg += "\n       }\r\n       catch (HibásBevittAdat ex)\r\n       {\r\n           MessageBox.Show(ex.Message, \"Információ\", MessageBoxButtons.OK, MessageBoxIcon.Information);\r\n       }\r\n       catch (Exception ex)\r\n       {\r\n           HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);\r\n           MessageBox.Show(ex.Message + \"\\n\\n a hiba naplózásra került.\", \"A program hibára futott\", MessageBoxButtons.OK, MessageBoxIcon.Error);\r\n       }\r\n   }";
+            szöveg += "\r\n\r\n\r\n\r\n\r\n";
+            File.AppendAllText(Fájlnév, szöveg);
+        }
+
         private void Rögzítés()
+        {
+            // Típus lekérése név alapján
+            Type tipus = Type.GetType($"Villamos.Adatszerkezet.{Osztály}");
+
+            // Innen már ugyanúgy megy, mint eddig
+            List<string> propertyk = tipus.GetProperties().Select(p => p.Name).ToList();
+
+            string szöveg = $"\n\n   public void Rögzítés(string Telephely, int Év, {Osztály} Adat)\n";
+            szöveg += "   {\r\n       try\r\n       {\r\n";
+            szöveg += "           FájlBeállítás(Telephely, Év);\n";
+            szöveg += $"           string szöveg = $\"INSERT INTO {{táblanév}} (";
+
+            for (int i = 0; i < propertyk.Count; i++)
+            {
+                if (i != 0) szöveg += ", ";
+                szöveg += $"{propertyk[i]}";
+            }
+            szöveg += ") VALUES \";\n";
+            szöveg += "           szöveg += $@\"(";
+            for (int i = 0; i < propertyk.Count; i++)
+            {
+                if (i != 0) szöveg += ", ";
+                szöveg += $"@{propertyk[i]}";
+            }
+            szöveg += ")\"; \n\n\n";
+            szöveg += "           SqliteCommand cmd = new SqliteCommand(szöveg);\n";
+
+            for (int i = 0; i < propertyk.Count; i++)
+            {
+                szöveg += $"           cmd.Parameters.AddWithValue(\"@{propertyk[i]}\", Adat.{propertyk[i]});\n";
+            }
+
+            szöveg += "\n           MyA.SqLite_Módosítás(hely, jelszó, cmd);";
+            szöveg += "\n       }\r\n       catch (HibásBevittAdat ex)\r\n       {\r\n           MessageBox.Show(ex.Message, \"Információ\", MessageBoxButtons.OK, MessageBoxIcon.Information);\r\n       }\r\n       catch (Exception ex)\r\n       {\r\n           HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);\r\n           MessageBox.Show(ex.Message + \"\\n\\n a hiba naplózásra került.\", \"A program hibára futott\", MessageBoxButtons.OK, MessageBoxIcon.Error);\r\n       }\r\n   }";
+            szöveg += "\r\n\r\n\r\n\r\n\r\n";
+            File.AppendAllText(Fájlnév, szöveg);
+        }
+
+        private void ListaRögzítés()
         {
             // Típus lekérése név alapján
             Type tipus = Type.GetType($"Villamos.Adatszerkezet.{Osztály}");
