@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Villamos;
 using Villamos.Adatszerkezet;
-using Villamos.Kezelõk;
 
 
 public static class GombLathatosagKezelo
@@ -20,7 +19,7 @@ public static class GombLathatosagKezelo
 
         GombokÁltalános(form, gombok);
         GombokSzemélyes(form, gombok, Telephely);
-        GombokSúgó(form, gombok);
+        GombokSúgó(form);
     }
 
     /// <summary>
@@ -266,7 +265,7 @@ public static class GombLathatosagKezelo
     /// </summary>
     /// <param name="form"></param>
     /// <param name="gombok"></param>
-    private static void GombokSúgó(Form form, List<Adat_Bejelentkezés_Gombok> gombok)
+    private static void GombokSúgó(Form form)
     {
         try
         {
@@ -299,4 +298,54 @@ public static class GombLathatosagKezelo
 
     }
 
+    public static bool Lekérdez(Form form, string Telephely, string GombNév)
+    {
+        bool válasz = false;
+        try
+        {
+            // Lekérjük az adott ablakhoz tartozó gombokat az adatbázisból
+            List<Adat_Bejelentkezés_Gombok> gombok = Program.PostásGombok.Where(g => g.FormName == form.Name && !g.Törölt).ToList();
+            if (gombok != null && gombok.Count > 0)
+            {
+                Adat_Bejelentkezés_Gombok gomb = (from a in gombok
+                                                  where a.GombName == GombNév
+                                                  select a).FirstOrDefault();
+                if (gomb == null) return válasz;
+
+                int TelephelyID = 0;
+                Adat_Kiegészítõ_Könyvtár TelephelyAdat = (from a in Program.PostásKönyvtár
+                                                          where a.Név == Telephely
+                                                          select a).FirstOrDefault();
+                if (TelephelyAdat != null) TelephelyID = TelephelyAdat.ID;
+
+                // Lekérjük az aktuális oldal ID-ját
+                Adat_Belépés_Oldalak AdatOldal = Program.PostásOldalak.Where(o => o.FromName == form.Name).FirstOrDefault();
+                if (AdatOldal == null) return válasz;
+
+                // Lekérjük az adott felhasználóhoz tartozó gombokat az adatbázisból
+                List<Adat_Bejelentkezés_Jogosultságok> jogosultságok = Program.PostásJogosultságok;
+                jogosultságok = (from j in jogosultságok
+                                 where j.UserId == Program.PostásNévId
+                                 && !j.Törölt
+                                 && j.SzervezetId == TelephelyID
+                                 && j.OldalId == AdatOldal.OldalId
+                                 && j.GombokId == gomb.GombokId 
+                                 select j).ToList();
+                if (jogosultságok != null) 
+                {
+                    válasz = true;
+                }
+            }
+        }
+        catch (HibásBevittAdat ex)
+        {
+            MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, "Lekérdez", ex.StackTrace, ex.Source, ex.HResult);
+            MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        return válasz;
+    }
 }

@@ -63,15 +63,15 @@ namespace Villamos
 
         private void GombokJog()
         {
-            AlapRögzít = Alap_Rögzít.Visible;
-            CégekEng = Cégek_engedélyezésre.Visible;
-            DolgRögzít = Dolg_Rögzít.Visible;
-            DolgTöröl = Dolgozó_töröl.Visible;
-            DolgBeo = Dolgozó_beolvas.Visible;
-            AutóOk = Autó_ok.Visible;
-            AutóTöröl = Autó_töröl.Visible;
-            AutóBeo = Autó_beolvas.Visible;
-            TelephelyRögzít = Telephely_rögzít.Visible;
+            AlapRögzít = GombLathatosagKezelo.Lekérdez(this, Cmbtelephely.Text.Trim(), "Alap_Rögzít");
+            CégekEng = GombLathatosagKezelo.Lekérdez(this, Cmbtelephely.Text.Trim(), "Cégek_engedélyezésre");
+            DolgRögzít = GombLathatosagKezelo.Lekérdez(this, Cmbtelephely.Text.Trim(), "Dolg_Rögzít");
+            DolgTöröl = GombLathatosagKezelo.Lekérdez(this, Cmbtelephely.Text.Trim(), "Dolgozó_töröl");
+            DolgBeo = GombLathatosagKezelo.Lekérdez(this, Cmbtelephely.Text.Trim(), "Dolgozó_beolvas");
+            AutóOk = GombLathatosagKezelo.Lekérdez(this, Cmbtelephely.Text.Trim(), "Autó_ok");
+            AutóTöröl = GombLathatosagKezelo.Lekérdez(this, Cmbtelephely.Text.Trim(), "Autó_töröl");
+            AutóBeo = GombLathatosagKezelo.Lekérdez(this, Cmbtelephely.Text.Trim(), "Autó_beolvas");
+            TelephelyRögzít = GombLathatosagKezelo.Lekérdez(this, Cmbtelephely.Text.Trim(), "Telephely_rögzít");
         }
 
         private void GombokIgen()
@@ -768,7 +768,7 @@ namespace Villamos
             Dolgozó_beolvas.Visible = false;
             Autó_beolvas.Visible = false;
 
-            if (Cmbtelephely.Enabled == true || Cmbtelephely.Enabled == false && Rádió_főmérnök == false && (Telephely_választott.Trim() == Cmbtelephely.Text.Trim()))
+            if (Rádió_főmérnök == false && (Telephely_választott.Trim() == Cmbtelephely.Text.Trim()))
             {
                 Telephely_rögzít.Visible = TelephelyRögzít;
                 Alap_Rögzít.Visible = AlapRögzít;
