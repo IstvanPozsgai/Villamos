@@ -17,7 +17,7 @@ namespace Villamos
         readonly Kezelő_Belépés_Jogosultságtábla Kéz_Jogosultság = new Kezelő_Belépés_Jogosultságtábla();
         readonly Kezelő_Belépés_Bejelentkezés Kéz_Bejelentkezés = new Kezelő_Belépés_Bejelentkezés();
         readonly Kezelő_Kiegészítő_Könyvtár KézKönyvtár = new Kezelő_Kiegészítő_Könyvtár();
-        readonly Kezelő_Belépés_Verzió KézVerzió = new Kezelő_Belépés_Verzió();
+        readonly SQL_Kezelő_Belépés_Verzió KézVerzió = new SQL_Kezelő_Belépés_Verzió();
         readonly Kezelő_Belépés_WinTábla KézWin = new Kezelő_Belépés_WinTábla();
 
         List<Adat_Belépés_Jogosultságtábla> AdatokJogosultságTelephely = new List<Adat_Belépés_Jogosultságtábla>();

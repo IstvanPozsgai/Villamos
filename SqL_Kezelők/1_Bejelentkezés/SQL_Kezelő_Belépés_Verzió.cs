@@ -50,7 +50,7 @@ namespace Villamos.Kezelők
             try
             {
                 Adatok = MyA.Lista_Adatok(hely, jelszó, táblanév, rekord => new Adat_Belépés_Verzió(
-                                  rekord["id"].ToÉrt_Int(),
+                                  rekord["id"].ToÉrt_Long(),
                                   rekord["Verzió"].ToÉrt_Double()));
             }
             catch (HibásBevittAdat ex)

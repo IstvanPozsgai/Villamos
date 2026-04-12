@@ -40,7 +40,7 @@ namespace Villamos
 
 
         readonly Kezelő_Üzenet Kéz_Üzenet = new Kezelő_Üzenet();
-        readonly Kezelő_Belépés_Verzió Kéz_Belépés_Verzió = new Kezelő_Belépés_Verzió();
+        readonly SQL_Kezelő_Belépés_Verzió Kéz_Belépés_Verzió = new SQL_Kezelő_Belépés_Verzió();
         readonly Kezelő_Kiegészítő_Könyvtár KézKönyvtár = new Kezelő_Kiegészítő_Könyvtár();
         readonly Kezelő_Jármű_Napló KézNapló = new Kezelő_Jármű_Napló();
         readonly Kezelő_Utasítás KézUtasítás = new Kezelő_Utasítás();

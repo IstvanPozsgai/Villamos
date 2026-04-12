@@ -18,7 +18,7 @@ namespace Villamos
         readonly SQL_Kezelő_Belépés_Gombok KézGombok = new SQL_Kezelő_Belépés_Gombok();
         readonly SQL_Kezelő_Belépés_Oldalak KézOldal = new SQL_Kezelő_Belépés_Oldalak();
 
-        readonly Kezelő_Belépés_Verzió KézVerzió = new Kezelő_Belépés_Verzió();
+        readonly SQL_Kezelő_Belépés_Verzió KézVerzió = new SQL_Kezelő_Belépés_Verzió();
         readonly Kezelő_Kiegészítő_Könyvtár KézKönyvtár = new Kezelő_Kiegészítő_Könyvtár();
 
         List<Adat_Bejelentkezés_Users> Adatok = new List<Adat_Bejelentkezés_Users>();
