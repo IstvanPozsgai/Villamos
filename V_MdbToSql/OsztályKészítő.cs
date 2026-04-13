@@ -29,11 +29,11 @@ namespace Villamos
 
         private void Konstruktor()
         {
-            string szöveg = $"   public SQL_Kezelő_{Osztály.Replace("Adat_", "")}()\n";
-            szöveg += "   {\n";
-            szöveg += "       if (!File.Exists(hely)) Tábla_Létrehozás();\n";
-            szöveg += "       if (!MyA.SqLite_ABvanTábla(hely, jelszó, táblanév)) Tábla_Létrehozás();\n";
-            szöveg += "   }\n\n";
+            string szöveg = $"        public SQL_Kezelő_{Osztály.Replace("Adat_", "")}()\n";
+            szöveg += "        {\n";
+            szöveg += "           if (!File.Exists(hely)) Tábla_Létrehozás();\n";
+            szöveg += "           if (!MyA.SqLite_ABvanTábla(hely, jelszó, táblanév)) Tábla_Létrehozás();\n";
+            szöveg += "        }\n\n";
 
 
             File.AppendAllText(Fájlnév, szöveg);
@@ -74,9 +74,10 @@ namespace Villamos
 
             // Innen már ugyanúgy megy, mint eddig
             List<string> propertyk = tipus.GetProperties().Select(p => p.Name).ToList();
-
-            string szöveg = $"\n\n   public void Módosítás({Osztály} Adat)\n";
+            string szöveg = $"//Ellenőrizendő";
+            szöveg += $"\n\n   public void Módosítás(List<{Osztály}> Adatok)\n";
             szöveg += "   {\r\n       try\r\n       {\r\n";
+            szöveg += $"           List<SqliteCommand> parancsLista = new List<SqliteCommand>();\n";
             szöveg += "           FájlBeállítás(Telephely, Év);\n";
             szöveg += "           string szöveg = $\"UPDATE {táblanév} SET \";\n";
             for (int i = 0; i < propertyk.Count; i++)
@@ -84,12 +85,16 @@ namespace Villamos
                 szöveg += $"           szöveg += $@\"{propertyk[i]}=@{propertyk[i]}, \";\n";
             }
             szöveg += "\n           szöveg += $@\"WHERE id=@Id;\";\n\n";
-            szöveg += "           SqliteCommand cmd = new SqliteCommand(szöveg);\n\n";
+            szöveg += "\n                foreach (var adat in Adatok)\n";
+            szöveg += "                  {\n";
+            szöveg += "                     SqliteCommand cmd = new SqliteCommand(szöveg);\n\n";
             for (int i = 0; i < propertyk.Count; i++)
             {
-                szöveg += $"           cmd.Parameters.AddWithValue(\"@{propertyk[i]}\", Adat.{propertyk[i]});\n";
+                szöveg += $"                     cmd.Parameters.AddWithValue(\"@{propertyk[i]}\", Adat.{propertyk[i]});\n";
             }
-            szöveg += "\n           MyA.SqLite_Módosítás(hely, jelszó, cmd);";
+            szöveg += "\n                     parancsLista.Add(cmd);\n";
+            szöveg += "                  }\n";
+            szöveg += "                MyA.SqLite_Módosítások(hely, jelszó, parancsLista);";
             szöveg += "\n       }\r\n       catch (HibásBevittAdat ex)\r\n       {\r\n           MessageBox.Show(ex.Message, \"Információ\", MessageBoxButtons.OK, MessageBoxIcon.Information);\r\n       }\r\n       catch (Exception ex)\r\n       {\r\n           HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);\r\n           MessageBox.Show(ex.Message + \"\\n\\n a hiba naplózásra került.\", \"A program hibára futott\", MessageBoxButtons.OK, MessageBoxIcon.Error);\r\n       }\r\n   }";
             szöveg += "\r\n\r\n\r\n\r\n\r\n";
             File.AppendAllText(Fájlnév, szöveg);
@@ -141,12 +146,12 @@ namespace Villamos
 
             // Innen már ugyanúgy megy, mint eddig
             List<string> propertyk = tipus.GetProperties().Select(p => p.Name).ToList();
-
-            string szöveg = $"\n\n   public void Rögzítés(string Telephely, int Év, List<{Osztály}> Adatok)\n";
+            string szöveg = $"//Ellenőrizendő";
+            szöveg += $"\n\n   public void Rögzítés(string Telephely, int Év, List<{Osztály}> Adatok)\n";
             szöveg += "   {\r\n       try\r\n       {\r\n";
-            szöveg += $"                List<SqliteCommand> parancsLista = new List<SqliteCommand>();";
-            szöveg += "           FájlBeállítás(Telephely, Év);\n";
-            szöveg += $"           string szöveg = $\"INSERT INTO {{táblanév}} (";
+            szöveg += $"                List<SqliteCommand> parancsLista = new List<SqliteCommand>();\n";
+            szöveg += "                FájlBeállítás(Telephely, Év);\n";
+            szöveg += $"                string szöveg = $\"INSERT INTO {{táblanév}} (";
 
             for (int i = 0; i < propertyk.Count; i++)
             {
@@ -154,7 +159,7 @@ namespace Villamos
                 szöveg += $"{propertyk[i]}";
             }
             szöveg += ") VALUES \";\n";
-            szöveg += "           szöveg += $@\"(";
+            szöveg += "                szöveg += $@\"(";
             for (int i = 0; i < propertyk.Count; i++)
             {
                 if (i != 0) szöveg += ", ";
@@ -164,16 +169,16 @@ namespace Villamos
 
             szöveg += "\n                foreach (var adat in Adatok)\n";
             szöveg += "                {\n";
-            szöveg += "           SqliteCommand cmd = new SqliteCommand(szöveg);\n";
+            szöveg += "                   SqliteCommand cmd = new SqliteCommand(szöveg);\n";
 
             for (int i = 0; i < propertyk.Count; i++)
             {
-                szöveg += $"           cmd.Parameters.AddWithValue(\"@{propertyk[i]}\", Adat.{propertyk[i]});\n";
+                szöveg += $"                   cmd.Parameters.AddWithValue(\"@{propertyk[i]}\", Adat.{propertyk[i]});\n";
             }
 
             szöveg += "                    parancsLista.Add(cmd);\n";
             szöveg += "                }\n";
-            szöveg += "                MyA.SqLite_Módosítások(hely, jelszó, parancsLista);\n";
+            szöveg += "                MyA.SqLite_Módosítások(hely, jelszó, parancsLista);";
             szöveg += "\n       }\r\n       catch (HibásBevittAdat ex)\r\n       {\r\n           MessageBox.Show(ex.Message, \"Információ\", MessageBoxButtons.OK, MessageBoxIcon.Information);\r\n       }\r\n       catch (Exception ex)\r\n       {\r\n           HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);\r\n           MessageBox.Show(ex.Message + \"\\n\\n a hiba naplózásra került.\", \"A program hibára futott\", MessageBoxButtons.OK, MessageBoxIcon.Error);\r\n       }\r\n   }";
             szöveg += "\r\n\r\n\r\n\r\n\r\n";
             File.AppendAllText(Fájlnév, szöveg);
