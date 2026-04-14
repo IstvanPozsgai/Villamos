@@ -5,8 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Villamos.Kezelők;
 using Villamos.Adatszerkezet;
+using Villamos.Kezelők;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -37,6 +37,9 @@ namespace Villamos.MindenEgyéb
                 List<Adat_Behajtás_Dolgozótábla> Adatok_behajt = KézDolgozó.Lista_Adatok();
                 MyX.ExcelMegnyitás(Excel_hely);
 
+                List<Adat_Behajtás_Dolgozótábla> AdatokRögzítés = new List<Adat_Behajtás_Dolgozótábla>();
+                List<Adat_Behajtás_Dolgozótábla> AdatokMódosítás = new List<Adat_Behajtás_Dolgozótábla>();
+
                 foreach (DataRow sor in Tábla.Rows)
                 {
                     // beolvassuk az adatokat
@@ -61,12 +64,15 @@ namespace Villamos.MindenEgyéb
                                                         munkakör.Trim(),
                                                         státus);
                         if (vane)
-                            KézDolgozó.Módosítás(ADAT);
+                            AdatokMódosítás .Add(ADAT);
                         else
-                            KézDolgozó.Rögzítés(ADAT);
+                            AdatokRögzítés.Add(ADAT);
                     }
 
                 }
+
+                if (AdatokRögzítés.Count > 0) KézDolgozó.Rögzítés(AdatokRögzítés);
+                if (AdatokMódosítás.Count > 0) KézDolgozó.Módosítás(AdatokMódosítás);
 
                 // az excel tábla bezárása
                 MyX.ExcelBezárás();

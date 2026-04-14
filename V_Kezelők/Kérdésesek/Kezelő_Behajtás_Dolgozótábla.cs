@@ -77,6 +77,36 @@ namespace Villamos.Kezelők
             }
         }
 
+        public void Módosítás(List<Adat_Behajtás_Dolgozótábla> Adatok)
+        {
+            try
+            {
+                List<string> Szövegek = new List<string>();
+
+                foreach (Adat_Behajtás_Dolgozótábla Adat in Adatok)
+                {
+                    string szöveg = $"UPDATE {táblanév} SET ";
+                    szöveg += $" Dolgozónév='{Adat.Dolgozónév}', ";
+                    szöveg += $" munkakör='{Adat.Munkakör}', ";
+                    szöveg += $" szervezetiegység='{Adat.Szervezetiegység}', ";
+                    szöveg += $" státus={Adat.Státus}";
+                    szöveg += $" WHERE Dolgozószám='{Adat.Dolgozószám}'";
+                    Szövegek.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, Szövegek);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void Rögzítés(Adat_Behajtás_Dolgozótábla Adat)
         {
             try
@@ -89,6 +119,37 @@ namespace Villamos.Kezelők
                 szöveg += $"{Adat.Státus}) ";
 
                 MyA.ABMódosítás(hely, jelszó, szöveg);
+
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        public void Rögzítés(List<Adat_Behajtás_Dolgozótábla> Adatok)
+        {
+            try
+            {
+                List<string> Szövegek = new List<string>();
+
+                foreach (Adat_Behajtás_Dolgozótábla Adat in Adatok)
+                {
+                    string szöveg = $"INSERT INTO {táblanév} ( Dolgozószám, Dolgozónév, munkakör, szervezetiegység, státus )  VALUES ( ";
+                    szöveg += $"'{Adat.Dolgozószám}', ";
+                    szöveg += $"'{Adat.Dolgozónév}', ";
+                    szöveg += $"'{Adat.Munkakör}', ";
+                    szöveg += $"'{Adat.Szervezetiegység}', ";
+                    szöveg += $"{Adat.Státus}) ";
+                    Szövegek.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, Szövegek);
 
             }
             catch (HibásBevittAdat ex)
