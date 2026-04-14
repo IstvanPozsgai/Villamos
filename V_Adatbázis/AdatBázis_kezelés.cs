@@ -30,7 +30,7 @@ namespace Villamos.Adatszerkezet
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, szöveg, ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, szöveg, ex.StackTrace, ex.Source, ex.HResult, $"hely: {hely}");
             }
         }
 
@@ -55,7 +55,7 @@ namespace Villamos.Adatszerkezet
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult, $"hely: {hely}");
             }
         }
 
@@ -82,7 +82,7 @@ namespace Villamos.Adatszerkezet
             }
             catch (System.Exception ex)
             {
-                HibaNapló.Log(ex.Message, szöveg, ex.StackTrace, ex.Source, ex.HResult);
+                HibaNapló.Log(ex.Message, szöveg, ex.StackTrace, ex.Source, ex.HResult, $"hely: {hely}");
             }
         }
 
