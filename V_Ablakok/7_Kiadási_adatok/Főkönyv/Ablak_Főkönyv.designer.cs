@@ -126,7 +126,6 @@ namespace Villamos
             this.Reklám_Check = new System.Windows.Forms.CheckBox();
             this.RichtextBox1 = new System.Windows.Forms.RichTextBox();
             this.REklám_frissít = new System.Windows.Forms.Button();
-            this.Vezénylésbeírás = new System.Windows.Forms.Button();
             this.TabPage8 = new System.Windows.Forms.TabPage();
             this.Km_tábla = new System.Windows.Forms.DataGridView();
             this.KM_pályaszám = new System.Windows.Forms.TextBox();
@@ -1106,7 +1105,6 @@ namespace Villamos
             this.TabPage4.Controls.Add(this.Reklám_Check);
             this.TabPage4.Controls.Add(this.RichtextBox1);
             this.TabPage4.Controls.Add(this.REklám_frissít);
-            this.TabPage4.Controls.Add(this.Vezénylésbeírás);
             this.TabPage4.Location = new System.Drawing.Point(4, 29);
             this.TabPage4.Name = "TabPage4";
             this.TabPage4.Size = new System.Drawing.Size(931, 547);
@@ -1116,7 +1114,7 @@ namespace Villamos
             // Reklám_Check
             // 
             this.Reklám_Check.AutoSize = true;
-            this.Reklám_Check.Location = new System.Drawing.Point(95, 9);
+            this.Reklám_Check.Location = new System.Drawing.Point(49, 19);
             this.Reklám_Check.Name = "Reklám_Check";
             this.Reklám_Check.Size = new System.Drawing.Size(151, 24);
             this.Reklám_Check.TabIndex = 202;
@@ -1144,18 +1142,6 @@ namespace Villamos
             this.REklám_frissít.TabIndex = 200;
             this.REklám_frissít.UseVisualStyleBackColor = true;
             this.REklám_frissít.Click += new System.EventHandler(this.REklám_frissít_Click);
-            // 
-            // Vezénylésbeírás
-            // 
-            this.Vezénylésbeírás.BackgroundImage = global::Villamos.Properties.Resources.Document_write;
-            this.Vezénylésbeírás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Vezénylésbeírás.Location = new System.Drawing.Point(49, 3);
-            this.Vezénylésbeírás.Name = "Vezénylésbeírás";
-            this.Vezénylésbeírás.Size = new System.Drawing.Size(40, 40);
-            this.Vezénylésbeírás.TabIndex = 199;
-            this.Vezénylésbeírás.UseVisualStyleBackColor = true;
-            this.Vezénylésbeírás.Visible = false;
-            this.Vezénylésbeírás.Click += new System.EventHandler(this.Vezénylésbeírás_Click);
             // 
             // TabPage8
             // 
@@ -1441,7 +1427,6 @@ namespace Villamos
         internal ToolTip ToolTip1;
         internal RichTextBox RichtextBox1;
         internal Button REklám_frissít;
-        internal Button Vezénylésbeírás;
         internal CheckBox Reklám_Check;
         internal Button Jegykezelő;
         internal Button Button1;
