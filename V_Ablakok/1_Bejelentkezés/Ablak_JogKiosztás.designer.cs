@@ -47,6 +47,7 @@ namespace Villamos
             this.MindenGomb = new System.Windows.Forms.Button();
             this.BtnMásol = new System.Windows.Forms.Button();
             this.BtnBeilleszt = new System.Windows.Forms.Button();
+            this.BtnAblakTörlés = new System.Windows.Forms.Button();
             this.Label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label3 = new System.Windows.Forms.Label();
@@ -63,7 +64,7 @@ namespace Villamos
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.Másolat = new System.Windows.Forms.Label();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.BtnAblakTörlés = new System.Windows.Forms.Button();
+            this.MenűFa = new System.Windows.Forms.TreeView();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -185,6 +186,18 @@ namespace Villamos
             this.BtnBeilleszt.UseVisualStyleBackColor = true;
             this.BtnBeilleszt.Click += new System.EventHandler(this.BtnBeilleszt_Click);
             // 
+            // BtnAblakTörlés
+            // 
+            this.BtnAblakTörlés.BackgroundImage = global::Villamos.Properties.Resources.Fatcow_Farm_Fresh_Table_row_delete_32;
+            this.BtnAblakTörlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BtnAblakTörlés.Location = new System.Drawing.Point(303, 3);
+            this.BtnAblakTörlés.Name = "BtnAblakTörlés";
+            this.BtnAblakTörlés.Size = new System.Drawing.Size(44, 44);
+            this.BtnAblakTörlés.TabIndex = 229;
+            this.ToolTip1.SetToolTip(this.BtnAblakTörlés, "A felhasználó ablakra vonatkozó jogosultságainak törlése");
+            this.BtnAblakTörlés.UseVisualStyleBackColor = true;
+            this.BtnAblakTörlés.Click += new System.EventHandler(this.BtnAblakTörlés_Click);
+            // 
             // Label1
             // 
             this.Label1.AutoSize = true;
@@ -228,6 +241,7 @@ namespace Villamos
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.MenűFa);
             this.panel2.Controls.Add(this.CmbAblakId);
             this.panel2.Controls.Add(this.CmbAblak);
             this.panel2.Location = new System.Drawing.Point(3, 23);
@@ -391,17 +405,12 @@ namespace Villamos
             this.tableLayoutPanel3.Size = new System.Drawing.Size(494, 50);
             this.tableLayoutPanel3.TabIndex = 225;
             // 
-            // BtnAblakTörlés
+            // MenűFa
             // 
-            this.BtnAblakTörlés.BackgroundImage = global::Villamos.Properties.Resources.Fatcow_Farm_Fresh_Table_row_delete_32;
-            this.BtnAblakTörlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.BtnAblakTörlés.Location = new System.Drawing.Point(303, 3);
-            this.BtnAblakTörlés.Name = "BtnAblakTörlés";
-            this.BtnAblakTörlés.Size = new System.Drawing.Size(44, 44);
-            this.BtnAblakTörlés.TabIndex = 229;
-            this.ToolTip1.SetToolTip(this.BtnAblakTörlés, "A felhasználó ablakra vonatkozó jogosultságainak törlése");
-            this.BtnAblakTörlés.UseVisualStyleBackColor = true;
-            this.BtnAblakTörlés.Click += new System.EventHandler(this.BtnAblakTörlés_Click);
+            this.MenűFa.Location = new System.Drawing.Point(4, 71);
+            this.MenűFa.Name = "MenűFa";
+            this.MenűFa.Size = new System.Drawing.Size(287, 186);
+            this.MenűFa.TabIndex = 104;
             // 
             // Ablak_JogKiosztás
             // 
@@ -462,5 +471,6 @@ namespace Villamos
         internal Button BtnMásol;
         private TableLayoutPanel tableLayoutPanel3;
         internal Button BtnAblakTörlés;
+        private TreeView MenűFa;
     }
 }
