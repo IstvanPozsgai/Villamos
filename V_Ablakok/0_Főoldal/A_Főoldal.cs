@@ -2695,7 +2695,7 @@ namespace Villamos
         {
             if (Új_Ablak_JogKiosztás == null)
             {
-                Új_Ablak_JogKiosztás = new Ablak_JogKiosztás();
+                Új_Ablak_JogKiosztás = new Ablak_JogKiosztás(this);
                 Új_Ablak_JogKiosztás.FormClosed += Új_Ablak_JogKiosztás_FormClosed;
                 Új_Ablak_JogKiosztás.Show();
             }

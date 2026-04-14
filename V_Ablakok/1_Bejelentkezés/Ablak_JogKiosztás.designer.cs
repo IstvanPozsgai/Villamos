@@ -411,6 +411,7 @@ namespace Villamos
             this.MenűFa.Name = "MenűFa";
             this.MenűFa.Size = new System.Drawing.Size(287, 186);
             this.MenűFa.TabIndex = 104;
+            this.MenűFa.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.MenűFa_AfterSelect);
             // 
             // Ablak_JogKiosztás
             // 

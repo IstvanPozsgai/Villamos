@@ -29,6 +29,9 @@ namespace Villamos
         List<Adat_Bejelentkezés_Jogosultságok> AdatokJogosultságok = new List<Adat_Bejelentkezés_Jogosultságok>();
         List<Adat_Bejelentkezés_Jogosultságok> MásolatAdatok = new List<Adat_Bejelentkezés_Jogosultságok>();
 
+        // Ez tárolja majd a konkrét, futó főoldalt
+        private A_Főoldal FőoldalPéldány;
+
 #pragma warning disable IDE0044
         DataTable AdatTáblaALap = new DataTable();
 #pragma warning restore IDE0044
@@ -39,10 +42,14 @@ namespace Villamos
         int AblakFőID = -1;
         int GombFőID = -1;
 
-        public Ablak_JogKiosztás()
+        public Ablak_JogKiosztás(A_Főoldal Példány)
         {
             InitializeComponent();
+            FőoldalPéldány = Példány; // Itt mentjük el
+            LoadMenuFromMain();
+
             Start();
+
         }
 
         private void Ablak_JogKiosztás_Load(object sender, System.EventArgs e)
@@ -65,6 +72,8 @@ namespace Villamos
             OldalFeltöltés();
             FelhasználóFeltöltés();
             GombLathatosagKezelo.Beallit(this, Program.PostásTelephely);
+
+
         }
 
 
@@ -622,6 +631,11 @@ namespace Villamos
         private void CmbAblakId_SelectionChangeCommitted(object sender, EventArgs e)
         {
             CmbAblakId.Text = CmbAblakId.Items[CmbAblakId.SelectedIndex].ToString();
+            KiválasztottAblak();
+        }
+
+        private void KiválasztottAblak()
+        {
             Adat_Belépés_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.OldalId == CmbAblakId.Text.ToÉrt_Int());
             AblakFormName = Ablak.FromName;
             CmbAblak.Text = Ablak.MenuFelirat;
@@ -698,5 +712,81 @@ namespace Villamos
             }
         }
         #endregion
+
+
+        #region MenüszerkezetFába írása
+        private void LoadMenuFromMain()
+        {
+            MenűFa.Nodes.Clear();
+            // Feltételezzük, hogy a főoldalon a MenuStrip neve 'menuStrip1'
+            foreach (ToolStripMenuItem item in FőoldalPéldány.MainMenuStrip.Items)
+            {
+                AddNodesRecursive(item, MenűFa.Nodes);
+            }
+        }
+
+        private void CopyMenuToTree(ToolStripItem menuItem, TreeNodeCollection treeNodes)
+        {
+            // Csak a valódi menüpontokkal foglalkozunk (elválasztó sávokat pl. kihagyjuk)
+            if (menuItem is ToolStripMenuItem menuEntry)
+            {
+                // Új csomópont létrehozása a menü szövegével
+                TreeNode newNode = new TreeNode(menuEntry.Text.Replace("&", ""));
+                newNode.Tag = menuEntry.Name; // Eltároljuk az azonosítót a későbbi jogkezeléshez
+
+                // Hozzáadjuk az aktuális szinthez
+                treeNodes.Add(newNode);
+
+                // Ha vannak almenük, azokat is feldolgozzuk rekurzívan
+                foreach (ToolStripItem subItem in menuEntry.DropDownItems)
+                {
+                    CopyMenuToTree(subItem, newNode.Nodes);
+                }
+            }
+        }
+
+        private void AddNodesRecursive(ToolStripItem menuItem, TreeNodeCollection treeNodes)
+        {
+            // Csak a valódi menüpontokat dolgozzuk fel (elválasztókat pl. nem)
+            if (menuItem is ToolStripMenuItem menuEntry)
+            {
+                // Létrehozunk egy új csomópontot a fában a menü szövegével
+                // A .Replace("&", "") kiszedi a gyorsbillentyű aláhúzásokat
+                TreeNode newNode = new TreeNode(menuEntry.Text.Replace("&", ""));
+
+                // Eltároljuk a menüpont nevét vagy ID-ját a Tag-ben a későbbi mentéshez
+                newNode.Tag = menuEntry.Name;
+
+                // Hozzáadjuk a fához az aktuális szinten
+                treeNodes.Add(newNode);
+
+                // REKURZÍV HÍVÁS: Ha vannak almenüpontok, azokat is feldolgozzuk ugyanígy
+                foreach (ToolStripItem subItem in menuEntry.DropDownItems)
+                {
+                    AddNodesRecursive(subItem, newNode.Nodes);
+                }
+            }
+        }
+
+        private void MenűFa_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            // Az 'e.Node' az az elem, amire a felhasználó rákattintott
+            string KijelöltSzöveg = e.Node.Text.Trim();
+            if (KijelöltSzöveg.Trim() == "") return;
+            Adat_Belépés_Oldalak Elem = (from a in AdatokOldal
+                                         where a.MenuFelirat.Trim() == KijelöltSzöveg
+                                         select a).FirstOrDefault();
+            CmbAblakId.Text = "";
+            if (Elem != null)
+            {
+                CmbAblakId.Text = Elem.OldalId.ToString();
+                KiválasztottAblak();
+            }
+
+        }
+
+        #endregion
+
+
     }
 }
