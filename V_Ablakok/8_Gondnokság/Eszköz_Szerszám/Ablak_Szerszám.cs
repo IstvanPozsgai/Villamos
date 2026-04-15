@@ -991,7 +991,16 @@ namespace Villamos
                                                          where a.Státus == Könyv_Töröltek.Checked
                                                          select a).ToList();
 
+                // 1. LEVÁLASZTÁS: Megszüntetjük a kapcsolatot a tábla és a rács között
+                Könyv_tábla.DataSource = null;
+
+                // 2. A DataTable teljes alaphelyzetbe állítása (Oszlopok, adatok ÉS kényszerek törlése)
+                AdatTáblaKönyv.DefaultView.RowFilter = ""; // Szűrő kényszerített törlése
+                AdatTáblaKönyv.DefaultView.Sort = "";      // Rendezés törlése
+                AdatTáblaKönyv.Clear();
+
                 AdatTáblaKönyv.Columns.Clear();
+                AdatTáblaKönyv.Rows.Clear();
                 AdatTáblaKönyv.Columns.Add("Könyvszám");
                 AdatTáblaKönyv.Columns.Add("Könyvmegnevezés");
                 AdatTáblaKönyv.Columns.Add("Felelős személy 1");
