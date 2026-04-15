@@ -1436,13 +1436,15 @@ namespace Villamos
             try
             {
                 Lekérd_mindtöröl_esemény();
+                string[] darabol = Lekérd_Felelős1.Text.Split('=');
+                string DolgozóNév = Lekérd_Felelős1.Text.Trim();
+                if (darabol.Length > 0) DolgozóNév = darabol[0].Trim();
 
-                Lekérd_Felelős1.Text.Trim();
                 KönyvListaFeltöltés();
 
                 List<Adat_Szerszám_Könyvtörzs> Adatok = (from a in AdatokKönyv
-                                                         where a.Felelős1 == Lekérd_Felelős1.Text.Trim() ||
-                                                        a.Felelős2 == Lekérd_Felelős1.Text.Trim()
+                                                         where a.Felelős1.Contains(DolgozóNév) ||
+                                                         a.Felelős2.Contains(DolgozóNév)
                                                          select a).ToList();
 
                 foreach (Adat_Szerszám_Könyvtörzs A in Adatok)
