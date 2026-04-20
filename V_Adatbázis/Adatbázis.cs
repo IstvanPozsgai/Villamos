@@ -7,7 +7,7 @@ using Villamos;
 
 internal static partial class Adatbázis
 {
-
+    #region Választó
     /// <summary>
     /// Adatbázisban módosít a küldött szöveg alapján (SQL)
     /// </summary>
@@ -23,128 +23,6 @@ internal static partial class Adatbázis
         else
         {
             SqLite_Módosítás(holvan, ABjelszó, SQLszöveg);
-        }
-    }
-
-    private static void Mdb_Módosítás(string holvan, string ABjelszó, string SQLszöveg)
-    {
-        try
-        {
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OleDb.4.0;Data Source= '{holvan}'; Jet Oledb:Database Password={ABjelszó}";
-            // módosítjuk az adatokat
-            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
-            {
-                using (OleDbCommand Parancs = new OleDbCommand(SQLszöveg, Kapcsolat))
-                {
-                    Kapcsolat.Open();
-                    Parancs.ExecuteNonQuery();
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            HibaNapló.Log(ex.Message, $"MDB Adat módosítás:\n{holvan}\n{SQLszöveg}", ex.StackTrace, ex.Source, ex.HResult);
-            throw new Exception("Adatbázis rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
-        }
-    }
-
-    private static void SqLite_Módosítás(string holvan, string ABjelszó, string SQLszöveg)
-    {
-        string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
-        try
-        {
-            using (var connection = new SqliteConnection(kapcsolatiszöveg))
-            {
-                connection.Open();
-                var command = new SqliteCommand(SQLszöveg, connection);
-                command.ExecuteNonQuery();
-            }
-        }
-        catch (Exception ex)
-        {
-            HibaNapló.Log(ex.Message, $"SqLite Adat módosítás:\n{holvan}\n{SQLszöveg}", ex.StackTrace, ex.Source, ex.HResult);
-            throw new Exception("Adatbázis rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
-        }
-    }
-
-    //public static void SqLite_Módosítás(string holvan, string ABjelszó, SqliteCommand cmd)
-    //{
-    //    string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
-    //    try
-    //    {
-    //        using (var connection = new SqliteConnection(kapcsolatiszöveg))
-    //        {
-    //            connection.Open();
-    //            // Fontos: a kapott cmd-t hozzárendeljük a nyitott kapcsolathoz
-    //            cmd.Connection = connection;
-    //            cmd.ExecuteNonQuery();
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        HibaNapló.Log(ex.Message, $"SqLite Adat módosítás:\n{holvan}", ex.StackTrace, ex.Source, ex.HResult);
-    //        throw new Exception("Adatbázis rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
-    //    }
-    //}
-
-    public static void SqLite_Módosítás(string holvan, string ABjelszó, SqliteCommand cmd)
-    {
-        string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
-        try
-        {
-            using (var connection = new SqliteConnection(kapcsolatiszöveg))
-            {
-                connection.Open();
-
-                // 1. WAL mód bekapcsolása (segít hálózati meghajtón a zárolások ellen)
-                using (var walCmd = connection.CreateCommand())
-                {
-                    walCmd.CommandText = "PRAGMA journal_mode=WAL;";
-                    walCmd.ExecuteNonQuery();
-                }
-
-                // 2. A parancs hozzárendelése és futtatása
-                cmd.Connection = connection;
-
-                // Biztonsági tartalék: ha a ConnectionString-ben nem lenne benne a Timeout
-                if (cmd.CommandTimeout < 30) cmd.CommandTimeout = 30;
-
-                cmd.ExecuteNonQuery();
-            }
-        }
-        catch (Exception ex)
-        {
-            HibaNapló.Log(ex.Message, $"SqLite Adat módosítás:\n{holvan}", ex.StackTrace, ex.Source, ex.HResult);
-            throw new Exception("Adatbázis rögzítési hiba, az adatok rögzítése/módosítása nem történt meg.");
-        }
-    }
-
-
-    public static void SqLite_Módosítások(string holvan, string ABjelszó, List<SqliteCommand> parancsok)
-    {
-        string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
-        using (var connection = new SqliteConnection(kapcsolatiszöveg))
-        {
-            connection.Open();
-            using (var transaction = connection.BeginTransaction())
-            {
-                try
-                {
-                    foreach (var cmd in parancsok)
-                    {
-                        cmd.Connection = connection;
-                        cmd.Transaction = transaction;
-                        cmd.ExecuteNonQuery();
-                    }
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    HibaNapló.Log(ex.Message, $"SqLite Tranzakciós hiba:\n{holvan}", ex.StackTrace, ex.Source, ex.HResult);
-                    throw new Exception("Hiba történt a csoportos művelet során. Semmi nem került rögzítésre.");
-                }
-            }
         }
     }
 
@@ -164,6 +42,70 @@ internal static partial class Adatbázis
         else
         {
             SqLite_Módosítás(holvan, ABjelszó, SQLszöveg);
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="holvan">A fájl elérhetőségének helye </param>
+    /// <param name="ABjelszó">Adatbázis jelszó</param>
+    /// <param name="SQLszöveg">SQl módosítási szöveg </param>
+
+    public static void ABtörlés(string holvan, string ABjelszó, string SQLszöveg)
+    {
+        if (holvan.Contains(".mdb"))
+        {
+            Mdb_ABtörlés(holvan, ABjelszó, SQLszöveg);
+        }
+        else
+        {
+            SqLite_ABtörlés(holvan, ABjelszó, SQLszöveg);
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="holvan">A fájl elérhetőségének helye </param>
+    /// <param name="ABjelszó">Adatbázis jelszó</param>
+    /// <param name="SQLszöveg">Lista SQl módosítási szöveg </param>
+    public static void ABtörlés(string holvan, string ABjelszó, List<string> SQLszöveg)
+    {
+        if (holvan.Contains(".mdb"))
+        {
+            Mdb_ABtörlés(holvan, ABjelszó, SQLszöveg);
+        }
+        else
+        {
+            SqLite_ABtörlés(holvan, ABjelszó, SQLszöveg);
+        }
+    }
+    #endregion
+
+
+    #region Mdb Megoldások
+    private static void Mdb_Módosítás(string holvan, string ABjelszó, string SQLszöveg)
+    {
+        try
+        {
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OleDb.4.0;Data Source= '{holvan}'; Jet Oledb:Database Password={ABjelszó}";
+            // módosítjuk az adatokat
+            using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
+            {
+                using (OleDbCommand Parancs = new OleDbCommand(SQLszöveg, Kapcsolat))
+                {
+                    Kapcsolat.Open();
+                    Parancs.ExecuteNonQuery();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, $"MDB Adat módosítás:\n{holvan}\n{SQLszöveg}", ex.StackTrace, ex.Source, ex.HResult);
+            throw new Exception("Adatbázis rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
         }
     }
 
@@ -206,57 +148,6 @@ internal static partial class Adatbázis
         if (hiba) throw new Exception(" Mdb Adatbázis rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
     }
 
-    private static void SqLite_Módosítás(string holvan, string ABjelszó, List<string> SQLszöveg)
-    {
-        string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
-
-        using (var connection = new SqliteConnection(kapcsolatiszöveg))
-        {
-            connection.Open();
-            using (var transaction = connection.BeginTransaction()) // Tranzakció indítása
-            {
-                try
-                {
-                    foreach (var sql in SQLszöveg)
-                    {
-                        using (var command = new SqliteCommand(sql, connection, transaction))
-                        {
-                            command.ExecuteNonQuery();
-                        }
-                    }
-                    transaction.Commit(); // Csak akkor ment, ha minden sikerült
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback(); // Hiba esetén mindent visszavon
-                    HibaNapló.Log(ex.Message, $"SQLite hiba: {holvan}", ex.StackTrace, ex.Source, ex.HResult);
-                    throw new Exception("Adatbázis hiba, a módosítások visszavonva.", ex);
-                }
-            }
-        }
-    }
-
-
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="holvan">A fájl elérhetőségének helye </param>
-    /// <param name="ABjelszó">Adatbázis jelszó</param>
-    /// <param name="SQLszöveg">SQl módosítási szöveg </param>
-    public static void ABtörlés(string holvan, string ABjelszó, string SQLszöveg)
-    {
-        if (holvan.Contains(".mdb"))
-        {
-            Mdb_ABtörlés(holvan, ABjelszó, SQLszöveg);
-        }
-        else
-        {
-            SqLite_ABtörlés(holvan, ABjelszó, SQLszöveg);
-        }
-    }
-
     public static void Mdb_ABtörlés(string holvan, string ABjelszó, string SQLszöveg)
     {
         try
@@ -276,48 +167,6 @@ internal static partial class Adatbázis
         {
             HibaNapló.Log(ex.Message, $"Mdb Adat törlés:\n{holvan}\n{SQLszöveg}", ex.StackTrace, ex.Source, ex.HResult);
             throw new Exception("Adatbázis törlési hiba, az adotok törlése nem történt meg.");
-        }
-    }
-
-    public static void SqLite_ABtörlés(string holvan, string ABjelszó, string SQLszöveg)
-    {
-        try
-        {
-            string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
-
-            using (SqliteConnection connection = new SqliteConnection(kapcsolatiszöveg))
-            {
-                connection.Open();
-
-                var command = new SqliteCommand(SQLszöveg, connection);
-                command.ExecuteNonQuery();
-            }
-        }
-        catch (Exception ex)
-        {
-            HibaNapló.Log(ex.Message, $"SqLite Adat törlés:\n{holvan}\n{SQLszöveg}", ex.StackTrace, ex.Source, ex.HResult);
-            throw new Exception("Adatbázis törlési hiba, az adotok törlése nem történt meg.");
-        }
-    }
-
-
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="holvan">A fájl elérhetőségének helye </param>
-    /// <param name="ABjelszó">Adatbázis jelszó</param>
-    /// <param name="SQLszöveg">Lista SQl módosítási szöveg </param>
-    public static void ABtörlés(string holvan, string ABjelszó, List<string> SQLszöveg)
-    {
-        if (holvan.Contains(".mdb"))
-        {
-            Mdb_ABtörlés(holvan, ABjelszó, SQLszöveg);
-        }
-        else
-        {
-            SqLite_ABtörlés(holvan, ABjelszó, SQLszöveg);
         }
     }
 
@@ -354,40 +203,6 @@ internal static partial class Adatbázis
             throw new Exception("Adatbázis törlési hiba, az adotok törlése nem történt meg.");
         }
     }
-
-    public static void SqLite_ABtörlés(string holvan, string ABjelszó, List<string> SQLszöveg)
-    {
-        string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
-
-        using (var connection = new SqliteConnection(kapcsolatiszöveg))
-        {
-            connection.Open();
-            // Tranzakció indítása: vagy az összes törlés sikerül, vagy egyik sem marad meg
-            using (var transaction = connection.BeginTransaction())
-            {
-                try
-                {
-                    foreach (string sql in SQLszöveg)
-                    {
-                        using (var command = new SqliteCommand(sql, connection, transaction))
-                        {
-                            command.ExecuteNonQuery();
-                        }
-                    }
-                    transaction.Commit(); // Ha idáig eljutott, minden törlés véglegesítve
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback(); // Hiba esetén MINDENT visszacsinál
-                    HibaNapló.Log(ex.Message, $"SqLite törlési hiba az adatbázisban: {holvan}", ex.StackTrace, ex.Source, ex.HResult);
-                    throw new Exception("Adatbázis törlési hiba, a folyamat megállt és a változások visszavonva.", ex);
-                }
-            }
-        }
-    }
-
-
-
 
     public static bool ABvanTábla(string holvan, string ABjelszó, string SQLszöveg)
     {
@@ -431,34 +246,6 @@ internal static partial class Adatbázis
         }
     }
 
-    public static bool SqLite_ABvanTábla(string holvan, string ABjelszó, string táblanév)
-    {
-        bool válasz = false;
-        try
-        {
-            string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
-            using (var connection = new SqliteConnection(kapcsolatiszöveg))
-            {
-                connection.Open();
-                válasz = TáblaVanSqLite(connection, táblanév);
-            }
-        }
-        catch (Exception ex)
-        {
-            HibaNapló.Log(ex.Message, "SqLite ABvanTábla", ex.StackTrace, ex.Source, ex.HResult, "_", false);
-        }
-        return válasz;
-    }
-
-    public static bool TáblaVanSqLite(SqliteConnection sqlite, string tablaNev)
-    {
-        using (var cmd = new SqliteCommand("SELECT name FROM sqlite_master WHERE type='table' AND name=@nev;", sqlite))
-        {
-            cmd.Parameters.AddWithValue("@nev", tablaNev);
-            return cmd.ExecuteScalar() != null;
-        }
-    }
-
     /// <summary>
     /// Adattáblanevek listája egy adott adatbázisban
     /// </summary>
@@ -495,7 +282,6 @@ internal static partial class Adatbázis
         }
         return válasz;
     }
-
 
     /// <summary>
     /// Adott Adattábla mezőinek listája egy adott adatbázisban
@@ -537,6 +323,230 @@ internal static partial class Adatbázis
         return válasz;
     }
 
+    public static DataTable Mdb_TáblaLekérése(string eleresiUt, string jelszo, string tablaNev)
+    {
+        DataTable dt = new DataTable();
+
+        // Kapcsolati karakterlánc (.mdb fájl esetén Jet.OLEDB.4.0, .accdb esetén ACE.OLEDB.12.0 kell)
+        string connectionString = $@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source={eleresiUt};Jet OLEDB:Database Password={jelszo};";
+
+        using (OleDbConnection conn = new OleDbConnection(connectionString))
+        {
+            try
+            {
+                conn.Open();
+                // A tábla nevét szögletes zárójelbe tesszük a biztonság kedvéért (pl. szóközök miatt)
+                string query = $"SELECT * FROM [{tablaNev}]";
+
+                using (OleDbDataAdapter adapter = new OleDbDataAdapter(query, conn))
+                {
+                    // Az adapter feltölti a DataTable-t az eredményekkel
+                    adapter.Fill(dt);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Továbbdobjuk a hibát, hogy a hívó oldalon (a Form-ban) naplózni lehessen
+                throw new Exception($"Hiba az adatok lekérésekor a(z) {tablaNev} táblából.", ex);
+            }
+        }
+        return dt;
+    }
+    #endregion
+
+
+    #region SqLite Megoldások
+
+    private static void SqLite_Módosítás(string holvan, string ABjelszó, string SQLszöveg)
+    {
+        string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
+        try
+        {
+            using (var connection = new SqliteConnection(kapcsolatiszöveg))
+            {
+                connection.Open();
+                var command = new SqliteCommand(SQLszöveg, connection);
+                command.ExecuteNonQuery();
+            }
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, $"SqLite Adat módosítás:\n{holvan}\n{SQLszöveg}", ex.StackTrace, ex.Source, ex.HResult);
+            throw new Exception("Adatbázis rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
+        }
+    }
+
+    public static void SqLite_Módosítás(string holvan, string ABjelszó, SqliteCommand cmd)
+    {
+        string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
+        try
+        {
+            using (var connection = new SqliteConnection(kapcsolatiszöveg))
+            {
+                connection.Open();
+
+                // 1. WAL mód bekapcsolása (segít hálózati meghajtón a zárolások ellen)
+                using (var walCmd = connection.CreateCommand())
+                {
+                    walCmd.CommandText = "PRAGMA journal_mode=WAL;";
+                    walCmd.ExecuteNonQuery();
+                }
+
+                // 2. A parancs hozzárendelése és futtatása
+                cmd.Connection = connection;
+
+                // Biztonsági tartalék: ha a ConnectionString-ben nem lenne benne a Timeout
+                if (cmd.CommandTimeout < 30) cmd.CommandTimeout = 30;
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, $"SqLite Adat módosítás:\n{holvan}", ex.StackTrace, ex.Source, ex.HResult);
+            throw new Exception("Adatbázis rögzítési hiba, az adatok rögzítése/módosítása nem történt meg.");
+        }
+    }
+
+    public static void SqLite_Módosítások(string holvan, string ABjelszó, List<SqliteCommand> parancsok)
+    {
+        string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
+        using (var connection = new SqliteConnection(kapcsolatiszöveg))
+        {
+            connection.Open();
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    foreach (var cmd in parancsok)
+                    {
+                        cmd.Connection = connection;
+                        cmd.Transaction = transaction;
+                        cmd.ExecuteNonQuery();
+                    }
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    HibaNapló.Log(ex.Message, $"SqLite Tranzakciós hiba:\n{holvan}", ex.StackTrace, ex.Source, ex.HResult);
+                    throw new Exception("Hiba történt a csoportos művelet során. Semmi nem került rögzítésre.");
+                }
+            }
+        }
+    }
+
+    private static void SqLite_Módosítás(string holvan, string ABjelszó, List<string> SQLszöveg)
+    {
+        string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
+
+        using (var connection = new SqliteConnection(kapcsolatiszöveg))
+        {
+            connection.Open();
+            using (var transaction = connection.BeginTransaction()) // Tranzakció indítása
+            {
+                try
+                {
+                    foreach (var sql in SQLszöveg)
+                    {
+                        using (var command = new SqliteCommand(sql, connection, transaction))
+                        {
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                    transaction.Commit(); // Csak akkor ment, ha minden sikerült
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback(); // Hiba esetén mindent visszavon
+                    HibaNapló.Log(ex.Message, $"SQLite hiba: {holvan}", ex.StackTrace, ex.Source, ex.HResult);
+                    throw new Exception("Adatbázis hiba, a módosítások visszavonva.", ex);
+                }
+            }
+        }
+    }
+
+    public static void SqLite_ABtörlés(string holvan, string ABjelszó, string SQLszöveg)
+    {
+        try
+        {
+            string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
+
+            using (SqliteConnection connection = new SqliteConnection(kapcsolatiszöveg))
+            {
+                connection.Open();
+
+                var command = new SqliteCommand(SQLszöveg, connection);
+                command.ExecuteNonQuery();
+            }
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, $"SqLite Adat törlés:\n{holvan}\n{SQLszöveg}", ex.StackTrace, ex.Source, ex.HResult);
+            throw new Exception("Adatbázis törlési hiba, az adotok törlése nem történt meg.");
+        }
+    }
+
+    public static void SqLite_ABtörlés(string holvan, string ABjelszó, List<string> SQLszöveg)
+    {
+        string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
+
+        using (var connection = new SqliteConnection(kapcsolatiszöveg))
+        {
+            connection.Open();
+            // Tranzakció indítása: vagy az összes törlés sikerül, vagy egyik sem marad meg
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    foreach (string sql in SQLszöveg)
+                    {
+                        using (var command = new SqliteCommand(sql, connection, transaction))
+                        {
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                    transaction.Commit(); // Ha idáig eljutott, minden törlés véglegesítve
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback(); // Hiba esetén MINDENT visszacsinál
+                    HibaNapló.Log(ex.Message, $"SqLite törlési hiba az adatbázisban: {holvan}", ex.StackTrace, ex.Source, ex.HResult);
+                    throw new Exception("Adatbázis törlési hiba, a folyamat megállt és a változások visszavonva.", ex);
+                }
+            }
+        }
+    }
+
+    public static bool SqLite_ABvanTábla(string holvan, string ABjelszó, string táblanév)
+    {
+        bool válasz = false;
+        try
+        {
+            string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
+            using (var connection = new SqliteConnection(kapcsolatiszöveg))
+            {
+                connection.Open();
+                válasz = SqLite_TáblaVan(connection, táblanév);
+            }
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, "SqLite ABvanTábla", ex.StackTrace, ex.Source, ex.HResult, "_", false);
+        }
+        return válasz;
+    }
+
+    public static bool SqLite_TáblaVan(SqliteConnection sqlite, string tablaNev)
+    {
+        using (var cmd = new SqliteCommand("SELECT name FROM sqlite_master WHERE type='table' AND name=@nev;", sqlite))
+        {
+            cmd.Parameters.AddWithValue("@nev", tablaNev);
+            return cmd.ExecuteScalar() != null;
+        }
+    }
+
+
     public static List<string> SqLite_ABMezők(string holvan, string ABjelszó, string táblaNeve)
     {
         List<string> válasz = new List<string>();
@@ -570,7 +580,7 @@ internal static partial class Adatbázis
         return válasz;
     }
 
-    public static string BuildConnectionString(string hely, string jelszó)
+    private static string BuildConnectionString(string hely, string jelszó)
     {
         return new SqliteConnectionStringBuilder
         {
@@ -683,38 +693,6 @@ internal static partial class Adatbázis
         return VálaszAdatok;
     }
 
-
-
-    public static DataTable Mdb_TáblaLekérése(string eleresiUt, string jelszo, string tablaNev)
-    {
-        DataTable dt = new DataTable();
-
-        // Kapcsolati karakterlánc (.mdb fájl esetén Jet.OLEDB.4.0, .accdb esetén ACE.OLEDB.12.0 kell)
-        string connectionString = $@"Provider=Microsoft.Jet.OLEDB.4.0;Data Source={eleresiUt};Jet OLEDB:Database Password={jelszo};";
-
-        using (OleDbConnection conn = new OleDbConnection(connectionString))
-        {
-            try
-            {
-                conn.Open();
-                // A tábla nevét szögletes zárójelbe tesszük a biztonság kedvéért (pl. szóközök miatt)
-                string query = $"SELECT * FROM [{tablaNev}]";
-
-                using (OleDbDataAdapter adapter = new OleDbDataAdapter(query, conn))
-                {
-                    // Az adapter feltölti a DataTable-t az eredményekkel
-                    adapter.Fill(dt);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Továbbdobjuk a hibát, hogy a hívó oldalon (a Form-ban) naplózni lehessen
-                throw new Exception($"Hiba az adatok lekérésekor a(z) {tablaNev} táblából.", ex);
-            }
-        }
-        return dt;
-    }
-
     public static DataTable SqLite_TáblaLekérése(string hely, string jelszó, string tablaNev)
     {
         DataTable dt = new DataTable();
@@ -746,5 +724,5 @@ internal static partial class Adatbázis
         return dt;
     }
 
-
+    #endregion
 }

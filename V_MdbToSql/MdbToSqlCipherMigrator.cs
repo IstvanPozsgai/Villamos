@@ -77,7 +77,7 @@ namespace Villamos
 
                     var mdbSchema = GetDataTableSchema(dt);
 
-                    bool letezik = MyA.TáblaVanSqLite(sqlite, Cél.Tábla);
+                    bool letezik = MyA.SqLite_TáblaVan(sqlite, Cél.Tábla);
 
                     if (letezik)
                     {
