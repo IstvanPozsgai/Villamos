@@ -67,6 +67,26 @@ internal static partial class Adatbázis
         }
     }
 
+    //public static void SqLite_Módosítás(string holvan, string ABjelszó, SqliteCommand cmd)
+    //{
+    //    string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
+    //    try
+    //    {
+    //        using (var connection = new SqliteConnection(kapcsolatiszöveg))
+    //        {
+    //            connection.Open();
+    //            // Fontos: a kapott cmd-t hozzárendeljük a nyitott kapcsolathoz
+    //            cmd.Connection = connection;
+    //            cmd.ExecuteNonQuery();
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        HibaNapló.Log(ex.Message, $"SqLite Adat módosítás:\n{holvan}", ex.StackTrace, ex.Source, ex.HResult);
+    //        throw new Exception("Adatbázis rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
+    //    }
+    //}
+
     public static void SqLite_Módosítás(string holvan, string ABjelszó, SqliteCommand cmd)
     {
         string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
@@ -75,17 +95,30 @@ internal static partial class Adatbázis
             using (var connection = new SqliteConnection(kapcsolatiszöveg))
             {
                 connection.Open();
-                // Fontos: a kapott cmd-t hozzárendeljük a nyitott kapcsolathoz
+
+                // 1. WAL mód bekapcsolása (segít hálózati meghajtón a zárolások ellen)
+                using (var walCmd = connection.CreateCommand())
+                {
+                    walCmd.CommandText = "PRAGMA journal_mode=WAL;";
+                    walCmd.ExecuteNonQuery();
+                }
+
+                // 2. A parancs hozzárendelése és futtatása
                 cmd.Connection = connection;
+
+                // Biztonsági tartalék: ha a ConnectionString-ben nem lenne benne a Timeout
+                if (cmd.CommandTimeout < 30) cmd.CommandTimeout = 30;
+
                 cmd.ExecuteNonQuery();
             }
         }
         catch (Exception ex)
         {
             HibaNapló.Log(ex.Message, $"SqLite Adat módosítás:\n{holvan}", ex.StackTrace, ex.Source, ex.HResult);
-            throw new Exception("Adatbázis rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
+            throw new Exception("Adatbázis rögzítési hiba, az adatok rögzítése/módosítása nem történt meg.");
         }
     }
+
 
     public static void SqLite_Módosítások(string holvan, string ABjelszó, List<SqliteCommand> parancsok)
     {
@@ -570,6 +603,38 @@ internal static partial class Adatbázis
     }
 
 
+    //public static List<T> Lista_Adatok<T>(string hely, string jelszó, string táblanév, Func<SqliteDataReader, T> mapFüggvény)
+    //{
+    //    List<T> VálaszAdatok = new List<T>();
+    //    try
+    //    {
+    //        string sql = $@"SELECT * FROM {táblanév}";
+    //        string kapcsolatiszöveg = BuildConnectionString(hely, jelszó);
+
+    //        using (SqliteConnection connection = new SqliteConnection(kapcsolatiszöveg))
+    //        {
+    //            connection.Open();
+    //            using (SqliteCommand command = new SqliteCommand(sql, connection))
+    //            {
+    //                using (var reader = command.ExecuteReader())
+    //                {
+    //                    while (reader.Read())
+    //                    {
+    //                        // Itt hívjuk meg a kívülről átadott leképezést
+    //                        VálaszAdatok.Add(mapFüggvény(reader));
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        HibaNapló.Log(ex.Message, $"SqLite Adat módosítás:\n{hely}\n{táblanév}", ex.StackTrace, ex.Source, ex.HResult);
+    //        throw new Exception("Adatbázis rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
+    //    }
+    //    return VálaszAdatok;
+    //}
+
     public static List<T> Lista_Adatok<T>(string hely, string jelszó, string táblanév, Func<SqliteDataReader, T> mapFüggvény)
     {
         List<T> VálaszAdatok = new List<T>();
@@ -581,13 +646,23 @@ internal static partial class Adatbázis
             using (SqliteConnection connection = new SqliteConnection(kapcsolatiszöveg))
             {
                 connection.Open();
+
+                // 1. WAL mód bekapcsolása az olvasáshoz is (így az írók nem blokkolnak)
+                using (var walCmd = connection.CreateCommand())
+                {
+                    walCmd.CommandText = "PRAGMA journal_mode=WAL;";
+                    walCmd.ExecuteNonQuery();
+                }
+
                 using (SqliteCommand command = new SqliteCommand(sql, connection))
                 {
+                    // 2. Biztonsági időtúllépés az olvasáshoz
+                    command.CommandTimeout = 30;
+
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            // Itt hívjuk meg a kívülről átadott leképezést
                             VálaszAdatok.Add(mapFüggvény(reader));
                         }
                     }
@@ -596,12 +671,12 @@ internal static partial class Adatbázis
         }
         catch (Exception ex)
         {
-            HibaNapló.Log(ex.Message, $"Mdb Adat módosítás:\n{hely}\n{táblanév}", ex.StackTrace, ex.Source, ex.HResult);
-            throw new Exception("Adatbázis rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
+            // Javítottam a naplózást: "Adat lekérés" szerepeljen módosítás helyett
+            HibaNapló.Log(ex.Message, $"SqLite Adat lekérés:\n{hely}\n{táblanév}", ex.StackTrace, ex.Source, ex.HResult);
+            throw; // Érdemes az eredeti kivételt továbbdobni a hibakereséshez
         }
         return VálaszAdatok;
     }
-
 
 
 

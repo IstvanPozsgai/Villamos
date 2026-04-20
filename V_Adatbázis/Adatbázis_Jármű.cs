@@ -135,39 +135,30 @@ namespace Villamos.Villamos_Adatbázis_Funkció
 
         public static void Kocsitípusanapló(string hely)
         {
-            try
+            string szöveg;
+            string jelszó = "pozsgaii";
+            string táblanév = "Állománytáblanapló";
+
+            AdatBázis_kezelés ADAT = new AdatBázis_kezelés();
+
+            //Létrehozzuk az adatbázist és beállítunk jelszót
+            ADAT.AB_Adat_Bázis_Létrehozás(hely, jelszó);
+
+            szöveg = $"CREATE TABLE {táblanév} (";
+            szöveg += " [azonosító]  CHAR(10),";
+            szöveg += " [típus]  CHAR(20),";
+            szöveg += " [hova]  CHAR(30),";
+            szöveg += " [honnan]  CHAR(30),";
+            szöveg += " [törölt] YESNO,";
+            szöveg += " [Módosító]  CHAR(20),";
+            szöveg += " [Mikor] Date,";
+            szöveg += " [Céltelep]  CHAR(30),";
+            szöveg += " [üzenet] short)";
+            //Létrehozzuk az adattáblát, ha még nincs
+            if (!AdatBázis_kezelés.TáblaEllenőrzés(hely, jelszó, táblanév))
             {
-                string szöveg;
-                string jelszó = "pozsgaii";
-
-                AdatBázis_kezelés ADAT = new AdatBázis_kezelés();
-
-                //Létrehozzuk az adatbázist és beállítunk jelszót
-                ADAT.AB_Adat_Bázis_Létrehozás(hely, jelszó);
-
-                szöveg = "CREATE TABLE Állománytáblanapló (";
-                szöveg += " [azonosító]  CHAR(10),";
-                szöveg += " [típus]  CHAR(20),";
-                szöveg += " [hova]  CHAR(30),";
-                szöveg += " [honnan]  CHAR(30),";
-                szöveg += " [törölt] YESNO,";
-                szöveg += " [Módosító]  CHAR(20),";
-                szöveg += " [Mikor] Date,";
-                szöveg += " [Céltelep]  CHAR(30),";
-                szöveg += " [üzenet] short)";
-                //Létrehozzuk az adattáblát, ha még nincs
-                if (!ADAT.TáblaEllenőrzés(hely, jelszó, "Állománytáblanapló")) ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
+                ADAT.AB_Adat_Tábla_Létrehozás(hely, jelszó, szöveg);
             }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
         }
 
         public static void Összevonttáblakészítő(string hely)
