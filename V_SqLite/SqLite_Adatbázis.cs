@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Adatszerkezet;
 
 namespace Villamos
 {
@@ -71,20 +70,6 @@ namespace Villamos
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-
-
-        //Használati példa:
-        public void valami()
-        {
-            using (Context_Bejelentkezés_Oldalak db = new Context_Bejelentkezés_Oldalak())
-            {
-                Adat_Belépés_Oldalak ujOldal = new Adat_Belépés_Oldalak(1, "Home", "Főmenü", "Kezdőlap", true, false);
-                db.Oldalak.Add(ujOldal);
-                db.SaveChanges(); // Itt jön létre az adatbázis és a tábla, ha még nem létezik
-            }
-
-
         }
     }
 }
