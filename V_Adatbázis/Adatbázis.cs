@@ -357,6 +357,22 @@ internal static partial class Adatbázis
 
     #region SqLite Megoldások
 
+    private static string BuildConnectionString(string hely, string jelszó)
+    {
+        return new SqliteConnectionStringBuilder
+        {
+            DataSource = hely,
+            Mode = SqliteOpenMode.ReadWriteCreate,
+            Password = jelszó,
+            // Bekapcsolja a kapcsolatgyűjtőt, ami segít a zárolások hatékonyabb kezelésében
+            Pooling = false,
+            // Növeli a várakozási időt (másodpercben), ha az adatbázis épp foglalt
+            DefaultTimeout = 60,
+            Cache = SqliteCacheMode.Shared
+        }.ToString();
+    }
+
+    #region Módosítás
     private static void SqLite_Módosítás(string holvan, string ABjelszó, string SQLszöveg)
     {
         string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
@@ -465,7 +481,10 @@ internal static partial class Adatbázis
             }
         }
     }
+    #endregion
 
+
+    #region Törlés
     public static void SqLite_ABtörlés(string holvan, string ABjelszó, string SQLszöveg)
     {
         try
@@ -517,107 +536,10 @@ internal static partial class Adatbázis
             }
         }
     }
-
-    public static bool SqLite_ABvanTábla(string holvan, string ABjelszó, string táblanév)
-    {
-        bool válasz = false;
-        try
-        {
-            string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
-            using (var connection = new SqliteConnection(kapcsolatiszöveg))
-            {
-                connection.Open();
-                válasz = SqLite_TáblaVan(connection, táblanév);
-            }
-        }
-        catch (Exception ex)
-        {
-            HibaNapló.Log(ex.Message, "SqLite ABvanTábla", ex.StackTrace, ex.Source, ex.HResult, "_", false);
-        }
-        return válasz;
-    }
-
-    public static bool SqLite_TáblaVan(SqliteConnection sqlite, string tablaNev)
-    {
-        using (var cmd = new SqliteCommand("SELECT name FROM sqlite_master WHERE type='table' AND name=@nev;", sqlite))
-        {
-            cmd.Parameters.AddWithValue("@nev", tablaNev);
-            return cmd.ExecuteScalar() != null;
-        }
-    }
+    #endregion
 
 
-    public static List<string> SqLite_ABMezők(string holvan, string ABjelszó, string táblaNeve)
-    {
-        List<string> válasz = new List<string>();
-        try
-        {
-            string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
-
-            using (var Kapcsolat = new SqliteConnection(kapcsolatiszöveg))
-            {
-                Kapcsolat.Open();
-                // A PRAGMA lekérdezi az oszlopnevet (name) és a típust (type)
-                using (var cmd = new SqliteCommand($"PRAGMA table_info([{táblaNeve}])", Kapcsolat))
-                {
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            string mezoNev = reader["name"].ToString();
-                            string tipusNev = reader["type"].ToString(); // Pl. TEXT, INTEGER, DATE
-
-                            válasz.Add($"{mezoNev}-{tipusNev}");
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            HibaNapló.Log(ex.Message, "Mdb Mdb_ABMezők", ex.StackTrace, ex.Source, ex.HResult, "_", false);
-        }
-        return válasz;
-    }
-
-    private static string BuildConnectionString(string hely, string jelszó)
-    {
-        return new SqliteConnectionStringBuilder
-        {
-            DataSource = hely,
-            Mode = SqliteOpenMode.ReadWriteCreate,
-            Password = jelszó,
-            // Bekapcsolja a kapcsolatgyűjtőt, ami segít a zárolások hatékonyabb kezelésében
-            Pooling = false,
-            // Növeli a várakozási időt (másodpercben), ha az adatbázis épp foglalt
-            DefaultTimeout = 60,
-            Cache = SqliteCacheMode.Shared
-        }.ToString();
-    }
-
-
-    public static void SqLite_TáblaLétrehozás(string hely, string jelszó, string sql)
-    {
-        try
-        {
-            string connectionString = BuildConnectionString(hely, jelszó);
-            using (var connection = new SqliteConnection(connectionString))
-            {
-                connection.Open();
-                using (var command = new SqliteCommand(sql, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-            } // Itt a kapcsolat automatikusan lezárul, akkor is, ha hiba történt.
-        }
-        catch (Exception ex)
-        {
-            HibaNapló.Log(ex.Message, $"SqLite_TáblaLétrehozás hiba: {sql}", ex.StackTrace, ex.Source, ex.HResult);
-            throw new Exception("Adatbázis tábla létrehozási hiba.", ex);
-        }
-    }
-
-
+    #region Listázás
     //public static List<T> Lista_Adatok<T>(string hely, string jelszó, string táblanév, Func<SqliteDataReader, T> mapFüggvény)
     //{
     //    List<T> VálaszAdatok = new List<T>();
@@ -691,6 +613,89 @@ internal static partial class Adatbázis
             throw; // Érdemes az eredeti kivételt továbbdobni a hibakereséshez
         }
         return VálaszAdatok;
+    }
+    #endregion
+
+    public static bool SqLite_ABvanTábla(string holvan, string ABjelszó, string táblanév)
+    {
+        bool válasz = false;
+        try
+        {
+            string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
+            using (var connection = new SqliteConnection(kapcsolatiszöveg))
+            {
+                connection.Open();
+                válasz = SqLite_TáblaVan(connection, táblanév);
+            }
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, "SqLite ABvanTábla", ex.StackTrace, ex.Source, ex.HResult, "_", false);
+        }
+        return válasz;
+    }
+
+    public static bool SqLite_TáblaVan(SqliteConnection sqlite, string tablaNev)
+    {
+        using (var cmd = new SqliteCommand("SELECT name FROM sqlite_master WHERE type='table' AND name=@nev;", sqlite))
+        {
+            cmd.Parameters.AddWithValue("@nev", tablaNev);
+            return cmd.ExecuteScalar() != null;
+        }
+    }
+
+    public static List<string> SqLite_ABMezők(string holvan, string ABjelszó, string táblaNeve)
+    {
+        List<string> válasz = new List<string>();
+        try
+        {
+            string kapcsolatiszöveg = BuildConnectionString(holvan, ABjelszó);
+
+            using (var Kapcsolat = new SqliteConnection(kapcsolatiszöveg))
+            {
+                Kapcsolat.Open();
+                // A PRAGMA lekérdezi az oszlopnevet (name) és a típust (type)
+                using (var cmd = new SqliteCommand($"PRAGMA table_info([{táblaNeve}])", Kapcsolat))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string mezoNev = reader["name"].ToString();
+                            string tipusNev = reader["type"].ToString(); // Pl. TEXT, INTEGER, DATE
+
+                            válasz.Add($"{mezoNev}-{tipusNev}");
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, "Mdb Mdb_ABMezők", ex.StackTrace, ex.Source, ex.HResult, "_", false);
+        }
+        return válasz;
+    }
+
+    public static void SqLite_TáblaLétrehozás(string hely, string jelszó, string sql)
+    {
+        try
+        {
+            string connectionString = BuildConnectionString(hely, jelszó);
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+            } // Itt a kapcsolat automatikusan lezárul, akkor is, ha hiba történt.
+        }
+        catch (Exception ex)
+        {
+            HibaNapló.Log(ex.Message, $"SqLite_TáblaLétrehozás hiba: {sql}", ex.StackTrace, ex.Source, ex.HResult);
+            throw new Exception("Adatbázis tábla létrehozási hiba.", ex);
+        }
     }
 
     public static DataTable SqLite_TáblaLekérése(string hely, string jelszó, string tablaNev)
