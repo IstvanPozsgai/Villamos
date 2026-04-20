@@ -29,13 +29,27 @@ namespace Villamos
             }
         }
 
+        //private string BuildConnectionString()
+        //{
+        //    return new SqliteConnectionStringBuilder
+        //    {
+        //        DataSource = Hely,
+        //        Mode = SqliteOpenMode.ReadWriteCreate,
+        //        Password = Jelszó
+        //    }.ToString();
+        //}
+
         private string BuildConnectionString()
         {
             return new SqliteConnectionStringBuilder
             {
                 DataSource = Hely,
                 Mode = SqliteOpenMode.ReadWriteCreate,
-                Password = Jelszó
+                Password = Jelszó,
+                // Bekapcsolja a kapcsolatgyűjtőt, ami segít a zárolások hatékonyabb kezelésében
+                Pooling = true,
+                // Növeli a várakozási időt (másodpercben), ha az adatbázis épp foglalt
+                DefaultTimeout = 30
             }.ToString();
         }
 
