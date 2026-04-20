@@ -570,16 +570,6 @@ internal static partial class Adatbázis
         return válasz;
     }
 
-    //private static string BuildConnectionString(string hely, string jelszó)
-    //{
-    //    return new SqliteConnectionStringBuilder
-    //    {
-    //        DataSource = hely,
-    //        Mode = SqliteOpenMode.ReadWriteCreate,
-    //        Password = jelszó
-    //    }.ToString();
-    //}
-
     public static string BuildConnectionString(string hely, string jelszó)
     {
         return new SqliteConnectionStringBuilder
@@ -588,9 +578,10 @@ internal static partial class Adatbázis
             Mode = SqliteOpenMode.ReadWriteCreate,
             Password = jelszó,
             // Bekapcsolja a kapcsolatgyűjtőt, ami segít a zárolások hatékonyabb kezelésében
-            Pooling = true,
+            Pooling = false,
             // Növeli a várakozási időt (másodpercben), ha az adatbázis épp foglalt
-            DefaultTimeout = 60
+            DefaultTimeout = 60,
+            Cache = SqliteCacheMode.Shared
         }.ToString();
     }
 
