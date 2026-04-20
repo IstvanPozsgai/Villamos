@@ -11,7 +11,7 @@ namespace Villamos.Kezelők
 
     public class SQL_Kezelő_Belépés_Verzió
     {
-        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\SQL\Belépés.db";
+        readonly string hely = $@"{Application.StartupPath}\Főmérnökség\SQL\AlapAdatok.db";
         readonly string jelszó = "ForgalmiUtasítás";
         readonly string táblanév = "Tbl_Bejelentkezés_Verzió";
 
