@@ -1630,7 +1630,6 @@
     <Compile Include="V_MindenEgyéb\Vezénylés.cs" />
     <Compile Include="V_MindenEgyéb\Váltós_Számítások.cs" />
     <Compile Include="V_Ablakok\7_Kiadási_adatok\Főkönyv\Főkönyv_Főkönyv.cs" />
-    <Compile Include="V_SqLite\SqLite_Adatbázis.cs" />
     <Compile Include="V_XML\MyClosedXML_Be.cs" />
     <Compile Include="V_XML\MyClosedXML_Betű.cs" />
     <Compile Include="V_XML\MyClosedXML_Cella.cs" />
