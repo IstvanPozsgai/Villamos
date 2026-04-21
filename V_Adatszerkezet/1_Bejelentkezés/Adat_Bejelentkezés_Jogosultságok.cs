@@ -7,7 +7,7 @@
         public int OldalId { get; private set; }
         public int GombokId { get; private set; }
         public int SzervezetId { get; private set; }
-        public bool Törölt { get; private set; }
+        public bool Törölt { get; set; }
 
         public Adat_Bejelentkezés_Jogosultságok(int userId, int oldalId, int gombokId, int szervezetId, bool törölt)
         {

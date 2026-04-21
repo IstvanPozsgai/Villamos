@@ -26,26 +26,24 @@ namespace Villamos
         List<Adat_Bejelentkezés_Jogosultságok> AdatokJogosultságok = new List<Adat_Bejelentkezés_Jogosultságok>();
         List<Adat_Bejelentkezés_Jogosultságok> MásolatAdatok = new List<Adat_Bejelentkezés_Jogosultságok>();
 
-        // Ez tárolja majd a konkrét, futó főoldalt
         private A_Főoldal FőoldalPéldány;
 
 #pragma warning disable IDE0044
         DataTable AdatTáblaALap = new DataTable();
 #pragma warning restore IDE0044
 
-        //Kiválasztott felhasználó id-je
         int FelhasználóFőId = -1;
         string AblakFormName = "";
         int AblakFőID = -1;
         int GombFőID = -1;
 
-        // VÁLTOZÓ AZ ÚJ KOSÁR FUNKCIÓHOZ: Figyeli, hogy épp a program tölti-e a listát
+        // Változó a listbox programozott bepipálásának figyelésére
         private bool SzervezetBetoltesAlatt = false;
 
         public Ablak_JogKiosztás(A_Főoldal Példány)
         {
             InitializeComponent();
-            FőoldalPéldány = Példány; // Itt mentjük el
+            FőoldalPéldány = Példány;
             LoadMenuFromMain();
             Start();
         }
@@ -59,23 +57,18 @@ namespace Villamos
             AdatokOldal = KézOldal.Lista_Adatok().Where(a => a.Törölt == false).ToList();
             AdatokGombok = KézGombok.Lista_Adatok().Where(a => a.Törölt == false).ToList();
             AdatokSzervezet = KézSzervezet.Lista_Adatok().OrderBy(a => a.Név).ToList();
-            AdatokUsers = KézUsers.Lista_Adatok();
-            AdatokUsers = (from a in AdatokUsers
-                           where a.Törölt == false
-                           orderby a.UserName
-                           select a).ToList();
+            AdatokUsers = KézUsers.Lista_Adatok().Where(a => a.Törölt == false).OrderBy(a => a.UserName).ToList();
             AdatokDolgozó = KézDolgozó.Lista_Adatok().Where(a => a.Státus == true).OrderBy(a => a.Dolgozónév).ToList();
+
+            // EZ AZ EGYETLEN HELY, AHOL A PROGRAM INDULÁSKOR BETÖLTI AZ ADATBÁZIST A MEMÓRIÁBA
             AdatokJogosultságok = KézJogosultságok.Lista_Adatok();
+
             OldalFeltöltés();
             FelhasználóFeltöltés();
             GombLathatosagKezelo.Beallit(this, Program.PostásTelephely);
         }
 
         #region Mezők feltöltése
-
-        /// <summary>
-        /// Oldalak feltöltése a comboxba.
-        /// </summary>
         private void OldalFeltöltés()
         {
             try
@@ -86,47 +79,24 @@ namespace Villamos
                     CmbAblakId.Items.Add(Elem.OldalId.ToString());
                 }
             }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            catch (Exception ex) { HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult); }
         }
 
-        /// <summary>
-        /// Ablak gombok feltöltése a comboxba.
-        /// </summary>
         private void GombokFeltöltése()
         {
             if (CmbAblak.Text.Trim() == "") return;
             LstGombok.Items.Clear();
 
-            Adat_Belépés_Oldalak oldal = (from a in AdatokOldal
-                                          where a.Törölt == false
-                                          && a.MenuFelirat == CmbAblak.Text.Trim()
-                                          orderby a.MenuFelirat
-                                          select a).FirstOrDefault();
+            Adat_Belépés_Oldalak oldal = AdatokOldal.FirstOrDefault(a => a.Törölt == false && a.MenuFelirat == CmbAblak.Text.Trim());
             if (oldal == null) return;
-            List<Adat_Bejelentkezés_Gombok> gombok = (from a in AdatokGombok
-                                                      where a.Törölt == false
-                                                      && a.FormName == oldal.FromName
-                                                      select a).ToList();
-            if (gombok == null) return;
-            for (int i = 0; i < gombok.Count; i++)
+
+            List<Adat_Bejelentkezés_Gombok> gombok = AdatokGombok.Where(a => a.Törölt == false && a.FormName == oldal.FromName).ToList();
+            foreach (var item in gombok)
             {
-                Adat_Bejelentkezés_Gombok item = gombok[i];
-                string felirat = $"{item.GombokId} = {item.GombFelirat} = {item.GombName}";
-                LstGombok.Items.Add(felirat);
+                LstGombok.Items.Add($"{item.GombokId} = {item.GombFelirat} = {item.GombName}");
             }
         }
 
-        /// <summary>
-        /// Feltöltjük a felhasználókat a comboxba.
-        /// </summary>
         private void FelhasználóFeltöltés()
         {
             try
@@ -138,76 +108,42 @@ namespace Villamos
                     Felhasználók.Items.Add(item.UserName);
                 }
             }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            catch (Exception ex) { HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult); }
         }
         #endregion
 
         #region Mezők kijelölése és választása
         private void CmbAblak_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            try
-            {
-                CmbAblak.Text = CmbAblak.Items[CmbAblak.SelectedIndex].ToString();
-                Adat_Belépés_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
-                AblakFormName = Ablak.FromName;
-                AblakFőID = Ablak.OldalId;
-                CmbAblakId.Text = Ablak.OldalId.ToString();
+            CmbAblak.Text = CmbAblak.Items[CmbAblak.SelectedIndex].ToString();
+            Adat_Belépés_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
+            AblakFormName = Ablak.FromName;
+            AblakFőID = Ablak.OldalId;
+            CmbAblakId.Text = Ablak.OldalId.ToString();
 
-                MezőkÜrítése(false);
-                GombokFeltöltése();
-                TáblázatListázás();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            MezőkÜrítése(false);
+            GombokFeltöltése();
+            TáblázatListázás();
         }
 
         private void Felhasználók_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            try
+            Felhasználók.Text = Felhasználók.Items[Felhasználók.SelectedIndex].ToString();
+            Adat_Bejelentkezés_Users Felhasználó = AdatokUsers.FirstOrDefault(a => a.UserName == Felhasználók.Text);
+
+            if (Felhasználó == null)
             {
-                Felhasználók.Text = Felhasználók.Items[Felhasználók.SelectedIndex].ToString();
-                Adat_Bejelentkezés_Users Felhasználó = AdatokUsers.FirstOrDefault(a => a.UserName == Felhasználók.Text);
-                if (Felhasználó == null)
-                {
-                    DolgozóNév.Text = $"<< - >>";
-                    FelhasználóFőId = -1;
-                }
-                else
-                {
-                    FelhasználóFőId = Felhasználó.UserId;
-                    Adat_Behajtás_Dolgozótábla dolgozó = AdatokDolgozó.FirstOrDefault(a => a.Dolgozószám == Felhasználó.Dolgozószám);
-                    if (dolgozó != null)
-                        DolgozóNév.Text = $"<<{dolgozó.Dolgozószám} - {dolgozó.Dolgozónév}>>";
-                    else
-                        DolgozóNév.Text = $"<<{Felhasználó.Dolgozószám} - >>";
-                }
-                MezőkÜrítése();
-                TáblázatListázás();
+                DolgozóNév.Text = $"<< - >>";
+                FelhasználóFőId = -1;
             }
-            catch (HibásBevittAdat ex)
+            else
             {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                FelhasználóFőId = Felhasználó.UserId;
+                Adat_Behajtás_Dolgozótábla dolgozó = AdatokDolgozó.FirstOrDefault(a => a.Dolgozószám == Felhasználó.Dolgozószám);
+                DolgozóNév.Text = dolgozó != null ? $"<<{dolgozó.Dolgozószám} - {dolgozó.Dolgozónév}>>" : $"<<{Felhasználó.Dolgozószám} - >>";
             }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            MezőkÜrítése();
+            TáblázatListázás();
         }
 
         private void MezőkÜrítése(bool minden = true)
@@ -228,47 +164,6 @@ namespace Villamos
             TáblázatListázás();
         }
 
-        // MEGJEGYZÉS: Ez az eredeti gombod, ha a kosaras rendszert használod, erre lehet nem is lesz szükséged, 
-        // de meghagytam az eredeti formájában.
-        private void Rögzít_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem adja meg a Felhasználót!");
-                if (CmbAblak.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon egy Ablakot!");
-                if (LstGombok.SelectedItems.Count == 0) throw new HibásBevittAdat("Kérem válasszon legalább egy Gombot gombot!");
-
-                string[] gomb = LstGombok.SelectedItems[0].ToStrTrim().Split('=');
-                int GombokID = AdatokGombok.FirstOrDefault(a => a.GombName == gomb[2].Trim() && a.FormName == AblakFormName)?.GombokId ?? -1;
-
-                List<Adat_Bejelentkezés_Jogosultságok> Adatok = new List<Adat_Bejelentkezés_Jogosultságok>();
-                for (int i = 0; i < LstChkSzervezet.Items.Count; i++)
-                {
-                    int SzervezetId = AdatokSzervezet.FirstOrDefault(a => a.Név == LstChkSzervezet.Items[i].ToString())?.ID ?? -1;
-                    Adat_Bejelentkezés_Jogosultságok adat = new Adat_Bejelentkezés_Jogosultságok
-                    (
-                        FelhasználóFőId,
-                        AblakFőID,
-                        GombokID,
-                        SzervezetId,
-                        !LstChkSzervezet.GetItemChecked(i)
-                    );
-                    Adatok.Add(adat);
-                }
-                if (Adatok.Count > 0) KézJogosultságok.Döntés(Adatok);
-                TáblázatListázás();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void MindenGomb_Click(object sender, EventArgs e)
         {
             try
@@ -276,36 +171,31 @@ namespace Villamos
                 if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem adja meg a Felhasználót!");
                 if (CmbAblak.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon egy Ablakot!");
 
-                List<Adat_Bejelentkezés_Jogosultságok> Adatok = new List<Adat_Bejelentkezés_Jogosultságok>();
+                // Memóriába rakjuk a jogokat
                 for (int j = 0; j < LstGombok.Items.Count; j++)
                 {
-                    string[] SzámDarabol = LstGombok.SelectedItems[0].ToStrTrim().Split('-');
+                    string[] SzámDarabol = LstGombok.Items[j].ToStrTrim().Split('=');
+                    int gombId = SzámDarabol[0].ToÉrt_Int();
+
                     for (int i = 0; i < LstChkSzervezet.Items.Count; i++)
                     {
                         int SzervezetId = AdatokSzervezet.FirstOrDefault(a => a.Név == LstChkSzervezet.Items[i].ToString())?.ID ?? -1;
-                        Adat_Bejelentkezés_Jogosultságok adat = new Adat_Bejelentkezés_Jogosultságok
-                        (
-                            FelhasználóFőId,
-                            AblakFőID,
-                            SzámDarabol[0].ToÉrt_Int(),
-                            SzervezetId,
-                            !LstChkSzervezet.GetItemChecked(i)
-                        );
-                        Adatok.Add(adat);
+                        bool toroltStatus = !LstChkSzervezet.GetItemChecked(i);
+
+                        var letezo = AdatokJogosultságok.FirstOrDefault(a => a.UserId == FelhasználóFőId && a.OldalId == AblakFőID && a.GombokId == gombId && a.SzervezetId == SzervezetId);
+                        if (letezo != null)
+                        {
+                            letezo.Törölt = toroltStatus;
+                        }
+                        else if (!toroltStatus)
+                        {
+                            AdatokJogosultságok.Add(new Adat_Bejelentkezés_Jogosultságok(FelhasználóFőId, AblakFőID, gombId, SzervezetId, false));
+                        }
                     }
                 }
-                if (Adatok.Count > 0) KézJogosultságok.Döntés(Adatok);
                 TáblázatListázás();
             }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
 
         private void BtnAblakTörlés_Click(object sender, EventArgs e)
@@ -314,27 +204,40 @@ namespace Villamos
             {
                 if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon ki egy felhasználót!");
                 if (CmbAblakId.Text.Trim() == "") throw new HibásBevittAdat("Nincs kiválasztva ablak!");
-                Adat_Bejelentkezés_Users ADAT = (from a in AdatokUsers
-                                                 where a.UserName == Felhasználók.Text.Trim()
-                                                 select a).FirstOrDefault();
-                Adat_Bejelentkezés_Jogosultságok Törlés = new Adat_Bejelentkezés_Jogosultságok(
-                             ADAT.UserId,
-                             CmbAblakId.Text.ToÉrt_Int(),
-                             0, 0, true);
-                KézJogosultságok.Törlés(Törlés);
+
+                Adat_Bejelentkezés_Users ADAT = AdatokUsers.FirstOrDefault(a => a.UserName == Felhasználók.Text.Trim());
+                int ablakId = CmbAblakId.Text.ToÉrt_Int();
+
+                // Memóriában töröltre állítjuk az ablakhoz tartozó jogokat
+                foreach (var adat in AdatokJogosultságok.Where(a => a.UserId == ADAT.UserId && a.OldalId == ablakId))
+                {
+                    adat.Törölt = true;
+                }
 
                 TáblázatListázás();
-                MessageBox.Show("A jogosultságok törlése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("A jogosultságok törlése a memóriában megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch (HibásBevittAdat ex)
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+        }
+
+        private void JogTörlés_Click(object sender, EventArgs e)
+        {
+            try
             {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon ki egy felhasználót!");
+
+                Adat_Bejelentkezés_Users Egy = AdatokUsers.FirstOrDefault(a => a.UserName == Felhasználók.Text.Trim());
+
+                // Memóriában töröljük a felhasználó összes jogát
+                foreach (var adat in AdatokJogosultságok.Where(a => a.UserId == Egy.UserId))
+                {
+                    adat.Törölt = true;
+                }
+
+                TáblázatListázás();
+                MessageBox.Show("Jogosultságok törlése a memóriában megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
 
         private void LstGombok_SelectedIndexChanged(object sender, EventArgs e)
@@ -343,12 +246,90 @@ namespace Villamos
         }
         #endregion
 
+        #region KOSÁR ÉS VÉGLEGES MENTÉS FUNKCIÓK
+
+        private void LstChkSzervezet_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            // Ne reagáljon, ha épp mi töltjük fel a listát
+            if (SzervezetBetoltesAlatt) return;
+
+            if (Felhasználók.Text.Trim() == "" || CmbAblak.Text.Trim() == "" || LstGombok.SelectedItems.Count == 0) return;
+
+            string szervezetNév = LstChkSzervezet.Items[e.Index].ToString();
+            int szervezetId = AdatokSzervezet.FirstOrDefault(a => a.Név == szervezetNév)?.ID ?? -1;
+
+            string[] gomb = LstGombok.SelectedItems[0].ToStrTrim().Split('=');
+            int GombokID = AdatokGombok.FirstOrDefault(a => a.GombName == gomb[2].Trim() && a.FormName == AblakFormName)?.GombokId ?? -1;
+
+            string megjelenitoSzoveg = $"{Felhasználók.Text} | {CmbAblak.Text} | {gomb[1].Trim()} | {szervezetNév}";
+
+            if (e.NewValue == CheckState.Checked)
+            {
+                bool marBenneVan = LstJogokAdni.Items.Cast<KiosztandoJog>().Any(x => x.Megjelenites == megjelenitoSzoveg);
+                if (!marBenneVan)
+                {
+                    Adat_Bejelentkezés_Jogosultságok ujJog = new Adat_Bejelentkezés_Jogosultságok(FelhasználóFőId, AblakFőID, GombokID, szervezetId, false);
+                    LstJogokAdni.Items.Add(new KiosztandoJog { JogAdat = ujJog, Megjelenites = megjelenitoSzoveg });
+                }
+            }
+            else if (e.NewValue == CheckState.Unchecked)
+            {
+                var torlendo = LstJogokAdni.Items.Cast<KiosztandoJog>().FirstOrDefault(x => x.Megjelenites == megjelenitoSzoveg);
+                if (torlendo != null) LstJogokAdni.Items.Remove(torlendo);
+            }
+        }
+
+        private void BtnOsszesMentese_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (LstJogokAdni.Items.Count == 0) return;
+
+                // Memóriába írjuk a kosár tartalmát
+                foreach (KiosztandoJog item in LstJogokAdni.Items)
+                {
+                    var meglévő = AdatokJogosultságok.FirstOrDefault(a => a.UserId == item.JogAdat.UserId && a.OldalId == item.JogAdat.OldalId && a.GombokId == item.JogAdat.GombokId && a.SzervezetId == item.JogAdat.SzervezetId);
+                    if (meglévő != null) meglévő.Törölt = false;
+                    else AdatokJogosultságok.Add(item.JogAdat);
+                }
+
+                LstJogokAdni.Items.Clear();
+                TáblázatListázás();
+                MessageBox.Show("A jogok a memóriában kiosztásra kerültek! Ne felejtsd el elmenteni az adatbázisba!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+        }
+
+        // AZ ÚJ VÉGLEGES MENTÉS GOMB - Ez írja ki a memóriát az adatbázisba!
+        private void BtnVeglegesMentes_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+                // Elküldjük a memóriát szinkronizálásra
+                KézJogosultságok.Teljes_Szinkronizáció(AdatokJogosultságok);
+
+                // Frissítjük a belső listát a biztos adatbázis állapotra
+                AdatokJogosultságok = KézJogosultságok.Lista_Adatok();
+                TáblázatListázás();
+                Cursor = Cursors.Default;
+
+                MessageBox.Show("A módosítások sikeresen mentve az adatbázisba!", "Sikeres mentés", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                Cursor = Cursors.Default;
+                MessageBox.Show(ex.Message, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
+
         #region Táblázat
         private void TáblázatListázás()
         {
             try
             {
-                AdatokJogosultságok = KézJogosultságok.Lista_Adatok();
+                // ITT NINCS ADATBÁZIS OLVASÁS! Tisztán a memóriából (AdatokJogosultságok) dolgozik.
                 Tábla.Visible = false;
                 Tábla.CleanFilterAndSort();
                 AlapTáblaFejléc();
@@ -358,38 +339,18 @@ namespace Villamos
                 Tábla.Visible = true;
                 Tábla.Refresh();
             }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            catch (Exception ex) { HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult); }
         }
 
         private void AlapTáblaFejléc()
         {
-            try
-            {
-                AdatTáblaALap.Columns.Clear();
-                AdatTáblaALap.Columns.Add("Felhasználó név");
-                AdatTáblaALap.Columns.Add("Ablak név");
-                AdatTáblaALap.Columns.Add("Gomb név");
-                AdatTáblaALap.Columns.Add("Szervezet");
-                AdatTáblaALap.Columns.Add("AblakId");
-                AdatTáblaALap.Columns.Add("GombId");
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            AdatTáblaALap.Columns.Clear();
+            AdatTáblaALap.Columns.Add("Felhasználó név");
+            AdatTáblaALap.Columns.Add("Ablak név");
+            AdatTáblaALap.Columns.Add("Gomb név");
+            AdatTáblaALap.Columns.Add("Szervezet");
+            AdatTáblaALap.Columns.Add("AblakId");
+            AdatTáblaALap.Columns.Add("GombId");
         }
 
         private void AlapTáblaTartalom()
@@ -397,47 +358,43 @@ namespace Villamos
             try
             {
                 AdatTáblaALap.Clear();
-                AdatokJogosultságok = KézJogosultságok.Lista_Adatok();
-                List<Adat_Bejelentkezés_Jogosultságok> Adatok = AdatokJogosultságok;
+
+                // Csak a NEM TÖRÖLT adatokat vesszük figyelembe a megjelenítésnél
+                List<Adat_Bejelentkezés_Jogosultságok> Adatok = AdatokJogosultságok.Where(a => !a.Törölt).ToList();
+
                 if (Felhasználók.Text.Trim() != "")
                 {
-                    Adat_Bejelentkezés_Users Egy = (from a in AdatokUsers
-                                                    where a.UserName == Felhasználók.Text.Trim()
-                                                    select a).FirstOrDefault();
-                    Adatok = AdatokJogosultságok.Where(a => a.UserId == Egy.UserId).ToList();
-                    if (CmbAblak.Text.Trim() != "")
+                    Adat_Bejelentkezés_Users Egy = AdatokUsers.FirstOrDefault(a => a.UserName == Felhasználók.Text.Trim());
+                    if (Egy != null)
                     {
-                        int oldalid = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text.Trim())?.OldalId ?? -1;
-                        Adatok = Adatok.Where(a => a.OldalId == oldalid).ToList();
+                        Adatok = Adatok.Where(a => a.UserId == Egy.UserId).ToList();
+                        if (CmbAblak.Text.Trim() != "")
+                        {
+                            int oldalid = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text.Trim())?.OldalId ?? -1;
+                            Adatok = Adatok.Where(a => a.OldalId == oldalid).ToList();
+                        }
                     }
                 }
+
                 foreach (Adat_Bejelentkezés_Jogosultságok rekord in Adatok)
                 {
                     DataRow Soradat = AdatTáblaALap.NewRow();
                     Soradat["Felhasználó név"] = AdatokUsers.FirstOrDefault(a => a.UserId == rekord.UserId)?.UserName ?? "<<Nincs felhasználó>>";
                     Soradat["Ablak név"] = AdatokOldal.FirstOrDefault(a => a.OldalId == rekord.OldalId)?.MenuFelirat ?? "<<Nincs Ablak>>";
+
                     string gombnév = "<<Nincs Gomb>>";
                     Adat_Bejelentkezés_Gombok EgyGomb = AdatokGombok.FirstOrDefault(a => a.GombokId == rekord.GombokId);
-                    if (EgyGomb != null)
-                        gombnév = $"{EgyGomb.GombFelirat} = {EgyGomb.GombName}";
+                    if (EgyGomb != null) gombnév = $"{EgyGomb.GombFelirat} = {EgyGomb.GombName}";
+
                     Soradat["Gomb név"] = gombnév;
-                    string szervezet = "<<Nincs Szervezet>>";
-                    szervezet = AdatokSzervezet.FirstOrDefault(a => a.ID == rekord.SzervezetId)?.Név ?? "<<Nincs Szervezet>>";
-                    Soradat["Szervezet"] = szervezet;
+                    Soradat["Szervezet"] = AdatokSzervezet.FirstOrDefault(a => a.ID == rekord.SzervezetId)?.Név ?? "<<Nincs Szervezet>>";
                     Soradat["AblakId"] = rekord.OldalId;
                     Soradat["GombId"] = rekord.GombokId;
+
                     AdatTáblaALap.Rows.Add(Soradat);
                 }
             }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            catch (Exception ex) { HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult); }
         }
 
         private void AlapTáblaOszlopSzélesség()
@@ -457,84 +414,61 @@ namespace Villamos
             string[] gombnév = Tábla.Rows[e.RowIndex].Cells[2].Value.ToStrTrim().Split('=');
             CmbAblak.Text = Tábla.Rows[e.RowIndex].Cells[1].Value.ToStrTrim();
             CmbAblakId.Text = Tábla.Rows[e.RowIndex].Cells[4].Value.ToStrTrim();
+
             Adat_Belépés_Oldalak Ablak = AdatokOldal.FirstOrDefault(a => a.MenuFelirat == CmbAblak.Text);
             AblakFormName = Ablak.FromName;
             AblakFőID = Ablak.OldalId;
 
             GombokFeltöltése();
-            GombKijelöl(gombnév[1]);
+            GombKijelöl(gombnév[1].Trim());
             Szervezetek();
         }
 
         private void GombKijelöl(string gombnév)
         {
-            try
+            for (int i = 0; i < LstGombok.Items.Count; i++)
             {
-                if (LstGombok.Items.Count < 1) return;
-                for (int i = 0; i < LstGombok.Items.Count; i++)
-                {
-                    string[] gomb = LstGombok.Items[i].ToStrTrim().Split('=');
-                    if (gomb[2] == gombnév) LstGombok.SelectedIndex = i;
-                }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string[] gomb = LstGombok.Items[i].ToStrTrim().Split('=');
+                if (gomb[2].Trim() == gombnév) LstGombok.SelectedIndex = i;
             }
         }
         #endregion
 
-        #region Szervezet / KOSÁR FUNKCIÓK
-
+        #region Szervezetek beállítása
         private void Szervezetek()
         {
             try
             {
+                // JELZÜNK A RENDSZERNEK, HOGY MOST MI PIPÁLUNK, NEM A FELHASZNÁLÓ
                 SzervezetBetoltesAlatt = true;
 
                 LstChkSzervezet.Items.Clear();
                 if (LstGombok.Items.Count == 0) return;
+
                 string[] Darabol = LstGombok.SelectedItems[0].ToStrTrim().Split('=');
                 Adat_Bejelentkezés_Gombok Gomb = AdatokGombok.FirstOrDefault(a => a.GombName == Darabol[2].Trim() && a.FormName == AblakFormName);
                 GombFőID = Gomb?.GombokId ?? -1;
 
                 if (Gomb == null) return;
+
                 string[] Gomb_Szervezetek_darabolva = Gomb.Szervezet.Split(';');
                 string[] Jogadó_Szervezetek_darabolva = Program.Postás_Felhasználó.Szervezetek.Split(';');
 
                 foreach (string szervezet in Gomb_Szervezetek_darabolva)
                 {
-                    if (Jogadó_Szervezetek_darabolva.Contains(szervezet))
+                    if (Jogadó_Szervezetek_darabolva.Contains(szervezet.Trim()))
                     {
                         LstChkSzervezet.Items.Add(szervezet.Trim());
+                        int szervezetID = AdatokSzervezet.FirstOrDefault(b => b.Név == szervezet.Trim())?.ID ?? -1;
 
-                        int UserId = FelhasználóFőId;
-                        Adat_Bejelentkezés_Jogosultságok Jog = (from a in AdatokJogosultságok
-                                                                where a.UserId == FelhasználóFőId
-                                                                && a.OldalId == AblakFőID
-                                                                && a.GombokId == GombFőID
-                                                                && a.SzervezetId == AdatokSzervezet.FirstOrDefault(b => b.Név == szervezet.Trim())?.ID
-                                                                select a).FirstOrDefault();
-                        if (Jog != null && !Jog.Törölt)
-                            LstChkSzervezet.SetItemChecked(LstChkSzervezet.Items.IndexOf(szervezet.Trim()), true);
-                        else
-                            LstChkSzervezet.SetItemChecked(LstChkSzervezet.Items.IndexOf(szervezet.Trim()), false);
+                        // A memóriából nézzük a jogot
+                        Adat_Bejelentkezés_Jogosultságok Jog = AdatokJogosultságok.FirstOrDefault(a =>
+                            a.UserId == FelhasználóFőId && a.OldalId == AblakFőID && a.GombokId == GombFőID && a.SzervezetId == szervezetID);
+
+                        bool chkState = (Jog != null && !Jog.Törölt);
+                        LstChkSzervezet.SetItemChecked(LstChkSzervezet.Items.IndexOf(szervezet.Trim()), chkState);
                     }
                 }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -542,136 +476,64 @@ namespace Villamos
             }
         }
 
-        private void SzervezetMinden_Click(object sender, EventArgs e)
-        {
-            SzervezetJelöl(true);
-        }
-
-        private void SzervezetSemmi_Click(object sender, EventArgs e)
-        {
-            SzervezetJelöl(false);
-        }
+        private void SzervezetMinden_Click(object sender, EventArgs e) => SzervezetJelöl(true);
+        private void SzervezetSemmi_Click(object sender, EventArgs e) => SzervezetJelöl(false);
 
         private void SzervezetJelöl(bool kell)
         {
             for (int i = 0; i < LstChkSzervezet.Items.Count; i++)
                 LstChkSzervezet.SetItemChecked(i, kell);
         }
+        #endregion
 
-        // AMIKOR A FELHASZNÁLÓ BEPIPÁL/KIVESZ EGY PIPÁT
-        private void LstChkSzervezet_ItemCheck(object sender, ItemCheckEventArgs e)
-        {
-            // Ha a program tölti be a listát, nem csinálunk semmit
-            if (SzervezetBetoltesAlatt) return;
-
-            if (Felhasználók.Text.Trim() == "" || CmbAblak.Text.Trim() == "" || LstGombok.SelectedItems.Count == 0)
-                return;
-
-            string szervezetNév = LstChkSzervezet.Items[e.Index].ToString();
-            int szervezetId = AdatokSzervezet.FirstOrDefault(a => a.Név == szervezetNév)?.ID ?? -1;
-
-            string[] gomb = LstGombok.SelectedItems[0].ToStrTrim().Split('=');
-            int GombokID = AdatokGombok.FirstOrDefault(a => a.GombName == gomb[2].Trim() && a.FormName == AblakFormName)?.GombokId ?? -1;
-
-            // Létrehozunk egy szép formázott szöveget, amit a felhasználó látni fog a gyűjtő listában
-            string megjelenitoSzoveg = $"{Felhasználók.Text} | {CmbAblak.Text} | {gomb[1].Trim()} | {szervezetNév}";
-
-            if (e.NewValue == CheckState.Checked)
-            {
-                // Megnézzük, hogy nincs-e már benne
-                bool marBenneVan = LstJogokAdni.Items.Cast<KiosztandoJog>().Any(x => x.Megjelenites == megjelenitoSzoveg);
-
-                if (!marBenneVan)
-                {
-                    Adat_Bejelentkezés_Jogosultságok ujJog = new Adat_Bejelentkezés_Jogosultságok(
-                        FelhasználóFőId, AblakFőID, GombokID, szervezetId, false);
-
-                    LstJogokAdni.Items.Add(new KiosztandoJog { JogAdat = ujJog, Megjelenites = megjelenitoSzoveg });
-                }
-            }
-            else if (e.NewValue == CheckState.Unchecked)
-            {
-                var torlendo = LstJogokAdni.Items.Cast<KiosztandoJog>().FirstOrDefault(x => x.Megjelenites == megjelenitoSzoveg);
-                if (torlendo != null)
-                {
-                    LstJogokAdni.Items.Remove(torlendo);
-                }
-            }
-        }
-
-        // AZ ÖSSZEGYŰJTÖTT JOGOK EGYSZERRE TÖRÉTNŐ MENTÉSE
-        private void BtnOsszesMentese_Click(object sender, EventArgs e)
+        #region Jogosultság másolása
+        private void BtnMásol_Click(object sender, EventArgs e)
         {
             try
             {
-                if (LstJogokAdni.Items.Count == 0)
-                {
-                    MessageBox.Show("Nincs kiosztásra váró jog a listában!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
+                MásolatAdatok.Clear();
+                Másolat.Text = $"<< >>";
 
-                List<Adat_Bejelentkezés_Jogosultságok> rögzitendőAdatok = new List<Adat_Bejelentkezés_Jogosultságok>();
+                if (Felhasználók.Text.Trim() == "") return;
+                Másolat.Text = $"Másolás: {Felhasználók.Text}";
 
-                foreach (KiosztandoJog item in LstJogokAdni.Items)
-                {
-                    rögzitendőAdatok.Add(item.JogAdat);
-                }
+                Adat_Bejelentkezés_Users Felhasználó = AdatokUsers.FirstOrDefault(a => a.UserName == Felhasználók.Text);
 
-                KézJogosultságok.Döntés(rögzitendőAdatok);
-
-                // Sikeres mentés után ürítjük a listát és frissítünk
-                LstJogokAdni.Items.Clear();
-                TáblázatListázás();
-
-                MessageBox.Show("Az összes kiválasztott jogosultság sikeresen kiosztásra került!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Memóriából másolunk
+                MásolatAdatok = AdatokJogosultságok.Where(a => a.UserId == Felhasználó.UserId && !a.Törölt).ToList();
             }
-            catch (Exception ex)
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+        }
+
+        private void BtnBeilleszt_Click(object sender, EventArgs e)
+        {
+            try
             {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (Másolat.Text.Trim() == "") throw new HibásBevittAdat("Nincs másolani kívánt felhasználó!");
+                if (MásolatAdatok.Count < 1) throw new HibásBevittAdat("Nincs másolani kívánt adat!");
+
+                Adat_Bejelentkezés_Users Felhasználó = AdatokUsers.FirstOrDefault(a => a.UserName == Felhasználók.Text);
+
+                // Memóriába illesztünk be
+                foreach (Adat_Bejelentkezés_Jogosultságok adat in MásolatAdatok)
+                {
+                    var letezo = AdatokJogosultságok.FirstOrDefault(a => a.UserId == Felhasználó.UserId && a.OldalId == adat.OldalId && a.GombokId == adat.GombokId && a.SzervezetId == adat.SzervezetId);
+                    if (letezo != null)
+                    {
+                        letezo.Törölt = false;
+                    }
+                    else
+                    {
+                        AdatokJogosultságok.Add(new Adat_Bejelentkezés_Jogosultságok(Felhasználó.UserId, adat.OldalId, adat.GombokId, adat.SzervezetId, false));
+                    }
+                }
+                TáblázatListázás();
             }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
         #endregion
 
-        private void JogTörlés_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon ki egy felhasználót!");
-                Adat_Bejelentkezés_Users Egy = (from a in AdatokUsers
-                                                where a.UserName == Felhasználók.Text.Trim()
-                                                select a).FirstOrDefault();
-                List<Adat_Bejelentkezés_Jogosultságok> Adatok = AdatokJogosultságok.Where(a => a.UserId == Egy.UserId).ToList();
-
-                List<Adat_Bejelentkezés_Jogosultságok> AdatokKüldés = new List<Adat_Bejelentkezés_Jogosultságok>();
-                foreach (Adat_Bejelentkezés_Jogosultságok adat in Adatok)
-                {
-                    Adat_Bejelentkezés_Jogosultságok Törlés = new Adat_Bejelentkezés_Jogosultságok
-                    (
-                        adat.UserId,
-                        adat.OldalId,
-                        adat.GombokId,
-                        adat.SzervezetId,
-                        true
-                    );
-                    AdatokKüldés.Add(Törlés);
-                }
-
-                KézJogosultságok.Döntés(AdatokKüldés);
-                TáblázatListázás();
-                MessageBox.Show("Jogosultságok törlése megtörtént.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
+        #region MenüszerkezetFába írása és egyéb segédfüggvények
         private void CmbAblakId_SelectionChangeCommitted(object sender, EventArgs e)
         {
             CmbAblakId.Text = CmbAblakId.Items[CmbAblakId.SelectedIndex].ToString();
@@ -689,73 +551,6 @@ namespace Villamos
             TáblázatListázás();
         }
 
-        #region Jogosultság másolása
-        private void BtnMásol_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                MásolatAdatok.Clear();
-                Másolat.Text = $"<< >>";
-
-                if (Felhasználók.Text.Trim() == "") return;
-                Másolat.Text = $"Másolás: {Felhasználók.Text}";
-
-                Adat_Bejelentkezés_Users Felhasználó = AdatokUsers.FirstOrDefault(a => a.UserName == Felhasználók.Text);
-                List<Adat_Bejelentkezés_Jogosultságok> Adatok = AdatokJogosultságok;
-
-                MásolatAdatok = (from a in AdatokJogosultságok
-                                 where a.UserId == Felhasználó.UserId
-                                 select a).ToList();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void BtnBeilleszt_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Másolat.Text.Trim() == "") throw new HibásBevittAdat("Nincs másolani kívánt felhasználó!");
-                if (MásolatAdatok.Count < 1) throw new HibásBevittAdat("Nincs másolani kívánt adat!");
-
-                Adat_Bejelentkezés_Users Felhasználó = AdatokUsers.FirstOrDefault(a => a.UserName == Felhasználók.Text);
-                List<Adat_Bejelentkezés_Jogosultságok> Rögzítés = new List<Adat_Bejelentkezés_Jogosultságok>();
-
-                foreach (Adat_Bejelentkezés_Jogosultságok adat in MásolatAdatok)
-                {
-                    Adat_Bejelentkezés_Jogosultságok Új = new Adat_Bejelentkezés_Jogosultságok
-                    (
-                        Felhasználó.UserId,
-                        adat.OldalId,
-                        adat.GombokId,
-                        adat.SzervezetId,
-                        adat.Törölt
-                    );
-                    Rögzítés.Add(Új);
-                }
-                if (Rögzítés.Count > 0) KézJogosultságok.Döntés(Rögzítés);
-                TáblázatListázás();
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        #endregion
-
-        #region MenüszerkezetFába írása
         private void LoadMenuFromMain()
         {
             MenűFa.Nodes.Clear();
@@ -799,9 +594,7 @@ namespace Villamos
         {
             string KijelöltSzöveg = e.Node.Text.Trim();
             if (KijelöltSzöveg.Trim() == "") return;
-            Adat_Belépés_Oldalak Elem = (from a in AdatokOldal
-                                         where a.MenuFelirat.Trim() == KijelöltSzöveg
-                                         select a).FirstOrDefault();
+            Adat_Belépés_Oldalak Elem = AdatokOldal.FirstOrDefault(a => a.MenuFelirat.Trim() == KijelöltSzöveg);
             CmbAblakId.Text = "";
             if (Elem != null)
             {
@@ -809,18 +602,13 @@ namespace Villamos
                 KiválasztottAblak();
             }
         }
-        #endregion
 
-        // SEGÉDOSZTÁLY A KOSÁR LISTÁHOZ
         public class KiosztandoJog
         {
             public Adat_Bejelentkezés_Jogosultságok JogAdat { get; set; }
             public string Megjelenites { get; set; }
-
-            public override string ToString()
-            {
-                return Megjelenites;
-            }
+            public override string ToString() => Megjelenites;
         }
+        #endregion
     }
 }

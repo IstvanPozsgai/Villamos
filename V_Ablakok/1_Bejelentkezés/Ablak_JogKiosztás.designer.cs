@@ -41,7 +41,7 @@ namespace Villamos
             this.Frissít = new System.Windows.Forms.Button();
             this.SzervezetMinden = new System.Windows.Forms.Button();
             this.SzervezetSemmi = new System.Windows.Forms.Button();
-            this.Rögzít = new System.Windows.Forms.Button();
+            this.BtnVeglegesMentes = new System.Windows.Forms.Button();
             this.BtnSugó = new System.Windows.Forms.Button();
             this.JogTörlés = new System.Windows.Forms.Button();
             this.MindenGomb = new System.Windows.Forms.Button();
@@ -117,17 +117,17 @@ namespace Villamos
             this.SzervezetSemmi.UseVisualStyleBackColor = true;
             this.SzervezetSemmi.Click += new System.EventHandler(this.SzervezetSemmi_Click);
             // 
-            // Rögzít
+            // BtnVeglegesMentes
             // 
-            this.Rögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Rögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.Rögzít.Location = new System.Drawing.Point(453, 3);
-            this.Rögzít.Name = "Rögzít";
-            this.Rögzít.Size = new System.Drawing.Size(44, 44);
-            this.Rögzít.TabIndex = 97;
-            this.ToolTip1.SetToolTip(this.Rögzít, "Rögzíti az adatokat");
-            this.Rögzít.UseVisualStyleBackColor = true;
-            this.Rögzít.Click += new System.EventHandler(this.Rögzít_Click);
+            this.BtnVeglegesMentes.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.BtnVeglegesMentes.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BtnVeglegesMentes.Location = new System.Drawing.Point(453, 3);
+            this.BtnVeglegesMentes.Name = "BtnVeglegesMentes";
+            this.BtnVeglegesMentes.Size = new System.Drawing.Size(44, 44);
+            this.BtnVeglegesMentes.TabIndex = 97;
+            this.ToolTip1.SetToolTip(this.BtnVeglegesMentes, "Menti az adatokat");
+            this.BtnVeglegesMentes.UseVisualStyleBackColor = true;
+            this.BtnVeglegesMentes.Click += new System.EventHandler(this.BtnVeglegesMentes_Click);
             // 
             // BtnSugó
             // 
@@ -413,7 +413,7 @@ namespace Villamos
             this.tableLayoutPanel2.Controls.Add(this.MindenGomb, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnBeilleszt, 5, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnMásol, 4, 0);
-            this.tableLayoutPanel2.Controls.Add(this.Rögzít, 9, 0);
+            this.tableLayoutPanel2.Controls.Add(this.BtnVeglegesMentes, 9, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnAblakTörlés, 6, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnOsszesMentese, 8, 0);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(565, 11);
@@ -487,7 +487,7 @@ namespace Villamos
         }
         internal ToolTip ToolTip1;
         internal Button BtnSugó;
-        internal Button Rögzít;
+        internal Button BtnVeglegesMentes;
         internal Label Label1;
         private TableLayoutPanel tableLayoutPanel1;
         internal Label label4;
