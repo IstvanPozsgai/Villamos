@@ -305,20 +305,12 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
                 MyX.Kiir(válasz, "c12");
                 MyX.Kiir(válasz, "l12");
 
-                if (eleje < vége)
-                {
-                    // nappal
-                    válasz = Tábla.SelectedRows[i].Cells[3].Value.ToStrTrim() + " nap " + Tábla.SelectedRows[i].Cells[8].Value.ToStrTrim() + " -ig";
-                    MyX.Kiir(válasz, "c13");
-                    MyX.Kiir(válasz, "l13");
-                }
-                else
-                {
-                    // éjszaka
-                    válasz = Tábla.SelectedRows[i].Cells[3].Value.ToStrTrim() + " nap " + Tábla.SelectedRows[i].Cells[8].Value.ToStrTrim() + " -ig";
-                    MyX.Kiir(válasz, "c13");
-                    MyX.Kiir(válasz, "l13");
-                }
+                string kezdőidő = $"{Tábla.SelectedRows[i].Cells[3].Value.ToStrTrim()} {Tábla.SelectedRows[i].Cells[7].Value.ToStrTrim()}";
+                DateTime MeddigTart = kezdőidő.ToÉrt_DaTeTime().AddMinutes ( Tábla.SelectedRows[i].Cells[4].Value.ToStrTrim().ToÉrt_Int ());
+                válasz = $"{MeddigTart:yyyy.MM.dd} nap {Tábla.SelectedRows[i].Cells[8].Value.ToStrTrim()}-ig";
+               
+                MyX.Kiir(válasz, "c13");
+                MyX.Kiir(válasz, "l13");
 
                 MyX.Kiir(Math.Round((double.Parse(Tábla.SelectedRows[i].Cells[4].Value.ToString()) / 60d), 2) + " óra", "c14");
                 MyX.Kiir(Math.Round((double.Parse(Tábla.SelectedRows[i].Cells[4].Value.ToString()) / 60d), 2) + " óra", "l14");

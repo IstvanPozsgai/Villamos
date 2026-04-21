@@ -109,19 +109,11 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
                     string válasz = Tábla.Rows[i].Cells[3].Value.ToStrTrim() + " " + Tábla.Rows[i].Cells[7].Value.ToStrTrim();
                     MyX.Kiir(válasz, "e" + sor);
                     vége = DateTime.Parse(Tábla.Rows[i].Cells[8].Value.ToStrTrim());
-                    if (eleje < vége)
-                    {
-                        // nappal
-                        válasz = Tábla.Rows[i].Cells[3].Value.ToStrTrim() + " " + Tábla.Rows[i].Cells[8].Value.ToStrTrim();
-                        MyX.Kiir(válasz, "f" + sor);
-                    }
-                    else
-                    {
-                        // éjszaka
-                        válasz = Tábla.Rows[i].Cells[3].Value.ToStrTrim() + " " + Tábla.Rows[i].Cells[8].Value.ToStrTrim();
-                        MyX.Kiir(válasz, "f" + sor);
-                    }
 
+                    string kezdőidő = $"{Tábla.SelectedRows[i].Cells[3].Value.ToStrTrim()} {Tábla.SelectedRows[i].Cells[7].Value.ToStrTrim()}";
+                    DateTime MeddigTart = kezdőidő.ToÉrt_DaTeTime().AddMinutes(Tábla.SelectedRows[i].Cells[4].Value.ToStrTrim().ToÉrt_Int());
+                    válasz = $"{MeddigTart:yyyy.MM.dd} {Tábla.SelectedRows[i].Cells[8].Value.ToStrTrim()}";
+                    MyX.Kiir(válasz, "f" + sor);
 
                     MyX.Kiir($"#KÉPLET#={Tábla.Rows[i].Cells[4].Value}/60", "g" + sor);
                     MyX.Betű(munkalap, "g" + sor, BeBetuSzazados);
