@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
+using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Ablakok._1_Beállítások;
-using Villamos.Adatszerkezet;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -15,6 +16,9 @@ namespace Villamos
         readonly Kezelő_Ciklus Kéz = new Kezelő_Ciklus();
 
         List<Adat_Ciklus> Adatok = new List<Adat_Ciklus>();
+
+        private BindingSource _bs = new BindingSource();
+
 
         #region ALAP
         public Ablak_Ciklus()
@@ -33,10 +37,14 @@ namespace Villamos
                 GombLathatosagKezelo.Beallit(this, "Főmérnökség");
             else
                 Jogosultságkiosztás();
+
+
+            BindingokBeallitasa();
         }
 
         private void Ablak_Ciklus_Load(object sender, EventArgs e)
         {
+
         }
 
 
@@ -166,14 +174,46 @@ namespace Villamos
             }
         }
 
-        private void CiklusTípus_SelectedIndexChanged(object sender, EventArgs e)
+        private void CiklusTípus_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            CiklusTípus.Text = CiklusTípus.Items[CiklusTípus.SelectedIndex].ToString();
             Táblaíró();
             Vizsálatsorszám.Text = "";
             Vizsgálatfoka.Text = "";
         }
 
-        private void Táblaíró()
+        private void BindingokBeallitasa()
+        {
+
+            _bs.DataSource = typeof(Adat_Ciklus);
+            Tábla.DataSource = _bs;
+            Tábla.AutoGenerateColumns = false;// Megakadályozza, hogy minden mezőhöz oszlopot gyárts
+
+            // 1. Töröljük a régi oszlopokat (biztonság kedvéért)
+            Tábla.Columns.Clear();
+
+            // 2. Oszlopok manuális hozzáadása és összekötése
+            // Add paraméterek: (Név, Fejléc szöveg)
+            Tábla.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Típus", HeaderText = "Ciklus Típus", Width = 120 });
+            Tábla.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Sorszám", HeaderText = "Sorszám", Width = 80 });
+            Tábla.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Vizsgálatfok", HeaderText = "Vizsgálat", Width = 200 });
+            Tábla.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Névleges", HeaderText = "Névleges", Width = 150 });
+            Tábla.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Alsóérték", HeaderText = "Alsó eltérés", Width = 150 });
+
+
+
+            // A TextBoxokat összekötjük a BindingSource-szal
+            // Az "Adat_Ciklus" osztályod tulajdonságneveit használd!
+            CiklusTípus.DataBindings.Add("Text", _bs, "Típus", true, DataSourceUpdateMode.OnPropertyChanged);
+            Vizsálatsorszám.DataBindings.Add("Text", _bs, "Sorszám", true, DataSourceUpdateMode.OnPropertyChanged);
+            Vizsgálatfoka.DataBindings.Add("Text", _bs, "Vizsgálatfok", true, DataSourceUpdateMode.OnPropertyChanged);
+            Névleges.DataBindings.Add("Text", _bs, "Névleges", true, DataSourceUpdateMode.OnPropertyChanged);
+            Alsóeltérés.DataBindings.Add("Text", _bs, "Alsóérték", true, DataSourceUpdateMode.OnPropertyChanged);
+            Felsőeltérés.DataBindings.Add("Text", _bs, "Felsőérték", true, DataSourceUpdateMode.OnPropertyChanged);
+        }
+
+
+        private void Tábla_író()
         {
             try
             {
@@ -233,13 +273,45 @@ namespace Villamos
             }
         }
 
+        private void Táblaíró()
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(CiklusTípus.Text)) throw new HibásBevittAdat("Nincs kiválasztva ciklus");
+
+                var osszesAdat = Kéz.Lista_Adatok();
+
+                // Szűrés LINQ-val (mint eddig)
+                var szurtLista = osszesAdat
+                    .Where(a => a.Törölt == "0" && a.Típus == CiklusTípus.Text.Trim())
+                    .OrderBy(a => a.Sorszám)
+                    .ToList();
+
+                // A varázslat: a BindingSource frissítése mindent visz magával
+                _bs.DataSource = new BindingList<Adat_Ciklus>(szurtLista);
+
+                // A táblázat automatikusan frissül, a TextBoxok pedig 
+                // mindig az éppen kijelölt sor adatait mutatják.
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show($"{ex.Message}\n\n a hiba naplózásra került.", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
         private void Lekérdezés_lekérdezés_Click(object sender, EventArgs e)
         {
             CiklusTípusfeltöltés();
             Táblaíró();
         }
 
-        private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void Tábla_Cell_Click(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
@@ -422,6 +494,7 @@ namespace Villamos
         {
             Új_Ablak_Ciklus_Sorrend?.Close();
         }
+
 
     }
 }

@@ -98,7 +98,7 @@ namespace Villamos
             this.Tábla.RowHeadersVisible = false;
             this.Tábla.Size = new System.Drawing.Size(534, 502);
             this.Tábla.TabIndex = 168;
-            this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
+      
             // 
             // CiklusTípus
             // 
@@ -108,7 +108,7 @@ namespace Villamos
             this.CiklusTípus.Name = "CiklusTípus";
             this.CiklusTípus.Size = new System.Drawing.Size(162, 28);
             this.CiklusTípus.TabIndex = 174;
-            this.CiklusTípus.SelectedIndexChanged += new System.EventHandler(this.CiklusTípus_SelectedIndexChanged);
+            this.CiklusTípus.SelectionChangeCommitted += new System.EventHandler(this.CiklusTípus_SelectionChangeCommitted);
             // 
             // Vizsálatsorszám
             // 
