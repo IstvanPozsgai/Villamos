@@ -6,11 +6,8 @@ using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 
-
-
 namespace Villamos
 {
-
     public partial class Ablak_JogKiosztás : Form
     {
         readonly SQL_Kezelő_Belépés_Oldalak KézOldal = new SQL_Kezelő_Belépés_Oldalak();
@@ -42,19 +39,19 @@ namespace Villamos
         int AblakFőID = -1;
         int GombFőID = -1;
 
+        // VÁLTOZÓ AZ ÚJ KOSÁR FUNKCIÓHOZ: Figyeli, hogy épp a program tölti-e a listát
+        private bool SzervezetBetoltesAlatt = false;
+
         public Ablak_JogKiosztás(A_Főoldal Példány)
         {
             InitializeComponent();
             FőoldalPéldány = Példány; // Itt mentjük el
             LoadMenuFromMain();
-
             Start();
-
         }
 
         private void Ablak_JogKiosztás_Load(object sender, System.EventArgs e)
         {
-
         }
 
         private void Start()
@@ -72,10 +69,7 @@ namespace Villamos
             OldalFeltöltés();
             FelhasználóFeltöltés();
             GombLathatosagKezelo.Beallit(this, Program.PostásTelephely);
-
-
         }
-
 
         #region Mezők feltöltése
 
@@ -130,8 +124,6 @@ namespace Villamos
             }
         }
 
-
-
         /// <summary>
         /// Feltöltjük a felhasználókat a comboxba.
         /// </summary>
@@ -158,7 +150,6 @@ namespace Villamos
         }
         #endregion
 
-
         #region Mezők kijelölése és választása
         private void CmbAblak_SelectionChangeCommitted(object sender, EventArgs e)
         {
@@ -184,7 +175,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void Felhasználók_SelectionChangeCommitted(object sender, EventArgs e)
         {
@@ -226,31 +216,20 @@ namespace Villamos
             {
                 CmbAblak.Text = "";
                 CmbAblakId.Text = "";
-
             }
             LstGombok.Items.Clear();
             LstChkSzervezet.Items.Clear();
         }
         #endregion
 
-
         #region Gombok 
-        /// <summary>
-        /// Kilistázzuk a kiválaszo felhasználóhoz tartozó jogosultságokat.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void Frissít_Click(object sender, EventArgs e)
         {
             TáblázatListázás();
         }
 
-
-        /// <summary>
-        /// Rögzítjük a kiválasztott felhasználóhoz az ablak, gombokat és szervezeteket jogosultásgát.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        // MEGJEGYZÉS: Ez az eredeti gombod, ha a kosaras rendszert használod, erre lehet nem is lesz szükséged, 
+        // de meghagytam az eredeti formájában.
         private void Rögzít_Click(object sender, EventArgs e)
         {
             try
@@ -258,7 +237,7 @@ namespace Villamos
                 if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem adja meg a Felhasználót!");
                 if (CmbAblak.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon egy Ablakot!");
                 if (LstGombok.SelectedItems.Count == 0) throw new HibásBevittAdat("Kérem válasszon legalább egy Gombot gombot!");
-                //Ha van kiválasztott gomb akkor azt rögzítjük
+
                 string[] gomb = LstGombok.SelectedItems[0].ToStrTrim().Split('=');
                 int GombokID = AdatokGombok.FirstOrDefault(a => a.GombName == gomb[2].Trim() && a.FormName == AblakFormName)?.GombokId ?? -1;
 
@@ -364,7 +343,6 @@ namespace Villamos
         }
         #endregion
 
-
         #region Táblázat
         private void TáblázatListázás()
         {
@@ -420,11 +398,9 @@ namespace Villamos
             {
                 AdatTáblaALap.Clear();
                 AdatokJogosultságok = KézJogosultságok.Lista_Adatok();
-                //ha nincs kiválasztva akkor az összes adatot írjuk ki
                 List<Adat_Bejelentkezés_Jogosultságok> Adatok = AdatokJogosultságok;
                 if (Felhasználók.Text.Trim() != "")
                 {
-                    //csak a kiválasztott felhasználó adatait írjuk ki
                     Adat_Bejelentkezés_Users Egy = (from a in AdatokUsers
                                                     where a.UserName == Felhasználók.Text.Trim()
                                                     select a).FirstOrDefault();
@@ -474,7 +450,6 @@ namespace Villamos
             Tábla.Columns["GombId"].Width = 110;
         }
 
-
         private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -489,8 +464,6 @@ namespace Villamos
             GombokFeltöltése();
             GombKijelöl(gombnév[1]);
             Szervezetek();
-
-
         }
 
         private void GombKijelöl(string gombnév)
@@ -513,18 +486,17 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
-
         #endregion
 
+        #region Szervezet / KOSÁR FUNKCIÓK
 
-        #region Szervezet
-        //A gombhoz tartozó szervezetek betöltése
         private void Szervezetek()
         {
             try
             {
+                SzervezetBetoltesAlatt = true;
+
                 LstChkSzervezet.Items.Clear();
                 if (LstGombok.Items.Count == 0) return;
                 string[] Darabol = LstGombok.SelectedItems[0].ToStrTrim().Split('=');
@@ -532,17 +504,15 @@ namespace Villamos
                 GombFőID = Gomb?.GombokId ?? -1;
 
                 if (Gomb == null) return;
-                string[] Gomb_Szervezetek_darabolva = Gomb.Szervezet.Split(';');//A gombhoz tartozó szervezetek tömbben
-                string[] Jogadó_Szervezetek_darabolva = Program.Postás_Felhasználó.Szervezetek.Split(';');//Jogosultságot adó jogosultsága
-                //A teljes lista csorbítása a beállító jogosultságaival
+                string[] Gomb_Szervezetek_darabolva = Gomb.Szervezet.Split(';');
+                string[] Jogadó_Szervezetek_darabolva = Program.Postás_Felhasználó.Szervezetek.Split(';');
+
                 foreach (string szervezet in Gomb_Szervezetek_darabolva)
                 {
-                    // A jogosztó adhat jogot
                     if (Jogadó_Szervezetek_darabolva.Contains(szervezet))
                     {
-                        //Csak azokat a szervezeteket írjuk ki amelyek a beállító jogosultságai között is szerepelnek
                         LstChkSzervezet.Items.Add(szervezet.Trim());
-                        //Jogosoultságok kiírása a meglévő alapján
+
                         int UserId = FelhasználóFőId;
                         Adat_Bejelentkezés_Jogosultságok Jog = (from a in AdatokJogosultságok
                                                                 where a.UserId == FelhasználóFőId
@@ -566,7 +536,10 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
+            finally
+            {
+                SzervezetBetoltesAlatt = false;
+            }
         }
 
         private void SzervezetMinden_Click(object sender, EventArgs e)
@@ -585,6 +558,79 @@ namespace Villamos
                 LstChkSzervezet.SetItemChecked(i, kell);
         }
 
+        // AMIKOR A FELHASZNÁLÓ BEPIPÁL/KIVESZ EGY PIPÁT
+        private void LstChkSzervezet_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            // Ha a program tölti be a listát, nem csinálunk semmit
+            if (SzervezetBetoltesAlatt) return;
+
+            if (Felhasználók.Text.Trim() == "" || CmbAblak.Text.Trim() == "" || LstGombok.SelectedItems.Count == 0)
+                return;
+
+            string szervezetNév = LstChkSzervezet.Items[e.Index].ToString();
+            int szervezetId = AdatokSzervezet.FirstOrDefault(a => a.Név == szervezetNév)?.ID ?? -1;
+
+            string[] gomb = LstGombok.SelectedItems[0].ToStrTrim().Split('=');
+            int GombokID = AdatokGombok.FirstOrDefault(a => a.GombName == gomb[2].Trim() && a.FormName == AblakFormName)?.GombokId ?? -1;
+
+            // Létrehozunk egy szép formázott szöveget, amit a felhasználó látni fog a gyűjtő listában
+            string megjelenitoSzoveg = $"{Felhasználók.Text} | {CmbAblak.Text} | {gomb[1].Trim()} | {szervezetNév}";
+
+            if (e.NewValue == CheckState.Checked)
+            {
+                // Megnézzük, hogy nincs-e már benne
+                bool marBenneVan = LstJogokAdni.Items.Cast<KiosztandoJog>().Any(x => x.Megjelenites == megjelenitoSzoveg);
+
+                if (!marBenneVan)
+                {
+                    Adat_Bejelentkezés_Jogosultságok ujJog = new Adat_Bejelentkezés_Jogosultságok(
+                        FelhasználóFőId, AblakFőID, GombokID, szervezetId, false);
+
+                    LstJogokAdni.Items.Add(new KiosztandoJog { JogAdat = ujJog, Megjelenites = megjelenitoSzoveg });
+                }
+            }
+            else if (e.NewValue == CheckState.Unchecked)
+            {
+                var torlendo = LstJogokAdni.Items.Cast<KiosztandoJog>().FirstOrDefault(x => x.Megjelenites == megjelenitoSzoveg);
+                if (torlendo != null)
+                {
+                    LstJogokAdni.Items.Remove(torlendo);
+                }
+            }
+        }
+
+        // AZ ÖSSZEGYŰJTÖTT JOGOK EGYSZERRE TÖRÉTNŐ MENTÉSE
+        private void BtnOsszesMentese_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (LstJogokAdni.Items.Count == 0)
+                {
+                    MessageBox.Show("Nincs kiosztásra váró jog a listában!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                List<Adat_Bejelentkezés_Jogosultságok> rögzitendőAdatok = new List<Adat_Bejelentkezés_Jogosultságok>();
+
+                foreach (KiosztandoJog item in LstJogokAdni.Items)
+                {
+                    rögzitendőAdatok.Add(item.JogAdat);
+                }
+
+                KézJogosultságok.Döntés(rögzitendőAdatok);
+
+                // Sikeres mentés után ürítjük a listát és frissítünk
+                LstJogokAdni.Items.Clear();
+                TáblázatListázás();
+
+                MessageBox.Show("Az összes kiválasztott jogosultság sikeresen kiosztásra került!", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         #endregion
 
         private void JogTörlés_Click(object sender, EventArgs e)
@@ -592,7 +638,6 @@ namespace Villamos
             try
             {
                 if (Felhasználók.Text.Trim() == "") throw new HibásBevittAdat("Kérem válasszon ki egy felhasználót!");
-                //csak a kiválasztott felhasználó jogain megyünk végig
                 Adat_Bejelentkezés_Users Egy = (from a in AdatokUsers
                                                 where a.UserName == Felhasználók.Text.Trim()
                                                 select a).FirstOrDefault();
@@ -625,7 +670,6 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void CmbAblakId_SelectionChangeCommitted(object sender, EventArgs e)
@@ -659,7 +703,6 @@ namespace Villamos
                 Adat_Bejelentkezés_Users Felhasználó = AdatokUsers.FirstOrDefault(a => a.UserName == Felhasználók.Text);
                 List<Adat_Bejelentkezés_Jogosultságok> Adatok = AdatokJogosultságok;
 
-                //csak a kiválasztott felhasználó adatait írjuk ki
                 MásolatAdatok = (from a in AdatokJogosultságok
                                  where a.UserId == Felhasználó.UserId
                                  select a).ToList();
@@ -683,7 +726,6 @@ namespace Villamos
                 if (MásolatAdatok.Count < 1) throw new HibásBevittAdat("Nincs másolani kívánt adat!");
 
                 Adat_Bejelentkezés_Users Felhasználó = AdatokUsers.FirstOrDefault(a => a.UserName == Felhasználók.Text);
-
                 List<Adat_Bejelentkezés_Jogosultságok> Rögzítés = new List<Adat_Bejelentkezés_Jogosultságok>();
 
                 foreach (Adat_Bejelentkezés_Jogosultságok adat in MásolatAdatok)
@@ -713,12 +755,10 @@ namespace Villamos
         }
         #endregion
 
-
         #region MenüszerkezetFába írása
         private void LoadMenuFromMain()
         {
             MenűFa.Nodes.Clear();
-            // Feltételezzük, hogy a főoldalon a MenuStrip neve 'menuStrip1'
             foreach (ToolStripMenuItem item in FőoldalPéldány.MainMenuStrip.Items)
             {
                 AddNodesRecursive(item, MenűFa.Nodes);
@@ -727,17 +767,12 @@ namespace Villamos
 
         private void CopyMenuToTree(ToolStripItem menuItem, TreeNodeCollection treeNodes)
         {
-            // Csak a valódi menüpontokkal foglalkozunk (elválasztó sávokat pl. kihagyjuk)
             if (menuItem is ToolStripMenuItem menuEntry)
             {
-                // Új csomópont létrehozása a menü szövegével
                 TreeNode newNode = new TreeNode(menuEntry.Text.Replace("&", ""));
-                newNode.Tag = menuEntry.Name; // Eltároljuk az azonosítót a későbbi jogkezeléshez
-
-                // Hozzáadjuk az aktuális szinthez
+                newNode.Tag = menuEntry.Name;
                 treeNodes.Add(newNode);
 
-                // Ha vannak almenük, azokat is feldolgozzuk rekurzívan
                 foreach (ToolStripItem subItem in menuEntry.DropDownItems)
                 {
                     CopyMenuToTree(subItem, newNode.Nodes);
@@ -747,20 +782,12 @@ namespace Villamos
 
         private void AddNodesRecursive(ToolStripItem menuItem, TreeNodeCollection treeNodes)
         {
-            // Csak a valódi menüpontokat dolgozzuk fel (elválasztókat pl. nem)
             if (menuItem is ToolStripMenuItem menuEntry)
             {
-                // Létrehozunk egy új csomópontot a fában a menü szövegével
-                // A .Replace("&", "") kiszedi a gyorsbillentyű aláhúzásokat
                 TreeNode newNode = new TreeNode(menuEntry.Text.Replace("&", ""));
-
-                // Eltároljuk a menüpont nevét vagy ID-ját a Tag-ben a későbbi mentéshez
                 newNode.Tag = menuEntry.Name;
-
-                // Hozzáadjuk a fához az aktuális szinten
                 treeNodes.Add(newNode);
 
-                // REKURZÍV HÍVÁS: Ha vannak almenüpontok, azokat is feldolgozzuk ugyanígy
                 foreach (ToolStripItem subItem in menuEntry.DropDownItems)
                 {
                     AddNodesRecursive(subItem, newNode.Nodes);
@@ -770,7 +797,6 @@ namespace Villamos
 
         private void MenűFa_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            // Az 'e.Node' az az elem, amire a felhasználó rákattintott
             string KijelöltSzöveg = e.Node.Text.Trim();
             if (KijelöltSzöveg.Trim() == "") return;
             Adat_Belépés_Oldalak Elem = (from a in AdatokOldal
@@ -782,11 +808,19 @@ namespace Villamos
                 CmbAblakId.Text = Elem.OldalId.ToString();
                 KiválasztottAblak();
             }
-
         }
-
         #endregion
 
+        // SEGÉDOSZTÁLY A KOSÁR LISTÁHOZ
+        public class KiosztandoJog
+        {
+            public Adat_Bejelentkezés_Jogosultságok JogAdat { get; set; }
+            public string Megjelenites { get; set; }
 
+            public override string ToString()
+            {
+                return Megjelenites;
+            }
+        }
     }
 }
