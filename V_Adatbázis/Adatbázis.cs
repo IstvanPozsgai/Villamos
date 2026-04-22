@@ -372,6 +372,17 @@ internal static partial class Adatbázis
         }.ToString();
     }
 
+    // ÚJ SEGÉDMETÓDUS: Minden megnyitott kapcsolatnál beállítja a WAL módot és a várakozást
+    private static void KapcsolatElokeszitese(SqliteConnection connection)
+    {
+        using (var walCmd = connection.CreateCommand())
+        {
+            // WAL mód bekapcsolása és a beépített várakozás (busy_timeout) 60 másodpercre növelése
+            walCmd.CommandText = "PRAGMA busy_timeout=60000; PRAGMA journal_mode=WAL;";
+            walCmd.ExecuteNonQuery();
+        }
+    }
+
     #region Módosítás
     private static void SqLite_Módosítás(string holvan, string ABjelszó, string SQLszöveg)
     {
@@ -381,14 +392,19 @@ internal static partial class Adatbázis
             using (var connection = new SqliteConnection(kapcsolatiszöveg))
             {
                 connection.Open();
-                var command = new SqliteCommand(SQLszöveg, connection);
-                command.ExecuteNonQuery();
+                KapcsolatElokeszitese(connection);
+
+                using (var command = new SqliteCommand(SQLszöveg, connection))
+                {
+                    command.CommandTimeout = 30;
+                    command.ExecuteNonQuery();
+                }
             }
         }
         catch (Exception ex)
         {
             HibaNapló.Log(ex.Message, $"SqLite Adat módosítás:\n{holvan}\n{SQLszöveg}", ex.StackTrace, ex.Source, ex.HResult);
-            throw new Exception("Adatbázis rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
+            throw new Exception("Adatbázis rögzítési hiba, az adatok rögzítése/módosítása nem történt meg.");
         }
     }
 
@@ -400,18 +416,9 @@ internal static partial class Adatbázis
             using (var connection = new SqliteConnection(kapcsolatiszöveg))
             {
                 connection.Open();
+                KapcsolatElokeszitese(connection);
 
-                // 1. WAL mód bekapcsolása (segít hálózati meghajtón a zárolások ellen)
-                using (var walCmd = connection.CreateCommand())
-                {
-                    walCmd.CommandText = "PRAGMA journal_mode=WAL;";
-                    walCmd.ExecuteNonQuery();
-                }
-
-                // 2. A parancs hozzárendelése és futtatása
                 cmd.Connection = connection;
-
-                // Biztonsági tartalék: ha a ConnectionString-ben nem lenne benne a Timeout
                 if (cmd.CommandTimeout < 30) cmd.CommandTimeout = 30;
 
                 cmd.ExecuteNonQuery();
@@ -430,6 +437,8 @@ internal static partial class Adatbázis
         using (var connection = new SqliteConnection(kapcsolatiszöveg))
         {
             connection.Open();
+            KapcsolatElokeszitese(connection);
+
             using (var transaction = connection.BeginTransaction())
             {
                 try
@@ -438,6 +447,7 @@ internal static partial class Adatbázis
                     {
                         cmd.Connection = connection;
                         cmd.Transaction = transaction;
+                        if (cmd.CommandTimeout < 30) cmd.CommandTimeout = 30;
                         cmd.ExecuteNonQuery();
                     }
                     transaction.Commit();
@@ -459,7 +469,9 @@ internal static partial class Adatbázis
         using (var connection = new SqliteConnection(kapcsolatiszöveg))
         {
             connection.Open();
-            using (var transaction = connection.BeginTransaction()) // Tranzakció indítása
+            KapcsolatElokeszitese(connection);
+
+            using (var transaction = connection.BeginTransaction())
             {
                 try
                 {
@@ -467,14 +479,15 @@ internal static partial class Adatbázis
                     {
                         using (var command = new SqliteCommand(sql, connection, transaction))
                         {
+                            command.CommandTimeout = 30;
                             command.ExecuteNonQuery();
                         }
                     }
-                    transaction.Commit(); // Csak akkor ment, ha minden sikerült
+                    transaction.Commit();
                 }
                 catch (Exception ex)
                 {
-                    transaction.Rollback(); // Hiba esetén mindent visszavon
+                    transaction.Rollback();
                     HibaNapló.Log(ex.Message, $"SQLite hiba: {holvan}", ex.StackTrace, ex.Source, ex.HResult);
                     throw new Exception("Adatbázis hiba, a módosítások visszavonva.", ex);
                 }
@@ -482,7 +495,6 @@ internal static partial class Adatbázis
         }
     }
     #endregion
-
 
     #region Törlés
     public static void SqLite_ABtörlés(string holvan, string ABjelszó, string SQLszöveg)
@@ -494,15 +506,19 @@ internal static partial class Adatbázis
             using (SqliteConnection connection = new SqliteConnection(kapcsolatiszöveg))
             {
                 connection.Open();
+                KapcsolatElokeszitese(connection);
 
-                var command = new SqliteCommand(SQLszöveg, connection);
-                command.ExecuteNonQuery();
+                using (var command = new SqliteCommand(SQLszöveg, connection))
+                {
+                    command.CommandTimeout = 30;
+                    command.ExecuteNonQuery();
+                }
             }
         }
         catch (Exception ex)
         {
             HibaNapló.Log(ex.Message, $"SqLite Adat törlés:\n{holvan}\n{SQLszöveg}", ex.StackTrace, ex.Source, ex.HResult);
-            throw new Exception("Adatbázis törlési hiba, az adotok törlése nem történt meg.");
+            throw new Exception("Adatbázis törlési hiba, az adatok törlése nem történt meg.");
         }
     }
 
@@ -513,7 +529,8 @@ internal static partial class Adatbázis
         using (var connection = new SqliteConnection(kapcsolatiszöveg))
         {
             connection.Open();
-            // Tranzakció indítása: vagy az összes törlés sikerül, vagy egyik sem marad meg
+            KapcsolatElokeszitese(connection);
+
             using (var transaction = connection.BeginTransaction())
             {
                 try
@@ -522,14 +539,15 @@ internal static partial class Adatbázis
                     {
                         using (var command = new SqliteCommand(sql, connection, transaction))
                         {
+                            command.CommandTimeout = 30;
                             command.ExecuteNonQuery();
                         }
                     }
-                    transaction.Commit(); // Ha idáig eljutott, minden törlés véglegesítve
+                    transaction.Commit();
                 }
                 catch (Exception ex)
                 {
-                    transaction.Rollback(); // Hiba esetén MINDENT visszacsinál
+                    transaction.Rollback();
                     HibaNapló.Log(ex.Message, $"SqLite törlési hiba az adatbázisban: {holvan}", ex.StackTrace, ex.Source, ex.HResult);
                     throw new Exception("Adatbázis törlési hiba, a folyamat megállt és a változások visszavonva.", ex);
                 }
@@ -538,40 +556,7 @@ internal static partial class Adatbázis
     }
     #endregion
 
-
     #region Listázás
-    //public static List<T> Lista_Adatok<T>(string hely, string jelszó, string táblanév, Func<SqliteDataReader, T> mapFüggvény)
-    //{
-    //    List<T> VálaszAdatok = new List<T>();
-    //    try
-    //    {
-    //        string sql = $@"SELECT * FROM {táblanév}";
-    //        string kapcsolatiszöveg = BuildConnectionString(hely, jelszó);
-
-    //        using (SqliteConnection connection = new SqliteConnection(kapcsolatiszöveg))
-    //        {
-    //            connection.Open();
-    //            using (SqliteCommand command = new SqliteCommand(sql, connection))
-    //            {
-    //                using (var reader = command.ExecuteReader())
-    //                {
-    //                    while (reader.Read())
-    //                    {
-    //                        // Itt hívjuk meg a kívülről átadott leképezést
-    //                        VálaszAdatok.Add(mapFüggvény(reader));
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        HibaNapló.Log(ex.Message, $"SqLite Adat módosítás:\n{hely}\n{táblanév}", ex.StackTrace, ex.Source, ex.HResult);
-    //        throw new Exception("Adatbázis rögzítési hiba, az adotok rögzítése/módosítása nem történt meg.");
-    //    }
-    //    return VálaszAdatok;
-    //}
-
     public static List<T> Lista_Adatok<T>(string hely, string jelszó, string táblanév, Func<SqliteDataReader, T> mapFüggvény)
     {
         List<T> VálaszAdatok = new List<T>();
@@ -583,17 +568,10 @@ internal static partial class Adatbázis
             using (SqliteConnection connection = new SqliteConnection(kapcsolatiszöveg))
             {
                 connection.Open();
-
-                // 1. WAL mód bekapcsolása az olvasáshoz is (így az írók nem blokkolnak)
-                using (var walCmd = connection.CreateCommand())
-                {
-                    walCmd.CommandText = "PRAGMA journal_mode=WAL;";
-                    walCmd.ExecuteNonQuery();
-                }
+                KapcsolatElokeszitese(connection);
 
                 using (SqliteCommand command = new SqliteCommand(sql, connection))
                 {
-                    // 2. Biztonsági időtúllépés az olvasáshoz
                     command.CommandTimeout = 30;
 
                     using (var reader = command.ExecuteReader())
@@ -608,9 +586,8 @@ internal static partial class Adatbázis
         }
         catch (Exception ex)
         {
-            // Javítottam a naplózást: "Adat lekérés" szerepeljen módosítás helyett
             HibaNapló.Log(ex.Message, $"SqLite Adat lekérés:\n{hely}\n{táblanév}", ex.StackTrace, ex.Source, ex.HResult);
-            throw; // Érdemes az eredeti kivételt továbbdobni a hibakereséshez
+            throw;
         }
         return VálaszAdatok;
     }
@@ -625,6 +602,7 @@ internal static partial class Adatbázis
             using (var connection = new SqliteConnection(kapcsolatiszöveg))
             {
                 connection.Open();
+                KapcsolatElokeszitese(connection);
                 válasz = SqLite_TáblaVan(connection, táblanév);
             }
         }
@@ -639,6 +617,7 @@ internal static partial class Adatbázis
     {
         using (var cmd = new SqliteCommand("SELECT name FROM sqlite_master WHERE type='table' AND name=@nev;", sqlite))
         {
+            cmd.CommandTimeout = 30;
             cmd.Parameters.AddWithValue("@nev", tablaNev);
             return cmd.ExecuteScalar() != null;
         }
@@ -654,15 +633,17 @@ internal static partial class Adatbázis
             using (var Kapcsolat = new SqliteConnection(kapcsolatiszöveg))
             {
                 Kapcsolat.Open();
-                // A PRAGMA lekérdezi az oszlopnevet (name) és a típust (type)
+                KapcsolatElokeszitese(Kapcsolat);
+
                 using (var cmd = new SqliteCommand($"PRAGMA table_info([{táblaNeve}])", Kapcsolat))
                 {
+                    cmd.CommandTimeout = 30;
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             string mezoNev = reader["name"].ToString();
-                            string tipusNev = reader["type"].ToString(); // Pl. TEXT, INTEGER, DATE
+                            string tipusNev = reader["type"].ToString();
 
                             válasz.Add($"{mezoNev}-{tipusNev}");
                         }
@@ -685,11 +666,14 @@ internal static partial class Adatbázis
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
+                KapcsolatElokeszitese(connection);
+
                 using (var command = new SqliteCommand(sql, connection))
                 {
+                    command.CommandTimeout = 30;
                     command.ExecuteNonQuery();
                 }
-            } // Itt a kapcsolat automatikusan lezárul, akkor is, ha hiba történt.
+            }
         }
         catch (Exception ex)
         {
@@ -708,21 +692,21 @@ internal static partial class Adatbázis
             try
             {
                 conn.Open();
-                // A tábla nevét szögletes zárójelbe tesszük a biztonság kedvéért (pl. szóközök miatt)
+                KapcsolatElokeszitese(conn);
+
                 string query = $"SELECT * FROM [{tablaNev}]";
 
                 using (var cmd = new SqliteCommand(query, conn))
                 {
+                    cmd.CommandTimeout = 30;
                     using (var reader = cmd.ExecuteReader())
                     {
-                        // A DataTable-t fel kell töltenünk a readerből
                         dt.Load(reader);
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Továbbdobjuk a hibát, hogy a hívó oldalon (a Form-ban) naplózni lehessen
                 throw new Exception($"Hiba az adatok lekérésekor a(z) {tablaNev} táblából.", ex);
             }
         }
