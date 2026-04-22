@@ -397,8 +397,41 @@ namespace Villamos
         {
             try
             {
-                if (!int.TryParse(txtsorszám.Text, out int sorszám)) return;
+                if (tábla.SelectedRows.Count < 1 || !int.TryParse(txtsorszám.Text, out int sorszám)) return;
+                if (Dátumtól.Value.Year != Dátumig.Value.Year) throw new HibásBevittAdat("Csak egy évben listázott utasításokat lehet visszavonni.");
 
+                // ha nincs kijelölve, de a sorszám mező nem üres
+                if (tábla.SelectedRows.Count == 0)
+                {
+                    Visszavon(sorszám);
+                }
+                else
+                {
+                    List<int> Sorok = new List<int>();
+                    for (int sor = 0; sor < tábla.SelectedRows.Count; sor++)
+                        if (int.TryParse(tábla.SelectedRows[sor].Cells[0].Value.ToString(), out int sora)) Sorok.Add(sora);
+
+                    KézUtas.Visszavon(Cmbtelephely.Text.Trim(), Dátumig.Value.Year, Sorok);
+                }
+
+                Utasítás_feltöltés();
+                Táblalistázás();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Visszavon(int sorszám)
+        {
+            try
+            {
                 // módosít
                 Adat_Utasítás Elem = (from a in AdatokUtas
                                       where a.Sorszám == sorszám
@@ -412,8 +445,6 @@ namespace Villamos
                     txtírásimező.Text = Elem.Szöveg + ideig;
                 }
                 btnVisszavon.Visible = false;
-                Utasítás_feltöltés();
-                Táblalistázás();
             }
             catch (HibásBevittAdat ex)
             {

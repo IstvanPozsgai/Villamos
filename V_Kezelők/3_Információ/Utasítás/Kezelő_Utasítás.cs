@@ -187,6 +187,30 @@ namespace Villamos.Kezelők
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public void Visszavon(string Telephely, int Év, List<int> Sorszámok)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Év);
+                List<string> Szövegek = new List<string>();
+                foreach (int sorszám in Sorszámok)
+                {
+                    string szöveg = $"UPDATE {táblanév} SET érvényes=true WHERE sorszám={sorszám}";
+                    Szövegek.Add(szöveg);
+                }
+                MyA.ABMódosítás(hely, jelszó, Szövegek);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 
 }
