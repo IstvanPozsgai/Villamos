@@ -185,7 +185,9 @@ namespace Villamos.Kezelők
                 szöveg += $" kilépésiidő='{Adat.Kilépésiidő:yyyy.MM.dd}', ";
                 szöveg += $" belépésiidő='{Adat.Belépésiidő:yyyy.MM.dd}', ";
                 szöveg += $" lakcím='{Adat.Lakcím}', ";
-                szöveg += $" dolgozónév='{Adat.DolgozóNév}' ";
+                szöveg += $" dolgozónév='{Adat.DolgozóNév}', ";
+                szöveg += $" feorsz='{Adat.Feorsz}', ";
+                szöveg += $" munkakör='{Adat.Munkakör}' ";
                 szöveg += $" WHERE dolgozószám='{Adat.Dolgozószám}'";
 
                 MyA.ABMódosítás(hely, jelszó, szöveg);
@@ -207,13 +209,15 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Telephely);
                 string szöveg = $"INSERT INTO {táblanév} ";
-                szöveg += " ( dolgozónév, dolgozószám, kilépésiidő, belépésiidő, lakcím)";
+                szöveg += " ( dolgozónév, dolgozószám, kilépésiidő, belépésiidő, lakcím, feorsz, munkakör)";
                 szöveg += " VALUES (";
                 szöveg += $"'{Adat.DolgozóNév}', ";
                 szöveg += $"'{Adat.Dolgozószám}', ";
                 szöveg += $"'{Adat.Kilépésiidő:yyyy.MM.dd}', ";
-                szöveg += $"'{Adat.Belépésiidő:yyyy.MM.dd}',";
-                szöveg += $"'{Adat.Lakcím}' )";
+                szöveg += $"'{Adat.Belépésiidő:yyyy.MM.dd}', ";
+                szöveg += $"'{Adat.Lakcím}', ";
+                szöveg += $"'{Adat.Feorsz}', ";
+                szöveg += $"'{Adat.Munkakör}' )";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
 
             }

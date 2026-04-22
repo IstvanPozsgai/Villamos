@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Kezelők;
 using Villamos.Adatszerkezet;
+using Villamos.Kezelők;
 using MyF = Függvénygyűjtemény;
 
 namespace Villamos
@@ -757,14 +757,14 @@ namespace Villamos
 
                 // törzsből elvesz
                 AdatokDolgozó = KézDolgozó.Lista_Adatok(Honnanba.Text.Trim());
-                Adat_Dolgozó_Alap AdatDolgozó = (from a in AdatokDolgozó
+                Adat_Dolgozó_Alap AdatKiDolgozó = (from a in AdatokDolgozó
                                                  where a.Dolgozószám == Dolgozószámba.Text.Trim()
                                                  select a).FirstOrDefault();
 
                 DateTime belépés = new DateTime(1900, 1, 1);
-                if (AdatokDolgozó != null) belépés = AdatDolgozó.Belépésiidő;
+                if (AdatokDolgozó != null) belépés = AdatKiDolgozó.Belépésiidő;
 
-                if (AdatDolgozó != null)
+                if (AdatKiDolgozó != null)
                 {
                     Adat_Dolgozó_Alap ADAT1 = new Adat_Dolgozó_Alap(Dolgozószámba.Text.Trim(),
                                                                    DateTime.Today,
@@ -774,7 +774,7 @@ namespace Villamos
 
                 // sajátba betesz
                 AdatokDolgozó = KézDolgozó.Lista_Adatok(Hovába.Text.Trim());
-                AdatDolgozó = (from a in AdatokDolgozó
+                Adat_Dolgozó_Alap AdatDolgozó = (from a in AdatokDolgozó
                                where a.Dolgozószám == Dolgozószámba.Text.Trim()
                                select a).FirstOrDefault();
 
@@ -784,11 +784,16 @@ namespace Villamos
                                                                darabol[0].Trim(),
                                                                new DateTime(1900, 1, 1),
                                                                belépés,
-                                                               Honnanba.Text.Trim());
+                                                               Honnanba.Text.Trim(),
+                                                               AdatKiDolgozó.Feorsz,
+                                                               AdatKiDolgozó.Munkakör);
                 if (AdatDolgozó != null)
                     KézDolgozó.Módosít_Telep(Hovába.Text.Trim(), ADAT);
                 else
                     KézDolgozó.Rögzítés_Telep(Hovába.Text.Trim(), ADAT);
+
+                //Munkaköri adatok átírása
+
 
                 Névfeltöltésba();
                 Dolgozószámba.Text = "";
@@ -999,7 +1004,9 @@ namespace Villamos
                                                                 MyF.Szöveg_Tisztítás(darabol[0], 0, 50),
                                                                 new DateTime(1900, 1, 1),
                                                                 belépés,
-                                                                HonnanKi.Text.Trim());
+                                                                HonnanKi.Text.Trim(),
+                                                                AdatDolgozó.Feorsz,
+                                                                AdatDolgozó.Munkakör);
 
                 if (AdatDolgozó != null)
                     KézDolgozó.Módosít_Telep(HováKi.Text.Trim(), ADAT2);
