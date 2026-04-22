@@ -68,6 +68,7 @@ namespace Villamos
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.Másolat = new System.Windows.Forms.Label();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.BtnCSVBeolvasas = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -416,6 +417,7 @@ namespace Villamos
             this.tableLayoutPanel2.Controls.Add(this.BtnVeglegesMentes, 9, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnAblakTörlés, 6, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnOsszesMentese, 8, 0);
+            this.tableLayoutPanel2.Controls.Add(this.BtnCSVBeolvasas, 7, 0);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(565, 11);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
@@ -452,6 +454,18 @@ namespace Villamos
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(494, 50);
             this.tableLayoutPanel3.TabIndex = 225;
+            // 
+            // BtnCSVBeolvasas
+            // 
+            this.BtnCSVBeolvasas.BackgroundImage = global::Villamos.Properties.Resources.alá;
+            this.BtnCSVBeolvasas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BtnCSVBeolvasas.Location = new System.Drawing.Point(353, 3);
+            this.BtnCSVBeolvasas.Name = "BtnCSVBeolvasas";
+            this.BtnCSVBeolvasas.Size = new System.Drawing.Size(44, 44);
+            this.BtnCSVBeolvasas.TabIndex = 231;
+            this.ToolTip1.SetToolTip(this.BtnCSVBeolvasas, "Rögzíti az adatokat");
+            this.BtnCSVBeolvasas.UseVisualStyleBackColor = true;
+            this.BtnCSVBeolvasas.Click += new System.EventHandler(this.BtnCSVBeolvasas_Click);
             // 
             // Ablak_JogKiosztás
             // 
@@ -516,5 +530,6 @@ namespace Villamos
         private ListBox LstJogokAdni;
         private Label lb_jogosultsagok;
         internal Button BtnOsszesMentese;
+        internal Button BtnCSVBeolvasas;
     }
 }

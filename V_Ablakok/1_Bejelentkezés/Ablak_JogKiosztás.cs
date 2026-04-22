@@ -610,5 +610,103 @@ namespace Villamos
             public override string ToString() => Megjelenites;
         }
         #endregion
+
+        private void BtnCSVBeolvasas_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (OpenFileDialog ofd = new OpenFileDialog())
+                {
+                    // Csak CSV fájlokat engedünk kiválasztani
+                    ofd.Filter = "CSV fájlok (*.csv)|*.csv|Minden fájl (*.*)|*.*";
+                    ofd.Title = "Jogosultságok beolvasása CSV-ből";
+
+                    if (ofd.ShowDialog() == DialogResult.OK)
+                    {
+                        // Beolvassuk a fájl összes sorát (UTF-8 kódolással, hogy az ékezetek is jók legyenek)
+                        string[] sorok = System.IO.File.ReadAllLines(ofd.FileName, System.Text.Encoding.UTF8);
+
+                        int sikeres = 0;
+                        int hibas = 0;
+
+                        foreach (string sor in sorok)
+                        {
+                            // Üres sorokat átugorjuk
+                            if (string.IsNullOrWhiteSpace(sor)) continue;
+
+                            // Ha az első sor a fejléc lenne (felhasznalo;gombid;szervezet), azt is átugorjuk
+                            if (sor.ToLower().StartsWith("felhasznalo")) continue;
+
+                            string[] adatok = sor.Split(';');
+                            if (adatok.Length < 3)
+                            {
+                                hibas++;
+                                continue; // Ha nincs meg a 3 adat (felhasználó;gomb;szervezet), ugrunk a köv sorra
+                            }
+
+                            string userName = adatok[0].Trim();
+                            string gombIdStr = adatok[1].Trim();
+                            string szervezetNev = adatok[2].Trim();
+
+                            // 1. Felhasználó azonosítása a memóriából
+                            var user = AdatokUsers.FirstOrDefault(a => a.UserName.Equals(userName, StringComparison.OrdinalIgnoreCase));
+                            if (user == null) { hibas++; continue; } // Nincs ilyen user
+
+                            // 2. Gomb azonosítása
+                            if (!int.TryParse(gombIdStr, out int gombId)) { hibas++; continue; }
+                            var gomb = AdatokGombok.FirstOrDefault(a => a.GombokId == gombId);
+                            if (gomb == null) { hibas++; continue; } // Nincs ilyen gomb
+
+                            // 3. Oldal (Ablak) azonosítása a gomb alapján
+                            // A gombhoz tartozó FormName alapján megkeressük az Oldalt (aminél ez FromName néven fut)
+                            var oldal = AdatokOldal.FirstOrDefault(a => a.FromName == gomb.FormName);
+                            if (oldal == null) { hibas++; continue; }
+
+                            // 4. Szervezet azonosítása
+                            var szervezet = AdatokSzervezet.FirstOrDefault(a => a.Név.Equals(szervezetNev, StringComparison.OrdinalIgnoreCase));
+                            if (szervezet == null) { hibas++; continue; } // Nincs ilyen szervezet
+
+                            // HA MINDEN ADAT MEGVAN, BETESSZÜK A MEMÓRIÁBA
+                            var letezo = AdatokJogosultságok.FirstOrDefault(a =>
+                                a.UserId == user.UserId &&
+                                a.OldalId == oldal.OldalId &&
+                                a.GombokId == gomb.GombokId &&
+                                a.SzervezetId == szervezet.ID);
+
+                            if (letezo != null)
+                            {
+                                // Ha már létezett (esetleg töröltként), akkor aktiváljuk
+                                letezo.Törölt = false;
+                            }
+                            else
+                            {
+                                // Ha teljesen új jog, felvesszük a listába
+                                AdatokJogosultságok.Add(new Adat_Bejelentkezés_Jogosultságok(
+                                    user.UserId,
+                                    oldal.OldalId,
+                                    gomb.GombokId,
+                                    szervezet.ID,
+                                    false));
+                            }
+                            sikeres++;
+                        }
+
+                        // Frissítjük a képernyőt, hogy lássuk a beolvasott adatokat
+                        TáblázatListázás();
+
+                        MessageBox.Show($"A CSV beolvasása befejeződött!\n\n" +
+                                        $"Sikeresen feldolgozott sorok: {sikeres}\n" +
+                                        $"Hibás vagy kihagyott sorok: {hibas}\n\n" +
+                                        $"A jogok a memóriában vannak. Ne felejtsd el megnyomni a 'Végleges mentés' gombot!",
+                                        "Beolvasás kész", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show($"Hiba a CSV feldolgozása közben:\n{ex.Message}", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
