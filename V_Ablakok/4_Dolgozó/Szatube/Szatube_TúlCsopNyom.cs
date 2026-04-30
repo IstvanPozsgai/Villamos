@@ -59,7 +59,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             MyX.VastagFelső(munkalap, "A5:K5");
 
             // logó beszúrása
-            MyX.Kép_beillesztés(munkalap, "A1", Application.StartupPath + @"\Főmérnökség\Adatok\BKV.png", 5, 5, 0.6901, 0.788);
+            MyX.Kép_beillesztés(munkalap, "A1", $@"{Application.StartupPath}\Főmérnökség\Adatok\BKV.png", 5, 5, 0.6901, 0.788);
 
             MyX.Egyesít(munkalap, "a7:k7");
             MyX.Kiir("Rendkívüli munka elrendelő lap (csoportos)", "a7");
@@ -110,9 +110,9 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
                     MyX.Kiir(válasz, "e" + sor);
                     vége = DateTime.Parse(Tábla.Rows[i].Cells[8].Value.ToStrTrim());
 
-                    string kezdőidő = $"{Tábla.SelectedRows[i].Cells[3].Value.ToStrTrim()} {Tábla.SelectedRows[i].Cells[7].Value.ToStrTrim()}";
-                    DateTime MeddigTart = kezdőidő.ToÉrt_DaTeTime().AddMinutes(Tábla.SelectedRows[i].Cells[4].Value.ToStrTrim().ToÉrt_Int());
-                    válasz = $"{MeddigTart:yyyy.MM.dd} {Tábla.SelectedRows[i].Cells[8].Value.ToStrTrim()}";
+                    string kezdőidő = $"{Tábla.Rows[i].Cells[3].Value.ToStrTrim()} {Tábla.Rows[i].Cells[7].Value.ToStrTrim()}";
+                    DateTime MeddigTart = kezdőidő.ToÉrt_DaTeTime().AddMinutes(Tábla.Rows[i].Cells[4].Value.ToStrTrim().ToÉrt_Int());
+                    válasz = $"{MeddigTart:yyyy.MM.dd} {Tábla.Rows[i].Cells[8].Value.ToStrTrim()}";
                     MyX.Kiir(válasz, "f" + sor);
 
                     MyX.Kiir($"#KÉPLET#={Tábla.Rows[i].Cells[4].Value}/60", "g" + sor);
@@ -229,7 +229,7 @@ namespace Villamos.V_Ablakok._3_Dolgozó.Szatube
             MyX.ExcelMentés(fájlexc);
             NyomtatásiFájlok.Add(fájlexc);
             MyX.ExcelBezárás();
-            MyF.ExcelNyomtatás(NyomtatásiFájlok,munkalap, !Töröl);
+            MyF.ExcelNyomtatás(NyomtatásiFájlok, munkalap, !Töröl);
 
         }
     }
