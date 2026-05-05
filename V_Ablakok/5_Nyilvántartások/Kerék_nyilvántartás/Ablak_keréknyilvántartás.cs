@@ -1348,7 +1348,7 @@ namespace Villamos
             AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség");
             Holtart.Lép();
 
-            AdatokKerék = KézKerék.Lista_Adatok().Where(a => a.Objektumfajta == "V.KERÉKPÁR").ToList();
+            AdatokKerék = KézKerék.Lista_Adatok().Where(a => a.Objektumfajta == "V.KERÉKPÁR" || a.Objektumfajta == "CAF.KAGY").ToList();
             Holtart.Lép();
 
             AdatokCsat = KézCsat.Lista_Adat();
