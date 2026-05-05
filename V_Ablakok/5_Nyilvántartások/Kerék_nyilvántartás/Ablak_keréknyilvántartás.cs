@@ -1240,10 +1240,12 @@ namespace Villamos
                 int oszlop = 0;
 
                 List<Adat_Jármű> Jármű = new List<Adat_Jármű>();
-                if (Program.PostásTelephely.Trim() == "Főmérnökség")
-                    Jármű = KézJármű.Lista_Adatok("Főmérnökség");
-                else
-                    Jármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Jármű = KézJármű.Lista_Adatok("Főmérnökség");
+
+                if (Program.PostásTelephely.Trim() != "Főmérnökség")
+                    Jármű = (from a in Jármű
+                             where a.Üzem == Cmbtelephely.Text.Trim()
+                             select a).ToList();
 
                 if (Típus_Szűrő.Text.Trim() != "")
                     Jármű = Jármű.Where(a => a.Típus.Trim() == Típus_Szűrő.Text.Trim()).ToList();
@@ -1775,8 +1777,8 @@ namespace Villamos
             string MilyenÁllapot = "";
             try
             {
-                if (Állapot.Length > 1) Állapot=Állapot.Substring(0, 1);
-        
+                if (Állapot.Length > 1) Állapot = Állapot.Substring(0, 1);
+
                 int szám = int.Parse(Állapot);
                 MilyenÁllapot = ((MyEn.Kerék_Állapot)szám).ToString().Replace('_', ' ');
             }
