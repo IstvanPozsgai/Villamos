@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using Villamos.Kezelők;
 using Villamos.Adatszerkezet;
+using Villamos.Kezelők;
 using MyF = Függvénygyűjtemény;
 using MyLista = Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok.Karbantartási_ListaFeltöltés;
 using MyX = Villamos.MyClosedXML_Excel;
@@ -44,7 +44,10 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 GombLathatosagKezelo.Beallit(this, Cmbtelephely.Text.Trim());
             }
             else
+               {
+                Cmbtelephely.Text = CMBtelephely;
                 Jogosultságkiosztás();
+            }
 
 
             Csoport_Típus_feltöltés();
@@ -345,6 +348,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                 AdatTábla.Columns.Add("Dátumtól", typeof(DateTime));
                 AdatTábla.Columns.Add("Dátumig", typeof(DateTime));
                 AdatTábla.Columns.Add("Karb Fokozat");
+                AdatTábla.Columns.Add("Al-Típus");
             }
             catch (HibásBevittAdat ex)
             {
@@ -369,6 +373,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
             Csoport_tábla.Columns["Dátumtól"].Width = 100;
             Csoport_tábla.Columns["Dátumig"].Width = 100;
             Csoport_tábla.Columns["Karb Fokozat"].Width = 100;
+            Csoport_tábla.Columns["Al-Típus"].Width = 100;
         }
 
         private void ABTartalom()
@@ -439,6 +444,7 @@ namespace Villamos.Villamos_Ablakok._3_Dolgozó.Karbantartási_Munkalapok
                     Soradat["Dátumtól"] = adat.Érv_kezdete;
                     Soradat["Dátumig"] = adat.Érv_vége;
                     Soradat["Karb Fokozat"] = adat.Karbantartási_fokozat.Trim();
+                    Soradat["Al-Típus"] = adat.Altípus.Trim();
 
                     if (adat.Karbantartási_fokozat.Trim() == Csoport_Ciklus.Text.Trim())
                     {
