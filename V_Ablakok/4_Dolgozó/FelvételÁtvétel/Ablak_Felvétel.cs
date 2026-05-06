@@ -758,8 +758,8 @@ namespace Villamos
                 // törzsből elvesz
                 AdatokDolgozó = KézDolgozó.Lista_Adatok(Honnanba.Text.Trim());
                 Adat_Dolgozó_Alap AdatKiDolgozó = (from a in AdatokDolgozó
-                                                 where a.Dolgozószám == Dolgozószámba.Text.Trim()
-                                                 select a).FirstOrDefault();
+                                                   where a.Dolgozószám == Dolgozószámba.Text.Trim()
+                                                   select a).FirstOrDefault();
 
                 DateTime belépés = new DateTime(1900, 1, 1);
                 if (AdatokDolgozó != null) belépés = AdatKiDolgozó.Belépésiidő;
@@ -775,18 +775,25 @@ namespace Villamos
                 // sajátba betesz
                 AdatokDolgozó = KézDolgozó.Lista_Adatok(Hovába.Text.Trim());
                 Adat_Dolgozó_Alap AdatDolgozó = (from a in AdatokDolgozó
-                               where a.Dolgozószám == Dolgozószámba.Text.Trim()
-                               select a).FirstOrDefault();
+                                                 where a.Dolgozószám == Dolgozószámba.Text.Trim()
+                                                 select a).FirstOrDefault();
 
                 string[] darabol = Dolgozóba.Text.Trim().Split('=');
+                string Feorsz = "";
+                string Munkakör = "";
+                if (AdatDolgozó != null)
+                {
+                    if (AdatDolgozó.Feorsz != null) Feorsz = AdatDolgozó.Feorsz;
+                    if (AdatDolgozó.Munkakör != null) Munkakör = AdatDolgozó.Munkakör;
+                }
 
                 Adat_Dolgozó_Alap ADAT = new Adat_Dolgozó_Alap(Dolgozószámba.Text.Trim(),
                                                                darabol[0].Trim(),
                                                                new DateTime(1900, 1, 1),
                                                                belépés,
                                                                Honnanba.Text.Trim(),
-                                                               AdatKiDolgozó.Feorsz,
-                                                               AdatKiDolgozó.Munkakör);
+                                                               Feorsz,
+                                                               Munkakör);
                 if (AdatDolgozó != null)
                     KézDolgozó.Módosít_Telep(Hovába.Text.Trim(), ADAT);
                 else
@@ -998,6 +1005,13 @@ namespace Villamos
                 AdatDolgozó = (from a in AdatokDolgozó
                                where a.Dolgozószám == DolgozószámKi.Text.Trim()
                                select a).FirstOrDefault();
+                string Feorsz = "";
+                string Munkakör = "";
+                if (AdatDolgozó != null)
+                {
+                    if (AdatDolgozó.Feorsz != null) Feorsz = AdatDolgozó.Feorsz;
+                    if (AdatDolgozó.Munkakör != null) Munkakör = AdatDolgozó.Munkakör;
+                }
                 string[] darabol = DolgozóKi.Text.Trim().Split('=');
 
                 Adat_Dolgozó_Alap ADAT2 = new Adat_Dolgozó_Alap(DolgozószámKi.Text.Trim(),
@@ -1005,8 +1019,8 @@ namespace Villamos
                                                                 new DateTime(1900, 1, 1),
                                                                 belépés,
                                                                 HonnanKi.Text.Trim(),
-                                                                AdatDolgozó.Feorsz,
-                                                                AdatDolgozó.Munkakör);
+                                                                Feorsz,
+                                                                Munkakör);
 
                 if (AdatDolgozó != null)
                     KézDolgozó.Módosít_Telep(HováKi.Text.Trim(), ADAT2);
