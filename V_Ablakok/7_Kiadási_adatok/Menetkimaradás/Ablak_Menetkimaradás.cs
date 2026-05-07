@@ -217,7 +217,7 @@ namespace Villamos
                 Pályaszámok.Items.Clear();
                 List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok("Főmérnökség");
                 Adatok = (from a in Adatok
-                          where a.Státus == 0
+                          where a.Törölt == false
                           orderby a.Azonosító
                           select a).ToList();
                 foreach (Adat_Jármű Elem in Adatok)
