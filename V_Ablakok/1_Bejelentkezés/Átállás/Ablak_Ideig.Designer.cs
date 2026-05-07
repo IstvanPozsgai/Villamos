@@ -166,6 +166,11 @@
             // FelhasználóId
             // 
             this.FelhasználóId.Location = new System.Drawing.Point(118, 224);
+            this.FelhasználóId.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             this.FelhasználóId.Name = "FelhasználóId";
             this.FelhasználóId.Size = new System.Drawing.Size(120, 26);
             this.FelhasználóId.TabIndex = 26;
