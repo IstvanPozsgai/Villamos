@@ -1360,12 +1360,12 @@ namespace Villamos
                     JobbMargó = 15,
                     FelsőMargó = 19,
                     AlsóMargó = 19,
-                    FejlécMéret = 10,
+                    FejlécMéret = 5,
                     LáblécMéret = 13,
                     VízKözép = true,
                     Álló = true,
                     LapSzéles = 1,
-                    Képútvonal = fénykép
+                    Képútvonal = fénykép                   
                 };
                 MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
