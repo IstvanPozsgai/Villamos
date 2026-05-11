@@ -998,6 +998,11 @@ namespace Villamos.Villamos_Ablakok
                                                     && a.Érv_kezdete <= Dátum.Value && a.Érv_vége >= Dátum.Value
                                                     orderby a.Részegység, a.Munka_utasítás_szám, a.ID
                                                     select a).ToList();
+                Adatok = Adatok
+                  .OrderBy(x => x.Részegység)// Először részegység szerint csoportosít
+                  .ThenBy(x => x.Munka_utasítás_szám, new NaturalStringComparer()) // Utána a szám hossza (hogy az 1 hamarabb legyen mint a 10)
+                  .ToList();
+
                 KM_korr = 0;
                 //Egyedi munkalapokon kiírja a km adatokat
                 if (CHKKMU.Checked && !csoportos)
@@ -1111,6 +1116,35 @@ namespace Villamos.Villamos_Ablakok
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public class NaturalStringComparer : IComparer<string>
+        {
+            public int Compare(string x, string y)
+            {
+                if (x == y) return 0;
+                if (x == null) return -1;
+                if (y == null) return 1;
+
+                // Kicseréljük az elválasztókat (pl. _ vagy .) szóközre, 
+                // hogy a darabolás konzisztens legyen
+                string[] xParts = x.Replace('_', '.').Split('.');
+                string[] yParts = y.Replace('_', '.').Split('.');
+
+                for (int i = 0; i < Math.Min(xParts.Length, yParts.Length); i++)
+                {
+                    if (int.TryParse(xParts[i], out int xNum) && int.TryParse(yParts[i], out int yNum))
+                    {
+                        if (xNum != yNum) return xNum.CompareTo(yNum);
+                    }
+                    else
+                    {
+                        int partCompare = string.Compare(xParts[i], yParts[i], StringComparison.OrdinalIgnoreCase);
+                        if (partCompare != 0) return partCompare;
+                    }
+                }
+                return xParts.Length.CompareTo(yParts.Length);
             }
         }
 
@@ -1622,27 +1656,34 @@ namespace Villamos.Villamos_Ablakok
             MyX.Egyesít(munkalap, $"A{sor}:E{sor}");
             MyX.Egyesít(munkalap, $"F{sor}:L{sor}");
             MyX.Egyesít(munkalap, $"M{sor}:Q{sor}");
-
+            // JAVÍTANDÓ:
             //Feltétel mező
             if (!csoportos)
             {
-                MyX.Kiir($"Pályaszám:{Pályaszám.Text.Trim()}", $"A{sor}");
-                MyX.Betű(munkalap, $"A{sor}", BeBetűV);
+                if (Járműtípus.Text != "SGP")
+                {
+                    MyX.Kiir($"Pályaszám:{Pályaszám.Text.Trim()}", $"A{sor}");
+                    MyX.Betű(munkalap, $"A{sor}", BeBetűV);
+                }
+                else
+                {
+                    MyX.Kiir($"Pályaszámok:", $"A{sor}");
+                    MyX.Betű(munkalap, $"A{sor}", BeBetűV);
+                }
+                string szöveg = Járműtípus.Text.Trim();
+                if (Járműtípus.Text.Trim().Length > 15) szöveg += "\n";
+                szöveg += $" - {Combo_KarbCiklus.Text.Trim()} Karbantartási munkalap";
+
+                MyX.Kiir(szöveg, $"F{sor}");
+                MyX.Betű(munkalap, $"F{sor}", BeBetűV);
+
+                MyX.Kiir($"Készítve: {DateTime.Now}", $"M{sor}");
+                MyX.Betű(munkalap, $"M{sor}", BeBetűD);
+
+                MyX.Sormagasság(munkalap, $"{sor}:{sor}", sormagagasság);
+                MyX.Rácsoz(munkalap, $"A{sor}:Q{sor}");
+                return sor;
             }
-            string szöveg = Járműtípus.Text.Trim();
-            if (Járműtípus.Text.Trim().Length > 15) szöveg += "\n";
-            szöveg += $" - {Combo_KarbCiklus.Text.Trim()} Karbantartási munkalap";
-
-            MyX.Kiir(szöveg, $"F{sor}");
-            MyX.Betű(munkalap, $"F{sor}", BeBetűV);
-
-            MyX.Kiir($"Készítve: {DateTime.Now}", $"M{sor}");
-            MyX.Betű(munkalap, $"M{sor}", BeBetűD);
-
-            MyX.Sormagasság(munkalap, $"{sor}:{sor}", sormagagasság);
-            MyX.Rácsoz(munkalap, $"A{sor}:Q{sor}");
-            return sor;
-        }
 
         private string Rendelés_Keresés(long Sorszám, string Azonosító = "")
         {
