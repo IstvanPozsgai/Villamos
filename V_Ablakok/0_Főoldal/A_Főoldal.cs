@@ -367,6 +367,7 @@ namespace Villamos
                 gombokBeállításaToolStripMenuItem.Enabled = false;
                 felhasználókLétrehozásaTörléseToolStripMenuItem.Enabled = false;
                 jogosultságKiosztásToolStripMenuItem.Enabled = false;
+                jogosultságKiosztásCsoportosToolStripMenuItem.Enabled = false;
                 SzoftverkulcsKészítésMenü.Enabled = false;
                 //az új esetén az új beállítással megyünk be.
                 if (panels2.Text.Substring(0, 1) == "R") Menü_Beállítása_Új();
@@ -2703,6 +2704,22 @@ namespace Villamos
             {
                 Új_Ablak_JogKiosztás.Activate();
                 Új_Ablak_JogKiosztás.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        Ablak_JogKiosztás_csoportos Új_Ablak_JogKiosztás_csoportos;
+        private void JogosultságKiosztásCsoportosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_JogKiosztás_csoportos == null)
+            {
+                Új_Ablak_JogKiosztás_csoportos = new Ablak_JogKiosztás_csoportos(this);
+                Új_Ablak_JogKiosztás_csoportos.FormClosed += Új_Ablak_JogKiosztás_FormClosed;
+                Új_Ablak_JogKiosztás_csoportos.Show();
+            }
+            else
+            {
+                Új_Ablak_JogKiosztás_csoportos.Activate();
+                Új_Ablak_JogKiosztás_csoportos.WindowState = FormWindowState.Maximized;
             }
         }
 

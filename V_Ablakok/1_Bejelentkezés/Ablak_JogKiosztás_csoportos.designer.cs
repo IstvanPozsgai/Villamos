@@ -6,7 +6,7 @@ using System.Windows.Forms;
 namespace Villamos
 {
 
-    public partial class Ablak_JogKiosztás : Form
+    public partial class Ablak_JogKiosztás_csoportos : Form
     {
 
         // Form overrides dispose to clean up the component list.
@@ -41,30 +41,34 @@ namespace Villamos
             this.Frissít = new System.Windows.Forms.Button();
             this.SzervezetMinden = new System.Windows.Forms.Button();
             this.SzervezetSemmi = new System.Windows.Forms.Button();
-            this.Rögzít = new System.Windows.Forms.Button();
+            this.BtnVeglegesMentes = new System.Windows.Forms.Button();
             this.BtnSugó = new System.Windows.Forms.Button();
             this.JogTörlés = new System.Windows.Forms.Button();
             this.MindenGomb = new System.Windows.Forms.Button();
             this.BtnMásol = new System.Windows.Forms.Button();
             this.BtnBeilleszt = new System.Windows.Forms.Button();
             this.BtnAblakTörlés = new System.Windows.Forms.Button();
+            this.BtnOsszesMentese = new System.Windows.Forms.Button();
             this.Label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.MenűFa = new System.Windows.Forms.TreeView();
             this.CmbAblakId = new System.Windows.Forms.ComboBox();
             this.CmbAblak = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.LstGombok = new System.Windows.Forms.ListBox();
             this.LstChkSzervezet = new System.Windows.Forms.CheckedListBox();
+            this.LstJogokAdni = new System.Windows.Forms.ListBox();
+            this.lb_jogosultsagok = new System.Windows.Forms.Label();
             this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.Felhasználók = new System.Windows.Forms.ComboBox();
             this.DolgozóNév = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.Másolat = new System.Windows.Forms.Label();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.MenűFa = new System.Windows.Forms.TreeView();
+            this.BtnCSVBeolvasas = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -114,17 +118,17 @@ namespace Villamos
             this.SzervezetSemmi.UseVisualStyleBackColor = true;
             this.SzervezetSemmi.Click += new System.EventHandler(this.SzervezetSemmi_Click);
             // 
-            // Rögzít
+            // BtnVeglegesMentes
             // 
-            this.Rögzít.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
-            this.Rögzít.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.Rögzít.Location = new System.Drawing.Point(453, 3);
-            this.Rögzít.Name = "Rögzít";
-            this.Rögzít.Size = new System.Drawing.Size(44, 44);
-            this.Rögzít.TabIndex = 97;
-            this.ToolTip1.SetToolTip(this.Rögzít, "Rögzíti az adatokat");
-            this.Rögzít.UseVisualStyleBackColor = true;
-            this.Rögzít.Click += new System.EventHandler(this.Rögzít_Click);
+            this.BtnVeglegesMentes.BackgroundImage = global::Villamos.Properties.Resources.Ok_gyűjtemény;
+            this.BtnVeglegesMentes.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BtnVeglegesMentes.Location = new System.Drawing.Point(453, 3);
+            this.BtnVeglegesMentes.Name = "BtnVeglegesMentes";
+            this.BtnVeglegesMentes.Size = new System.Drawing.Size(44, 44);
+            this.BtnVeglegesMentes.TabIndex = 97;
+            this.ToolTip1.SetToolTip(this.BtnVeglegesMentes, "Menti az adatokat");
+            this.BtnVeglegesMentes.UseVisualStyleBackColor = true;
+            this.BtnVeglegesMentes.Click += new System.EventHandler(this.BtnVeglegesMentes_Click);
             // 
             // BtnSugó
             // 
@@ -198,6 +202,18 @@ namespace Villamos
             this.BtnAblakTörlés.UseVisualStyleBackColor = true;
             this.BtnAblakTörlés.Click += new System.EventHandler(this.BtnAblakTörlés_Click);
             // 
+            // BtnOsszesMentese
+            // 
+            this.BtnOsszesMentese.BackgroundImage = global::Villamos.Properties.Resources.shopping_cart;
+            this.BtnOsszesMentese.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BtnOsszesMentese.Location = new System.Drawing.Point(403, 3);
+            this.BtnOsszesMentese.Name = "BtnOsszesMentese";
+            this.BtnOsszesMentese.Size = new System.Drawing.Size(44, 44);
+            this.BtnOsszesMentese.TabIndex = 230;
+            this.ToolTip1.SetToolTip(this.BtnOsszesMentese, "Rögzíti az adatokat");
+            this.BtnOsszesMentese.UseVisualStyleBackColor = true;
+            this.BtnOsszesMentese.Click += new System.EventHandler(this.BtnOsszesMentese_Click);
+            // 
             // Label1
             // 
             this.Label1.AutoSize = true;
@@ -209,19 +225,22 @@ namespace Villamos
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.ColumnCount = 4;
+            this.tableLayoutPanel1.ColumnCount = 5;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 500F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 175F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 520F));
             this.tableLayoutPanel1.Controls.Add(this.label3, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel2, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.label2, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.label4, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.LstGombok, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.LstChkSzervezet, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.LstJogokAdni, 4, 1);
+            this.tableLayoutPanel1.Controls.Add(this.lb_jogosultsagok, 4, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 67);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
@@ -233,7 +252,7 @@ namespace Villamos
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1058, 0);
+            this.label3.Location = new System.Drawing.Point(863, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(80, 20);
             this.label3.TabIndex = 230;
@@ -248,6 +267,14 @@ namespace Villamos
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(294, 260);
             this.panel2.TabIndex = 223;
+            // 
+            // MenűFa
+            // 
+            this.MenűFa.Location = new System.Drawing.Point(4, 71);
+            this.MenűFa.Name = "MenűFa";
+            this.MenűFa.Size = new System.Drawing.Size(287, 186);
+            this.MenűFa.TabIndex = 104;
+            this.MenűFa.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.MenűFa_AfterSelect);
             // 
             // CmbAblakId
             // 
@@ -288,33 +315,54 @@ namespace Villamos
             // 
             // LstGombok
             // 
-            this.LstGombok.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.LstGombok.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LstGombok.FormattingEnabled = true;
             this.LstGombok.IntegralHeight = false;
             this.LstGombok.ItemHeight = 20;
             this.LstGombok.Location = new System.Drawing.Point(303, 23);
             this.LstGombok.Name = "LstGombok";
-            this.LstGombok.Size = new System.Drawing.Size(749, 260);
+            this.LstGombok.Size = new System.Drawing.Size(554, 260);
             this.LstGombok.TabIndex = 229;
             this.LstGombok.SelectedIndexChanged += new System.EventHandler(this.LstGombok_SelectedIndexChanged);
             // 
             // LstChkSzervezet
             // 
             this.LstChkSzervezet.CheckOnClick = true;
+            this.LstChkSzervezet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LstChkSzervezet.FormattingEnabled = true;
             this.LstChkSzervezet.IntegralHeight = false;
-            this.LstChkSzervezet.Location = new System.Drawing.Point(1058, 23);
+            this.LstChkSzervezet.Location = new System.Drawing.Point(863, 23);
             this.LstChkSzervezet.Name = "LstChkSzervezet";
-            this.LstChkSzervezet.Size = new System.Drawing.Size(494, 260);
+            this.LstChkSzervezet.Size = new System.Drawing.Size(169, 260);
             this.LstChkSzervezet.TabIndex = 98;
+            this.LstChkSzervezet.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.LstChkSzervezet_ItemCheck);
+            // 
+            // LstJogokAdni
+            // 
+            this.LstJogokAdni.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LstJogokAdni.FormattingEnabled = true;
+            this.LstJogokAdni.ItemHeight = 20;
+            this.LstJogokAdni.Location = new System.Drawing.Point(1038, 23);
+            this.LstJogokAdni.Name = "LstJogokAdni";
+            this.LstJogokAdni.Size = new System.Drawing.Size(514, 260);
+            this.LstJogokAdni.TabIndex = 231;
+            // 
+            // lb_jogosultsagok
+            // 
+            this.lb_jogosultsagok.AutoSize = true;
+            this.lb_jogosultsagok.Location = new System.Drawing.Point(1038, 0);
+            this.lb_jogosultsagok.Name = "lb_jogosultsagok";
+            this.lb_jogosultsagok.Size = new System.Drawing.Size(150, 20);
+            this.lb_jogosultsagok.TabIndex = 232;
+            this.lb_jogosultsagok.Text = "Adott jogosultságok";
             // 
             // Tábla
             // 
             this.Tábla.AllowUserToAddRows = false;
             this.Tábla.AllowUserToDeleteRows = false;
-            this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla.FilterAndSortEnabled = true;
@@ -349,7 +397,7 @@ namespace Villamos
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel2.ColumnCount = 10;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
@@ -366,8 +414,10 @@ namespace Villamos
             this.tableLayoutPanel2.Controls.Add(this.MindenGomb, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnBeilleszt, 5, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnMásol, 4, 0);
-            this.tableLayoutPanel2.Controls.Add(this.Rögzít, 9, 0);
+            this.tableLayoutPanel2.Controls.Add(this.BtnVeglegesMentes, 9, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnAblakTörlés, 6, 0);
+            this.tableLayoutPanel2.Controls.Add(this.BtnOsszesMentese, 8, 0);
+            this.tableLayoutPanel2.Controls.Add(this.BtnCSVBeolvasas, 7, 0);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(565, 11);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
@@ -405,13 +455,17 @@ namespace Villamos
             this.tableLayoutPanel3.Size = new System.Drawing.Size(494, 50);
             this.tableLayoutPanel3.TabIndex = 225;
             // 
-            // MenűFa
+            // BtnCSVBeolvasas
             // 
-            this.MenűFa.Location = new System.Drawing.Point(4, 71);
-            this.MenűFa.Name = "MenűFa";
-            this.MenűFa.Size = new System.Drawing.Size(287, 186);
-            this.MenűFa.TabIndex = 104;
-            this.MenűFa.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.MenűFa_AfterSelect);
+            this.BtnCSVBeolvasas.BackgroundImage = global::Villamos.Properties.Resources.alá;
+            this.BtnCSVBeolvasas.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.BtnCSVBeolvasas.Location = new System.Drawing.Point(353, 3);
+            this.BtnCSVBeolvasas.Name = "BtnCSVBeolvasas";
+            this.BtnCSVBeolvasas.Size = new System.Drawing.Size(44, 44);
+            this.BtnCSVBeolvasas.TabIndex = 231;
+            this.ToolTip1.SetToolTip(this.BtnCSVBeolvasas, "Rögzíti az adatokat");
+            this.BtnCSVBeolvasas.UseVisualStyleBackColor = true;
+            this.BtnCSVBeolvasas.Click += new System.EventHandler(this.BtnCSVBeolvasas_Click);
             // 
             // Ablak_JogKiosztás
             // 
@@ -447,7 +501,7 @@ namespace Villamos
         }
         internal ToolTip ToolTip1;
         internal Button BtnSugó;
-        internal Button Rögzít;
+        internal Button BtnVeglegesMentes;
         internal Label Label1;
         private TableLayoutPanel tableLayoutPanel1;
         internal Label label4;
@@ -473,5 +527,9 @@ namespace Villamos
         private TableLayoutPanel tableLayoutPanel3;
         internal Button BtnAblakTörlés;
         private TreeView MenűFa;
+        private ListBox LstJogokAdni;
+        private Label lb_jogosultsagok;
+        internal Button BtnOsszesMentese;
+        internal Button BtnCSVBeolvasas;
     }
 }

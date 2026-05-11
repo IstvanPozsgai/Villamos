@@ -176,6 +176,12 @@
     <Compile Include="V_Ablakok\1_Bejelentkezés\Ablak_Gombok.Designer.cs">
       <DependentUpon>Ablak_Gombok.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\1_Bejelentkezés\Ablak_JogKiosztás_csoportos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\1_Bejelentkezés\Ablak_JogKiosztás_csoportos.designer.cs">
+      <DependentUpon>Ablak_JogKiosztás_csoportos.cs</DependentUpon>
+    </Compile>
     <Compile Include="V_Ablakok\1_Bejelentkezés\Átállás\Ablak_Ideig.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1657,6 +1663,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Bejelentkezés\Ablak_Gombok.resx">
       <DependentUpon>Ablak_Gombok.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\1_Bejelentkezés\Ablak_JogKiosztás_csoportos.resx">
+      <DependentUpon>Ablak_JogKiosztás_csoportos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\1_Bejelentkezés\Átállás\Ablak_Ideig.resx">
       <DependentUpon>Ablak_Ideig.cs</DependentUpon>

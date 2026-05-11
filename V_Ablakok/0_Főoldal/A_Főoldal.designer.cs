@@ -196,6 +196,7 @@ namespace Villamos
             this.Képkeret = new System.Windows.Forms.PictureBox();
             this.Képkeret1 = new System.Windows.Forms.PictureBox();
             this.LblNév = new System.Windows.Forms.Label();
+            this.jogosultságKiosztásCsoportosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Menü.SuspendLayout();
             this.Alsó.SuspendLayout();
             this.Rejtett.SuspendLayout();
@@ -237,6 +238,7 @@ namespace Villamos
             this.toolStripSeparator37,
             this.felhasználókLétrehozásaTörléseToolStripMenuItem,
             this.jogosultságKiosztásToolStripMenuItem,
+            this.jogosultságKiosztásCsoportosToolStripMenuItem,
             this.toolStripSeparator38,
             this.toolStripSeparator36,
             this.FelhasználókBeállításaMenü,
@@ -1531,6 +1533,12 @@ namespace Villamos
             this.LblNév.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.LblNév.DoubleClick += new System.EventHandler(this.Panels1_DoubleClick);
             // 
+            // jogosultságKiosztásCsoportosToolStripMenuItem
+            // 
+            this.jogosultságKiosztásCsoportosToolStripMenuItem.Name = "jogosultságKiosztásCsoportosToolStripMenuItem";
+            this.jogosultságKiosztásCsoportosToolStripMenuItem.Size = new System.Drawing.Size(275, 26);
+            this.jogosultságKiosztásCsoportosToolStripMenuItem.Text = "Jogosultság kiosztás csoportos";
+            // 
             // A_Főoldal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1734,5 +1742,6 @@ namespace Villamos
         private ToolStripMenuItem AdatbázisVáltásToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator41;
         private ToolStripSeparator toolStripSeparator42;
+        private ToolStripMenuItem jogosultságKiosztásCsoportosToolStripMenuItem;
     }
 }
