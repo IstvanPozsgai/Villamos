@@ -338,7 +338,7 @@ namespace Villamos
             try
             {
                 string pályaszám = "";
-                // megpróbáljuk megnyitni az excel táblát.
+
                 OpenFileDialog OpenFileDialog1 = new OpenFileDialog
                 {
                     InitialDirectory = "MyDocuments",
@@ -346,53 +346,97 @@ namespace Villamos
                     FileName = "",
                     Filter = "Szövegfájlok |*.txt"
                 };
+
                 string fájlexc;
-                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
+
                 if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
                     fájlexc = OpenFileDialog1.FileName;
                 else
                     return;
 
-
                 List<Adat_Osztály_Adat> AdatokAdat = KézOsztály.Lista_Adat();
 
                 Holtart.Be();
-                // beolvassuk a szövegfájlt
-                string[] lines = ReadAllLines(fájlexc);
-                // soronként elemezzük
 
-                //Fejléc adatok
-                string[] Soradatok = lines[3].ToString().Split('\t');
-                int fejléchossz = Soradatok.Length + 1;
+                string[] lines = ReadAllLines(fájlexc);
+
+                // Fejléc adatok, összefűzve a két külön sort.
+                string[] Soradatok1 = lines[3].ToString().Split('\t');
+                string[] Soradatok2 = lines[4].ToString().Split('\t');
+                string[] Soradatok = Soradatok1.Concat(Soradatok2).ToArray();
+
+                int fejléchossz = Soradatok.Length;
                 string[] Fejléc = new string[fejléchossz];
                 int[] Sorszám = new int[fejléchossz];
-                Fejléc[0] = "azonosító"; //Első elem
+
+                Fejléc[0] = "azonosító";
+
+                // Külön változóban tároljuk, hogy melyik oszlop a Berendez.
+                int berendezIndex = -1;
 
                 for (int i = 0; i < Soradatok.Length; i++)
                 {
                     string szó = Soradatok[i].Trim();
-                    if (szó == "Berendez.") Sorszám[0] = i;
+
+                    if (szó == "Berendez.")
+                        berendezIndex = i;
 
                     Adat_Osztály_Név Elem = (from a in AdatokNév
                                              where a.Osztálynév.Trim() == szó
                                              select a).FirstOrDefault();
+
                     if (Elem != null)
                     {
                         Fejléc[i] = Elem.Osztálymező;
-                        Sorszám[i] = Elem.Id; //megadja , hogy az elemet hova rakjuk
+                        Sorszám[i] = Elem.Id;
                     }
                 }
 
+                if (berendezIndex == -1)
+                    throw new HibásBevittAdat("Nem található a Berendez. oszlop a fájlban.");
+
                 List<Adat_Osztály_Adat> AdatokR = new List<Adat_Osztály_Adat>();
                 List<Adat_Osztály_Adat> AdatokM = new List<Adat_Osztály_Adat>();
-                for (int i = 5; i < lines.Length; i++)  // lines
+
+                for (int i = 5; i < lines.Length; i++)
                 {
                     Soradatok = lines[i].ToString().Split('\t');
-                    if (Soradatok.Length == 1 && Soradatok[0].Trim() == "") continue;
+
+                    if (Soradatok.Length == 1 && Soradatok[0].Trim() == "")
+                        continue;
+
+                    // Ha a rekord folytatódik a következő sorban, akkor hozzáfűzzük.
+                    // Ez while, nem if, hogy akkor is működjön, ha nem csak 2 sorból áll egy rekord.
+                    while (i + 1 < lines.Length && Soradatok.Length < Fejléc.Length)
+                    {
+                        string[] KövetkezőSor = lines[i + 1].ToString().Split('\t');
+
+                        // Ha a következő sorban már van Berendez. adat, akkor az már új rekord.
+                        if (KövetkezőSor.Length > berendezIndex &&
+                            KövetkezőSor[berendezIndex].Trim() != "")
+                        {
+                            break;
+                        }
+
+                        Soradatok = Soradatok.Concat(KövetkezőSor).ToArray();
+                        i++;
+                    }
+
+                    // Biztonsági ellenőrzés: ha még így sincs Berendez. oszlopnyi adat, átugorjuk.
+                    if (Soradatok.Length <= berendezIndex)
+                        continue;
+
+                    pályaszám = Soradatok[berendezIndex].Trim();
+
+                    if (pályaszám.Trim() == "")
+                        continue;
+
+                    pályaszám = MyF.Szöveg_Tisztítás(pályaszám, 1, -1);
+
                     List<string> Értékek = new List<string>();
                     List<string> Mezők = new List<string>();
-                    // Feldaraboljuk a sort elemekre és beletesszük a megfelelő helyre
-                    for (int j = 1; j < Soradatok.Length; j++)
+
+                    for (int j = 1; j < Soradatok.Length && j < Sorszám.Length; j++)
                     {
                         if (Sorszám[j] != 0)
                         {
@@ -400,15 +444,11 @@ namespace Villamos
                                 Értékek.Add(Soradatok[j].ToStrTrim());
                             else
                                 Értékek.Add("?");
+
                             Mezők.Add(Fejléc[j].ToStrTrim());
                         }
                     }
-                    pályaszám = Soradatok[Sorszám[0]].Trim();
-                    if (pályaszám.Trim() == "") continue;
 
-                    pályaszám = MyF.Szöveg_Tisztítás(pályaszám, 1, -1);
-
-                    // az új azonosító
                     Adat_Osztály_Adat Elem = (from a in AdatokAdat
                                               where a.Azonosító == pályaszám.ToStrTrim()
                                               select a).FirstOrDefault();
@@ -417,22 +457,32 @@ namespace Villamos
                                         pályaszám,
                                         Értékek,
                                         Mezők);
+
                     if (Elem == null)
                         AdatokR.Add(Adat);
                     else
                         AdatokM.Add(Adat);
+
                     Holtart.Lép();
                 }
 
-                if (AdatokR.Count > 0) KézOsztály.Rögzítés(AdatokR);
-                if (AdatokM.Count > 0) KézOsztály.Módosítás(AdatokM);
+                if (AdatokR.Count > 0)
+                    KézOsztály.Rögzítés(AdatokR);
+
+                if (AdatokM.Count > 0)
+                    KézOsztály.Módosítás(AdatokM);
+
                 Holtart.Ki();
-                // kitöröljük a betöltött fájlt
+
                 Delete(fájlexc);
 
-                AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség").Where(a => a.Törölt == false).ToList();
+                AdatokJármű = KézJármű.Lista_Adatok("Főmérnökség")
+                                      .Where(a => a.Törölt == false)
+                                      .ToList();
+
                 AdatokOsztály = KézOsztály.Lista_Adat();
                 AdatokNév = KézNév.Lista_Adat();
+
                 MessageBox.Show("Az adat konvertálás befejeződött!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (HibásBevittAdat ex)
