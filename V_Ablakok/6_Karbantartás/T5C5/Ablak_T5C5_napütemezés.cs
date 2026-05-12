@@ -1292,7 +1292,7 @@ namespace Villamos
                     InitialDirectory = "MyDocuments",
 
                     Title = "Listázott tartalom mentése Excel fájlba",
-                    FileName = "Hibalista-" + Program.PostásNév.Trim() + "-" + Dátum.Value.Year,
+                    FileName = $"Hibalista-{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
                     Filter = "Excel |*.xlsx"
                 };
                 // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
@@ -1304,11 +1304,31 @@ namespace Villamos
                 Holtart.Be();
                 // megnyitjuk
                 MyX.ExcelLétrehozás(munkalap);
+                Beállítás_Betű bebetű = new Beállítás_Betű
+                {
+                    Méret = 12,
+                    Név = "Arial"
+                };
+                Beállítás_Betű bebetűv14 = new Beállítás_Betű
+                {
+                    Méret = 14,
+                    Név = "Arial",
+                    Vastag = true
+                };
+                Beállítás_Betű bebetűv = new Beállítás_Betű
+                {
+                    Méret = 12,
+                    Név = "Arial",
+                    Vastag = true
+                };
+                MyX.Munkalap_betű(munkalap, bebetű);
 
                 long szerelvény = 0;
 
                 int sor = 1;
-                MyX.Kiir(Dátum.Value.ToString("yyyy.MM.dd") + "-i tervezett karbantartásokhoz járműveinek 1 hónapos hibalistája", "A" + sor.ToString());
+                MyX.Egyesít(munkalap, $"A{sor}:C{sor}");
+                MyX.Kiir(Dátum.Value.ToString("yyyy.MM.dd") + "-i tervezett karbantartásokhoz járműveinek 1 hónapos hibalistája", $"A{sor}");
+                MyX.Betű(munkalap, $"A{sor}", bebetűv14);
                 sor += 2;
 
                 List<Adat_Vezénylés> AdatVez = KézVezénylés.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value); //rekord
@@ -1329,8 +1349,10 @@ namespace Villamos
                     if (szerelvény == 0)
                         szerelvény = rekord.Szerelvényszám;
 
-                    MyX.Kiir(rekord.Azonosító.Trim(), "A" + sor.ToString());
-                    MyX.Kiir(rekord.Vizsgálat.Trim(), "B" + sor.ToString());
+                    MyX.Kiir(rekord.Azonosító.Trim(), $"A{sor}");
+                    MyX.Kiir(rekord.Vizsgálat.Trim(), $"C{sor}");
+                    MyX.Rácsoz(munkalap, $"A{sor}:C{sor}");
+                    MyX.Betű(munkalap, $"A{sor}:C{sor}", bebetűv);
                     sor += 1;
 
                     // hibák felsorolása az aktuális évben
@@ -1343,13 +1365,23 @@ namespace Villamos
 
                     if (Adatokhiba != null && Adatokhiba.Count > 0)
                     {
+
+                        MyX.Kiir("Dátum", $"A{sor}");
+                        MyX.Kiir("Hiba", $"B{sor}");
+                        MyX.Kiir("Javítás", $"C{sor}");
+                        MyX.Betű(munkalap, $"A{sor}:C{sor}", bebetűv);
+                        MyX.Rácsoz(munkalap, $"A{sor}:C{sor}");
+                        MyX.Háttérszín(munkalap, $"A{sor}:C{sor}", Color.Yellow);
+                        sor++;
+                        int blokkeleje = sor;
                         foreach (Adat_Menetkimaradás rekordhiba in Adatokhiba)
                         {
-                            MyX.Kiir(rekordhiba.Bekövetkezés.ToString(), $"c{sor}");
-                            MyX.Kiir(rekordhiba.Jvbeírás.Trim(), $"d{sor}");
-                            MyX.Kiir(rekordhiba.Javítás.Trim(), $"e{sor}");
+                            MyX.Kiir(rekordhiba.Bekövetkezés.ToString(), $"A{sor}");
+                            MyX.Kiir(rekordhiba.Jvbeírás.Trim(), $"B{sor}");
+                            MyX.Kiir(rekordhiba.Javítás.Trim(), $"C{sor}");
                             sor += 1;
                         }
+                        MyX.Rácsoz(munkalap, $"A{blokkeleje}:C{sor - 1}");
                     }
 
                     sor += 2;
@@ -1357,14 +1389,14 @@ namespace Villamos
                 }
 
                 MyX.Oszlopszélesség(munkalap, "C:C");
-                MyX.Oszlopszélesség(munkalap, "D:D");
-                MyX.Oszlopszélesség(munkalap, "E:E");
+                MyX.Oszlopszélesség(munkalap, "A:A");
+                MyX.Oszlopszélesség(munkalap, "B:B");
 
                 // nyomtatási beállítások
                 Beállítás_Nyomtatás benyom = new Beállítás_Nyomtatás
                 {
                     Munkalap = munkalap,
-                    NyomtatásiTerület = $"A1:E{sor}",
+                    NyomtatásiTerület = $"A1:C{sor}",
                     LapSzéles = 1
                 };
                 MyX.NyomtatásiTerület_részletes(munkalap, benyom);
