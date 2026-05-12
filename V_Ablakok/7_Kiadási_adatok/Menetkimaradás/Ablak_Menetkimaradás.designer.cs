@@ -75,6 +75,7 @@ namespace Villamos
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cmbtelephely1 = new System.Windows.Forms.ComboBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.BtnVEllenőrzés = new System.Windows.Forms.Button();
             this.Panel2.SuspendLayout();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -244,7 +245,7 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnVonal.BackgroundImage = global::Villamos.Properties.Resources.App_spreadsheet1;
             this.BtnVonal.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnVonal.Location = new System.Drawing.Point(922, 2);
+            this.BtnVonal.Location = new System.Drawing.Point(897, 2);
             this.BtnVonal.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BtnVonal.Name = "BtnVonal";
             this.BtnVonal.Size = new System.Drawing.Size(44, 45);
@@ -259,7 +260,7 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnHavi.BackgroundImage = global::Villamos.Properties.Resources.Aha_Soft_Large_Seo_SEO;
             this.BtnHavi.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnHavi.Location = new System.Drawing.Point(972, 2);
+            this.BtnHavi.Location = new System.Drawing.Point(947, 2);
             this.BtnHavi.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BtnHavi.Name = "BtnHavi";
             this.BtnHavi.Size = new System.Drawing.Size(44, 45);
@@ -436,7 +437,7 @@ namespace Villamos
             // 
             this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel2.ColumnCount = 14;
+            this.tableLayoutPanel2.ColumnCount = 15;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
@@ -446,9 +447,10 @@ namespace Villamos
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.Controls.Add(this.groupBox3, 7, 0);
@@ -458,10 +460,11 @@ namespace Villamos
             this.tableLayoutPanel2.Controls.Add(this.BtnHavi, 11, 0);
             this.tableLayoutPanel2.Controls.Add(this.Btnexcel, 3, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnFrissít, 8, 0);
-            this.tableLayoutPanel2.Controls.Add(this.BtnSúgó, 13, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnFőmérnükség, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.BtnRészletes, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.groupBox1, 5, 0);
+            this.tableLayoutPanel2.Controls.Add(this.BtnSúgó, 14, 0);
+            this.tableLayoutPanel2.Controls.Add(this.BtnVEllenőrzés, 13, 0);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(234, 40);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
@@ -557,6 +560,21 @@ namespace Villamos
             // 
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
+            // BtnVEllenőrzés
+            // 
+            this.BtnVEllenőrzés.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnVEllenőrzés.BackgroundImage = global::Villamos.Properties.Resources.Document_write;
+            this.BtnVEllenőrzés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnVEllenőrzés.Location = new System.Drawing.Point(1022, 2);
+            this.BtnVEllenőrzés.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.BtnVEllenőrzés.Name = "BtnVEllenőrzés";
+            this.BtnVEllenőrzés.Size = new System.Drawing.Size(44, 45);
+            this.BtnVEllenőrzés.TabIndex = 219;
+            this.ToolTip1.SetToolTip(this.BtnVEllenőrzés, "Havi ABC Listát készít");
+            this.BtnVEllenőrzés.UseVisualStyleBackColor = true;
+            this.BtnVEllenőrzés.Click += new System.EventHandler(this.BtnVEllenőrzés_Click);
+            // 
             // AblakMenetkimaradás
             // 
             this.BackColor = System.Drawing.Color.MediumSlateBlue;
@@ -625,5 +643,6 @@ namespace Villamos
         internal Button BtnRészletes;
         internal Button BtnVonal;
         internal Button BtnHavi;
+        internal Button BtnVEllenőrzés;
     }
 }

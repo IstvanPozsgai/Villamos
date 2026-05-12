@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -1246,6 +1247,133 @@ namespace Villamos
         {
             if (DátumTól.Value > DátumIg.Value) DátumIg.Value = DátumTól.Value;
         }
+
+
+        private void BtnVEllenőrzés_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string fájlexc;
+                string munkalap = "Munka1";
+                // kimeneti fájl helye és neve
+                SaveFileDialog SaveFileDialog1 = new SaveFileDialog
+                {
+                    InitialDirectory = "MyDocuments",
+
+                    Title = "Listázott tartalom mentése Excel fájlba",
+                    FileName = $"Hibalista-{Pályaszámok.Text.Trim()}-{Program.PostásNév.Trim()}-{DateTime.Now:yyyyMMddHHmmss}",
+                    Filter = "Excel |*.xlsx"
+                };
+                // bekérjük a fájl nevét és helyét ha mégse, akkor kilép
+                if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel)
+                    fájlexc = SaveFileDialog1.FileName;
+                else
+                    return;
+
+                Holtart.Be();
+                // megnyitjuk
+                MyX.ExcelLétrehozás(munkalap);
+                Beállítás_Betű bebetű = new Beállítás_Betű
+                {
+                    Méret = 12,
+                    Név = "Arial"
+                };
+                Beállítás_Betű bebetűv14 = new Beállítás_Betű
+                {
+                    Méret = 14,
+                    Név = "Arial",
+                    Vastag = true
+                };
+                Beállítás_Betű bebetűv = new Beállítás_Betű
+                {
+                    Méret = 12,
+                    Név = "Arial",
+                    Vastag = true
+                };
+                MyX.Munkalap_betű(munkalap, bebetű);
+
+                int sor = 1;
+                MyX.Egyesít(munkalap, $"A{sor}:C{sor}");
+                MyX.Kiir($"{Pályaszámok.Text} pályaszámú villamos {DátumTól.Value:yyyy.MM.dd} - {DátumIg.Value:yyyy.MM.dd} közötti meghibásodásai ", $"A{sor}");
+                MyX.Betű(munkalap, $"A{sor}", bebetűv14);
+                sor += 2;
+
+                List<Adat_Menetkimaradás> AdatokhibaÖ = KézMenet.Lista_Adatok(Cmbtelephely.Text.Trim(), DátumTól.Value.Year);
+                int IdeigÉv = DátumTól.Value.Year;
+                if (DátumTól.Value.Year != DátumIg.Value.Year)
+                {
+                    while (IdeigÉv <= DátumIg.Value.Year)
+                    {
+                        List<Adat_Menetkimaradás> IdeigHiba = KézMenet.Lista_Adatok(Cmbtelephely.Text.Trim(), IdeigÉv);
+                        AdatokhibaÖ.AddRange(IdeigHiba);
+                        IdeigÉv++;
+                    }
+                }
+
+
+                // hibák felsorolása az aktuális évben
+                List<Adat_Menetkimaradás> Adatokhiba = (from a in AdatokhibaÖ
+                                                        where a.Azonosító == Pályaszámok.Text.Trim()
+                                                        && a.Bekövetkezés >= DátumTól.Value
+                                                        && a.Bekövetkezés <= DátumIg.Value
+                                                        orderby a.Bekövetkezés descending
+                                                        select a).ToList();
+
+                if (Adatokhiba != null && Adatokhiba.Count > 0)
+                {
+
+                    MyX.Kiir("Dátum", $"A{sor}");
+                    MyX.Kiir("Hiba", $"B{sor}");
+                    MyX.Kiir("Javítás", $"C{sor}");
+                    MyX.Betű(munkalap, $"A{sor}:C{sor}", bebetűv);
+                    MyX.Rácsoz(munkalap, $"A{sor}:C{sor}");
+                    MyX.Háttérszín(munkalap, $"A{sor}:C{sor}", Color.Yellow);
+                    sor++;
+                    int blokkeleje = sor;
+                    foreach (Adat_Menetkimaradás rekordhiba in Adatokhiba)
+                    {
+                        MyX.Kiir(rekordhiba.Bekövetkezés.ToString(), $"A{sor}");
+                        MyX.Kiir(rekordhiba.Jvbeírás.Trim(), $"B{sor}");
+                        MyX.Kiir(rekordhiba.Javítás.Trim(), $"C{sor}");
+                        sor += 1;
+                    }
+                    MyX.Rácsoz(munkalap, $"A{blokkeleje}:C{sor - 1}");
+                }
+
+                sor += 2;
+                Holtart.Lép();
+
+
+                MyX.Oszlopszélesség(munkalap, "C:C");
+                MyX.Oszlopszélesség(munkalap, "A:A");
+                MyX.Oszlopszélesség(munkalap, "B:B");
+
+                // nyomtatási beállítások
+                Beállítás_Nyomtatás benyom = new Beállítás_Nyomtatás
+                {
+                    Munkalap = munkalap,
+                    NyomtatásiTerület = $"A1:C{sor}",
+                    LapSzéles = 1
+                };
+                MyX.NyomtatásiTerület_részletes(munkalap, benyom);
+
+                Holtart.Ki();
+
+                MyX.ExcelMentés(fájlexc);
+                MyX.ExcelBezárás();
+
+                MyF.Megnyitás(fájlexc);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         #endregion
 
 
@@ -1514,5 +1642,6 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
     }
 }
