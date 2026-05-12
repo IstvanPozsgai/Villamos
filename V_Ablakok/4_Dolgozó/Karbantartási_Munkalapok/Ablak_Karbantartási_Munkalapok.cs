@@ -1656,7 +1656,6 @@ namespace Villamos.Villamos_Ablakok
             MyX.Egyesít(munkalap, $"A{sor}:E{sor}");
             MyX.Egyesít(munkalap, $"F{sor}:L{sor}");
             MyX.Egyesít(munkalap, $"M{sor}:Q{sor}");
-            // JAVÍTANDÓ:
             //Feltétel mező
             if (!csoportos)
             {
