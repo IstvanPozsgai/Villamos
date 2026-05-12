@@ -1660,30 +1660,41 @@ namespace Villamos.Villamos_Ablakok
             //Feltétel mező
             if (!csoportos)
             {
-                if (Járműtípus.Text != "SGP")
+                if (!Járműtípus.Text.Contains("SGP"))
                 {
                     MyX.Kiir($"Pályaszám:{Pályaszám.Text.Trim()}", $"A{sor}");
                     MyX.Betű(munkalap, $"A{sor}", BeBetűV);
                 }
                 else
                 {
-                    MyX.Kiir($"Pályaszámok:", $"A{sor}");
+                    //a szerelvény másik kocsijának kiíratása SGP esetén
+                    string tisztaSzoveg = Pályaszám.Text.Trim();
+                    char utolso = '0';
+                    if (tisztaSzoveg.Length > 0)
+                    {
+                        utolso = tisztaSzoveg[tisztaSzoveg.Length - 1];
+                        // Itt már használhatod az 'utolso' változót
+                    }
+                    string következő = $"006{utolso}";
+                    MyX.Kiir($"Pályaszámok: {Pályaszám.Text.Trim()} - {következő}", $"A{sor}");
                     MyX.Betű(munkalap, $"A{sor}", BeBetűV);
                 }
-                string szöveg = Járműtípus.Text.Trim();
-                if (Járműtípus.Text.Trim().Length > 15) szöveg += "\n";
-                szöveg += $" - {Combo_KarbCiklus.Text.Trim()} Karbantartási munkalap";
-
-                MyX.Kiir(szöveg, $"F{sor}");
-                MyX.Betű(munkalap, $"F{sor}", BeBetűV);
-
-                MyX.Kiir($"Készítve: {DateTime.Now}", $"M{sor}");
-                MyX.Betű(munkalap, $"M{sor}", BeBetűD);
-
-                MyX.Sormagasság(munkalap, $"{sor}:{sor}", sormagagasság);
-                MyX.Rácsoz(munkalap, $"A{sor}:Q{sor}");
-                return sor;
             }
+            string szöveg = Járműtípus.Text.Trim();
+            if (Járműtípus.Text.Trim().Length > 15) szöveg += "\n";
+            szöveg += $" - {Combo_KarbCiklus.Text.Trim()} Karbantartási munkalap";
+
+            MyX.Kiir(szöveg, $"F{sor}");
+            MyX.Betű(munkalap, $"F{sor}", BeBetűV);
+
+            MyX.Kiir($"Készítve: {DateTime.Now}", $"M{sor}");
+            MyX.Betű(munkalap, $"M{sor}", BeBetűD);
+
+            MyX.Sormagasság(munkalap, $"{sor}:{sor}", sormagagasság);
+            MyX.Rácsoz(munkalap, $"A{sor}:Q{sor}");
+            return sor;
+
+        }
 
         private string Rendelés_Keresés(long Sorszám, string Azonosító = "")
         {
