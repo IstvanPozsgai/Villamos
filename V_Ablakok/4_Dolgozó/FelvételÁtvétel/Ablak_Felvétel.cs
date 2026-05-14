@@ -781,10 +781,10 @@ namespace Villamos
                 string[] darabol = Dolgozóba.Text.Trim().Split('=');
                 string Feorsz = "";
                 string Munkakör = "";
-                if (AdatDolgozó != null)
+                if (AdatKiDolgozó != null)
                 {
-                    if (AdatDolgozó.Feorsz != null) Feorsz = AdatDolgozó.Feorsz;
-                    if (AdatDolgozó.Munkakör != null) Munkakör = AdatDolgozó.Munkakör;
+                    if (AdatKiDolgozó.Feorsz != null) Feorsz = AdatKiDolgozó.Feorsz;
+                    if (AdatKiDolgozó.Munkakör != null) Munkakör = AdatKiDolgozó.Munkakör;
                 }
 
                 Adat_Dolgozó_Alap ADAT = new Adat_Dolgozó_Alap(Dolgozószámba.Text.Trim(),
