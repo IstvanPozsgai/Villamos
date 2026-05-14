@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 using MyF = Függvénygyűjtemény;
 
@@ -19,7 +19,7 @@ namespace Villamos.Kezelők
 
         public Kezelő_Kulcs()
         {
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kulcs_Adatok(hely.KönyvSzerk());
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Kulcs_Adatok(hely.KönyvSzerkHelyi());
         }
 
         public List<Adat_Kulcs> Lista_Adatok()

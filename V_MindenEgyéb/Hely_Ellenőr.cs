@@ -57,6 +57,40 @@ namespace Villamos
             return Válasz;
         }
 
+        //Ha nem hálózati könyvtár hanem helyigépen lévő
+        public static string KönyvSzerkHelyi(this string fájl)
+        {
+            string Válasz = fájl;
+            try
+            {
+                //Ha létezik a fájl akkor nem foglalkozunk tovább vele
+                if (File.Exists(fájl)) return Válasz;
+
+                //Ha van telephely, akkor létrehozzuk a nem létező könyvtárszerkezetet.
+                string[] Könyvtár = fájl.Split('\\');
+                string alap = Könyvtár[0];
+                for (int i = 1; i < Könyvtár.Length; i++)
+                {
+                    if (!(Könyvtár[i].Contains(".mdb") || Könyvtár[i].Contains(".db")))
+                    {
+                        alap += $@"\{Könyvtár[i]}";
+                        if (!Directory.Exists(alap)) Directory.CreateDirectory(alap);
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Application.Exit();
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, $"Hely_Ellenőr : Ellenőrzés :{fájl}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return Válasz;
+        }
+
 
         /// <summary>
         /// Feltölti a Postás_Telephelyek listát, mely majd a könyvtár ellenőrzéshez kell
