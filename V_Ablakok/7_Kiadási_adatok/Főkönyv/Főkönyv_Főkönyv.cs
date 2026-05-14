@@ -1512,6 +1512,10 @@ namespace Villamos.Villamos_Nyomtatványok
             MyX.Betű(munkalap, MyF.Oszlopnév(utolsó + 12) + újsor.ToString(), BeBetűAV);
             MyX.Kiir("Többlet kiadás", MyF.Oszlopnév(utolsó + 13) + újsor.ToString());
 
+            újsor+=2;
+            MyX.Kiir($"Készült: {DateTime.Now}", MyF.Oszlopnév(utolsó) + újsor.ToString());
+
+
             //***************************************
             //*Nyomtatási beállítások
             //***************************************
