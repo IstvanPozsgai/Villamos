@@ -2398,6 +2398,9 @@
     <PackageReference Include="System.Data.SQLite">
       <Version>2.0.2</Version>
     </PackageReference>
+    <PackageReference Include="System.DirectoryServices.AccountManagement">
+      <Version>10.0.8</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

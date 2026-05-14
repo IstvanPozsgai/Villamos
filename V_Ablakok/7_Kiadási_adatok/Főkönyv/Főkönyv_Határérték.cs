@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.DirectoryServices.AccountManagement;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
@@ -178,6 +179,10 @@ namespace Villamos.V_Ablakok._6_Kiadási_adatok.Főkönyv
                 {
                     MyO._Application _app = new MyO.Application();
                     MyO.MailItem mail = (MyO.MailItem)_app.CreateItem(MyO.OlItemType.olMailItem);
+                    //Küldő lekérdezése
+                    string Küldőemail = UserPrincipal.Current.EmailAddress;
+                    if (!string.IsNullOrEmpty(Küldőemail)) email += $"; {Küldőemail}";
+
                     // címzett
                     mail.To = email;
                     // üzenet tárgya
