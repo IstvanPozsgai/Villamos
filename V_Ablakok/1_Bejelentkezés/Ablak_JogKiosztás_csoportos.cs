@@ -48,6 +48,11 @@ namespace Villamos
             Start();
         }
 
+        public Ablak_JogKiosztás_csoportos()
+        {
+            InitializeComponent();
+        }
+
         private void Ablak_JogKiosztás_Load(object sender, System.EventArgs e)
         {
         }
