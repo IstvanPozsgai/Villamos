@@ -77,6 +77,7 @@ namespace Villamos
                 Szolgálatoklista();
                 Telephelyek_Feltöltése_lista();
                 Pályaszámokfeltöltése();
+                AcceptButton = BtnFrissít;
 
             }
             catch (HibásBevittAdat ex)
