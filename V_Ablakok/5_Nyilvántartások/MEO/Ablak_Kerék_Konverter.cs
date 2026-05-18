@@ -52,6 +52,7 @@ namespace Villamos.Villamos_Ablakok.MEO
 
         private void Végrehajt_Click(object sender, EventArgs e)
         {
+            string hely = "";
             try
             {
                 bool caf = false;
@@ -59,22 +60,34 @@ namespace Villamos.Villamos_Ablakok.MEO
                 if (könyvtár == null || könyvtár.Trim() == "") return;
 
                 Holtart.Be(20);
+                List<string> HibaLista = new List<string>();
                 foreach (string elem in FileList.Items)
                 {
-                    string hely = könyvtár + @"\" + elem;
+                    hely = könyvtár + @"\" + elem;
                     List<string> Lista = Beolvas_CSV(hely);
                     // Szétválasztjuk típusra
                     string[] darab = Lista[0].Split(';');
-                    if (darab[1].Contains("CAF"))
+                    if (darab.Length < 2)
                     {
-                        caf = true;
-                        TengelyAzonosítókCAF(Lista);
-                        MértÉrtékekCAF(Lista);
+                        HibaLista.Add(elem);
                     }
                     else
                     {
-                        TengelyAzonosítók(Lista);
-                        MértÉrtékek(Lista);
+                        if (darab[1].Contains("CAF"))
+                        {
+                            caf = true;
+                            TengelyAzonosítókCAF(Lista);
+                            MértÉrtékekCAF(Lista);
+                        }
+                        else if (darab[0].Contains("Name"))
+                        {
+                            TengelyAzonosítók(Lista);
+                            MértÉrtékek(Lista);
+                        }
+                        else
+                        {
+                            HibaLista.Add(elem);
+                        }
                     }
 
                 }
@@ -84,6 +97,15 @@ namespace Villamos.Villamos_Ablakok.MEO
                     Excel_Kimenet();
 
                 Holtart.Ki();
+                if (HibaLista.Count > 0)
+                {
+                    string szöveg = "";
+                    foreach (var item in HibaLista)
+                    {
+                        szöveg += $"{item}\n";
+                    }
+                    MessageBox.Show(szöveg, "Hibás fájlok", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -91,8 +113,8 @@ namespace Villamos.Villamos_Ablakok.MEO
             }
             catch (Exception ex)
             {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                HibaNapló.Log(ex.Message, $"A feldolgozás során a hiba: {hely} fájlban volt\n{this}", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show($"{ex.Message}\n\n a hiba naplózásra került.\n\nA feldolgozás során a hiba: {hely} fájlban volt\n{this}", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -898,14 +920,26 @@ namespace Villamos.Villamos_Ablakok.MEO
         List<string> Beolvas_CSV(string hely)
         {
             List<string> válasz = new List<string>();
-            using (StreamReader sr = new StreamReader(hely))
+            try
             {
-                while (!sr.EndOfStream)
+                using (StreamReader sr = new StreamReader(hely))
                 {
-                    string EgySor = sr.ReadLine();
-                    válasz.Add(EgySor);
-                    Holtart.Lép();
+                    while (!sr.EndOfStream)
+                    {
+                        string EgySor = sr.ReadLine();
+                        válasz.Add(EgySor);
+                        Holtart.Lép();
+                    }
                 }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return válasz;
         }

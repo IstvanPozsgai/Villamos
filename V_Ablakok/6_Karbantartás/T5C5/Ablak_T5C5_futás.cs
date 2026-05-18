@@ -898,6 +898,8 @@ namespace Villamos
                 List<Adat_T5C5_Havi_Nap> AdatokGyHaviÚ = new List<Adat_T5C5_Havi_Nap>();
                 List<Adat_T5C5_Göngyöl> AdatokGyBázis = new List<Adat_T5C5_Göngyöl>();
                 List<Adat_T5C5_Göngyöl> AdatokGyBázisÚ = new List<Adat_T5C5_Göngyöl>();
+
+                // JAVÍTANDÓ: az elment kocsik hiányoznak így beragadnak.
                 foreach (Adat_T5C5_Futás rekord in AdatokNapi)
                 {
                     string napikód = "0";
