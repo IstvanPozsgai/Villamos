@@ -53,6 +53,7 @@ namespace Villamos
             this.BtnRészletes = new System.Windows.Forms.Button();
             this.BtnVonal = new System.Windows.Forms.Button();
             this.BtnHavi = new System.Windows.Forms.Button();
+            this.BtnVEllenőrzés = new System.Windows.Forms.Button();
             this.Dátum = new System.Windows.Forms.DateTimePicker();
             this.Panel1 = new System.Windows.Forms.Panel();
             this.CheckBox1 = new System.Windows.Forms.CheckBox();
@@ -75,7 +76,6 @@ namespace Villamos
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cmbtelephely1 = new System.Windows.Forms.ComboBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.BtnVEllenőrzés = new System.Windows.Forms.Button();
             this.Panel2.SuspendLayout();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -268,6 +268,21 @@ namespace Villamos
             this.ToolTip1.SetToolTip(this.BtnHavi, "Havi ABC Listát készít");
             this.BtnHavi.UseVisualStyleBackColor = true;
             this.BtnHavi.Click += new System.EventHandler(this.BtnHavi_Click);
+            // 
+            // BtnVEllenőrzés
+            // 
+            this.BtnVEllenőrzés.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnVEllenőrzés.BackgroundImage = global::Villamos.Properties.Resources.Document_write;
+            this.BtnVEllenőrzés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BtnVEllenőrzés.Location = new System.Drawing.Point(1022, 2);
+            this.BtnVEllenőrzés.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.BtnVEllenőrzés.Name = "BtnVEllenőrzés";
+            this.BtnVEllenőrzés.Size = new System.Drawing.Size(44, 45);
+            this.BtnVEllenőrzés.TabIndex = 219;
+            this.ToolTip1.SetToolTip(this.BtnVEllenőrzés, "Lekérdezésnek megfelelően\r\negyszerűsített hibalistát készít");
+            this.BtnVEllenőrzés.UseVisualStyleBackColor = true;
+            this.BtnVEllenőrzés.Click += new System.EventHandler(this.BtnVEllenőrzés_Click);
             // 
             // Dátum
             // 
@@ -559,21 +574,6 @@ namespace Villamos
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
-            // 
-            // BtnVEllenőrzés
-            // 
-            this.BtnVEllenőrzés.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnVEllenőrzés.BackgroundImage = global::Villamos.Properties.Resources.Document_write;
-            this.BtnVEllenőrzés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnVEllenőrzés.Location = new System.Drawing.Point(1022, 2);
-            this.BtnVEllenőrzés.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.BtnVEllenőrzés.Name = "BtnVEllenőrzés";
-            this.BtnVEllenőrzés.Size = new System.Drawing.Size(44, 45);
-            this.BtnVEllenőrzés.TabIndex = 219;
-            this.ToolTip1.SetToolTip(this.BtnVEllenőrzés, "Havi ABC Listát készít");
-            this.BtnVEllenőrzés.UseVisualStyleBackColor = true;
-            this.BtnVEllenőrzés.Click += new System.EventHandler(this.BtnVEllenőrzés_Click);
             // 
             // AblakMenetkimaradás
             // 
