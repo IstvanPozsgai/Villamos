@@ -97,12 +97,16 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.Cmbtelephely = new System.Windows.Forms.ComboBox();
+            this.Label13 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // KövV2km
@@ -491,7 +495,7 @@
             this.tableLayoutPanel1.Controls.Add(this.Utolsófelújításdátuma, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.Label26, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.TEljesKmText, 3, 1);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(10, 12);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(10, 49);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 4;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
@@ -522,7 +526,7 @@
             this.tableLayoutPanel2.Controls.Add(this.Üzemek, 1, 7);
             this.tableLayoutPanel2.Controls.Add(this.Label18, 0, 6);
             this.tableLayoutPanel2.Controls.Add(this.Label17, 0, 7);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(10, 181);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(10, 218);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 8;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
@@ -558,7 +562,7 @@
             this.tableLayoutPanel4.Controls.Add(this.KövV2_Sorszám, 2, 3);
             this.tableLayoutPanel4.Controls.Add(this.Label31, 0, 2);
             this.tableLayoutPanel4.Controls.Add(this.KövV1km, 1, 2);
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(10, 478);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(10, 515);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 6;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
@@ -664,7 +668,7 @@
             this.tableLayoutPanel5.Controls.Add(this.SAP_adatok, 4, 0);
             this.tableLayoutPanel5.Controls.Add(this.Új_adat, 0, 1);
             this.tableLayoutPanel5.Controls.Add(this.Vezényel, 4, 3);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(429, 181);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(429, 218);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 5;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
@@ -815,18 +819,46 @@
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(8, 159);
+            this.Holtart.Location = new System.Drawing.Point(8, 196);
             this.Holtart.Name = "Holtart";
             this.Holtart.Size = new System.Drawing.Size(751, 13);
             this.Holtart.TabIndex = 142;
             this.Holtart.Visible = false;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.Cmbtelephely);
+            this.panel3.Controls.Add(this.Label13);
+            this.panel3.Location = new System.Drawing.Point(11, 5);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(346, 39);
+            this.panel3.TabIndex = 143;
+            // 
+            // Cmbtelephely
+            // 
+            this.Cmbtelephely.FormattingEnabled = true;
+            this.Cmbtelephely.Location = new System.Drawing.Point(149, 5);
+            this.Cmbtelephely.Name = "Cmbtelephely";
+            this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
+            this.Cmbtelephely.TabIndex = 18;
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted);
+            // 
+            // Label13
+            // 
+            this.Label13.AutoSize = true;
+            this.Label13.Location = new System.Drawing.Point(5, 9);
+            this.Label13.Name = "Label13";
+            this.Label13.Size = new System.Drawing.Size(145, 20);
+            this.Label13.TabIndex = 17;
+            this.Label13.Text = "Telephelyi beállítás:";
             // 
             // Karbantartás_Rögzítés
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DarkOrange;
-            this.ClientSize = new System.Drawing.Size(765, 700);
+            this.ClientSize = new System.Drawing.Size(765, 738);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.tableLayoutPanel5);
             this.Controls.Add(this.tableLayoutPanel4);
@@ -849,6 +881,8 @@
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.tableLayoutPanel5.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -923,5 +957,8 @@
         internal System.Windows.Forms.Button Btn_SelejtreFutat;
         internal System.Windows.Forms.Button Vezényel;
         internal System.Windows.Forms.Button JJavítás;
+        internal System.Windows.Forms.Panel panel3;
+        internal System.Windows.Forms.ComboBox Cmbtelephely;
+        internal System.Windows.Forms.Label Label13;
     }
 }
