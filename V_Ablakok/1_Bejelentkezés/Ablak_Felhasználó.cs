@@ -282,6 +282,8 @@ namespace Villamos
                 if (Adatok.Any(a => a.UserName == TextUserNév.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A felhasználónév már létezik!");
                 if (TextWinUser.Text.Trim() != "" && Adatok.Any(a => a.WinUserName == TextWinUser.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A Windows felhasználónév már létezik egy másik felhasználónál!");
                 if (Adatok.Any(a => a.Dolgozószám == CmbDolgozószám.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A Dolgozószámhoz már létezik egy másik felhasználó!");
+                Frissít.Checked = true;
+                TxtPassword.Text = "123456";
                 string jelszó = Jelszó.HashPassword(TxtPassword.Text.Trim());
                 if (CmbSzervezet.Text.Trim() == "") throw new HibásBevittAdat("Kérem töltse ki a Alap szervezet mezőt!"); ;
 
@@ -339,6 +341,8 @@ namespace Villamos
                 if (Adatok.Any(a => a.UserName == TextUserNév.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A felhasználónév már létezik!");
                 if (TextWinUser.Text.Trim() != "" && Adatok.Any(a => a.WinUserName == TextWinUser.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A Windows felhasználónév már létezik egy másik felhasználónál!");
                 if (Adatok.Any(a => a.Dolgozószám == CmbDolgozószám.Text.Trim() && a.UserId != Id)) throw new HibásBevittAdat("A Dolgozószámhoz már létezik egy másik felhasználó!");
+                Frissít.Checked = true;
+                TxtPassword.Text = "123456";
                 string jelszó = Jelszó.HashPassword(TxtPassword.Text.Trim());
                 if (CmbSzervezet.Text.Trim() == "") throw new HibásBevittAdat("Kérem töltse ki a Alap szervezet mezőt!"); ;
 
