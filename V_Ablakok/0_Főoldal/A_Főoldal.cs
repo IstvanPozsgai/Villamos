@@ -2832,6 +2832,7 @@ namespace Villamos
             Új_Ablak_AdatbázisRendezés = null;
         }
 
+
         #endregion
     }
 }
