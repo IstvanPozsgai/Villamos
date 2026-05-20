@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -183,6 +183,28 @@ namespace Villamos.Kezelők
                 szöveg += $" telephely='{Adat.Telephely}' ";
                 szöveg += $" WHERE azonosító='{Adat.Azonosító}'";
 
+                MyA.ABMódosítás(hely, jelszó, szöveg);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        public void TelepHelyNulla(string Telephely, DateTime Dátum)
+        {
+            try
+            {
+                FájlBeállítás(Telephely, Dátum);
+                string szöveg = $"UPDATE {táblanév} SET ";
+                szöveg += $" telephely='_' ";
+                szöveg += $" WHERE azonosító='{Telephely}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
