@@ -1119,7 +1119,6 @@
     <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Users.cs" />
     <Compile Include="V_Kezelők\5_Nyilvántartások\Akkumulátor\Kezelő_Akkumulátor_Mérés.cs" />
     <Compile Include="V_Kezelők\5_Nyilvántartások\Akkumulátor\Kezelő_Akkumulátor_Napló.cs" />
-    <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Belépés_Verzió Új.cs" />
     <Compile Include="V_Kezelők\2_Beállítások\Alap_Adatok\Egyéb_adatok\Kezelő_Excel_Beolvasás.cs" />
     <Compile Include="V_Kezelők\8_Gondnokság\Behajtási\Kezelő_Behajtás_Behajtási.cs" />
     <Compile Include="V_Kezelők\8_Gondnokság\Behajtási\Kezelő_Behajtás_Behajtási_Napló.cs" />

@@ -8,12 +8,12 @@ using MyA = Adatbázis;
 namespace Villamos.Kezelők
 {
 
-    public class Kezelő_Belépés_Verzió_old
+    public class Kezelő_Belépés_Verzió
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\Adatok\belépés.mdb";
         readonly string jelszó = "forgalmiutasítás";
         readonly string táblanév = "Verzió";
-        public Kezelő_Belépés_Verzió_old()
+        public Kezelő_Belépés_Verzió()
         {
             // Nincs kidolgozva
         }
