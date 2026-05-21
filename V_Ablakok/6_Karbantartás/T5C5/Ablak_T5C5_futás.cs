@@ -1079,7 +1079,7 @@ namespace Villamos
                 // ha a telephelyi függést alapra állítjuk
                 // Napi adatok rögzítésével csak a telephelyen lévő kocsik kerülnek tovább göngyölésre, így a telephelyi függés alapra állításával csak azok a kocsik kerülnek tovább göngyölésre melyek szerepelnek a napi adatok között, így azok a kocsik melyek már nincsenek a telephelyen nem kerülnek tovább göngyölésre, így nem ragadnak be a telephelyen.
 
-                Kéz_Göngyöl.TelepHelyNulla("Főmérnökség", DateTime.Today);
+                Kéz_Göngyöl.TelepHelyNulla("Főmérnökség", DateTime.Today, Cmbtelephely.Text.Trim());
                 //Göngyöljük az adatokat
                 if (AdatokGyBázisÚ.Count > 0) Kéz_Göngyöl.Rögzítés("Főmérnökség", DateTime.Today, AdatokGyBázisÚ);
                 if (AdatokGyBázis.Count > 0) Kéz_Göngyöl.Módosítás("Főmérnökség", DateTime.Today, AdatokGyBázis);

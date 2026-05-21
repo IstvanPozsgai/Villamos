@@ -196,15 +196,24 @@ namespace Villamos.Kezelők
             }
         }
 
-
-        public void TelepHelyNulla(string Telephely, DateTime Dátum)
+        /// <summary>
+        /// Göngyölés során azokat a kocsikat melyek már nincsenek a telephelyen mivel nincsenek a napi adatok között, csak úgy lehet átengedni másik telephelyre
+        /// ha a telephelyi függést alapra állítjuk
+        /// Napi adatok rögzítésével csak a telephelyen lévő kocsik kerülnek tovább göngyölésre, így a telephelyi függés alapra állításával csak azok a kocsik
+        /// kerülnek tovább göngyölésre melyek szerepelnek a napi adatok között, így azok a kocsik melyek már nincsenek a telephelyen nem kerülnek tovább göngyölésre,
+        /// így nem ragadnak be a telephelyen.
+        /// </summary>
+        /// <param name="Könyvtár">Melyik adatbázisban</param>
+        /// <param name="Dátum">Mikor</param>
+        /// <param name="telephelye">Melyik telephelyet</param>
+        public void TelepHelyNulla(string Könyvtár, DateTime Dátum, string telephelye)
         {
             try
             {
-                FájlBeállítás(Telephely, Dátum);
+                FájlBeállítás(Könyvtár, Dátum);
                 string szöveg = $"UPDATE {táblanév} SET ";
                 szöveg += $" telephely='_' ";
-                szöveg += $" WHERE azonosító='{Telephely}'";
+                szöveg += $" WHERE telephely='{telephelye}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
