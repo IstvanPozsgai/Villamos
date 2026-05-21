@@ -8,7 +8,7 @@ using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
 {
-
+    //Ebben a formában lassú a kapcsolat létrehozása
     public class SQL_Kezelő_Belépés_Verzió
     {
         readonly string hely = $@"{Application.StartupPath}\Főmérnökség\SQL\AlapAdatok.db";
