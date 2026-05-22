@@ -111,7 +111,7 @@ namespace Villamos.Kezelők
             {
                 FájlBeállítás(Év);
                 string szöveg = $"UPDATE {táblanév}  SET ";
-                szöveg += $" státus=1 ";
+                szöveg += $" státus=1, ";
                 szöveg += $" státus1=1 ";
                 szöveg += $" WHERE [sorszám]={Sorszám}";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
