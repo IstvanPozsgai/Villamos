@@ -2572,7 +2572,7 @@ namespace Villamos
             Papírméret_ = Papírméret.Text.Trim();
             Főkönyv_Meghagyás nyomtatvány = new Főkönyv_Meghagyás();
             Meghagyás.Visible = false;
-            await Task.Run(() => nyomtatvány.Főkönyv_Meghagyáskészítés(fájlnév_, Telephely_, Dátum_, Papírméret_, PapírElrendezés_));
+            await Task.Run(() => nyomtatvány.Főkönyv_MeghagyáskészítésÖ(fájlnév_, Telephely_, Dátum_, Papírméret_, PapírElrendezés_));
             //leállítjuk a számlálót és kikapcsoljuk a holtartot.
             timer1.Enabled = false;
             Holtart.Ki();
