@@ -454,188 +454,184 @@ namespace Villamos.Villamos_Nyomtatványok
                 Kiirja_Karb_("E3", Adatok, sor, 1);
 
 
-                //// vizsgálatra maradjon benn
+                // vizsgálatra maradjon benn
 
 
-                //// csoportosításhoz alaphelyzetbe állítjuk a váltózókat
-                //List<string> csoportpsz = new List<string>();
+                // csoportosításhoz alaphelyzetbe állítjuk a váltózókat
+                List<string> csoportpsz = new List<string>();
 
 
-                //foreach (Adat_Nap_Hiba rekord in Adatok)
-                //{
-                //    if (rekord.Üzemképtelen.ToUpper().Contains("E3") || rekord.Üzemképtelen.ToUpper().Contains("V1"))
-                //    {
-                //        csoportpsz.Add(rekord.Azonosító.Trim());
-                //    }
-                //}
+                foreach (Adat_Nap_Hiba rekord in Adatok)
+                {
+                    if (rekord.Üzemképtelen.ToUpper().Contains("E3") || rekord.Üzemképtelen.ToUpper().Contains("V1"))
+                    {
+                        csoportpsz.Add(rekord.Azonosító.Trim());
+                    }
+                }
 
-                //// benn maradók csoportba kiirása
-                //oszlop = 20;
-                //sor += 2;
-                //MyX.Kiir("Vizsgálatra maradjon:", MyF.Oszlopnév(17) + $"{sor}");
-                //MyX.Betű(munkalap, MyF.Oszlopnév(17) + $"{sor}", BeBetűV);
+                // benn maradók csoportba kiirása
+                int oszlop = 1;
+                sor += 2;
+                MyX.Kiir("Vizsgálatra maradjon:", $"A{sor}");
+                MyX.Betű(munkalap, $"A{sor}", BeBetűV);
 
-                //for (int j = 0; j < csoportpsz.Count; j++)
-                //{
+                for (int j = 0; j < csoportpsz.Count; j++)
+                {
 
-                //    if (csoportpsz[j].Trim() != "")
-                //    {
-                //        MyX.Kiir(csoportpsz[j].Trim(), MyF.Oszlopnév(oszlop) + $"{sor}");
+                    if (csoportpsz[j].Trim() != "")
+                    {
+                        MyX.Kiir(csoportpsz[j].Trim(), MyF.Oszlopnév(oszlop) + $"{sor}");
 
-                //        oszlop += 1;
-                //        if (oszlop > 28)
-                //        {
-                //            oszlop = 21;
-                //            sor += 1;
-                //        }
-                //    }
+                        oszlop += 1;
+                        if (oszlop > 28)
+                        {
+                            oszlop = 1;
+                            sor += 1;
+                        }
+                    }
 
-                //}
-                //// mosás bennmarad
-                //sor += 2;
+                }
+                // mosás bennmarad
+                sor += 2;
 
-                //// csoportosításhoz alaphelyzetbe állítjuk a váltózókat
-                //csoportpsz.Clear();
+                // csoportosításhoz alaphelyzetbe állítjuk a váltózókat
+                csoportpsz.Clear();
 
-                //foreach (Adat_Nap_Hiba rekord in Adatok)
-                //{
-                //    if (rekord.Üzemképtelen.ToUpper().Contains("MOSÓ"))
-                //    {
-                //        csoportpsz.Add(rekord.Azonosító.Trim());
-                //    }
-                //}
-
-
-                //// a mosók kiirása
-                //MyX.Kiir("Mosásra maradjon:", MyF.Oszlopnév(17) + $"{sor}");
-                //MyX.Betű(munkalap, MyF.Oszlopnév(17) + $"{sor}", BeBetűV);
-
-                //oszlop = 20;
-                //for (int j = 0; j < csoportpsz.Count; j++)
-                //{
-                //    if (csoportpsz[j].Trim() != "")
-                //    {
-                //        MyX.Kiir(csoportpsz[j], MyF.Oszlopnév(oszlop) + $"{sor}");
-                //        oszlop += 1;
-                //        if (oszlop > 28)
-                //        {
-                //            oszlop = 19;
-                //            sor += 1;
-                //        }
-                //    }
-
-                //}
-                //// mosás beálló
-                //// csoportosításhoz alaphelyzetbe állítjuk a váltózókat
-                //csoportpsz.Clear();
-
-                //foreach (Adat_Nap_Hiba rekord in Adatok)
-                //{
-                //    if (rekord.Beálló.ToUpper().Contains("MOSÓ"))
-                //    {
-                //        csoportpsz.Add(rekord.Azonosító.Trim());
-                //    }
-                //}
-
-                //// a mosók kiirása
-                //sor += 2;
-                //MyX.Kiir("Mosás:", MyF.Oszlopnév(17) + $"{sor}");
-                //MyX.Betű(munkalap, MyF.Oszlopnév(17) + $"{sor}", BeBetűV);
-
-                //oszlop = 19;
-                //for (int j = 0; j < csoportpsz.Count; j++)
-                //{
-
-                //    if (csoportpsz[j].Trim() != "")
-                //    {
-                //        MyX.Kiir(csoportpsz[j], MyF.Oszlopnév(oszlop) + $"{sor}");
-                //        oszlop += 1;
-                //        if (oszlop > 28)
-                //        {
-                //            oszlop = 19;
-                //            sor += 1;
-                //        }
-                //    }
-
-                //}
+                foreach (Adat_Nap_Hiba rekord in Adatok)
+                {
+                    if (rekord.Üzemképtelen.ToUpper().Contains("MOSÓ"))
+                    {
+                        csoportpsz.Add(rekord.Azonosító.Trim());
+                    }
+                }
 
 
+                // a mosók kiirása
+                MyX.Kiir("Mosásra maradjon:", $"A{sor}");
+                MyX.Betű(munkalap, $"A{sor}", BeBetűV);
+
+                oszlop = 2;
+                for (int j = 0; j < csoportpsz.Count; j++)
+                {
+                    if (csoportpsz[j].Trim() != "")
+                    {
+                        MyX.Kiir(csoportpsz[j], MyF.Oszlopnév(oszlop) + $"{sor}");
+                        oszlop += 1;
+                        if (oszlop > 16)
+                        {
+                            oszlop = 2;
+                            sor += 1;
+                        }
+                    }
+
+                }
+                // mosás beálló
+                // csoportosításhoz alaphelyzetbe állítjuk a váltózókat
+                csoportpsz.Clear();
+
+                foreach (Adat_Nap_Hiba rekord in Adatok)
+                {
+                    if (rekord.Beálló.ToUpper().Contains("MOSÓ"))
+                    {
+                        csoportpsz.Add(rekord.Azonosító.Trim());
+                    }
+                }
+
+                // a mosók kiirása
+                sor += 2;
+                MyX.Kiir("Mosás:", $"A{sor}");
+                MyX.Betű(munkalap, $"A{sor}", BeBetűV);
+
+                oszlop = 2;
+                for (int j = 0; j < csoportpsz.Count; j++)
+                {
+
+                    if (csoportpsz[j].Trim() != "")
+                    {
+                        MyX.Kiir(csoportpsz[j], MyF.Oszlopnév(oszlop) + $"{sor}");
+                        oszlop += 1;
+                        if (oszlop > 16)
+                        {
+                            oszlop = 2;
+                            sor += 1;
+                        }
+                    }
+
+                }
+
+                // összecsatolások
+                // megnézzük, hogy van-e adott szerelvény napló
+
+                List<Adat_Szerelvény_Napló> SzAdatokÖ = KSZN_kéz.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
+
+                // ha van akkor kiirjuk
+                if (SzAdatokÖ != null)
+                {
+                    List<Adat_Szerelvény_Napló> SzAdatok = (from a in SzAdatokÖ
+                                                            where a.Szerelvényhossz > 0 &&
+                                                            a.Mikor > Dátum
+                                                            orderby a.Mikor
+                                                            select a).ToList();
+                    oszlop = 1;
+                    long szerelvény = 0;
+                    sor = 22;
+
+                    foreach (Adat_Szerelvény_Napló rekord in SzAdatok)
+                    {
+                        if (rekord.Kocsi2.Trim() != "0")
+                        {
+                            // ha a szerelvény id nem egyezik akkor sort emel
+                            if (szerelvény != rekord.ID && szerelvény != 0)
+                                sor++;
+                            if (rekord.Kocsi1.Trim() != "0")
+                                MyX.Kiir(rekord.Kocsi1, MyF.Oszlopnév(oszlop) + $"{sor}");
+                            if (rekord.Kocsi2.Trim() != "0")
+                                MyX.Kiir(rekord.Kocsi2, MyF.Oszlopnév(oszlop + 1) + $"{sor}");
+                            if (rekord.Kocsi3.Trim() != "0")
+                                MyX.Kiir(rekord.Kocsi3, MyF.Oszlopnév(oszlop + 2) + $"{sor}");
+                            if (rekord.Kocsi4.Trim() != "0")
+                                MyX.Kiir(rekord.Kocsi4, MyF.Oszlopnév(oszlop + 3) + $"{sor}");
+                            if (rekord.Kocsi5.Trim() != "0")
+                                MyX.Kiir(rekord.Kocsi5, MyF.Oszlopnév(oszlop + 4) + $"{sor}");
+                            if (rekord.Kocsi6.Trim() != "0")
+                                MyX.Kiir(rekord.Kocsi6, MyF.Oszlopnév(oszlop + 6) + $"{sor}");
+                            szerelvény = rekord.ID;
+                        }
+                    }
 
 
-
-                //// összecsatolások
-                //// megnézzük, hogy van-e adott szerelvény napló
-
-                //List<Adat_Szerelvény_Napló> SzAdatokÖ = KSZN_kéz.Lista_Adatok(Cmbtelephely.Trim(), Dátum);
-
-                //// ha van akkor kiirjuk
-                //if (SzAdatokÖ != null)
-                //{
-                //    List<Adat_Szerelvény_Napló> SzAdatok = (from a in SzAdatokÖ
-                //                                            where a.Szerelvényhossz > 0 &&
-                //                                            a.Mikor > Dátum
-                //                                            orderby a.Mikor
-                //                                            select a).ToList();
-                //    oszlop = 17;
-                //    long szerelvény = 0;
-                //    sor = 22;
-
-                //    foreach (Adat_Szerelvény_Napló rekord in SzAdatok)
-                //    {
-                //        if (rekord.Kocsi2.Trim() != "0")
-                //        {
-                //            // ha a szerelvény id nem egyezik akkor sort emel
-                //            if (szerelvény != rekord.ID && szerelvény != 0)
-                //                sor++;
-                //            if (rekord.Kocsi1.Trim() != "0")
-                //                MyX.Kiir(rekord.Kocsi1, MyF.Oszlopnév(oszlop) + $"{sor}");
-                //            if (rekord.Kocsi2.Trim() != "0")
-                //                MyX.Kiir(rekord.Kocsi2, MyF.Oszlopnév(oszlop + 1) + $"{sor}");
-                //            if (rekord.Kocsi3.Trim() != "0")
-                //                MyX.Kiir(rekord.Kocsi3, MyF.Oszlopnév(oszlop + 2) + $"{sor}");
-                //            if (rekord.Kocsi4.Trim() != "0")
-                //                MyX.Kiir(rekord.Kocsi4, MyF.Oszlopnév(oszlop + 3) + $"{sor}");
-                //            if (rekord.Kocsi5.Trim() != "0")
-                //                MyX.Kiir(rekord.Kocsi5, MyF.Oszlopnév(oszlop + 4) + $"{sor}");
-                //            if (rekord.Kocsi6.Trim() != "0")
-                //                MyX.Kiir(rekord.Kocsi6, MyF.Oszlopnév(oszlop + 6) + $"{sor}");
-                //            szerelvény = rekord.ID;
-                //        }
-                //    }
-
-
-                //    // Szétcsatolások
-                //    oszlop = 25;
-                //    sor = 22;
-                //    SzAdatok = (from a in SzAdatokÖ
-                //                where a.Szerelvényhossz == 0 &&
-                //                a.Mikor > Dátum
-                //                orderby a.Mikor
-                //                select a).ToList();
-                //    if (SzAdatok != null)
-                //    {
-                //        foreach (Adat_Szerelvény_Napló rekord in SzAdatok)
-                //        {
-                //            // ha a második kocsi van akkor kírja a 0-kat
-                //            if (rekord.Kocsi2.Trim() != "0")
-                //            {
-                //                if (rekord.Kocsi1.Trim() != "0")
-                //                    MyX.Kiir(rekord.Kocsi1.Trim(), MyF.Oszlopnév(oszlop) + $"{sor}");
-                //                if (rekord.Kocsi2.Trim() != "0")
-                //                    MyX.Kiir(rekord.Kocsi2.Trim(), MyF.Oszlopnév(oszlop + 1) + $"{sor}");
-                //                if (rekord.Kocsi3.Trim() != "0")
-                //                    MyX.Kiir(rekord.Kocsi3.Trim(), MyF.Oszlopnév(oszlop + 2) + $"{sor}");
-                //                if (rekord.Kocsi4.Trim() != "0")
-                //                    MyX.Kiir(rekord.Kocsi4.Trim(), MyF.Oszlopnév(oszlop + 3) + $"{sor}");
-                //                if (rekord.Kocsi5.Trim() != "0")
-                //                    MyX.Kiir(rekord.Kocsi5.Trim(), MyF.Oszlopnév(oszlop + 4) + $"{sor}");
-                //                if (rekord.Kocsi6.Trim() != "0")
-                //                    MyX.Kiir(rekord.Kocsi6.Trim(), MyF.Oszlopnév(oszlop + 6) + $"{sor}");
-                //                sor += 1;
-                //            }
-                //        }
-                //    }
-                //}
+                    // Szétcsatolások
+                    oszlop = 10;
+                    sor = 22;
+                    SzAdatok = (from a in SzAdatokÖ
+                                where a.Szerelvényhossz == 0 &&
+                                a.Mikor > Dátum
+                                orderby a.Mikor
+                                select a).ToList();
+                    if (SzAdatok != null)
+                    {
+                        foreach (Adat_Szerelvény_Napló rekord in SzAdatok)
+                        {
+                            // ha a második kocsi van akkor kírja a 0-kat
+                            if (rekord.Kocsi2.Trim() != "0")
+                            {
+                                if (rekord.Kocsi1.Trim() != "0")
+                                    MyX.Kiir(rekord.Kocsi1.Trim(), MyF.Oszlopnév(oszlop) + $"{sor}");
+                                if (rekord.Kocsi2.Trim() != "0")
+                                    MyX.Kiir(rekord.Kocsi2.Trim(), MyF.Oszlopnév(oszlop + 1) + $"{sor}");
+                                if (rekord.Kocsi3.Trim() != "0")
+                                    MyX.Kiir(rekord.Kocsi3.Trim(), MyF.Oszlopnév(oszlop + 2) + $"{sor}");
+                                if (rekord.Kocsi4.Trim() != "0")
+                                    MyX.Kiir(rekord.Kocsi4.Trim(), MyF.Oszlopnév(oszlop + 3) + $"{sor}");
+                                if (rekord.Kocsi5.Trim() != "0")
+                                    MyX.Kiir(rekord.Kocsi5.Trim(), MyF.Oszlopnév(oszlop + 4) + $"{sor}");
+                                if (rekord.Kocsi6.Trim() != "0")
+                                    MyX.Kiir(rekord.Kocsi6.Trim(), MyF.Oszlopnév(oszlop + 6) + $"{sor}");
+                                sor += 1;
+                            }
+                        }
+                    }
+                }
 
 
                 //Szabad járművek:
@@ -744,5 +740,7 @@ namespace Villamos.Villamos_Nyomtatványok
                 }
             }
         }
+
+
     }
 }
