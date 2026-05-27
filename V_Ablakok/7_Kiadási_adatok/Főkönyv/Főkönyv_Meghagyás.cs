@@ -22,6 +22,7 @@ namespace Villamos.Villamos_Nyomtatványok
 
         public void Főkönyv_MeghagyáskészítésÖ(string fájlexc, string Cmbtelephely, DateTime Dátum, string papírméret, string papírelrendezés)
         {
+            Főkönyv_Funkciók.Napiállók(Cmbtelephely.Trim());
             munkalap = "Eredeti";
             Főkönyv_MeghagyáskészítésRégi(Cmbtelephely, Dátum, papírméret, papírelrendezés);
 
@@ -66,7 +67,7 @@ namespace Villamos.Villamos_Nyomtatványok
                 //
                 // frissítjük a táblát
                 // elkészítjük a formanyomtatványt
-                Főkönyv_Funkciók.Napiállók(Cmbtelephely.Trim());
+
                 // kiirjuk a V2-t
                 List<Adat_Nap_Hiba> Adatok = KNH_kéz.Lista_Adatok(Cmbtelephely.Trim());
                 Adatok = Adatok.OrderBy(y => y.Azonosító).ToList();
@@ -190,7 +191,7 @@ namespace Villamos.Villamos_Nyomtatványok
 
                 }
 
-                // hibák
+                // szabad hibák
                 oszlop = 1;
                 int sorúj = 2;
                 MyX.Kiir("Hibák:", MyF.Oszlopnév(1) + sorúj.ToString());
@@ -372,7 +373,7 @@ namespace Villamos.Villamos_Nyomtatványok
                 int sor = 2;
                 // frissítjük a táblát
                 // elkészítjük a formanyomtatványt
-                Főkönyv_Funkciók.Napiállók(Cmbtelephely.Trim());
+
                 // Hibák listázása
                 List<Adat_Nap_Hiba> AdatokÖ = KNH_kéz.Lista_Adatok(Cmbtelephely.Trim());
                 List<Adat_Nap_Hiba> Adatok = (from a in AdatokÖ
@@ -401,21 +402,22 @@ namespace Villamos.Villamos_Nyomtatványok
                     MyX.Kiir(rekord.Azonosító.Trim(), $"A{sor}");
                     MyX.Kiir(rekord.Típus.Trim(), $"B{sor}");
 
-                    szöveg1 = rekord.Üzemképtelen;
-
+                    szöveg1 = $"{(rekord.Üzemképtelen.Trim() != "" ? rekord.Üzemképtelen.Trim() : "")}{(rekord.Beálló.Trim() != "" ? rekord.Beálló.Trim() : "")}{(rekord.Üzemképeshiba.Trim() != "" ? rekord.Üzemképeshiba.Trim() : "")}";
                     szöveg1 = szöveg1.Length > 100 ? szöveg1.Substring(0, 100) : szöveg1;
                     MyX.Kiir(szöveg1, $"D{sor}");
                 }
 
                 //Beálló járművek:
-                sor += 2;
+                sor += 1;
 
                 Adatok = (from a in AdatokÖ
                           where a.Státus == 3
                           orderby a.Azonosító
                           select a).ToList();
+                sor += 1;
                 MyX.Kiir("Beálló járművek:", $"A{sor}");
                 MyX.Betű(munkalap, $"A{sor}", BeBetűV);
+                sor += 1;
                 foreach (Adat_Nap_Hiba rekord in Adatok)
                 {
 
@@ -434,8 +436,7 @@ namespace Villamos.Villamos_Nyomtatványok
                     MyX.Kiir(rekord.Azonosító.Trim(), $"A{sor}");
                     MyX.Kiir(rekord.Típus.Trim(), $"B{sor}");
 
-                    szöveg1 = rekord.Üzemképeshiba + rekord.Üzemképtelen;
-
+                    szöveg1 = $"{(rekord.Üzemképtelen.Trim() != "" ? rekord.Üzemképtelen.Trim() : "")}{(rekord.Beálló.Trim() != "" ? rekord.Beálló.Trim() : "")}{(rekord.Üzemképeshiba.Trim() != "" ? rekord.Üzemképeshiba.Trim() : "")}";
                     szöveg1 = szöveg1.Length > 100 ? szöveg1.Substring(0, 100) : szöveg1;
                     MyX.Kiir(szöveg1, $"D{sor}");
                 }
@@ -574,7 +575,11 @@ namespace Villamos.Villamos_Nyomtatványok
                                                             select a).ToList();
                     oszlop = 1;
                     long szerelvény = 0;
-                    sor = 22;
+                    sor += 2;
+                    MyX.Kiir("Csatolások:", $"A{sor}");
+                    MyX.Betű(munkalap, $"A{sor}", BeBetűV);
+                    
+                    sor += 2;
 
                     foreach (Adat_Szerelvény_Napló rekord in SzAdatok)
                     {
@@ -602,7 +607,7 @@ namespace Villamos.Villamos_Nyomtatványok
 
                     // Szétcsatolások
                     oszlop = 10;
-                    sor = 22;
+                    sor += 2;
                     SzAdatok = (from a in SzAdatokÖ
                                 where a.Szerelvényhossz == 0 &&
                                 a.Mikor > Dátum
@@ -643,6 +648,7 @@ namespace Villamos.Villamos_Nyomtatványok
                           select a).ToList();
                 MyX.Kiir("Szabadhibás járművek:", $"R{újsor}");
                 MyX.Betű(munkalap, $"R{újsor}", BeBetűV);
+                újsor += 1;
                 foreach (Adat_Nap_Hiba rekord in Adatok)
                 {
 
@@ -661,7 +667,7 @@ namespace Villamos.Villamos_Nyomtatványok
                     MyX.Kiir(rekord.Azonosító.Trim(), $"Q{újsor}");
                     MyX.Kiir(rekord.Típus.Trim(), $"R{újsor}");
 
-                    szöveg1 = rekord.Üzemképeshiba;
+                    szöveg1 = $"{(rekord.Üzemképtelen.Trim() != "" ? rekord.Üzemképtelen.Trim() : "")}{(rekord.Beálló.Trim() != "" ? rekord.Beálló.Trim() : "")}{(rekord.Üzemképeshiba.Trim() != "" ? rekord.Üzemképeshiba.Trim() : "")}";
 
                     szöveg1 = szöveg1.Length > 100 ? szöveg1.Substring(0, 100) : szöveg1;
                     MyX.Kiir(szöveg1, $"T{újsor}");
