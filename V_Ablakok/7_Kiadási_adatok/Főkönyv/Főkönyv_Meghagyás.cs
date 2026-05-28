@@ -442,123 +442,56 @@ namespace Villamos.Villamos_Nyomtatványok
                 }
 
                 sor += 2;
-                Kiirja_Karb_("V3", Adatok, sor, 1);
+                Kiirja_Karb_("V3", AdatokÖ, sor, 1);
 
                 sor += 2;
-                Kiirja_Karb_("V2", Adatok, sor, 1);
+                Kiirja_Karb_("V2", AdatokÖ, sor, 1);
 
                 sor += 2;
-                Kiirja_Karb_("V1", Adatok, sor, 1);
-
+                Kiirja_Karb_("V1", AdatokÖ, sor, 1);
 
                 sor += 2;
-                Kiirja_Karb_("E3", Adatok, sor, 1);
+                Kiirja_Karb_("E3", AdatokÖ, sor, 1);
 
 
                 // vizsgálatra maradjon benn
-
-
                 // csoportosításhoz alaphelyzetbe állítjuk a váltózókat
                 List<string> csoportpsz = new List<string>();
-
-
-                foreach (Adat_Nap_Hiba rekord in Adatok)
-                {
-                    if (rekord.Üzemképtelen.ToUpper().Contains("E3") || rekord.Üzemképtelen.ToUpper().Contains("V1"))
-                    {
-                        csoportpsz.Add(rekord.Azonosító.Trim());
-                    }
-                }
+                csoportpsz = (from a in AdatokÖ
+                              where a.Üzemképtelen.ToUpper().Contains("E3")
+                              || a.Üzemképtelen.ToUpper().Contains("V1")
+                              orderby a.Azonosító
+                              select a.Azonosító).ToList();
 
                 // benn maradók csoportba kiirása
-                int oszlop = 1;
+                int oszlop = 4;
                 sor += 2;
                 MyX.Kiir("Vizsgálatra maradjon:", $"A{sor}");
                 MyX.Betű(munkalap, $"A{sor}", BeBetűV);
+                sor = Kiír_Pályaszám(csoportpsz, 4, sor);
 
-                for (int j = 0; j < csoportpsz.Count; j++)
-                {
-
-                    if (csoportpsz[j].Trim() != "")
-                    {
-                        MyX.Kiir(csoportpsz[j].Trim(), MyF.Oszlopnév(oszlop) + $"{sor}");
-
-                        oszlop += 1;
-                        if (oszlop > 28)
-                        {
-                            oszlop = 1;
-                            sor += 1;
-                        }
-                    }
-
-                }
                 // mosás bennmarad
                 sor += 2;
 
-                // csoportosításhoz alaphelyzetbe állítjuk a váltózókat
-                csoportpsz.Clear();
-
-                foreach (Adat_Nap_Hiba rekord in Adatok)
-                {
-                    if (rekord.Üzemképtelen.ToUpper().Contains("MOSÓ"))
-                    {
-                        csoportpsz.Add(rekord.Azonosító.Trim());
-                    }
-                }
-
-
                 // a mosók kiirása
+                csoportpsz = (from a in AdatokÖ
+                              where a.Üzemképtelen.ToUpper().Contains("MOSÓ")
+                              orderby a.Azonosító
+                              select a.Azonosító).ToList();
                 MyX.Kiir("Mosásra maradjon:", $"A{sor}");
                 MyX.Betű(munkalap, $"A{sor}", BeBetűV);
+                sor = Kiír_Pályaszám(csoportpsz, 4, sor);
 
-                oszlop = 2;
-                for (int j = 0; j < csoportpsz.Count; j++)
-                {
-                    if (csoportpsz[j].Trim() != "")
-                    {
-                        MyX.Kiir(csoportpsz[j], MyF.Oszlopnév(oszlop) + $"{sor}");
-                        oszlop += 1;
-                        if (oszlop > 16)
-                        {
-                            oszlop = 2;
-                            sor += 1;
-                        }
-                    }
-
-                }
                 // mosás beálló
-                // csoportosításhoz alaphelyzetbe állítjuk a váltózókat
-                csoportpsz.Clear();
-
-                foreach (Adat_Nap_Hiba rekord in Adatok)
-                {
-                    if (rekord.Beálló.ToUpper().Contains("MOSÓ"))
-                    {
-                        csoportpsz.Add(rekord.Azonosító.Trim());
-                    }
-                }
-
+                csoportpsz = (from a in AdatokÖ
+                              where a.Beálló.ToUpper().Contains("MOSÓ")
+                              orderby a.Azonosító
+                              select a.Azonosító).ToList();
                 // a mosók kiirása
                 sor += 2;
                 MyX.Kiir("Mosás:", $"A{sor}");
                 MyX.Betű(munkalap, $"A{sor}", BeBetűV);
-
-                oszlop = 2;
-                for (int j = 0; j < csoportpsz.Count; j++)
-                {
-
-                    if (csoportpsz[j].Trim() != "")
-                    {
-                        MyX.Kiir(csoportpsz[j], MyF.Oszlopnév(oszlop) + $"{sor}");
-                        oszlop += 1;
-                        if (oszlop > 16)
-                        {
-                            oszlop = 2;
-                            sor += 1;
-                        }
-                    }
-
-                }
+                sor = Kiír_Pályaszám(csoportpsz, 4, sor);
 
                 // összecsatolások
                 // megnézzük, hogy van-e adott szerelvény napló
@@ -578,7 +511,7 @@ namespace Villamos.Villamos_Nyomtatványok
                     sor += 2;
                     MyX.Kiir("Csatolások:", $"A{sor}");
                     MyX.Betű(munkalap, $"A{sor}", BeBetűV);
-                    
+
                     sor += 2;
 
                     foreach (Adat_Szerelvény_Napló rekord in SzAdatok)
@@ -748,5 +681,27 @@ namespace Villamos.Villamos_Nyomtatványok
         }
 
 
+        private int Kiír_Pályaszám(List<string> csoportpsz, int oszlopeleje, int soreleje)
+        {
+            int sor = soreleje;
+            int oszlop = oszlopeleje;
+            for (int j = 0; j < csoportpsz.Count; j++)
+            {
+
+                if (csoportpsz[j].Trim() != "")
+                {
+                    MyX.Kiir(csoportpsz[j].Trim(), MyF.Oszlopnév(oszlop) + $"{sor}");
+
+                    oszlop += 1;
+                    if (oszlop > 28)
+                    {
+                        oszlop = oszlopeleje;
+                        sor += 1;
+                    }
+                }
+
+            }
+            return sor;
+        }
     }
 }
