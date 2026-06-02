@@ -81,8 +81,8 @@ namespace Villamos
                         }
                     }
                 }
-           
-    
+
+
             }
             catch (Exception ex)
             {
@@ -103,29 +103,49 @@ namespace Villamos
         /// <returns>A tisztított munkalap (helyben módosítva)</returns>
         public static IXLWorksheet TisztitsdMegAdatLapotXmlHibakarakterektol(IXLWorksheet adatLap)
         {
-            if (adatLap == null)
-                throw new ArgumentNullException(nameof(adatLap));
 
-            var hasznaltTartomany = adatLap.RangeUsed();
-            if (hasznaltTartomany == null)
-                return adatLap;
-
-            foreach (IXLCell cell in hasznaltTartomany.Cells())
+            try
             {
-                // XLCellValue struct, soha nem null → ToString() biztonságos
-                string cellSzoveg = cell.Value.ToString();
+                if (adatLap == null) throw new ArgumentNullException(nameof(adatLap));
 
-                // Csak akkor tisztítunk, ha van érték ÉS az szövegként értelmezhető
-                if (!string.IsNullOrEmpty(cellSzoveg))
+                var hasznaltTartomany = adatLap.RangeUsed();
+                if (hasznaltTartomany == null)
+                    return adatLap;
+
+                foreach (IXLCell cell in hasznaltTartomany.Cells())
                 {
-                    string tisztaSzoveg = TisztaXmlString(cellSzoveg);
-                    if (!string.Equals(cellSzoveg, tisztaSzoveg, StringComparison.Ordinal))
+                    // XLCellValue struct, soha nem null → ToString() biztonságos
+                    try
                     {
-                        cell.Value = tisztaSzoveg;
+                        string cellSzoveg = cell.Value.ToString();
+
+                        // Csak akkor tisztítunk, ha van érték ÉS az szövegként értelmezhető
+                        if (!string.IsNullOrEmpty(cellSzoveg))
+                        {
+                            string tisztaSzoveg = TisztaXmlString(cellSzoveg);
+                            if (!string.Equals(cellSzoveg, tisztaSzoveg, StringComparison.Ordinal))
+                            {
+                                cell.Value = tisztaSzoveg;
+                            }
+                        }
                     }
+                    catch (Exception)
+                    {
+
+
+                    }
+
                 }
             }
-
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "TisztitsdMegAdatLapotXmlHibakarakterektol", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             return adatLap;
         }
 
