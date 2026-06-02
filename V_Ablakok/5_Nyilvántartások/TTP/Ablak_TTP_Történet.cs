@@ -283,7 +283,7 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
                     CmbStátus.Text = Enum.GetName(typeof(MyEn.TTP_Státus), 8);
                     return;
                 case "Összes":
-                    if (Telephely.Trim() == "Főmérnökség") MindenAktív();
+                    if (Cmbtelephely.Text.Trim() == "Főmérnökség") MindenAktív();
                     return;
             }
         }
@@ -628,5 +628,14 @@ namespace Villamos.Villamos_Ablakok._4_Nyilvántartások.TTP
             return AdatTábla;
         }
 
+        private void Cmbtelephely_SelectionChangeCommitted_1(object sender, EventArgs e)
+        {
+            Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
+            if (Cmbtelephely.Text.Trim() == "") return;
+            if (Cmbtelephely.Text.Trim() == "Főmérnökség")
+                MindenAktív();
+            else
+                MindenInAktív();
+        }
     }
 }

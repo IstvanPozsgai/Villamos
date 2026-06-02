@@ -114,7 +114,7 @@
             // 
             this.CmbStátus.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.CmbStátus.FormattingEnabled = true;
-            this.CmbStátus.Location = new System.Drawing.Point(209, 229);
+            this.CmbStátus.Location = new System.Drawing.Point(209, 236);
             this.CmbStátus.Name = "CmbStátus";
             this.CmbStátus.Size = new System.Drawing.Size(187, 28);
             this.CmbStátus.TabIndex = 4;
@@ -275,7 +275,7 @@
             // 
             this.CmbAzonosító.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.CmbAzonosító.FormattingEnabled = true;
-            this.CmbAzonosító.Location = new System.Drawing.Point(209, 19);
+            this.CmbAzonosító.Location = new System.Drawing.Point(209, 26);
             this.CmbAzonosító.Name = "CmbAzonosító";
             this.CmbAzonosító.Size = new System.Drawing.Size(187, 28);
             this.CmbAzonosító.TabIndex = 14;
@@ -382,6 +382,7 @@
             this.Cmbtelephely.Name = "Cmbtelephely";
             this.Cmbtelephely.Size = new System.Drawing.Size(186, 28);
             this.Cmbtelephely.TabIndex = 18;
+            this.Cmbtelephely.SelectionChangeCommitted += new System.EventHandler(this.Cmbtelephely_SelectionChangeCommitted_1);
             // 
             // Label13
             // 
