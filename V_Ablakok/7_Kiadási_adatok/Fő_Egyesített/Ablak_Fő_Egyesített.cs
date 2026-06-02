@@ -1648,7 +1648,7 @@ namespace Villamos
                                           orderby a.Dátum
                                           select a).ToList();
 
-                            if (Elemek.Count > 1)
+                            if (Elemek.Count > 0)
                             {
                                 DateTime ElőzőDátum = new DateTime(1900, 1, 1);
                                 Holtart.Be(hónapnap + 1);
