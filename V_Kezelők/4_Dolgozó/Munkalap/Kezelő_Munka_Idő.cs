@@ -59,7 +59,7 @@ namespace Villamos.Kezelők
             try
             {
                 FájlBeállítás(Telephely);
-                string szöveg = $"INSERT INTO {táblanév} (id, idő) VALUES ({Sorszám(hely)},{Adat.Idő})";
+                string szöveg = $"INSERT INTO {táblanév} (id, idő) VALUES ({Sorszám(Telephely)},{Adat.Idő})";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
