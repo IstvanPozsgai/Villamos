@@ -135,6 +135,9 @@ namespace Villamos.Villamos_Ablakok.Közös
 
         private void Fényképek_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Ellenőrizzük, hogy van-e kijelölt elem
+            if (Fényképek.SelectedItems.Count == 0) return;
+
             string helyi = $@"{Könyvtár}\{Fényképek.SelectedItems[0].ToStrTrim()}";
             if (!Exists(helyi)) return;
             Kezelő_Kép.KépMegnyitás(Képtöltő, helyi, toolTip1);
