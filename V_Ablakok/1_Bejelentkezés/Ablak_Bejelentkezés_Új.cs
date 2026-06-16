@@ -224,12 +224,14 @@ namespace Villamos
             this.Controls.Add(Figyelmeztetés);
 
             Timer_kilép.Enabled = true;
+            Adatbázis.Központi_Adatbázis.MindenKapcsolatotZár();
             Application.Exit();
         }
 
         private void Timer1_Tick(object sender, EventArgs e)
         {
             // kilépünk
+            Adatbázis.Központi_Adatbázis.MindenKapcsolatotZár();
             Application.Exit();
         }
         #endregion
@@ -316,6 +318,7 @@ namespace Villamos
 
         private void BtnMégse_Click(object sender, EventArgs e)
         {
+            Adatbázis.Központi_Adatbázis.MindenKapcsolatotZár();
             Application.Exit();
         }
 
@@ -433,6 +436,15 @@ namespace Villamos
         private void BtnLátszódik_MouseUp(object sender, MouseEventArgs e)
         {
             TxtPassword.UseSystemPasswordChar = true;
+        }
+
+        private void AblakBejelentkezés_Új_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Adatbázis.Központi_Adatbázis.MindenKapcsolatotZár();
+
+            Application.Exit();
+
+            Environment.Exit(0);
         }
     }
 }

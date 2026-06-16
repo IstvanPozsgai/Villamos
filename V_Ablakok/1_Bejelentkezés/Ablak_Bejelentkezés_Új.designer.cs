@@ -335,6 +335,7 @@ namespace Villamos
             this.Name = "AblakBejelentkezés_Új";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Bejelentkezés";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AblakBejelentkezés_Új_FormClosed);
             this.Load += new System.EventHandler(this.AblakBejelentkezés_Load);
             this.Shown += new System.EventHandler(this.AblakBejelentkezés_Új_Shown);
             this.GroupBox2.ResumeLayout(false);

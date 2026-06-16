@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
+using static Adatbázis;
 using MyA = Adatbázis;
 
 
@@ -19,44 +20,46 @@ namespace Villamos.Kezelők
             //nincs elkészítve
             // if (!File.Exists(hely)) Adatbázis_Létrehozás.Behajtási_Adatok_Napló(hely.KönyvSzerk());
         }
-
         public List<Adat_Kiegészítő_Könyvtár> Lista_Adatok()
         {
             string szöveg = $"SELECT * FROM {táblanév} ORDER BY id";
-            Adat_Kiegészítő_Könyvtár Adat;
             List<Adat_Kiegészítő_Könyvtár> Adatok = new List<Adat_Kiegészítő_Könyvtár>();
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            // Biztosítjuk, hogy a hálózati zárolás (.ldb) éljen. 
+            // Ez garantálja, hogy a következő Open() metódus ne a hálózaton várakozzon.
+            Adatbázis.Központi_Adatbázis.EnsureKeepAlive(hely, jelszó);
+
+            //Szabványos kapcsolati sztring az OLE DB Services engedélyezésével (Pooling)
+            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}';Jet OLEDB:Database Password={jelszó};OLE DB Services=-1;";
+
+            //Saját, lokális kapcsolat nyitása (Thread-safe)
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
+                // Ez a hívás most már milliszekundumok alatt lefut a Keep-Alive miatt
                 Kapcsolat.Open();
+
                 using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
                 {
                     using (OleDbDataReader rekord = Parancs.ExecuteReader())
                     {
-                        if (rekord.HasRows)
+                        while (rekord.Read())
                         {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_Kiegészítő_Könyvtár(
-                                           rekord["id"].ToÉrt_Int(),
-                                           rekord["név"].ToStrTrim(),
-                                           rekord["vezér1"].ToÉrt_Bool(),
-                                           rekord["Csoport1"].ToÉrt_Int(),
-                                           rekord["Csoport2"].ToÉrt_Int(),
-                                           rekord["vezér2"].ToÉrt_Bool(),
-                                           rekord["sorrend1"].ToÉrt_Int(),
-                                           rekord["sorrend2"].ToÉrt_Int()
-                                           );
-                                Adatok.Add(Adat);
-                            }
+                            Adatok.Add(new Adat_Kiegészítő_Könyvtár(
+                                rekord["id"].ToÉrt_Int(),
+                                rekord["név"].ToStrTrim(),
+                                rekord["vezér1"].ToÉrt_Bool(),
+                                rekord["Csoport1"].ToÉrt_Int(),
+                                rekord["Csoport2"].ToÉrt_Int(),
+                                rekord["vezér2"].ToÉrt_Bool(),
+                                rekord["sorrend1"].ToÉrt_Int(),
+                                rekord["sorrend2"].ToÉrt_Int()
+                            ));
                         }
                     }
                 }
             }
             return Adatok;
         }
-
         public void Rögzítés(Adat_Kiegészítő_Könyvtár Adat)
         {
             try
