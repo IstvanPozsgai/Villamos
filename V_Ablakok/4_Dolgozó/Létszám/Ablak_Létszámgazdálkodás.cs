@@ -460,16 +460,39 @@ namespace Villamos
             // egész sor színezése ha törölt
             foreach (DataGridViewRow row in Tábla.Rows)
             {
-                if (row.Cells[13].Value.ToString().Trim() == "Státus megszüntetése")
+
+
+                if (row.Cells[13].Value.ToStrTrim() == "Státus megszüntetése")
                 {
                     row.DefaultCellStyle.ForeColor = Color.White;
                     row.DefaultCellStyle.BackColor = Color.IndianRed;
                     row.DefaultCellStyle.Font = new Font("Arial Narrow", 12f, FontStyle.Strikeout);
                 }
-                if (row.Cells[13].Value.ToString().Trim() == "Státus létrehozása")
+                if (row.Cells[13].Value.ToStrTrim() == "Státus létrehozása")
                 {
                     row.DefaultCellStyle.ForeColor = Color.White;
                     row.DefaultCellStyle.BackColor = Color.ForestGreen;
+                    row.DefaultCellStyle.Font = new Font("Arial Narrow", 12f, FontStyle.Bold);
+                }
+                //Ha megjegyzésben takarító szerepel
+                if (row.Cells[15].Value.ToStrTrim().ToUpper().Contains("TAKARÍT"))
+                {
+                    row.DefaultCellStyle.ForeColor = Color.Black;
+                    row.DefaultCellStyle.BackColor = Color.Aqua;
+                    row.DefaultCellStyle.Font = new Font("Arial Narrow", 12f, FontStyle.Italic);
+                }
+                //Ha megjegyzésben takarító szerepel
+                if (row.Cells[15].Value.ToStrTrim().ToUpper().Contains("TAKARÍT") && row.Cells[13].Value.ToStrTrim() == "Státus létrehozása")
+                {
+                    row.DefaultCellStyle.ForeColor = Color.Black;
+                    row.DefaultCellStyle.BackColor = Color.DeepSkyBlue;
+                    row.DefaultCellStyle.Font = new Font("Arial Narrow", 12f, FontStyle.Bold);
+                }
+                //Ha megjegyzésben takarító szerepel
+                if (row.Cells[15].Value.ToStrTrim().ToUpper().Contains("TAKARÍT") && row.Cells[13].Value.ToStrTrim() == "Státus megszüntetése")
+                {
+                    row.DefaultCellStyle.ForeColor = Color.White;
+                    row.DefaultCellStyle.BackColor = Color.Blue;
                     row.DefaultCellStyle.Font = new Font("Arial Narrow", 12f, FontStyle.Bold);
                 }
             }
