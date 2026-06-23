@@ -414,6 +414,7 @@ namespace Villamos
                 }
                 Tábla.Visible = true;
                 Tábla.Refresh();
+                TáblaSzínezés();
             }
             catch (HibásBevittAdat ex)
             {
@@ -455,7 +456,7 @@ namespace Villamos
             Fülek.SelectedIndex = 1;
         }
 
-        private void Tábla_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private void TáblaSzínezés()
         {
             // egész sor színezése ha törölt
             foreach (DataGridViewRow row in Tábla.Rows)

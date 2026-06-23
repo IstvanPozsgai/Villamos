@@ -238,7 +238,7 @@ namespace Villamos
             this.Tábla.Size = new System.Drawing.Size(1231, 493);
             this.Tábla.TabIndex = 116;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
-            this.Tábla.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.Tábla_CellFormatting);
+
             // 
             // Panel3
             // 
