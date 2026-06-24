@@ -478,13 +478,11 @@ namespace Villamos
                 else
                 {
                     // ha visszaléptetett
-                    Adat_Dolgozó_Alap EGYADAT = new Adat_Dolgozó_Alap(
-                                                      MyF.Szöveg_Tisztítás(Dolgozószámúj.Text.Trim(), 0, 8),
-                                                      MyF.Szöveg_Tisztítás(Dolgozónévúj.Text.Trim(), 0, 50),
-                                                      new DateTime(1900, 1, 1),
-                                                      new DateTime(1900, 1, 1));
-                    // JAVÍTANDÓ:
-                    KézDolgozó.Módosít_Csoport(Cmbtelephely.Text.Trim(), EGYADAT);
+                    Adat_Dolgozó_Alap EGYADAT = new Adat_Dolgozó_Alap(MyF.Szöveg_Tisztítás(Dolgozószámúj.Text.Trim(), 0, 8),
+                                                                   MyF.Szöveg_Tisztítás(Dolgozónévúj.Text.Trim(), 0, 50),
+                                                                   new DateTime(1900, 1, 1),
+                                                                   Belépésiidő.Value);
+                    KézDolgozó.Módosít_Vissza(Cmbtelephely.Text.Trim(), EGYADAT);
                 }
 
 
