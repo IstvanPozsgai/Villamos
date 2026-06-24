@@ -101,7 +101,7 @@ namespace Villamos
 
                 Telephelyki.Items.Clear();
                 foreach (string Elem in Listák.TelephelyLista_Személy(true))
-                    Telephelybe.Items.Add(Elem);
+                    Telephelyki.Items.Add(Elem);
 
 
                 if (Program.PostásTelephely == "Főmérnökség")

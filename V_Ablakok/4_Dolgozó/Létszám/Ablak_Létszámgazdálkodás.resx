@@ -117,6 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="Label17.Text" xml:space="preserve">
+    <value>A régi munkahelye mező, ha ki van töltve, akkor felvétele folyamatbanhoz számolja a program, különben Üres státusnak kezeli. 
+Státus létrehozását csak akkor számolja, ha a belépési adatoknál a telephely mező ki van töltve.
+</value>
+  </data>
   <data name="label30.Text" xml:space="preserve">
     <value>A beolvasandó Excel tábla:
 Munkalapjának a neve: Munka1
@@ -126,17 +134,6 @@ Ha valakinek nem ismert a bére, akkor 0 -t (nullát) kell beírni.
 A sornál az első beolvasandó adatot kell megjelölni.
 Természetesen az Excel táblának zárva kell lennie a beolvasás megkezdésekor.</value>
   </data>
-  <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <data name="Label17.Text" xml:space="preserve">
-    <value>A régi munkahelye mező, ha ki van töltve, akkor felvétele folyamatbanhoz számolja a program, különben Üres státusnak kezeli. 
-Státus létrehozását csak akkor számolja, ha a belépési adatoknál a telephely mező ki van töltve.
-</value>
-  </data>
-  <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
