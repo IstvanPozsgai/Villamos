@@ -483,6 +483,7 @@ namespace Villamos
                                                       MyF.Szöveg_Tisztítás(Dolgozónévúj.Text.Trim(), 0, 50),
                                                       new DateTime(1900, 1, 1),
                                                       new DateTime(1900, 1, 1));
+                    // JAVÍTANDÓ:
                     KézDolgozó.Módosít_Csoport(Cmbtelephely.Text.Trim(), EGYADAT);
                 }
 
