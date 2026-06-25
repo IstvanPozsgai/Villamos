@@ -192,14 +192,23 @@ namespace Villamos.Kezelők
         {
             try
             {
-                FájlBeállítás(Telephely, Év);
                 List<string> Szövegek = new List<string>();
+                List<Adat_Utasítás> ListaAdatok = Lista_Adatok(Telephely, Év);
+
+                string ideig = $"\r\n\r\n Visszavonta : {Program.PostásNév.Trim()} Dátum: {DateTime.Now:yyyy.MM.dd hh:mm}";
                 foreach (int sorszám in Sorszámok)
                 {
-                    string szöveg = $"UPDATE {táblanév} SET érvényes=true WHERE sorszám={sorszám}";
-                    Szövegek.Add(szöveg);
+                    // Módosítjuk a szövegezést
+                    Adat_Utasítás Adat = (from a in ListaAdatok
+                                          where a.Sorszám == sorszám
+                                          select a).FirstOrDefault();
+                    if (Adat != null)
+                    {
+                        string szöveg = $"UPDATE {táblanév} SET szöveg='{Adat.Szöveg + ideig}', érvényes=1 WHERE sorszám={sorszám}";
+                        Szövegek.Add(szöveg);
+                    }
                 }
-                MyA.ABMódosítás(hely, jelszó, Szövegek);
+                if (Szövegek.Count > 0) MyA.ABMódosítás(hely, jelszó, Szövegek);
             }
             catch (HibásBevittAdat ex)
             {
