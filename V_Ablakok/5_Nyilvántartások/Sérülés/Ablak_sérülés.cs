@@ -3378,7 +3378,10 @@ namespace Villamos
                     NyomtatásiTerület = $"A1:G{sor}",
                     FejlécJobb = jobbfejléc,
                     Képútvonal = helycsop,
-                    LáblécKözép = "&G"
+                    LáblécKözép = "&G",
+                    FejlécMéret = 5,
+                    LapMagas = 1,
+                    LapSzéles = 1
                 };
                 MyX.NyomtatásiTerület_részletes(munkalap, BeNYom);
                 MyX.ExcelMentés(fájlexc);
