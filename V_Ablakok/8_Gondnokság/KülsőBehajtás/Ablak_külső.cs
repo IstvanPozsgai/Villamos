@@ -394,7 +394,16 @@ namespace Villamos
                 foreach (string Elem in Listák.TelephelyLista_Jármű())
                     Cmbtelephely.Items.Add(Elem);
                 if (Program.PostásTelephely == "Főmérnökség" || Program.Postás_Vezér)
-                { Cmbtelephely.Text = Cmbtelephely.Items[0].ToString().Trim(); }
+                {
+                    if (Program.PostásTelephely == "Főmérnökség")
+                    {
+                        Cmbtelephely.Items.Add("Főmérnökség");
+                        Cmbtelephely.Text = "Főmérnökség";
+                    }
+                    else
+
+                    Cmbtelephely.Text = Cmbtelephely.Items[0].ToString().Trim();
+                }
                 else
                 { Cmbtelephely.Text = Program.PostásTelephely; }
 
@@ -768,7 +777,7 @@ namespace Villamos
             Dolgozó_beolvas.Visible = false;
             Autó_beolvas.Visible = false;
 
-            if (Rádió_főmérnök == false && (Telephely_választott.Trim() == Cmbtelephely.Text.Trim()))
+            if (Telephely_választott.Trim() == Cmbtelephely.Text.Trim())
             {
                 Telephely_rögzít.Visible = TelephelyRögzít;
                 Alap_Rögzít.Visible = AlapRögzít;
