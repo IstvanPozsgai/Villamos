@@ -1313,7 +1313,7 @@ namespace Villamos
             try
             {
                 if (Pályaszám.Text.Trim() == "") throw new HibásBevittAdat("Nincs megadva a pályaszám.");
-                Adat_Jármű Elem = AdatokJármű.Where(a => a.Azonosító == Pályaszám.Text.Trim() && a.Valóstípus == "TW6000").FirstOrDefault();
+                Adat_Jármű Elem = AdatokJármű.Where(a => a.Azonosító == Pályaszám.Text.Trim() && a.Valóstípus.Contains("TW6000")).FirstOrDefault();
 
                 if (Elem == null)
                     throw new HibásBevittAdat($"Nincs {Pályaszám.Text.Trim()} pályaszámú jármű!");
@@ -1404,7 +1404,7 @@ namespace Villamos
                            Megállítás.Checked,
                            StartDátum.Value,
                            Vizsgdátum.Value,
-                           Vizsgsorszám.Text.Trim(),
+                           VizsgNév.Text.Trim(),
                            Sorszámvizsg);
 
                 if (Elem == null)
