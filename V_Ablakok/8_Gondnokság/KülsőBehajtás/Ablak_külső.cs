@@ -399,6 +399,7 @@ namespace Villamos
                     {
                         Cmbtelephely.Items.Add("Főmérnökség");
                         Cmbtelephely.Text = "Főmérnökség";
+                        Telephely_választott = "Főmérnökség";
                     }
                     else
 
