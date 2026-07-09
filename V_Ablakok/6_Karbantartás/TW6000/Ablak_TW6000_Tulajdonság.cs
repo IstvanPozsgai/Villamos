@@ -433,7 +433,7 @@ namespace Villamos
                 //listázzuk a járműveket, amik TW6000 típusúak
                 List<Adat_Jármű> AdatokJ = KézJármű.Lista_Adatok("Főmérnökség");
                 AdatokJ = (from a in AdatokJ
-                           where a.Valóstípus == "TW6000"
+                           where a.Valóstípus.Contains ("TW6000")
                            && a.Törölt == false
                            select a).ToList();
 
@@ -842,6 +842,7 @@ namespace Villamos
                 foreach (Adat_Jármű rekord in AdatokJármű)
                 {
                     Holtart.Lép();
+                    if (rekord.Azonosító=="7692") continue;
                     // megkeressük, hogy az adott napon mi az ütemezett feladat
                     Adat_TW6000_Alap Elem = (from a in AdatokAlap
                                              where a.Azonosító == rekord.Azonosító && a.Megállítás == false
