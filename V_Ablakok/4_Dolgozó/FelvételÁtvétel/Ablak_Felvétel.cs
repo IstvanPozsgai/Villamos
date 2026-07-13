@@ -687,6 +687,16 @@ namespace Villamos
                 int melyik = 1;
                 if (AdatokStátus != null) melyik = AdatokStátus.Max(a => a.ID).ToÉrt_Int();
 
+                AdatokDolgozó = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Adat_Dolgozó_Alap AdatDolgozó = (from a in AdatokDolgozó
+                                                 where a.Dolgozószám == KilépDolgozószám.Text.Trim()
+                                                 select a).FirstOrDefault();
+                string megjegyzés = "_";
+                if (AdatDolgozó != null && AdatDolgozó.Munkakör != null && AdatDolgozó.Munkakör == "Takarító")
+                {
+                    megjegyzés = AdatDolgozó.Munkakör;
+                }
+
 
                 if (AdatStátus == null)
                 {
@@ -702,7 +712,8 @@ namespace Villamos
                                                                          "_",
                                                                          new DateTime(1900, 1, 1),
                                                                          "Személy csere",
-                                                                         előzetes);
+                                                                         előzetes,
+                                                                         megjegyzés);
                     KézStátus.Rögzítés_Alap(Cmbtelephely.Text.Trim(), ADATBE);
                 }
                 else
@@ -718,11 +729,6 @@ namespace Villamos
                 if (!KilépTelephely.Visible)
                 {
                     // ha nem látszódik akkor a dolgozó kilép
-                    AdatokDolgozó = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
-                    Adat_Dolgozó_Alap AdatDolgozó = (from a in AdatokDolgozó
-                                                     where a.Dolgozószám == KilépDolgozószám.Text.Trim()
-                                                     select a).FirstOrDefault();
-
                     if (AdatDolgozó != null)
                     {
                         Adat_Dolgozó_Alap ADAT = new Adat_Dolgozó_Alap(KilépDolgozószám.Text.Trim(),

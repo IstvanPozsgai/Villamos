@@ -309,7 +309,7 @@ namespace Villamos.Kezelők
                 FájlBeállítás(Telephely);
                 long Válasz = Sorszám(Telephely);
                 string szöveg = $"INSERT INTO {táblanév} ";
-                szöveg += " (id, Névki, Hrazonosítóki, kilépésdátum, Bérki, telephelyki, Státusváltozások, névbe,  Hrazonosítóbe, honnanjött, belépésidátum, előzetes )";
+                szöveg += " (id, Névki, Hrazonosítóki, kilépésdátum, Bérki, telephelyki, Státusváltozások, névbe,  Hrazonosítóbe, honnanjött, belépésidátum, előzetes, megjegyzés )";
                 szöveg += " VALUES (";
                 szöveg += $"{Válasz}, ";
                 szöveg += $" '{Adat.Névki}', ";
@@ -322,7 +322,8 @@ namespace Villamos.Kezelők
                 szöveg += $" '{Adat.Hrazonosítóbe}', ";
                 szöveg += $" '{Adat.Honnanjött}', ";
                 szöveg += $" '{Adat.Belépésidátum:yyyy.MM.dd}',";
-                szöveg += $" {Adat.Előzetes})";
+                szöveg += $" {Adat.Előzetes}, ";
+                szöveg += $" '{Adat.Megjegyzés}')";
                 MyA.ABMódosítás(hely, jelszó, szöveg);
             }
             catch (HibásBevittAdat ex)
