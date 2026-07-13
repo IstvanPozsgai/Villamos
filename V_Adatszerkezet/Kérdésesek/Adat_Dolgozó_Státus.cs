@@ -73,6 +73,24 @@ namespace Villamos.Adatszerkezet
             Előzetes = előzetes;
         }
 
+        public Adat_Dolgozó_Státus(long iD, string névki, string hrazonosítóki, double bérki, string telephelyki, DateTime kilépésdátum, string névbe, string hrazonosítóbe,
+            string honnanjött, DateTime belépésidátum, string státusváltozások, bool előzetes, string megjegyzés)
+        {
+            ID = iD;
+            Névki = névki;
+            Hrazonosítóki = hrazonosítóki;
+            Bérki = bérki;
+            Telephelyki = telephelyki;
+            Kilépésdátum = kilépésdátum;
+            Névbe = névbe;
+            Hrazonosítóbe = hrazonosítóbe;
+            Honnanjött = honnanjött;
+            Belépésidátum = belépésidátum;
+            Státusváltozások = státusváltozások;
+            Előzetes = előzetes;
+            Megjegyzés = megjegyzés;
+        }
+
         public Adat_Dolgozó_Státus(long iD, DateTime kilépésdátum, bool előzetes)
         {
             ID = iD;
