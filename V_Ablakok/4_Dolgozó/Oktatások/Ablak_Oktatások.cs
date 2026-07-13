@@ -28,6 +28,7 @@ namespace Villamos
         readonly Kezelő_Kiegészítő_Jelenlétiív KézJelenléti = new Kezelő_Kiegészítő_Jelenlétiív();
 
         List<Adat_Oktatásrajelöltek> Adatok_OktJelölt = new List<Adat_Oktatásrajelöltek>();
+        private bool _naplóListaFeltöltésAlatt;
 
         #endregion
 
@@ -36,6 +37,13 @@ namespace Villamos
         public Ablak_Oktatások()
         {
             InitializeComponent();
+            TáblaOktatás.SelectionChanged -= TáblaOktatás_SelectionChanged;
+            TáblaOktatás.SelectionChanged += TáblaOktatás_SelectionChanged;
+            TáblaOktatás.CellClick -= TáblaOktatás_CellClick;
+            TáblaOktatás.CellClick += TáblaOktatás_CellClick;
+
+            TáblaOktatás.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
             Start();
         }
 
@@ -548,14 +556,18 @@ namespace Villamos
 
         private void TáblaOktatás_SelectionChanged(object sender, EventArgs e)
         {
+            // A naplólista sorainak létrehozása közben többször lefutna az esemény,
+            // amikor a PDF-fájlnév cellája még nincs feltöltve.
+            if (_naplóListaFeltöltésAlatt)
+                return;
+
             if (!CHKpdfvan.Checked)
             {
                 if (TáblaOktatás.SelectedRows.Count != 0 && Chkoktat.Checked)
                 {
-                    // ha oktatandóra kattint akkor összeállítja a fájl nevét
+                    // Ha oktatandó sorra kattintunk, összeállítjuk a mentendő PDF nevét.
                     if (TáblaOktatás.SelectedRows.Count == 1)
                     {
-                        // ha egy van kijelölve
                         Txtmentett.Text = $"{TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[0].Value}_";
                         Txtmentett.Text += $"{TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[2].Value}_";
                         Txtmentett.Text += $"{Cmbtelephely.Text}_";
@@ -563,7 +575,6 @@ namespace Villamos
                     }
                     else
                     {
-                        // ha több sor van kijelölve
                         int volt = 0;
                         int i = 1;
                         while (volt == 0)
@@ -572,7 +583,14 @@ namespace Villamos
                             Txtmentett.Text += $"{TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[2].Value}_";
                             Txtmentett.Text += $"{Cmbtelephely.Text}_";
                             Txtmentett.Text += $"{BizDátum.Value:yyyyMMdd}.pdf";
-                            string hely = $@"{Application.StartupPath}\Főmérnökség\Oktatás\{Cmbtelephely.Text}\{Txtmentett.Text.Trim()}";
+
+                            string hely = Path.Combine(
+                                Application.StartupPath,
+                                "Főmérnökség",
+                                "Oktatás",
+                                Cmbtelephely.Text.Trim(),
+                                Txtmentett.Text.Trim());
+
                             if (File.Exists(hely))
                                 i++;
                             else
@@ -580,11 +598,6 @@ namespace Villamos
                         }
                     }
                 }
-            }
-            if (TáblaOktatás.SelectedRows.Count == 1 && CHkNapló.Checked)
-            {
-                string hely = $@"{Application.StartupPath}\Főmérnökség\Oktatás\{Cmbtelephely.Text}\{TáblaOktatás.Rows[TáblaOktatás.SelectedRows[0].Index].Cells[8].Value}";
-                Pdf_Megjelenítés(hely);
             }
         }
         #endregion
@@ -595,18 +608,20 @@ namespace Villamos
         {
             try
             {
-                OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
-                Txtmegnyitott.Text = "";
-                Txtmentett.Text = "";
-                OpenFileDialog1.Filter = "PDF Files |*.pdf";
-                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
+                using (OpenFileDialog OpenFileDialog1 = new OpenFileDialog())
                 {
-                    Kezelő_Pdf.PdfMegnyitás(PDF_néző, OpenFileDialog1.FileName);
+                    Txtmegnyitott.Text = "";
+                    Txtmentett.Text = "";
+                    OpenFileDialog1.Filter = "PDF Files |*.pdf";
 
-                    Txtmegnyitott.Text = OpenFileDialog1.FileName;
-                    CHKpdfvan.Checked = false;
-                    Fülek.SelectedIndex = 5;
-                    Felcsukja();
+                    if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
+                    {
+                        if (Pdf_Megjelenítés(OpenFileDialog1.FileName))
+                        {
+                            Txtmegnyitott.Text = OpenFileDialog1.FileName;
+                            CHKpdfvan.Checked = false;
+                        }
+                    }
                 }
             }
             catch (HibásBevittAdat ex)
@@ -620,22 +635,90 @@ namespace Villamos
             }
         }
 
-        private void Pdf_Megjelenítés(string hely)
+        private bool Pdf_Megjelenítés(string hely)
         {
             try
             {
-                if (!File.Exists(hely)) return;
-                Kezelő_Pdf.PdfMegnyitás(PDF_néző, hely);
+                if (string.IsNullOrWhiteSpace(hely))
+                    throw new HibásBevittAdat("A PDF elérési útvonala üres.");
+
+                hely = Path.GetFullPath(hely.Trim());
+
+                if (!File.Exists(hely))
+                    throw new HibásBevittAdat($"A PDF fájl nem található:\n{hely}");
+
+                // A korábban megnyitott dokumentumot el kell engedni,
+                // különben a PdfiumViewer a régi dokumentumot tarthatja a nézőben.
+                var régiDokumentum = PDF_néző.Document;
+                PDF_néző.Document = null;
+                régiDokumentum?.Dispose();
+
+                PDF_néző.Document = PdfDocument.Load(hely);
+
+                PDF_néző.Visible = true;
+                PDF_néző.Enabled = true;
+                PDF_néző.BringToFront();
+
+                if (Fülek.TabPages.Count > 5)
+                    Fülek.SelectedIndex = 5;
+
+                Felcsukja();
+                PDF_néző.Invalidate();
+                PDF_néző.Refresh();
+                PDF_néző.Focus();
+
+                return true;
             }
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
             }
             catch (Exception ex)
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"A PDF megnyitása sikertelen:\n{hely}\n\n{ex.Message}\n\nA hiba naplózásra került.",
+                    "PDF megnyitási hiba",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return false;
             }
+        }
+
+        private void NaplóPdfMegnyitása(int sorIndex)
+        {
+            if (_naplóListaFeltöltésAlatt || !CHkNapló.Checked)
+                return;
+
+            if (sorIndex < 0 || sorIndex >= TáblaOktatás.Rows.Count)
+                return;
+
+            DataGridViewRow sor = TáblaOktatás.Rows[sorIndex];
+            if (sor.IsNewRow || sor.Cells.Count <= 8)
+                return;
+
+            string pdfNév = sor.Cells[8].Value?.ToString()?.Trim() ?? "";
+            if (string.IsNullOrWhiteSpace(pdfNév))
+            {
+                MessageBox.Show(
+                    "Ehhez a naplóbejegyzéshez nincs PDF-fájl rögzítve.",
+                    "PDF",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                return;
+            }
+
+            string hely = Path.IsPathRooted(pdfNév)
+                ? pdfNév
+                : Path.Combine(
+                    Application.StartupPath,
+                    "Főmérnökség",
+                    "Oktatás",
+                    Cmbtelephely.Text.Trim(),
+                    pdfNév);
+
+            Pdf_Megjelenítés(hely);
         }
 
         private void BtnPdfNyit_Click(object sender, EventArgs e)
@@ -1365,7 +1448,7 @@ namespace Villamos
                     VízKözép = true,
                     Álló = true,
                     LapSzéles = 1,
-                    Képútvonal = fénykép                   
+                    Képútvonal = fénykép
                 };
                 MyX.NyomtatásiTerület_részletes(munkalap, BeNyom);
 
@@ -1457,11 +1540,10 @@ namespace Villamos
         {
             try
             {
-                if (CHkNapló.Checked && e.RowIndex >= 0)
-                {
-                    string hely = $@"{Application.StartupPath}\Főmérnökség\Oktatás\{Cmbtelephely.Text}\{TáblaOktatás.Rows[e.RowIndex].Cells[8].Value}";
-                    if (File.Exists(hely)) Pdf_Megjelenítés(hely);
-                }
+                if (e.RowIndex < 0)
+                    return;
+
+                NaplóPdfMegnyitása(e.RowIndex);
             }
             catch (HibásBevittAdat ex)
             {
@@ -1481,25 +1563,35 @@ namespace Villamos
         {
             try
             {
-                string Könyvtár = $@"{Application.StartupPath}\Főmérnökség\Oktatás\{Cmbtelephely.Text}";
+                string Könyvtár = Path.Combine(
+                    Application.StartupPath,
+                    "Főmérnökség",
+                    "Oktatás",
+                    Cmbtelephely.Text.Trim());
 
-                // feltöltött fájlok ismételt felhasználása
-                OpenFileDialog OpenFileDialog1 = new OpenFileDialog
+                using (OpenFileDialog OpenFileDialog1 = new OpenFileDialog
                 {
                     Filter = "PDF Files |*.pdf",
                     InitialDirectory = Könyvtár
-                };
-
-                if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
+                })
                 {
-                    if (!OpenFileDialog1.FileName.Contains(Könyvtár)) throw new HibásBevittAdat("A program által beállított könyvtárból lehet csak fájlt választani.");
-                    PDF_néző.Document = PdfDocument.Load(OpenFileDialog1.FileName);
-                    Txtmegnyitott.Text = OpenFileDialog1.FileName;
-                    Txtmentett.Text = OpenFileDialog1.SafeFileName;
-                    CHKpdfvan.Checked = true;
-                    PDF_néző.Visible = true;
-                    Fülek.SelectedIndex = 5;
-                    Felcsukja();
+                    if (OpenFileDialogPI.ShowDialogEllenőr(OpenFileDialog1) == DialogResult.OK)
+                    {
+                        string teljesKönyvtár = Path.GetFullPath(Könyvtár)
+                            .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                            + Path.DirectorySeparatorChar;
+                        string teljesFájl = Path.GetFullPath(OpenFileDialog1.FileName);
+
+                        if (!teljesFájl.StartsWith(teljesKönyvtár, StringComparison.OrdinalIgnoreCase))
+                            throw new HibásBevittAdat("A program által beállított könyvtárból lehet csak fájlt választani.");
+
+                        if (Pdf_Megjelenítés(teljesFájl))
+                        {
+                            Txtmegnyitott.Text = teljesFájl;
+                            Txtmentett.Text = OpenFileDialog1.SafeFileName;
+                            CHKpdfvan.Checked = true;
+                        }
+                    }
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1828,6 +1920,8 @@ namespace Villamos
         {
             try
             {
+                _naplóListaFeltöltésAlatt = true;
+
                 if (ChkDolgozónév.CheckedItems.Count < 1) throw new HibásBevittAdat("Nincs kijelölove egy dolgozó sem.");
 
 
@@ -1839,7 +1933,7 @@ namespace Villamos
                 List<Adat_Oktatás_Napló> Adatok = Kéz_Okt_Nap.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátumtól.Value.Year);
                 if (Dátumtól.Value.Year != Dátumig.Value.Year)
                 {
-                    for (int év = (Dátumtól.Value.Year + 1); év < Dátumig.Value.Year; év++)
+                    for (int év = (Dátumtól.Value.Year + 1); év <= Dátumig.Value.Year; év++)
                     {
                         List<Adat_Oktatás_Napló> AdatokIdeig = Kéz_Okt_Nap.Lista_Adatok(Cmbtelephely.Text.Trim(), év);
                         Adatok.AddRange(AdatokIdeig);
@@ -1898,9 +1992,6 @@ namespace Villamos
                 TáblaOktatás.Columns[12].Width = 100;
                 TáblaOktatás.Columns[13].HeaderText = "Megjegyzés/ Tárolási hely";
                 TáblaOktatás.Columns[13].Width = 300;
-                CHkNapló.Checked = true;
-
-
                 for (int j = 0; j < ChkDolgozónév.CheckedItems.Count; j++)
                 {
                     string[] darabol = ChkDolgozónév.CheckedItems[j].ToString().Split('=');
@@ -1926,7 +2017,7 @@ namespace Villamos
                                                        where a.IDoktatás == rekord.IDoktatás
                                                        select a).FirstOrDefault();
 
-                            if (Elem != null) TáblaOktatás.Rows[i].Cells[4].Value = ElemT.Téma;
+                            if (ElemT != null) TáblaOktatás.Rows[i].Cells[4].Value = ElemT.Téma;
                             TáblaOktatás.Rows[i].Cells[5].Value = rekord.Oktatásdátuma.ToString("yyyy.MM.dd").Trim();
                             TáblaOktatás.Rows[i].Cells[6].Value = rekord.Telephely.Trim();
                             TáblaOktatás.Rows[i].Cells[7].Value = rekord.Kioktatta.Trim();
@@ -1972,6 +2063,9 @@ namespace Villamos
                         }
                     }
                 }
+                CHkNapló.Checked = true;
+                TáblaOktatás.ClearSelection();
+                TáblaOktatás.CurrentCell = null;
                 Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
@@ -1982,6 +2076,10 @@ namespace Villamos
             {
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                _naplóListaFeltöltésAlatt = false;
             }
         }
         #endregion
