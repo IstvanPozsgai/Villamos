@@ -43,7 +43,7 @@ namespace Villamos
         List<Adat_Kerék_Eszterga_Igény> AdatokIgény = new List<Adat_Kerék_Eszterga_Igény>();
         List<Adat_Nap_Hiba> AdatokHiba = new List<Adat_Nap_Hiba>();
         List<Adat_Kiegészítő_Jelenlétiív> AdatokKiegJelenlét = new List<Adat_Kiegészítő_Jelenlétiív>();
-
+        
         #region alap
         public Ablak_keréknyilvántartás()
         {
@@ -75,6 +75,7 @@ namespace Villamos
                 Dátumtól.Value = new DateTime(DateTime.Today.Year, 1, 1);
 
                 Irányítófeltöltés();
+                Névfeltöltés();
                 Jegyzettömb.Visible = false;
                 Tábla1.Visible = true;
                 LapFülek.DrawMode = TabDrawMode.OwnerDrawFixed;
@@ -358,6 +359,37 @@ namespace Villamos
                 foreach (Adat_Dolgozó_Alap Elem in Adatok)
                     Kiadta.Items.Add(Elem.DolgozóNév);
                 Kiadta.Refresh();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Névfeltöltés()
+        {
+            try
+            {
+                Ellenőrizte.Items.Clear();
+                Ellenőrizte.BeginUpdate();
+
+                Kezelő_Dolgozó_Alap KézDolgozó = new Kezelő_Dolgozó_Alap();
+                List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
+
+                Adatok = (from a in Adatok
+                              where a.Kilépésiidő == new DateTime(1900, 1, 1)
+                              orderby a.DolgozóNév ascending
+                              select a).ToList();
+
+                foreach (Adat_Dolgozó_Alap rekord in Adatok)
+                    Ellenőrizte.Items.Add(rekord.DolgozóNév);
+
+                Ellenőrizte.EndUpdate();
             }
             catch (HibásBevittAdat ex)
             {
@@ -956,8 +988,10 @@ namespace Villamos
                     MyX.Aláírásvonal(munkalap, $"B{sor}:c{sor}");
                     MyX.Aláírásvonal(munkalap, $"h{sor}:i{sor}");
                     sor += 1;
+                    MyX.Egyesít(munkalap, $"b{sor}:c{sor}");
                     MyX.Egyesít(munkalap, $"h{sor}:i{sor}");
-                    MyX.Kiir(Kiadta.Text.Trim(), $"h{sor}");
+                    MyX.Kiir(Ellenőrizte.Text.Trim(), $"b{sor}");
+                    MyX.Kiir(Kiadta.Text.Trim(), $"h{sor}");                    
                     if (i == 1) sor += 4;
                 }
                 Holtart.Lép();
