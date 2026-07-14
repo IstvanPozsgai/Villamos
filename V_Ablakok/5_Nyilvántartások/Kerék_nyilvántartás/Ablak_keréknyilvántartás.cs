@@ -43,7 +43,7 @@ namespace Villamos
         List<Adat_Kerék_Eszterga_Igény> AdatokIgény = new List<Adat_Kerék_Eszterga_Igény>();
         List<Adat_Nap_Hiba> AdatokHiba = new List<Adat_Nap_Hiba>();
         List<Adat_Kiegészítő_Jelenlétiív> AdatokKiegJelenlét = new List<Adat_Kiegészítő_Jelenlétiív>();
-        
+
         #region alap
         public Ablak_keréknyilvántartás()
         {
@@ -382,9 +382,9 @@ namespace Villamos
                 List<Adat_Dolgozó_Alap> Adatok = KézDolgozó.Lista_Adatok(Cmbtelephely.Text.Trim());
 
                 Adatok = (from a in Adatok
-                              where a.Kilépésiidő == new DateTime(1900, 1, 1)
-                              orderby a.DolgozóNév ascending
-                              select a).ToList();
+                          where a.Kilépésiidő == new DateTime(1900, 1, 1)
+                          orderby a.DolgozóNév ascending
+                          select a).ToList();
 
                 foreach (Adat_Dolgozó_Alap rekord in Adatok)
                     Ellenőrizte.Items.Add(rekord.DolgozóNév);
@@ -991,7 +991,7 @@ namespace Villamos
                     MyX.Egyesít(munkalap, $"b{sor}:c{sor}");
                     MyX.Egyesít(munkalap, $"h{sor}:i{sor}");
                     MyX.Kiir(Ellenőrizte.Text.Trim(), $"b{sor}");
-                    MyX.Kiir(Kiadta.Text.Trim(), $"h{sor}");                    
+                    MyX.Kiir(Kiadta.Text.Trim(), $"h{sor}");
                     if (i == 1) sor += 4;
                 }
                 Holtart.Lép();
