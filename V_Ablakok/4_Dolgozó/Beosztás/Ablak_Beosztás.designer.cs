@@ -68,6 +68,7 @@ namespace Villamos
             this.CsoportFrissít = new System.Windows.Forms.Button();
             this.Excel_gomb = new System.Windows.Forms.Button();
             this.Napszámok = new System.Windows.Forms.Button();
+            this.Btn_beosztás = new System.Windows.Forms.Button();
             this.CsukDolgozó = new System.Windows.Forms.Button();
             this.CsukCsoport = new System.Windows.Forms.Button();
             this.NyitDolgozó = new System.Windows.Forms.Button();
@@ -475,6 +476,19 @@ namespace Villamos
             this.Napszámok.UseVisualStyleBackColor = true;
             this.Napszámok.Click += new System.EventHandler(this.Napszámok_Click);
             // 
+            // Btn_beosztás
+            // 
+            this.Btn_beosztás.BackgroundImage = global::Villamos.Properties.Resources.App_edit;
+            this.Btn_beosztás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_beosztás.Location = new System.Drawing.Point(938, 40);
+            this.Btn_beosztás.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Btn_beosztás.Name = "Btn_beosztás";
+            this.Btn_beosztás.Size = new System.Drawing.Size(40, 40);
+            this.Btn_beosztás.TabIndex = 171;
+            this.ToolTip1.SetToolTip(this.Btn_beosztás, "Adott havi beosztást személyre szólóan lehet kiadni a dolgozónak.");
+            this.Btn_beosztás.UseVisualStyleBackColor = true;
+            this.Btn_beosztás.Click += new System.EventHandler(this.Btn_beosztás_Click);
+            // 
             // CsukDolgozó
             // 
             this.CsukDolgozó.BackgroundImage = global::Villamos.Properties.Resources.fel;
@@ -590,6 +604,7 @@ namespace Villamos
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSeaGreen;
             this.ClientSize = new System.Drawing.Size(1200, 484);
+            this.Controls.Add(this.Btn_beosztás);
             this.Controls.Add(this.Napszámok);
             this.Controls.Add(this.Ledolgozottidő);
             this.Controls.Add(this.Hrazonosító);
@@ -686,5 +701,6 @@ namespace Villamos
         private Button Múlt;
         private Panel panel2;
         internal Button Napszámok;
+        internal Button Btn_beosztás;
     }
 }
