@@ -277,7 +277,7 @@ namespace Villamos
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla.Location = new System.Drawing.Point(7, 99);
             this.Tábla.Name = "Tábla";
-            this.Tábla.Size = new System.Drawing.Size(839, 142);
+            this.Tábla.Size = new System.Drawing.Size(839, 134);
             this.Tábla.TabIndex = 70;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
