@@ -48,6 +48,8 @@ namespace Villamos
             this.LapFülek = new System.Windows.Forms.TabControl();
             this.TabPage1 = new System.Windows.Forms.TabPage();
             this.Kiadta = new System.Windows.Forms.ComboBox();
+            this.Ellenőrizte = new System.Windows.Forms.ComboBox();
+            this.LabelEllenőrizte = new System.Windows.Forms.Label();
             this.Label2 = new System.Windows.Forms.Label();
             this.Csakkerék = new System.Windows.Forms.CheckBox();
             this.Tábla = new System.Windows.Forms.DataGridView();
@@ -171,8 +173,8 @@ namespace Villamos
             // 
             // LapFülek
             // 
-            this.LapFülek.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.LapFülek.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LapFülek.Controls.Add(this.TabPage1);
             this.LapFülek.Controls.Add(this.TabPage2);
@@ -190,6 +192,8 @@ namespace Villamos
             // TabPage1
             // 
             this.TabPage1.BackColor = System.Drawing.Color.Orange;
+            this.TabPage1.Controls.Add(this.Ellenőrizte);
+            this.TabPage1.Controls.Add(this.LabelEllenőrizte);
             this.TabPage1.Controls.Add(this.Kiadta);
             this.TabPage1.Controls.Add(this.Label2);
             this.TabPage1.Controls.Add(this.Csakkerék);
@@ -216,17 +220,36 @@ namespace Villamos
             this.Kiadta.IntegralHeight = false;
             this.Kiadta.Location = new System.Drawing.Point(803, 29);
             this.Kiadta.Name = "Kiadta";
-            this.Kiadta.Size = new System.Drawing.Size(368, 28);
+            this.Kiadta.Size = new System.Drawing.Size(178, 28);
             this.Kiadta.TabIndex = 116;
+            // 
+            // Ellenőrizte
+            // 
+            this.Ellenőrizte.DropDownHeight = 300;
+            this.Ellenőrizte.FormattingEnabled = true;
+            this.Ellenőrizte.IntegralHeight = false;
+            this.Ellenőrizte.Location = new System.Drawing.Point(993, 29);
+            this.Ellenőrizte.Name = "Ellenőrizte";
+            this.Ellenőrizte.Size = new System.Drawing.Size(178, 28);
+            this.Ellenőrizte.TabIndex = 118;
+            // 
+            // LabelEllenőrizte
+            // 
+            this.LabelEllenőrizte.AutoSize = true;
+            this.LabelEllenőrizte.Location = new System.Drawing.Point(993, 6);
+            this.LabelEllenőrizte.Name = "LabelEllenőrizte";
+            this.LabelEllenőrizte.Size = new System.Drawing.Size(92, 20);
+            this.LabelEllenőrizte.TabIndex = 117;
+            this.LabelEllenőrizte.Text = "Ellenőrizte:";
             // 
             // Label2
             // 
             this.Label2.AutoSize = true;
             this.Label2.Location = new System.Drawing.Point(803, 6);
             this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(155, 20);
+            this.Label2.Size = new System.Drawing.Size(58, 20);
             this.Label2.TabIndex = 115;
-            this.Label2.Text = "Ellenőr, vagy igénylő:";
+            this.Label2.Text = "Kiadta:";
             // 
             // Csakkerék
             // 
@@ -246,8 +269,8 @@ namespace Villamos
             this.Tábla.AllowUserToDeleteRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             this.Tábla.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.Tábla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla.EnableHeadersVisualStyles = false;
@@ -777,8 +800,8 @@ namespace Villamos
             // 
             // Jegyzettömb
             // 
-            this.Jegyzettömb.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.Jegyzettömb.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Jegyzettömb.Location = new System.Drawing.Point(4, 66);
             this.Jegyzettömb.Name = "Jegyzettömb";
@@ -864,8 +887,8 @@ namespace Villamos
             this.Tábla1.AllowUserToDeleteRows = false;
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             this.Tábla1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
-            this.Tábla1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.Tábla1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
@@ -1016,8 +1039,8 @@ namespace Villamos
             this.Tábla2.AllowUserToDeleteRows = false;
             dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
             this.Tábla2.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
-            this.Tábla2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.Tábla2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
@@ -1073,7 +1096,7 @@ namespace Villamos
             // 
             // Holtart
             // 
-            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Holtart.Location = new System.Drawing.Point(380, 10);
             this.Holtart.Name = "Holtart";
@@ -1196,6 +1219,8 @@ namespace Villamos
         internal CheckBox Csakkerék;
         internal Label Label2;
         internal ComboBox Kiadta;
+        internal Label LabelEllenőrizte;
+        internal ComboBox Ellenőrizte;
         internal Button Button1;
         internal Button Kerék_Ütemez;
         internal TextBox KMU_új;
