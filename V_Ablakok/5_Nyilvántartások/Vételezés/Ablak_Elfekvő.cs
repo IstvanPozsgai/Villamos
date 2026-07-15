@@ -37,7 +37,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             {
                 await Task.Run(() => FeldolgozÉsMent(fájl_MB52, fájl_MB51));
 
-                MessageBox.Show("Az adatok feldolgozása és az SQLite adatbázisba történő rögzítése sikeresen befejeződött!",
+                MessageBox.Show("Az adatok feldolgozása és az adatbázisba történő rögzítése sikeresen befejeződött!",
                                 "Sikeres művelet", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 TáblaÍró();
@@ -120,36 +120,16 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                         continue;
 
                     string kulcs = $"{cikkszám}|{sarzs}";
-
-                    if (idxMegnMB51 != -1)
-                    {
-                        string megn = sor.Cell(idxMegnMB51).GetString().Trim();
-                        if (!string.IsNullOrEmpty(megn) && !megnevezésekEllenőrző.ContainsKey(kulcs))
-                            megnevezésekEllenőrző[kulcs] = megn;
-                    }
+                    // JAVÍTANDÓ: Raktár helyet is figyelni
+                    // és csak az legújabb elemet szabad figyelni a többit át kell ugrani
 
                     DateTime mozgásDátum;
-                    bool sikeresDátum = false;
 
-                    if (sor.Cell(idxDatum).TryGetValue(out mozgásDátum))
-                        sikeresDátum = true;
+                    if (sor.Cell(idxDatum).TryGetValue(out mozgásDátum)) mozgásDátum = new DateTime(1900, 1, 1);
 
-                    else
-                    {
-                        string dátumSzöveg = sor.Cell(idxDatum).GetString().Trim();
-                        if (DateTime.TryParse(dátumSzöveg, out mozgásDátum))
-                            sikeresDátum = true;
-                    }
 
-                    if (sikeresDátum)
-                    {
-                        if (mozgásokKereső.TryGetValue(kulcs, out DateTime eddigiUtolsó))
-                            if (mozgásDátum > eddigiUtolsó)
-                                mozgásokKereső[kulcs] = mozgásDátum;
+                    mozgásokKereső.Add(kulcs, mozgásDátum);
 
-                            else
-                                mozgásokKereső.Add(kulcs, mozgásDátum);
-                    }
                 }
             }
 
