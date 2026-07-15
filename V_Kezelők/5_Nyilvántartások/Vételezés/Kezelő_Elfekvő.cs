@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Villamos_Adatbázis_Funkció;
@@ -47,7 +46,7 @@ namespace Villamos.Kezelők
                                         rekord["Anyag rövid szövege"].ToStrTrim(),
                                         rekord["Raktárhely"].ToStrTrim(),
                                         rekord["Szabadon használható"].ToÉrt_Double(),
-                                        rekord["Szab_felh_érték"].ToÉrt_Double(), // Módosított mezőnév olvasása
+                                        rekord["Szab_felh_érték"].ToÉrt_Double(),
                                         rekord["Sarzs"].ToStrTrim(),
                                         rekord["Utolsó mozgás"].ToÉrt_DaTeTime()
                                     );

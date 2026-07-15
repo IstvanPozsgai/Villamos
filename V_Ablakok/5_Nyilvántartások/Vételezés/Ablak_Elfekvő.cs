@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
-using Villamos.V_MindenEgyéb;
-using Villamos.Villamos_Ablakok.Közös;
-using MyF = Függvénygyűjtemény;
-using MyX = Villamos.MyClosedXML_Excel;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 {
@@ -84,9 +78,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 {
                     string fejlecNev = elsoSor.Cell(i).GetString().Trim();
                     if (!string.IsNullOrEmpty(fejlecNev) && !indexek.ContainsKey(fejlecNev))
-                    {
                         indexek.Add(fejlecNev, i);
-                    }
                 }
             }
             return indexek;
@@ -140,9 +132,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                     bool sikeresDátum = false;
 
                     if (sor.Cell(idxDatum).TryGetValue(out mozgásDátum))
-                    {
                         sikeresDátum = true;
-                    }
+
                     else
                     {
                         string dátumSzöveg = sor.Cell(idxDatum).GetString().Trim();
@@ -153,14 +144,11 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                     if (sikeresDátum)
                     {
                         if (mozgásokKereső.TryGetValue(kulcs, out DateTime eddigiUtolsó))
-                        {
                             if (mozgásDátum > eddigiUtolsó)
                                 mozgásokKereső[kulcs] = mozgásDátum;
-                        }
-                        else
-                        {
-                            mozgásokKereső.Add(kulcs, mozgásDátum);
-                        }
+
+                            else
+                                mozgásokKereső.Add(kulcs, mozgásDátum);
                     }
                 }
             }
@@ -174,11 +162,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 var indexekMB52 = GetFejlecIndexek(ws);
 
                 string[] szuksegesOszlopok = { "Anyag", "Anyag rövid szövege", "Raktárhely", "Szabadon használható", "Szab.felh. érték", "Sarzs" };
+
                 foreach (var oszlop in szuksegesOszlopok)
-                {
                     if (!indexekMB52.ContainsKey(oszlop))
                         throw new HibásBevittAdat($"Az MB52 fájl nem tartalmazza a(z) '{oszlop}' oszlopot!");
-                }
 
                 int idxAnyag = indexekMB52["Anyag"];
                 int idxMegnevezes = indexekMB52["Anyag rövid szövege"];
@@ -202,25 +189,17 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
                     double mennyiség = 0;
                     if (!sor.Cell(idxSzabadon).TryGetValue(out mennyiség))
-                    {
                         double.TryParse(sor.Cell(idxSzabadon).GetString().Trim(), out mennyiség);
-                    }
 
                     double érték = 0;
                     if (!sor.Cell(idxErtek).TryGetValue(out érték))
-                    {
                         double.TryParse(sor.Cell(idxErtek).GetString().Trim(), out érték);
-                    }
 
                     string kulcs = $"{cikkszám}|{sarzs}";
 
                     if (megnevezésekEllenőrző.TryGetValue(kulcs, out string mentettMegn))
-                    {
                         if (!string.Equals(mentettMegn, megnevezés, StringComparison.OrdinalIgnoreCase))
-                        {
                             HibaNapló.Log($"Figyelmeztetés: Eltérő megnevezés a(z) {kulcs} kulcshoz. MB51: '{mentettMegn}', MB52: '{megnevezés}'", "Ablak_Elfekvő", "", "", 0);
-                        }
-                    }
 
                     DateTime utolsóMozgásDatuma = new DateTime(1900, 1, 1);
                     if (mozgásokKereső.TryGetValue(kulcs, out DateTime megtaláltDátum))
@@ -292,7 +271,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             {
                 sfd.Title = "Elfekvő készlet mentése Excel fájlba";
                 sfd.Filter = "Excel fájlok |*.xlsx";
-                sfd.FileName = $"Elfekvo_Keszlet_{DateTime.Now:yyyyMMdd}";
+                sfd.FileName = $"Elfekvő_Készlet_{DateTime.Now:yyyyMMdd_HHmm}";
 
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {

@@ -1,7 +1,6 @@
 ﻿using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
@@ -10,6 +9,14 @@ namespace Villamos.Kezelők
 {
     public class Excel_Elfekvő_Export
     {
+        private readonly DateTime MA = DateTime.Today;
+        private readonly DateTime ALAP_DATUM = new DateTime(1900, 1, 1);
+
+        #region Publikus Export Metódusok
+
+        /// <summary>
+        /// Független hívási pont: adatbázisból olvassa ki az adatokat, majd exportál.
+        /// </summary>
         public void Export(string fájlnév)
         {
             try
@@ -18,9 +25,7 @@ namespace Villamos.Kezelők
                 List<Adat_Elfekvő> adatok = kézElfekvő.Lista_Adatok();
 
                 if (adatok == null || adatok.Count == 0)
-                {
                     throw new HibásBevittAdat("Nincs exportálható adat az adatbázisban!");
-                }
 
                 Export(adatok, fájlnév);
             }
@@ -35,6 +40,9 @@ namespace Villamos.Kezelők
             }
         }
 
+        /// <summary>
+        /// Fő exportáló motor: egy meglévő memórialistát dolgoz fel és ír ki Excelbe.
+        /// </summary>
         public void Export(List<Adat_Elfekvő> adatok, string fájlnév)
         {
             if (adatok == null || adatok.Count == 0) return;
@@ -43,143 +51,16 @@ namespace Villamos.Kezelők
             {
                 using (var workbook = new XLWorkbook())
                 {
-                    // Az elfekvő készlet küszöbértéke (1 évnél régebbi mozgások)
-                    DateTime elfekvoKuszob = DateTime.Today.AddYears(-1);
+                    // Dashboard (Összesítő) generálása
+                    KészítsDashboard(workbook, adatok);
 
-                    var raktarCsoportok = adatok.GroupBy(a => a.Raktárhely).OrderBy(g => g.Key).ToList();
+                    // Részletes munkalapok dinamikus létrehozása kizárólag Raktárhely alapján
+                    KészítsRészletesLapokat(workbook, adatok);
 
-                    // ==========================================
-                    // 1. LÉPÉS: "Összesítés" munkalap kiértékeléssel
-                    // ==========================================
-                    var wsOsszesito = workbook.Worksheets.Add("Összesítés");
-
-                    // Fejlécek beállítása az elvárt kiértékelési oszlopokkal
-                    wsOsszesito.Cell(1, 1).Value = "Raktárhely";
-                    wsOsszesito.Cell(1, 2).Value = "Cikkszámok száma";
-                    wsOsszesito.Cell(1, 3).Value = "Készlet érték összesen";
-                    wsOsszesito.Cell(1, 4).Value = "Darabszám összesen";
-                    wsOsszesito.Cell(1, 5).Value = "Elfekvő készlet érték";
-                    wsOsszesito.Cell(1, 6).Value = "Elfekvő százalékos értéke";
-                    wsOsszesito.Cell(1, 7).Value = "Legrégebbi utolsó mozgás";
-                    wsOsszesito.Cell(1, 8).Value = "Legújabb utolsó mozgás";
-
-                    int osszSorIndex = 2;
-                    foreach (var csoport in raktarCsoportok)
-                    {
-                        string raktarhely = string.IsNullOrWhiteSpace(csoport.Key) ? "Ismeretlen" : csoport.Key;
-                        int cikkszamokSzama = csoport.Count();
-                        double keszletErtek = csoport.Sum(a => a.Szab_felh_érték);
-                        double darabszam = csoport.Sum(a => a.Szabadon_használható);
-
-                        // Elfekvő számítás: ha régebbi mint 1 év, VAGY ha 1900.01.01 (sosem mozdult meg)
-                        double elfekvoErtek = csoport
-                            .Where(a => a.Utolsó_mozgás <= elfekvoKuszob || a.Utolsó_mozgás == new DateTime(1900, 1, 1))
-                            .Sum(a => a.Szab_felh_érték);
-
-                        double elfekvoSzazalek = keszletErtek > 0 ? (elfekvoErtek / keszletErtek) : 0;
-
-                        // Dátum statisztikák (kihagyva az alapértelmezett 1900-as dátumokat a torzítás elkerülésére)
-                        var valosMozgasok = csoport.Select(a => a.Utolsó_mozgás).Where(d => d > new DateTime(1900, 1, 1)).ToList();
-                        DateTime legregebbi = valosMozgasok.Any() ? valosMozgasok.Min() : new DateTime(1900, 1, 1);
-                        DateTime legujabb = valosMozgasok.Any() ? valosMozgasok.Max() : new DateTime(1900, 1, 1);
-
-                        wsOsszesito.Cell(osszSorIndex, 1).Value = raktarhely;
-                        wsOsszesito.Cell(osszSorIndex, 2).Value = cikkszamokSzama;
-                        wsOsszesito.Cell(osszSorIndex, 3).Value = keszletErtek;
-                        wsOsszesito.Cell(osszSorIndex, 4).Value = darabszam;
-                        wsOsszesito.Cell(osszSorIndex, 5).Value = elfekvoErtek;
-                        wsOsszesito.Cell(osszSorIndex, 6).Value = elfekvoSzazalek;
-                        wsOsszesito.Cell(osszSorIndex, 7).Value = legregebbi;
-                        wsOsszesito.Cell(osszSorIndex, 8).Value = legujabb;
-
-                        osszSorIndex++;
-                    }
-
-                    // GLOBÁLIS ÖSSZESÍTŐ SOR (II. Szakszolgálat szinten)
-                    double globalKeszletErtek = adatok.Sum(a => a.Szab_felh_érték);
-                    double globalElfekvoErtek = adatok
-                        .Where(a => a.Utolsó_mozgás <= elfekvoKuszob || a.Utolsó_mozgás == new DateTime(1900, 1, 1))
-                        .Sum(a => a.Szab_felh_érték);
-
-                    var globalValosMozgasok = adatok.Select(a => a.Utolsó_mozgás).Where(d => d > new DateTime(1900, 1, 1)).ToList();
-
-                    var globalSor = wsOsszesito.Row(osszSorIndex);
-                    globalSor.Cell(1).Value = "II. Szakszolgálat összesen";
-                    globalSor.Cell(2).Value = adatok.Count;
-                    globalSor.Cell(3).Value = globalKeszletErtek;
-                    globalSor.Cell(4).Value = adatok.Sum(a => a.Szabadon_használható);
-                    globalSor.Cell(5).Value = globalElfekvoErtek;
-                    globalSor.Cell(6).Value = globalKeszletErtek > 0 ? (globalElfekvoErtek / globalKeszletErtek) : 0;
-                    globalSor.Cell(7).Value = globalValosMozgasok.Any() ? globalValosMozgasok.Min() : new DateTime(1900, 1, 1);
-                    globalSor.Cell(8).Value = globalValosMozgasok.Any() ? globalValosMozgasok.Max() : new DateTime(1900, 1, 1);
-
-                    // Összesen sor kiemelése félkövér stílussal és alsó dupla vonallal
-                    globalSor.Style.Font.Bold = true;
-                    globalSor.Style.Border.BottomBorder = XLBorderStyleValues.Double;
-                    globalSor.Style.Border.TopBorder = XLBorderStyleValues.Thin;
-
-                    // Összesítő lap formázása oszlopszinten
-                    FormazzFejlecet(wsOsszesito, 8);
-                    wsOsszesito.Column(2).Style.NumberFormat.Format = "#,##0";
-                    wsOsszesito.Column(3).Style.NumberFormat.Format = "#,##0\" Ft\"";
-                    wsOsszesito.Column(4).Style.NumberFormat.Format = "#,##0.000";
-                    wsOsszesito.Column(5).Style.NumberFormat.Format = "#,##0\" Ft\"";
-                    wsOsszesito.Column(6).Style.NumberFormat.Format = "0.0%";
-                    wsOsszesito.Column(7).Style.NumberFormat.Format = "yyyy.MM.dd";
-                    wsOsszesito.Column(8).Style.NumberFormat.Format = "yyyy.MM.dd";
-                    wsOsszesito.Columns(1, 8).AdjustToContents();
-
-                    // ==========================================
-                    // 2. LÉPÉS: Dinamikus Raktárhely munkalapok
-                    // ==========================================
-                    foreach (var csoport in raktarCsoportok)
-                    {
-                        string lapNev = string.IsNullOrWhiteSpace(csoport.Key) ? "Ismeretlen" : csoport.Key;
-                        lapNev = string.Concat(lapNev.Split(Path.GetInvalidFileNameChars())).Trim();
-                        if (lapNev.Length > 31) lapNev = lapNev.Substring(0, 31);
-
-                        var wsRaktar = workbook.Worksheets.Add(lapNev);
-
-                        wsRaktar.Cell(1, 1).Value = "Anyag";
-                        wsRaktar.Cell(1, 2).Value = "Anyag rövid szövege";
-                        wsRaktar.Cell(1, 3).Value = "Raktárhely";
-                        wsRaktar.Cell(1, 4).Value = "Sarzs";
-                        wsRaktar.Cell(1, 5).Value = "Szabadon használható";
-                        wsRaktar.Cell(1, 6).Value = "Szab.felh. érték";
-                        wsRaktar.Cell(1, 7).Value = "Utolsó mozgás";
-
-                        int raktarSorIndex = 2;
-                        foreach (var elem in csoport)
-                        {
-                            var cellaAnyag = wsRaktar.Cell(raktarSorIndex, 1);
-                            cellaAnyag.Style.NumberFormat.Format = "@";
-                            cellaAnyag.Value = elem.Anyag ?? "";
-
-                            wsRaktar.Cell(raktarSorIndex, 2).Value = elem.Anyag_rövid_szövege ?? "";
-                            wsRaktar.Cell(raktarSorIndex, 3).Value = elem.Raktárhely ?? "";
-
-                            var cellaSarzs = wsRaktar.Cell(raktarSorIndex, 4);
-                            cellaSarzs.Style.NumberFormat.Format = "@";
-                            cellaSarzs.Value = elem.Sarzs ?? "";
-
-                            wsRaktar.Cell(raktarSorIndex, 5).Value = elem.Szabadon_használható;
-                            wsRaktar.Cell(raktarSorIndex, 6).Value = elem.Szab_felh_érték;
-                            wsRaktar.Cell(raktarSorIndex, 7).Value = elem.Utolsó_mozgás;
-
-                            raktarSorIndex++;
-                        }
-
-                        FormazzFejlecet(wsRaktar, 7);
-                        wsRaktar.Column(1).Style.NumberFormat.Format = "@";
-                        wsRaktar.Column(4).Style.NumberFormat.Format = "@";
-                        wsRaktar.Column(5).Style.NumberFormat.Format = "#,##0.000";
-                        wsRaktar.Column(6).Style.NumberFormat.Format = "#,##0\" Ft\"";
-                        wsRaktar.Column(7).Style.NumberFormat.Format = "yyyy.MM.dd";
-
-                        wsRaktar.Columns(1, 7).AdjustToContents();
-                    }
-
+                    // Fájl mentése
                     workbook.SaveAs(fájlnév);
+
+                    Függvénygyűjtemény.Megnyitás(fájlnév);
                 }
             }
             catch (Exception ex)
@@ -189,17 +70,315 @@ namespace Villamos.Kezelők
             }
         }
 
-        private void FormazzFejlecet(IXLWorksheet ws, int oszlopSzam)
-        {
-            var fejlecTartomany = ws.Range(1, 1, 1, oszlopSzam);
-            fejlecTartomany.Style.Font.Bold = true;
-            fejlecTartomany.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-            fejlecTartomany.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-            fejlecTartomany.Style.Fill.BackgroundColor = XLColor.LightGray;
+        #endregion
 
-            ws.AutoFilter.Clear();
-            fejlecTartomany.SetAutoFilter();
-            ws.SheetView.FreezeRows(1);
+        #region Munkalap Generáló Metódusok
+
+        private void KészítsDashboard(IXLWorkbook workbook, List<Adat_Elfekvő> adatok)
+        {
+            var ws = workbook.Worksheets.Add("Összesítés");
+            int sor = 1;
+
+            // Készítés dátuma a B1 és C1 cellákba
+            ws.Cell(sor, 2).Value = "Készítés dátuma:";
+            ws.Cell(sor, 2).Style.Font.Bold = true;
+            ws.Cell(sor, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+
+            ws.Cell(sor, 3).Value = MA;
+            ws.Cell(sor, 3).Style.NumberFormat.Format = "yyyy.MM.dd";
+            ws.Cell(sor, 3).Style.Font.Bold = true;
+            sor += 3; // Térköz az összesítő blokkok előtt
+
+            KészítsMintaÖsszesítőBlokkokat(ws, adatok, ref sor);
+
+            sor += 3; // Térköz
+
+            // Bővített, részletes Dashboard mátrix
+            KészítsRészletesMátrixot(ws, adatok, ref sor);
+
+            sor += 3; // Térköz
+
+            // Diagramok adatforrásának előkészítése
+            KészítsDiagramAdatforrást(ws, adatok, ref sor);
+
+            // Lap egységes oszlopszélesség igazítása
+            ws.Columns().AdjustToContents();
+
+
+            foreach (var col in ws.ColumnsUsed())
+                col.Width += 3.0;
+
+            ws.Column("D").Width = Math.Max(ws.Column("D").Width, 20);
         }
+
+        private void KészítsRészletesLapokat(IXLWorkbook workbook, List<Adat_Elfekvő> adatok)
+        {
+            // Csoportosítás kizárólag Raktárhely alapján
+            var raktarCsoportok = adatok.GroupBy(a => a.Raktárhely).OrderBy(g => g.Key).ToList();
+
+            foreach (var csoport in raktarCsoportok)
+            {
+                string rNev = string.IsNullOrWhiteSpace(csoport.Key) ? "Ismeretlen" : csoport.Key;
+
+                // Lapnév tisztítása
+                string lapNév = rNev.Replace("[", "").Replace("]", "").Replace("*", "").Replace("?", "").Replace(":", "").Replace("\\", "").Replace("/", "");
+                if (lapNév.Length > 31) lapNév = lapNév.Substring(0, 31);
+
+                // Névütközés elkerülése, ha véletlenül két raktárhely neve levágva megegyezne
+                int counter = 1;
+                string eredetiNév = lapNév;
+                while (workbook.Worksheets.Contains(lapNév))
+                {
+                    lapNév = eredetiNév.Substring(0, Math.Min(eredetiNév.Length, 28)) + "_" + counter;
+                    counter++;
+                }
+
+                KészítsEgyRészletesLapot(workbook, lapNév, csoport);
+            }
+        }
+
+        private void KészítsEgyRészletesLapot(IXLWorkbook workbook, string lapNév, IEnumerable<Adat_Elfekvő> elemek)
+        {
+            var ws = workbook.Worksheets.Add(lapNév);
+
+            // Fejléc beállítása 
+            ws.Cell(1, 1).Value = "Anyag";
+            ws.Cell(1, 2).Value = "Anyag rövid szövege";
+            ws.Cell(1, 3).Value = "Raktárhely";
+            ws.Cell(1, 4).Value = "Sarzs";
+            ws.Cell(1, 5).Value = "Szabadon használható";
+            ws.Cell(1, 6).Value = "Szab.felh. érték";
+            ws.Cell(1, 7).Value = "Utolsó mozgás";
+
+            FormázFejlécet(ws, 1, 7);
+
+            int dSor = 2;
+            foreach (var elem in elemek)
+            {
+                ws.Cell(dSor, 1).Value = elem.Anyag ?? "";
+                ws.Cell(dSor, 1).Style.NumberFormat.Format = "@"; // Nullák megtartása
+
+                ws.Cell(dSor, 2).Value = elem.Anyag_rövid_szövege ?? "";
+                ws.Cell(dSor, 3).Value = elem.Raktárhely ?? "";
+
+                ws.Cell(dSor, 4).Value = elem.Sarzs ?? "";
+                ws.Cell(dSor, 4).Style.NumberFormat.Format = "@";
+
+                // Mennyiség egész számként, tizedesek nélkül
+                ws.Cell(dSor, 5).Value = elem.Szabadon_használható;
+                ws.Cell(dSor, 5).Style.NumberFormat.Format = "#,##0";
+
+                ws.Cell(dSor, 6).Value = elem.Szab_felh_érték;
+                ws.Cell(dSor, 6).Style.NumberFormat.Format = "#,##0 Ft";
+
+                ws.Cell(dSor, 7).Value = elem.Utolsó_mozgás;
+                ws.Cell(dSor, 7).Style.NumberFormat.Format = "yyyy.MM.dd";
+
+                dSor++;
+            }
+
+            ws.Columns().AdjustToContents();
+        }
+
+        #endregion
+
+        #region Üzleti Logika és Számítási Metódusok
+
+        private void KészítsMintaÖsszesítőBlokkokat(IXLWorksheet ws, List<Adat_Elfekvő> adatok, ref int sor)
+        {
+            var raktarCsoportok = adatok.GroupBy(a => a.Raktárhely).OrderBy(g => g.Key).ToList();
+
+            foreach (var rh in raktarCsoportok)
+            {
+                string rNév = string.IsNullOrWhiteSpace(rh.Key) ? "Ismeretlen Raktárhely" : rh.Key;
+
+                ws.Cell(sor, 1).Value = rNév;
+                ws.Cell(sor, 1).Style.Font.Bold = true;
+                sor++;
+
+                ws.Cell(sor, 1).Value = "Készlet érték";
+                ws.Cell(sor, 2).Value = "Elfekvő készlet érték";
+                ws.Cell(sor, 3).Value = "Elfekvő százalékos értéke";
+                ws.Range(sor, 1, sor, 3).Style.Font.Bold = true;
+                ws.Range(sor, 1, sor, 3).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                sor++;
+
+                double keszletErtek = rh.Sum(a => a.Szab_felh_érték);
+                double elfekvoErtek = SzámolElfekvőÉrték(rh, 365);
+                double elfekvoSzazalek = keszletErtek > 0 ? (elfekvoErtek / keszletErtek) : 0;
+
+                ws.Cell(sor, 1).Value = keszletErtek;
+                ws.Cell(sor, 1).Style.NumberFormat.Format = "#,##0 Ft";
+
+                ws.Cell(sor, 2).Value = elfekvoErtek;
+                ws.Cell(sor, 2).Style.NumberFormat.Format = "#,##0 Ft";
+
+                ws.Cell(sor, 3).Value = elfekvoSzazalek;
+                ws.Cell(sor, 3).Style.NumberFormat.Format = "0.00%";
+
+                sor += 3;
+            }
+
+            // Globális (Teljes) összesítő blokk
+            ws.Cell(sor, 1).Value = "II. Szakszolgálat összesen";
+            ws.Cell(sor, 1).Style.Font.Bold = true;
+            sor++;
+
+            ws.Cell(sor, 1).Value = "Készlet érték";
+            ws.Cell(sor, 2).Value = "Elfekvő készlet érték";
+            ws.Cell(sor, 3).Value = "Elfekvő százalékos értéke";
+            ws.Range(sor, 1, sor, 3).Style.Font.Bold = true;
+            ws.Range(sor, 1, sor, 3).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+            sor++;
+
+            double globalKeszlet = adatok.Sum(a => a.Szab_felh_érték);
+            double globalElfekvo = SzámolElfekvőÉrték(adatok, 365);
+            double globalSzazalek = globalKeszlet > 0 ? (globalElfekvo / globalKeszlet) : 0;
+
+            ws.Cell(sor, 1).Value = globalKeszlet;
+            ws.Cell(sor, 1).Style.NumberFormat.Format = "#,##0 Ft";
+            ws.Cell(sor, 2).Value = globalElfekvo;
+            ws.Cell(sor, 2).Style.NumberFormat.Format = "#,##0 Ft";
+            ws.Cell(sor, 3).Value = globalSzazalek;
+            ws.Cell(sor, 3).Style.NumberFormat.Format = "0.00%";
+
+            ws.Range(sor, 1, sor, 3).Style.Font.Bold = true;
+            ws.Range(sor, 1, sor, 3).Style.Fill.BackgroundColor = XLColor.LightYellow;
+            sor++;
+        }
+
+        private void KészítsRészletesMátrixot(IXLWorksheet ws, List<Adat_Elfekvő> adatok, ref int sor)
+        {
+            ws.Cell(sor, 1).Value = "BŐVÍTETT ÖSSZESÍTŐ MÁTRIX";
+            ws.Cell(sor, 1).Style.Font.Bold = true;
+            ws.Cell(sor, 1).Style.Font.FontSize = 14;
+            sor += 2;
+
+            ws.Cell(sor, 1).Value = "Raktárhely";
+            ws.Cell(sor, 2).Value = "Cikkszámok száma";
+            ws.Cell(sor, 3).Value = "Összes készlet (db)";
+            ws.Cell(sor, 4).Value = "Készletérték";
+            ws.Cell(sor, 5).Value = "Átlagos cikkérték";
+            ws.Cell(sor, 6).Value = "Legrégebbi mozgás";
+            ws.Cell(sor, 7).Value = "Legújabb mozgás";
+            ws.Cell(sor, 8).Value = "30 napnál régebbi";
+            ws.Cell(sor, 9).Value = "90 napnál régebbi";
+            ws.Cell(sor, 10).Value = "180 napnál régebbi";
+            ws.Cell(sor, 11).Value = "365 napnál régebbi";
+
+            FormázFejlécet(ws, sor, 11);
+            sor++;
+
+            var raktarCsoportok = adatok.GroupBy(a => a.Raktárhely).OrderBy(g => g.Key).ToList();
+
+            foreach (var g in raktarCsoportok)
+            {
+                int cikkSzám = g.Count();
+                double osszKeszlet = g.Sum(a => a.Szabadon_használható);
+                double keszletErtek = g.Sum(a => a.Szab_felh_érték);
+                double atlagErtek = cikkSzám > 0 ? (keszletErtek / cikkSzám) : 0;
+
+                var valosMozgasok = g.Where(a => a.Utolsó_mozgás > ALAP_DATUM).Select(a => a.Utolsó_mozgás).ToList();
+                DateTime legrégebbi = valosMozgasok.Any() ? valosMozgasok.Min() : ALAP_DATUM;
+                DateTime legújabb = valosMozgasok.Any() ? valosMozgasok.Max() : ALAP_DATUM;
+
+                double r30 = SzámolElfekvőÉrték(g, 30);
+                double r90 = SzámolElfekvőÉrték(g, 90);
+                double r180 = SzámolElfekvőÉrték(g, 180);
+                double r365 = SzámolElfekvőÉrték(g, 365);
+
+                ws.Cell(sor, 1).Value = string.IsNullOrWhiteSpace(g.Key) ? "Ismeretlen" : g.Key;
+                ws.Cell(sor, 2).Value = cikkSzám;
+                ws.Cell(sor, 3).Value = osszKeszlet;
+                ws.Cell(sor, 4).Value = keszletErtek;
+                ws.Cell(sor, 5).Value = atlagErtek;
+
+                ws.Cell(sor, 6).Value = legrégebbi;
+                ws.Cell(sor, 7).Value = legújabb;
+
+                ws.Cell(sor, 8).Value = r30;
+                ws.Cell(sor, 9).Value = r90;
+                ws.Cell(sor, 10).Value = r180;
+                ws.Cell(sor, 11).Value = r365;
+
+                FormázAdatsort(ws, sor);
+                sor++;
+            }
+        }
+
+        private void KészítsDiagramAdatforrást(IXLWorksheet ws, List<Adat_Elfekvő> adatok, ref int sor)
+        {
+            ws.Cell(sor, 1).Value = "--- DIAGRAM ADATFORRÁS ---";
+            ws.Cell(sor, 1).Style.Font.Italic = true;
+            ws.Cell(sor, 1).Style.Font.FontColor = XLColor.DimGray;
+            sor += 2;
+
+            ws.Cell(sor, 1).Value = "Raktárhely";
+            ws.Cell(sor, 2).Value = "Teljes Készletérték";
+            ws.Cell(sor, 3).Value = "365 napos (Elfekvő) érték";
+            FormázFejlécet(ws, sor, 3);
+            sor++;
+
+            var raktarCsoportok = adatok.GroupBy(a => a.Raktárhely).OrderBy(g => g.Key).ToList();
+            foreach (var rh in raktarCsoportok)
+            {
+                ws.Cell(sor, 1).Value = string.IsNullOrWhiteSpace(rh.Key) ? "Ismeretlen" : rh.Key;
+                ws.Cell(sor, 2).Value = rh.Sum(a => a.Szab_felh_érték);
+                ws.Cell(sor, 3).Value = SzámolElfekvőÉrték(rh, 365);
+
+                ws.Cell(sor, 2).Style.NumberFormat.Format = "#,##0 Ft";
+                ws.Cell(sor, 3).Style.NumberFormat.Format = "#,##0 Ft";
+                sor++;
+            }
+        }
+
+        #endregion
+
+        #region Segédmetódusok és Formázás
+
+        private double SzámolElfekvőÉrték(IEnumerable<Adat_Elfekvő> lista, int napokKuszob)
+        {
+            return lista.Where(a => ÉletkorNapokban(a.Utolsó_mozgás) > napokKuszob)
+                        .Sum(a => a.Szab_felh_érték);
+        }
+
+        private double ÉletkorNapokban(DateTime utolsóMozgás)
+        {
+            if (utolsóMozgás <= ALAP_DATUM) return 9999;
+            return (MA - utolsóMozgás).TotalDays;
+        }
+
+        private void FormázFejlécet(IXLWorksheet ws, int sor, int maxOszlop)
+        {
+            var range = ws.Range(sor, 1, sor, maxOszlop);
+            range.Style.Font.Bold = true;
+            range.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            range.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+            range.Style.Fill.BackgroundColor = XLColor.LightGray;
+
+            // Csak az első soros fejlécekre teszünk szűrőt
+            if (sor == 1)
+            {
+                ws.AutoFilter.Clear();
+                range.SetAutoFilter();
+                ws.SheetView.FreezeRows(1);
+            }
+        }
+
+        private void FormázAdatsort(IXLWorksheet ws, int sor)
+        {
+            ws.Cell(sor, 2).Style.NumberFormat.Format = "#,##0";
+            ws.Cell(sor, 3).Style.NumberFormat.Format = "#,##0";
+            ws.Cell(sor, 4).Style.NumberFormat.Format = "#,##0 Ft";
+            ws.Cell(sor, 5).Style.NumberFormat.Format = "#,##0 Ft";
+            ws.Cell(sor, 6).Style.NumberFormat.Format = "yyyy.MM.dd";
+            ws.Cell(sor, 7).Style.NumberFormat.Format = "yyyy.MM.dd";
+            ws.Cell(sor, 8).Style.NumberFormat.Format = "#,##0 Ft";
+            ws.Cell(sor, 9).Style.NumberFormat.Format = "#,##0 Ft";
+            ws.Cell(sor, 10).Style.NumberFormat.Format = "#,##0 Ft";
+            ws.Cell(sor, 11).Style.NumberFormat.Format = "#,##0 Ft";
+        }
+
+        #endregion
     }
 }
