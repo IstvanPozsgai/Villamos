@@ -334,6 +334,12 @@
     <Compile Include="V_Ablakok\5_Nyilvántartások\Vételezés\Ablak_Anyag_Karbantartás.Designer.cs">
       <DependentUpon>Ablak_Anyag_Karbantartás.cs</DependentUpon>
     </Compile>
+    <Compile Include="V_Ablakok\5_Nyilvántartások\Vételezés\Ablak_Elfekvő.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V_Ablakok\5_Nyilvántartások\Vételezés\Ablak_Elfekvő.Designer.cs">
+      <DependentUpon>Ablak_Elfekvő.cs</DependentUpon>
+    </Compile>
     <Compile Include="V_Ablakok\5_Nyilvántartások\Vételezés\Ablak_Készlet.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -389,10 +395,12 @@
     <Compile Include="V_Ablakok\7_Kiadási_adatok\Főkönyv\list.cs" />
     <Compile Include="V_Ablakok\7_Kiadási_adatok\Állomány\Vendég_Járművek_Karbantartása.cs" />
     <Compile Include="V_Adatbázis\Adatbázis_Anyagtörzs.cs" />
+    <Compile Include="V_Adatbázis\Adatbázis_Elfekvő.cs" />
     <Compile Include="V_Adatszerkezet\1_Bejelentkezés\Adat_Bejelentkezés_Fordító.cs" />
     <Compile Include="V_Adatszerkezet\5_Nyilvántartások\Akkumulátor\Adat_Akkumulátor_Mérés.cs" />
     <Compile Include="V_Adatszerkezet\5_Nyilvántartások\Akkumulátor\Adat_Akkumulátor_Napló.cs" />
     <Compile Include="V_Adatszerkezet\5_Nyilvántartások\Vételezés\Adat_Anyagok.cs" />
+    <Compile Include="V_Adatszerkezet\5_Nyilvántartások\Vételezés\Adat_Elfekvő.cs" />
     <Compile Include="V_Adatszerkezet\Kérdésesek\Adat_Beallitas_Diagram.cs" />
     <Compile Include="V_Adatszerkezet\8_Gondnokság\Behajtási\Adat_Behajtási_Engedélyek.cs" />
     <Compile Include="V_Adatszerkezet\8_Gondnokság\Behajtási\Adat_Behajtás_Behajtási.cs" />
@@ -579,6 +587,7 @@
     <Compile Include="V_Adatszerkezet\Kérdésesek\Beállítás_Nyomtatás.cs" />
     <Compile Include="V_Adatszerkezet\Kérdésesek\Sql_Működés.cs" />
     <Compile Include="V_Függvények\CsvTo.cs" />
+    <Compile Include="V_Függvények\Excel_Elfekvő_Export.cs" />
     <Compile Include="V_Függvények\HtmlToDataTable.cs" />
     <Compile Include="V_Függvények\Oszlopneve.cs" />
     <Compile Include="V_Input_Forms\DataGridViewHelper.cs" />
@@ -596,6 +605,7 @@
     <Compile Include="V_Kezelők\5_Nyilvántartások\Vételezés\Kezelő_AnyagTörzs.cs" />
     <Compile Include="SqL_Kezelők\Sql_Kezelő_Áttöltés.cs" />
     <Compile Include="V_Kezelők\1_Bejelentkezés\Kezelő_Belépés_MindenMásol.cs" />
+    <Compile Include="V_Kezelők\5_Nyilvántartások\Vételezés\Kezelő_Elfekvő.cs" />
     <Compile Include="V_Kezelők\6_ Karbantartás\CAF_Ütemezés\Kezelő_CAF_KM_Attekintes.cs" />
     <Compile Include="V_Kezelők\2_Beállítások\Ciklus\Kezelő_Ciklus_Sorrend.cs" />
     <Compile Include="V_Kezelők\5_Nyilvántartások\Eszterga_karbantartás\Kezelő_Eszterga_Műveletek_Napló.cs" />
@@ -1792,6 +1802,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Nyilvántartások\Vételezés\Ablak_Anyag_Karbantartás.resx">
       <DependentUpon>Ablak_Anyag_Karbantartás.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V_Ablakok\5_Nyilvántartások\Vételezés\Ablak_Elfekvő.resx">
+      <DependentUpon>Ablak_Elfekvő.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="V_Ablakok\5_Nyilvántartások\Vételezés\Ablak_Készlet.resx">
       <DependentUpon>Ablak_Készlet.cs</DependentUpon>

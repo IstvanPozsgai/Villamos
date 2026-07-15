@@ -45,6 +45,8 @@
             this.BtnSAP = new System.Windows.Forms.Button();
             this.Képnéző = new System.Windows.Forms.Button();
             this.RaktárKészlet = new System.Windows.Forms.Button();
+            this.Btn_Frissit = new System.Windows.Forms.Button();
+            this.Btn_Elfekvő = new System.Windows.Forms.Button();
             this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.TáblaFelső = new Zuby.ADGV.AdvancedDataGridView();
             this.Kereső = new System.Windows.Forms.TextBox();
@@ -52,7 +54,6 @@
             this.Összesen = new System.Windows.Forms.Label();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.Btn_Frissit = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TáblaFelső)).BeginInit();
@@ -220,6 +221,31 @@
             this.RaktárKészlet.UseVisualStyleBackColor = true;
             this.RaktárKészlet.Click += new System.EventHandler(this.RaktárKészlet_Click);
             // 
+            // Btn_Frissit
+            // 
+            this.Btn_Frissit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Btn_Frissit.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.Btn_Frissit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Frissit.Location = new System.Drawing.Point(1111, 275);
+            this.Btn_Frissit.Name = "Btn_Frissit";
+            this.Btn_Frissit.Size = new System.Drawing.Size(45, 45);
+            this.Btn_Frissit.TabIndex = 201;
+            this.toolTip1.SetToolTip(this.Btn_Frissit, "Frissíti a táblázatot");
+            this.Btn_Frissit.UseVisualStyleBackColor = true;
+            this.Btn_Frissit.Click += new System.EventHandler(this.Btn_Frissit_Click);
+            // 
+            // Btn_Elfekvő
+            // 
+            this.Btn_Elfekvő.BackgroundImage = global::Villamos.Properties.Resources.process_accept;
+            this.Btn_Elfekvő.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Elfekvő.Location = new System.Drawing.Point(453, 3);
+            this.Btn_Elfekvő.Name = "Btn_Elfekvő";
+            this.Btn_Elfekvő.Size = new System.Drawing.Size(44, 45);
+            this.Btn_Elfekvő.TabIndex = 203;
+            this.toolTip1.SetToolTip(this.Btn_Elfekvő, "Raktárkészlet frissítés");
+            this.Btn_Elfekvő.UseVisualStyleBackColor = true;
+            this.Btn_Elfekvő.Click += new System.EventHandler(this.Btn_Elfekvő_Click);
+            // 
             // Tábla
             // 
             this.Tábla.AllowUserToAddRows = false;
@@ -300,6 +326,7 @@
             this.tableLayoutPanel1.Controls.Add(this.AnyagMódosítás, 11, 0);
             this.tableLayoutPanel1.Controls.Add(this.BtnSAP, 10, 0);
             this.tableLayoutPanel1.Controls.Add(this.RaktárKészlet, 7, 0);
+            this.tableLayoutPanel1.Controls.Add(this.Btn_Elfekvő, 9, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(354, 7);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
@@ -333,19 +360,6 @@
             // 
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
-            // 
-            // Btn_Frissit
-            // 
-            this.Btn_Frissit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Btn_Frissit.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.Btn_Frissit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_Frissit.Location = new System.Drawing.Point(1111, 275);
-            this.Btn_Frissit.Name = "Btn_Frissit";
-            this.Btn_Frissit.Size = new System.Drawing.Size(45, 45);
-            this.Btn_Frissit.TabIndex = 201;
-            this.toolTip1.SetToolTip(this.Btn_Frissit, "Frissíti a táblázatot");
-            this.Btn_Frissit.UseVisualStyleBackColor = true;
-            this.Btn_Frissit.Click += new System.EventHandler(this.Btn_Frissit_Click);
             // 
             // Ablak_Vételezés
             // 
@@ -404,5 +418,6 @@
         private System.Windows.Forms.Timer timer1;
         internal System.Windows.Forms.Button RaktárKészlet;
         internal System.Windows.Forms.Button Btn_Frissit;
+        internal System.Windows.Forms.Button Btn_Elfekvő;
     }
 }

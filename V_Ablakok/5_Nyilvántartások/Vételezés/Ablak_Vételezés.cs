@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using Villamos.V_Ablakok._4_Nyilvántartások.Vételezés;
 using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok.Közös;
 using MyF = Függvénygyűjtemény;
@@ -779,8 +780,28 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         {
             Új_Ablak_Készlet = null;
         }
+
         #endregion
 
+        Ablak_Elfekvő Új_Ablak_Elfekvő;
 
+        private void Btn_Elfekvő_Click(object sender, EventArgs e)
+        {
+            if (Új_Ablak_Elfekvő == null)
+            {
+                Új_Ablak_Elfekvő = new Ablak_Elfekvő();
+                Új_Ablak_Elfekvő.FormClosed += Új_Ablak_Elfekvő_FormClosed;
+                Új_Ablak_Elfekvő.Show();
+            }
+            else
+            {
+                Új_Ablak_Elfekvő.Activate();
+                Új_Ablak_Elfekvő.WindowState = FormWindowState.Maximized;
+            }
+        }
+        private void Új_Ablak_Elfekvő_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Új_Ablak_Elfekvő = null;
+        }
     }
 }
