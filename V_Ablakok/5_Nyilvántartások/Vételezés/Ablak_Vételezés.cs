@@ -65,7 +65,6 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             AdatokKész = KézRezsi.Lista_Adatok(CmbTelephely.Text.Trim());
             AdatokRaktár = KézRaktár.Lista_Adatok();
             Raktárhely = KézSzolgálattelepei.Lista_Adatok().Where(a => a.Telephelynév == CmbTelephely.Text.Trim()).Select(a => a.Raktár).FirstOrDefault() ?? "";
-            TáblaÍrás();
         }
 
         private void Ablak_Vételezés_Load(object sender, EventArgs e)
@@ -207,6 +206,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
 
         #region Kereső Tábla
+
+        private void Btn_Frissit_Click(object sender, EventArgs e)
+        {
+            TáblaÍrás();
+        }
+
         private void TáblaÍrás()
         {
             Tábla.CleanFilterAndSort();
@@ -224,10 +229,41 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
         {
             try
             {
+                Holtart.Be(1000);
+                // 1. Keresőszavak és UI/indexelés optimalizálás indítása
                 Keresőszavak = Kereső.Text.ToLower().Split(' ');
                 AdatTábla.Clear();
+                AdatTábla.BeginLoadData(); // Kikapcsolja a belső indexelést a feltöltés idejére
+
+                // Változók előre tisztítása a ciklus előtt
+                string aktualisRaktarhely = Raktárhely.Trim();
+
+                // 2. Gyorsítótárak (Dictionary-k) felépítése a ciklus ELŐTT (Egyszeri futás)
+
+                // SAJÁT RAKTÁR: Kulcs = Cikkszám|Sarzs|Raktárhely
+                var raktarLookup = AdatokRaktár
+                    .GroupBy(a => $"{a.Cikkszám.Trim()}|{a.Sarzs.Trim()}|{a.Raktárhely.Trim()}")
+                    .ToDictionary(g => g.Key, g => g.First().Mennyiség);
+
+                // REZSI KÉSZLET: Kulcs = Azonosító
+                var rezsiLookup = AdatokKész
+                    .GroupBy(a => a.Azonosító.Trim())
+                    .ToDictionary(g => g.Key, g => g.First().Mennyiség);
+
+                // ÖSSZES RAKTÁR (Minden raktárhely együtt): Kulcs = Cikkszám|Sarzs
+                // Ez kell majd az "Egyéb Raktár" kivonásos kiszámításához
+                var raktarOsszesenLookup = AdatokRaktár
+                    .GroupBy(a => $"{a.Cikkszám.Trim()}|{a.Sarzs.Trim()}")
+                    .ToDictionary(g => g.Key, g => g.Sum(a => a.Mennyiség));
+
+
+                // 3. Fő ciklus futtatása
                 foreach (Adat_Anyagok rekord in Adatok)
                 {
+                    // Előre letároljuk a tisztított kulcsokat, hogy ne függvényben formázgassunk
+                    string cikkszamTrim = rekord.Cikkszám.Trim();
+                    string sarzsTrim = rekord.Sarzs.Trim();
+
                     if (KellÍrni(rekord.Megnevezés.ToLower() + rekord.KeresőFogalom.ToLower()))
                     {
                         DataRow Soradat = AdatTábla.NewRow();
@@ -236,32 +272,25 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                         Soradat["Kereső fogalom"] = KeresőFogalom(rekord.Cikkszám);
                         Soradat["Sarzs"] = rekord.Sarzs;
                         Soradat["Ár"] = Math.Round(rekord.Ár, 1);
-                        double RaktárK = 0;
-                        Adat_Raktár EgyRaktár = (from a in AdatokRaktár
-                                                 where a.Cikkszám.Trim() == rekord.Cikkszám.Trim()
-                                                 && a.Sarzs.Trim() == rekord.Sarzs.Trim()
-                                                 && a.Raktárhely.Trim() == Raktárhely.Trim()
-                                                 select a).FirstOrDefault();
-                        if (EgyRaktár != null) RaktárK = EgyRaktár.Mennyiség;
-                        Soradat["Saját Raktár"] = RaktárK;
 
-                        double RezsiK = 0;
-                        Adat_Rezsi_Lista EgyRezsi = (from a in AdatokKész
-                                                     where a.Azonosító.Trim() == rekord.Cikkszám.Trim()
-                                                     select a).FirstOrDefault();
-                        if (EgyRezsi != null) RezsiK = EgyRezsi.Mennyiség;
-                        Soradat["Rezsi készlet"] = RezsiK;
+                        // SAJÁT RAKTÁR KÉSZLET: Gyors keresés O(1) időben
+                        string raktarKulcs = $"{cikkszamTrim}|{sarzsTrim}|{aktualisRaktarhely}";
+                        double raktarK = raktarLookup.TryGetValue(raktarKulcs, out double rK) ? rK : 0;
+                        Soradat["Saját Raktár"] = raktarK;
 
-                        double RaktárKE = 0;
-                        RaktárKE = (from a in AdatokRaktár
-                                    where a.Cikkszám.Trim() == rekord.Cikkszám.Trim()
-                                    && a.Sarzs.Trim() == rekord.Sarzs.Trim()
-                                    && a.Raktárhely.Trim() != Raktárhely.Trim()
-                                    select a).ToList().Sum(a => a.Mennyiség);
+                        // REZSI KÉSZLET: Gyors keresés O(1) időben
+                        Soradat["Rezsi készlet"] = rezsiLookup.TryGetValue(cikkszamTrim, out double rezsiK) ? rezsiK : 0;
 
-                        Soradat["Egyéb Raktár"] = RaktárKE;
+                        // EGYÉB RAKTÁR KÉSZLET: (Összes készlet az adott cikkszám+sarzson) - (A saját raktárhely készlete)
+                        string raktarOsszKulcs = $"{cikkszamTrim}|{sarzsTrim}";
+                        double raktarOsszesen = raktarOsszesenLookup.TryGetValue(raktarOsszKulcs, out double rOssz) ? rOssz : 0;
+
+                        // Kivonással megkapjuk az összes többi raktárhelyen lévő mennyiséget (Nincs LINQ ciklus!)
+                        double raktarKE = raktarOsszesen - raktarK;
+                        Soradat["Egyéb Raktár"] = raktarKE;
 
                         AdatTábla.Rows.Add(Soradat);
+                        Holtart.Lép();
                     }
                 }
             }
@@ -274,7 +303,15 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                // 4. Az adatbázis frissítéseket a végén mindenképpen visszakapcsoljuk
+                AdatTábla.EndLoadData();
+                Holtart.Ki();
+            }
         }
+
+
 
         private string KeresőFogalom(string cikkszám)
         {
@@ -743,5 +780,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             Új_Ablak_Készlet = null;
         }
         #endregion
+
+
     }
 }

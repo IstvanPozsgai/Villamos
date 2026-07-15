@@ -52,6 +52,7 @@
             this.Összesen = new System.Windows.Forms.Label();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.Btn_Frissit = new System.Windows.Forms.Button();
             this.Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TáblaFelső)).BeginInit();
@@ -251,7 +252,7 @@
             this.TáblaFelső.MaxFilterButtonImageHeight = 23;
             this.TáblaFelső.Name = "TáblaFelső";
             this.TáblaFelső.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.TáblaFelső.Size = new System.Drawing.Size(1151, 225);
+            this.TáblaFelső.Size = new System.Drawing.Size(1151, 200);
             this.TáblaFelső.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.TáblaFelső.TabIndex = 192;
             this.TáblaFelső.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.TáblaFelső_CellClick);
@@ -303,7 +304,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(802, 55);
             this.tableLayoutPanel1.TabIndex = 198;
             // 
@@ -322,7 +323,7 @@
             // 
             this.Holtart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Holtart.Location = new System.Drawing.Point(14, 251);
+            this.Holtart.Location = new System.Drawing.Point(14, 235);
             this.Holtart.Name = "Holtart";
             this.Holtart.Size = new System.Drawing.Size(1128, 28);
             this.Holtart.TabIndex = 200;
@@ -333,12 +334,26 @@
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
+            // Btn_Frissit
+            // 
+            this.Btn_Frissit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Btn_Frissit.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.Btn_Frissit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Frissit.Location = new System.Drawing.Point(1111, 275);
+            this.Btn_Frissit.Name = "Btn_Frissit";
+            this.Btn_Frissit.Size = new System.Drawing.Size(45, 45);
+            this.Btn_Frissit.TabIndex = 201;
+            this.toolTip1.SetToolTip(this.Btn_Frissit, "Frissíti a táblázatot");
+            this.Btn_Frissit.UseVisualStyleBackColor = true;
+            this.Btn_Frissit.Click += new System.EventHandler(this.Btn_Frissit_Click);
+            // 
             // Ablak_Vételezés
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Coral;
             this.ClientSize = new System.Drawing.Size(1168, 584);
+            this.Controls.Add(this.Btn_Frissit);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.Összesen);
             this.Controls.Add(this.tableLayoutPanel1);
@@ -388,5 +403,6 @@
         internal V_MindenEgyéb.MyProgressbar Holtart;
         private System.Windows.Forms.Timer timer1;
         internal System.Windows.Forms.Button RaktárKészlet;
+        internal System.Windows.Forms.Button Btn_Frissit;
     }
 }
