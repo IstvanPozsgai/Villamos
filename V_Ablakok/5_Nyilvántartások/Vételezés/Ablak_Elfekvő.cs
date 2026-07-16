@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -67,161 +68,122 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             return string.Empty;
         }
 
-        private Dictionary<string, int> GetFejlecIndexek(ClosedXML.Excel.IXLWorksheet ws)
-        {
-            var indexek = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            var elsoSor = ws.FirstRowUsed();
-            if (elsoSor != null)
-            {
-                int maxOszlop = elsoSor.LastCellUsed().Address.ColumnNumber;
-                for (int i = 1; i <= maxOszlop; i++)
-                {
-                    string fejlecNev = elsoSor.Cell(i).GetString().Trim();
-                    if (!string.IsNullOrEmpty(fejlecNev) && !indexek.ContainsKey(fejlecNev))
-                        indexek.Add(fejlecNev, i);
-                }
-            }
-            return indexek;
-        }
-
         private void FeldolgozÉsMent(string fájl_MB52, string fájl_MB51)
         {
-            Dictionary<string, DateTime> mozgásokKeresőPontos = new Dictionary<string, DateTime>();
-            Dictionary<string, DateTime> mozgásokKeresőTartalék = new Dictionary<string, DateTime>();
-            Dictionary<string, string> megnevezésekEllenőrző = new Dictionary<string, string>();
+            // MB51 MOZGÁSOK BEOLVASÁSA ÉS ELLENŐRZÉSE
+            DataTable tablaMB51 = Függvénygyűjtemény.Excel_Tábla_Beolvas(fájl_MB51);
 
-            // MB51 mozgások beolvasása DINAMIKUS FEJLÉC alapján
-            using (var wbMB51 = new ClosedXML.Excel.XLWorkbook(fájl_MB51))
+            // Ellenőrzés a projekt standardja szerint
+            if (!Függvénygyűjtemény.Betöltéshelyes("Elfekvő", tablaMB51))
+                throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt MB51 (Anyagmozgások) adatok formátuma!");
+
+            // Beolvasni kívánt oszlopok lekérdezése
+            Kezelő_Excel_Beolvasás KézBeolvasás = new Kezelő_Excel_Beolvasás();
+            List<Adat_Excel_Beolvasás> oszlopnév = KézBeolvasás.Lista_Adatok();
+
+            // Oszlopnevek beállítása (MB51)
+            string oszlopCikkszam51 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Cikkszám" select a.Fejléc).FirstOrDefault();
+            string oszlopSarzs51 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Sarzs" select a.Fejléc).FirstOrDefault();
+            string oszlopRaktar51 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Raktárhely" select a.Fejléc).FirstOrDefault();
+            string oszlopDatum51 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Dátum" select a.Fejléc).FirstOrDefault();
+
+            if (oszlopCikkszam51 == null || oszlopSarzs51 == null || oszlopRaktar51 == null || oszlopDatum51 == null)
+                throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla az MB51 fájlhoz!");
+
+            Dictionary<string, DateTime> mozgásokKereső = new Dictionary<string, DateTime>();
+
+            // Adatok kiolvasása és tisztítása
+            foreach (DataRow Sor in tablaMB51.Rows)
             {
-                var ws = wbMB51.Worksheet(1);
-                var indexekMB51 = GetFejlecIndexek(ws);
+                string cikkszám = Függvénygyűjtemény.Szöveg_Tisztítás(Sor[oszlopCikkszam51].ToStrTrim(), 0, 50);
+                string sarzs = Függvénygyűjtemény.Szöveg_Tisztítás(Sor[oszlopSarzs51].ToStrTrim(), 0, 50);
+                string raktár = Függvénygyűjtemény.Szöveg_Tisztítás(Sor[oszlopRaktar51].ToStrTrim(), 0, 50);
 
-                if (!indexekMB51.ContainsKey("Anyag") || !indexekMB51.ContainsKey("Sarzs"))
-                    throw new HibásBevittAdat("Az MB51 fájl nem tartalmazza az 'Anyag' vagy 'Sarzs' oszlopot!");
+                // SAP dátumok esetleges felesleges szóközének eltávolítása, majd típuskonverzió
+                string datumSzoveg = Sor[oszlopDatum51].ToStrTrim().Replace(" ", "");
+                DateTime mozgásDátum = datumSzoveg.ToÉrt_DaTeTime();
 
-                int idxAnyag = indexekMB51["Anyag"];
-                int idxSarzs = indexekMB51["Sarzs"];
-                int idxRaktarhelyMB51 = indexekMB51.ContainsKey("Raktárhely") ? indexekMB51["Raktárhely"] :
-                                       (indexekMB51.ContainsKey("Tárolási hely") ? indexekMB51["Tárolási hely"] : -1);
+                if (string.IsNullOrWhiteSpace(cikkszám) || string.IsNullOrWhiteSpace(sarzs)) continue;
 
-                int idxDatum = indexekMB51.ContainsKey("Könyvelési dátum") ? indexekMB51["Könyvelési dátum"] :
-                               (indexekMB51.ContainsKey("Könyvelés dátuma") ? indexekMB51["Könyvelés dátuma"] : -1);
+                string kulcsPontos = $"{cikkszám}|{sarzs}|{raktár}";
+                string kulcsTartalek = $"{cikkszám}|{sarzs}";
 
-                if (idxDatum == -1)
-                    throw new HibásBevittAdat("Az MB51 fájl nem tartalmazza a 'Könyvelési dátum' oszlopot!");
-
-                int idxMegnMB51 = indexekMB51.ContainsKey("Anyag rövid szövege") ? indexekMB51["Anyag rövid szövege"] : -1;
-
-                var sorok = ws.RowsUsed().Skip(1);
-                foreach (var sor in sorok)
+                if (mozgásDátum > new DateTime(1900, 1, 1))
                 {
-                    string cikkszám = sor.Cell(idxAnyag).GetString().Trim();
-                    string sarzs = sor.Cell(idxSarzs).GetString().Trim();
-
-                    if (string.IsNullOrWhiteSpace(cikkszám) || string.IsNullOrWhiteSpace(sarzs)) continue;
-
-                    string raktárhelyMB51 = idxRaktarhelyMB51 != -1 ? sor.Cell(idxRaktarhelyMB51).GetString().Trim() : "";
-                    string kulcsPontos = $"{cikkszám}|{sarzs}|{raktárhelyMB51}";
-                    string kulcsTartalék = $"{cikkszám}|{sarzs}";
-
-                    if (idxMegnMB51 != -1)
+                    if (!string.IsNullOrWhiteSpace(raktár))
                     {
-                        string megn = sor.Cell(idxMegnMB51).GetString().Trim();
-                        if (!string.IsNullOrEmpty(megn) && !megnevezésekEllenőrző.ContainsKey(kulcsTartalék))
-                            megnevezésekEllenőrző[kulcsTartalék] = megn;
-                    }
-
-                    DateTime mozgásDátum = new DateTime(1900, 1, 1);
-                    bool sikeresDátum = false;
-
-                    if (sor.Cell(idxDatum).TryGetValue(out DateTime tempDatum))
-                    {
-                        mozgásDátum = tempDatum;
-                        sikeresDátum = true;
-                    }
-                    else
-                    {
-                        string dátumSzöveg = sor.Cell(idxDatum).GetString().Replace(" ", "").Trim();
-                        if (DateTime.TryParse(dátumSzöveg, out tempDatum))
+                        if (mozgásokKereső.TryGetValue(kulcsPontos, out DateTime eddigi))
                         {
-                            mozgásDátum = tempDatum;
-                            sikeresDátum = true;
+                            if (mozgásDátum > eddigi) mozgásokKereső[kulcsPontos] = mozgásDátum;
                         }
+                        else mozgásokKereső.Add(kulcsPontos, mozgásDátum);
                     }
 
-                    if (sikeresDátum)
+                    if (mozgásokKereső.TryGetValue(kulcsTartalek, out DateTime eddigiTartalek))
                     {
-                        if (!string.IsNullOrEmpty(raktárhelyMB51))
-                        {
-                            if (mozgásokKeresőPontos.TryGetValue(kulcsPontos, out DateTime eddigiPontos))
-                            {
-                                if (mozgásDátum > eddigiPontos) mozgásokKeresőPontos[kulcsPontos] = mozgásDátum;
-                            }
-                            else mozgásokKeresőPontos.Add(kulcsPontos, mozgásDátum);
-                        }
-
-                        if (mozgásokKeresőTartalék.TryGetValue(kulcsTartalék, out DateTime eddigiTartalék))
-                        {
-                            if (mozgásDátum > eddigiTartalék) mozgásokKeresőTartalék[kulcsTartalék] = mozgásDátum;
-                        }
-                        else mozgásokKeresőTartalék.Add(kulcsTartalék, mozgásDátum);
+                        if (mozgásDátum > eddigiTartalek) mozgásokKereső[kulcsTartalek] = mozgásDátum;
                     }
+                    else mozgásokKereső.Add(kulcsTartalek, mozgásDátum);
                 }
             }
 
-            // MB52 raktárkészlet beolvasása DINAMIKUS FEJLÉC alapján
+            // MB52 KÉSZLET BEOLVASÁSA ÉS ELLENŐRZÉSE
+            DataTable tablaMB52 = Függvénygyűjtemény.Excel_Tábla_Beolvas(fájl_MB52);
+
+            if (!Függvénygyűjtemény.Betöltéshelyes("Elfekvő", tablaMB52))
+                throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt MB52 (Raktárkészlet) adatok formátuma!");
+
+            // Oszlopnevek beállítása (MB52)
+            string oszlopCikkszam52 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Cikkszám" select a.Fejléc).FirstOrDefault();
+            string oszlopSarzs52 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Sarzs" select a.Fejléc).FirstOrDefault();
+            string oszlopRaktar52 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Raktárhely" select a.Fejléc).FirstOrDefault();
+            string oszlopMegnevezes52 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Megnevezés" select a.Fejléc).FirstOrDefault();
+            string oszlopMennyiseg52 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Mennyiség" select a.Fejléc).FirstOrDefault();
+            string oszlopErtek52 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Érték" select a.Fejléc).FirstOrDefault();
+
+            if (oszlopCikkszam52 == null || oszlopSarzs52 == null || oszlopRaktar52 == null || oszlopMegnevezes52 == null || oszlopMennyiseg52 == null || oszlopErtek52 == null)
+                throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla az MB52 fájlhoz!");
+
             List<Adat_Elfekvő> elfekvőLista = new List<Adat_Elfekvő>();
 
-            using (var wbMB52 = new ClosedXML.Excel.XLWorkbook(fájl_MB52))
+            // Adatok kiolvasása és tisztítása
+            foreach (DataRow Sor in tablaMB52.Rows)
             {
-                var ws = wbMB52.Worksheet(1);
-                var indexekMB52 = GetFejlecIndexek(ws);
+                string cikkszám = Függvénygyűjtemény.Szöveg_Tisztítás(Sor[oszlopCikkszam52].ToStrTrim(), 0, 50);
+                string sarzs = Függvénygyűjtemény.Szöveg_Tisztítás(Sor[oszlopSarzs52].ToStrTrim(), 0, 50);
+                string raktár = Függvénygyűjtemény.Szöveg_Tisztítás(Sor[oszlopRaktar52].ToStrTrim(), 0, 50);
+                string megnevezes = Függvénygyűjtemény.Szöveg_Tisztítás(Sor[oszlopMegnevezes52].ToStrTrim(), 0, 255);
 
-                string[] szuksegesOszlopok = { "Anyag", "Anyag rövid szövege", "Raktárhely", "Szabadon használható", "Szab.felh. érték", "Sarzs" };
-                foreach (var oszlop in szuksegesOszlopok)
-                    if (!indexekMB52.ContainsKey(oszlop))
-                        throw new HibásBevittAdat($"Az MB52 fájl nem tartalmazza a(z) '{oszlop}' oszlopot!");
+                // Mennyiség és érték konvertálása a projekt saját kiterjesztésével
+                double mennyiseg = Sor[oszlopMennyiseg52].ToStrTrim().Replace(",", ".").ToÉrt_Double();
+                double ertek = Sor[oszlopErtek52].ToStrTrim().Replace(",", ".").ToÉrt_Double();
 
-                int idxAnyag = indexekMB52["Anyag"];
-                int idxMegnevezes = indexekMB52["Anyag rövid szövege"];
-                int idxRaktarhely = indexekMB52["Raktárhely"];
-                int idxSzabadon = indexekMB52["Szabadon használható"];
-                int idxErtek = indexekMB52["Szab.felh. érték"];
-                int idxSarzs = indexekMB52["Sarzs"];
+                if (string.IsNullOrWhiteSpace(cikkszám) || string.IsNullOrWhiteSpace(sarzs)) continue;
 
-                var sorok = ws.RowsUsed().Skip(1);
+                string kulcsPontos = $"{cikkszám}|{sarzs}|{raktár}";
+                string kulcsTartalek = $"{cikkszám}|{sarzs}";
 
-                foreach (var sor in sorok)
-                {
-                    string cikkszám = sor.Cell(idxAnyag).GetString().Trim();
-                    string sarzs = sor.Cell(idxSarzs).GetString().Trim();
+                // Dátum párosítása: először pontos (Raktárhely), ha nincs, akkor tartalék
+                DateTime utolsoMozgas = new DateTime(1900, 1, 1);
+                if (mozgásokKereső.TryGetValue(kulcsPontos, out DateTime mDatum))
+                    utolsoMozgas = mDatum;
+                else if (mozgásokKereső.TryGetValue(kulcsTartalek, out DateTime tDatum))
+                    utolsoMozgas = tDatum;
 
-                    if (string.IsNullOrWhiteSpace(cikkszám) || string.IsNullOrWhiteSpace(sarzs)) continue;
+                Adat_Elfekvő ADAT = new Adat_Elfekvő(
+                    0,
+                    cikkszám,
+                    megnevezes,
+                    raktár,
+                    mennyiseg,
+                    ertek,
+                    sarzs,
+                    utolsoMozgas);
 
-                    string megnevezés = sor.Cell(idxMegnevezes).GetString().Trim();
-                    string raktárhely = sor.Cell(idxRaktarhely).GetString().Trim();
-
-                    double mennyiség = 0;
-                    if (!sor.Cell(idxSzabadon).TryGetValue(out mennyiség))
-                        double.TryParse(sor.Cell(idxSzabadon).GetString().Trim(), out mennyiség);
-
-                    double érték = 0;
-                    if (!sor.Cell(idxErtek).TryGetValue(out érték))
-                        double.TryParse(sor.Cell(idxErtek).GetString().Trim(), out érték);
-
-                    string kulcsPontos = $"{cikkszám}|{sarzs}|{raktárhely}";
-                    string kulcsTartalék = $"{cikkszám}|{sarzs}";
-
-                    DateTime utolsóMozgásDatuma = new DateTime(1900, 1, 1);
-                    if (mozgásokKeresőPontos.TryGetValue(kulcsPontos, out DateTime megtaláltPontos))
-                        utolsóMozgásDatuma = megtaláltPontos;
-                    else if (mozgásokKeresőTartalék.TryGetValue(kulcsTartalék, out DateTime megtaláltTartalék))
-                        utolsóMozgásDatuma = megtaláltTartalék;
-
-                    elfekvőLista.Add(new Adat_Elfekvő(0, cikkszám, megnevezés, raktárhely, mennyiség, érték, sarzs, utolsóMozgásDatuma));
-                }
+                elfekvőLista.Add(ADAT);
             }
 
+            // RÖGZÍTÉS AZ ADATBÁZISBA
             if (elfekvőLista.Count > 0)
             {
                 KézElfekvő.Tábla_Kiürítés();
