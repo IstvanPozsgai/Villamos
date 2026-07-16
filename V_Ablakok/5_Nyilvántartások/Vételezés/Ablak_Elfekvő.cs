@@ -86,7 +86,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
         private void FeldolgozÉsMent(string fájl_MB52, string fájl_MB51)
         {
-            Dictionary<string, DateTime> mozgásokKereső = new Dictionary<string, DateTime>();
+            // Két szintű szótár a biztonságos összekapcsolásért
+            Dictionary<string, DateTime> mozgásokKeresőPontos = new Dictionary<string, DateTime>(); // Cikkszám+Sarzs+Raktárhely
+            Dictionary<string, DateTime> mozgásokKeresőTartalék = new Dictionary<string, DateTime>(); // Cikkszám+Sarzs (ha az MB51-ből hiányzik a Raktárhely)
             Dictionary<string, string> megnevezésekEllenőrző = new Dictionary<string, string>();
 
             // MB51 mozgások beolvasása dinamikus fejléc-indexek alapján
@@ -101,8 +103,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 int idxAnyag = indexekMB51["Anyag"];
                 int idxSarzs = indexekMB51["Sarzs"];
 
-                // Raktárhely oszlop keresése az MB51-ben (fontos a pontos párosításhoz)
-                int idxRaktarhelyMB51 = indexekMB51.ContainsKey("Raktárhely") ? indexekMB51["Raktárhely"] : -1;
+                // Raktárhely keresése rugalmasan (előfordulhat, hogy "Tárolási hely" néven jön ki az SAP-ból)
+                int idxRaktarhelyMB51 = indexekMB51.ContainsKey("Raktárhely") ? indexekMB51["Raktárhely"] :
+                                       (indexekMB51.ContainsKey("Tárolási hely") ? indexekMB51["Tárolási hely"] : -1);
 
                 int idxDatum = indexekMB51.ContainsKey("Könyvelési dátum") ? indexekMB51["Könyvelési dátum"] :
                                (indexekMB51.ContainsKey("Könyvelés dátuma") ? indexekMB51["Könyvelés dátuma"] : -1);
@@ -124,15 +127,16 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
                     string raktárhelyMB51 = idxRaktarhelyMB51 != -1 ? sor.Cell(idxRaktarhelyMB51).GetString().Trim() : "";
 
-                    string kulcs = $"{cikkszám}|{sarzs}|{raktárhelyMB51}";
-                    string névKulcs = $"{cikkszám}|{sarzs}";
+                    string kulcsPontos = $"{cikkszám}|{sarzs}|{raktárhelyMB51}";
+                    string kulcsTartalék = $"{cikkszám}|{sarzs}";
 
                     if (idxMegnMB51 != -1)
                     {
                         string megn = sor.Cell(idxMegnMB51).GetString().Trim();
-                        if (!string.IsNullOrEmpty(megn) && !megnevezésekEllenőrző.ContainsKey(névKulcs))
-                            megnevezésekEllenőrző[névKulcs] = megn;
+                        if (!string.IsNullOrEmpty(megn) && !megnevezésekEllenőrző.ContainsKey(kulcsTartalék))
+                            megnevezésekEllenőrző[kulcsTartalék] = megn;
                     }
+
                     DateTime mozgásDátum = new DateTime(1900, 1, 1);
                     bool sikeresDátum = false;
 
@@ -143,7 +147,8 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                     }
                     else
                     {
-                        string dátumSzöveg = sor.Cell(idxDatum).GetString().Trim();
+                        // Biztonsági javítás az SAP formátumok (pl. extra szóközök) kezelésére
+                        string dátumSzöveg = sor.Cell(idxDatum).GetString().Replace(" ", "").Trim();
                         if (DateTime.TryParse(dátumSzöveg, out tempDatum))
                         {
                             mozgásDátum = tempDatum;
@@ -151,13 +156,31 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                         }
                     }
 
+                    // Dátum rögzítése a kétlépcsős szótárban
                     if (sikeresDátum)
                     {
-                        if (mozgásokKereső.TryGetValue(kulcs, out DateTime eddigiUtolsó))
-                            if (mozgásDátum > eddigiUtolsó)
-                                mozgásokKereső[kulcs] = mozgásDátum;
+                        // Pontos szótár frissítése (ha van Raktárhely)
+                        if (!string.IsNullOrEmpty(raktárhelyMB51))
+                        {
+                            if (mozgásokKeresőPontos.TryGetValue(kulcsPontos, out DateTime eddigiPontos))
+                            {
+                                if (mozgásDátum > eddigiPontos) mozgásokKeresőPontos[kulcsPontos] = mozgásDátum;
+                            }
+                            else
+                            {
+                                mozgásokKeresőPontos.Add(kulcsPontos, mozgásDátum);
+                            }
+                        }
+
+                        // Tartalék szótár frissítése (Cikkszám + Sarzs alapján mindenképpen)
+                        if (mozgásokKeresőTartalék.TryGetValue(kulcsTartalék, out DateTime eddigiTartalék))
+                        {
+                            if (mozgásDátum > eddigiTartalék) mozgásokKeresőTartalék[kulcsTartalék] = mozgásDátum;
+                        }
                         else
-                            mozgásokKereső.Add(kulcs, mozgásDátum);
+                        {
+                            mozgásokKeresőTartalék.Add(kulcsTartalék, mozgásDátum);
+                        }
                     }
                 }
             }
@@ -204,16 +227,25 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                     if (!sor.Cell(idxErtek).TryGetValue(out érték))
                         double.TryParse(sor.Cell(idxErtek).GetString().Trim(), out érték);
 
-                    string kulcs = $"{cikkszám}|{sarzs}|{raktárhely}";
-                    string névKulcs = $"{cikkszám}|{sarzs}";
+                    string kulcsPontos = $"{cikkszám}|{sarzs}|{raktárhely}";
+                    string kulcsTartalék = $"{cikkszám}|{sarzs}";
 
-                    if (megnevezésekEllenőrző.TryGetValue(névKulcs, out string mentettMegn))
+                    if (megnevezésekEllenőrző.TryGetValue(kulcsTartalék, out string mentettMegn))
                         if (!string.Equals(mentettMegn, megnevezés, StringComparison.OrdinalIgnoreCase))
-                            HibaNapló.Log($"Figyelmeztetés: Eltérő megnevezés a(z) {névKulcs} kulcshoz. MB51: '{mentettMegn}', MB52: '{megnevezés}'", "Ablak_Elfekvő", "", "", 0);
+                            HibaNapló.Log($"Figyelmeztetés: Eltérő megnevezés a(z) {kulcsTartalék} kulcshoz. MB51: '{mentettMegn}', MB52: '{megnevezés}'", "Ablak_Elfekvő", "", "", 0);
 
                     DateTime utolsóMozgásDatuma = new DateTime(1900, 1, 1);
-                    if (mozgásokKereső.TryGetValue(kulcs, out DateTime megtaláltDátum))
-                        utolsóMozgásDatuma = megtaláltDátum;
+
+                    // Először a Raktárhely-specifikus dátumot keressük
+                    if (mozgásokKeresőPontos.TryGetValue(kulcsPontos, out DateTime megtaláltPontos))
+                    {
+                        utolsóMozgásDatuma = megtaláltPontos;
+                    }
+                    // Ha nincs meg (mert pl. az MB51-ből hiányzott a Raktárhely adat), akkor a tartalékot használjuk
+                    else if (mozgásokKeresőTartalék.TryGetValue(kulcsTartalék, out DateTime megtaláltTartalék))
+                    {
+                        utolsóMozgásDatuma = megtaláltTartalék;
+                    }
 
                     elfekvőLista.Add(new Adat_Elfekvő(
                         0,
