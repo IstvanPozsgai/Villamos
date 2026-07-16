@@ -37,7 +37,6 @@ namespace Villamos
 
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AblakJelszóváltoztatás));
             this.TxtPassword = new System.Windows.Forms.TextBox();
             this.Label4 = new System.Windows.Forms.Label();
@@ -189,9 +188,9 @@ namespace Villamos
             this.label5.Location = new System.Drawing.Point(6, 38);
             this.label5.Margin = new System.Windows.Forms.Padding(6);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(95, 20);
+            this.label5.Size = new System.Drawing.Size(128, 20);
             this.label5.TabIndex = 46;
-            this.label5.Text = "Régi Jelszó:";
+            this.label5.Text = "Felhasználó név:";
             // 
             // TxtTelephely
             // 
