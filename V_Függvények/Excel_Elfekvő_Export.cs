@@ -12,52 +12,6 @@ namespace Villamos.Kezelők
         private readonly DateTime MA = DateTime.Today;
         private readonly DateTime ALAP_DATUM = new DateTime(1900, 1, 1);
 
-        #region Hierarchia Adatszerkezet
-
-        // Segédosztály a hierarchia tárolására
-        private class HelyInfo
-        {
-            public string Szakszolgalat { get; set; }
-            public string Telephely { get; set; }
-        }
-
-        // A memóriában tárolt hierarchia fa (könnyen bővíthető új elemekkel)
-        private readonly Dictionary<string, HelyInfo> _hierarchia = new Dictionary<string, HelyInfo>(StringComparer.OrdinalIgnoreCase)
-        {
-            // 1. Szakszolgálat
-            { "V180", new HelyInfo { Szakszolgalat = "1. Szakszolgálat", Telephely = "Zugló" } },
-            { "V220", new HelyInfo { Szakszolgalat = "1. Szakszolgálat", Telephely = "Száva" } },
-            { "V200", new HelyInfo { Szakszolgalat = "1. Szakszolgálat", Telephely = "Hungária" } },
-            
-            // 2. Szakszolgálat
-            { "V130", new HelyInfo { Szakszolgalat = "2. Szakszolgálat", Telephely = "Fogas" } },
-            { "V170", new HelyInfo { Szakszolgalat = "2. Szakszolgálat", Telephely = "Angyalföld" } },
-            { "V190", new HelyInfo { Szakszolgalat = "2. Szakszolgálat", Telephely = "Baross" } },
-            { "V260", new HelyInfo { Szakszolgalat = "2. Szakszolgálat", Telephely = "Szépilona" } },
-            
-            // 3. Szakszolgálat
-            { "V490", new HelyInfo { Szakszolgalat = "3. Szakszolgálat", Telephely = "Kelenföld" } },
-            { "V230", new HelyInfo { Szakszolgalat = "3. Szakszolgálat", Telephely = "Ferencváros" } },
-            { "V390", new HelyInfo { Szakszolgalat = "3. Szakszolgálat", Telephely = "Budafok" } }
-        };
-
-        // Metódus a raktárhelyek automatikus beazonosítására
-        private HelyInfo GetHelyInfo(string raktarhely)
-        {
-            if (string.IsNullOrWhiteSpace(raktarhely))
-                return new HelyInfo { Szakszolgalat = "Ismeretlen Szakszolgálat", Telephely = "Ismeretlen Telephely" };
-
-            if (_hierarchia.TryGetValue(raktarhely, out var info))
-                return info;
-
-            // Opcionális naplózás ismeretlen raktárhely esetén (a program nem áll le)
-            HibaNapló.Log($"Ismeretlen raktárhely azonosítva: '{raktarhely}'. Kérem bővítse a hierarchiát.", "Excel_Elfekvő_Export", "", "", 0);
-
-            return new HelyInfo { Szakszolgalat = "Ismeretlen Szakszolgálat", Telephely = "Ismeretlen Telephely" };
-        }
-
-        #endregion
-
         #region Publikus Export Metódusok
 
         public void Export(string fájlnév)
@@ -89,15 +43,19 @@ namespace Villamos.Kezelők
 
             try
             {
+                // Szolgálattelepek lekérdezése az adatbázisból a párosításhoz
+                Kezelő_Kiegészítő_Szolgálattelepei kezelőSzolg = new Kezelő_Kiegészítő_Szolgálattelepei();
+                var telephelyAdatok = kezelőSzolg.Lista_Adatok();
+
                 using (var workbook = new XLWorkbook())
                 {
-                    // LINQ GroupBy segítségével egyszer csoportosítunk Raktárhely alapján a részletes lapokhoz
+                    // Részletes lapokhoz a csoportosítás Raktárhely alapján
                     var raktarCsoportok = adatok.GroupBy(a => a.Raktárhely).OrderBy(g => g.Key).ToList();
 
-                    // Összesítő lap (Dashboard) elkészítése a háromszintű hierarchia alapján
-                    KészítsDashboard(workbook, adatok);
+                    // Összesítő lap (Dashboard)
+                    KészítsDashboard(workbook, adatok, telephelyAdatok);
 
-                    //Részletes lapok automatikus elkészítése Raktárhelyenként
+                    // Részletes lapok automatikus elkészítése
                     KészítsRészletesLapokat(workbook, raktarCsoportok);
 
                     workbook.SaveAs(fájlnév);
@@ -114,68 +72,77 @@ namespace Villamos.Kezelők
 
         #region Munkalap Generáló Metódusok
 
-        private void KészítsDashboard(IXLWorkbook workbook, List<Adat_Elfekvő> adatok)
+        private void KészítsDashboard(IXLWorkbook workbook, List<Adat_Elfekvő> adatok, List<Adat_Kiegészítő_Szolgálattelepei> telephelyAdatok)
         {
             var ws = workbook.Worksheets.Add("Összesítés");
             int sor = 1;
 
-            // Fejléc adatok
-            ws.Cell(sor, 1).Value = "Készítés dátuma:";
-            ws.Cell(sor, 1).Style.Font.Bold = true;
+            ws.Cell(sor, 1).Value = "Lekérdezés dátuma";
             ws.Cell(sor, 2).Value = MA;
             ws.Cell(sor, 2).Style.NumberFormat.Format = "yyyy.MM.dd";
-            ws.Cell(sor, 2).Style.Font.Bold = true;
-            sor += 3;
 
-            // Összesítő táblázat fejléce
+            ws.Range(sor, 1, sor, 2).Style.Font.Bold = true;
+            ws.Range(sor, 1, sor, 2).Style.Fill.BackgroundColor = XLColor.LightBlue;
+            sor += 2;
+
+            // Összesítő táblázat fejléce 
             ws.Cell(sor, 1).Value = "Szint / Megnevezés";
-            ws.Cell(sor, 2).Value = "Cikkszámok száma";
-            ws.Cell(sor, 3).Value = "Összes készlet (db)";
-            ws.Cell(sor, 4).Value = "Készlet érték";
-            ws.Cell(sor, 5).Value = "Átlagos cikkérték";
-            ws.Cell(sor, 6).Value = "Elfekvő készlet érték";
-            ws.Cell(sor, 7).Value = "Elfekvő százalék";
+            ws.Cell(sor, 2).Value = "Készlet érték";
+            ws.Cell(sor, 3).Value = "Elfekvő készlet érték";
+            ws.Cell(sor, 4).Value = "Elfekvő százalék";
 
-            var fejlécTartomány = ws.Range(sor, 1, sor, 7);
+            var fejlécTartomány = ws.Range(sor, 1, sor, 4);
             fejlécTartomány.Style.Font.Bold = true;
             fejlécTartomány.Style.Fill.BackgroundColor = XLColor.LightGray;
             fejlécTartomány.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            fejlécTartomány.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
             sor++;
 
-            // Adatok kibővítése a hierarchia infókkal a memóriában
-            var hierarchikusAdatok = adatok.Select(a => new {
-                Adat = a,
-                Hely = GetHelyInfo(a.Raktárhely)
+            // HIERARCHIA PÁROSÍTÁS
+            var illesztettAdatok = adatok.Select(a =>
+            {
+                string rKod = a.Raktárhely?.Trim().ToUpper() ?? "";
+
+                // Közvetlen illesztés az adatbázisból lekért listával
+                var info = telephelyAdatok?.FirstOrDefault(t => t.Raktár?.Trim().ToUpper() == rKod);
+
+                string tNev = info?.Telephelynév?.Trim() ?? "";
+                string szaksz = info?.Szolgálatnév?.Trim() ?? "Ismeretlen Szakszolgálat";
+
+                // Ha nincs hozzá telephely, csak a raktárkód jelenik meg
+                string megnevezes = string.IsNullOrEmpty(tNev) ? a.Raktárhely?.Trim() : $"{a.Raktárhely?.Trim()} - {tNev}";
+
+                return new
+                {
+                    Adat = a,
+                    Szakszolgalat = szaksz,
+                    Megnevezes = megnevezes
+                };
             }).ToList();
 
-            // Csoportosítás Szakszolgálat szerint
-            var szakszCsoportok = hierarchikusAdatok.GroupBy(x => x.Hely.Szakszolgalat).OrderBy(g => g.Key).ToList();
+            // Csoportosítás Szakszolgálat alapján
+            var szakszGroups = illesztettAdatok.GroupBy(x => x.Szakszolgalat).OrderBy(g => g.Key).ToList();
 
-            foreach (var szakszGroup in szakszCsoportok)
+            foreach (var szakszGroup in szakszGroups)
             {
-                // Szakszolgálaton belül Csoportosítás Telephely szerint
-                var telephelyCsoportok = szakszGroup.GroupBy(x => x.Hely.Telephely).OrderBy(g => g.Key).ToList();
+                // Csoportosítás Telephelyek (Megnevezések) alapján az adott szakszolgálaton belül
+                var telephelyCsoportok = szakszGroup.GroupBy(x => x.Megnevezes).OrderBy(g => g.Key).ToList();
 
                 foreach (var thGroup in telephelyCsoportok)
                 {
-                    //Telephely szintű összesítés
-                    var thAdatok = thGroup.Select(x => x.Adat).ToList();
-                    KiirOsszesitoSor(ws, ref sor, thGroup.Key, thAdatok, behuzas: 2);
+                    // Raktárhely / Telephely sorok kiírása
+                    KiirOsszesitoSor(ws, ref sor, thGroup.Key, thGroup.Select(x => x.Adat), XLColor.NoColor, felkover: false);
                 }
 
-                // Szakszolgálat szintű összesítés
-                var szakszAdatok = szakszGroup.Select(x => x.Adat).ToList();
-                KiirOsszesitoSor(ws, ref sor, $"{szakszGroup.Key.ToUpper()} ÖSSZESEN", szakszAdatok, behuzas: 0, felkover: true);
+                // A Szakszolgálati blokk végén egyetlen lezáró ÖSSZESEN sor (Halványsárga háttérrel)
+                KiirOsszesitoSor(ws, ref sor, "ÖSSZESEN", szakszGroup.Select(x => x.Adat), XLColor.LightYellow, felkover: true);
 
-                sor++; // Üres sor az átláthatóságért a szakszolgálatok között
+                sor++; // Üres sor a blokkok közé az átláthatóságért
             }
 
-            //  Teljes Összesítés (Grand Total)
-            KiirOsszesitoSor(ws, ref sor, "TELJES ÁLLOMÁNY ÖSSZESEN", adatok, behuzas: 0, felkover: true, hatter: true);
-
-            // Lap formázása (oszlopszélességek)
+            // Oszlopok automatikus szélesítése
             ws.Columns().AdjustToContents();
-            foreach (var col in ws.ColumnsUsed()) col.Width += 3.0; // Biztonsági szélesítés a ###### ellen
+            foreach (var col in ws.ColumnsUsed()) col.Width += 3.0; // Biztonsági ráhagyás
         }
 
         private void KészítsRészletesLapokat(IXLWorkbook workbook, List<IGrouping<string, Adat_Elfekvő>> raktarCsoportok)
@@ -245,48 +212,39 @@ namespace Villamos.Kezelők
 
         #region Üzleti Logika és Közös Számítási Metódusok
 
-        /// <summary>
-        /// Közös számoló metódus, amely bármilyen (Telephely, Szakszolgálat, Teljes) rekordlistára meghívható
-        /// és azonos struktúrában írja ki az összesítéseket a Dashboardra.
-        /// </summary>
-        private void KiirOsszesitoSor(IXLWorksheet ws, ref int sor, string megnevezes, IEnumerable<Adat_Elfekvő> adatok, int behuzas = 0, bool felkover = false, bool hatter = false)
+        private void KiirOsszesitoSor(IXLWorksheet ws, ref int sor, string megnevezes, IEnumerable<Adat_Elfekvő> adatok, XLColor hatterSzin, bool felkover = false)
         {
-            // Közös számítások
-            int cikkSzam = adatok.Count();
-            double osszKeszlet = adatok.Sum(a => a.Szabadon_használható);
             double keszletErtek = adatok.Sum(a => a.Szab_felh_érték);
-            double atlagErtek = cikkSzam > 0 ? (keszletErtek / cikkSzam) : 0;
 
-            // 365 napnál régebbi, vagy 1900.01.01 dátumú (sosem mozgott) tételek
-            double elfekvoErtek = adatok.Where(a =>
-            {
-                if (a.Utolsó_mozgás <= ALAP_DATUM) return true;
-                return (MA - a.Utolsó_mozgás).TotalDays > 365;
-            }).Sum(a => a.Szab_felh_érték);
+            // 365 napnál régebbi (vagy 1900.01.01 = sosem mozgott) tételek értéke
+            double elfekvoErtek = adatok.Where(a => a.Utolsó_mozgás <= ALAP_DATUM || (MA - a.Utolsó_mozgás).TotalDays > 365)
+                                        .Sum(a => a.Szab_felh_érték);
 
-            double elfekvoSzazalek = keszletErtek > 0 ? (elfekvoErtek / keszletErtek) : 0;
+            double szazalek = keszletErtek > 0 ? (elfekvoErtek / keszletErtek) : 0;
 
-            // Cellák kitöltése
             ws.Cell(sor, 1).Value = megnevezes;
-            if (behuzas > 0) ws.Cell(sor, 1).Style.Alignment.Indent = behuzas; // Strukturált megjelenés (behúzás)
+            ws.Cell(sor, 2).Value = keszletErtek;
+            ws.Cell(sor, 3).Value = elfekvoErtek;
+            ws.Cell(sor, 4).Value = szazalek;
 
-            ws.Cell(sor, 2).Value = cikkSzam;
-            ws.Cell(sor, 3).Value = osszKeszlet;
-            ws.Cell(sor, 4).Value = keszletErtek;
-            ws.Cell(sor, 5).Value = atlagErtek;
-            ws.Cell(sor, 6).Value = elfekvoErtek;
-            ws.Cell(sor, 7).Value = elfekvoSzazalek;
+            ws.Cell(sor, 2).Style.NumberFormat.Format = "#,##0 Ft";
+            ws.Cell(sor, 3).Style.NumberFormat.Format = "#,##0 Ft";
+            ws.Cell(sor, 4).Style.NumberFormat.Format = "0.00%";
 
-            // Formázások alkalmazása a sorra
-            ws.Cell(sor, 2).Style.NumberFormat.Format = "#,##0";
-            ws.Cell(sor, 3).Style.NumberFormat.Format = "#,##0";
-            ws.Cell(sor, 4).Style.NumberFormat.Format = "#,##0 Ft";
-            ws.Cell(sor, 5).Style.NumberFormat.Format = "#,##0 Ft";
-            ws.Cell(sor, 6).Style.NumberFormat.Format = "#,##0 Ft";
-            ws.Cell(sor, 7).Style.NumberFormat.Format = "0.00%";
+            var formatRng = ws.Range(sor, 1, sor, 4);
+            formatRng.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+            formatRng.Style.Border.BottomBorderColor = XLColor.LightGray;
 
-            if (felkover) ws.Range(sor, 1, sor, 7).Style.Font.Bold = true;
-            if (hatter) ws.Range(sor, 1, sor, 7).Style.Fill.BackgroundColor = XLColor.LightYellow;
+            if (felkover) formatRng.Style.Font.Bold = true;
+            if (hatterSzin != XLColor.NoColor) formatRng.Style.Fill.BackgroundColor = hatterSzin;
+
+            if (megnevezes == "ÖSSZESEN")
+            {
+                formatRng.Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                formatRng.Style.Border.TopBorderColor = XLColor.Gray;
+                formatRng.Style.Border.BottomBorder = XLBorderStyleValues.Double;
+                formatRng.Style.Border.BottomBorderColor = XLColor.Black;
+            }
 
             sor++;
         }
