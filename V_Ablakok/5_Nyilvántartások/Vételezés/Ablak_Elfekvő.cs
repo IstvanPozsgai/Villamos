@@ -250,5 +250,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 }
             }
         }
+
+        private void BtnSúgó_Click(object sender, EventArgs e)
+        {
+            // JAVÍTANDÓ:A súgó gomb nincs bekötve
+        }
     }
 }
