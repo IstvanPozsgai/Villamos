@@ -31,8 +31,8 @@
             this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.Btn_AdatFeldolgozás = new System.Windows.Forms.Button();
-            this.Btn_Frissit = new System.Windows.Forms.Button();
             this.BtnSúgó = new System.Windows.Forms.Button();
+            this.Btn_Frissit = new System.Windows.Forms.Button();
             this.Btn_ExcelExport = new System.Windows.Forms.Button();
             this.Tábla = new Zuby.ADGV.AdvancedDataGridView();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -62,7 +62,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 426F));
             this.tableLayoutPanel1.Controls.Add(this.Btn_AdatFeldolgozás, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.BtnSúgó, 15, 0);
             this.tableLayoutPanel1.Controls.Add(this.Btn_Frissit, 1, 0);
@@ -87,18 +87,6 @@
             this.Btn_AdatFeldolgozás.UseVisualStyleBackColor = true;
             this.Btn_AdatFeldolgozás.Click += new System.EventHandler(this.Btn_AdatFeldolgozás_Click);
             // 
-            // Btn_Frissit
-            // 
-            this.Btn_Frissit.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
-            this.Btn_Frissit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_Frissit.Location = new System.Drawing.Point(53, 3);
-            this.Btn_Frissit.Name = "Btn_Frissit";
-            this.Btn_Frissit.Size = new System.Drawing.Size(44, 45);
-            this.Btn_Frissit.TabIndex = 203;
-            this.toolTip1.SetToolTip(this.Btn_Frissit, "Táblázat frissítése");
-            this.Btn_Frissit.UseVisualStyleBackColor = true;
-            this.Btn_Frissit.Click += new System.EventHandler(this.Btn_Frissit_Click);
-            // 
             // BtnSúgó
             // 
             this.BtnSúgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -110,6 +98,19 @@
             this.BtnSúgó.TabIndex = 188;
             this.toolTip1.SetToolTip(this.BtnSúgó, "Súgó");
             this.BtnSúgó.UseVisualStyleBackColor = true;
+            this.BtnSúgó.Click += new System.EventHandler(this.BtnSúgó_Click);
+            // 
+            // Btn_Frissit
+            // 
+            this.Btn_Frissit.BackgroundImage = global::Villamos.Properties.Resources.frissít_gyűjtemény;
+            this.Btn_Frissit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Btn_Frissit.Location = new System.Drawing.Point(53, 3);
+            this.Btn_Frissit.Name = "Btn_Frissit";
+            this.Btn_Frissit.Size = new System.Drawing.Size(44, 45);
+            this.Btn_Frissit.TabIndex = 203;
+            this.toolTip1.SetToolTip(this.Btn_Frissit, "Táblázat frissítése");
+            this.Btn_Frissit.UseVisualStyleBackColor = true;
+            this.Btn_Frissit.Click += new System.EventHandler(this.Btn_Frissit_Click);
             // 
             // Btn_ExcelExport
             // 
