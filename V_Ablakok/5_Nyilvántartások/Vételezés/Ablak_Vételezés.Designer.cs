@@ -236,13 +236,13 @@
             // 
             // Btn_Elfekvő
             // 
-            this.Btn_Elfekvő.BackgroundImage = global::Villamos.Properties.Resources.process_accept;
+            this.Btn_Elfekvő.BackgroundImage = global::Villamos.Properties.Resources.Action_view_bottom;
             this.Btn_Elfekvő.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Btn_Elfekvő.Location = new System.Drawing.Point(453, 3);
             this.Btn_Elfekvő.Name = "Btn_Elfekvő";
             this.Btn_Elfekvő.Size = new System.Drawing.Size(44, 45);
             this.Btn_Elfekvő.TabIndex = 203;
-            this.toolTip1.SetToolTip(this.Btn_Elfekvő, "Raktárkészlet frissítés");
+            this.toolTip1.SetToolTip(this.Btn_Elfekvő, "Elfekvő készlet ablak");
             this.Btn_Elfekvő.UseVisualStyleBackColor = true;
             this.Btn_Elfekvő.Click += new System.EventHandler(this.Btn_Elfekvő_Click);
             // 

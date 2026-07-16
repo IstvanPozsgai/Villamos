@@ -101,6 +101,9 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 int idxAnyag = indexekMB51["Anyag"];
                 int idxSarzs = indexekMB51["Sarzs"];
 
+                // Raktárhely oszlop keresése az MB51-ben (fontos a pontos párosításhoz)
+                int idxRaktarhelyMB51 = indexekMB51.ContainsKey("Raktárhely") ? indexekMB51["Raktárhely"] : -1;
+
                 int idxDatum = indexekMB51.ContainsKey("Könyvelési dátum") ? indexekMB51["Könyvelési dátum"] :
                                (indexekMB51.ContainsKey("Könyvelés dátuma") ? indexekMB51["Könyvelés dátuma"] : -1);
 
@@ -119,21 +122,47 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                     if (string.IsNullOrWhiteSpace(cikkszám) || string.IsNullOrWhiteSpace(sarzs))
                         continue;
 
-                    string kulcs = $"{cikkszám}|{sarzs}";
-                    // JAVÍTANDÓ: Raktár helyet is figyelni
-                    // és csak az legújabb elemet szabad figyelni a többit át kell ugrani
+                    string raktárhelyMB51 = idxRaktarhelyMB51 != -1 ? sor.Cell(idxRaktarhelyMB51).GetString().Trim() : "";
 
-                    DateTime mozgásDátum;
+                    string kulcs = $"{cikkszám}|{sarzs}|{raktárhelyMB51}";
+                    string névKulcs = $"{cikkszám}|{sarzs}";
 
-                    if (sor.Cell(idxDatum).TryGetValue(out mozgásDátum)) mozgásDátum = new DateTime(1900, 1, 1);
+                    if (idxMegnMB51 != -1)
+                    {
+                        string megn = sor.Cell(idxMegnMB51).GetString().Trim();
+                        if (!string.IsNullOrEmpty(megn) && !megnevezésekEllenőrző.ContainsKey(névKulcs))
+                            megnevezésekEllenőrző[névKulcs] = megn;
+                    }
+                    DateTime mozgásDátum = new DateTime(1900, 1, 1);
+                    bool sikeresDátum = false;
 
+                    if (sor.Cell(idxDatum).TryGetValue(out DateTime tempDatum))
+                    {
+                        mozgásDátum = tempDatum;
+                        sikeresDátum = true;
+                    }
+                    else
+                    {
+                        string dátumSzöveg = sor.Cell(idxDatum).GetString().Trim();
+                        if (DateTime.TryParse(dátumSzöveg, out tempDatum))
+                        {
+                            mozgásDátum = tempDatum;
+                            sikeresDátum = true;
+                        }
+                    }
 
-                    mozgásokKereső.Add(kulcs, mozgásDátum);
-
+                    if (sikeresDátum)
+                    {
+                        if (mozgásokKereső.TryGetValue(kulcs, out DateTime eddigiUtolsó))
+                            if (mozgásDátum > eddigiUtolsó)
+                                mozgásokKereső[kulcs] = mozgásDátum;
+                        else
+                            mozgásokKereső.Add(kulcs, mozgásDátum);
+                    }
                 }
             }
 
-            //MB52 raktárkészlet beolvasása dinamikus fejléc-indexek alapján
+            // MB52 raktárkészlet beolvasása dinamikus fejléc-indexek alapján
             List<Adat_Elfekvő> elfekvőLista = new List<Adat_Elfekvő>();
 
             using (var wbMB52 = new ClosedXML.Excel.XLWorkbook(fájl_MB52))
@@ -175,11 +204,12 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                     if (!sor.Cell(idxErtek).TryGetValue(out érték))
                         double.TryParse(sor.Cell(idxErtek).GetString().Trim(), out érték);
 
-                    string kulcs = $"{cikkszám}|{sarzs}";
+                    string kulcs = $"{cikkszám}|{sarzs}|{raktárhely}";
+                    string névKulcs = $"{cikkszám}|{sarzs}";
 
-                    if (megnevezésekEllenőrző.TryGetValue(kulcs, out string mentettMegn))
+                    if (megnevezésekEllenőrző.TryGetValue(névKulcs, out string mentettMegn))
                         if (!string.Equals(mentettMegn, megnevezés, StringComparison.OrdinalIgnoreCase))
-                            HibaNapló.Log($"Figyelmeztetés: Eltérő megnevezés a(z) {kulcs} kulcshoz. MB51: '{mentettMegn}', MB52: '{megnevezés}'", "Ablak_Elfekvő", "", "", 0);
+                            HibaNapló.Log($"Figyelmeztetés: Eltérő megnevezés a(z) {névKulcs} kulcshoz. MB51: '{mentettMegn}', MB52: '{megnevezés}'", "Ablak_Elfekvő", "", "", 0);
 
                     DateTime utolsóMozgásDatuma = new DateTime(1900, 1, 1);
                     if (mozgásokKereső.TryGetValue(kulcs, out DateTime megtaláltDátum))
@@ -198,6 +228,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
                 }
             }
 
+            // Rögzítés az adatbázisba
             if (elfekvőLista.Count > 0)
             {
                 KézElfekvő.Tábla_Kiürítés();
