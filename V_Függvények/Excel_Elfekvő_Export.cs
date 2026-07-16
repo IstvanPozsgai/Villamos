@@ -94,10 +94,10 @@ namespace Villamos.Kezelők
                     // LINQ GroupBy segítségével egyszer csoportosítunk Raktárhely alapján a részletes lapokhoz
                     var raktarCsoportok = adatok.GroupBy(a => a.Raktárhely).OrderBy(g => g.Key).ToList();
 
-                    // 1. Összesítő lap (Dashboard) elkészítése a háromszintű hierarchia alapján
+                    // Összesítő lap (Dashboard) elkészítése a háromszintű hierarchia alapján
                     KészítsDashboard(workbook, adatok);
 
-                    // 2. Részletes lapok automatikus elkészítése Raktárhelyenként
+                    //Részletes lapok automatikus elkészítése Raktárhelyenként
                     KészítsRészletesLapokat(workbook, raktarCsoportok);
 
                     workbook.SaveAs(fájlnév);
@@ -158,19 +158,19 @@ namespace Villamos.Kezelők
 
                 foreach (var thGroup in telephelyCsoportok)
                 {
-                    // 1. Szint: Telephely szintű összesítés
+                    //Telephely szintű összesítés
                     var thAdatok = thGroup.Select(x => x.Adat).ToList();
                     KiirOsszesitoSor(ws, ref sor, thGroup.Key, thAdatok, behuzas: 2);
                 }
 
-                // 2. Szint: Szakszolgálat szintű összesítés
+                // Szakszolgálat szintű összesítés
                 var szakszAdatok = szakszGroup.Select(x => x.Adat).ToList();
                 KiirOsszesitoSor(ws, ref sor, $"{szakszGroup.Key.ToUpper()} ÖSSZESEN", szakszAdatok, behuzas: 0, felkover: true);
 
                 sor++; // Üres sor az átláthatóságért a szakszolgálatok között
             }
 
-            // 3. Szint: Teljes Összesítés (Grand Total)
+            //  Teljes Összesítés (Grand Total)
             KiirOsszesitoSor(ws, ref sor, "TELJES ÁLLOMÁNY ÖSSZESEN", adatok, behuzas: 0, felkover: true, hatter: true);
 
             // Lap formázása (oszlopszélességek)
