@@ -74,7 +74,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             DataTable tablaMB51 = Függvénygyűjtemény.Excel_Tábla_Beolvas(fájl_MB51);
 
             // Ellenőrzés a projekt standardja szerint
-            if (!Függvénygyűjtemény.Betöltéshelyes("Elfekvő", tablaMB51))
+            if (!Függvénygyűjtemény.Betöltéshelyes("ElfekMB51", tablaMB51))
                 throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt MB51 (Anyagmozgások) adatok formátuma!");
 
             // Beolvasni kívánt oszlopok lekérdezése
@@ -82,10 +82,10 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             List<Adat_Excel_Beolvasás> oszlopnév = KézBeolvasás.Lista_Adatok();
 
             // Oszlopnevek beállítása (MB51)
-            string oszlopCikkszam51 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Cikkszám" select a.Fejléc).FirstOrDefault();
-            string oszlopSarzs51 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Sarzs" select a.Fejléc).FirstOrDefault();
-            string oszlopRaktar51 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Raktárhely" select a.Fejléc).FirstOrDefault();
-            string oszlopDatum51 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Dátum" select a.Fejléc).FirstOrDefault();
+            string oszlopCikkszam51 = (from a in oszlopnév where a.Csoport == "ElfekMB51" && a.Státusz == false && a.Változónév == "Cikkszám" select a.Fejléc).FirstOrDefault();
+            string oszlopSarzs51 = (from a in oszlopnév where a.Csoport == "ElfekMB51" && a.Státusz == false && a.Változónév == "Sarzs" select a.Fejléc).FirstOrDefault();
+            string oszlopRaktar51 = (from a in oszlopnév where a.Csoport == "ElfekMB51" && a.Státusz == false && a.Változónév == "Raktárhely" select a.Fejléc).FirstOrDefault();
+            string oszlopDatum51 = (from a in oszlopnév where a.Csoport == "ElfekMB51" && a.Státusz == false && a.Változónév == "Dátum" select a.Fejléc).FirstOrDefault();
 
             if (oszlopCikkszam51 == null || oszlopSarzs51 == null || oszlopRaktar51 == null || oszlopDatum51 == null)
                 throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla az MB51 fájlhoz!");
@@ -130,16 +130,16 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             // MB52 KÉSZLET BEOLVASÁSA ÉS ELLENŐRZÉSE
             DataTable tablaMB52 = Függvénygyűjtemény.Excel_Tábla_Beolvas(fájl_MB52);
 
-            if (!Függvénygyűjtemény.Betöltéshelyes("Elfekvő", tablaMB52))
+            if (!Függvénygyűjtemény.Betöltéshelyes("ElfekMB52", tablaMB52))
                 throw new HibásBevittAdat("Nem megfelelő a betölteni kívánt MB52 (Raktárkészlet) adatok formátuma!");
 
             // Oszlopnevek beállítása (MB52)
-            string oszlopCikkszam52 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Cikkszám" select a.Fejléc).FirstOrDefault();
-            string oszlopSarzs52 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Sarzs" select a.Fejléc).FirstOrDefault();
-            string oszlopRaktar52 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Raktárhely" select a.Fejléc).FirstOrDefault();
-            string oszlopMegnevezes52 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Megnevezés" select a.Fejléc).FirstOrDefault();
-            string oszlopMennyiseg52 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Mennyiség" select a.Fejléc).FirstOrDefault();
-            string oszlopErtek52 = (from a in oszlopnév where a.Csoport == "Elfekvő" && a.Státusz == false && a.Változónév == "Érték" select a.Fejléc).FirstOrDefault();
+            string oszlopCikkszam52 = (from a in oszlopnév where a.Csoport == "ElfekMB52" && a.Státusz == false && a.Változónév == "Cikkszám" select a.Fejléc).FirstOrDefault();
+            string oszlopSarzs52 = (from a in oszlopnév where a.Csoport == "ElfekMB52" && a.Státusz == false && a.Változónév == "Sarzs" select a.Fejléc).FirstOrDefault();
+            string oszlopRaktar52 = (from a in oszlopnév where a.Csoport == "ElfekMB52" && a.Státusz == false && a.Változónév == "Raktárhely" select a.Fejléc).FirstOrDefault();
+            string oszlopMegnevezes52 = (from a in oszlopnév where a.Csoport == "ElfekMB52" && a.Státusz == false && a.Változónév == "Megnevezés" select a.Fejléc).FirstOrDefault();
+            string oszlopMennyiseg52 = (from a in oszlopnév where a.Csoport == "ElfekMB52" && a.Státusz == false && a.Változónév == "Mennyiség" select a.Fejléc).FirstOrDefault();
+            string oszlopErtek52 = (from a in oszlopnév where a.Csoport == "ElfekMB52" && a.Státusz == false && a.Változónév == "Érték" select a.Fejléc).FirstOrDefault();
 
             if (oszlopCikkszam52 == null || oszlopSarzs52 == null || oszlopRaktar52 == null || oszlopMegnevezes52 == null || oszlopMennyiseg52 == null || oszlopErtek52 == null)
                 throw new HibásBevittAdat("Nincs helyesen beállítva a beolvasótábla az MB52 fájlhoz!");
