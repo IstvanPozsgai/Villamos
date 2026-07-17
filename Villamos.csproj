@@ -2097,6 +2097,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Aha-Soft-Standard-Transport-Tram.ico" />
+    <Content Include="Főmérnökség\Adatok\BeolvasásÚj.mdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Főmérnökség\Adatok\Nosztalgia\Kép\5901_1.jpg" />
     <None Include="Resources\Szem1.ico" />
     <None Include="Resources\Szem.ico" />
