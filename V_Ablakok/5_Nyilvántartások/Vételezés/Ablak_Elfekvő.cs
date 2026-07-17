@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
+using MyF = Függvénygyűjtemény;
 
 namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 {
@@ -38,7 +39,7 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
             {
                 await Task.Run(() => FeldolgozÉsMent(fájl_MB52, fájl_MB51));
 
-        
+
 
                 TáblaÍró();
             }
@@ -270,7 +271,20 @@ namespace Villamos.V_Ablakok._4_Nyilvántartások.Vételezés
 
         private void BtnSúgó_Click(object sender, EventArgs e)
         {
-            // JAVÍTANDÓ:A súgó gomb nincs bekötve
+            try
+            {
+                string hely = Application.StartupPath + @"\Súgó\VillamosLapok\Elfekvő.html";
+                MyF.Megnyitás(hely);
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
