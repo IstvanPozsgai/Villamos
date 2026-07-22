@@ -1492,7 +1492,7 @@ namespace Villamos
                 Tábla_telephely.Columns[12].Width = 100;
 
                 oszlop = 2;
-                sor = 0;
+                sor =-1;
 
                 foreach (Adat_Jármű adat in Adatok)
                 {
@@ -1541,8 +1541,7 @@ namespace Villamos
                     }
 
                 }
-
-                Tábla_telephely.Rows[sor].Cells[12].Value = darab;
+                if (sor >= 0) Tábla_telephely.Rows[sor].Cells[12].Value = darab;
                 Tábla_telephely.Visible = true;
                 Tábla_telephely.Refresh();
 
