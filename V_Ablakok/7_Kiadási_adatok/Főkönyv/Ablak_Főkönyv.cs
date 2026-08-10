@@ -1204,6 +1204,8 @@ namespace Villamos
                         Holtart.Lép();
                         Főkönyv_Funkciók.Napitöbblet("du", Dátum.Value, Cmbtelephely.Text);
                     }
+                    Holtart.Ki();
+                    Gombok();
                     return;
                 }
                 Holtart.Lép();
@@ -1247,6 +1249,7 @@ namespace Villamos
                 if (Dátum.Value == DateTime.Today && Reklám_Check.Checked) Reklám_eltérés();
                 Holtart.Lép();
                 Gombok();
+
             }
             catch (HibásBevittAdat ex)
             {
@@ -1257,6 +1260,7 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
         }
 
         private void Osztályozúj()
@@ -3064,7 +3068,7 @@ namespace Villamos
             AdatokFőVendég = KézFőJárműVendég.Lista_Adatok();
 
             AdatokFőkönyvZSER = KézFőkönyvZSER.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value, Délelőtt.Checked ? "de" : "du");
-            if (AdatokFőkönyvZSER == null || AdatokFőkönyvZSER.Count == 0) return;
+            // if (AdatokFőkönyvZSER == null || AdatokFőkönyvZSER.Count == 0) return;
 
 
             // kimeneti fájl helye és neve
