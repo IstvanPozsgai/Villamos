@@ -33,7 +33,6 @@ namespace Villamos.Adatszerkezet
             TénySzerSz = ténySzerSz;
             TénySzerelvény = ténySzerelvény;
             ElőírtSzerSz = előírtSzerSz;
-            ElőírtSzerelvény1 = előírtSzerelvény1;
             EÍSzerhossz = eÍSzerhossz;
             Státus = státus;
             E3vezénylés = e3vezénylés;
