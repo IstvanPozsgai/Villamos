@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -48,6 +49,9 @@ namespace Villamos
         List<Adat_Hétvége_Előírás> AdatokElőírás = new List<Adat_Hétvége_Előírás>();
         List<Adat_Kerék_Mérés> Mérés_Adatok = new List<Adat_Kerék_Mérés>();
         List<Adat_Vezénylés> AdatokVezény = new List<Adat_Vezénylés>();
+
+        DataTable AdatTábla = new DataTable();
+        List<Adat_T5C5_V_Vizsgálat> ÖsszesítettAdatok = new List<Adat_T5C5_V_Vizsgálat>();
 
 
         bool Terv = false;
@@ -245,99 +249,33 @@ namespace Villamos
 
 
         #region V ütemező
+
+
+
         private void Tábla_kitöltés()
         {
             try
             {
+                //Átállítjuk a táblázat nézetet
+                Tábla.Visible = false;
+                TáblaAdatNézet.Visible = true;
+
+                Listák_Feltöltése();
+                ABFejléc();
+                ABFeltöltése();
+
+                TáblaAdatNézet.DataSource = AdatTábla;
+                OszlopSzélesség();
+                TáblaAdatNézet.Refresh();
+                TáblaAdatNézet.Visible = true;
+                TáblaAdatNézet.ClearSelection();
+
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
                 Tábla.Refresh();
                 Tábla.Visible = false;
                 Tábla.ColumnCount = 38;
 
-                Listák_Feltöltése();
-
-                // fejléc elkészítése 
-                Tábla.Columns[0].HeaderText = "Ssz";
-                Tábla.Columns[0].Width = 60;
-                Tábla.Columns[1].HeaderText = "Psz";
-                Tábla.Columns[1].Width = 70;
-                Tábla.Columns[2].HeaderText = "Típus";
-                Tábla.Columns[2].Width = 70;
-                Tábla.Columns[2].Frozen = true;
-                Tábla.Columns[3].HeaderText = "Vizsg. foka";
-                Tábla.Columns[3].Width = 70;
-                Tábla.Columns[4].HeaderText = "Vizsg. Ssz.";
-                Tábla.Columns[4].Width = 70;
-                Tábla.Columns[5].HeaderText = "Vizsg. Vége";
-                Tábla.Columns[5].Width = 110;
-                Tábla.Columns[6].HeaderText = "V után futott korr";
-                Tábla.Columns[6].Width = 70;
-                Tábla.Columns[7].HeaderText = "Havi km";
-                Tábla.Columns[7].Width = 70;
-                Tábla.Columns[8].HeaderText = "Köv. V";
-                Tábla.Columns[8].Width = 80;
-                Tábla.Columns[9].HeaderText = "Köv. V Ssz";
-                Tábla.Columns[9].Width = 80;
-                Tábla.Columns[10].HeaderText = "Előző V-től km korr";
-                Tábla.Columns[10].Width = 80;
-
-                Tábla.Columns[11].HeaderText = "Köv. V2/V3";
-                Tábla.Columns[11].Width = 80;
-                Tábla.Columns[12].HeaderText = "Előző V2/V3-től km korr";
-                Tábla.Columns[12].Width = 80;
-                Tábla.Columns[13].HeaderText = "Jármű státusz";
-                Tábla.Columns[13].Width = 120;
-                Tábla.Columns[14].HeaderText = "Hiba leírása";
-                Tábla.Columns[14].Width = 300;
-
-                Tábla.Columns[15].HeaderText = "Előírt Szerelvény";
-                Tábla.Columns[15].Width = 160;
-                Tábla.Columns[16].HeaderText = "Csatolhatóság";
-                Tábla.Columns[16].Width = 70;
-                Tábla.Columns[17].HeaderText = "Kerék átmérő Min";
-                Tábla.Columns[17].Width = 80;
-                Tábla.Columns[18].HeaderText = "KMU";
-                Tábla.Columns[18].Width = 80;
-                Tábla.Columns[19].HeaderText = "Ciklus";
-                Tábla.Columns[19].Width = 120;
-
-                Tábla.Columns[20].HeaderText = "Vonal";
-                Tábla.Columns[20].Width = 70;
-                Tábla.Columns[21].HeaderText = "Napos utolsó";
-                Tábla.Columns[21].Width = 70;
-                Tábla.Columns[22].HeaderText = "Napos szám";
-                Tábla.Columns[22].Width = 70;
-                Tábla.Columns[23].HeaderText = "E3 nap";
-                Tábla.Columns[23].Width = 70;
-                Tábla.Columns[24].HeaderText = "Tény Szer.sz";
-                Tábla.Columns[24].Width = 70;
-                Tábla.Columns[25].HeaderText = "Tény Szerelvény";
-                Tábla.Columns[25].Width = 70;
-                Tábla.Columns[26].HeaderText = "Előírt Szer Sz";
-                Tábla.Columns[26].Width = 70;
-                Tábla.Columns[27].HeaderText = "Előírt Szerelvény1";
-                Tábla.Columns[27].Width = 70;
-                Tábla.Columns[28].HeaderText = "EÍ Szer hossz";
-                Tábla.Columns[28].Width = 70;
-                Tábla.Columns[29].HeaderText = "Státus";
-                Tábla.Columns[29].Width = 70;
-                Tábla.Columns[30].HeaderText = "E3 vezénylés";
-                Tábla.Columns[30].Width = 70;
-                Tábla.Columns[31].HeaderText = "Vissza";
-                Tábla.Columns[31].Width = 70;
-                Tábla.Columns[32].HeaderText = "Kiad";
-                Tábla.Columns[32].Width = 70;
-                Tábla.Columns[33].HeaderText = "Korrigált km";
-                Tábla.Columns[33].Width = 70;
-                Tábla.Columns[34].HeaderText = "V után futott";
-                Tábla.Columns[34].Width = 70;
-                Tábla.Columns[35].HeaderText = "Előző V-től km ";
-                Tábla.Columns[35].Width = 80;
-                Tábla.Columns[36].HeaderText = "Előző V2/V3-től km ";
-                Tábla.Columns[36].Width = 70;
-                Tábla.Columns[37].HeaderText = "Friss dátum";
-                Tábla.Columns[37].Width = 110;
 
                 // kilistázzuk a adatbázis adatait
                 List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
@@ -441,6 +379,127 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void ABFeltöltése()
+        {
+            try
+            {
+                AdatTábla.Clear();
+                foreach (Adat_T5C5_V_Vizsgálat rekord in ÖsszesítettAdatok)
+                {
+                    DataRow Soradat = AdatTábla.NewRow();
+                    Soradat["Típus"] = rekord.Típus;
+
+                    AdatTábla.Rows.Add(Soradat);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ABFejléc()
+        {
+            try
+            {
+                AdatTábla.Columns.Clear();
+                AdatTábla.Columns.Add("Ssz");
+                AdatTábla.Columns.Add("Psz");
+                AdatTábla.Columns.Add("Típus");
+                AdatTábla.Columns.Add("Vizsg. foka");
+                AdatTábla.Columns.Add("Vizsg. Ssz.");
+                AdatTábla.Columns.Add("Vizsg. Vége");
+                AdatTábla.Columns.Add("V után futott korr");
+                AdatTábla.Columns.Add("Havi km");
+                AdatTábla.Columns.Add("Köv. V");
+                AdatTábla.Columns.Add("Köv. V Ssz");
+                AdatTábla.Columns.Add("Előző V-től km korr");
+                AdatTábla.Columns.Add("Köv. V2/V3");
+                AdatTábla.Columns.Add("Előző V2/V3-től km korr");
+                AdatTábla.Columns.Add("Jármű státusz");
+                AdatTábla.Columns.Add("Hiba leírása");
+                AdatTábla.Columns.Add("Előírt Szerelvény");
+                AdatTábla.Columns.Add("Csatolhatóság");
+                AdatTábla.Columns.Add("Kerék átmérő Min");
+                AdatTábla.Columns.Add("KMU");
+                AdatTábla.Columns.Add("Ciklus");
+                AdatTábla.Columns.Add("Vonal");
+                AdatTábla.Columns.Add("Napos utolsó");
+                AdatTábla.Columns.Add("Napos szám");
+                AdatTábla.Columns.Add("E3 nap");
+                AdatTábla.Columns.Add("Tény Szer.sz");
+                AdatTábla.Columns.Add("Tény Szerelvény");
+                AdatTábla.Columns.Add("Előírt Szer Sz");
+                AdatTábla.Columns.Add("Előírt Szerelvény1");
+                AdatTábla.Columns.Add("EÍ Szer hossz");
+                AdatTábla.Columns.Add("Státus");
+                AdatTábla.Columns.Add("E3 vezénylés");
+                AdatTábla.Columns.Add("Vissza");
+                AdatTábla.Columns.Add("Kiad");
+                AdatTábla.Columns.Add("Korrigált km");
+                AdatTábla.Columns.Add("V után futott");
+                AdatTábla.Columns.Add("Előző V-től km");
+                AdatTábla.Columns.Add("Előző V2/V3-től km");
+                AdatTábla.Columns.Add("Friss dátum");
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void OszlopSzélesség()
+        {
+            TáblaAdatNézet.Columns["Ssz"].Width = 60;
+            TáblaAdatNézet.Columns["Psz"].Width = 70;
+            TáblaAdatNézet.Columns["Típus"].Width = 70;
+            TáblaAdatNézet.Columns["Vizsg. foka"].Width = 70;
+            TáblaAdatNézet.Columns["Vizsg. Ssz."].Width = 70;
+            TáblaAdatNézet.Columns["Vizsg. Vége"].Width = 110;
+            TáblaAdatNézet.Columns["V után futott korr"].Width = 70;
+            TáblaAdatNézet.Columns["Havi km"].Width = 70;
+            TáblaAdatNézet.Columns["Köv. V"].Width = 80;
+            TáblaAdatNézet.Columns["Köv. V Ssz"].Width = 80;
+            TáblaAdatNézet.Columns["Előző V-től km korr"].Width = 80;
+            TáblaAdatNézet.Columns["Köv. V2/V3"].Width = 80;
+            TáblaAdatNézet.Columns["Előző V2/V3-től km korr"].Width = 80;
+            TáblaAdatNézet.Columns["Jármű státusz"].Width = 120;
+            TáblaAdatNézet.Columns["Hiba leírása"].Width = 300;
+            TáblaAdatNézet.Columns["Előírt Szerelvény"].Width = 160;
+            TáblaAdatNézet.Columns["Csatolhatóság"].Width = 70;
+            TáblaAdatNézet.Columns["Kerék átmérő Min"].Width = 80;
+            TáblaAdatNézet.Columns["KMU"].Width = 80;
+            TáblaAdatNézet.Columns["Ciklus"].Width = 120;
+            TáblaAdatNézet.Columns["Vonal"].Width = 70;
+            TáblaAdatNézet.Columns["Napos utolsó"].Width = 70;
+            TáblaAdatNézet.Columns["Napos szám"].Width = 70;
+            TáblaAdatNézet.Columns["E3 nap"].Width = 70;
+            TáblaAdatNézet.Columns["Tény Szer.sz"].Width = 70;
+            TáblaAdatNézet.Columns["Tény Szerelvény"].Width = 70;
+            TáblaAdatNézet.Columns["Előírt Szer Sz"].Width = 70;
+            TáblaAdatNézet.Columns["Előírt Szerelvény1"].Width = 80;
+            TáblaAdatNézet.Columns["EÍ Szer hossz"].Width = 80;
+            TáblaAdatNézet.Columns["Státus"].Width = 80;
+            TáblaAdatNézet.Columns["E3 vezénylés"].Width = 80;
+            TáblaAdatNézet.Columns["Vissza"].Width = 80;
+            TáblaAdatNézet.Columns["Kiad"].Width = 80;
+            TáblaAdatNézet.Columns["Korrigált km"].Width = 80;
+            TáblaAdatNézet.Columns["V után futott"].Width = 80;
+            TáblaAdatNézet.Columns["Előző V-től km"].Width = 80;
+            TáblaAdatNézet.Columns["Előző V2/V3-től km"].Width = 80;
+            TáblaAdatNézet.Columns["Friss dátum"].Width = 110;
         }
 
         private void Listák_Feltöltése()
@@ -1470,7 +1529,8 @@ namespace Villamos
             try
             {
                 AlsóPanel1 = "szerelvény";
-
+                Tábla.Visible = true;
+                TáblaAdatNézet.Visible = false;
                 Tábla.Rows.Clear();
                 Tábla.Columns.Clear();
                 Tábla.Refresh();
