@@ -281,7 +281,6 @@ namespace Villamos
             this.Tábla.Name = "Tábla";
             this.Tábla.Size = new System.Drawing.Size(839, 134);
             this.Tábla.TabIndex = 70;
-            this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
             // TáblaAdatNézet
             // 
