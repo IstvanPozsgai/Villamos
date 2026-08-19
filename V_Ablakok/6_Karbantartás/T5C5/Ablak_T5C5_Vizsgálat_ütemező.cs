@@ -1,6 +1,4 @@
-﻿using ADODB;
-using Microsoft.Office.Interop.Excel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -10,9 +8,7 @@ using Villamos.Adatszerkezet;
 using Villamos.Kezelők;
 using Villamos.V_Ablakok._5_Karbantartás.T5C5;
 using Villamos.V_Ablakok.Közös;
-using Villamos.V_MindenEgyéb;
 using Villamos.Villamos_Ablakok;
-using static Villamos.V_MindenEgyéb.Enumok;
 using MyF = Függvénygyűjtemény;
 using MyX = Villamos.MyClosedXML_Excel;
 
@@ -275,6 +271,7 @@ namespace Villamos
                 TáblaAdatNézet.Refresh();
                 TáblaAdatNézet.Visible = true;
                 TáblaAdatNézet.ClearSelection();
+                Holtart.Ki();
             }
             catch (HibásBevittAdat ex)
             {
@@ -355,61 +352,60 @@ namespace Villamos
 
                     string Hibák = Hiba_listázása(rekord.Azonosító);
 
+                    long KmKorr = Korrekció_km(rekord.Azonosító, KMAdat.KMUdátum);
+
+                    string Vezénylés = Vezénylés_listázása(rekord.Azonosító);
+
+                    string Csatolható = Csatolhatóság_listázása(rekord.Azonosító);
+
+                    long Átmérő = Kerékátmérő(rekord.Azonosító);
+
+                    string előírás = Előírás_listázás(rekord.Azonosító);
+                    string előírásVonal = Előírás_listázás_Vonal(rekord.Azonosító);
+
+                    Adat_T5C5_Göngyöl Göngyöl = Futásadat_listázása(rekord.Azonosító);
+
+
                     Adat_T5C5_V_Vizsgálat Adat = new Adat_T5C5_V_Vizsgálat(
-                        ssz: sorszám,
-                        psz: rekord.Azonosító,
-                        típus: rekord.Típus,
-                        vizsgfoka: KMAdat.Vizsgfok,
-                    vizsgSsz: KMAdat.Vizsgsorszám,
-                    vizsgVége: KMAdat.Vizsgdátumv,
-                    vutánfutottkorr: ,
-                    havikm: KMAdat.Havikm,
-                    kövV: KMAdat.KövV,
-                    kövVSsz: KMAdat.KövV_sorszám,
-                    előzőVkmkorr: ,
-                    kövV2V3: KMAdat.KövV2,
-                    előzőV2V3tőlkmkorr: ,
-                    járműstátusz: ,
-                    hibaleírása: Hibák,
-                    előírtSzerelvény: ElőírtszerelvényKocsijai,
-                    csatolhatóság: ,
-                    kerékátmérőMin: ,
-                    kMU: KMAdat.KMUkm,
-                    ciklus: KMAdat.Ciklusrend.Trim(),
-                    vonal: ,
-                    naposutolsó: ,
-                    naposszám: ,
-                    e3nap: ,
-                ténySzerSz: rekord.Szerelvénykocsik,
-                    ténySzerelvény: TényszerelvényKocsijai,
-                    előírtSzerSz: Előírtszerelvény.Szerelvény_ID,
-                    eÍSzerhossz: Előírtszerelvény.Szerelvényhossz,
-                státus: státus,
-                    e3vezénylés: ,
-                    vissza: ,
-                    kiad: ,
-                    korrigáltkm: ,
-                    vutánfutott: VUtánFutot,
-                    előzőVtőlkm: KMAdat.KMUkm - KMAdat.Vizsgkm,
-                    előzőV2V3tőlkm: KMAdat.KMUkm - KMAdat.V2V3Számláló,
-                    frissdátum: KMAdat.KMUdátum
+                        sorszám,
+                        rekord.Azonosító,
+                        rekord.Típus,
+                        KMAdat.Vizsgfok,
+                        KMAdat.Vizsgsorszám,
+                        KMAdat.Vizsgdátumv,
+                        KorNapikm + VUtánFutot,
+                        KMAdat.Havikm,
+                        KMAdat.KövV,
+                        KMAdat.KövV_sorszám,
+                        KorNapikm + ElőzőVtől,
+                        KMAdat.KövV2,
+                        KmKorr + (KMAdat.KMUkm - KMAdat.V2V3Számláló),
+                        státus,
+                        Hibák,
+                        ElőírtszerelvényKocsijai,
+                        Csatolható,
+                        Átmérő,
+                        KMAdat.KMUkm,
+                        KMAdat.Ciklusrend.Trim(),
+                        előírásVonal,
+                        Göngyöl.Vizsgálatfokozata,
+                        Göngyöl.Vizsgálatszáma,
+                        Göngyöl.Futásnap,
+                        rekord.Szerelvénykocsik,
+                        TényszerelvényKocsijai,
+                        Előírtszerelvény.Szerelvény_ID,
+                        Előírtszerelvény.Szerelvényhossz,
+                        rekord.Státus,
+                        Vezénylés,
+                        vissza: előírás,
+                        korrigáltkm: KmKorr,
+                        vutánfutott: VUtánFutot,
+                        előzőVtőlkm: KMAdat.KMUkm - KMAdat.Vizsgkm,
+                        előzőV2V3tőlkm: KMAdat.KMUkm - KMAdat.V2V3Számláló,
+                        frissdátum: KMAdat.KMUdátum
                     );
+                    ÖsszesítettAdatok.Add(Adat);
 
-
-
-
-
-                    Csatolhatóság_listázása(rekord.Azonosító, i);
-                    Futásadat_listázása(rekord.Azonosító, i);
-                    Előírás_listázás(rekord.Azonosító, i);
-                    Kerékátmérő(rekord.Azonosító, i);
-                    Vezénylés_listázása(rekord.Azonosító, i);
-                    Tábla.Rows[i].Cells[33].Value = 0;
-                    Korrekció_km(rekord.Azonosító, i);
-
-                    Tábla.Rows[i].Cells[6].Value = KorNapikm + VUtánFutot;
-                    Tábla.Rows[i].Cells[10].Value = KorNapikm + ElőzőVtől;
-                    Tábla.Rows[i].Cells[12].Value = KorNapikm + ElőzőV2V3;
                     Holtart.Lép();
                 }
                 //Tábla.Refresh();
@@ -422,7 +418,7 @@ namespace Villamos
                 //}
                 //Tábla.Sort(Tábla.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
                 //Holtart.Ki();
-                //TáblaSzínezés();
+                TáblaSzínezés();
                 //Tábla.ClearSelection();
                 //Tábla.Visible = true;
             }
@@ -446,7 +442,43 @@ namespace Villamos
                 foreach (Adat_T5C5_V_Vizsgálat rekord in ÖsszesítettAdatok)
                 {
                     DataRow Soradat = AdatTábla.NewRow();
+
+                    Soradat["Ssz"] = rekord.Ssz;
+                    Soradat["Psz"] = rekord.Psz;
                     Soradat["Típus"] = rekord.Típus;
+                    Soradat["Vizsg. foka"] = rekord.Vizsgfoka;
+                    Soradat["Vizsg. Ssz."] = rekord.KövVSsz;
+                    Soradat["Vizsg. Vége"] = rekord.VizsgVége.ToString("yyyy.MM.dd");
+                    Soradat["V után futott korr"] = rekord.Vutánfutott;
+                    Soradat["Havi km"] = rekord.Havikm;
+                    Soradat["Köv. V"] = rekord.KövV;
+                    Soradat["Köv. V Ssz"] = rekord.KövVSsz;
+                    Soradat["Előző V-től km korr"] = rekord.ElőzőVkmkorr;
+                    Soradat["Köv. V2/V3"] = rekord.KövV2V3;
+                    Soradat["Előző V2/V3-től km korr"] = rekord.ElőzőV2V3tőlkmkorr;
+                    Soradat["Jármű státusz"] = rekord.Járműstátusz;
+                    Soradat["Hiba leírása"] = rekord.Hibaleírása;
+                    Soradat["Előírt Szerelvény"] = rekord.ElőírtSzerelvény;
+                    Soradat["Csatolhatóság"] = rekord.Csatolhatóság;
+                    Soradat["Kerék átmérő Min"] = rekord.KerékátmérőMin;
+                    Soradat["KMU"] = rekord.KMU;
+                    Soradat["Ciklus"] = rekord.Ciklus;
+                    Soradat["Vonal"] = rekord.Vonal;
+                    Soradat["Napos utolsó"] = rekord.Naposutolsó;
+                    Soradat["Napos szám"] = rekord.Naposszám;
+                    Soradat["E3 nap"] = rekord.E3nap;
+                    Soradat["Tény Szer.sz"] = rekord.TénySzerSz;
+                    Soradat["Tény Szerelvény"] = rekord.TénySzerelvény;
+                    Soradat["Előírt Szer Sz"] = rekord.ElőírtSzerSz;
+                    Soradat["EÍ Szer hossz"] = rekord.EÍSzerhossz;
+                    Soradat["Státus"] = rekord.Státus;
+                    Soradat["E3 vezénylés"] = rekord.E3vezénylés;
+                    Soradat["Vissza"] = rekord.Vissza;
+                    Soradat["Korrigált km"] = rekord.Korrigáltkm;
+                    Soradat["V után futott"] = rekord.Vutánfutott;
+                    Soradat["Előző V-től km"] = rekord.ElőzőVtőlkm;
+                    Soradat["Előző V2/V3-től km"] = rekord.ElőzőV2V3tőlkm;
+                    Soradat["Friss dátum"] = rekord.Frissdátum.ToString("yyyy.MM.dd");
 
                     AdatTábla.Rows.Add(Soradat);
                 }
@@ -825,11 +857,6 @@ namespace Villamos
                         ideig += Elem.Kocsi4.Trim() == "_" ? "" : "-" + Elem.Kocsi4.Trim();
                         ideig += Elem.Kocsi5.Trim() == "_" ? "" : "-" + Elem.Kocsi5.Trim();
                         ideig += Elem.Kocsi6.Trim() == "_" ? "" : "-" + Elem.Kocsi6.Trim();
-
-                        Tábla.Rows[sor].Cells[26].Value = Elem.Szerelvény_ID;
-                        Tábla.Rows[sor].Cells[15].Value = ideig;
-                        Tábla.Rows[sor].Cells[27].Value = ideig;
-                        Tábla.Rows[sor].Cells[28].Value = Elem.Szerelvényhossz;
                     }
                 }
             }
@@ -857,13 +884,11 @@ namespace Villamos
                                             select a).FirstOrDefault();
                     if (Elem != null)
                     {
-                        string ideig = Elem.Kocsi1.Trim();
-                        ideig += Elem.Kocsi2.Trim() == "_" ? "" : "-" + Elem.Kocsi2.Trim();
-                        ideig += Elem.Kocsi3.Trim() == "_" ? "" : "-" + Elem.Kocsi3.Trim();
-                        ideig += Elem.Kocsi4.Trim() == "_" ? "" : "-" + Elem.Kocsi4.Trim();
-                        ideig += Elem.Kocsi5.Trim() == "_" ? "" : "-" + Elem.Kocsi5.Trim();
-                        ideig += Elem.Kocsi6.Trim() == "_" ? "" : "-" + Elem.Kocsi6.Trim();
                         válasz = Elem;
+                    }
+                    else
+                    {
+                        válasz = new Adat_Szerelvény(0, 0, "_", "_", "_", "_", "_", "_");
                     }
                 }
             }
@@ -929,8 +954,6 @@ namespace Villamos
             return rekordszer;
         }
 
-
-
         private string Csatolhatóság_listázása(string azonosító)
         {
             string válasz = "";
@@ -957,46 +980,29 @@ namespace Villamos
             return válasz;
         }
 
-        private void Futásadat_listázása(string azonosító, int sor)
+        private Adat_T5C5_Göngyöl Futásadat_listázása(string azonosító)
         {
+            Adat_T5C5_Göngyöl válasz = null;
             try
             {
-                if (AdatokFutás == null) return;
-                Adat_T5C5_Göngyöl rekordszer = (from a in AdatokFutás
-                                                where a.Azonosító == azonosító
-                                                select a).FirstOrDefault();
-                if (rekordszer != null)
+                if (AdatokFutás != null)
                 {
-                    Tábla.Rows[sor].Cells[21].Value = rekordszer.Vizsgálatfokozata;
-                    Tábla.Rows[sor].Cells[22].Value = rekordszer.Vizsgálatszáma;
-                    Tábla.Rows[sor].Cells[23].Value = rekordszer.Futásnap;
-                }
-            }
-            catch (HibásBevittAdat ex)
-            {
-                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
-                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Előírás_listázás(string azonosító, int sor)
-        {
-            try
-            {
-                if (AdatokHBeosztás == null) return;
-                Adat_Hétvége_Beosztás rekordszer = (from a in AdatokHBeosztás
-                                                    where a.Kocsi1 == azonosító || a.Kocsi2 == azonosító || a.Kocsi3 == azonosító ||
-                                                    a.Kocsi4 == azonosító || a.Kocsi5 == azonosító || a.Kocsi6 == azonosító
+                    Adat_T5C5_Göngyöl rekordszer = (from a in AdatokFutás
+                                                    where a.Azonosító == azonosító
                                                     select a).FirstOrDefault();
-                if (rekordszer != null)
-                {
-                    Tábla.Rows[sor].Cells[20].Value = rekordszer.Vonal;
-                    string ideig = rekordszer.Vissza1 + "-" + rekordszer.Vissza2 + "-" + rekordszer.Vissza3 + "-" + rekordszer.Vissza4 + "-" + rekordszer.Vissza5 + "-" + rekordszer.Vissza6;
-                    Tábla.Rows[sor].Cells[31].Value = ideig;
+                    if (rekordszer == null)
+                    {
+                        rekordszer = new Adat_T5C5_Göngyöl(
+                        azonosító,
+                        new DateTime(1900, 1, 1),
+                        new DateTime(1900, 1, 1),
+                        new DateTime(1900, 1, 1),
+                        "_",
+                        0,
+                        0,
+                        "_");
+                    }
+                    válasz = rekordszer;
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1008,21 +1014,25 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            return válasz;
         }
 
-        private void Kerékátmérő(string azonosító, int sor)
+        private string Előírás_listázás(string azonosító)
         {
+            string válasz = "";
             try
             {
-                if (Mérés_Adatok == null) return;
-                List<Adat_Kerék_Mérés> Elem = (from a in Mérés_Adatok
-                                               where a.Azonosító == azonosító
-                                               orderby a.Mikor descending
-                                               select a).ToList();
-                if (Elem != null && Elem.Count != 0)
+                if (AdatokHBeosztás != null)
                 {
-                    int min = Elem.Take(4).Min(b => b.Méret);
-                    Tábla.Rows[sor].Cells[17].Value = min;
+                    Adat_Hétvége_Beosztás rekordszer = (from a in AdatokHBeosztás
+                                                        where a.Kocsi1 == azonosító || a.Kocsi2 == azonosító || a.Kocsi3 == azonosító ||
+                                                        a.Kocsi4 == azonosító || a.Kocsi5 == azonosító || a.Kocsi6 == azonosító
+                                                        select a).FirstOrDefault();
+                    if (rekordszer != null)
+                    {
+                        string ideig = rekordszer.Vissza1 + "-" + rekordszer.Vissza2 + "-" + rekordszer.Vissza3 + "-" + rekordszer.Vissza4 + "-" + rekordszer.Vissza5 + "-" + rekordszer.Vissza6;
+                        válasz = ideig;
+                    }
                 }
             }
             catch (HibásBevittAdat ex)
@@ -1034,10 +1044,70 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            return válasz;
+        }
+        private string Előírás_listázás_Vonal(string azonosító)
+        {
+            string válasz = "";
+            try
+            {
+                if (AdatokHBeosztás != null)
+                {
+                    Adat_Hétvége_Beosztás rekordszer = (from a in AdatokHBeosztás
+                                                        where a.Kocsi1 == azonosító || a.Kocsi2 == azonosító || a.Kocsi3 == azonosító ||
+                                                        a.Kocsi4 == azonosító || a.Kocsi5 == azonosító || a.Kocsi6 == azonosító
+                                                        select a).FirstOrDefault();
+                    if (rekordszer != null)
+                    {
+                        válasz = rekordszer.Vonal;
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return válasz;
         }
 
-        private void Vezénylés_listázása(string azonosító, int sor)
+        private long Kerékátmérő(string azonosító)
         {
+            long válasz = 0;
+            try
+            {
+                if (Mérés_Adatok != null)
+                {
+                    List<Adat_Kerék_Mérés> Elem = (from a in Mérés_Adatok
+                                                   where a.Azonosító == azonosító
+                                                   orderby a.Mikor descending
+                                                   select a).ToList();
+                    if (Elem != null && Elem.Count != 0)
+                    {
+                        int min = Elem.Take(4).Min(b => b.Méret);
+                        válasz = min;
+                    }
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return válasz;
+        }
+
+        private string Vezénylés_listázása(string azonosító)
+        {
+            string válasz = "";
             try
             {
                 if (AdatokVezény != null && AdatokVezény.Count != 0)
@@ -1052,12 +1122,12 @@ namespace Villamos
                         {
                             // előző napi
                             if (rekord.Dátum.ToString("MM-dd-yyyy") == DateTime.Today.AddDays(-1).ToString("MM-dd-yyyy"))
-                                Tábla.Rows[sor].Cells[30].Value = rekord.Vizsgálat.Trim() + "-" + rekord.Dátum.ToString("MM.dd") + "-e";
+                                válasz = rekord.Vizsgálat.Trim() + "-" + rekord.Dátum.ToString("MM.dd") + "-e";
                             // aznapi
                             else if (rekord.Dátum.ToString("MM-dd-yyyy") == DateTime.Today.ToString("MM-dd-yyyy"))
-                                Tábla.Rows[sor].Cells[30].Value = rekord.Vizsgálat.Trim() + "-" + rekord.Dátum.ToString("MM.dd") + "-a";
+                                válasz = rekord.Vizsgálat.Trim() + "-" + rekord.Dátum.ToString("MM.dd") + "-a";
                             else
-                                Tábla.Rows[sor].Cells[30].Value = rekord.Vizsgálat.Trim() + "-" + rekord.Dátum.ToString("MM.dd") + "-u";
+                                válasz = rekord.Vizsgálat.Trim() + "-" + rekord.Dátum.ToString("MM.dd") + "-u";
                         }
                     }
                 }
@@ -1071,24 +1141,25 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            return válasz;
         }
 
-        private void Korrekció_km(string azonosító, int sor)
+        private long Korrekció_km(string azonosító, DateTime Dátum)
         {
+            long válasz = 0;
             try
             {
-                Tábla.Rows[sor].Cells[33].Value = 0;
-                if (AdatokZSER == null) return;
+                if (AdatokZSER != null)
+                {
+                    List<Adat_Főkönyv_Zser_Km> KorNapikmLista = (from a in AdatokZSER
+                                                                 where a.Azonosító == azonosító && a.Dátum > Dátum
+                                                                 select a).ToList();
 
-                List<Adat_Főkönyv_Zser_Km> KorNapikmLista = (from a in AdatokZSER
-                                                             where a.Azonosító == azonosító && a.Dátum > Tábla.Rows[sor].Cells[37].Value.ToÉrt_DaTeTime()
-                                                             select a).ToList();
+                    if (KorNapikmLista != null)
+                        KorNapikm = KorNapikmLista.Sum(a => a.Napikm);
 
-                if (KorNapikmLista != null)
-                    KorNapikm = KorNapikmLista.Sum(a => a.Napikm);
-
-                Tábla.Rows[sor].Cells[33].Value = KorNapikm;
-
+                    válasz = KorNapikm;
+                }
             }
             catch (HibásBevittAdat ex)
             {
@@ -1099,6 +1170,7 @@ namespace Villamos
                 HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            return válasz;
         }
 
         private void Előírás_listázásFrissít()

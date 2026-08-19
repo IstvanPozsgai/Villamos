@@ -18,7 +18,8 @@ namespace Villamos.Adatszerkezet
         public int Futásnap { get; private set; }
         public string Telephely { get; private set; }
 
-        public Adat_T5C5_Göngyöl(string azonosító, DateTime utolsórögzítés, DateTime vizsgálatdátuma, DateTime utolsóforgalminap, string vizsgálatfokozata, int vizsgálatszáma, int futásnap, string telephely)
+        public Adat_T5C5_Göngyöl(string azonosító, DateTime utolsórögzítés, DateTime vizsgálatdátuma, DateTime utolsóforgalminap, 
+            string vizsgálatfokozata, int vizsgálatszáma, int futásnap, string telephely)
         {
             Azonosító = azonosító;
             Utolsórögzítés = utolsórögzítés;

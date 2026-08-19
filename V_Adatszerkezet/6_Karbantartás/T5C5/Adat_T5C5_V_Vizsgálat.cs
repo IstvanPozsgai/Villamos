@@ -4,7 +4,11 @@ namespace Villamos.Adatszerkezet
 {
     public class Adat_T5C5_V_Vizsgálat
     {
-        public Adat_T5C5_V_Vizsgálat(long ssz, string psz, string típus, string vizsgfoka, long vizsgSsz, DateTime vizsgVége, long vutánfutottkorr, long havikm, string kövV, long kövVSsz, long előzőVkmkorr, string kövV2V3, long előzőV2V3tőlkmkorr, string járműstátusz, string hibaleírása, string előírtSzerelvény, string csatolhatóság, long kerékátmérőMin, long kMU, string ciklus, string vonal, string naposutolsó, long naposszám, long e3nap, long ténySzerSz, string ténySzerelvény, long előírtSzerSz, string előírtSzerelvény1, long eÍSzerhossz, long státus, string e3vezénylés, string vissza, string kiad, long korrigáltkm, long vutánfutott, long előzőVtőlkm, long előzőV2V3tőlkm, DateTime frissdátum)
+        public Adat_T5C5_V_Vizsgálat(long ssz, string psz, string típus, string vizsgfoka, long vizsgSsz, DateTime vizsgVége, long vutánfutottkorr, long havikm,
+            string kövV, long kövVSsz, long előzőVkmkorr, string kövV2V3, long előzőV2V3tőlkmkorr, string járműstátusz, string hibaleírása, string előírtSzerelvény,
+            string csatolhatóság, long kerékátmérőMin, long kMU, string ciklus, string vonal, string naposutolsó, long naposszám, long e3nap, long ténySzerSz,
+            string ténySzerelvény, long előírtSzerSz, long eÍSzerhossz, long státus, string e3vezénylés, string vissza,
+            long korrigáltkm, long vutánfutott, long előzőVtőlkm, long előzőV2V3tőlkm, DateTime frissdátum)
         {
             Ssz = ssz;
             Psz = psz;
@@ -37,7 +41,6 @@ namespace Villamos.Adatszerkezet
             Státus = státus;
             E3vezénylés = e3vezénylés;
             Vissza = vissza;
-            Kiad = kiad;
             Korrigáltkm = korrigáltkm;
             Vutánfutott = vutánfutott;
             ElőzőVtőlkm = előzőVtőlkm;
@@ -72,12 +75,10 @@ namespace Villamos.Adatszerkezet
         public long TénySzerSz { get; private set; } = 0;
         public string TénySzerelvény { get; private set; } = "-";
         public long ElőírtSzerSz { get; private set; } = 0;
-        public string ElőírtSzerelvény1 { get; private set; } = "-";
         public long EÍSzerhossz { get; private set; } = 0;
         public long Státus { get; private set; } = 0;
         public string E3vezénylés { get; private set; } = "-";
         public string Vissza { get; private set; } = "_";
-        public string Kiad { get; private set; } = "_";
         public long Korrigáltkm { get; private set; } = 0;
         public long Vutánfutott { get; private set; } = 0;
         public long ElőzőVtőlkm { get; private set; } = 0;
