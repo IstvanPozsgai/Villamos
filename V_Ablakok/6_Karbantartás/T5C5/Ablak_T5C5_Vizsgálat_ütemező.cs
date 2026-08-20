@@ -409,7 +409,7 @@ namespace Villamos
                     Holtart.Lép();
                 }
                 //Tábla.Refresh();
-                AlsóPanel1 = "lista";
+                //AlsóPanel1 = "lista";
 
                 //Tábla.Sort(Tábla.Columns[12], System.ComponentModel.ListSortDirection.Descending);
                 //for (int ii = 0; ii < Tábla.Rows.Count; ii++)
@@ -417,7 +417,7 @@ namespace Villamos
                 //    Tábla.Rows[ii].Cells[0].Value = ii + 1;
                 //}
                 //Tábla.Sort(Tábla.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
-                Holtart.Ki();
+                //Holtart.Ki();
                 TáblaSzínezés();
                 //Tábla.ClearSelection();
                 //Tábla.Visible = true;
@@ -1274,54 +1274,54 @@ namespace Villamos
             // cellák színezése
             if (AlsóPanel1.Trim() == "lista")
             {
-                for (int sor = 0; sor < TáblaAdatNézet.Rows.Count; sor++)
+                for (int sor = 0; sor < Tábla.Rows.Count; sor++)
                 {
-                    if (TáblaAdatNézet.Rows[sor].Cells[29].Value != null)
+                    if (Tábla.Rows[sor].Cells[29].Value != null)
                     {
-                        switch (int.Parse(TáblaAdatNézet.Rows[sor].Cells[29].Value.ToString()))
+                        switch (int.Parse(Tábla.Rows[sor].Cells[29].Value.ToString()))
                         {
                             case 3:
                                 {
                                     // ha beálló
-                                    TáblaAdatNézet.Rows[sor].Cells[1].Style.BackColor = Color.Yellow;
-                                    TáblaAdatNézet.Rows[sor].Cells[1].Style.ForeColor = Color.Black;
-                                    TáblaAdatNézet.Rows[sor].Cells[1].Style.Font = new Font("ThenArial Narrow", 11f, FontStyle.Italic);
+                                    Tábla.Rows[sor].Cells[1].Style.BackColor = Color.Yellow;
+                                    Tábla.Rows[sor].Cells[1].Style.ForeColor = Color.Black;
+                                    Tábla.Rows[sor].Cells[1].Style.Font = new Font("ThenArial Narrow", 11f, FontStyle.Italic);
 
-                                    TáblaAdatNézet.Rows[sor].Cells[13].Style.BackColor = Color.Yellow;
-                                    TáblaAdatNézet.Rows[sor].Cells[13].Style.ForeColor = Color.Black;
-                                    TáblaAdatNézet.Rows[sor].Cells[13].Style.Font = new Font("ThenArial Narrow", 11f, FontStyle.Italic);
+                                    Tábla.Rows[sor].Cells[13].Style.BackColor = Color.Yellow;
+                                    Tábla.Rows[sor].Cells[13].Style.ForeColor = Color.Black;
+                                    Tábla.Rows[sor].Cells[13].Style.Font = new Font("ThenArial Narrow", 11f, FontStyle.Italic);
                                     break;
                                 }
                             case 4:
                                 {
                                     // ha BM
-                                    TáblaAdatNézet.Rows[sor].Cells[1].Style.BackColor = Color.Red;
-                                    TáblaAdatNézet.Rows[sor].Cells[1].Style.ForeColor = Color.White;
-                                    TáblaAdatNézet.Rows[sor].Cells[1].Style.Font = new Font("ThenArial Narrow", 11f, FontStyle.Italic);
+                                    Tábla.Rows[sor].Cells[1].Style.BackColor = Color.Red;
+                                    Tábla.Rows[sor].Cells[1].Style.ForeColor = Color.White;
+                                    Tábla.Rows[sor].Cells[1].Style.Font = new Font("ThenArial Narrow", 11f, FontStyle.Italic);
 
-                                    TáblaAdatNézet.Rows[sor].Cells[13].Style.BackColor = Color.Red;
-                                    TáblaAdatNézet.Rows[sor].Cells[13].Style.ForeColor = Color.White;
-                                    TáblaAdatNézet.Rows[sor].Cells[13].Style.Font = new Font("ThenArial Narrow", 11f, FontStyle.Italic);
+                                    Tábla.Rows[sor].Cells[13].Style.BackColor = Color.Red;
+                                    Tábla.Rows[sor].Cells[13].Style.ForeColor = Color.White;
+                                    Tábla.Rows[sor].Cells[13].Style.Font = new Font("ThenArial Narrow", 11f, FontStyle.Italic);
                                     break;
                                 }
                         }
                     }
-                    if (TáblaAdatNézet.Rows[sor].Cells[20].Value != null)
+                    if (Tábla.Rows[sor].Cells[20].Value != null)
                     {
                         foreach (Adat_Hétvége_Előírás Elem in AdatokElőírás)
                         {
-                            if (TáblaAdatNézet.Rows[sor].Cells[20].Value.ToStrTrim() == Elem.Vonal.Trim())
+                            if (Tábla.Rows[sor].Cells[20].Value.ToStrTrim() == Elem.Vonal.Trim())
                             {
-                                TáblaAdatNézet.Rows[sor].Cells[0].Style.BackColor = Color.FromArgb(Elem.Red, Elem.Green, Elem.Blue);
-                                TáblaAdatNézet.Rows[sor].Cells[2].Style.BackColor = Color.FromArgb(Elem.Red, Elem.Green, Elem.Blue);
-                                TáblaAdatNézet.Rows[sor].Cells[15].Style.BackColor = Color.FromArgb(Elem.Red, Elem.Green, Elem.Blue);
+                                Tábla.Rows[sor].Cells[0].Style.BackColor = Color.FromArgb(Elem.Red, Elem.Green, Elem.Blue);
+                                Tábla.Rows[sor].Cells[2].Style.BackColor = Color.FromArgb(Elem.Red, Elem.Green, Elem.Blue);
+                                Tábla.Rows[sor].Cells[15].Style.BackColor = Color.FromArgb(Elem.Red, Elem.Green, Elem.Blue);
                                 break;
                             }
-                            if (TáblaAdatNézet.Rows[sor].Cells[20].Value.ToStrTrim() == "")
+                            if (Tábla.Rows[sor].Cells[20].Value.ToStrTrim() == "")
                             {
-                                TáblaAdatNézet.Rows[sor].Cells[0].Style.BackColor = default;
-                                TáblaAdatNézet.Rows[sor].Cells[2].Style.BackColor = default;
-                                TáblaAdatNézet.Rows[sor].Cells[15].Style.BackColor = default;
+                                Tábla.Rows[sor].Cells[0].Style.BackColor = default;
+                                Tábla.Rows[sor].Cells[2].Style.BackColor = default;
+                                Tábla.Rows[sor].Cells[15].Style.BackColor = default;
                                 break;
                             }
                         }
@@ -1390,7 +1390,7 @@ namespace Villamos
 
 
         #region Táblázatban kattint
-        private void TáblaAdatNézet_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void Tábla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
