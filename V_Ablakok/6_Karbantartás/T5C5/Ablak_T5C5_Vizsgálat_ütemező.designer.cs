@@ -55,9 +55,11 @@ namespace Villamos
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.Tábla = new System.Windows.Forms.DataGridView();
+            this.TáblaAdatNézet = new Zuby.ADGV.AdvancedDataGridView();
             this.Panel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TáblaAdatNézet)).BeginInit();
             this.SuspendLayout();
             // 
             // Panel2
@@ -277,9 +279,26 @@ namespace Villamos
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Tábla.Location = new System.Drawing.Point(7, 99);
             this.Tábla.Name = "Tábla";
-            this.Tábla.Size = new System.Drawing.Size(839, 142);
+            this.Tábla.Size = new System.Drawing.Size(839, 134);
             this.Tábla.TabIndex = 70;
-            this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
+            // 
+            // TáblaAdatNézet
+            // 
+            this.TáblaAdatNézet.AllowUserToAddRows = false;
+            this.TáblaAdatNézet.AllowUserToDeleteRows = false;
+            this.TáblaAdatNézet.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TáblaAdatNézet.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.TáblaAdatNézet.FilterAndSortEnabled = true;
+            this.TáblaAdatNézet.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.TáblaAdatNézet.Location = new System.Drawing.Point(7, 99);
+            this.TáblaAdatNézet.MaxFilterButtonImageHeight = 23;
+            this.TáblaAdatNézet.Name = "TáblaAdatNézet";
+            this.TáblaAdatNézet.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.TáblaAdatNézet.Size = new System.Drawing.Size(839, 134);
+            this.TáblaAdatNézet.SortStringChangedInvokeBeforeDatasourceUpdate = true;
+            this.TáblaAdatNézet.TabIndex = 71;
             // 
             // Ablak_T5C5_Vizsgálat_ütemező
             // 
@@ -287,6 +306,7 @@ namespace Villamos
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tan;
             this.ClientSize = new System.Drawing.Size(855, 245);
+            this.Controls.Add(this.TáblaAdatNézet);
             this.Controls.Add(this.Tábla);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.Holtart);
@@ -305,6 +325,7 @@ namespace Villamos
             this.Panel2.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TáblaAdatNézet)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -326,5 +347,6 @@ namespace Villamos
         internal Button Vonalak;
         internal DataGridView Tábla;
         internal Button BeosztásTörlés;
+        private Zuby.ADGV.AdvancedDataGridView TáblaAdatNézet;
     }
 }
