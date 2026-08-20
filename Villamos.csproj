@@ -401,7 +401,6 @@
     <Compile Include="V_Adatszerkezet\5_Nyilvántartások\Akkumulátor\Adat_Akkumulátor_Napló.cs" />
     <Compile Include="V_Adatszerkezet\5_Nyilvántartások\Vételezés\Adat_Anyagok.cs" />
     <Compile Include="V_Adatszerkezet\5_Nyilvántartások\Vételezés\Adat_Elfekvő.cs" />
-    <Compile Include="V_Adatszerkezet\6_Karbantartás\T5C5\Adat_T5C5_V_Vizsgálat.cs" />
     <Compile Include="V_Adatszerkezet\Kérdésesek\Adat_Beallitas_Diagram.cs" />
     <Compile Include="V_Adatszerkezet\8_Gondnokság\Behajtási\Adat_Behajtási_Engedélyek.cs" />
     <Compile Include="V_Adatszerkezet\8_Gondnokság\Behajtási\Adat_Behajtás_Behajtási.cs" />
