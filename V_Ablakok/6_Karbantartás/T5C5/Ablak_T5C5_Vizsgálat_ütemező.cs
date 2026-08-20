@@ -81,6 +81,7 @@ namespace Villamos
                     Jogosultságkiosztás();
                 }
                 VonalasFrissít();
+                ChkTípusok_Feltöltése();
 
             }
             catch (HibásBevittAdat ex)
@@ -130,6 +131,7 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void TelephelyekFeltöltéseÚj()
         {
             try
@@ -341,11 +343,18 @@ namespace Villamos
 
                 // kilistázzuk a adatbázis adatait
                 List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+
+                // 1. Kigyűjtjük a bejelölt elemeket egy listába (Levágva a felesleges szóközöket a pontos egyezésért)
+                List<string> bejeloltTipusok = ChkTípusok.CheckedItems.Cast<string>().Select(t => t.Trim()).ToList();
+
+                // 2. Lefuttatjuk a szűrést a bejelölt elemek alapján
                 Adatok = (from a in Adatok
                           where a.Törölt == false
                           && a.Valóstípus.Contains("T5C5")
+                          && bejeloltTipusok.Contains(a.Valóstípus.Trim()) // Csak a bejelöltek maradhatnak
                           orderby a.Azonosító
                           select a).ToList();
+
                 Holtart.Be();
 
                 foreach (Adat_Jármű rekord in Adatok)
@@ -1745,5 +1754,40 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        #region CheckLista
+        private void ChkTípusok_Feltöltése()
+        {
+            try
+            {
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Adatok = (from a in Adatok
+                          where a.Törölt == false
+                          && a.Valóstípus.Contains("T5C5")
+                          orderby a.Azonosító
+                          select a)
+                          .GroupBy(a => a.Valóstípus) // Csoportosítás a típus szerint
+                          .Select(g => g.First())     // Mindegyik típusból csak az elsőt tartja meg
+                          .ToList();
+                foreach (Adat_Jármű rekord in Adatok)
+                {
+                    // Hozzáadjuk az elemet, és elmentjük az indexét
+                    int index = ChkTípusok.Items.Add(rekord.Valóstípus.Trim());
+
+                    // Az index alapján azonnal bepipáljuk (true = bejelölve)
+                    ChkTípusok.SetItemChecked(index, true);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
     }
 }

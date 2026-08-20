@@ -55,6 +55,7 @@ namespace Villamos
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.Tábla = new System.Windows.Forms.DataGridView();
+            this.ChkTípusok = new System.Windows.Forms.CheckedListBox();
             this.Panel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -105,7 +106,7 @@ namespace Villamos
             this.BtnSúgó.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnSúgó.BackgroundImage = global::Villamos.Properties.Resources.Help_Support;
             this.BtnSúgó.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BtnSúgó.Location = new System.Drawing.Point(796, 3);
+            this.BtnSúgó.Location = new System.Drawing.Point(938, 3);
             this.BtnSúgó.Name = "BtnSúgó";
             this.BtnSúgó.Size = new System.Drawing.Size(40, 40);
             this.BtnSúgó.TabIndex = 62;
@@ -118,7 +119,7 @@ namespace Villamos
             this.Felmentés.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Felmentés.BackgroundImage = global::Villamos.Properties.Resources.App_edit;
             this.Felmentés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Felmentés.Location = new System.Drawing.Point(672, 3);
+            this.Felmentés.Location = new System.Drawing.Point(822, 3);
             this.Felmentés.Name = "Felmentés";
             this.Felmentés.Size = new System.Drawing.Size(40, 40);
             this.Felmentés.TabIndex = 63;
@@ -131,7 +132,7 @@ namespace Villamos
             this.Excel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Excel.BackgroundImage = global::Villamos.Properties.Resources.Excel_gyűjtő;
             this.Excel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Excel.Location = new System.Drawing.Point(507, 3);
+            this.Excel.Location = new System.Drawing.Point(657, 3);
             this.Excel.Name = "Excel";
             this.Excel.Size = new System.Drawing.Size(40, 40);
             this.Excel.TabIndex = 67;
@@ -144,7 +145,7 @@ namespace Villamos
             this.Utasítás.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Utasítás.BackgroundImage = global::Villamos.Properties.Resources.Document_write;
             this.Utasítás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Utasítás.Location = new System.Drawing.Point(397, 3);
+            this.Utasítás.Location = new System.Drawing.Point(547, 3);
             this.Utasítás.Name = "Utasítás";
             this.Utasítás.Size = new System.Drawing.Size(40, 40);
             this.Utasítás.TabIndex = 68;
@@ -157,7 +158,7 @@ namespace Villamos
             this.Vonalak.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Vonalak.BackgroundImage = global::Villamos.Properties.Resources.Elegantthemes_Beautiful_Flat_Running;
             this.Vonalak.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Vonalak.Location = new System.Drawing.Point(562, 3);
+            this.Vonalak.Location = new System.Drawing.Point(712, 3);
             this.Vonalak.Name = "Vonalak";
             this.Vonalak.Size = new System.Drawing.Size(40, 40);
             this.Vonalak.TabIndex = 69;
@@ -170,7 +171,7 @@ namespace Villamos
             this.AktSzerelvény.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.AktSzerelvény.BackgroundImage = global::Villamos.Properties.Resources.Yellow_Glass_Folders_Icon_47;
             this.AktSzerelvény.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.AktSzerelvény.Location = new System.Drawing.Point(232, 3);
+            this.AktSzerelvény.Location = new System.Drawing.Point(382, 3);
             this.AktSzerelvény.Name = "AktSzerelvény";
             this.AktSzerelvény.Size = new System.Drawing.Size(40, 40);
             this.AktSzerelvény.TabIndex = 67;
@@ -183,7 +184,7 @@ namespace Villamos
             this.AktuálisLista.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.AktuálisLista.BackgroundImage = global::Villamos.Properties.Resources.Junior_Icon_111;
             this.AktuálisLista.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.AktuálisLista.Location = new System.Drawing.Point(177, 3);
+            this.AktuálisLista.Location = new System.Drawing.Point(327, 3);
             this.AktuálisLista.Name = "AktuálisLista";
             this.AktuálisLista.Size = new System.Drawing.Size(40, 40);
             this.AktuálisLista.TabIndex = 67;
@@ -196,7 +197,7 @@ namespace Villamos
             this.Előírt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Előírt.BackgroundImage = global::Villamos.Properties.Resources.Treetog_Junior_Document_scroll;
             this.Előírt.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Előírt.Location = new System.Drawing.Point(122, 3);
+            this.Előírt.Location = new System.Drawing.Point(272, 3);
             this.Előírt.Name = "Előírt";
             this.Előírt.Size = new System.Drawing.Size(40, 40);
             this.Előírt.TabIndex = 67;
@@ -209,7 +210,7 @@ namespace Villamos
             this.BeosztásTörlés.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.BeosztásTörlés.BackgroundImage = global::Villamos.Properties.Resources.Kuka;
             this.BeosztásTörlés.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BeosztásTörlés.Location = new System.Drawing.Point(342, 3);
+            this.BeosztásTörlés.Location = new System.Drawing.Point(492, 3);
             this.BeosztásTörlés.Name = "BeosztásTörlés";
             this.BeosztásTörlés.Size = new System.Drawing.Size(40, 40);
             this.BeosztásTörlés.TabIndex = 66;
@@ -223,7 +224,7 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Holtart.Location = new System.Drawing.Point(350, 18);
             this.Holtart.Name = "Holtart";
-            this.Holtart.Size = new System.Drawing.Size(493, 21);
+            this.Holtart.Size = new System.Drawing.Size(636, 21);
             this.Holtart.TabIndex = 67;
             this.Holtart.Visible = false;
             // 
@@ -231,7 +232,11 @@ namespace Villamos
             // 
             this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.ColumnCount = 15;
+            this.tableLayoutPanel1.ColumnCount = 16;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 155F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
@@ -243,25 +248,23 @@ namespace Villamos
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 69F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Controls.Add(this.Kereső, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.Utasítás, 7, 0);
-            this.tableLayoutPanel1.Controls.Add(this.BeosztásTörlés, 6, 0);
-            this.tableLayoutPanel1.Controls.Add(this.AktuálisLista, 3, 0);
-            this.tableLayoutPanel1.Controls.Add(this.Előírt, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.AktSzerelvény, 4, 0);
-            this.tableLayoutPanel1.Controls.Add(this.Excel, 9, 0);
-            this.tableLayoutPanel1.Controls.Add(this.Vonalak, 10, 0);
-            this.tableLayoutPanel1.Controls.Add(this.Felmentés, 12, 0);
-            this.tableLayoutPanel1.Controls.Add(this.BtnSúgó, 14, 0);
+            this.tableLayoutPanel1.Controls.Add(this.BtnSúgó, 15, 0);
+            this.tableLayoutPanel1.Controls.Add(this.Felmentés, 14, 0);
+            this.tableLayoutPanel1.Controls.Add(this.Vonalak, 12, 0);
+            this.tableLayoutPanel1.Controls.Add(this.Excel, 11, 0);
+            this.tableLayoutPanel1.Controls.Add(this.Utasítás, 9, 0);
+            this.tableLayoutPanel1.Controls.Add(this.BeosztásTörlés, 8, 0);
+            this.tableLayoutPanel1.Controls.Add(this.AktSzerelvény, 6, 0);
+            this.tableLayoutPanel1.Controls.Add(this.AktuálisLista, 5, 0);
+            this.tableLayoutPanel1.Controls.Add(this.Előírt, 4, 0);
+            this.tableLayoutPanel1.Controls.Add(this.ChkTípusok, 2, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(7, 45);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(838, 48);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(981, 59);
             this.tableLayoutPanel1.TabIndex = 68;
             // 
             // Tábla
@@ -275,18 +278,26 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Tábla.BackgroundColor = System.Drawing.Color.Silver;
             this.Tábla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Tábla.Location = new System.Drawing.Point(7, 99);
+            this.Tábla.Location = new System.Drawing.Point(7, 110);
             this.Tábla.Name = "Tábla";
-            this.Tábla.Size = new System.Drawing.Size(839, 134);
+            this.Tábla.Size = new System.Drawing.Size(982, 123);
             this.Tábla.TabIndex = 70;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
+            // 
+            // ChkTípusok
+            // 
+            this.ChkTípusok.FormattingEnabled = true;
+            this.ChkTípusok.Location = new System.Drawing.Point(83, 3);
+            this.ChkTípusok.Name = "ChkTípusok";
+            this.ChkTípusok.Size = new System.Drawing.Size(148, 46);
+            this.ChkTípusok.TabIndex = 70;
             // 
             // Ablak_T5C5_Vizsgálat_ütemező
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tan;
-            this.ClientSize = new System.Drawing.Size(855, 245);
+            this.ClientSize = new System.Drawing.Size(998, 245);
             this.Controls.Add(this.Tábla);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.Holtart);
@@ -326,5 +337,6 @@ namespace Villamos
         internal Button Vonalak;
         internal DataGridView Tábla;
         internal Button BeosztásTörlés;
+        private CheckedListBox ChkTípusok;
     }
 }
