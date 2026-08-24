@@ -54,8 +54,8 @@ namespace Villamos
             this.BeosztásTörlés = new System.Windows.Forms.Button();
             this.Holtart = new Villamos.V_MindenEgyéb.MyProgressbar();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.Tábla = new System.Windows.Forms.DataGridView();
             this.ChkTípusok = new System.Windows.Forms.CheckedListBox();
+            this.Tábla = new System.Windows.Forms.DataGridView();
             this.Panel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
@@ -248,7 +248,7 @@ namespace Villamos
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 116F));
             this.tableLayoutPanel1.Controls.Add(this.Kereső, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.BtnSúgó, 15, 0);
             this.tableLayoutPanel1.Controls.Add(this.Felmentés, 14, 0);
@@ -263,9 +263,18 @@ namespace Villamos
             this.tableLayoutPanel1.Location = new System.Drawing.Point(7, 45);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 59F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(981, 59);
             this.tableLayoutPanel1.TabIndex = 68;
+            // 
+            // ChkTípusok
+            // 
+            this.ChkTípusok.CheckOnClick = true;
+            this.ChkTípusok.FormattingEnabled = true;
+            this.ChkTípusok.Location = new System.Drawing.Point(83, 3);
+            this.ChkTípusok.Name = "ChkTípusok";
+            this.ChkTípusok.Size = new System.Drawing.Size(148, 46);
+            this.ChkTípusok.TabIndex = 70;
             // 
             // Tábla
             // 
@@ -283,14 +292,6 @@ namespace Villamos
             this.Tábla.Size = new System.Drawing.Size(982, 123);
             this.Tábla.TabIndex = 70;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
-            // 
-            // ChkTípusok
-            // 
-            this.ChkTípusok.FormattingEnabled = true;
-            this.ChkTípusok.Location = new System.Drawing.Point(83, 3);
-            this.ChkTípusok.Name = "ChkTípusok";
-            this.ChkTípusok.Size = new System.Drawing.Size(148, 46);
-            this.ChkTípusok.TabIndex = 70;
             // 
             // Ablak_T5C5_Vizsgálat_ütemező
             // 

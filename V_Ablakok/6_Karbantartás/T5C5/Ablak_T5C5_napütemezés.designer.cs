@@ -58,6 +58,7 @@ namespace Villamos
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.BtnExcelkimenet = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.ChkTípusok = new System.Windows.Forms.CheckedListBox();
             ((System.ComponentModel.ISupportInitialize)(this.Tábla)).BeginInit();
             this.Panel2.SuspendLayout();
             this.SuspendLayout();
@@ -96,7 +97,7 @@ namespace Villamos
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.Tábla.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.Tábla.RowHeadersWidth = 25;
-            this.Tábla.Size = new System.Drawing.Size(972, 417);
+            this.Tábla.Size = new System.Drawing.Size(972, 518);
             this.Tábla.TabIndex = 63;
             this.Tábla.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Tábla_CellClick);
             // 
@@ -133,7 +134,7 @@ namespace Villamos
             // 
             this.Btn_Lista.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Btn_Lista.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.Btn_Lista.Location = new System.Drawing.Point(980, 159);
+            this.Btn_Lista.Location = new System.Drawing.Point(980, 214);
             this.Btn_Lista.Name = "Btn_Lista";
             this.Btn_Lista.Size = new System.Drawing.Size(203, 28);
             this.Btn_Lista.TabIndex = 72;
@@ -158,7 +159,7 @@ namespace Villamos
             // 
             this.Btn_hónaplistázás.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Btn_hónaplistázás.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.Btn_hónaplistázás.Location = new System.Drawing.Point(980, 229);
+            this.Btn_hónaplistázás.Location = new System.Drawing.Point(980, 284);
             this.Btn_hónaplistázás.Name = "Btn_hónaplistázás";
             this.Btn_hónaplistázás.Size = new System.Drawing.Size(203, 30);
             this.Btn_hónaplistázás.TabIndex = 75;
@@ -170,7 +171,7 @@ namespace Villamos
             // 
             this.Btn_Szerelvénylista.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Btn_Szerelvénylista.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.Btn_Szerelvénylista.Location = new System.Drawing.Point(980, 193);
+            this.Btn_Szerelvénylista.Location = new System.Drawing.Point(980, 248);
             this.Btn_Szerelvénylista.Name = "Btn_Szerelvénylista";
             this.Btn_Szerelvénylista.Size = new System.Drawing.Size(203, 30);
             this.Btn_Szerelvénylista.TabIndex = 76;
@@ -184,9 +185,9 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Ütemezés_lista.FormattingEnabled = true;
             this.Ütemezés_lista.ItemHeight = 20;
-            this.Ütemezés_lista.Location = new System.Drawing.Point(980, 317);
+            this.Ütemezés_lista.Location = new System.Drawing.Point(980, 377);
             this.Ütemezés_lista.Name = "Ütemezés_lista";
-            this.Ütemezés_lista.Size = new System.Drawing.Size(203, 104);
+            this.Ütemezés_lista.Size = new System.Drawing.Size(203, 144);
             this.Ütemezés_lista.TabIndex = 82;
             this.Ütemezés_lista.SelectedIndexChanged += new System.EventHandler(this.Ütemezés_lista_SelectedIndexChanged);
             // 
@@ -196,7 +197,7 @@ namespace Villamos
             this.Btn_Command3.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.Btn_Command3.BackgroundImage = global::Villamos.Properties.Resources.Document_write;
             this.Btn_Command3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_Command3.Location = new System.Drawing.Point(1031, 265);
+            this.Btn_Command3.Location = new System.Drawing.Point(1031, 320);
             this.Btn_Command3.Name = "Btn_Command3";
             this.Btn_Command3.Size = new System.Drawing.Size(50, 50);
             this.Btn_Command3.TabIndex = 79;
@@ -210,7 +211,7 @@ namespace Villamos
             this.Btn_Vezénylésbeírás.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.Btn_Vezénylésbeírás.BackgroundImage = global::Villamos.Properties.Resources.leadott;
             this.Btn_Vezénylésbeírás.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_Vezénylésbeírás.Location = new System.Drawing.Point(1082, 265);
+            this.Btn_Vezénylésbeírás.Location = new System.Drawing.Point(1082, 320);
             this.Btn_Vezénylésbeírás.Name = "Btn_Vezénylésbeírás";
             this.Btn_Vezénylésbeírás.Size = new System.Drawing.Size(50, 50);
             this.Btn_Vezénylésbeírás.TabIndex = 78;
@@ -224,7 +225,7 @@ namespace Villamos
             this.Btn_vezénylésexcel.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.Btn_vezénylésexcel.BackgroundImage = global::Villamos.Properties.Resources.CALC1;
             this.Btn_vezénylésexcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Btn_vezénylésexcel.Location = new System.Drawing.Point(980, 265);
+            this.Btn_vezénylésexcel.Location = new System.Drawing.Point(980, 320);
             this.Btn_vezénylésexcel.Name = "Btn_vezénylésexcel";
             this.Btn_vezénylésexcel.Size = new System.Drawing.Size(50, 50);
             this.Btn_vezénylésexcel.TabIndex = 77;
@@ -238,7 +239,7 @@ namespace Villamos
             this.SAP_adatok.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.SAP_adatok.BackgroundImage = global::Villamos.Properties.Resources.SAP;
             this.SAP_adatok.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.SAP_adatok.Location = new System.Drawing.Point(1133, 265);
+            this.SAP_adatok.Location = new System.Drawing.Point(1133, 320);
             this.SAP_adatok.Name = "SAP_adatok";
             this.SAP_adatok.Size = new System.Drawing.Size(50, 50);
             this.SAP_adatok.TabIndex = 92;
@@ -288,12 +289,23 @@ namespace Villamos
             // 
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
+            // ChkTípusok
+            // 
+            this.ChkTípusok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ChkTípusok.CheckOnClick = true;
+            this.ChkTípusok.FormattingEnabled = true;
+            this.ChkTípusok.Location = new System.Drawing.Point(980, 161);
+            this.ChkTípusok.Name = "ChkTípusok";
+            this.ChkTípusok.Size = new System.Drawing.Size(203, 46);
+            this.ChkTípusok.TabIndex = 93;
+            // 
             // Ablak_T5C5_napütemezés
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SaddleBrown;
-            this.ClientSize = new System.Drawing.Size(1189, 431);
+            this.ClientSize = new System.Drawing.Size(1189, 532);
+            this.Controls.Add(this.ChkTípusok);
             this.Controls.Add(this.Holtart);
             this.Controls.Add(this.SAP_adatok);
             this.Controls.Add(this.Ütemezés_lista);
@@ -345,5 +357,6 @@ namespace Villamos
         internal ToolTip ToolTip1;
         internal Button SAP_adatok;
         private Timer timer1;
+        private CheckedListBox ChkTípusok;
     }
 }
