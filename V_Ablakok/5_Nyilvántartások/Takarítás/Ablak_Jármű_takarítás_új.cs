@@ -201,6 +201,7 @@ namespace Villamos
                     }
                 case 1:
                     {
+                        ChkTípusok_Feltöltése();
                         string[] adat = { "J2", "J3", "J4", "J5", "J6" };
                         for (int i = 0; i < adat.Length; i++)
                             Ütemezett_kocsik_részlet(adat[i]);
@@ -543,12 +544,36 @@ namespace Villamos
 
                 #endregion
 
+                // kilistázzuk a adatbázis adatait
+                AdatokJármű = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+
+                // 1. Kigyűjtjük a bejelölt elemeket egy listába (Levágva a felesleges szóközöket a pontos egyezésért)
+                List<string> bejeloltTipusok = ChkTípusok.CheckedItems.Cast<string>().Select(t => t.Trim()).ToList();
+
+                // 2. Lefuttatjuk a szűrést a bejelölt elemek alapján
+                AdatokJármű = (from a in AdatokJármű
+                               where a.Törölt == false
+                          && a.Valóstípus.Contains("T5C5")
+                          && bejeloltTipusok.Contains(a.Valóstípus.Trim()) // Csak a bejelöltek maradhatnak
+                               orderby a.Azonosító
+                               select a).ToList();
+
                 AdatokTak = KézTak.Lista_Adatok();
+                //List<string> Pályaszámok = (from a in AdatokTak
+                //                            where a.Telephely == Cmbtelephely.Text.Trim()
+                //                            && a.Státus == 0
+                //                            orderby a.Azonosító, a.Takarítási_fajta, a.Dátum ascending
+                //                            select a.Azonosító).Distinct().ToList();
                 List<string> Pályaszámok = (from a in AdatokTak
+                                            join j in AdatokJármű
+                                            on a.Azonosító equals j.Azonosító
                                             where a.Telephely == Cmbtelephely.Text.Trim()
                                             && a.Státus == 0
-                                            orderby a.Azonosító, a.Takarítási_fajta, a.Dátum ascending
-                                            select a.Azonosító).Distinct().ToList();
+                                            orderby a.Azonosító, a.Takarítási_fajta, a.Dátum
+                                            select a.Azonosító)
+                                            .Distinct()
+                                            .ToList();
+
                 List<Adat_Jármű_Takarítás_Takarítások> AdatokTakÖ = AdatokTak;
 
                 foreach (string pályaszám in Pályaszámok)
@@ -1303,6 +1328,45 @@ namespace Villamos
                 }
             }
         }
+
+
+
+        #endregion
+
+        #region CheckLista
+        private void ChkTípusok_Feltöltése()
+        {
+            try
+            {
+                List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
+                Adatok = (from a in Adatok
+                          where a.Törölt == false
+                          && a.Valóstípus.Contains("T5C5")
+                          orderby a.Azonosító
+                          select a)
+                          .GroupBy(a => a.Valóstípus) // Csoportosítás a típus szerint
+                          .Select(g => g.First())     // Mindegyik típusból csak az elsőt tartja meg
+                          .ToList();
+                foreach (Adat_Jármű rekord in Adatok)
+                {
+                    // Hozzáadjuk az elemet, és elmentjük az indexét
+                    int index = ChkTípusok.Items.Add(rekord.Valóstípus.Trim());
+
+                    // Az index alapján azonnal bepipáljuk (true = bejelölve)
+                    ChkTípusok.SetItemChecked(index, true);
+                }
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, this.ToString(), ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         #endregion
 
 
