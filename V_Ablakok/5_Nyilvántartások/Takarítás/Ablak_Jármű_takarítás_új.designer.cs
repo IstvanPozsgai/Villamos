@@ -178,6 +178,7 @@ namespace Villamos
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BtnSúgó = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.ChkTípusok = new System.Windows.Forms.CheckedListBox();
             this.Panel2.SuspendLayout();
             this.Lapfülek.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -671,6 +672,7 @@ namespace Villamos
             // TabPage2
             // 
             this.TabPage2.BackColor = System.Drawing.Color.Blue;
+            this.TabPage2.Controls.Add(this.ChkTípusok);
             this.TabPage2.Controls.Add(this.Btn_vezénylésexcel);
             this.TabPage2.Controls.Add(this.Kereső_hívó);
             this.TabPage2.Controls.Add(this.Alap_Lista);
@@ -729,9 +731,9 @@ namespace Villamos
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Ütemezés_lista.FormattingEnabled = true;
             this.Ütemezés_lista.ItemHeight = 20;
-            this.Ütemezés_lista.Location = new System.Drawing.Point(1113, 97);
+            this.Ütemezés_lista.Location = new System.Drawing.Point(1113, 167);
             this.Ütemezés_lista.Name = "Ütemezés_lista";
-            this.Ütemezés_lista.Size = new System.Drawing.Size(190, 364);
+            this.Ütemezés_lista.Size = new System.Drawing.Size(190, 284);
             this.Ütemezés_lista.TabIndex = 83;
             this.Ütemezés_lista.SelectedIndexChanged += new System.EventHandler(this.Ütemezés_lista_SelectedIndexChanged);
             // 
@@ -1855,6 +1857,16 @@ namespace Villamos
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
+            // ChkTípusok
+            // 
+            this.ChkTípusok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ChkTípusok.CheckOnClick = true;
+            this.ChkTípusok.FormattingEnabled = true;
+            this.ChkTípusok.Location = new System.Drawing.Point(1113, 96);
+            this.ChkTípusok.Name = "ChkTípusok";
+            this.ChkTípusok.Size = new System.Drawing.Size(190, 67);
+            this.ChkTípusok.TabIndex = 97;
+            // 
             // Ablak_Jármű_takarítás_új
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -2063,5 +2075,6 @@ namespace Villamos
         internal Button BMR;
         private Timer timer1;
         internal Button PályaszámTakarításai;
+        private CheckedListBox ChkTípusok;
     }
 }
