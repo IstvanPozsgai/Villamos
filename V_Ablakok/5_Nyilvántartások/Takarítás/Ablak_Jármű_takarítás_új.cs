@@ -202,10 +202,11 @@ namespace Villamos
                 case 1:
                     {
                         ChkTípusok_Feltöltése();
-                        string[] adat = { "J2", "J3", "J4", "J5", "J6" };
-                        for (int i = 0; i < adat.Length; i++)
-                            Ütemezett_kocsik_részlet(adat[i]);
-
+                        Ütemezés_lista.Items.Clear();
+                        foreach (string adat in Enum.GetNames(typeof(MyEn.Takfajtaadat)))
+                        {
+                            Ütemezett_kocsik_részlet(adat);
+                        }
                         break;
                     }
 
@@ -1201,14 +1202,11 @@ namespace Villamos
 
                 AdatokVezény = KézVezény.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
 
-                if (Tábla.RowCount != 0)
+                foreach (string adat in Enum.GetNames(typeof(MyEn.Takfajtaadat)))
                 {
-                    foreach (string adat in Enum.GetNames(typeof(MyEn.Takfajtaadat)))
-                    {
-                        Ütemezés_lista.Items.Add(adat);
-                        Ütemezett_kocsik_részlet(adat);
-                    }
+                    Ütemezett_kocsik_részlet(adat);
                 }
+
             }
             catch (HibásBevittAdat ex)
             {
