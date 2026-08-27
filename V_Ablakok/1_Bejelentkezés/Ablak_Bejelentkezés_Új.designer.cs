@@ -155,7 +155,7 @@ namespace Villamos
             this.BtnBelépés.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.BtnBelépés.Name = "BtnBelépés";
             this.BtnBelépés.Size = new System.Drawing.Size(152, 50);
-            this.BtnBelépés.TabIndex = 2;
+            this.BtnBelépés.TabIndex = 0;
             this.BtnBelépés.Text = "Belépés";
             this.BtnBelépés.UseVisualStyleBackColor = true;
             this.BtnBelépés.Click += new System.EventHandler(this.BtnBelépés_Click);
@@ -213,7 +213,7 @@ namespace Villamos
             this.CmbTelephely.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.CmbTelephely.Name = "CmbTelephely";
             this.CmbTelephely.Size = new System.Drawing.Size(284, 28);
-            this.CmbTelephely.TabIndex = 43;
+            this.CmbTelephely.TabIndex = 0;
             this.CmbTelephely.SelectionChangeCommitted += new System.EventHandler(this.CmbTelephely_SelectionChangeCommitted);
             // 
             // Label4
@@ -238,7 +238,7 @@ namespace Villamos
             this.CmbUserName.Name = "CmbUserName";
             this.CmbUserName.Size = new System.Drawing.Size(284, 28);
             this.CmbUserName.Sorted = true;
-            this.CmbUserName.TabIndex = 0;
+            this.CmbUserName.TabIndex = 1;
             this.CmbUserName.SelectedIndexChanged += new System.EventHandler(this.CmbUserName_SelectedIndexChanged);
             // 
             // Label3
@@ -281,7 +281,7 @@ namespace Villamos
             this.TxtPassword.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.TxtPassword.Name = "TxtPassword";
             this.TxtPassword.Size = new System.Drawing.Size(277, 26);
-            this.TxtPassword.TabIndex = 1;
+            this.TxtPassword.TabIndex = 0;
             this.TxtPassword.UseSystemPasswordChar = true;
             // 
             // BtnLátszódik
