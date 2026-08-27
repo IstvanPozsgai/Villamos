@@ -359,17 +359,29 @@ internal static partial class Adatbázis
 
     private static string BuildConnectionString(string hely, string jelszó)
     {
+        //return new SqliteConnectionStringBuilder
+        //{
+        //    DataSource = hely,
+        //    Mode = SqliteOpenMode.ReadWriteCreate,
+        //    Password = jelszó,
+        //    // Bekapcsolja a kapcsolatgyűjtőt, ami segít a zárolások hatékonyabb kezelésében
+        //    Pooling = false,
+        //    // Növeli a várakozási időt (másodpercben), ha az adatbázis épp foglalt
+        //    DefaultTimeout = 60,
+        //    Cache = SqliteCacheMode.Shared
+        //}.ToString();
+
+        //Martin féle
         return new SqliteConnectionStringBuilder
         {
             DataSource = hely,
             Mode = SqliteOpenMode.ReadWriteCreate,
             Password = jelszó,
-            // Bekapcsolja a kapcsolatgyűjtőt, ami segít a zárolások hatékonyabb kezelésében
-            Pooling = false,
-            // Növeli a várakozási időt (másodpercben), ha az adatbázis épp foglalt
+            Pooling = true,
             DefaultTimeout = 60,
             Cache = SqliteCacheMode.Shared
         }.ToString();
+
     }
 
     // ÚJ SEGÉDMETÓDUS: Minden megnyitott kapcsolatnál beállítja a WAL módot és a várakozást
@@ -378,7 +390,8 @@ internal static partial class Adatbázis
         using (var walCmd = connection.CreateCommand())
         {
             // WAL mód bekapcsolása és a beépített várakozás (busy_timeout) 60 másodpercre növelése
-            walCmd.CommandText = "PRAGMA busy_timeout=60000; PRAGMA journal_mode=WAL;";
+            //    walCmd.CommandText = "PRAGMA busy_timeout=60000; PRAGMA journal_mode=WAL;";// Lassú
+            walCmd.CommandText = "PRAGMA busy_timeout=60000; PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL;"; //Martin által használt
             walCmd.ExecuteNonQuery();
         }
     }
