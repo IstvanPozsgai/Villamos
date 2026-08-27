@@ -215,6 +215,7 @@ namespace Villamos
             this.CmbTelephely.Size = new System.Drawing.Size(284, 28);
             this.CmbTelephely.TabIndex = 0;
             this.CmbTelephely.SelectionChangeCommitted += new System.EventHandler(this.CmbTelephely_SelectionChangeCommitted);
+            this.CmbTelephely.Sorted = true;
             // 
             // Label4
             // 
