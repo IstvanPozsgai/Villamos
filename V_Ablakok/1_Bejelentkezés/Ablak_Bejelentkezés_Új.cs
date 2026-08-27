@@ -56,6 +56,12 @@ namespace Villamos
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                if (ex.Message == "Hibás jelszó!")
+                {
+                    TxtPassword.Clear();
+                    TxtPassword.Focus();
+                }
             }
             catch (Exception ex)
             {
@@ -274,6 +280,11 @@ namespace Villamos
             catch (HibásBevittAdat ex)
             {
                 MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (ex.Message == "Hibás jelszó!")
+                {
+                    TxtPassword.Clear();
+                    TxtPassword.Focus();
+                }
             }
             catch (Exception ex)
             {
