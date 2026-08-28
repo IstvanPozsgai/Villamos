@@ -359,29 +359,17 @@ internal static partial class Adatbázis
 
     private static string BuildConnectionString(string hely, string jelszó)
     {
-        //return new SqliteConnectionStringBuilder
-        //{
-        //    DataSource = hely,
-        //    Mode = SqliteOpenMode.ReadWriteCreate,
-        //    Password = jelszó,
-        //    // Bekapcsolja a kapcsolatgyűjtőt, ami segít a zárolások hatékonyabb kezelésében
-        //    Pooling = false,
-        //    // Növeli a várakozási időt (másodpercben), ha az adatbázis épp foglalt
-        //    DefaultTimeout = 60,
-        //    Cache = SqliteCacheMode.Shared
-        //}.ToString();
-
-        //Martin féle
         return new SqliteConnectionStringBuilder
         {
             DataSource = hely,
             Mode = SqliteOpenMode.ReadWriteCreate,
             Password = jelszó,
-            Pooling = true,
+            // Bekapcsolja a kapcsolatgyűjtőt, ami segít a zárolások hatékonyabb kezelésében
+            Pooling = false,
+            // Növeli a várakozási időt (másodpercben), ha az adatbázis épp foglalt
             DefaultTimeout = 60,
             Cache = SqliteCacheMode.Shared
         }.ToString();
-
     }
 
     // ÚJ SEGÉDMETÓDUS: Minden megnyitott kapcsolatnál beállítja a WAL módot és a várakozást
@@ -622,6 +610,7 @@ internal static partial class Adatbázis
         catch (Exception ex)
         {
             HibaNapló.Log(ex.Message, "SqLite ABvanTábla", ex.StackTrace, ex.Source, ex.HResult, "_", false);
+            throw;
         }
         return válasz;
     }
