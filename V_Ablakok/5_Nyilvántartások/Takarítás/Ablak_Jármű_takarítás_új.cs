@@ -554,7 +554,6 @@ namespace Villamos
                 // 2. Lefuttatjuk a szűrést a bejelölt elemek alapján
                 AdatokJármű = (from a in AdatokJármű
                                where a.Törölt == false
-                          && a.Valóstípus.Contains("T5C5")
                           && bejeloltTipusok.Contains(a.Valóstípus.Trim()) // Csak a bejelöltek maradhatnak
                                orderby a.Azonosító
                                select a).ToList();
