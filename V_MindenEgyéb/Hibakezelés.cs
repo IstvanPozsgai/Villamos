@@ -119,19 +119,32 @@ namespace Villamos
 
         private static void Email(string hely, string hiba, int hibakod)
         {
-            if (EmailVizsgál(hiba))
+            try
             {
+                if (!EmailVizsgál(hiba)) return; //Vizsgáljuk a hibát 
+
+                string cimzett = Kezelő_Kiegészítő_Email.ÖsszesEmailCím;
+                if (string.IsNullOrWhiteSpace(cimzett)) return; // ha nem tudjuk a címzettet akkor nem küldünk levelet.
 
                 MyO._Application _app = new MyO.Application();
                 MyO.MailItem mail = (MyO.MailItem)_app.CreateItem(MyO.OlItemType.olMailItem);
                 // címzett
-                mail.To = $"{Kezelő_Kiegészítő_Email.ÖsszesEmailCím}";
+                mail.To = cimzett;
                 // üzenet tárgya
                 mail.Subject = $"Hibanapló {DateTime.Now:yyyyMMddHHmmss}";
                 mail.Body = hiba;
                 mail.Importance = MyO.OlImportance.olImportanceNormal;
                 if (File.Exists(hely)) mail.Attachments.Add(hely);
                 ((MyO._MailItem)mail).Send();
+            }
+            catch (HibásBevittAdat ex)
+            {
+                MessageBox.Show(ex.Message, "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                HibaNapló.Log(ex.Message, "Hibakezelés - Email", ex.StackTrace, ex.Source, ex.HResult);
+                MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
