@@ -1339,7 +1339,6 @@ namespace Villamos
                 List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adatok = (from a in Adatok
                           where a.Törölt == false
-                          && a.Valóstípus.Contains("T5C5")
                           orderby a.Azonosító
                           select a)
                           .GroupBy(a => a.Valóstípus) // Csoportosítás a típus szerint
