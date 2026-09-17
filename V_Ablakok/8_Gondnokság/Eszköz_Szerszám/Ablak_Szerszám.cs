@@ -2529,12 +2529,17 @@ namespace Villamos
         private void Hovánév_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (Napló_Hovánév.Text.Trim() == "") return;
-            Napló_Hova.Text = "";
+
             Adat_Szerszám_Könyvtörzs ElemKönyv = (from a in AdatokKönyv
                                                   where a.Szerszámkönyvnév == Napló_Hovánév.Text.Trim()
                                                   select a).FirstOrDefault();
-            if (ElemKönyv != null) Napló_Hova.Text = ElemKönyv.Szerszámkönyvszám;
+            if (ElemKönyv != null)
+                Napló_Hova.Text = ElemKönyv.Szerszámkönyvszám;
+            else
+                Napló_Hova.Text = "";
         }
+
+
 
         private void Napló_Honnan_SelectionChangeCommitted(object sender, EventArgs e)
         {
@@ -4624,7 +4629,9 @@ namespace Villamos
                 MessageBox.Show(ex.Message + "\n\n a hiba naplózásra került.", "A program hibára futott", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion     
+        #endregion
+
+
     }
 }
 
