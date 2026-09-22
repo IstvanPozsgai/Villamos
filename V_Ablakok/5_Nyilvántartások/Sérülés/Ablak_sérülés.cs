@@ -1975,7 +1975,8 @@ namespace Villamos
                         if (!int.TryParse(Adat_módosítás(25, 18, szöveg).Replace(".", ""), out munkaidő)) munkaidő = 0;
 
                         rendelés = Adat_módosítás(42, 9, szöveg).ToÉrt_Int();
-                        if (szöveg.Substring(szöveg.Length - 1, 1).Trim() == "X")
+        
+                        if (Adat_módosítás(51, 2, szöveg).Trim() == "X")
                             storno = "I";
                         else
                             storno = "N";
