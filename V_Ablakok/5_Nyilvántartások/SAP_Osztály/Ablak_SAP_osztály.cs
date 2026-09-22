@@ -378,7 +378,7 @@ namespace Villamos
                 {
                     string szó = Soradatok[i].Trim();
 
-                    if (szó == "Berendez.")
+                    if (szó == "Berendez." || szó == "Berendezés")
                         berendezIndex = i;
 
                     Adat_Osztály_Név Elem = (from a in AdatokNév
