@@ -52,43 +52,50 @@ namespace Villamos.Kezelők
             }
         }
 
-        public List<Adat_TW6000_AlapNapló> Lista_Adatok()
+        public List<Adat_TW6000_AlapNapló> Lista_Adatok(int Év)
         {
+            FájlBeállítás(Év);
+
             string szöveg = $"SELECT * FROM {táblanév}";
             List<Adat_TW6000_AlapNapló> Adatok = new List<Adat_TW6000_AlapNapló>();
             Adat_TW6000_AlapNapló Adat;
 
-            string kapcsolatiszöveg = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='{hely}'; Jet Oledb:Database Password={jelszó}";
+            string kapcsolatiszöveg =
+                $"Provider=Microsoft.Jet.OLEDB.4.0;" +
+                $"Data Source='{hely}';" +
+                $"Jet OLEDB:Database Password={jelszó}";
+
             using (OleDbConnection Kapcsolat = new OleDbConnection(kapcsolatiszöveg))
             {
                 Kapcsolat.Open();
+
                 using (OleDbCommand Parancs = new OleDbCommand(szöveg, Kapcsolat))
+                using (OleDbDataReader rekord = Parancs.ExecuteReader())
                 {
-                    using (OleDbDataReader rekord = Parancs.ExecuteReader())
+                    if (rekord.HasRows)
                     {
-                        if (rekord.HasRows)
+                        while (rekord.Read())
                         {
-                            while (rekord.Read())
-                            {
-                                Adat = new Adat_TW6000_AlapNapló(
-                                        rekord["Azonosító"].ToStrTrim(),
-                                        rekord["Ciklusrend"].ToStrTrim(),
-                                        rekord["Kötöttstart"].ToÉrt_Bool(),
-                                        rekord["Megállítás"].ToÉrt_Bool(),
-                                        rekord["Oka"].ToStrTrim(),
-                                        rekord["Rögzítésiidő"].ToÉrt_DaTeTime(),
-                                        rekord["Rögzítő"].ToStrTrim(),
-                                        rekord["Start"].ToÉrt_DaTeTime(),
-                                        rekord["Vizsgdátum"].ToÉrt_DaTeTime(),
-                                        rekord["Vizsgnév"].ToStrTrim(),
-                                        rekord["Vizsgsorszám"].ToÉrt_Int()
-                                        );
-                                Adatok.Add(Adat);
-                            }
+                            Adat = new Adat_TW6000_AlapNapló(
+                                rekord["Azonosító"].ToStrTrim(),
+                                rekord["Ciklusrend"].ToStrTrim(),
+                                rekord["Kötöttstart"].ToÉrt_Bool(),
+                                rekord["Megállítás"].ToÉrt_Bool(),
+                                rekord["Oka"].ToStrTrim(),
+                                rekord["Rögzítésiidő"].ToÉrt_DaTeTime(),
+                                rekord["Rögzítő"].ToStrTrim(),
+                                rekord["Start"].ToÉrt_DaTeTime(),
+                                rekord["Vizsgdátum"].ToÉrt_DaTeTime(),
+                                rekord["Vizsgnév"].ToStrTrim(),
+                                rekord["Vizsgsorszám"].ToÉrt_Int()
+                            );
+
+                            Adatok.Add(Adat);
                         }
                     }
                 }
             }
+
             return Adatok;
         }
     }

@@ -1539,7 +1539,7 @@ namespace Villamos
                 Napló_Tábla.Columns[10].HeaderText = "Kötött start";
                 Napló_Tábla.Columns[10].Width = 150;
 
-                List<Adat_TW6000_AlapNapló> Adatok = KézAlapNapló.Lista_Adatok();
+                List<Adat_TW6000_AlapNapló> Adatok = KézAlapNapló.Lista_Adatok(NaplóKezdete.Value.Year);
                 Adatok = (from a in Adatok
                           where a.Rögzítésiidő >= MyF.Nap0000(NaplóKezdete.Value)
                           && a.Rögzítésiidő <= MyF.Nap2359(NaplóVége.Value)
