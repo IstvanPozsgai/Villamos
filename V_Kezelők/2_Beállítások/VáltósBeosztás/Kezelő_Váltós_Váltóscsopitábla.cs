@@ -78,7 +78,7 @@ namespace Villamos.Kezelők
         {
             try
             {
-                string szöveg = " UPDATE  {táblanév} SET ";
+                string szöveg = $" UPDATE  {táblanév} SET ";
                 szöveg += $" név='{Adat.Név}' ";
                 szöveg += $" WHERE csoport='{Adat.Csoport}' and telephely='{Adat.Telephely}'";
                 MyA.ABMódosítás(hely, jelszó, szöveg);

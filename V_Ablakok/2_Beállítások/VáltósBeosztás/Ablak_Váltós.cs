@@ -2710,6 +2710,7 @@ namespace Villamos
             {
                 Panel5.BackColor = Color.Green;
                 Command30.Enabled = true;
+                Command30.Visible = true;
             }
         }
 
