@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -16,7 +16,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string hely)
         {
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.Előtervkmfutástábla(hely.KönyvSzerk());
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.Előtervkmfutástábla(hely);
         }
 
         public List<Adat_T5C5_Előterv> Lista_Adatok(string hely)

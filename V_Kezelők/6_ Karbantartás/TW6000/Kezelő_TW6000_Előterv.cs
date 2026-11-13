@@ -17,7 +17,7 @@ namespace Villamos.Kezelők
 
         private void FájlBeállítás(string hely)
         {
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.TW6000tábla(hely.KönyvSzerk());
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.TW6000tábla(hely);
 
         }
 

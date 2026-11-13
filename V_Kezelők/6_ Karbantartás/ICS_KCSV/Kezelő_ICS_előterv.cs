@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows.Forms;
-using Villamos.Villamos_Adatbázis_Funkció;
 using Villamos.Adatszerkezet;
+using Villamos.Villamos_Adatbázis_Funkció;
 using MyA = Adatbázis;
 
 namespace Villamos.Kezelők
@@ -13,10 +13,10 @@ namespace Villamos.Kezelők
     {
         readonly string jelszó = "pocsaierzsi";
         readonly string táblanév = "KMtábla";
-        
+
         private void FájlBeállítás(string hely)
         {
-            if (!File.Exists(hely)) Adatbázis_Létrehozás.ElőtervkmfutástáblaICS(hely.KönyvSzerk());
+            if (!File.Exists(hely)) Adatbázis_Létrehozás.ElőtervkmfutástáblaICS(hely);
         }
 
         public List<Adat_ICS_előterv> Lista_Adatok(string hely)
