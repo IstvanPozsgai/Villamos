@@ -261,9 +261,7 @@ namespace Villamos
 
         private void Cmbtelephely_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            Táblalista_kiírás();
-            Pályaszámok_feltöltése();
-            ListákFeltöltése();
+
             try
             {
                 Cmbtelephely.Text = Cmbtelephely.Items[Cmbtelephely.SelectedIndex].ToStrTrim();
@@ -276,7 +274,10 @@ namespace Villamos
                 {
 
                 }
-
+                JárművekLista();
+                Táblalista_kiírás();
+                Pályaszámok_feltöltése();
+                ListákFeltöltése();
             }
             catch (HibásBevittAdat ex)
             {
@@ -592,7 +593,7 @@ namespace Villamos
             {
                 Pályaszám.Items.Clear();
                 Napló_pályaszám.Items.Clear();
-
+                JárművekLista();
                 if (Cmbtelephely.Text.Trim() == "") return;
                 if (AdatokJármű == null) return;
                 List<Adat_Jármű> Adatok = (from a in AdatokJármű
