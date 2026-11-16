@@ -286,7 +286,7 @@ namespace Villamos
         {
             try
             {
-                List<Adat_Jármű_Javításiátfutástábla> Adatok = KézÁtfutás.Lista_Adatok(Cmbtelephely.Text.Trim());
+                List<Adat_Jármű_Javításiátfutástábla> Adatok = KézÁtfutás.Lista_Adatok(Cmbtelephely.Text.Trim(), Dátum.Value.Year);
 
                 if (MilyenLista.Trim() == "napiálló")
                 {
