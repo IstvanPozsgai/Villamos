@@ -391,15 +391,15 @@ namespace Villamos
                         Soradat["Végső dátum"] = rekord.Végdátum.ToString("yyyy.MM.dd");
                     // nincs vég dátum annál ami áll
                     TimeSpan delta;
-                    if (rekord.Végdátum.ToString("yyyy.MM.dd") == (new DateTime(1900, 1, 1)).ToString("yyyy.MM.dd"))
+                    if (rekord.Végdátum.Date == new DateTime(1900, 1, 1))
                     {
-                        delta = DateTime.Today - rekord.Kezdődátum;
-                        Soradat["Állási napok"] = (int)delta.TotalDays;
+                        delta = DateTime.Today.Date  - rekord.Kezdődátum.Date;
+                        Soradat["Állási napok"] = delta.Days;
                     }
                     else
                     {
-                        delta = DateTime.Today - rekord.Végdátum;
-                        Soradat["Állási napok"] = (int)delta.TotalDays;
+                        delta = rekord.Végdátum.Date - rekord.Kezdődátum.Date;
+                        Soradat["Állási napok"] = delta.Days;
                     }
                     Soradat["Hiba leírása"] = rekord.Hibaleírása.Trim();
                     AdatTábla.Rows.Add(Soradat);
