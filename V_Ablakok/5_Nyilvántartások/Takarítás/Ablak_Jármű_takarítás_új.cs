@@ -1335,6 +1335,7 @@ namespace Villamos
         {
             try
             {
+                ChkTípusok.Items.Clear();
                 List<Adat_Jármű> Adatok = KézJármű.Lista_Adatok(Cmbtelephely.Text.Trim());
                 Adatok = (from a in Adatok
                           where a.Törölt == false
